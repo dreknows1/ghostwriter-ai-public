@@ -1,4 +1,6 @@
 import type { VercelRequest, VercelResponse } from "@vercel/node";
+import { ConvexHttpClient } from "convex/browser";
+import { makeFunctionReference } from "convex/server";
 
 type AIAction =
   | "generateSong"
@@ -30,6 +32,8 @@ function getTextModel(): string {
 function getImageModel(): string {
   return process.env.OPENAI_IMAGE_MODEL || "nano-banana-pro";
 }
+
+const getUserProfileByEmailRef = makeFunctionReference<"query">("app:getUserProfileByEmail");
 
 async function openAIResponses(prompt: string, model = getTextModel()): Promise<string> {
   const apiKey = getOpenAIApiKey();
@@ -90,6 +94,74 @@ async function openAIImage(prompt: string): Promise<string> {
   const data: any = await response.json();
   const b64 = data?.data?.[0]?.b64_json;
   if (!b64) throw new Error("Image generation returned no base64 payload");
+  return `data:image/png;base64,${b64}`;
+}
+
+function mapAspectToSize(aspectRatio: "9:16" | "1:1" | "16:9"): "1024x1792" | "1024x1024" | "1792x1024" {
+  if (aspectRatio === "1:1") return "1024x1024";
+  if (aspectRatio === "16:9") return "1792x1024";
+  return "1024x1792";
+}
+
+function parseDataUrlToBlob(dataUrl: string): Blob | null {
+  const match = dataUrl.match(/^data:(.+);base64,(.+)$/);
+  if (!match) return null;
+  const mimeType = match[1];
+  const b64 = match[2];
+  const bytes = Buffer.from(b64, "base64");
+  return new Blob([bytes], { type: mimeType });
+}
+
+async function getAvatarBlobByEmail(email: string): Promise<Blob | null> {
+  const convexUrl = process.env.CONVEX_URL;
+  const convexAdminKey = process.env.CONVEX_ADMIN_KEY;
+  if (!convexUrl || !convexAdminKey) return null;
+  try {
+    const client: any = new ConvexHttpClient(convexUrl);
+    client.setAdminAuth(convexAdminKey);
+    const profile: any = await client.query(getUserProfileByEmailRef as any, { email });
+    const avatar = profile?.avatar_url;
+    if (!avatar || typeof avatar !== "string") return null;
+    if (avatar.startsWith("data:")) return parseDataUrlToBlob(avatar);
+    if (avatar.startsWith("http://") || avatar.startsWith("https://")) {
+      const r = await fetch(avatar);
+      if (!r.ok) return null;
+      return await r.blob();
+    }
+    return null;
+  } catch {
+    return null;
+  }
+}
+
+async function openAIImageEditWithAvatar(
+  prompt: string,
+  aspectRatio: "9:16" | "1:1" | "16:9",
+  avatarBlob: Blob
+): Promise<string> {
+  const apiKey = getOpenAIApiKey();
+  const fd = new FormData();
+  fd.append("model", getImageModel());
+  fd.append("prompt", prompt);
+  fd.append("size", mapAspectToSize(aspectRatio));
+  fd.append("image", avatarBlob, "avatar.png");
+
+  const response = await fetch("https://api.openai.com/v1/images/edits", {
+    method: "POST",
+    headers: {
+      Authorization: `Bearer ${apiKey}`,
+    },
+    body: fd,
+  });
+
+  if (!response.ok) {
+    const text = await response.text();
+    throw new Error(`OpenAI image edit error (${response.status}): ${text}`);
+  }
+
+  const data: any = await response.json();
+  const b64 = data?.data?.[0]?.b64_json;
+  if (!b64) throw new Error("Image edit returned no base64 payload");
   return `data:image/png;base64,${b64}`;
 }
 
@@ -184,16 +256,23 @@ Rules:
 }
 
 async function generateAlbumArt(payload: any) {
-  const { songTitle, sunoPrompt, style } = payload || {};
+  const { songTitle, sunoPrompt, style, aspectRatio } = payload || {};
+  const ratio: "9:16" | "1:1" | "16:9" = aspectRatio === "1:1" || aspectRatio === "16:9" ? aspectRatio : "9:16";
   const prompt = `
-Create a professional 9:16 album cover image.
+Create a professional album cover image.
 Title: ${songTitle || "Untitled"}
 Style: ${style || "Cinematic"}
 Vibe: ${(sunoPrompt || "").slice(0, 200)}
+Aspect ratio: ${ratio}
+The attached avatar image is the PRIMARY identity reference. Keep the same person facial structure, hair, skin tone, and distinguishing features.
+The song context dictates the visual theme, scene, color, mood, styling, and composition.
 No watermark, no logo, no extra text.
 `.trim();
-
-  return { imageDataUrl: await openAIImage(prompt) };
+  const avatarBlob = await getAvatarBlobByEmail(sanitizeEmail(payload?.email || ""));
+  if (!avatarBlob) {
+    throw new Error("Missing avatar reference. Please upload avatar in profile before generating cover art.");
+  }
+  return { imageDataUrl: await openAIImageEditWithAvatar(prompt, ratio, avatarBlob) };
 }
 
 async function generateSocialPack(payload: any) {
@@ -268,7 +347,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
       case "generateDynamicOptions":
         return res.status(200).json(await generateDynamicOptions(payload));
       case "generateAlbumArt":
-        return res.status(200).json(await generateAlbumArt(payload));
+        return res.status(200).json(await generateAlbumArt({ ...(payload || {}), email }));
       case "generateSocialPack":
         return res.status(200).json(await generateSocialPack(payload));
       case "translateLyrics":

@@ -16,7 +16,7 @@ interface LyricsDisplayProps {
   onEdit: (instruction: string) => void;
   onSave: (title: string, prompt: string, lyrics: string, albumArt?: string, socialPack?: SocialPack) => Promise<void>;
   onResizePrompt: (currentPrompt: string, action: 'shorten' | 'lengthen') => Promise<void>;
-  onGenerateArt: (title: string, prompt: string) => Promise<string>;
+  onGenerateArt: (title: string, prompt: string, aspectRatio: "9:16" | "1:1" | "16:9") => Promise<string>;
   onGenerateSocial: (title: string, lyrics: string) => Promise<SocialPack>;
   onTranslate: (text: string, lang: string) => Promise<string>;
   refreshCredits?: () => Promise<void>;
@@ -50,6 +50,7 @@ const LyricsDisplay: React.FC<LyricsDisplayProps> = ({
   const [quickEditInput, setQuickEditInput] = useState('');
   const [isQuickEditing, setIsQuickEditing] = useState(false);
   const [isGeneratingArt, setIsGeneratingArt] = useState(false);
+  const [artAspect, setArtAspect] = useState<"9:16" | "1:1" | "16:9">("9:16");
   const [copiedPrompt, setCopiedPrompt] = useState(false);
   const [copiedLyrics, setCopiedLyrics] = useState(false);
 
@@ -146,7 +147,7 @@ const LyricsDisplay: React.FC<LyricsDisplayProps> = ({
     if (!canAfford) { alert("Insufficient credits for artwork."); return; }
     setIsGeneratingArt(true);
     try {
-      const art = await onGenerateArt(parsed.title, parsed.prompt);
+      const art = await onGenerateArt(parsed.title, parsed.prompt, artAspect);
       if (art) {
         onAlbumArtChange(art);
         await deductCredits(email, COSTS.GENERATE_ART);
@@ -265,8 +266,24 @@ const LyricsDisplay: React.FC<LyricsDisplayProps> = ({
 
               <div className="bg-[#131722] border border-slate-800 p-6 md:p-10 rounded-[2rem] md:rounded-[3rem] shadow-xl">
                   <h3 className="text-white text-sm font-black uppercase tracking-widest mb-8 flex items-center gap-3"><ImageIcon /> Session Art</h3>
-                  <div className="w-full aspect-[9/16] bg-[#0b0f19] rounded-[2rem] flex items-center justify-center text-slate-800 border-2 border-dashed border-slate-800/40 mb-8 overflow-hidden relative">
+                  <div className={`${artAspect === "9:16" ? "aspect-[9/16]" : artAspect === "1:1" ? "aspect-square" : "aspect-[16/9]"} w-full bg-[#0b0f19] rounded-[2rem] flex items-center justify-center text-slate-800 border-2 border-dashed border-slate-800/40 mb-5 overflow-hidden relative`}>
                       {isGeneratingArt ? <LoadingSpinner /> : albumArt ? <img src={albumArt} alt="Artwork" className="w-full h-full object-cover" /> : <ImageIcon />}
+                  </div>
+                  <div className="grid grid-cols-3 gap-2 mb-5">
+                    {(["9:16", "1:1", "16:9"] as const).map((ratio) => (
+                      <button
+                        key={ratio}
+                        type="button"
+                        onClick={() => setArtAspect(ratio)}
+                        className={`py-2 rounded-xl text-xs font-black border transition-all ${
+                          artAspect === ratio
+                            ? "bg-indigo-500/20 border-indigo-400 text-indigo-300"
+                            : "bg-slate-900/40 border-slate-700 text-slate-400 hover:text-white"
+                        }`}
+                      >
+                        {ratio}
+                      </button>
+                    ))}
                   </div>
                   <button onClick={handleGenerateArtwork} disabled={isGeneratingArt} className="w-full bg-indigo-900/10 hover:bg-indigo-900/20 py-5 rounded-[1.5rem] text-sm font-black uppercase tracking-[0.14em] md:tracking-[0.3em] text-indigo-500 border border-indigo-900/20 transition-all">
                       {isGeneratingArt ? 'Visualizing...' : 'Generate Art'}
