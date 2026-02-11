@@ -184,6 +184,26 @@ const ProfileView: React.FC<ProfileViewProps> = ({ email, onLoadSong, onBack, on
 
   const nextRefillDate = getNextRefillDate();
 
+  const getPlanState = () => {
+    const latestProTx = transactions.find((t) => /pro monthly/i.test(t.item));
+    if (!latestProTx) {
+      return { plan: 'Free', isActive: true, renewalDate: null as string | null };
+    }
+
+    const txDate = new Date(latestProTx.date);
+    const renewal = new Date(txDate);
+    renewal.setDate(renewal.getDate() + 30);
+    const isActive = renewal.getTime() > Date.now();
+
+    return {
+      plan: isActive ? 'Pro Monthly' : 'Free',
+      isActive,
+      renewalDate: renewal.toLocaleDateString('en-US', { month: 'long', day: 'numeric' }),
+    };
+  };
+
+  const planState = getPlanState();
+
   if (isLoading) return (
     <div className="flex flex-col items-center justify-center min-h-[60vh]">
       <LoadingSpinner />
@@ -248,7 +268,7 @@ const ProfileView: React.FC<ProfileViewProps> = ({ email, onLoadSong, onBack, on
                     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                         <div className="glass-panel bg-gradient-to-br from-blue-900/35 to-slate-900 rounded-[2rem] md:rounded-[2.5rem] p-8 relative overflow-hidden">
                             <h3 className="text-sm font-black uppercase tracking-[0.2em] text-blue-400 mb-4">Available Credits</h3>
-                            <div className="text-6xl font-black text-white mb-2">{profile?.credits || 0}</div>
+                            <div className="text-5xl md:text-6xl font-black text-white mb-2">{profile?.credits || 0}</div>
                             
                             {nextRefillDate && (
                                 <div className="mb-4 inline-block px-3 py-1 bg-blue-500/10 rounded-lg border border-blue-500/20">
@@ -258,20 +278,27 @@ const ProfileView: React.FC<ProfileViewProps> = ({ email, onLoadSong, onBack, on
 
                             <button onClick={onBuyCredits} className="mt-2 w-full px-6 py-3 bg-blue-600 hover:bg-blue-500 rounded-2xl text-sm font-black uppercase tracking-widest text-white transition-all shadow-lg">Top Up Balance</button>
                             <p className="mt-4 text-[10px] text-slate-400 uppercase tracking-widest leading-relaxed opacity-60">
-                                *Free credits reset to 100 monthly. No carry over.
+                                *Free tier: 30/mo. Pro plan: 2,000/mo. Top-ups are one-time.
                             </p>
                         </div>
 
                         <div className="glass-panel rounded-[2rem] md:rounded-[2.5rem] p-8">
                              <h3 className="text-sm font-black uppercase tracking-[0.2em] text-slate-500 mb-4">Total Sessions</h3>
-                             <div className="text-6xl font-black text-white mb-2">{songs.length}</div>
+                             <div className="text-5xl md:text-6xl font-black text-white mb-2">{songs.length}</div>
                              <p className="text-slate-600 text-sm">Mastered tracks in catalog</p>
                         </div>
 
                         <div className="glass-panel rounded-[2rem] md:rounded-[2.5rem] p-8">
                              <h3 className="text-sm font-black uppercase tracking-[0.2em] text-slate-500 mb-4">Membership Status</h3>
-                             <div className="text-2xl font-black text-white mb-2 uppercase">{email === 'dreknows@gmail.com' ? 'Owner / Admin' : 'Pro Member'}</div>
-                             <p className="text-emerald-500 text-sm font-bold uppercase tracking-widest">● Active</p>
+                             <div className="text-2xl font-black text-white mb-2 uppercase">{planState.plan}</div>
+                             <p className={`text-sm font-bold uppercase tracking-widest ${planState.isActive ? 'text-emerald-500' : 'text-amber-400'}`}>
+                               ● {planState.isActive ? 'Active' : 'Inactive'}
+                             </p>
+                             {planState.plan === 'Pro Monthly' && planState.renewalDate && (
+                                <p className="mt-2 text-xs text-slate-500 uppercase tracking-widest">
+                                  Renewal Date: <span className="text-slate-300">{planState.renewalDate}</span>
+                                </p>
+                             )}
                         </div>
                     </div>
 
@@ -384,10 +411,10 @@ const ProfileView: React.FC<ProfileViewProps> = ({ email, onLoadSong, onBack, on
                         <button onClick={onBuyCredits} className="bg-white text-black px-8 py-4 rounded-2xl font-black uppercase tracking-widest text-base hover:scale-105 transition-all shadow-xl">Purchase Credits</button>
                     </div>
 
-                    <div className="bg-[#131722] border border-slate-800 rounded-[2.5rem] p-10 mb-12 flex items-center justify-between relative overflow-hidden">
+                    <div className="bg-[#131722] border border-slate-800 rounded-[2rem] md:rounded-[2.5rem] p-6 md:p-10 mb-12 flex items-center justify-between relative overflow-hidden gap-4">
                         <div className="relative z-10">
                             <span className="text-sm font-black uppercase tracking-[0.2em] text-slate-400 block mb-2">Current Balance</span>
-                            <span className="text-7xl font-black text-white tracking-tighter block mb-4">{profile?.credits}</span>
+                            <span className="text-5xl md:text-7xl font-black text-white tracking-tighter block mb-4">{profile?.credits}</span>
                             
                             {nextRefillDate && (
                                 <div className="flex flex-col gap-1 mt-2">
@@ -395,7 +422,7 @@ const ProfileView: React.FC<ProfileViewProps> = ({ email, onLoadSong, onBack, on
                                         Next Monthly Reset: <span className="text-blue-400">{nextRefillDate}</span>
                                      </span>
                                      <span className="text-[10px] text-slate-600 uppercase tracking-widest">
-                                        (Balance resets to 100 free credits. Unused free credits do not roll over.)
+                                        (Free balance resets to 30 monthly. Pro monthly grants 2,000 on renewal.)
                                      </span>
                                 </div>
                             )}
@@ -408,7 +435,8 @@ const ProfileView: React.FC<ProfileViewProps> = ({ email, onLoadSong, onBack, on
 
                     <h3 className="text-xl font-black text-white mb-6">Transaction History</h3>
                     <div className="bg-[#0b0f19] border border-slate-800 rounded-3xl overflow-hidden">
-                        <table className="w-full text-left">
+                        <div className="overflow-x-auto">
+                        <table className="w-full min-w-[560px] text-left">
                             <thead className="bg-slate-900/50 border-b border-slate-800">
                                 <tr>
                                     <th className="p-6 text-sm font-black uppercase tracking-widest text-slate-500">Date</th>
@@ -432,6 +460,7 @@ const ProfileView: React.FC<ProfileViewProps> = ({ email, onLoadSong, onBack, on
                                 )}
                             </tbody>
                         </table>
+                        </div>
                     </div>
                 </div>
             )}
@@ -442,13 +471,13 @@ const ProfileView: React.FC<ProfileViewProps> = ({ email, onLoadSong, onBack, on
                     <h2 className="text-3xl font-black text-white tracking-tighter mb-8">Studio History</h2>
                     <div className="grid grid-cols-1 gap-6">
                         {songs.length > 0 ? songs.map(song => (
-                             <div key={song.id} className="group bg-[#0b0f19] border border-slate-800 p-6 rounded-3xl flex flex-col md:flex-row items-start md:items-center justify-between gap-6 hover:border-blue-500/30 transition-all">
+                             <div key={song.id} className="group bg-[#0b0f19] border border-slate-800 p-4 md:p-6 rounded-3xl flex flex-col md:flex-row items-start md:items-center justify-between gap-4 md:gap-6 hover:border-blue-500/30 transition-all">
                                  <div className="flex items-center gap-6">
                                      <div className="w-20 h-20 bg-slate-800 rounded-2xl flex-shrink-0 overflow-hidden">
                                          {song.album_art ? <img src={song.album_art} className="w-full h-full object-cover" /> : <div className="w-full h-full flex items-center justify-center text-slate-600"><ImageIcon /></div>}
                                      </div>
                                      <div>
-                                         <h4 className="text-xl font-bold text-white mb-1 group-hover:text-blue-400 transition-colors">{song.title}</h4>
+                                        <h4 className="text-lg md:text-xl font-bold text-white mb-1 group-hover:text-blue-400 transition-colors">{song.title}</h4>
                                          <p className="text-sm text-slate-500 font-mono line-clamp-1 max-w-md">{song.lyrics.slice(0, 70)}...</p>
                                          <span className="text-xs text-slate-600 uppercase tracking-widest mt-2 block">{new Date(song.created_at).toLocaleDateString()}</span>
                                      </div>

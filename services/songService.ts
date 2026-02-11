@@ -1,7 +1,7 @@
 import { SavedSong, SocialPack } from '../types';
 
 const LOCAL_STORAGE_KEY = 'baim_saved_songs';
-const STORAGE_LIMIT = 15;
+const STORAGE_LIMIT = 25;
 
 const normalizeEmail = (email: string) => email.toLowerCase().trim();
 

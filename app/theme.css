@@ -89,4 +89,9 @@ body {
   .heading-display {
     letter-spacing: -0.02em;
   }
+
+  .cta-primary,
+  .cta-secondary {
+    font-size: 0.85rem;
+  }
 }

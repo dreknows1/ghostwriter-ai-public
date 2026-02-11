@@ -227,7 +227,7 @@ const CreationWizard: React.FC<{
         {isLoadingOptions ? (
           <div className="col-span-full py-12 flex flex-col items-center gap-4 animate-pulse">
             <LoadingSpinner />
-            <span className="text-slate-500 font-black uppercase tracking-[0.3em] text-xs">Researching cultural parameters...</span>
+            <span className="text-slate-500 font-black uppercase tracking-[0.14em] md:tracking-[0.3em] text-xs text-center">Researching cultural parameters...</span>
           </div>
         ) : (
           <>
@@ -248,10 +248,10 @@ const CreationWizard: React.FC<{
               <button onClick={() => setIsOther(true)} className="p-4 sm:p-5 lg:p-6 rounded-3xl border bg-slate-800 border-slate-700 text-cyan-400 hover:bg-slate-700 hover:border-cyan-400 hover:text-white transition-all text-base font-black uppercase tracking-widest min-h-[56px] flex items-center justify-center">CUSTOM</button>
             ) : (
               <div className="col-span-full flex flex-col sm:flex-row gap-4 animate-fade-in">
-                <input autoFocus type="text" placeholder={`Enter custom ${field}...`} className="flex-grow bg-slate-800 border border-cyan-500/50 p-6 rounded-3xl text-white outline-none text-base font-black uppercase tracking-widest" value={otherText} onChange={(e) => setOtherText(e.target.value)} onKeyDown={(e) => e.key === 'Enter' && handleOtherSubmit(field)} />
+                <input autoFocus type="text" placeholder={`Enter custom ${field}...`} className="flex-grow bg-slate-800 border border-cyan-500/50 p-4 md:p-6 rounded-3xl text-white outline-none text-base font-black uppercase tracking-wide md:tracking-widest" value={otherText} onChange={(e) => setOtherText(e.target.value)} onKeyDown={(e) => e.key === 'Enter' && handleOtherSubmit(field)} />
                 <div className="flex gap-2">
-                  <button onClick={() => handleOtherSubmit(field)} className="flex-grow sm:flex-none px-10 bg-cyan-600 rounded-3xl text-sm font-black uppercase tracking-widest text-white py-4">Confirm</button>
-                  <button onClick={() => setIsOther(false)} className="flex-grow sm:flex-none px-10 bg-slate-800 rounded-3xl text-sm font-black uppercase tracking-widest text-slate-500 py-4">Cancel</button>
+                  <button onClick={() => handleOtherSubmit(field)} className="flex-grow sm:flex-none px-6 md:px-10 bg-cyan-600 rounded-3xl text-sm font-black uppercase tracking-wide md:tracking-widest text-white py-4">Confirm</button>
+                  <button onClick={() => setIsOther(false)} className="flex-grow sm:flex-none px-6 md:px-10 bg-slate-800 rounded-3xl text-sm font-black uppercase tracking-wide md:tracking-widest text-slate-500 py-4">Cancel</button>
                 </div>
               </div>
             )}
@@ -278,8 +278,8 @@ const CreationWizard: React.FC<{
   }, [step]);
 
   return (
-    <div className="max-w-6xl mx-auto py-12 px-4 animate-fade-in">
-      <div className="flex justify-between items-center mb-16">
+    <div className="max-w-6xl mx-auto py-8 md:py-12 px-4 animate-fade-in">
+      <div className="flex justify-between items-center mb-10 md:mb-16 gap-2">
         <button onClick={onPrev} className="text-slate-500 hover:text-white text-sm font-black uppercase tracking-widest flex items-center gap-2">← Back</button>
         <div className="flex flex-col items-center gap-2">
             <div className="flex gap-2">
@@ -290,14 +290,14 @@ const CreationWizard: React.FC<{
                 <div key={i} className={`h-1.5 w-8 rounded-full transition-all duration-500 ${STEP_ORDER.indexOf(step) >= STEP_ORDER.indexOf(s) ? 'bg-blue-600 shadow-[0_0_10px_rgba(37,99,235,0.5)]' : 'bg-slate-800'}`}></div>
             ))}
             </div>
-            <span className="text-xs font-black text-slate-600 uppercase tracking-widest">Studio Progress: {Math.round((STEP_ORDER.indexOf(step) / STEP_ORDER.length) * 100)}%</span>
+            <span className="text-[10px] md:text-xs font-black text-slate-600 uppercase tracking-wide md:tracking-widest text-center">Studio Progress: {Math.round((STEP_ORDER.indexOf(step) / STEP_ORDER.length) * 100)}%</span>
         </div>
-        <div className="w-20"></div>
+        <div className="w-10 md:w-20"></div>
       </div>
 
       <div className="text-center">
-        <h2 className="text-5xl md:text-7xl font-black text-white mb-4 tracking-tighter">{stepTitle}</h2>
-        <p className="text-slate-500 font-black uppercase tracking-[0.4em] text-sm mb-12">Building authenticity for the {inputs.genre || 'Universal'} session</p>
+        <h2 className="text-4xl md:text-7xl font-black text-white mb-4 tracking-tighter">{stepTitle}</h2>
+        <p className="text-slate-500 font-black uppercase tracking-[0.12em] md:tracking-[0.4em] text-xs md:text-sm mb-8 md:mb-12">Building authenticity for the {inputs.genre || 'Universal'} session</p>
         
         {step === AppStep.AWAITING_LANGUAGE && renderOptions('language')}
         {step === AppStep.AWAITING_GENRE && renderOptions('genre')}
@@ -314,14 +314,14 @@ const CreationWizard: React.FC<{
           <div className="text-center space-y-6 max-w-2xl mx-auto mt-12">
             <input type="text" placeholder="Reference Artist (e.g. Bad Bunny, Utada Hikaru)" className="w-full bg-slate-800 border border-slate-700 p-8 rounded-[2rem] text-white outline-none focus:border-blue-500 text-lg transition-all" value={inputs.referenceArtist || ''} onChange={(e) => onUpdate('referenceArtist', e.target.value)} />
             <input type="text" placeholder="Mundane Objects (e.g. cold coffee, cracked phone)" className="w-full bg-slate-800 border border-slate-700 p-8 rounded-[2rem] text-white outline-none focus:border-blue-500 text-lg transition-all" value={inputs.mundaneObjects || ''} onChange={(e) => onUpdate('mundaneObjects', e.target.value)} />
-            <button onClick={() => onNext()} className="w-full bg-blue-600 py-8 rounded-[2rem] text-base font-black uppercase tracking-[0.4em] text-white hover:bg-blue-500 transition-all">Next Module</button>
+            <button onClick={() => onNext()} className="w-full bg-blue-600 py-6 md:py-8 rounded-[2rem] text-sm md:text-base font-black uppercase tracking-[0.16em] md:tracking-[0.4em] text-white hover:bg-blue-500 transition-all">Next Module</button>
           </div>
         )}
 
         {step === AppStep.AWAITING_ADDITIONAL_INFO && (
           <div className="text-center space-y-6 max-w-2xl mx-auto mt-12">
             <textarea autoFocus placeholder="e.g. A conversation at a train station in the rain..." className="w-full bg-slate-800 border border-slate-700 p-8 rounded-[2rem] text-white outline-none focus:border-blue-500 min-h-[250px] text-lg leading-relaxed" value={inputs.awkwardMoment || ''} onChange={(e) => onUpdate('awkwardMoment', e.target.value)} />
-            <button onClick={onGenerate} className="w-full bg-gradient-to-r from-blue-600 to-cyan-500 py-8 rounded-[2rem] text-xl font-black uppercase tracking-[0.5em] text-white shadow-xl transition-all hover:scale-[1.02]">MASTER THE RECORD</button>
+            <button onClick={onGenerate} className="w-full bg-gradient-to-r from-blue-600 to-cyan-500 py-6 md:py-8 rounded-[2rem] text-base md:text-xl font-black uppercase tracking-[0.16em] md:tracking-[0.5em] text-white shadow-xl transition-all hover:scale-[1.02]">MASTER THE RECORD</button>
             <p className="text-sm text-slate-500 uppercase tracking-widest mt-4">COST: {COSTS.GENERATE_SONG} CREDITS</p>
           </div>
         )}
@@ -626,9 +626,9 @@ export const App: React.FC = () => {
                         autoFocus
                      />
                      
-                     <div className="flex gap-4">
+                     <div className="flex flex-col sm:flex-row gap-3 sm:gap-4">
                          <button onClick={handlePasteImport} className="cta-primary flex-1 py-4 rounded-2xl font-black uppercase tracking-widest transition-all">
-                             Structure Song (5 Credits)
+                             Structure Song ({COSTS.GENERATE_SONG} Credits)
                          </button>
                          <button onClick={() => { setIsPasteMode(false); setPasteContent(''); }} className="cta-secondary flex-1 py-4 rounded-2xl text-slate-300 font-black uppercase tracking-widest transition-all">
                              Cancel
@@ -640,7 +640,7 @@ export const App: React.FC = () => {
                      <div className="mb-12 flex flex-col items-center">
                         <Logo size={100} className="mb-6" />
                         <h1 className="heading-display text-4xl md:text-5xl font-black text-white tracking-tighter mb-2">Studio Dashboard</h1>
-                        <p className="text-slate-500 font-black uppercase tracking-[0.4em] text-sm">Welcome back, {session?.user?.email?.split('@')[0]}</p>
+                        <p className="text-slate-500 font-black uppercase tracking-[0.18em] md:tracking-[0.4em] text-xs md:text-sm">Welcome back, {session?.user?.email?.split('@')[0]}</p>
                      </div>
 
                      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
@@ -692,7 +692,7 @@ export const App: React.FC = () => {
 
                      </div>
 
-                     <div className="mt-16 flex justify-center gap-6">
+                     <div className="mt-16 flex flex-wrap justify-center gap-4 md:gap-6">
                          <div className="flex items-center gap-2 px-5 py-2 bg-slate-900 rounded-full border border-slate-800">
                              <WalletIcon className="w-4 h-4 text-slate-500" />
                              <span className="text-xs font-black text-slate-300 uppercase tracking-widest">{credits} Credits</span>
@@ -711,11 +711,15 @@ export const App: React.FC = () => {
       <div className="fixed top-0 left-0 w-full h-full bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-slate-900 via-[#020617] to-[#020617] pointer-events-none z-0"></div>
       
       {/* Header */}
-      <nav className="glass-panel relative z-50 p-4 md:p-6 mt-3 flex justify-between items-center max-w-7xl mx-auto rounded-2xl md:rounded-3xl">
+      <nav className="glass-panel relative z-50 p-4 md:p-6 mt-3 flex justify-between items-center max-w-7xl mx-auto rounded-2xl md:rounded-3xl gap-3">
          <div onClick={() => setView(AppView.LANDING)} className="cursor-pointer hover:opacity-80 transition-opacity">
             <Logo size={48} />
          </div>
-         <div className="flex items-center gap-4">
+         <div className="flex items-center gap-2 md:gap-4">
+             <div className="md:hidden flex items-center gap-1 px-3 py-2 rounded-full bg-slate-900 border border-slate-800 text-cyan-400">
+                <WalletIcon className="w-3.5 h-3.5" />
+                <span className="text-[11px] font-black tracking-wider tabular-nums">{credits}</span>
+             </div>
              {/* Credit Monitor & Add Button */}
              <div className="hidden md:flex items-center bg-[#0b0f19] border border-slate-800 rounded-full p-1 pl-1 pr-4 gap-3 shadow-inner">
                 <div className="flex items-center gap-2 px-4 py-2 rounded-full bg-slate-800 border border-slate-700 text-cyan-400">

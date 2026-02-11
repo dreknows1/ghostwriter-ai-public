@@ -50,8 +50,15 @@ export default async function handler(req: any, res: any) {
   }
 
   try {
+    const client: any = new ConvexHttpClient(convexUrl);
+    client.setAdminAuth(convexAdminKey);
+
     if (event.type === 'checkout.session.completed') {
       const session = event.data.object as Stripe.Checkout.Session;
+      if (session.mode === 'subscription') {
+        return res.status(200).json({ received: true });
+      }
+
       const metadata = session.metadata || {};
       const userEmail = metadata.userEmail || session.customer_email || session.client_reference_id;
 
@@ -67,9 +74,6 @@ export default async function handler(req: any, res: any) {
       const amountCents = session.amount_total || 0;
       const item = metadata.productName || 'Credit Package';
 
-      const client: any = new ConvexHttpClient(convexUrl);
-      client.setAdminAuth(convexAdminKey);
-
       await client.mutation(applyStripeCheckoutCreditsByEmailRef as any, {
         eventId: event.id,
         sessionId: session.id,
@@ -78,6 +82,33 @@ export default async function handler(req: any, res: any) {
         item,
         amountCents,
       });
+    }
+
+    if (event.type === 'invoice.paid') {
+      const invoice = event.data.object as Stripe.Invoice;
+      const subscriptionId = typeof invoice.subscription === 'string'
+        ? invoice.subscription
+        : invoice.subscription?.id;
+
+      if (!subscriptionId) {
+        return res.status(200).json({ received: true });
+      }
+
+      const subscription = await stripe.subscriptions.retrieve(subscriptionId);
+      const metadata = subscription.metadata || {};
+      const userEmail = metadata.userEmail || invoice.customer_email;
+      const credits = Number(metadata.credits || 0);
+
+      if (userEmail && credits > 0) {
+        await client.mutation(applyStripeCheckoutCreditsByEmailRef as any, {
+          eventId: event.id,
+          sessionId: `sub_${subscriptionId}_inv_${invoice.id}`,
+          userEmail,
+          credits,
+          item: metadata.productName || 'Pro Monthly Plan',
+          amountCents: invoice.amount_paid || invoice.amount_due || 0,
+        });
+      }
     }
 
     return res.status(200).json({ received: true });

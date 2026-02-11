@@ -52,19 +52,19 @@ const MetaTagLibrary: React.FC<MetaTagLibraryProps> = ({ onDragStart }) => {
     const [activeCategory, setActiveCategory] = useState("Structure");
 
     return (
-        <div className="bg-[#131722] border border-slate-800 rounded-[3rem] h-[700px] flex flex-col shadow-2xl overflow-hidden">
+        <div className="bg-[#131722] border border-slate-800 rounded-[2rem] md:rounded-[3rem] h-[560px] md:h-[700px] flex flex-col shadow-2xl overflow-hidden">
             {/* Main Header - Fixed */}
-            <div className="px-10 py-8 bg-slate-900/40 border-b border-slate-800 flex justify-between items-center shrink-0">
-                <h3 className="text-white text-base font-black uppercase tracking-[0.2em] flex items-center gap-3">
+            <div className="px-4 md:px-10 py-5 md:py-8 bg-slate-900/40 border-b border-slate-800 flex justify-between items-center shrink-0 gap-3">
+                <h3 className="text-white text-sm md:text-base font-black uppercase tracking-[0.12em] md:tracking-[0.2em] flex items-center gap-3">
                    Master Tag Library
                 </h3>
-                <span className="text-xs font-bold text-slate-500 uppercase tracking-widest">DRAG TO EDITOR</span>
+                <span className="text-[10px] md:text-xs font-bold text-slate-500 uppercase tracking-[0.1em] md:tracking-widest">DRAG TO EDITOR</span>
             </div>
             
             {/* Scrollable Content Pane */}
             <div className="flex-1 overflow-y-auto custom-scrollbar">
                 {/* Category Navigation - Pill Style */}
-                <div className="p-8 pb-4">
+                <div className="p-4 md:p-8 pb-4">
                     <div className="flex flex-wrap gap-2">
                         {Object.keys(CATEGORIES).map(cat => (
                             <button
@@ -83,7 +83,7 @@ const MetaTagLibrary: React.FC<MetaTagLibraryProps> = ({ onDragStart }) => {
                 </div>
 
                 {/* Tags Grid Area */}
-                <div className="p-8 pt-4">
+                <div className="p-4 md:p-8 pt-4">
                     <div className="flex flex-wrap gap-3 content-start pb-10">
                         {(CATEGORIES as any)[activeCategory].map((tag: string) => (
                             <div
@@ -92,7 +92,7 @@ const MetaTagLibrary: React.FC<MetaTagLibraryProps> = ({ onDragStart }) => {
                                 onDragStart={(e) => onDragStart(e, tag)}
                                 className={`
                                     cursor-grab active:cursor-grabbing select-none
-                                    text-sm font-black py-4 px-6 rounded-2xl
+                                    text-xs md:text-sm font-black py-3 md:py-4 px-4 md:px-6 rounded-2xl
                                     border transition-all active:scale-95 shadow-lg
                                     ${tag.startsWith('(') 
                                         ? 'bg-emerald-600 border-emerald-500 text-white hover:bg-emerald-500 shadow-emerald-900/40' 

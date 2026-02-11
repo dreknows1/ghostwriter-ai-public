@@ -44,7 +44,7 @@ const TermsAndPrivacy: React.FC<TermsAndPrivacyProps> = ({ onBack }) => {
 
               <div>
                 <strong className="text-white block mb-2 uppercase tracking-wide text-xs">4. Usage Limits</strong>
-                <p>Standard accounts are provided with 100 monthly generation credits and a storage limit of 15 songs. These limits reset monthly based on your account creation date.</p>
+                <p>Free accounts include 30 monthly credits and a storage limit of 25 songs. Pro plans include 2,000 monthly credits, and one-time top-up packages are available for additional usage.</p>
               </div>
 
               <div>

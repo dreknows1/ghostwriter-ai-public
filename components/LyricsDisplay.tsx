@@ -170,26 +170,26 @@ const LyricsDisplay: React.FC<LyricsDisplayProps> = ({
         </button>
       </div>
 
-      <div className="w-full flex flex-col md:flex-row justify-between items-end mb-12 gap-6">
+      <div className="w-full flex flex-col md:flex-row justify-between md:items-end mb-8 md:mb-12 gap-6">
          <div className="flex flex-col text-left w-full">
             <span className="text-sm uppercase font-black tracking-[0.4em] text-[#3B82F6] mb-3">MASTER SESSION TITLE</span>
             <h2 className="heading-display text-4xl md:text-7xl font-black text-white tracking-tighter leading-none break-words">{parsed.title}</h2>
          </div>
-         <div className="flex gap-4 flex-shrink-0">
+         <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 w-full md:w-auto md:flex-shrink-0">
             <button onClick={async () => {
                 const lang = prompt("Translate to:", "Spanish");
                 if (lang) {
                   const res = await onTranslate(parsed.lyrics, lang);
                   addToHistory(`Title: ${parsed.title}\n\n### SUNO Prompt\n${parsed.prompt}\n\n### Lyrics\n${res}`);
                 }
-            }} className="cta-secondary hover:bg-slate-800 px-5 md:px-8 py-4 rounded-2xl text-sm font-black text-slate-200 uppercase tracking-widest transition-all flex items-center gap-2">
+            }} className="cta-secondary hover:bg-slate-800 px-5 md:px-8 py-4 rounded-2xl text-sm font-black text-slate-200 uppercase tracking-wide md:tracking-widest transition-all flex items-center justify-center gap-2 w-full sm:w-auto">
                 <TranslateIcon /> Translate
             </button>
             <button onClick={async () => { 
                 setIsSaving(true); 
                 try { await onSave(parsed.title, parsed.prompt, parsed.lyrics, albumArt || undefined); } 
                 finally { setIsSaving(false); } 
-            }} className="cta-primary px-6 md:px-12 py-4 rounded-2xl text-sm font-black uppercase tracking-[0.12em] md:tracking-[0.2em] transition-all min-h-[56px]">
+            }} className="cta-primary px-6 md:px-12 py-4 rounded-2xl text-sm font-black uppercase tracking-[0.12em] md:tracking-[0.2em] transition-all min-h-[56px] w-full sm:w-auto">
                 {isSaving ? 'Saving...' : 'Save Record'}
             </button>
          </div>
@@ -199,14 +199,14 @@ const LyricsDisplay: React.FC<LyricsDisplayProps> = ({
           <div className="lg:col-span-8 flex flex-col gap-8">
             <div className={`glass-panel-strong rounded-[2rem] md:rounded-[3.5rem] flex flex-col shadow-2xl ring-1 ring-white/5 min-h-[900px] md:min-h-[1200px] relative studio-container overflow-hidden`}>
                 
-                <div className="bg-[#131722]/60 px-10 py-7 border-b border-slate-800 flex justify-between items-center relative z-40">
+                <div className="bg-[#131722]/60 px-4 md:px-10 py-5 md:py-7 border-b border-slate-800 flex justify-between items-center relative z-40 gap-3">
                     <span className="text-sm uppercase font-black tracking-[0.2em] text-slate-500">Master Session Lyrics</span>
-                    <button onClick={() => copyToClipboard(parsed.lyrics, setCopiedLyrics)} className={`px-6 py-3 rounded-2xl text-sm font-black uppercase tracking-widest border transition-all ${copiedLyrics ? 'bg-green-500/10 border-green-500/50 text-green-400' : 'bg-white text-black hover:bg-slate-200'}`}>
+                    <button onClick={() => copyToClipboard(parsed.lyrics, setCopiedLyrics)} className={`px-4 md:px-6 py-2.5 md:py-3 rounded-2xl text-xs md:text-sm font-black uppercase tracking-wide md:tracking-widest border transition-all whitespace-nowrap ${copiedLyrics ? 'bg-green-500/10 border-green-500/50 text-green-400' : 'bg-white text-black hover:bg-slate-200'}`}>
                         {copiedLyrics ? 'Copied' : 'Copy Lyrics'}
                     </button>
                 </div>
 
-                <div className="p-10 pb-6 border-b border-slate-800/50 bg-slate-900/10 relative z-40">
+                <div className="p-4 md:p-10 pb-4 md:pb-6 border-b border-slate-800/50 bg-slate-900/10 relative z-40">
                    <div className="flex justify-between items-center mb-4">
                       <label className="text-sm uppercase font-black tracking-widest text-[#6366F1]">Style / SUNO Prompt</label>
                       <button onClick={() => copyToClipboard(parsed.prompt, setCopiedPrompt)} className="text-slate-500 hover:text-[#6366F1] transition-colors">
@@ -239,17 +239,17 @@ const LyricsDisplay: React.FC<LyricsDisplayProps> = ({
 
           <div className="lg:col-span-4 flex flex-col gap-10">
               <div className="flex flex-col">
-                  <h3 className="text-cyan-400 text-lg font-black uppercase tracking-[0.3em] mb-4 flex items-center gap-3">
+                  <h3 className="text-cyan-400 text-base md:text-lg font-black uppercase tracking-[0.14em] md:tracking-[0.3em] mb-4 flex items-center gap-3">
                     <MagicWandIcon /> STUDIO REVISION
                   </h3>
                   <textarea 
-                    className="w-full bg-slate-800/90 border-2 border-cyan-400/60 shadow-[0_0_40px_rgba(34,211,238,0.25)] rounded-[2.5rem] p-10 text-lg leading-relaxed text-white placeholder:text-slate-500 focus:border-cyan-400 outline-none resize-none mb-6 shadow-inner transition-all focus:ring-1 focus:ring-cyan-400/30"
+                    className="w-full bg-slate-800/90 border-2 border-cyan-400/60 shadow-[0_0_40px_rgba(34,211,238,0.25)] rounded-[1.5rem] md:rounded-[2.5rem] p-6 md:p-10 text-base md:text-lg leading-relaxed text-white placeholder:text-slate-500 focus:border-cyan-400 outline-none resize-none mb-6 shadow-inner transition-all focus:ring-1 focus:ring-cyan-400/30"
                     rows={10}
                     placeholder="e.g. Add more ad-libs, make the chorus hit harder..."
                     value={quickEditInput}
                     onChange={(e) => setQuickEditInput(e.target.value)}
                   />
-                  <button onClick={handleQuickEdit} disabled={isQuickEditing} className="w-full bg-cyan-600 hover:bg-cyan-500 py-6 rounded-[1.5rem] text-sm font-black uppercase tracking-[0.3em] text-white shadow-lg shadow-cyan-900/40 transition-all flex justify-center min-h-[64px] items-center group-hover:scale-[1.02]">
+                  <button onClick={handleQuickEdit} disabled={isQuickEditing} className="w-full bg-cyan-600 hover:bg-cyan-500 py-5 md:py-6 rounded-[1.5rem] text-xs md:text-sm font-black uppercase tracking-[0.12em] md:tracking-[0.3em] text-white shadow-lg shadow-cyan-900/40 transition-all flex justify-center min-h-[64px] items-center group-hover:scale-[1.02]">
                       {isQuickEditing ? <LoadingSpinner /> : `Master Revision (${COSTS.EDIT_SONG} Credits)`}
                   </button>
               </div>
@@ -263,20 +263,20 @@ const LyricsDisplay: React.FC<LyricsDisplayProps> = ({
                   e.dataTransfer.setDragImage(img, 0, 0);
               }} />
 
-              <div className="bg-[#131722] border border-slate-800 p-10 rounded-[3rem] shadow-xl">
+              <div className="bg-[#131722] border border-slate-800 p-6 md:p-10 rounded-[2rem] md:rounded-[3rem] shadow-xl">
                   <h3 className="text-white text-sm font-black uppercase tracking-widest mb-8 flex items-center gap-3"><ImageIcon /> Session Art</h3>
                   <div className="w-full aspect-[9/16] bg-[#0b0f19] rounded-[2rem] flex items-center justify-center text-slate-800 border-2 border-dashed border-slate-800/40 mb-8 overflow-hidden relative">
                       {isGeneratingArt ? <LoadingSpinner /> : albumArt ? <img src={albumArt} alt="Artwork" className="w-full h-full object-cover" /> : <ImageIcon />}
                   </div>
-                  <button onClick={handleGenerateArtwork} disabled={isGeneratingArt} className="w-full bg-indigo-900/10 hover:bg-indigo-900/20 py-5 rounded-[1.5rem] text-sm font-black uppercase tracking-[0.3em] text-indigo-500 border border-indigo-900/20 transition-all">
+                  <button onClick={handleGenerateArtwork} disabled={isGeneratingArt} className="w-full bg-indigo-900/10 hover:bg-indigo-900/20 py-5 rounded-[1.5rem] text-sm font-black uppercase tracking-[0.14em] md:tracking-[0.3em] text-indigo-500 border border-indigo-900/20 transition-all">
                       {isGeneratingArt ? 'Visualizing...' : 'Generate Art'}
                   </button>
               </div>
           </div>
       </div>
 
-      <div className="py-32">
-          <button onClick={onStartOver} className="bg-white text-black px-20 py-7 rounded-full font-black uppercase tracking-[0.2em] text-base hover:scale-105 transition-all shadow-2xl active:scale-95">Start New Session</button>
+      <div className="py-16 md:py-32">
+          <button onClick={onStartOver} className="bg-white text-black px-8 md:px-20 py-4 md:py-7 rounded-full font-black uppercase tracking-[0.12em] md:tracking-[0.2em] text-sm md:text-base hover:scale-105 transition-all shadow-2xl active:scale-95">Start New Session</button>
       </div>
 
       <style>{`
@@ -332,6 +332,14 @@ const LyricsDisplay: React.FC<LyricsDisplayProps> = ({
         .studio-text-layer::-webkit-scrollbar { width: 12px; }
         .studio-text-layer::-webkit-scrollbar-track { background: transparent; }
         .studio-text-layer::-webkit-scrollbar-thumb { background: #1e293b; border-radius: 10px; }
+
+        @media (max-width: 768px) {
+          .studio-text-layer {
+            padding: 20px;
+            font-size: 17px;
+            line-height: 1.55;
+          }
+        }
       `}</style>
     </div>
   );

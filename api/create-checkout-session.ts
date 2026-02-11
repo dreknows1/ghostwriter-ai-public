@@ -28,21 +28,24 @@ export default async function handler(req: any, res: any) {
       return res.status(400).json({ error: 'Email is required' });
     }
 
-    const products: Record<string, { name: string; amount: number; credits: number }> = {
+    const products: Record<string, { name: string; amount: number; credits: number; mode: 'payment' | 'subscription' }> = {
+      'pro_monthly': {
+        name: 'Pro Monthly (2000 Credits)',
+        amount: 2900, // $29.00 per month in cents
+        credits: 2000,
+        mode: 'subscription'
+      },
       'starter': { 
-        name: 'Refill Pack (100 Credits)', 
-        amount: 499, // $4.99 in cents
-        credits: 100 
+        name: 'Starter Top-Up (250 Credits)', 
+        amount: 1200, // $12.00 in cents
+        credits: 250,
+        mode: 'payment'
       },
-      'studio': { 
-        name: 'Studio Pack (500 Credits)', 
-        amount: 1999, // $19.99 in cents
-        credits: 500 
-      },
-      'label': { 
-        name: 'Label Pack (2000 Credits)', 
-        amount: 4999, // $49.99 in cents
-        credits: 2000 
+      'pro': { 
+        name: 'Pro Top-Up (1000 Credits)', 
+        amount: 3900, // $39.00 in cents
+        credits: 1000,
+        mode: 'payment'
       },
     };
 
@@ -56,6 +59,8 @@ export default async function handler(req: any, res: any) {
     // Vercel functions populate the host header, or we default to the production URL
     const origin = req.headers.origin || 'https://ghostwriter-ai.vercel.app'; 
 
+    const isSubscription = product.mode === 'subscription';
+
     const session = await stripe.checkout.sessions.create({
       payment_method_types: ['card'],
       line_items: [
@@ -66,16 +71,29 @@ export default async function handler(req: any, res: any) {
               name: product.name,
               description: `${product.credits} Ghostwriter AI Generation Credits`,
             },
+            ...(isSubscription ? { recurring: { interval: 'month' as const } } : {}),
             unit_amount: product.amount,
           },
           quantity: 1,
         },
       ],
-      mode: 'payment',
+      mode: product.mode,
       success_url: `${origin}/?status=success&session_id={CHECKOUT_SESSION_ID}`,
       cancel_url: `${origin}/?status=cancel`,
       customer_email: normalizedEmail,
       client_reference_id: normalizedEmail,
+      ...(isSubscription
+        ? {
+            subscription_data: {
+              metadata: {
+                userEmail: normalizedEmail,
+                credits: product.credits.toString(),
+                productName: product.name,
+                pkgId: priceId
+              }
+            }
+          }
+        : {}),
       metadata: {
         userEmail: normalizedEmail,
         credits: product.credits.toString(),

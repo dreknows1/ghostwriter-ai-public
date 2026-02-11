@@ -1,11 +1,11 @@
 import { getUserProfile, upsertUserProfile } from './userService';
 
-const FREE_MONTHLY_CREDITS = 100;
+const FREE_MONTHLY_CREDITS = 30;
 
 export const COSTS = {
-  GENERATE_SONG: 5,
+  GENERATE_SONG: 4,
   EDIT_SONG: 1,
-  GENERATE_ART: 2,
+  GENERATE_ART: 8,
   SOCIAL_PACK: 1
 };
 
