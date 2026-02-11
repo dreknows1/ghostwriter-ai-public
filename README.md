@@ -13,7 +13,7 @@ Prerequisites: Node.js 20+
 1. Install dependencies
    `npm install`
 2. Configure environment variables in `.env.local`:
-   - `API_KEY` (Gemini)
+   - `GEMINI_API_KEY` (preferred) or `API_KEY` (Gemini)
    - `CONVEX_URL` (for Convex client/server integration)
    - `CONVEX_ADMIN_KEY` (server-only, for webhook mutation calls)
    - `STRIPE_PUBLISHABLE_KEY`
