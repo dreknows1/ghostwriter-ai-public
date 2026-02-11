@@ -502,38 +502,79 @@ export const App: React.FC = () => {
 
   if (!session || view === AppView.AUTH) {
     return (
-      <div className="app-shell min-h-screen flex flex-col items-center justify-center p-4 relative overflow-hidden">
-        <div className="absolute top-0 left-0 w-full h-full bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-20 pointer-events-none"></div>
-        <div className="glass-panel-strong relative z-10 w-full max-w-md p-8 rounded-[2rem] md:rounded-[3rem]">
-           <div className="flex justify-center mb-8"><Logo size={80} /></div>
-           <h1 className="heading-display text-3xl font-black text-white text-center tracking-tighter mb-2">Ghostwriter A.I.</h1>
-           <p className="text-center text-slate-500 text-sm font-black uppercase tracking-widest mb-10">Professional Songwriting Assistant</p>
-           
-           {!magicLinkSent ? (
-               <form onSubmit={handleAuth} className="space-y-4">
-                   <input 
-                    type="email" 
-                    placeholder="ENTER YOUR EMAIL" 
-                    value={authEmail}
-                    onChange={(e) => setAuthEmail(e.target.value)}
-                    className="w-full bg-[#131722] border border-slate-800 p-5 rounded-2xl text-center text-white outline-none focus:border-blue-500 font-bold uppercase tracking-widest placeholder:text-slate-600 transition-all"
-                    required
-                   />
-                   <button disabled={isAuthLoading} className="cta-primary w-full py-5 rounded-2xl font-black uppercase tracking-[0.2em] transition-all">
-                       {isAuthLoading ? <LoadingSpinner /> : 'Enter Studio'}
-                   </button>
-               </form>
-           ) : (
-               <div className="text-center p-6 bg-green-900/20 border border-green-500/30 rounded-2xl">
-                   <CheckIcon />
-                   <h3 className="text-green-400 font-black uppercase tracking-widest mt-4">Magic Link Sent</h3>
-                   <p className="text-slate-400 text-sm mt-2">Check your inbox to access the studio.</p>
-                   <button onClick={() => setMagicLinkSent(false)} className="mt-6 text-xs text-slate-500 uppercase tracking-widest hover:text-white">Try different email</button>
-               </div>
-           )}
-           <div className="mt-8 text-center">
-               <button onClick={() => setView(AppView.TERMS)} className="text-[10px] text-slate-600 uppercase tracking-widest hover:text-slate-400">Terms & Privacy</button>
-           </div>
+      <div className="app-shell min-h-screen flex flex-col items-center justify-center p-3 sm:p-4 relative overflow-hidden">
+        <div className="fixed top-0 left-0 w-full h-full bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-slate-900 via-[#0a0d17] to-[#06080f] pointer-events-none z-0"></div>
+        <div className="relative z-10 w-full max-w-xl rounded-[1.75rem] sm:rounded-[2rem] border border-slate-800/80 bg-[#0f121b]/95 shadow-[0_20px_80px_rgba(0,0,0,0.55)] overflow-hidden">
+          <div className="p-5 sm:p-8">
+            <div className="flex justify-center mb-5"><Logo size={74} /></div>
+            <h1 className="text-3xl sm:text-4xl font-black text-center tracking-tight text-white mb-2">Sign In</h1>
+            <p className="text-center text-slate-400 text-base mb-7">Welcome back. Sign in to continue.</p>
+
+            {!magicLinkSent ? (
+              <>
+                <div className="grid grid-cols-5 gap-2 sm:gap-3 mb-6">
+                  {['Apple', 'Discord', 'Facebook', 'Google', 'Microsoft'].map((provider) => (
+                    <button
+                      key={provider}
+                      type="button"
+                      className="h-11 rounded-xl border border-slate-700/90 bg-[#111522] text-slate-300 text-xs font-bold hover:border-slate-500 hover:text-white transition-all"
+                      aria-label={`${provider} sign in coming soon`}
+                      title={`${provider} sign in coming soon`}
+                    >
+                      {provider.slice(0, 1)}
+                    </button>
+                  ))}
+                </div>
+
+                <div className="flex items-center gap-4 mb-6">
+                  <div className="h-px flex-1 bg-slate-800"></div>
+                  <span className="text-slate-500 text-base">or</span>
+                  <div className="h-px flex-1 bg-slate-800"></div>
+                </div>
+
+                <form onSubmit={handleAuth} className="space-y-4">
+                  <div>
+                    <label className="block text-left text-white font-semibold mb-2">Email</label>
+                    <input
+                      type="email"
+                      placeholder="Enter your email"
+                      value={authEmail}
+                      onChange={(e) => setAuthEmail(e.target.value)}
+                      className="w-full bg-[#101522] border border-slate-700 p-4 rounded-xl text-white outline-none focus:border-slate-400 text-base placeholder:text-slate-500 transition-all"
+                      required
+                    />
+                  </div>
+                  <button
+                    disabled={isAuthLoading}
+                    className="w-full h-12 rounded-xl bg-white text-black font-black text-lg hover:bg-slate-200 transition-all disabled:opacity-70 flex items-center justify-center"
+                  >
+                    {isAuthLoading ? <LoadingSpinner /> : 'Continue'}
+                  </button>
+                </form>
+              </>
+            ) : (
+              <div className="text-center p-6 bg-green-900/20 border border-green-500/30 rounded-2xl">
+                <CheckIcon />
+                <h3 className="text-green-400 font-black uppercase tracking-widest mt-4">Magic Link Sent</h3>
+                <p className="text-slate-400 text-sm mt-2">Check your inbox to access the studio.</p>
+                <button onClick={() => setMagicLinkSent(false)} className="mt-6 text-xs text-slate-500 uppercase tracking-widest hover:text-white">Try different email</button>
+              </div>
+            )}
+          </div>
+
+          <div className="border-t border-slate-800 p-4 sm:p-5 bg-[#111522]">
+            <div className="flex flex-col sm:flex-row gap-3 items-center justify-between">
+              <p className="text-slate-400 text-base">Don't have an account?</p>
+              <button type="button" className="w-full sm:w-auto px-10 h-12 rounded-xl bg-white text-black font-bold">
+                Sign up
+              </button>
+            </div>
+            <div className="mt-4 text-center">
+              <button onClick={() => setView(AppView.TERMS)} className="text-xs text-slate-500 hover:text-slate-300">
+                By continuing, you accept our Privacy Policy and Terms
+              </button>
+            </div>
+          </div>
         </div>
       </div>
     );
