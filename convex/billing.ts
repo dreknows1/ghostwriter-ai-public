@@ -27,7 +27,7 @@ async function ensureUserAndProfile(ctx: any, email: string) {
   if (!profile) {
     const profileId = await ctx.db.insert("profiles", {
       userId: user._id,
-      credits: 100,
+      credits: 30,
       lastResetDate: new Date().toISOString(),
       updatedAt: Date.now(),
     });

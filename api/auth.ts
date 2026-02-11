@@ -5,6 +5,7 @@ import { pbkdf2Sync, randomBytes, timingSafeEqual } from "node:crypto";
 
 const getUserByEmailRef = makeFunctionReference<"query">("users:getUserByEmail");
 const upsertUserCredentialsRef = makeFunctionReference<"mutation">("users:upsertUserCredentials");
+const claimReferralCodeByEmailRef = makeFunctionReference<"mutation">("app:claimReferralCodeByEmail");
 
 function normalizeEmail(email: string): string {
   return email.toLowerCase().trim();
@@ -43,7 +44,9 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
       action?: "signup" | "signin";
       email?: string;
       password?: string;
+      referralCode?: string;
     };
+    const referralCode = (req.body as any)?.referralCode;
 
     const normalizedEmail = normalizeEmail(email || "");
     if (!action || !normalizedEmail || !password) {
@@ -68,6 +71,17 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
         passwordHash,
         passwordSalt: salt,
       });
+
+      if (referralCode && String(referralCode).trim()) {
+        try {
+          await client.mutation(claimReferralCodeByEmailRef as any, {
+            email: normalizedEmail,
+            code: String(referralCode).trim().toUpperCase(),
+          });
+        } catch (e) {
+          // Keep signup successful even if referral code is invalid.
+        }
+      }
 
       return res.status(200).json({
         session: {

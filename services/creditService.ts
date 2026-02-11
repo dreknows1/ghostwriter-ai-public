@@ -1,78 +1,29 @@
-import { getUserProfile, getUserTransactions, upsertUserProfile } from './userService';
-
 const FREE_MONTHLY_CREDITS = 30;
 
 export const COSTS = {
   GENERATE_SONG: 4,
   EDIT_SONG: 1,
   GENERATE_ART: 8,
-  SOCIAL_PACK: 1
+  SOCIAL_PACK: 1,
 };
 
-const normalizeEmail = (email: string) => email.toLowerCase().trim();
-
-async function ensureProfile(email: string) {
-  const normalizedEmail = normalizeEmail(email);
-  const existing = await getUserProfile(normalizedEmail);
-
-  if (existing) return existing;
-
-  const now = new Date().toISOString();
-  const created = {
-    user_email: normalizedEmail,
-    credits: FREE_MONTHLY_CREDITS,
-    last_reset_date: now,
-  };
-
-  await upsertUserProfile(created);
-  return created;
-}
-
-async function reconcileLegacyFreeBalance(email: string, profile: any) {
-  // Legacy local profiles may still carry the old free baseline (100 credits).
-  // Only migrate when there is no payment history to avoid touching paid balances.
-  if (!profile || profile.credits !== 100) return profile;
-
-  try {
-    const transactions = await getUserTransactions(email);
-    const hasPaidHistory = transactions.some((tx) => tx.amount > 0);
-    if (hasPaidHistory) return profile;
-
-    const migrated = {
-      ...profile,
-      credits: FREE_MONTHLY_CREDITS,
-      last_reset_date: new Date().toISOString(),
-    };
-    await upsertUserProfile(migrated);
-    return migrated;
-  } catch (e) {
-    console.error('Failed to reconcile legacy balance:', e);
-    return profile;
-  }
+async function callDb(action: string, payload: any) {
+  const res = await fetch("/api/db", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ action, payload }),
+  });
+  const json = await res.json();
+  if (!res.ok) throw new Error(json?.error || "DB call failed");
+  return json.data;
 }
 
 export const getUserCredits = async (email: string): Promise<number> => {
   try {
-    const ensured = await ensureProfile(email);
-    const profile = await reconcileLegacyFreeBalance(email, ensured);
-
-    const now = new Date();
-    const lastReset = profile.last_reset_date ? new Date(profile.last_reset_date) : new Date(0);
-    const shouldReset =
-      now.getMonth() !== lastReset.getMonth() || now.getFullYear() !== lastReset.getFullYear();
-
-    if (!shouldReset) return profile.credits;
-
-    const updated = {
-      ...profile,
-      credits: FREE_MONTHLY_CREDITS,
-      last_reset_date: now.toISOString()
-    };
-
-    await upsertUserProfile(updated);
-    return updated.credits;
+    const credits = await callDb("getCreditsByEmail", { email });
+    return Number(credits ?? FREE_MONTHLY_CREDITS);
   } catch (e) {
-    console.error('Failed to fetch credits:', e);
+    console.error("Failed to fetch credits:", e);
     return 0;
   }
 };
@@ -84,17 +35,10 @@ export const hasEnoughCredits = async (email: string, cost: number = 1): Promise
 
 export const deductCredits = async (email: string, amount: number = 1): Promise<number> => {
   try {
-    const profile = await ensureProfile(email);
-    const newBalance = Math.max(0, profile.credits - amount);
-
-    await upsertUserProfile({
-      ...profile,
-      credits: newBalance,
-    });
-
-    return newBalance;
+    const next = await callDb("spendCreditsByEmail", { email, amount, reason: "app_usage" });
+    return Number(next ?? 0);
   } catch (e) {
-    console.error('Credit deduction failed:', e);
+    console.error("Credit deduction failed:", e);
     return await getUserCredits(email);
   }
 };

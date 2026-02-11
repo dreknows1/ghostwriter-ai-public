@@ -15,12 +15,12 @@ const createSession = (email: string): AppSession => ({
   }
 });
 
-export const signUp = async (email: string, pass: string) => {
+export const signUp = async (email: string, pass: string, referralCode?: string) => {
   try {
     const resp = await fetch('/api/auth', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ action: 'signup', email, password: pass }),
+      body: JSON.stringify({ action: 'signup', email, password: pass, referralCode }),
     });
     const json = await resp.json();
     if (!resp.ok) return { data: null, error: new Error(json?.error || 'Sign up failed') };

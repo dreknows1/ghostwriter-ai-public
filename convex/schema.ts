@@ -57,4 +57,25 @@ export default defineSchema({
     type: v.string(),
     createdAt: v.number(),
   }).index("by_event", ["eventId"]),
+
+  referralCodes: defineTable({
+    userId: v.id("users"),
+    code: v.string(),
+    isActive: v.boolean(),
+    createdAt: v.number(),
+  }).index("by_code", ["code"]).index("by_user", ["userId"]),
+
+  referrals: defineTable({
+    referrerUserId: v.id("users"),
+    referredUserId: v.id("users"),
+    code: v.string(),
+    status: v.string(),
+    qualifiedAt: v.optional(v.number()),
+    rewardedAt: v.optional(v.number()),
+    rejectionReason: v.optional(v.string()),
+    createdAt: v.number(),
+  })
+    .index("by_referred", ["referredUserId"])
+    .index("by_referrer", ["referrerUserId"])
+    .index("by_referrer_referred", ["referrerUserId", "referredUserId"]),
 });

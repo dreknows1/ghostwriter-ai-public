@@ -1,7 +1,7 @@
 import { mutation, query } from "./_generated/server";
 import { v } from "convex/values";
 
-const FREE_MONTHLY_CREDITS = 100;
+const FREE_MONTHLY_CREDITS = 30;
 
 export const getCredits = query({
   args: { userId: v.id("users") },

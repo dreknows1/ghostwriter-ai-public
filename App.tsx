@@ -299,6 +299,7 @@ export const App: React.FC = () => {
   const [loadingMessage, setLoadingMessage] = useState('');
   const [authEmail, setAuthEmail] = useState('');
   const [authPassword, setAuthPassword] = useState('');
+  const [referralCode, setReferralCode] = useState('');
   const [isAuthLoading, setIsAuthLoading] = useState(false);
   const [isSignUpMode, setIsSignUpMode] = useState(false);
   const [loadedSongId, setLoadedSongId] = useState<string | null>(null);
@@ -439,7 +440,7 @@ export const App: React.FC = () => {
       setIsAuthLoading(true);
       try {
           const { data, error } = isSignUpMode
-            ? await signUp(authEmail, authPassword)
+            ? await signUp(authEmail, authPassword, referralCode)
             : await signIn(authEmail, authPassword);
           if (error) throw error;
           if (data?.session) {
@@ -557,6 +558,18 @@ export const App: React.FC = () => {
                     minLength={8}
                   />
                 </div>
+                {isSignUpMode && (
+                  <div>
+                    <label className="block text-left text-white font-semibold mb-2">Referral Code (optional)</label>
+                    <input
+                      type="text"
+                      placeholder="Enter referral code"
+                      value={referralCode}
+                      onChange={(e) => setReferralCode(e.target.value.toUpperCase())}
+                      className="w-full bg-[#101522] border border-slate-700 p-4 rounded-xl text-white outline-none focus:border-slate-400 text-base placeholder:text-slate-500 transition-all"
+                    />
+                  </div>
+                )}
                 <button
                   disabled={isAuthLoading}
                   className="w-full h-12 rounded-xl bg-white text-black font-black text-lg hover:bg-slate-200 transition-all disabled:opacity-70 flex items-center justify-center"
