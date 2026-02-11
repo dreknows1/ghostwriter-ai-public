@@ -237,7 +237,7 @@ const CreationWizard: React.FC<{
                 onClick={() => { onUpdate(field, opt); onNext(); }}
                 className={`w-full p-4 sm:p-5 lg:p-6 rounded-3xl border transition-all text-sm sm:text-base leading-tight font-black uppercase tracking-[0.08em] sm:tracking-widest min-h-[56px] flex items-center justify-center text-center break-words ${
                   inputs[field] === opt 
-                  ? 'bg-blue-600 border-blue-400 text-white shadow-lg scale-105 z-10' 
+                  ? 'bg-blue-600 border-blue-400 text-white shadow-lg z-10' 
                   : 'bg-slate-700 border-slate-600 text-slate-200 hover:bg-slate-600 hover:border-slate-500 hover:text-white'
                 }`}
               >
