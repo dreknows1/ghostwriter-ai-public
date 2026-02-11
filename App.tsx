@@ -10,6 +10,7 @@ import LyricsDisplay from './components/LyricsDisplay';
 import ProfileView from './components/ProfileView';
 import PricingView from './components/PricingView';
 import TermsAndPrivacy from './components/TermsAndPrivacy';
+import UtilityHub, { UtilitySection } from './components/UtilityHub';
 import { Logo } from './components/Logo';
 import { LoadingSpinner, ProfileIcon, WalletIcon, CheckIcon, MagicWandIcon, EditIcon, ClockIcon } from './components/icons';
 import {
@@ -304,6 +305,10 @@ export const App: React.FC = () => {
   const [isSignUpMode, setIsSignUpMode] = useState(false);
   const [loadedSongId, setLoadedSongId] = useState<string | null>(null);
   const [credits, setCredits] = useState<number>(0);
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [utilitySection, setUtilitySection] = useState<UtilitySection>('invite');
+  const [utilityReturnView, setUtilityReturnView] = useState<AppView>(AppView.LANDING);
+  const [termsReturnView, setTermsReturnView] = useState<AppView>(AppView.AUTH);
   
   // Paste / Import State
   const [isPasteMode, setIsPasteMode] = useState(false);
@@ -426,6 +431,13 @@ export const App: React.FC = () => {
       setAlbumArt(null);
       setStep(AppStep.AWAITING_LANGUAGE);
       setView(AppView.STUDIO);
+  };
+
+  const openUtility = (section: UtilitySection, from: AppView) => {
+    setUtilitySection(section);
+    setUtilityReturnView(from);
+    setView(AppView.HELP);
+    setIsMenuOpen(false);
   };
 
   const handleSave = async (title: string, prompt: string, lyrics: string, art?: string, social?: any) => {
@@ -592,7 +604,13 @@ export const App: React.FC = () => {
               </button>
             </div>
             <div className="mt-4 text-center">
-              <button onClick={() => setView(AppView.TERMS)} className="text-xs text-slate-500 hover:text-slate-300">
+              <button
+                onClick={() => {
+                  setTermsReturnView(AppView.AUTH);
+                  setView(AppView.TERMS);
+                }}
+                className="text-xs text-slate-500 hover:text-slate-300"
+              >
                 By continuing, you accept our Privacy Policy and Terms
               </button>
             </div>
@@ -603,7 +621,23 @@ export const App: React.FC = () => {
   }
 
   if (view === AppView.TERMS) {
-      return <TermsAndPrivacy onBack={() => setView(AppView.AUTH)} />;
+      return <TermsAndPrivacy onBack={() => setView(termsReturnView)} />;
+  }
+
+  if (view === AppView.HELP && session) {
+      return (
+        <div className="app-shell min-h-screen text-slate-200">
+          <UtilityHub
+            email={session.user.email}
+            section={utilitySection}
+            onBack={() => setView(utilityReturnView)}
+            onOpenTerms={() => {
+              setTermsReturnView(AppView.HELP);
+              setView(AppView.TERMS);
+            }}
+          />
+        </div>
+      );
   }
 
   if (view === AppView.PRICING) {
@@ -650,7 +684,13 @@ export const App: React.FC = () => {
                  </div>
              ) : (
                      <div className="relative z-10 w-full max-w-4xl animate-fade-in text-center">
-                     <div className="mb-12 flex flex-col items-center">
+                     <div className="mb-12 flex flex-col items-center relative">
+                        <button
+                          onClick={() => setIsMenuOpen((v) => !v)}
+                          className="absolute -top-4 right-0 px-3 py-2 rounded-xl bg-slate-900 border border-slate-800 text-slate-300 hover:text-white"
+                        >
+                          Menu
+                        </button>
                         <Logo size={100} className="mb-6" />
                         <h1 className="heading-display text-4xl md:text-5xl font-black text-white tracking-tighter mb-2">Studio Dashboard</h1>
                         <p className="text-slate-500 font-black uppercase tracking-[0.18em] md:tracking-[0.4em] text-xs md:text-sm">Welcome back, {session?.user?.email?.split('@')[0]}</p>
@@ -714,6 +754,29 @@ export const App: React.FC = () => {
                      </div>
                  </div>
              )}
+
+             {isMenuOpen && (
+               <div className="fixed right-4 top-20 z-[70] w-72 rounded-2xl border border-slate-800 bg-[#1a1d27] shadow-2xl p-3">
+                 {[
+                   ['Invite Friends', 'invite'],
+                   ['Earn Credits', 'earn'],
+                   ["What's New?", 'whatsnew'],
+                   ['Help', 'help'],
+                   ['Feedback', 'feedback'],
+                   ['Terms of Service', 'terms'],
+                   ['Privacy', 'privacy'],
+                   ['About', 'about'],
+                 ].map(([label, key]) => (
+                   <button
+                     key={key}
+                     onClick={() => openUtility(key as UtilitySection, AppView.LANDING)}
+                     className="w-full text-left px-3 py-3 rounded-xl text-slate-300 hover:bg-slate-800 hover:text-white"
+                   >
+                     {label}
+                   </button>
+                 ))}
+               </div>
+             )}
         </div>
       );
   }
@@ -747,8 +810,37 @@ export const App: React.FC = () => {
              <button onClick={() => setView(AppView.PROFILE)} className="w-10 h-10 rounded-full bg-slate-800 flex items-center justify-center text-slate-400 hover:bg-slate-700 hover:text-white transition-all">
                  <ProfileIcon />
              </button>
+             <button
+               onClick={() => setIsMenuOpen((v) => !v)}
+               className="h-10 px-3 rounded-xl bg-slate-800 text-slate-300 hover:bg-slate-700 hover:text-white"
+             >
+               Menu
+             </button>
          </div>
       </nav>
+
+      {isMenuOpen && (
+        <div className="fixed right-4 top-24 z-[70] w-72 rounded-2xl border border-slate-800 bg-[#1a1d27] shadow-2xl p-3">
+          {[
+            ['Invite Friends', 'invite'],
+            ['Earn Credits', 'earn'],
+            ["What's New?", 'whatsnew'],
+            ['Help', 'help'],
+            ['Feedback', 'feedback'],
+            ['Terms of Service', 'terms'],
+            ['Privacy', 'privacy'],
+            ['About', 'about'],
+          ].map(([label, key]) => (
+            <button
+              key={key}
+              onClick={() => openUtility(key as UtilitySection, AppView.STUDIO)}
+              className="w-full text-left px-3 py-3 rounded-xl text-slate-300 hover:bg-slate-800 hover:text-white"
+            >
+              {label}
+            </button>
+          ))}
+        </div>
+      )}
 
       {/* Main Content */}
       <div className="relative z-10 min-h-[80vh] flex flex-col">
