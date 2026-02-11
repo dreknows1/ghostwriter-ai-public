@@ -12,6 +12,13 @@ import PricingView from './components/PricingView';
 import TermsAndPrivacy from './components/TermsAndPrivacy';
 import { Logo } from './components/Logo';
 import { LoadingSpinner, ProfileIcon, WalletIcon, CheckIcon, MagicWandIcon, EditIcon, ClockIcon } from './components/icons';
+import {
+  LANGUAGES,
+  GENRES_BY_LANG,
+  SUBGENRES,
+  getBaseCulture,
+  getBaseEnv
+} from './lib/culturalLogic';
 
 const STEP_ORDER = [
   AppStep.AWAITING_LANGUAGE,
@@ -29,53 +36,6 @@ const STEP_ORDER = [
 ];
 
 // --- CULTURAL LOGIC DATA ---
-
-const LANGUAGES = ['English', 'Spanish', 'French', 'German', 'Japanese', 'Korean', 'Chinese', 'Portuguese', 'Italian', 'Arabic', 'Hindi', 'Swahili'];
-
-const GENRES_BY_LANG: Record<string, string[]> = {
-  'English': ['Pop', 'Hip-Hop', 'Rock', 'R&B', 'Country', 'Electronic/EDM', 'Metal', 'Soul', 'Folk', 'Afrobeats', 'Reggae', 'Gospel', 'Blues', 'Jazz'],
-  'Spanish': ['Reggaeton', 'Bachata', 'Salsa', 'Merengue', 'Latin Trap', 'Flamenco', 'Latin Pop', 'Cumbia', 'Regional Mexican'],
-  'French': ['Chanson', 'French Touch', 'Afro-Trap', 'Indie Rock', 'Electro-Pop', 'Rap Français', 'Zouk', 'Variety'],
-  'German': ['Schlager', 'Neue Deutsche Härte', 'Techno', 'Hip-Hop', 'Indie', 'Krautrock', 'Deutschrock', 'Volksmusik'],
-  'Japanese': ['J-Pop', 'City Pop', 'Enka', 'Visual Kei', 'J-Rock', 'Idol Music', 'Anime OST', 'Kawaii Future Bass'],
-  'Korean': ['K-Pop', 'K-HipHop', 'Trot', 'K-Ballad', 'K-Indie', 'K-Rock', 'Trap', 'K-R&B'],
-  'Chinese': ['Mandopop', 'Cantopop', 'Guofeng (Fusion)', 'C-Pop', 'C-HipHop', 'Chinese Rock'],
-  'Portuguese': ['Samba', 'Bossa Nova', 'Fado', 'Funk Carioca', 'Sertanejo', 'MPB', 'Forró', 'Piseiro'],
-  'Italian': ['Italo-Disco', 'Opera Pop', 'Canzone Napoletana', 'Italian Trap', 'Sanremo Pop', 'Rock Italiano'],
-  'Arabic': ['Arabic Pop', 'Raï', 'Khaliji', 'Maqam Fusion', 'Mahraganat', 'Dabke', 'Classical Arabic', 'Shaabi'],
-  'Hindi': ['Bollywood', 'Indi-Pop', 'Ghazal', 'Bhangra', 'Classical Fusion', 'Sufi', 'Desi Hip-Hop', 'Qawwali'],
-  'Swahili': ['Bongo Flava', 'Taarab', 'Gengetone', 'Swahili Gospel', 'Singeli']
-};
-
-const SUBGENRES: Record<string, string[]> = {
-  'Regional Mexican': ['Banda', 'Mariachi', 'Norteño', 'Duranguense', 'Corridos Tumbados', 'Sierreño', 'Ranchera'],
-  'Reggaeton': ['Old School Dembow', 'Modern Romantic', 'Latin Trap Fusion', 'Perreo', 'Moombahton'],
-  'Mandopop': ['Mandarin Ballad', 'Dance-Mandopop', 'Guofeng-Pop', 'Taiwanese Indie', 'City Mando'],
-  'Cantopop': ['Classic HK Ballad', '80s Retro Canto', 'Cantorock', 'HK Hip-Hop', 'TVB OST Style'],
-  'Guofeng (Fusion)': ['Classical Poetic', 'Traditional Instrument Trap', 'Orchestral Guofeng', 'Silk Road Fusion'],
-  'C-Pop': ['Mainstream Idol Pop', 'Mandarin R&B', 'Electronic C-Pop'],
-  'Bongo Flava': ['Afro-Bongo', 'Bongo-Trap', 'Baibuda', 'Zouk-Flava', 'Coastal Chill'],
-  'Taarab': ['Modern Taarab', 'Traditional Coastal', 'Zanzibar Orchestra', 'Mduara Fusion'],
-  'Gengetone': ['Nairobi Club', 'Sheng Rap', 'Ghetto Anthem', 'Urban Slum Vibe'],
-  'Enka': ['Traditional Showa', 'Modern Enka', 'Shinto Folk', 'Nostalgic Enka'],
-  'Fado': ['Fado de Lisboa', 'Fado de Coimbra', 'Fado Novo', 'Saudade Acoustic'],
-  'Zouk': ['Zouk-Love', 'Kizomba', 'Kompa', 'Antilles Party', 'Tropical Urban'],
-  'Afro-Trap': ['Ivorian Coupe-Decale', 'Parisian Street', 'Afro-Drill', 'Abidjan Vibz', 'Congo Fusion'],
-  'Pop': ['Synth-Pop', 'Hyper-Pop', 'Bedroom Pop', 'Dance-Pop', 'Indie Pop', 'Bubblegum Pop', 'Electropop', 'Soft Pop', 'Dream Pop', 'Teen Pop'],
-  'Hip-Hop': ['Boom Bap', 'Trap', 'Drill', 'Conscious Hip-Hop', 'G-Funk', 'Emo Rap', 'Jazz Rap', 'Gangsta Rap'],
-  'R&B': ['Contemporary R&B', 'Neo-Soul', 'Alternative R&B', 'New Jack Swing', 'Soul', 'Funk'],
-  'Rock': ['Alternative Rock', 'Punk Rock', 'Grunge', 'Indie Rock', 'Classic Rock', 'Hard Rock', 'Psychedelic Rock'],
-  'Electronic/EDM': ['House', 'Techno', 'Dubstep', 'Drum & Bass', 'Trance', 'Ambient', 'Synthwave'],
-  'Country': ['Bluegrass', 'Honky-Tonk', 'Country Pop', 'Outlaw Country', 'Americana'],
-  'Metal': ['Heavy Metal', 'Thrash Metal', 'Death Metal', 'Black Metal', 'Doom Metal', 'Power Metal'],
-  'Soul': ['Motown', 'Neo-Soul', 'Classic Soul', 'Psychedelic Soul', 'Blue-Eyed Soul'],
-  'Blues': ['Delta Blues', 'Chicago Blues', 'Texas Blues', 'Jump Blues', 'Blues Rock'],
-  'Jazz': ['Bebop', 'Cool Jazz', 'Swing', 'Smooth Jazz', 'Fusion', 'Free Jazz'],
-  'Folk': ['Traditional Folk', 'Americana', 'Indie Folk', 'Contemporary Folk', 'Folk Rock'],
-  'Gospel': ['Traditional Gospel', 'Contemporary Gospel', 'Southern Gospel', 'Gospel Choir', 'Urban Gospel'],
-  'Afrobeats': ['Afro-Pop', 'Afropiano', 'Street-Hop', 'Alté', 'Afro-Fusion'],
-  'Reggae': ['Roots Reggae', 'Dancehall', 'Dub', 'Ska', 'Lovers Rock', 'Ragga']
-};
 
 const INSTRUMENTS_BY_GENRE: Record<string, string[]> = {
   'Regional Mexican': ['Guitarrón', 'Trumpets', 'Accordion', 'Bajo Sexto', 'Tuba', 'Vihuela', 'Violin'],
@@ -189,30 +149,20 @@ const CreationWizard: React.FC<{
     // If we have AI generated dynamic options, prioritize them
     if (dynamicOptions && dynamicOptions.length > 0) return dynamicOptions;
 
-    const lang = inputs.language || 'English';
+    const lang = (inputs.language || 'English') as keyof typeof GENRES_BY_LANG;
     const genre = inputs.genre || 'General';
     
-    const getBaseCulture = () => {
-        if (['Spanish', 'Portuguese'].includes(lang)) return 'Latin';
-        if (['Japanese', 'Korean', 'Chinese'].includes(lang)) return 'Asian';
-        if (['Swahili', 'Hindi', 'Arabic', 'Yoruba', 'Zulu'].includes(lang)) return 'African';
-        return 'European';
-    };
-
-    const getBaseEnv = () => {
-        if (['Hip-Hop', 'Trap', 'Reggaeton', 'Bongo Flava', 'Gengetone', 'Afro-Trap', 'Drill'].some(g => genre.includes(g))) return 'Urban';
-        if (['Enka', 'Fado', 'Ghazal', 'Taarab', 'Regional Mexican', 'Guofeng', 'Traditional'].some(g => genre.includes(g))) return 'Traditional';
-        return 'Pop';
-    };
+    const baseCulture = getBaseCulture(lang);
+    const baseEnv = getBaseEnv(genre);
 
     switch (step) {
       case AppStep.AWAITING_LANGUAGE: return LANGUAGES;
-      case AppStep.AWAITING_GENRE: return GENRES_BY_LANG[lang] || GENRES_BY_LANG['English'];
+      case AppStep.AWAITING_GENRE: return GENRES_BY_LANG[lang] || GENRES_BY_LANG.English;
       case AppStep.AWAITING_SUBGENRE: return SUBGENRES[genre] || ['Alternative', 'Mainstream', 'Underground', 'Experimental', 'Classic', 'Modern', 'Fusion'];
       case AppStep.AWAITING_INSTRUMENTATION: return INSTRUMENTS_BY_GENRE[genre] || INSTRUMENTS_BY_GENRE[lang] || INSTRUMENTS_BY_GENRE['General'];
-      case AppStep.AWAITING_AUDIO_ENV: return AUDIO_ENV_BY_GENRE[getBaseEnv()] || AUDIO_ENV_BY_GENRE['General'];
+      case AppStep.AWAITING_AUDIO_ENV: return AUDIO_ENV_BY_GENRE[baseEnv] || AUDIO_ENV_BY_GENRE['General'];
       case AppStep.AWAITING_SCENE: return SCENES_BY_GENRE[genre] || SCENES_BY_GENRE[lang] || SCENES_BY_GENRE['Pop'] || SCENES_BY_GENRE['General'];
-      case AppStep.AWAITING_EMOTION: return EMOTIONS_BY_GENRE[getBaseCulture()] || EMOTIONS_BY_GENRE['General'];
+      case AppStep.AWAITING_EMOTION: return EMOTIONS_BY_GENRE[baseCulture] || EMOTIONS_BY_GENRE['General'];
       case AppStep.AWAITING_VOCALS: return ['Female Solo', 'Male Solo', 'Duo/Group', 'Duet (Mixed)', 'Whisper', 'Soulful', 'Choir', 'Auto-Tuned', 'Spoken Word', 'Screaming', 'Growling'];
       case AppStep.AWAITING_DUET_CONFIG: return ['Male & Female', 'Female Duo', 'Male Duo', 'Artist & AI Feature', 'Rapper & Singer', 'Choir & Lead', 'Call & Response', 'Harmonized'];
       case AppStep.AWAITING_PERFORMER: return ['Solo Artist', 'Featured Collaboration', 'Indie Band', 'Underground Artist', 'Supergroup', 'Orchestral Ensemble', 'Acoustic Trio', 'Vocal Harmony Group', 'DJ/Producer'];
@@ -231,7 +181,7 @@ const CreationWizard: React.FC<{
           </div>
         ) : (
           <>
-            {options.map(opt => (
+            {options.map((opt: string) => (
               <button
                 key={opt}
                 onClick={() => { onUpdate(field, opt); onNext(); }}
@@ -695,7 +645,7 @@ export const App: React.FC = () => {
                      <div className="mt-16 flex flex-wrap justify-center gap-4 md:gap-6">
                          <div className="flex items-center gap-2 px-5 py-2 bg-slate-900 rounded-full border border-slate-800">
                              <WalletIcon className="w-4 h-4 text-slate-500" />
-                             <span className="text-xs font-black text-slate-300 uppercase tracking-widest">{credits} Credits</span>
+                             <span className="text-xs font-black text-slate-300 uppercase tracking-widest">Balance: {credits}</span>
                          </div>
                          <button onClick={() => signOut().then(() => { setSession(null); setView(AppView.AUTH); })} className="text-xs font-black text-slate-600 uppercase tracking-widest hover:text-white transition-colors">Sign Out</button>
                      </div>

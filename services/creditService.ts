@@ -1,4 +1,4 @@
-import { getUserProfile, upsertUserProfile } from './userService';
+import { getUserProfile, getUserTransactions, upsertUserProfile } from './userService';
 
 const FREE_MONTHLY_CREDITS = 30;
 
@@ -28,9 +28,33 @@ async function ensureProfile(email: string) {
   return created;
 }
 
+async function reconcileLegacyFreeBalance(email: string, profile: any) {
+  // Legacy local profiles may still carry the old free baseline (100 credits).
+  // Only migrate when there is no payment history to avoid touching paid balances.
+  if (!profile || profile.credits !== 100) return profile;
+
+  try {
+    const transactions = await getUserTransactions(email);
+    const hasPaidHistory = transactions.some((tx) => tx.amount > 0);
+    if (hasPaidHistory) return profile;
+
+    const migrated = {
+      ...profile,
+      credits: FREE_MONTHLY_CREDITS,
+      last_reset_date: new Date().toISOString(),
+    };
+    await upsertUserProfile(migrated);
+    return migrated;
+  } catch (e) {
+    console.error('Failed to reconcile legacy balance:', e);
+    return profile;
+  }
+}
+
 export const getUserCredits = async (email: string): Promise<number> => {
   try {
-    const profile = await ensureProfile(email);
+    const ensured = await ensureProfile(email);
+    const profile = await reconcileLegacyFreeBalance(email, ensured);
 
     const now = new Date();
     const lastReset = profile.last_reset_date ? new Date(profile.last_reset_date) : new Date(0);
