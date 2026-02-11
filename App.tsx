@@ -756,26 +756,44 @@ export const App: React.FC = () => {
              )}
 
              {isMenuOpen && (
-               <div className="fixed right-4 top-20 z-[70] w-72 rounded-2xl border border-slate-800 bg-[#1a1d27] shadow-2xl p-3">
-                 {[
-                   ['Invite Friends', 'invite'],
-                   ['Earn Credits', 'earn'],
-                   ["What's New?", 'whatsnew'],
-                   ['Help', 'help'],
-                   ['Feedback', 'feedback'],
-                   ['Terms of Service', 'terms'],
-                   ['Privacy', 'privacy'],
-                   ['About', 'about'],
-                 ].map(([label, key]) => (
-                   <button
-                     key={key}
-                     onClick={() => openUtility(key as UtilitySection, AppView.LANDING)}
-                     className="w-full text-left px-3 py-3 rounded-xl text-slate-300 hover:bg-slate-800 hover:text-white"
-                   >
-                     {label}
-                   </button>
-                 ))}
-               </div>
+               <>
+                 <button
+                   aria-label="Close menu overlay"
+                   onClick={() => setIsMenuOpen(false)}
+                   className="fixed inset-0 z-[65] bg-black/35"
+                 />
+                 <div className="fixed right-3 top-16 bottom-3 z-[70] w-[19rem] rounded-[1.1rem] border border-slate-700/70 bg-[#21232d] shadow-2xl flex flex-col overflow-hidden">
+                   <div className="p-3 overflow-y-auto">
+                     {[
+                       ['Invite Friends', 'invite'],
+                       ['Earn Credits', 'earn'],
+                       ["What's New?", 'whatsnew'],
+                       ['Help', 'help'],
+                       ['Feedback', 'feedback'],
+                       ['Terms of Service', 'terms'],
+                       ['Privacy', 'privacy'],
+                       ['About', 'about'],
+                     ].map(([label, key]) => (
+                       <button
+                         key={key}
+                         onClick={() => openUtility(key as UtilitySection, AppView.LANDING)}
+                         className="w-full text-left px-4 py-3 rounded-xl text-slate-200 text-[2.05rem] sm:text-[2.2rem] font-medium leading-none hover:bg-slate-700/40 hover:text-white"
+                       >
+                         {label}
+                       </button>
+                     ))}
+                   </div>
+                   <div className="border-t border-slate-600/50 p-3">
+                     <div className="flex items-center justify-around text-slate-300">
+                       {['X', 'IG', 'YT', 'TT', 'DS'].map((icon) => (
+                         <button key={icon} className="w-9 h-9 rounded-full border border-slate-600/70 text-[10px] font-black hover:bg-slate-700/50">
+                           {icon}
+                         </button>
+                       ))}
+                     </div>
+                   </div>
+                 </div>
+               </>
              )}
         </div>
       );
@@ -820,26 +838,44 @@ export const App: React.FC = () => {
       </nav>
 
       {isMenuOpen && (
-        <div className="fixed right-4 top-24 z-[70] w-72 rounded-2xl border border-slate-800 bg-[#1a1d27] shadow-2xl p-3">
-          {[
-            ['Invite Friends', 'invite'],
-            ['Earn Credits', 'earn'],
-            ["What's New?", 'whatsnew'],
-            ['Help', 'help'],
-            ['Feedback', 'feedback'],
-            ['Terms of Service', 'terms'],
-            ['Privacy', 'privacy'],
-            ['About', 'about'],
-          ].map(([label, key]) => (
-            <button
-              key={key}
-              onClick={() => openUtility(key as UtilitySection, AppView.STUDIO)}
-              className="w-full text-left px-3 py-3 rounded-xl text-slate-300 hover:bg-slate-800 hover:text-white"
-            >
-              {label}
-            </button>
-          ))}
-        </div>
+        <>
+          <button
+            aria-label="Close menu overlay"
+            onClick={() => setIsMenuOpen(false)}
+            className="fixed inset-0 z-[65] bg-black/35"
+          />
+          <div className="fixed right-3 top-16 bottom-3 z-[70] w-[19rem] rounded-[1.1rem] border border-slate-700/70 bg-[#21232d] shadow-2xl flex flex-col overflow-hidden">
+            <div className="p-3 overflow-y-auto">
+              {[
+                ['Invite Friends', 'invite'],
+                ['Earn Credits', 'earn'],
+                ["What's New?", 'whatsnew'],
+                ['Help', 'help'],
+                ['Feedback', 'feedback'],
+                ['Terms of Service', 'terms'],
+                ['Privacy', 'privacy'],
+                ['About', 'about'],
+              ].map(([label, key]) => (
+                <button
+                  key={key}
+                  onClick={() => openUtility(key as UtilitySection, AppView.STUDIO)}
+                  className="w-full text-left px-4 py-3 rounded-xl text-slate-200 text-[2.05rem] sm:text-[2.2rem] font-medium leading-none hover:bg-slate-700/40 hover:text-white"
+                >
+                  {label}
+                </button>
+              ))}
+            </div>
+            <div className="border-t border-slate-600/50 p-3">
+              <div className="flex items-center justify-around text-slate-300">
+                {['X', 'IG', 'YT', 'TT', 'DS'].map((icon) => (
+                  <button key={icon} className="w-9 h-9 rounded-full border border-slate-600/70 text-[10px] font-black hover:bg-slate-700/50">
+                    {icon}
+                  </button>
+                ))}
+              </div>
+            </div>
+          </div>
+        </>
       )}
 
       {/* Main Content */}
