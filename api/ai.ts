@@ -71,7 +71,10 @@ async function openAIResponses(prompt: string, model = getTextModel()): Promise<
   return chunks.join("\n").trim();
 }
 
-async function openAIImage(prompt: string): Promise<string> {
+async function openAIImage(
+  prompt: string,
+  aspectRatio: "9:16" | "1:1" | "16:9" = "9:16"
+): Promise<string> {
   const apiKey = getOpenAIApiKey();
   const response = await fetch("https://api.openai.com/v1/images/generations", {
     method: "POST",
@@ -82,7 +85,7 @@ async function openAIImage(prompt: string): Promise<string> {
     body: JSON.stringify({
       model: getImageModel(),
       prompt,
-      size: "1024x1792",
+      size: mapAspectToSize(aspectRatio),
     }),
   });
 
@@ -264,15 +267,18 @@ Title: ${songTitle || "Untitled"}
 Style: ${style || "Cinematic"}
 Vibe: ${(sunoPrompt || "").slice(0, 200)}
 Aspect ratio: ${ratio}
-The attached avatar image is the PRIMARY identity reference. Keep the same person facial structure, hair, skin tone, and distinguishing features.
 The song context dictates the visual theme, scene, color, mood, styling, and composition.
 No watermark, no logo, no extra text.
 `.trim();
   const avatarBlob = await getAvatarBlobByEmail(sanitizeEmail(payload?.email || ""));
-  if (!avatarBlob) {
-    throw new Error("Missing avatar reference. Please upload avatar in profile before generating cover art.");
+  if (avatarBlob) {
+    const avatarPrompt = `${prompt}
+The attached avatar image is the PRIMARY identity reference.
+Keep the same person facial structure, hair, skin tone, and distinguishing features.`;
+    return { imageDataUrl: await openAIImageEditWithAvatar(avatarPrompt, ratio, avatarBlob) };
   }
-  return { imageDataUrl: await openAIImageEditWithAvatar(prompt, ratio, avatarBlob) };
+  // Fallback mode: no avatar on profile, generate song-themed art only.
+  return { imageDataUrl: await openAIImage(prompt, ratio) };
 }
 
 async function generateSocialPack(payload: any) {
