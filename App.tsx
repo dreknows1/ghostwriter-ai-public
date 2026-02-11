@@ -4,7 +4,7 @@ import { AppStep, AppView, SongInputs, SavedSong, UserProfile } from './types';
 import { generateSong, generateAlbumArt, generateSocialPack, translateLyrics, editSong, generateDynamicOptions, structureImportedSong } from './services/geminiService';
 import { saveSong } from './services/songService';
 import { getUserProfile } from './services/userService';
-import { getSession, signOut, signInWithOtp } from './services/authService';
+import { getSession, signOut, signIn, signUp } from './services/authService';
 import { getUserCredits, hasEnoughCredits, deductCredits, COSTS } from './services/creditService';
 import LyricsDisplay from './components/LyricsDisplay';
 import ProfileView from './components/ProfileView';
@@ -298,8 +298,9 @@ export const App: React.FC = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [loadingMessage, setLoadingMessage] = useState('');
   const [authEmail, setAuthEmail] = useState('');
+  const [authPassword, setAuthPassword] = useState('');
   const [isAuthLoading, setIsAuthLoading] = useState(false);
-  const [magicLinkSent, setMagicLinkSent] = useState(false);
+  const [isSignUpMode, setIsSignUpMode] = useState(false);
   const [loadedSongId, setLoadedSongId] = useState<string | null>(null);
   const [credits, setCredits] = useState<number>(0);
   
@@ -434,10 +435,12 @@ export const App: React.FC = () => {
 
   const handleAuth = async (e: React.FormEvent) => {
       e.preventDefault();
-      if (!authEmail) return;
+      if (!authEmail || !authPassword) return;
       setIsAuthLoading(true);
       try {
-          const { data, error } = await signInWithOtp(authEmail);
+          const { data, error } = isSignUpMode
+            ? await signUp(authEmail, authPassword)
+            : await signIn(authEmail, authPassword);
           if (error) throw error;
           if (data?.session) {
             setSession(data.session);
@@ -445,7 +448,6 @@ export const App: React.FC = () => {
             const c = await getUserCredits(data.session.user.email || '');
             setCredits(c);
           }
-          setMagicLinkSent(true);
       } catch (e: any) {
           alert(e.message);
       } finally {
@@ -510,63 +512,70 @@ export const App: React.FC = () => {
             <h1 className="text-3xl sm:text-4xl font-black text-center tracking-tight text-white mb-2">Sign In</h1>
             <p className="text-center text-slate-400 text-base mb-7">Welcome back. Sign in to continue.</p>
 
-            {!magicLinkSent ? (
-              <>
-                <div className="grid grid-cols-5 gap-2 sm:gap-3 mb-6">
-                  {['Apple', 'Discord', 'Facebook', 'Google', 'Microsoft'].map((provider) => (
-                    <button
-                      key={provider}
-                      type="button"
-                      className="h-11 rounded-xl border border-slate-700/90 bg-[#111522] text-slate-300 text-xs font-bold hover:border-slate-500 hover:text-white transition-all"
-                      aria-label={`${provider} sign in coming soon`}
-                      title={`${provider} sign in coming soon`}
-                    >
-                      {provider.slice(0, 1)}
-                    </button>
-                  ))}
-                </div>
-
-                <div className="flex items-center gap-4 mb-6">
-                  <div className="h-px flex-1 bg-slate-800"></div>
-                  <span className="text-slate-500 text-base">or</span>
-                  <div className="h-px flex-1 bg-slate-800"></div>
-                </div>
-
-                <form onSubmit={handleAuth} className="space-y-4">
-                  <div>
-                    <label className="block text-left text-white font-semibold mb-2">Email</label>
-                    <input
-                      type="email"
-                      placeholder="Enter your email"
-                      value={authEmail}
-                      onChange={(e) => setAuthEmail(e.target.value)}
-                      className="w-full bg-[#101522] border border-slate-700 p-4 rounded-xl text-white outline-none focus:border-slate-400 text-base placeholder:text-slate-500 transition-all"
-                      required
-                    />
-                  </div>
+            <>
+              <div className="grid grid-cols-5 gap-2 sm:gap-3 mb-6">
+                {['Apple', 'Discord', 'Facebook', 'Google', 'Microsoft'].map((provider) => (
                   <button
-                    disabled={isAuthLoading}
-                    className="w-full h-12 rounded-xl bg-white text-black font-black text-lg hover:bg-slate-200 transition-all disabled:opacity-70 flex items-center justify-center"
+                    key={provider}
+                    type="button"
+                    className="h-11 rounded-xl border border-slate-700/90 bg-[#111522] text-slate-300 text-xs font-bold hover:border-slate-500 hover:text-white transition-all"
+                    aria-label={`${provider} sign in coming soon`}
+                    title={`${provider} sign in coming soon`}
                   >
-                    {isAuthLoading ? <LoadingSpinner /> : 'Continue'}
+                    {provider.slice(0, 1)}
                   </button>
-                </form>
-              </>
-            ) : (
-              <div className="text-center p-6 bg-green-900/20 border border-green-500/30 rounded-2xl">
-                <CheckIcon />
-                <h3 className="text-green-400 font-black uppercase tracking-widest mt-4">Magic Link Sent</h3>
-                <p className="text-slate-400 text-sm mt-2">Check your inbox to access the studio.</p>
-                <button onClick={() => setMagicLinkSent(false)} className="mt-6 text-xs text-slate-500 uppercase tracking-widest hover:text-white">Try different email</button>
+                ))}
               </div>
-            )}
+
+              <div className="flex items-center gap-4 mb-6">
+                <div className="h-px flex-1 bg-slate-800"></div>
+                <span className="text-slate-500 text-base">or</span>
+                <div className="h-px flex-1 bg-slate-800"></div>
+              </div>
+
+              <form onSubmit={handleAuth} className="space-y-4">
+                <div>
+                  <label className="block text-left text-white font-semibold mb-2">Email</label>
+                  <input
+                    type="email"
+                    placeholder="Enter your email"
+                    value={authEmail}
+                    onChange={(e) => setAuthEmail(e.target.value)}
+                    className="w-full bg-[#101522] border border-slate-700 p-4 rounded-xl text-white outline-none focus:border-slate-400 text-base placeholder:text-slate-500 transition-all"
+                    required
+                  />
+                </div>
+                <div>
+                  <label className="block text-left text-white font-semibold mb-2">Password</label>
+                  <input
+                    type="password"
+                    placeholder="Enter your password"
+                    value={authPassword}
+                    onChange={(e) => setAuthPassword(e.target.value)}
+                    className="w-full bg-[#101522] border border-slate-700 p-4 rounded-xl text-white outline-none focus:border-slate-400 text-base placeholder:text-slate-500 transition-all"
+                    required
+                    minLength={8}
+                  />
+                </div>
+                <button
+                  disabled={isAuthLoading}
+                  className="w-full h-12 rounded-xl bg-white text-black font-black text-lg hover:bg-slate-200 transition-all disabled:opacity-70 flex items-center justify-center"
+                >
+                  {isAuthLoading ? <LoadingSpinner /> : (isSignUpMode ? 'Create Account' : 'Continue')}
+                </button>
+              </form>
+            </>
           </div>
 
           <div className="border-t border-slate-800 p-4 sm:p-5 bg-[#111522]">
             <div className="flex flex-col sm:flex-row gap-3 items-center justify-between">
-              <p className="text-slate-400 text-base">Don't have an account?</p>
-              <button type="button" className="w-full sm:w-auto px-10 h-12 rounded-xl bg-white text-black font-bold">
-                Sign up
+              <p className="text-slate-400 text-base">{isSignUpMode ? 'Already have an account?' : "Don't have an account?"}</p>
+              <button
+                type="button"
+                onClick={() => setIsSignUpMode((v) => !v)}
+                className="w-full sm:w-auto px-10 h-12 rounded-xl bg-white text-black font-bold"
+              >
+                {isSignUpMode ? 'Sign in' : 'Sign up'}
               </button>
             </div>
             <div className="mt-4 text-center">

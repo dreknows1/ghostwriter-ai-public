@@ -4,7 +4,10 @@ import { v } from "convex/values";
 export default defineSchema({
   users: defineTable({
     email: v.string(),
+    passwordHash: v.optional(v.string()),
+    passwordSalt: v.optional(v.string()),
     createdAt: v.number(),
+    updatedAt: v.optional(v.number()),
     isActive: v.boolean(),
   }).index("by_email", ["email"]),
 

@@ -15,22 +15,38 @@ const createSession = (email: string): AppSession => ({
   }
 });
 
-export const signUp = async (email: string, _pass: string) => {
-  const session = createSession(email);
-  localStorage.setItem(SESSION_KEY, JSON.stringify(session));
-  return { data: { session }, error: null };
+export const signUp = async (email: string, pass: string) => {
+  try {
+    const resp = await fetch('/api/auth', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ action: 'signup', email, password: pass }),
+    });
+    const json = await resp.json();
+    if (!resp.ok) return { data: null, error: new Error(json?.error || 'Sign up failed') };
+    const session = json?.session || createSession(email);
+    localStorage.setItem(SESSION_KEY, JSON.stringify(session));
+    return { data: { session }, error: null };
+  } catch (e: any) {
+    return { data: null, error: e };
+  }
 };
 
-export const signIn = async (email: string, _pass: string) => {
-  const session = createSession(email);
-  localStorage.setItem(SESSION_KEY, JSON.stringify(session));
-  return { data: { session }, error: null };
-};
-
-export const signInWithOtp = async (email: string) => {
-  const session = createSession(email);
-  localStorage.setItem(SESSION_KEY, JSON.stringify(session));
-  return { data: { session }, error: null };
+export const signIn = async (email: string, pass: string) => {
+  try {
+    const resp = await fetch('/api/auth', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ action: 'signin', email, password: pass }),
+    });
+    const json = await resp.json();
+    if (!resp.ok) return { data: null, error: new Error(json?.error || 'Sign in failed') };
+    const session = json?.session || createSession(email);
+    localStorage.setItem(SESSION_KEY, JSON.stringify(session));
+    return { data: { session }, error: null };
+  } catch (e: any) {
+    return { data: null, error: e };
+  }
 };
 
 export const signOut = async () => {
