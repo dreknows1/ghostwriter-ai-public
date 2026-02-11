@@ -45,6 +45,39 @@ const SocialDiscordIcon = () => (
     <path d="M20 5.4A16 16 0 0016.1 4l-.2.4a11 11 0 00-4-.1l-.2-.4A16 16 0 007.8 5.4C5 9.6 4.2 13.7 4.4 17.7A16.5 16.5 0 009 20l.8-1.2a10.4 10.4 0 01-1.6-.8l.4-.3c3.2 1.5 6.7 1.5 9.8 0l.4.3c-.5.3-1 .5-1.6.8L18 20a16.5 16.5 0 004.6-2.3c.3-4.6-.6-8.6-2.6-12.3zM9.8 14.8c-.9 0-1.6-.8-1.6-1.8s.7-1.8 1.6-1.8 1.6.8 1.6 1.8-.7 1.8-1.6 1.8zm4.4 0c-.9 0-1.6-.8-1.6-1.8s.7-1.8 1.6-1.8 1.6.8 1.6 1.8-.7 1.8-1.6 1.8z" />
   </svg>
 );
+
+const AuthAppleIcon = () => (
+  <svg viewBox="0 0 24 24" className="w-5 h-5" fill="currentColor" aria-hidden="true">
+    <path d="M16.7 12.8c0-2.3 1.9-3.4 2-3.5-1.1-1.6-2.8-1.8-3.4-1.8-1.5-.2-2.9.9-3.6.9-.7 0-1.9-.9-3.1-.9-1.6 0-3.1 1-3.9 2.3-1.7 2.9-.4 7.2 1.2 9.5.8 1.1 1.7 2.3 2.9 2.2 1.2 0 1.6-.7 3-.7s1.8.7 3 .7c1.3 0 2.1-1.1 2.9-2.2.9-1.3 1.3-2.6 1.3-2.7-.1 0-2.5-1-2.5-3.8zM14.4 5.8c.7-.9 1.1-2.1 1-3.3-1 .1-2.2.7-2.9 1.6-.7.8-1.2 2-1 3.2 1.1.1 2.2-.6 2.9-1.5z" />
+  </svg>
+);
+
+const AuthFacebookIcon = () => (
+  <svg viewBox="0 0 24 24" className="w-5 h-5" fill="currentColor" aria-hidden="true">
+    <path d="M22 12a10 10 0 10-11.6 9.9v-7h-2.1V12h2.1V9.8c0-2.1 1.2-3.3 3.2-3.3.9 0 1.9.2 1.9.2v2.1h-1.1c-1.1 0-1.5.7-1.5 1.4V12h2.5l-.4 2.9h-2.1v7A10 10 0 0022 12z" />
+  </svg>
+);
+
+const AuthGoogleIcon = () => (
+  <svg viewBox="0 0 24 24" className="w-5 h-5" aria-hidden="true">
+    <path fill="#EA4335" d="M12 10.2v3.9h5.5c-.2 1.3-1.5 3.8-5.5 3.8-3.3 0-6-2.8-6-6.2s2.7-6.2 6-6.2c1.9 0 3.2.8 3.9 1.5l2.7-2.6C16.8 2.8 14.6 2 12 2 6.7 2 2.4 6.4 2.4 11.8S6.7 21.6 12 21.6c6.9 0 9.6-4.8 9.6-7.3 0-.5 0-.9-.1-1.3H12z"/>
+  </svg>
+);
+
+const AuthMicrosoftIcon = () => (
+  <svg viewBox="0 0 24 24" className="w-5 h-5" aria-hidden="true">
+    <rect x="3" y="3" width="8" height="8" fill="#F35325" />
+    <rect x="13" y="3" width="8" height="8" fill="#81BC06" />
+    <rect x="3" y="13" width="8" height="8" fill="#05A6F0" />
+    <rect x="13" y="13" width="8" height="8" fill="#FFBA08" />
+  </svg>
+);
+
+const AuthDiscordIcon = () => (
+  <svg viewBox="0 0 24 24" className="w-5 h-5" fill="currentColor" aria-hidden="true">
+    <path d="M20 5.4A16 16 0 0016.1 4l-.2.4a11 11 0 00-4-.1l-.2-.4A16 16 0 007.8 5.4C5 9.6 4.2 13.7 4.4 17.7A16.5 16.5 0 009 20l.8-1.2a10.4 10.4 0 01-1.6-.8l.4-.3c3.2 1.5 6.7 1.5 9.8 0l.4.3c-.5.3-1 .5-1.6.8L18 20a16.5 16.5 0 004.6-2.3c.3-4.6-.6-8.6-2.6-12.3zM9.8 14.8c-.9 0-1.6-.8-1.6-1.8s.7-1.8 1.6-1.8 1.6.8 1.6 1.8-.7 1.8-1.6 1.8zm4.4 0c-.9 0-1.6-.8-1.6-1.8s.7-1.8 1.6-1.8 1.6.8 1.6 1.8-.7 1.8-1.6 1.8z" />
+  </svg>
+);
 import {
   LANGUAGES,
   GENRES_BY_LANG,
@@ -551,23 +584,29 @@ export const App: React.FC = () => {
     return (
       <div className="app-shell min-h-screen flex flex-col items-center justify-center p-3 sm:p-4 relative overflow-hidden">
         <div className="fixed top-0 left-0 w-full h-full bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-slate-900 via-[#0a0d17] to-[#06080f] pointer-events-none z-0"></div>
-        <div className="relative z-10 w-full max-w-xl rounded-[1.75rem] sm:rounded-[2rem] border border-slate-800/80 bg-[#0f121b]/95 shadow-[0_20px_80px_rgba(0,0,0,0.55)] overflow-hidden">
-          <div className="p-5 sm:p-8">
-            <div className="flex justify-center mb-5"><Logo size={74} /></div>
-            <h1 className="text-3xl sm:text-4xl font-black text-center tracking-tight text-white mb-2">Sign In</h1>
-            <p className="text-center text-slate-400 text-base mb-7">Welcome back. Sign in to continue.</p>
+        <div className="relative z-10 w-full max-w-xl rounded-[2rem] border border-slate-800/80 bg-[#0c101a]/95 shadow-[0_24px_90px_rgba(0,0,0,0.62)] overflow-hidden">
+          <div className="p-6 sm:p-9">
+            <div className="flex justify-center mb-4"><Logo size={68} /></div>
+            <h1 className="text-4xl sm:text-5xl font-black text-center tracking-tight text-white mb-3">{isSignUpMode ? 'Sign Up' : 'Sign In'}</h1>
+            <p className="text-center text-slate-400 text-base sm:text-lg mb-8">Welcome back. Sign in to continue</p>
 
             <>
-              <div className="grid grid-cols-5 gap-2 sm:gap-3 mb-6">
-                {['Apple', 'Discord', 'Facebook', 'Google', 'Microsoft'].map((provider) => (
+              <div className="grid grid-cols-5 gap-2 sm:gap-3 mb-7">
+                {[
+                  { name: 'Apple', icon: <AuthAppleIcon /> },
+                  { name: 'Discord', icon: <AuthDiscordIcon /> },
+                  { name: 'Facebook', icon: <AuthFacebookIcon /> },
+                  { name: 'Google', icon: <AuthGoogleIcon /> },
+                  { name: 'Microsoft', icon: <AuthMicrosoftIcon /> },
+                ].map((provider) => (
                   <button
-                    key={provider}
+                    key={provider.name}
                     type="button"
-                    className="h-11 rounded-xl border border-slate-700/90 bg-[#111522] text-slate-300 text-xs font-bold hover:border-slate-500 hover:text-white transition-all"
-                    aria-label={`${provider} sign in coming soon`}
-                    title={`${provider} sign in coming soon`}
+                    className="h-12 rounded-xl border border-slate-700/90 bg-[#111522] text-slate-300 flex items-center justify-center hover:border-slate-500 hover:text-white transition-all"
+                    aria-label={`${provider.name} sign in coming soon`}
+                    title={`${provider.name} sign in coming soon`}
                   >
-                    {provider.slice(0, 1)}
+                    {provider.icon}
                   </button>
                 ))}
               </div>
@@ -578,45 +617,45 @@ export const App: React.FC = () => {
                 <div className="h-px flex-1 bg-slate-800"></div>
               </div>
 
-              <form onSubmit={handleAuth} className="space-y-4">
+              <form onSubmit={handleAuth} className="space-y-5">
                 <div>
-                  <label className="block text-left text-white font-semibold mb-2">Email</label>
+                  <label className="block text-left text-white font-semibold mb-2.5 text-lg">Email</label>
                   <input
                     type="email"
                     placeholder="Enter your email"
                     value={authEmail}
                     onChange={(e) => setAuthEmail(e.target.value)}
-                    className="w-full bg-[#101522] border border-slate-700 p-4 rounded-xl text-white outline-none focus:border-slate-400 text-base placeholder:text-slate-500 transition-all"
+                    className="w-full bg-[#0b1223] border border-slate-700 p-4 rounded-xl text-white outline-none focus:border-blue-400 text-base placeholder:text-slate-500 transition-all"
                     required
                   />
                 </div>
                 <div>
-                  <label className="block text-left text-white font-semibold mb-2">Password</label>
+                  <label className="block text-left text-white font-semibold mb-2.5 text-lg">Password</label>
                   <input
                     type="password"
                     placeholder="Enter your password"
                     value={authPassword}
                     onChange={(e) => setAuthPassword(e.target.value)}
-                    className="w-full bg-[#101522] border border-slate-700 p-4 rounded-xl text-white outline-none focus:border-slate-400 text-base placeholder:text-slate-500 transition-all"
+                    className="w-full bg-[#0b1223] border border-slate-700 p-4 rounded-xl text-white outline-none focus:border-blue-400 text-base placeholder:text-slate-500 transition-all"
                     required
                     minLength={8}
                   />
                 </div>
                 {isSignUpMode && (
                   <div>
-                    <label className="block text-left text-white font-semibold mb-2">Referral Code (optional)</label>
+                    <label className="block text-left text-white font-semibold mb-2.5 text-lg">Referral Code (optional)</label>
                     <input
                       type="text"
                       placeholder="Enter referral code"
                       value={referralCode}
                       onChange={(e) => setReferralCode(e.target.value.toUpperCase())}
-                      className="w-full bg-[#101522] border border-slate-700 p-4 rounded-xl text-white outline-none focus:border-slate-400 text-base placeholder:text-slate-500 transition-all"
+                      className="w-full bg-[#0b1223] border border-slate-700 p-4 rounded-xl text-white outline-none focus:border-blue-400 text-base placeholder:text-slate-500 transition-all"
                     />
                   </div>
                 )}
                 <button
                   disabled={isAuthLoading}
-                  className="w-full h-12 rounded-xl bg-white text-black font-black text-lg hover:bg-slate-200 transition-all disabled:opacity-70 flex items-center justify-center"
+                  className="w-full h-14 rounded-xl bg-white text-black font-black text-xl hover:bg-slate-200 transition-all disabled:opacity-70 flex items-center justify-center"
                 >
                   {isAuthLoading ? <LoadingSpinner /> : (isSignUpMode ? 'Create Account' : 'Continue')}
                 </button>
@@ -624,13 +663,13 @@ export const App: React.FC = () => {
             </>
           </div>
 
-          <div className="border-t border-slate-800 p-4 sm:p-5 bg-[#111522]">
+          <div className="border-t border-slate-800 p-5 sm:p-6 bg-[#0d1325]">
             <div className="flex flex-col sm:flex-row gap-3 items-center justify-between">
-              <p className="text-slate-400 text-base">{isSignUpMode ? 'Already have an account?' : "Don't have an account?"}</p>
+              <p className="text-slate-400 text-base sm:text-lg">{isSignUpMode ? 'Already have an account?' : "Don't have an account?"}</p>
               <button
                 type="button"
                 onClick={() => setIsSignUpMode((v) => !v)}
-                className="w-full sm:w-auto px-10 h-12 rounded-xl bg-white text-black font-bold"
+                className="w-full sm:w-auto px-10 h-12 rounded-xl bg-white text-black font-black text-xl"
               >
                 {isSignUpMode ? 'Sign in' : 'Sign up'}
               </button>
@@ -641,7 +680,7 @@ export const App: React.FC = () => {
                   setTermsReturnView(AppView.AUTH);
                   setView(AppView.TERMS);
                 }}
-                className="text-xs text-slate-500 hover:text-slate-300"
+                className="text-sm text-slate-500 hover:text-slate-300"
               >
                 By continuing, you accept our Privacy Policy and Terms
               </button>
