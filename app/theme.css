@@ -27,10 +27,12 @@ body {
     linear-gradient(160deg, var(--bg-0), var(--bg-1) 45%, var(--bg-2));
   min-height: 100vh;
   font-family: "Manrope", "Satoshi", "Avenir Next", "Segoe UI", sans-serif;
+  overflow-x: hidden;
 }
 
 #root {
   min-height: 100vh;
+  overflow-x: hidden;
 }
 
 .app-shell {

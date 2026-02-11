@@ -223,7 +223,7 @@ const CreationWizard: React.FC<{
   const renderOptions = (field: keyof SongInputs) => {
     const options = getOptionsForStep();
     return (
-      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 mt-8">
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 sm:gap-4 mt-6 sm:mt-8">
         {isLoadingOptions ? (
           <div className="col-span-full py-12 flex flex-col items-center gap-4 animate-pulse">
             <LoadingSpinner />
@@ -235,7 +235,7 @@ const CreationWizard: React.FC<{
               <button
                 key={opt}
                 onClick={() => { onUpdate(field, opt); onNext(); }}
-                className={`p-4 sm:p-5 lg:p-6 rounded-3xl border transition-all text-base font-black uppercase tracking-widest min-h-[56px] flex items-center justify-center text-center ${
+                className={`w-full p-4 sm:p-5 lg:p-6 rounded-3xl border transition-all text-sm sm:text-base leading-tight font-black uppercase tracking-[0.08em] sm:tracking-widest min-h-[56px] flex items-center justify-center text-center break-words ${
                   inputs[field] === opt 
                   ? 'bg-blue-600 border-blue-400 text-white shadow-lg scale-105 z-10' 
                   : 'bg-slate-700 border-slate-600 text-slate-200 hover:bg-slate-600 hover:border-slate-500 hover:text-white'
@@ -245,7 +245,7 @@ const CreationWizard: React.FC<{
               </button>
             ))}
             {!isOther ? (
-              <button onClick={() => setIsOther(true)} className="p-4 sm:p-5 lg:p-6 rounded-3xl border bg-slate-800 border-slate-700 text-cyan-400 hover:bg-slate-700 hover:border-cyan-400 hover:text-white transition-all text-base font-black uppercase tracking-widest min-h-[56px] flex items-center justify-center">CUSTOM</button>
+              <button onClick={() => setIsOther(true)} className="w-full p-4 sm:p-5 lg:p-6 rounded-3xl border bg-slate-800 border-slate-700 text-cyan-400 hover:bg-slate-700 hover:border-cyan-400 hover:text-white transition-all text-sm sm:text-base leading-tight font-black uppercase tracking-[0.08em] sm:tracking-widest min-h-[56px] flex items-center justify-center">CUSTOM</button>
             ) : (
               <div className="col-span-full flex flex-col sm:flex-row gap-4 animate-fade-in">
                 <input autoFocus type="text" placeholder={`Enter custom ${field}...`} className="flex-grow bg-slate-800 border border-cyan-500/50 p-4 md:p-6 rounded-3xl text-white outline-none text-base font-black uppercase tracking-wide md:tracking-widest" value={otherText} onChange={(e) => setOtherText(e.target.value)} onKeyDown={(e) => e.key === 'Enter' && handleOtherSubmit(field)} />
@@ -278,26 +278,26 @@ const CreationWizard: React.FC<{
   }, [step]);
 
   return (
-    <div className="max-w-6xl mx-auto py-8 md:py-12 px-4 animate-fade-in">
-      <div className="flex justify-between items-center mb-10 md:mb-16 gap-2">
-        <button onClick={onPrev} className="text-slate-500 hover:text-white text-sm font-black uppercase tracking-widest flex items-center gap-2">← Back</button>
+    <div className="max-w-6xl mx-auto py-6 md:py-12 px-3 sm:px-4 animate-fade-in overflow-x-hidden">
+      <div className="flex justify-between items-center mb-8 md:mb-16 gap-2">
+        <button onClick={onPrev} className="text-slate-500 hover:text-white text-xs sm:text-sm font-black uppercase tracking-[0.08em] sm:tracking-widest flex items-center gap-2">← Back</button>
         <div className="flex flex-col items-center gap-2">
             <div className="flex gap-2">
             {STEP_ORDER.filter(s => {
                 if (s === AppStep.AWAITING_DUET_CONFIG && (inputs.vocals !== 'Duo/Group' && inputs.vocals !== 'Duet (Mixed)')) return false;
                 return true;
             }).map((s, i) => (
-                <div key={i} className={`h-1.5 w-8 rounded-full transition-all duration-500 ${STEP_ORDER.indexOf(step) >= STEP_ORDER.indexOf(s) ? 'bg-blue-600 shadow-[0_0_10px_rgba(37,99,235,0.5)]' : 'bg-slate-800'}`}></div>
+                <div key={i} className={`h-1.5 w-5 sm:w-8 rounded-full transition-all duration-500 ${STEP_ORDER.indexOf(step) >= STEP_ORDER.indexOf(s) ? 'bg-blue-600 shadow-[0_0_10px_rgba(37,99,235,0.5)]' : 'bg-slate-800'}`}></div>
             ))}
             </div>
             <span className="text-[10px] md:text-xs font-black text-slate-600 uppercase tracking-wide md:tracking-widest text-center">Studio Progress: {Math.round((STEP_ORDER.indexOf(step) / STEP_ORDER.length) * 100)}%</span>
         </div>
-        <div className="w-10 md:w-20"></div>
+        <div className="w-6 sm:w-10 md:w-20"></div>
       </div>
 
       <div className="text-center">
-        <h2 className="text-4xl md:text-7xl font-black text-white mb-4 tracking-tighter">{stepTitle}</h2>
-        <p className="text-slate-500 font-black uppercase tracking-[0.12em] md:tracking-[0.4em] text-xs md:text-sm mb-8 md:mb-12">Building authenticity for the {inputs.genre || 'Universal'} session</p>
+        <h2 className="text-[2.2rem] sm:text-5xl md:text-7xl leading-[0.95] font-black text-white mb-3 sm:mb-4 tracking-tight break-words">{stepTitle}</h2>
+        <p className="text-slate-500 font-black uppercase tracking-[0.08em] sm:tracking-[0.12em] md:tracking-[0.4em] text-[10px] sm:text-xs md:text-sm mb-6 sm:mb-8 md:mb-12 break-words px-1">Building authenticity for the {inputs.genre || 'Universal'} session</p>
         
         {step === AppStep.AWAITING_LANGUAGE && renderOptions('language')}
         {step === AppStep.AWAITING_GENRE && renderOptions('genre')}
