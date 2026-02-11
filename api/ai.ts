@@ -1,5 +1,4 @@
 import type { VercelRequest, VercelResponse } from "@vercel/node";
-import { GoogleGenAI, Type } from "@google/genai";
 
 type AIAction =
   | "generateSong"
@@ -10,25 +9,88 @@ type AIAction =
   | "generateSocialPack"
   | "translateLyrics";
 
-function getApiKey(): string | null {
-  return process.env.GEMINI_API_KEY || process.env.API_KEY || null;
-}
-
-function getClient() {
-  const apiKey = getApiKey();
-  if (!apiKey) {
-    throw new Error("Missing GEMINI_API_KEY (or API_KEY) in environment");
-  }
-  return new GoogleGenAI({ apiKey });
-}
-
 function sanitizeEmail(email?: string): string {
   return (email || "").toLowerCase().trim();
 }
 
 function isAllowedEmail(email?: string): boolean {
-  const cleaned = sanitizeEmail(email);
-  return cleaned.includes("@");
+  return sanitizeEmail(email).includes("@");
+}
+
+function getOpenAIApiKey(): string {
+  const key = process.env.OPENAI_API_KEY;
+  if (!key) throw new Error("Missing OPENAI_API_KEY in environment");
+  return key;
+}
+
+function getTextModel(): string {
+  return process.env.OPENAI_TEXT_MODEL || process.env.OPENAI_MODEL || "gpt-5.2";
+}
+
+function getImageModel(): string {
+  return process.env.OPENAI_IMAGE_MODEL || "gpt-image-1";
+}
+
+async function openAIResponses(prompt: string, model = getTextModel()): Promise<string> {
+  const apiKey = getOpenAIApiKey();
+  const response = await fetch("https://api.openai.com/v1/responses", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${apiKey}`,
+    },
+    body: JSON.stringify({
+      model,
+      input: prompt,
+    }),
+  });
+
+  if (!response.ok) {
+    const text = await response.text();
+    throw new Error(`OpenAI responses error (${response.status}): ${text}`);
+  }
+
+  const data: any = await response.json();
+  const text = data?.output_text;
+  if (typeof text === "string") return text;
+
+  const chunks: string[] = [];
+  const output = Array.isArray(data?.output) ? data.output : [];
+  for (const item of output) {
+    const content = Array.isArray(item?.content) ? item.content : [];
+    for (const part of content) {
+      if (part?.type === "output_text" && typeof part?.text === "string") {
+        chunks.push(part.text);
+      }
+    }
+  }
+  return chunks.join("\n").trim();
+}
+
+async function openAIImage(prompt: string): Promise<string> {
+  const apiKey = getOpenAIApiKey();
+  const response = await fetch("https://api.openai.com/v1/images/generations", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${apiKey}`,
+    },
+    body: JSON.stringify({
+      model: getImageModel(),
+      prompt,
+      size: "1024x1792",
+    }),
+  });
+
+  if (!response.ok) {
+    const text = await response.text();
+    throw new Error(`OpenAI image error (${response.status}): ${text}`);
+  }
+
+  const data: any = await response.json();
+  const b64 = data?.data?.[0]?.b64_json;
+  if (!b64) throw new Error("Image generation returned no base64 payload");
+  return `data:image/png;base64,${b64}`;
 }
 
 async function generateSong(payload: any) {
@@ -55,12 +117,7 @@ Context:
 - Artist persona: ${userProfile?.display_name || "N/A"} | vibe: ${userProfile?.preferred_vibe || "N/A"}
 `.trim();
 
-  const ai = getClient();
-  const response = await ai.models.generateContent({
-    model: "gemini-2.5-pro",
-    contents: prompt,
-  });
-  return { text: response.text || "" };
+  return { text: await openAIResponses(prompt) };
 }
 
 async function editSong(payload: any) {
@@ -79,12 +136,7 @@ Original song:
 ${originalSong || ""}
 `.trim();
 
-  const ai = getClient();
-  const response = await ai.models.generateContent({
-    model: "gemini-2.5-pro",
-    contents: prompt,
-  });
-  return { text: response.text || "" };
+  return { text: await openAIResponses(prompt) };
 }
 
 async function structureImportedSong(payload: any) {
@@ -102,53 +154,33 @@ Input:
 ${rawText || ""}
 `.trim();
 
-  const ai = getClient();
-  const response = await ai.models.generateContent({
-    model: "gemini-2.5-pro",
-    contents: prompt,
-  });
-  return { text: response.text || "" };
+  return { text: await openAIResponses(prompt) };
 }
 
 async function generateDynamicOptions(payload: any) {
   const { targetField, currentInputs } = payload || {};
   const prompt = `
-Generate 8 options for field "${targetField}".
+Generate exactly 8 options for field "${targetField}".
 Session context:
 ${JSON.stringify(currentInputs || {}, null, 2)}
 Rules:
 - Keep options unique
 - Match genre/language context
-- Return only JSON array of strings
+- Return ONLY JSON array of strings
 `.trim();
 
-  const ai = getClient();
-  const response = await ai.models.generateContent({
-    model: "gemini-2.5-flash",
-    contents: prompt,
-    config: {
-      responseMimeType: "application/json",
-      responseSchema: {
-        type: Type.ARRAY,
-        items: { type: Type.STRING },
-      },
-    },
-  });
-
-  let options: string[] = [];
+  const raw = await openAIResponses(prompt);
   try {
-    const parsed = JSON.parse(response.text || "[]");
-    if (Array.isArray(parsed)) {
-      options = parsed
-        .map((v) => (typeof v === "string" ? v.trim() : ""))
-        .filter(Boolean)
-        .slice(0, 8);
-    }
+    const parsed = JSON.parse(raw);
+    if (!Array.isArray(parsed)) return { options: [] };
+    const options = parsed
+      .map((v) => (typeof v === "string" ? v.trim() : ""))
+      .filter(Boolean)
+      .slice(0, 8);
+    return { options };
   } catch {
-    options = [];
+    return { options: [] };
   }
-
-  return { options };
 }
 
 async function generateAlbumArt(payload: any) {
@@ -161,21 +193,7 @@ Vibe: ${(sunoPrompt || "").slice(0, 200)}
 No watermark, no logo, no extra text.
 `.trim();
 
-  const ai = getClient();
-  const response: any = await ai.models.generateContent({
-    model: "gemini-2.5-flash-image",
-    contents: [{ parts: [{ text: prompt }] }],
-    config: { imageConfig: { aspectRatio: "9:16" } },
-  });
-
-  const candidate = response?.candidates?.[0];
-  const parts = candidate?.content?.parts || [];
-  const imagePart = parts.find((p: any) => p?.inlineData?.data);
-  if (!imagePart?.inlineData?.data) {
-    throw new Error("Image generation returned no image data");
-  }
-
-  return { imageDataUrl: `data:image/png;base64,${imagePart.inlineData.data}` };
+  return { imageDataUrl: await openAIImage(prompt) };
 }
 
 async function generateSocialPack(payload: any) {
@@ -184,7 +202,7 @@ async function generateSocialPack(payload: any) {
 Create a social media launch pack for this song.
 Title: ${songTitle || "Untitled"}
 Lyrics snippet: ${(lyrics || "").slice(0, 350)}
-Return JSON:
+Return ONLY JSON:
 {
   "shortDescription": "...",
   "instagramCaption": "...",
@@ -195,41 +213,21 @@ Return JSON:
 }
 `.trim();
 
-  const ai = getClient();
-  const response = await ai.models.generateContent({
-    model: "gemini-2.5-flash",
-    contents: prompt,
-    config: {
-      responseMimeType: "application/json",
-      responseSchema: {
-        type: Type.OBJECT,
-        properties: {
-          shortDescription: { type: Type.STRING },
-          instagramCaption: { type: Type.STRING },
-          tiktokCaption: { type: Type.STRING },
-          youtubeShortsCaption: { type: Type.STRING },
-          hashtags: { type: Type.ARRAY, items: { type: Type.STRING } },
-          cta: { type: Type.STRING },
-        },
-        required: [
-          "shortDescription",
-          "instagramCaption",
-          "tiktokCaption",
-          "youtubeShortsCaption",
-          "hashtags",
-          "cta",
-        ],
-      },
-    },
-  });
-
-  let pack = {};
+  const raw = await openAIResponses(prompt);
   try {
-    pack = JSON.parse(response.text || "{}");
+    return { pack: JSON.parse(raw) };
   } catch {
-    pack = {};
+    return {
+      pack: {
+        shortDescription: "",
+        instagramCaption: "",
+        tiktokCaption: "",
+        youtubeShortsCaption: "",
+        hashtags: [],
+        cta: "",
+      },
+    };
   }
-  return { pack };
 }
 
 async function translateLyrics(payload: any) {
@@ -241,13 +239,7 @@ Keep section tags and preserve singable rhythm.
 Lyrics:
 ${lyrics || ""}
 `.trim();
-
-  const ai = getClient();
-  const response = await ai.models.generateContent({
-    model: "gemini-2.5-flash",
-    contents: prompt,
-  });
-  return { text: response.text || "" };
+  return { text: await openAIResponses(prompt) };
 }
 
 export default async function handler(req: VercelRequest, res: VercelResponse) {

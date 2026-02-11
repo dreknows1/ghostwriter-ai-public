@@ -13,7 +13,9 @@ Prerequisites: Node.js 20+
 1. Install dependencies
    `npm install`
 2. Configure environment variables in `.env.local`:
-   - `GEMINI_API_KEY` (preferred) or `API_KEY` (Gemini)
+   - `OPENAI_API_KEY`
+   - `OPENAI_TEXT_MODEL` (default: `gpt-5.2`)
+   - `OPENAI_IMAGE_MODEL` (default: `gpt-image-1`)
    - `CONVEX_URL` (for Convex client/server integration)
    - `CONVEX_ADMIN_KEY` (server-only, for webhook mutation calls)
    - `STRIPE_PUBLISHABLE_KEY`
