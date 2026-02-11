@@ -28,7 +28,7 @@ function getTextModel(): string {
 }
 
 function getImageModel(): string {
-  return process.env.OPENAI_IMAGE_MODEL || "gpt-image-1";
+  return process.env.OPENAI_IMAGE_MODEL || "nano-banana-pro";
 }
 
 async function openAIResponses(prompt: string, model = getTextModel()): Promise<string> {

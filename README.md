@@ -15,7 +15,7 @@ Prerequisites: Node.js 20+
 2. Configure environment variables in `.env.local`:
    - `OPENAI_API_KEY`
    - `OPENAI_TEXT_MODEL` (default: `gpt-5.2`)
-   - `OPENAI_IMAGE_MODEL` (default: `gpt-image-1`)
+   - `OPENAI_IMAGE_MODEL` (default: `nano-banana-pro`)
    - `CONVEX_URL` (for Convex client/server integration)
    - `CONVEX_ADMIN_KEY` (server-only, for webhook mutation calls)
    - `STRIPE_PUBLISHABLE_KEY`
