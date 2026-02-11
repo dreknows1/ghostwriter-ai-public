@@ -3,97 +3,46 @@ import { GoogleGenAI, Type } from "@google/genai";
 import { SongInputs, SocialPack, UserProfile } from '../types';
 import { isAllowed } from '../lib/checkMembership';
 import { getUserProfile } from './userService';
+import { getGenreProfile, getSubgenreSonicProfile, inferWritingProfile, validateTaxonomyCoverage } from '../lib/culturalLogic';
 
-const GENRE_LINGUISTIC_GUIDELINES: Record<string, string> = {
-    "Hip-Hop": `
-      - LANGUAGE: Heavy use of AAVE (African American Vernacular English). Use regional slang based on context (e.g., NY "deadass", ATL "no cap").
-      - PHONETICS: Tight rhythmic syllables, focus on punchlines and triple-entendre. Incorporate triplet flows and boom-bap rhythmic variations.
-      - STRUCTURE: 16-bar verses, complex internal rhyme schemes, multi-syllabic rhymes.
-      - SLANG: 2025 relevant urban terminology.
-      - AD-LIBS: (skrt, skrt), (uh), (yeah), (it's lit).
-    `,
-    "R&B": `
-      - LANGUAGE: Soulful, vulnerable, romantic yet grounded in modern AAVE. 
-      - PHONETICS: Melismatic vocal runs (riffs/runs), elongated vowels for emotional weight.
-      - TERMINOLOGY: Focus on intimacy, heartbreak, and resilience. 
-      - STRUCTURE: Smooth transitions, stacked [harmonies], focus on the Bridge as the emotional peak.
-      - AD-LIBS: (ooo), (baby), (yeah-eah).
-    `,
-    "Reggaeton": `
-      - LANGUAGE: Spanglish integration. Caribbean Spanish focus (Puerto Rican "boricua" / Colombian slang).
-      - PHONETICS: Staccato dembow rhythmic delivery. Focus on "flow" and aggressive/smooth switching.
-      - TERMINOLOGY: "Perreo", "Malianteo", "Gatita", "La calle".
-      - AUTHENTICITY: Use "¡Dime!" and rhythmic counts like "Uno, dos, tres, ¡Dale!".
-    `,
-    "Regional Mexican": `
-      - LANGUAGE: Mexican Spanish. Rural idioms and storytelling focus (Corridos).
-      - AUTHENTICITY: Incorporate the "Grito" (traditional exclamation). Themes of "Orgullo", "Familia", and "Tierra".
-      - PHONETICS: Strong downbeat syllabic emphasis to match brass/accordion pulses.
-      - TERMINOLOGY: "Compa", "Plebes", "Sierra", "Rancho".
-      - AD-LIBS: (¡Ajua!), (¡Y puro Jalisco!).
-    `,
-    "Afrobeats": `
-      - LANGUAGE: West African Pidgin English (Nigerian/Ghanaian influences). 
-      - STRUCTURE: High-repetition hooks, infectious groove-based phrasing. 
-      - PHONETICS: Poly-rhythmic syllable placement. Call-and-response between lead and group.
-      - TERMINOLOGY: "Omo", "Chop", "Vibes on vibes", "Shayo".
-      - AD-LIBS: (Shekpe!), (Leggo!).
-    `,
-    "Reggae": `
-      - LANGUAGE: Jamaican Patois (Patwa). Use "I and I", "Jah", "Zion".
-      - PHONETICS: Laid-back "one-drop" rhythm pacing. Syncopated delivery.
-      - TERMINOLOGY: "Selecta", "Riddim", "Soundboy", "Bredda".
-      - STRUCTURE: Roots-reggae social consciousness or Lovers Rock romanticism.
-      - AD-LIBS: (Rastafari), (Greetings in the name of the Most High).
-    `,
-    "K-Pop": `
-      - LANGUAGE: Strategic mix of Korean and English. Use honorifics (oppa, unnie, sunbae) where culturally appropriate for the persona.
-      - PHONETICS: Polished, rhythmic, staccato delivery in rap parts, high-register melodic hooks.
-      - TERMINOLOGY: "Aegyo" vibes (cute), "Swag" urban vibes.
-      - AUTHENTICITY: Focus on the "Hook Step" (lyrical repetition that suggests choreography).
-    `,
-    "Mandopop": `
-      - LANGUAGE: Poetic Standard Mandarin. Focus on tonal consistency and nature-based metaphors (moon, water, time).
-      - PHONETICS: Smooth, legato phrasing. Melancholic yet sophisticated delivery.
-      - STRUCTURE: Classical Chinese poetic meter influences. Slow-burn ballads.
-    `,
-    "Cantopop": `
-      - LANGUAGE: Cantonese (9-tone system considerations). Use Hong Kong urban idioms.
-      - TERMINOLOGY: References to city life, neon, Victoria Harbour, and collective nostalgia.
-      - PHONETICS: Flow that respects Cantonese tone shifts.
-    `,
-    "Gospel": `
-      - LANGUAGE: Biblical references, testifying, spiritual uplift.
-      - STRUCTURE: Heavy Call-and-response. Anthemic builds toward a choir-backed peak.
-      - PHONETICS: Powerful, belting delivery. Melismatic riffs.
-      - AD-LIBS: (Amen!), (Preach!), (Hallelujah!).
-    `,
-    "Blues": `
-      - LANGUAGE: Simple, repetitive, raw honesty. Themes of struggle and resilience.
-      - STRUCTURE: AAB rhyme scheme (Repeat the first line twice before the payoff). 12-bar logic.
-      - PHONETICS: Gritty, growling, or "crying" vocal tone.
-    `,
-    "Jazz": `
-      - LANGUAGE: Sophisticated, intellectual, poetic. 
-      - PHONETICS: Improvisational syntax. Incorporate "Scat" sections [Scatting].
-      - TERMINOLOGY: Urban noire, bebop-influenced wordplay.
-    `,
-    "Bongo Flava": `
-      - LANGUAGE: Swahili street slang (Sheng). Coastal Tanzanian/Kenyan urban context.
-      - PHONETICS: Smooth melodic delivery, influence of R&B and Afrobeats rhythms.
-      - TERMINOLOGY: "Mambo vipi", "Bila hiyana", "Dar es Salaam vibes".
-    `,
-    "Fado": `
-      - LANGUAGE: Portuguese "Saudade" (deep melancholy).
-      - STRUCTURE: Formal poetic meter. References to fate (fado), the sea, and lost love.
-      - PHONETICS: Trembling, emotional vocal delivery with sudden dynamic shifts.
-    `,
-    "General": "Modern conversational style, grounded in the specific cultural context of the chosen language."
-};
+function buildGenreLogicBlock(inputs: SongInputs): string {
+  const genreProfile = getGenreProfile(inputs.genre);
+  const sonic = getSubgenreSonicProfile(inputs.subGenre);
+  const writing = inferWritingProfile({
+    language: inputs.language,
+    genre: inputs.genre,
+    subGenre: inputs.subGenre
+  });
 
-const SUBGENRE_SONIC_DATA: Record<string, { bpmRange: string; instrumentation: string; productionStyle: string; definingElements: string }> = {
-    // ... (Existing subgenre data remains unchanged)
-};
+  const sonicBlock = sonic
+    ? `
+SUBGENRE SONIC PROFILE (${sonic.subGenre}):
+- BPM: ${sonic.bpmRange}
+- Groove: ${sonic.groove}
+- Instrumentation: ${sonic.instrumentation}
+- Production: ${sonic.productionStyle}
+- Arrangement: ${sonic.arrangement}
+`
+    : '';
+
+  return `
+LINGUISTIC PROFILE:
+- Language: ${writing.languageVariant}
+- Culture/Region Lens: ${writing.cultureRegion}
+- Register: ${writing.register}
+- Slang Level: ${writing.slang}
+- Code-switching: ${writing.codeSwitchPolicy}
+- Guardrails: ${writing.authenticityGuardrails}
+
+GENRE WRITING LOGIC (${genreProfile.genre}):
+- Structure Default: ${genreProfile.defaultStructure}
+- Prosody: ${genreProfile.prosody}
+- Rhyme: ${genreProfile.rhymeGuidance}
+- Hook: ${genreProfile.hookGuidance}
+- Lexicon Policy: ${genreProfile.lexiconPolicy}
+${sonicBlock}
+`.trim();
+}
 
 const systemInstruction = `
 You are a world-class Ghostwriter and Cultural Creative. You are an expert in the "Master Instructions for AI Songwriting" with a deep specialization in Global Music Ethnomusicology.
@@ -117,20 +66,11 @@ export async function* generateSong(inputs: SongInputs, email: string, userProfi
   try {
     const ai = new GoogleGenAI({ apiKey: process.env.API_KEY as string });
     const artistContext = userProfile ? `ARTIST PERSONA: ${userProfile.display_name}. PREFERRED VIBE: ${userProfile.preferred_vibe}` : '';
-    const genreRules = GENRE_LINGUISTIC_GUIDELINES[inputs.genre || "General"] || GENRE_LINGUISTIC_GUIDELINES["General"];
-    const sonicData = inputs.subGenre ? SUBGENRE_SONIC_DATA[inputs.subGenre] : null;
-
-    let sonicContext = '';
-    if (sonicData) {
-        sonicContext = `
-        SONIC & PRODUCTION DATA for ${inputs.subGenre}:
-        - BPM Range: ${sonicData.bpmRange}
-        - Instrumentation: ${sonicData.instrumentation}
-        - Production Style: ${sonicData.productionStyle}
-        - Defining Elements: ${sonicData.definingElements}
-        Use these details to inform the ### SUNO Prompt section and the rhythmic flow of lyrics.
-        `;
-    }
+    const coverageProblems = validateTaxonomyCoverage();
+    const coverageNote = coverageProblems.length
+      ? `TAXONOMY COVERAGE WARNING: ${coverageProblems.join(' | ')}`
+      : '';
+    const logicBlock = buildGenreLogicBlock(inputs);
     
     const prompt = `
       ${artistContext}
@@ -143,15 +83,14 @@ export async function* generateSong(inputs: SongInputs, email: string, userProfi
       VOCALS: ${inputs.vocals} ${inputs.duetType ? `(Collaboration Pairing: ${inputs.duetType})` : ''}
       CULTURAL OBJECTS/SCENARIO TO INCLUDE: ${inputs.mundaneObjects} | ${inputs.awkwardMoment}
       
-      GENRE-SPECIFIC LINGUISTIC RULES:
-      ${genreRules}
-
-      ${sonicContext}
+      ${coverageNote}
+      AUTHENTICITY + GENRE LOGIC (use for EVERY line and the SUNO prompt):
+      ${logicBlock}
       
       CRITICAL INSTRUCTION:
-      Write this song as a native speaker of ${inputs.language} would write for a ${inputs.genre} audience. 
-      Respect the specific dialectal needs (e.g. use AAVE for urban genres, Patois for Reggae, Mexican Spanish idioms for Regional Mexican).
-      Maintain the poetic meter and rhyme schemes typical of the subgenre ${inputs.subGenre}.
+      Write as a native speaker would for a ${inputs.genre} audience, consistent with the LINGUISTIC PROFILE and GENRE WRITING LOGIC above.
+      Do NOT “perform” dialect with exaggerated spelling. If dialect is not explicitly specified, default to region-neutral, widely understood phrasing.
+      Maintain subgenre-appropriate rhythmic phrasing and hook strategy (no generic one-size-fits-all pop cadence).
       
       OUTPUT FORMAT:
       Title: [Creative Name]
@@ -190,13 +129,27 @@ export async function generateDynamicOptions(
   currentInputs: SongInputs
 ): Promise<string[]> {
   const ai = new GoogleGenAI({ apiKey: process.env.API_KEY as string });
+  const existingValues = Object.entries(currentInputs)
+    .map(([k, v]) => (typeof v === 'string' ? `${k}:${v}` : ''))
+    .filter(Boolean)
+    .join(' | ');
+  const avoidList = new Set<string>(
+    Object.values(currentInputs)
+      .filter((v): v is string => typeof v === 'string' && Boolean(v))
+      .map((v) => v.trim())
+  );
   const prompt = `
     You are an ethnomusicologist researching music for a studio session.
     CURRENT SESSION CONTEXT:
     - Language: ${currentInputs.language || 'Any'}
     - Genre: ${currentInputs.genre || 'Any'}
     - Subgenre: ${currentInputs.subGenre || 'Any'}
+    - Existing selections (do not repeat): ${existingValues || 'None'}
     TASK: Generate 6-8 authentic, creative options for "${targetField.toUpperCase()}".
+    HARD RULES:
+    - No option may duplicate any existing selection value.
+    - All options must be unique from each other (no near-duplicates like different punctuation/casing).
+    - Each option must be context-coherent with the selected language/genre/subgenre.
     Field to research: ${targetField}
   `;
 
@@ -214,7 +167,17 @@ export async function generateDynamicOptions(
     });
 
     const options = JSON.parse(response.text || '[]');
-    return Array.isArray(options) ? options : [];
+    if (!Array.isArray(options)) return [];
+    const cleaned = options
+      .map((o) => (typeof o === 'string' ? o.trim() : ''))
+      .filter(Boolean);
+    const uniqueByFold = new Map<string, string>();
+    for (const opt of cleaned) {
+      const folded = opt.toLowerCase().replace(/\s+/g, ' ').replace(/[.!,;:]+$/g, '');
+      if (avoidList.has(opt)) continue;
+      if (!uniqueByFold.has(folded)) uniqueByFold.set(folded, opt);
+    }
+    return Array.from(uniqueByFold.values()).slice(0, 8);
   } catch (e) {
     return [];
   }
