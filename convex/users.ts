@@ -25,8 +25,8 @@ export const getOrCreateUser = mutation({
 export const upsertUserCredentials = mutation({
   args: {
     email: v.string(),
-    passwordHash: v.string(),
-    passwordSalt: v.string(),
+    passwordHash: v.optional(v.string()),
+    passwordSalt: v.optional(v.string()),
   },
   handler: async (ctx: any, args: any) => {
     const email = args.email.toLowerCase().trim();
@@ -36,23 +36,33 @@ export const upsertUserCredentials = mutation({
       .first();
 
     if (!existing) {
-      const id = await ctx.db.insert("users", {
+      const nextDoc: any = {
         email,
-        passwordHash: args.passwordHash,
-        passwordSalt: args.passwordSalt,
         createdAt: Date.now(),
         updatedAt: Date.now(),
         isActive: true,
+      };
+      if (args.passwordHash && args.passwordSalt) {
+        nextDoc.passwordHash = args.passwordHash;
+        nextDoc.passwordSalt = args.passwordSalt;
+      }
+
+      const id = await ctx.db.insert("users", {
+        ...nextDoc,
       });
       return await ctx.db.get(id);
     }
 
-    await ctx.db.patch(existing._id, {
-      passwordHash: args.passwordHash,
-      passwordSalt: args.passwordSalt,
+    const patch: any = {
       updatedAt: Date.now(),
       isActive: true,
-    });
+    };
+    if (args.passwordHash && args.passwordSalt) {
+      patch.passwordHash = args.passwordHash;
+      patch.passwordSalt = args.passwordSalt;
+    }
+
+    await ctx.db.patch(existing._id, patch);
     return await ctx.db.get(existing._id);
   },
 });

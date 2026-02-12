@@ -17,8 +17,13 @@ async function callAI<T>(action: AIAction, email: string, payload: Record<string
   });
 
   if (!response.ok) {
-    const text = await response.text();
-    throw new Error(`AI request failed (${response.status}): ${text}`);
+    try {
+      const json = await response.json();
+      throw new Error(json?.error || `AI request failed (${response.status})`);
+    } catch {
+      const text = await response.text();
+      throw new Error(text || `AI request failed (${response.status})`);
+    }
   }
 
   return response.json();

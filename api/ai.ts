@@ -50,8 +50,26 @@ async function openAIResponses(prompt: string, model = getTextModel()): Promise<
   });
 
   if (!response.ok) {
-    const text = await response.text();
-    throw new Error(`OpenAI responses error (${response.status}): ${text}`);
+    let errorCode = "provider_error";
+    let errorMessage = "Text generation failed.";
+    try {
+      const data: any = await response.json();
+      errorCode = data?.error?.code || errorCode;
+      errorMessage = data?.error?.message || errorMessage;
+    } catch {
+      // Ignore parse errors and keep safe defaults.
+    }
+
+    const sanitizedMessage =
+      response.status === 401 || errorCode === "invalid_api_key"
+        ? "AI service authentication failed. Please verify OPENAI_API_KEY in server environment."
+        : `OpenAI text request failed (${response.status}).`;
+
+    throw Object.assign(new Error(sanitizedMessage), {
+      status: response.status,
+      code: errorCode,
+      details: errorMessage,
+    });
   }
 
   const data: any = await response.json();
@@ -90,8 +108,26 @@ async function openAIImage(
   });
 
   if (!response.ok) {
-    const text = await response.text();
-    throw new Error(`OpenAI image error (${response.status}): ${text}`);
+    let errorCode = "provider_error";
+    let errorMessage = "Image generation failed.";
+    try {
+      const data: any = await response.json();
+      errorCode = data?.error?.code || errorCode;
+      errorMessage = data?.error?.message || errorMessage;
+    } catch {
+      // Ignore parse errors and keep safe defaults.
+    }
+
+    const sanitizedMessage =
+      response.status === 401 || errorCode === "invalid_api_key"
+        ? "AI image service authentication failed. Please verify OPENAI_API_KEY in server environment."
+        : `OpenAI image request failed (${response.status}).`;
+
+    throw Object.assign(new Error(sanitizedMessage), {
+      status: response.status,
+      code: errorCode,
+      details: errorMessage,
+    });
   }
 
   const data: any = await response.json();
@@ -158,8 +194,26 @@ async function openAIImageEditWithAvatar(
   });
 
   if (!response.ok) {
-    const text = await response.text();
-    throw new Error(`OpenAI image edit error (${response.status}): ${text}`);
+    let errorCode = "provider_error";
+    let errorMessage = "Image edit failed.";
+    try {
+      const data: any = await response.json();
+      errorCode = data?.error?.code || errorCode;
+      errorMessage = data?.error?.message || errorMessage;
+    } catch {
+      // Ignore parse errors and keep safe defaults.
+    }
+
+    const sanitizedMessage =
+      response.status === 401 || errorCode === "invalid_api_key"
+        ? "AI image service authentication failed. Please verify OPENAI_API_KEY in server environment."
+        : `OpenAI image edit request failed (${response.status}).`;
+
+    throw Object.assign(new Error(sanitizedMessage), {
+      status: response.status,
+      code: errorCode,
+      details: errorMessage,
+    });
   }
 
   const data: any = await response.json();
@@ -362,7 +416,16 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
         return res.status(400).json({ error: "Unsupported action" });
     }
   } catch (error: any) {
-    console.error("[AI API Error]", error);
-    return res.status(500).json({ error: error?.message || "AI API failed" });
+    console.error("[AI API Error]", {
+      message: error?.message,
+      code: error?.code,
+      status: error?.status,
+      details: error?.details,
+    });
+    const status = Number.isInteger(error?.status) ? error.status : 500;
+    return res.status(status).json({
+      error: error?.message || "AI API failed",
+      code: error?.code || "ai_request_failed",
+    });
   }
 }
