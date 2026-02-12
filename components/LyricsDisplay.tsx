@@ -15,6 +15,7 @@ interface LyricsDisplayProps {
   onGoHome: () => void;
   onEdit: (instruction: string) => void;
   onSave: (title: string, prompt: string, lyrics: string, albumArt?: string, socialPack?: SocialPack) => Promise<void>;
+  onAutoSaveArt?: (title: string, prompt: string, lyrics: string, albumArt?: string) => Promise<void>;
   onResizePrompt: (currentPrompt: string, action: 'shorten' | 'lengthen') => Promise<void>;
   onGenerateArt: (title: string, prompt: string, aspectRatio: "9:16" | "1:1" | "16:9") => Promise<string>;
   onGenerateSocial: (title: string, lyrics: string) => Promise<SocialPack>;
@@ -33,6 +34,7 @@ const LyricsDisplay: React.FC<LyricsDisplayProps> = ({
     onStartOver, 
     onGoHome,
     onSave, 
+    onAutoSaveArt,
     onGenerateArt,
     onTranslate,
     refreshCredits,
@@ -156,6 +158,13 @@ const LyricsDisplay: React.FC<LyricsDisplayProps> = ({
       const art = await onGenerateArt(parsed.title, parsed.prompt, artAspect);
       if (art) {
         onAlbumArtChange(art);
+        if (onAutoSaveArt) {
+          try {
+            await onAutoSaveArt(parsed.title, parsed.prompt, parsed.lyrics, art);
+          } catch (saveError) {
+            console.error("Auto-save artwork failed:", saveError);
+          }
+        }
         await deductCredits(email, COSTS.GENERATE_ART);
         if (refreshCredits) await refreshCredits();
       }
@@ -312,6 +321,12 @@ const LyricsDisplay: React.FC<LyricsDisplayProps> = ({
                   <button onClick={handleGenerateArtwork} disabled={isGeneratingArt} className="w-full bg-indigo-900/10 hover:bg-indigo-900/20 py-5 rounded-[1.5rem] text-sm font-black uppercase tracking-[0.14em] md:tracking-[0.3em] text-indigo-500 border border-indigo-900/20 transition-all">
                       {isGeneratingArt ? 'Visualizing...' : 'Generate Art'}
                   </button>
+                  {albumArt && (
+                    <button onClick={handleDownloadArt} className="w-full mt-3 bg-slate-900/30 hover:bg-slate-800/50 py-4 rounded-[1.2rem] text-xs font-black uppercase tracking-[0.14em] md:tracking-[0.2em] text-slate-200 border border-slate-700/70 transition-all flex items-center justify-center gap-2">
+                      <DownloadIcon />
+                      Download Art
+                    </button>
+                  )}
               </div>
           </div>
       </div>

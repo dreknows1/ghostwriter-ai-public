@@ -279,6 +279,14 @@ function getGeminiImageModel(): string {
   return process.env.GEMINI_IMAGE_MODEL || "gemini-3-pro-image-preview";
 }
 
+function shouldRunMultiPassRefinement(): boolean {
+  return process.env.AI_MULTIPASS_REFINEMENT === "1";
+}
+
+function shouldRunDeepAudit(): boolean {
+  return process.env.AI_DEEP_AUDIT === "1";
+}
+
 function getStylePrompt(style?: string): string {
   const normalized = (style || "Realism").trim().toLowerCase();
   switch (normalized) {
@@ -923,10 +931,18 @@ ${metaTagPackage.strictSpec}
   `.trim();
 
   const draft = await openAIResponses(prompt);
-  const refined = await culturallyRefineSong(draft, inputs || {}, userProfile || {});
-  const orchestrated = await enforceMetaTagOrchestration(refined, inputs || {});
-  const audit = await evaluateCulturalAudit(orchestrated, inputs || {});
-  return { text: orchestrated, audit };
+  let finalText = draft;
+
+  if (shouldRunMultiPassRefinement()) {
+    const refined = await culturallyRefineSong(draft, inputs || {}, userProfile || {});
+    finalText = await enforceMetaTagOrchestration(refined, inputs || {});
+  }
+
+  const audit = shouldRunDeepAudit()
+    ? await evaluateCulturalAudit(finalText, inputs || {})
+    : fallbackAudit(inputs || {});
+
+  return { text: finalText, audit };
 }
 
 async function editSong(payload: any) {
@@ -954,10 +970,18 @@ ${originalSong || ""}
   `.trim();
 
   const draft = await openAIResponses(prompt);
-  const refined = await culturallyRefineSong(draft, inputs || {}, userProfile || {});
-  const orchestrated = await enforceMetaTagOrchestration(refined, inputs || {});
-  const audit = await evaluateCulturalAudit(orchestrated, inputs || {});
-  return { text: orchestrated, audit };
+  let finalText = draft;
+
+  if (shouldRunMultiPassRefinement()) {
+    const refined = await culturallyRefineSong(draft, inputs || {}, userProfile || {});
+    finalText = await enforceMetaTagOrchestration(refined, inputs || {});
+  }
+
+  const audit = shouldRunDeepAudit()
+    ? await evaluateCulturalAudit(finalText, inputs || {})
+    : fallbackAudit(inputs || {});
+
+  return { text: finalText, audit };
 }
 
 async function structureImportedSong(payload: any) {
@@ -984,10 +1008,18 @@ ${rawText || ""}
   `.trim();
 
   const draft = await openAIResponses(prompt);
-  const refined = await culturallyRefineSong(draft, inputs || {}, userProfile || {});
-  const orchestrated = await enforceMetaTagOrchestration(refined, inputs || {});
-  const audit = await evaluateCulturalAudit(orchestrated, inputs || {});
-  return { text: orchestrated, audit };
+  let finalText = draft;
+
+  if (shouldRunMultiPassRefinement()) {
+    const refined = await culturallyRefineSong(draft, inputs || {}, userProfile || {});
+    finalText = await enforceMetaTagOrchestration(refined, inputs || {});
+  }
+
+  const audit = shouldRunDeepAudit()
+    ? await evaluateCulturalAudit(finalText, inputs || {})
+    : fallbackAudit(inputs || {});
+
+  return { text: finalText, audit };
 }
 
 async function generateDynamicOptions(payload: any) {

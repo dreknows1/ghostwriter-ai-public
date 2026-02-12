@@ -545,6 +545,8 @@ export const App: React.FC = () => {
       setIsLoading(true);
       setLoadingMessage("Song Ghost is listening...");
       setStep(AppStep.GENERATING);
+      setLoadedSongId(null);
+      setAlbumArt(null);
 
       try {
           const profile = await getUserProfile(session.user.email || '');
@@ -576,6 +578,7 @@ export const App: React.FC = () => {
       setGeneratedSong('');
       setCulturalAudit(null);
       setAlbumArt(null);
+      setLoadedSongId(null);
       setStep(AppStep.AWAITING_LANGUAGE);
       setView(AppView.STUDIO);
   };
@@ -587,10 +590,39 @@ export const App: React.FC = () => {
     setIsMenuOpen(false);
   };
 
+  const persistSong = async (
+    title: string,
+    prompt: string,
+    lyrics: string,
+    art?: string,
+    social?: any
+  ) => {
+    if (!session) return null;
+    const result: any = await saveSong(
+      session.user.email || "",
+      title,
+      prompt,
+      lyrics,
+      art,
+      social,
+      loadedSongId || undefined
+    );
+    const persistedId =
+      result?.data?.[0]?.id ||
+      result?.data?.id ||
+      result?.id ||
+      null;
+    if (persistedId) setLoadedSongId(String(persistedId));
+    return persistedId;
+  };
+
   const handleSave = async (title: string, prompt: string, lyrics: string, art?: string, social?: any) => {
-      if (!session) return;
-      await saveSong(session.user.email || '', title, prompt, lyrics, art, social, loadedSongId || undefined);
+      await persistSong(title, prompt, lyrics, art, social);
       alert('Session saved to library!');
+  };
+
+  const handleAutoSaveArt = async (title: string, prompt: string, lyrics: string, art?: string) => {
+      await persistSong(title, prompt, lyrics, art, undefined);
   };
 
   const handleAuth = async (e: React.FormEvent) => {
@@ -1101,6 +1133,7 @@ export const App: React.FC = () => {
                 onGoHome={() => setView(AppView.LANDING)}
                 onEdit={() => {}}
                 onSave={handleSave}
+                onAutoSaveArt={handleAutoSaveArt}
                 onResizePrompt={async () => {}}
                 onGenerateArt={async (t, p, aspectRatio) => generateAlbumArt(
                   t,
