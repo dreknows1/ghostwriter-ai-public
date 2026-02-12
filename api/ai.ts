@@ -1,7 +1,7 @@
 import type { VercelRequest, VercelResponse } from "@vercel/node";
 import { ConvexHttpClient } from "convex/browser";
 import { makeFunctionReference } from "convex/server";
-import { GoogleGenAI, PersonGeneration } from "@google/genai";
+import { GoogleGenAI } from "@google/genai";
 
 type AIAction =
   | "generateSong"
@@ -37,7 +37,7 @@ function getGeminiApiKey(): string {
 }
 
 function getGeminiImageModel(): string {
-  return process.env.GEMINI_IMAGE_MODEL || "imagen-4.0-generate-001";
+  return process.env.GEMINI_IMAGE_MODEL || "gemini-3-pro-image-preview";
 }
 
 const getUserProfileByEmailRef = makeFunctionReference<"query">("app:getUserProfileByEmail");
@@ -145,20 +145,34 @@ async function getAvatarBlob(avatarUrl: string | undefined, email: string): Prom
 
 async function geminiGenerateImage(
   prompt: string,
-  aspectRatio: "9:16" | "1:1" | "16:9" = "9:16"
+  aspectRatio: "9:16" | "1:1" | "16:9" = "9:16",
+  referenceImage?: Blob | null
 ): Promise<string> {
   const ai = new GoogleGenAI({ apiKey: getGeminiApiKey() });
-  const response: any = await ai.models.generateImages({
+  const promptWithAspect = `${prompt}\nTarget aspect ratio: ${aspectRatio}.`;
+  const contents: any[] = [{ text: promptWithAspect }];
+
+  if (referenceImage) {
+    const arrayBuffer = await referenceImage.arrayBuffer();
+    contents.push({
+      inlineData: {
+        mimeType: referenceImage.type || "image/png",
+        data: Buffer.from(arrayBuffer).toString("base64"),
+      },
+    });
+  }
+
+  const response: any = await ai.models.generateContent({
     model: getGeminiImageModel(),
-    prompt,
+    contents,
     config: {
-      numberOfImages: 1,
-      aspectRatio,
-      personGeneration: PersonGeneration.ALLOW_ALL,
+      responseModalities: ["TEXT", "IMAGE"],
     },
   });
 
-  const b64 = response?.generatedImages?.[0]?.image?.imageBytes;
+  const parts = Array.isArray(response?.parts) ? response.parts : Array.isArray(response?.candidates?.[0]?.content?.parts) ? response.candidates[0].content.parts : [];
+  const imagePart = parts.find((part: any) => part?.inlineData?.data);
+  const b64 = imagePart?.inlineData?.data;
   if (!b64 || typeof b64 !== "string") {
     throw new Error("Gemini image generation returned no base64 payload");
   }
@@ -276,7 +290,7 @@ Primary subject guidance:
 - Use the same person identity as the user's avatar.
 - Preserve core facial structure, hairstyle, and skin tone.
 - Keep styling tasteful and non-suggestive for mainstream album artwork.`;
-    return { imageDataUrl: await geminiGenerateImage(avatarGuidedPrompt, ratio) };
+    return { imageDataUrl: await geminiGenerateImage(avatarGuidedPrompt, ratio, avatarBlob) };
   }
 
   return { imageDataUrl: await geminiGenerateImage(prompt, ratio) };
