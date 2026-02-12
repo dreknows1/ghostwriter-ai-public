@@ -1,5 +1,11 @@
 
 import Stripe from 'stripe';
+import { ConvexHttpClient } from 'convex/browser';
+import { makeFunctionReference } from 'convex/server';
+
+const createStripeCheckoutPendingByEmailRef = makeFunctionReference<'mutation'>(
+  'billing:createStripeCheckoutPendingByEmail'
+);
 
 export default async function handler(req: any, res: any) {
   const apiKey = process.env.STRIPE_SECRET_KEY;
@@ -101,6 +107,26 @@ export default async function handler(req: any, res: any) {
         pkgId: priceId
       },
     });
+
+    // Track every checkout immediately in account history.
+    // Best-effort: checkout can proceed even if tracking write fails.
+    try {
+      const convexUrl = process.env.CONVEX_URL;
+      const convexAdminKey = process.env.CONVEX_ADMIN_KEY;
+      if (convexUrl && convexAdminKey) {
+        const client: any = new ConvexHttpClient(convexUrl);
+        client.setAdminAuth(convexAdminKey);
+        await client.mutation(createStripeCheckoutPendingByEmailRef as any, {
+          sessionId: session.id,
+          userEmail: normalizedEmail,
+          credits: product.credits,
+          item: product.name,
+          amountCents: product.amount,
+        });
+      }
+    } catch (trackingError) {
+      console.error('[Checkout Tracking Error]:', trackingError);
+    }
 
     return res.status(200).json({ url: session.url });
 

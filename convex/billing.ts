@@ -52,7 +52,7 @@ export const applyStripeCheckoutCredits = mutation({
       .query("transactions")
       .withIndex("by_session", (q: any) => q.eq("stripeSessionId", args.sessionId))
       .first();
-    if (existingTx) return { applied: false, reason: "duplicate_session" };
+    if (existingTx?.status === "completed") return { applied: false, reason: "duplicate_session" };
 
     const seen = await ctx.db
       .query("stripeEvents")
@@ -83,15 +83,24 @@ export const applyStripeCheckoutCredits = mutation({
       createdAt: Date.now(),
     });
 
-    await ctx.db.insert("transactions", {
-      userId: args.userId,
-      stripeSessionId: args.sessionId,
-      item: args.item,
-      amountCents: args.amountCents,
-      creditsGranted: args.credits,
-      status: "completed",
-      createdAt: Date.now(),
-    });
+    if (existingTx) {
+      await ctx.db.patch(existingTx._id, {
+        item: args.item,
+        amountCents: args.amountCents,
+        creditsGranted: args.credits,
+        status: "completed",
+      });
+    } else {
+      await ctx.db.insert("transactions", {
+        userId: args.userId,
+        stripeSessionId: args.sessionId,
+        item: args.item,
+        amountCents: args.amountCents,
+        creditsGranted: args.credits,
+        status: "completed",
+        createdAt: Date.now(),
+      });
+    }
 
     await ctx.db.insert("stripeEvents", {
       eventId: args.eventId,
@@ -117,7 +126,7 @@ export const applyStripeCheckoutCreditsByEmail = mutation({
       .query("transactions")
       .withIndex("by_session", (q: any) => q.eq("stripeSessionId", args.sessionId))
       .first();
-    if (existingTx) return { applied: false, reason: "duplicate_session" };
+    if (existingTx?.status === "completed") return { applied: false, reason: "duplicate_session" };
 
     const seen = await ctx.db
       .query("stripeEvents")
@@ -142,15 +151,24 @@ export const applyStripeCheckoutCreditsByEmail = mutation({
       createdAt: Date.now(),
     });
 
-    await ctx.db.insert("transactions", {
-      userId: user._id,
-      stripeSessionId: args.sessionId,
-      item: args.item,
-      amountCents: args.amountCents,
-      creditsGranted: args.credits,
-      status: "completed",
-      createdAt: Date.now(),
-    });
+    if (existingTx) {
+      await ctx.db.patch(existingTx._id, {
+        item: args.item,
+        amountCents: args.amountCents,
+        creditsGranted: args.credits,
+        status: "completed",
+      });
+    } else {
+      await ctx.db.insert("transactions", {
+        userId: user._id,
+        stripeSessionId: args.sessionId,
+        item: args.item,
+        amountCents: args.amountCents,
+        creditsGranted: args.credits,
+        status: "completed",
+        createdAt: Date.now(),
+      });
+    }
 
     await ctx.db.insert("stripeEvents", {
       eventId: args.eventId,
@@ -159,5 +177,34 @@ export const applyStripeCheckoutCreditsByEmail = mutation({
     });
 
     return { applied: true, credits: nextCredits };
+  },
+});
+
+export const createStripeCheckoutPendingByEmail = mutation({
+  args: {
+    sessionId: v.string(),
+    userEmail: v.string(),
+    credits: v.number(),
+    item: v.string(),
+    amountCents: v.number(),
+  },
+  handler: async (ctx: any, args: any) => {
+    const existing = await ctx.db
+      .query("transactions")
+      .withIndex("by_session", (q: any) => q.eq("stripeSessionId", args.sessionId))
+      .first();
+    if (existing) return { created: false, reason: "exists" };
+
+    const { user } = await ensureUserAndProfile(ctx, args.userEmail);
+    await ctx.db.insert("transactions", {
+      userId: user._id,
+      stripeSessionId: args.sessionId,
+      item: args.item,
+      amountCents: args.amountCents,
+      creditsGranted: args.credits,
+      status: "pending",
+      createdAt: Date.now(),
+    });
+    return { created: true };
   },
 });
