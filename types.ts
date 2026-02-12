@@ -78,6 +78,18 @@ export interface SocialPack {
   cta: string;
 }
 
+export interface CulturalAuditItem {
+  dimension: string;
+  score: number;
+  notes: string;
+}
+
+export interface CulturalAudit {
+  overallScore: number;
+  summary: string;
+  checklist: CulturalAuditItem[];
+}
+
 export interface SavedSong {
   id: string;
   user_email: string;

@@ -1,4 +1,4 @@
-import { SongInputs, SocialPack, UserProfile } from "../types";
+import { CulturalAudit, SongInputs, SocialPack, UserProfile } from "../types";
 
 type AIAction =
   | "generateSong"
@@ -8,6 +8,18 @@ type AIAction =
   | "generateAlbumArt"
   | "generateSocialPack"
   | "translateLyrics";
+
+let lastCulturalAudit: CulturalAudit | null = null;
+
+function setLastCulturalAudit(audit?: CulturalAudit | null) {
+  if (!audit) return;
+  if (typeof audit.overallScore !== "number" || !Array.isArray(audit.checklist)) return;
+  lastCulturalAudit = audit;
+}
+
+export function getLastCulturalAudit(): CulturalAudit | null {
+  return lastCulturalAudit;
+}
 
 async function callAI<T>(action: AIAction, email: string, payload: Record<string, unknown>): Promise<T> {
   const response = await fetch("/api/ai", {
@@ -40,7 +52,8 @@ export async function* generateSong(
   email: string,
   userProfile?: UserProfile | null
 ): AsyncGenerator<string> {
-  const result = await callAI<{ text: string }>("generateSong", email, { inputs, userProfile });
+  const result = await callAI<{ text: string; audit?: CulturalAudit }>("generateSong", email, { inputs, userProfile });
+  setLastCulturalAudit(result.audit || null);
   yield* singleYield(result.text || "");
 }
 
@@ -58,14 +71,32 @@ export async function generateDynamicOptions(
 export async function* editSong(
   originalSong: string,
   editInstruction: string,
-  email: string
+  email: string,
+  inputs?: SongInputs,
+  userProfile?: UserProfile | null
 ): AsyncGenerator<string> {
-  const result = await callAI<{ text: string }>("editSong", email, { originalSong, editInstruction });
+  const result = await callAI<{ text: string; audit?: CulturalAudit }>("editSong", email, {
+    originalSong,
+    editInstruction,
+    inputs,
+    userProfile,
+  });
+  setLastCulturalAudit(result.audit || null);
   yield* singleYield(result.text || "");
 }
 
-export async function* structureImportedSong(rawText: string, email: string): AsyncGenerator<string> {
-  const result = await callAI<{ text: string }>("structureImportedSong", email, { rawText });
+export async function* structureImportedSong(
+  rawText: string,
+  email: string,
+  inputs?: SongInputs,
+  userProfile?: UserProfile | null
+): AsyncGenerator<string> {
+  const result = await callAI<{ text: string; audit?: CulturalAudit }>("structureImportedSong", email, {
+    rawText,
+    inputs,
+    userProfile,
+  });
+  setLastCulturalAudit(result.audit || null);
   yield* singleYield(result.text || "");
 }
 
@@ -99,9 +130,11 @@ export async function translateLyrics(lyrics: string, targetLanguage: string, em
 }
 
 export async function* polishSong(currentLyrics: string, genre: string, email: string): AsyncGenerator<string> {
-  const result = await callAI<{ text: string }>("editSong", email, {
+  const result = await callAI<{ text: string; audit?: CulturalAudit }>("editSong", email, {
     originalSong: `Title: Draft\n### SUNO Prompt\n${genre}\n### Lyrics\n${currentLyrics}`,
     editInstruction: `Polish for ${genre}. Keep structure and improve performance cues.`,
+    inputs: { genre },
   });
+  setLastCulturalAudit(result.audit || null);
   yield* singleYield(result.text || "");
 }

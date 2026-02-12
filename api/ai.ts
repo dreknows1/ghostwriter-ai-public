@@ -2,6 +2,12 @@ import type { VercelRequest, VercelResponse } from "@vercel/node";
 import { ConvexHttpClient } from "convex/browser";
 import { makeFunctionReference } from "convex/server";
 import { GoogleGenAI } from "@google/genai";
+import {
+  getGenreProfile,
+  getSubgenreSonicProfile,
+  inferWritingProfile,
+  LANGUAGE_PROFILES,
+} from "../lib/culturalLogic";
 
 type AIAction =
   | "generateSong"
@@ -11,6 +17,18 @@ type AIAction =
   | "generateAlbumArt"
   | "generateSocialPack"
   | "translateLyrics";
+
+type CulturalAuditItem = {
+  dimension: string;
+  score: number;
+  notes: string;
+};
+
+type CulturalAudit = {
+  overallScore: number;
+  summary: string;
+  checklist: CulturalAuditItem[];
+};
 
 function sanitizeEmail(email?: string): string {
   return (email || "").toLowerCase().trim();
@@ -90,6 +108,281 @@ STRICT STYLE: FANTASY
 STRICT STYLE: REALISM
 - Photorealistic, true-to-life rendering with cinematic quality.
 `.trim();
+  }
+}
+
+function detectRegisterHint(inputs: any): "clean" | "radio" | "explicit" {
+  const bag = `${inputs?.additionalInfo || ""} ${inputs?.scene || ""} ${inputs?.emotion || ""}`.toLowerCase();
+  if (bag.includes("clean") || bag.includes("family") || bag.includes("radio safe")) return "clean";
+  if (bag.includes("explicit") || bag.includes("uncensored") || bag.includes("adult")) return "explicit";
+  return "radio";
+}
+
+function getHipHopCadenceGuidance(subGenre?: string): string {
+  const key = (subGenre || "").toLowerCase();
+  if (key.includes("boom bap")) {
+    return "Boom Bap lens: East-coast-forward rhyme density, internal multis, narrative bars, punchline precision.";
+  }
+  if (key.includes("g-funk")) {
+    return "G-Funk lens: West-coast glide, laid-back cadence pockets, vivid street/city imagery, melodic hooks.";
+  }
+  if (key.includes("drill")) {
+    return "Drill lens: clipped phrasing, high-energy percussive cadence, minimal filler, urgent bar endings.";
+  }
+  if (key.includes("conscious")) {
+    return "Conscious lens: layered metaphor, social texture, double/triple entendre where natural.";
+  }
+  if (key.includes("trap") || key.includes("emo rap")) {
+    return "Trap/Emo lens: melodic repetition in hook, contrast sparse punchlines vs emotive refrains.";
+  }
+  return "Hip-Hop lens: cadence contrast between verse and hook, meaningful multis, no recycled cliches.";
+}
+
+function getRegionalSceneGuidance(language: string, genre: string, subGenre: string, cultureRegion: string): string {
+  const l = language.toLowerCase();
+  const g = genre.toLowerCase();
+  if (l === "french" && (g.includes("rap") || g.includes("hip-hop") || g.includes("afro-trap"))) {
+    return "French rap context: keep idioms region-natural, modern spoken texture, avoid caricature verlan overload.";
+  }
+  if (l === "german" && (g.includes("hip-hop") || g.includes("rap"))) {
+    return "German rap context: direct phrasing and rhythmic consonant clarity; avoid forced anglicism spam.";
+  }
+  if (l === "spanish" && cultureRegion === "Caribbean") {
+    return "Caribbean Spanish context: natural regional flow; avoid cartoon dialect spellings and over-tokenized slang.";
+  }
+  if (l === "spanish" && cultureRegion === "Mexico") {
+    return "Mexican context: local scene texture and imagery should feel grounded, not touristic stereotypes.";
+  }
+  if (l === "portuguese" && cultureRegion === "Brazil") {
+    return "Brazilian Portuguese context: contemporary phrasing and contractions; avoid mixing pt-PT forms.";
+  }
+  if (l === "portuguese" && cultureRegion === "Portugal") {
+    return "Portuguese (Portugal) context: maintain pt-PT vocabulary and tone, avoid Brazilian colloquial defaults.";
+  }
+  if (l === "swahili") {
+    return "Swahili context: clear, singable, region-coherent wording; no random imported slang unless requested.";
+  }
+  return "Regional context: use lived-in scene details from the selected language/region without stereotypes.";
+}
+
+function buildCulturalPromptContext(inputs: any) {
+  const language = inputs?.language || "English";
+  const genre = inputs?.genre || "Pop";
+  const subGenre = inputs?.subGenre || "Modern";
+  const register = detectRegisterHint(inputs);
+  const writingProfile = inferWritingProfile({
+    language,
+    genre,
+    subGenre,
+    register,
+    allowCodeSwitch: false,
+  });
+  const genreProfile = getGenreProfile(genre);
+  const subProfile = getSubgenreSonicProfile(subGenre);
+  const languageNotes = LANGUAGE_PROFILES[language]?.notes || "Use natural native phrasing.";
+  const regionalScene = getRegionalSceneGuidance(
+    language,
+    genre,
+    subGenre,
+    writingProfile.cultureRegion
+  );
+  const hipHopCadence = genre.toLowerCase() === "hip-hop" ? getHipHopCadenceGuidance(subGenre) : "";
+
+  return `
+Language/Culture:
+- Language: ${writingProfile.language}
+- Variant: ${writingProfile.languageVariant}
+- Region: ${writingProfile.cultureRegion}
+- Register: ${writingProfile.register}
+- Slang level: ${writingProfile.slang}
+- Language notes: ${languageNotes}
+- Code-switching: ${writingProfile.codeSwitchPolicy}
+- Guardrails: ${writingProfile.authenticityGuardrails}
+
+Genre Writing Blueprint:
+- Genre: ${genreProfile.genre}
+- Structure target: ${genreProfile.defaultStructure}
+- Prosody: ${genreProfile.prosody}
+- Rhyme strategy: ${genreProfile.rhymeGuidance}
+- Hook strategy: ${genreProfile.hookGuidance}
+- Lexicon policy: ${genreProfile.lexiconPolicy}
+
+Subgenre Sonic Intent:
+- Subgenre: ${subProfile?.subGenre || subGenre}
+- BPM: ${subProfile?.bpmRange || "Genre-appropriate"}
+- Groove: ${subProfile?.groove || "Genre-appropriate"}
+- Instrumentation direction: ${subProfile?.instrumentation || "Genre-coherent instrumentation"}
+- Production style: ${subProfile?.productionStyle || "Genre-coherent production"}
+- Arrangement direction: ${subProfile?.arrangement || "Strong verse/chorus contrast"}
+
+Regional/Scene Authenticity:
+- ${regionalScene}
+${hipHopCadence ? `- ${hipHopCadence}` : ""}
+- Avoid generic "AI song" phrasing and overused cliche metaphors.
+- Use concrete, culturally coherent scene details that match language + genre + subgenre.
+  `.trim();
+}
+
+async function culturallyRefineSong(rawSong: string, inputs: any, userProfile: any): Promise<string> {
+  if (!rawSong?.trim()) return rawSong;
+  const culturalContext = buildCulturalPromptContext(inputs);
+  const prompt = `
+You are a senior lyric editor specializing in cultural authenticity.
+Refine the song below for cultural and stylistic accuracy while preserving intent and emotional arc.
+
+Return ONLY this exact format:
+Title: ...
+### SUNO Prompt
+...
+### Lyrics
+...
+
+Rules:
+- Preserve the original language and regional variant.
+- Keep strong genre/subgenre identity and avoid cliche stock lines.
+- Improve metaphors, cadence, rhyme texture, and scene authenticity.
+- Do not add stereotypes, slurs, or tokenized dialect.
+- Keep title and hook memorable and aligned with the core story.
+
+Creator context:
+- Artist persona: ${userProfile?.display_name || "N/A"} | vibe: ${userProfile?.preferred_vibe || "N/A"}
+
+${culturalContext}
+
+Song draft:
+${rawSong}
+  `.trim();
+
+  try {
+    return await openAIResponses(prompt);
+  } catch {
+    return rawSong;
+  }
+}
+
+function parseLooseJson(text: string): any | null {
+  if (!text || typeof text !== "string") return null;
+  const trimmed = text.trim();
+  const fenced = trimmed.match(/```(?:json)?\s*([\s\S]*?)```/i);
+  const candidate = fenced?.[1]?.trim() || trimmed;
+  try {
+    return JSON.parse(candidate);
+  } catch {
+    const start = candidate.indexOf("{");
+    const end = candidate.lastIndexOf("}");
+    if (start !== -1 && end !== -1 && end > start) {
+      try {
+        return JSON.parse(candidate.slice(start, end + 1));
+      } catch {
+        return null;
+      }
+    }
+    return null;
+  }
+}
+
+function clampScore(value: any): number {
+  const n = Number(value);
+  if (!Number.isFinite(n)) return 0;
+  return Math.max(0, Math.min(100, Math.round(n)));
+}
+
+function normalizeAudit(raw: any): CulturalAudit {
+  const fallbackChecklist: CulturalAuditItem[] = [
+    { dimension: "Language Authenticity", score: 0, notes: "" },
+    { dimension: "Cultural Context", score: 0, notes: "" },
+    { dimension: "Genre Fidelity", score: 0, notes: "" },
+    { dimension: "Subgenre Fidelity", score: 0, notes: "" },
+    { dimension: "Lyrical Originality", score: 0, notes: "" },
+    { dimension: "Cadence & Prosody", score: 0, notes: "" },
+  ];
+
+  const checklist = Array.isArray(raw?.checklist)
+    ? raw.checklist
+        .map((item: any) => ({
+          dimension: typeof item?.dimension === "string" ? item.dimension : "",
+          score: clampScore(item?.score),
+          notes: typeof item?.notes === "string" ? item.notes : "",
+        }))
+        .filter((item: CulturalAuditItem) => item.dimension)
+        .slice(0, 8)
+    : [];
+
+  const normalizedChecklist = checklist.length ? checklist : fallbackChecklist;
+  const derivedAverage = Math.round(
+    normalizedChecklist.reduce((acc: number, item: CulturalAuditItem) => acc + item.score, 0) /
+      normalizedChecklist.length
+  );
+  const overallScore = raw?.overallScore !== undefined ? clampScore(raw.overallScore) : derivedAverage;
+  const summary =
+    typeof raw?.summary === "string" && raw.summary.trim()
+      ? raw.summary.trim()
+      : "Audit completed using cultural authenticity rubric.";
+
+  return {
+    overallScore,
+    summary,
+    checklist: normalizedChecklist,
+  };
+}
+
+function fallbackAudit(inputs: any): CulturalAudit {
+  const language = inputs?.language || "English";
+  const genre = inputs?.genre || "Pop";
+  const subGenre = inputs?.subGenre || "Modern";
+  return {
+    overallScore: 72,
+    summary: `Baseline audit fallback for ${language} ${genre}/${subGenre}.`,
+    checklist: [
+      { dimension: "Language Authenticity", score: 72, notes: "Fallback audit: verify native phrasing manually." },
+      { dimension: "Cultural Context", score: 70, notes: "Fallback audit: validate local scene references." },
+      { dimension: "Genre Fidelity", score: 75, notes: "Fallback audit: confirm genre writing conventions." },
+      { dimension: "Subgenre Fidelity", score: 70, notes: "Fallback audit: align cadence and sonic cues." },
+      { dimension: "Lyrical Originality", score: 74, notes: "Fallback audit: reduce cliches where needed." },
+      { dimension: "Cadence & Prosody", score: 71, notes: "Fallback audit: tighten line stress and flow." },
+    ],
+  };
+}
+
+async function evaluateCulturalAudit(songText: string, inputs: any): Promise<CulturalAudit> {
+  if (!songText?.trim()) return fallbackAudit(inputs);
+  const culturalContext = buildCulturalPromptContext(inputs || {});
+  const prompt = `
+You are evaluating one song draft for cultural authenticity and stylistic quality.
+Score strictly and return ONLY JSON:
+{
+  "overallScore": number,
+  "summary": string,
+  "checklist": [
+    { "dimension": "Language Authenticity", "score": number, "notes": string },
+    { "dimension": "Cultural Context", "score": number, "notes": string },
+    { "dimension": "Genre Fidelity", "score": number, "notes": string },
+    { "dimension": "Subgenre Fidelity", "score": number, "notes": string },
+    { "dimension": "Lyrical Originality", "score": number, "notes": string },
+    { "dimension": "Cadence & Prosody", "score": number, "notes": string }
+  ]
+}
+
+Scoring rules:
+- 90-100: excellent/authentic
+- 75-89: strong but has notable improvements
+- 60-74: mixed quality with clear authenticity gaps
+- below 60: weak authenticity/fidelity
+- Keep notes concise and actionable.
+
+${culturalContext}
+
+Song to audit:
+${songText}
+  `.trim();
+
+  try {
+    const raw = await openAIResponses(prompt);
+    const parsed = parseLooseJson(raw);
+    if (!parsed) return fallbackAudit(inputs);
+    return normalizeAudit(parsed);
+  } catch {
+    return fallbackAudit(inputs);
   }
 }
 
@@ -234,6 +527,7 @@ async function geminiGenerateImage(
 
 async function generateSong(payload: any) {
   const { inputs, userProfile } = payload || {};
+  const culturalContext = buildCulturalPromptContext(inputs || {});
   const prompt = `
 You are a professional songwriter.
 Return only:
@@ -254,13 +548,25 @@ Context:
 - Vocals: ${inputs?.vocals || "Female Solo"} ${inputs?.duetType ? `(Duet: ${inputs.duetType})` : ""}
 - Extra details: ${inputs?.mundaneObjects || ""} ${inputs?.awkwardMoment || ""}
 - Artist persona: ${userProfile?.display_name || "N/A"} | vibe: ${userProfile?.preferred_vibe || "N/A"}
-`.trim();
 
-  return { text: await openAIResponses(prompt) };
+Non-negotiable writing directives:
+- The song must sound native to the selected language/region and faithful to the selected subgenre's writing traditions.
+- Avoid generic AI patterns, filler hooks, and repetitive cliche imagery.
+- Distinguish verse cadence vs hook cadence clearly.
+- Make the SUNO prompt production-ready and specific to the same cultural/genre profile.
+
+${culturalContext}
+  `.trim();
+
+  const draft = await openAIResponses(prompt);
+  const refined = await culturallyRefineSong(draft, inputs || {}, userProfile || {});
+  const audit = await evaluateCulturalAudit(refined, inputs || {});
+  return { text: refined, audit };
 }
 
 async function editSong(payload: any) {
-  const { originalSong, editInstruction } = payload || {};
+  const { originalSong, editInstruction, inputs, userProfile } = payload || {};
+  const culturalContext = buildCulturalPromptContext(inputs || {});
   const prompt = `
 Revise the song per instruction.
 Return only full song in this exact format:
@@ -271,15 +577,22 @@ Title: ...
 ...
 
 Instruction: ${editInstruction || ""}
+Cultural context requirements:
+${culturalContext}
+
 Original song:
 ${originalSong || ""}
-`.trim();
+  `.trim();
 
-  return { text: await openAIResponses(prompt) };
+  const draft = await openAIResponses(prompt);
+  const refined = await culturallyRefineSong(draft, inputs || {}, userProfile || {});
+  const audit = await evaluateCulturalAudit(refined, inputs || {});
+  return { text: refined, audit };
 }
 
 async function structureImportedSong(payload: any) {
-  const { rawText } = payload || {};
+  const { rawText, inputs, userProfile } = payload || {};
+  const culturalContext = buildCulturalPromptContext(inputs || {});
   const prompt = `
 Turn the input into a full structured song.
 Output format:
@@ -289,11 +602,17 @@ Title: ...
 ### Lyrics
 ...
 
+Cultural context requirements:
+${culturalContext}
+
 Input:
 ${rawText || ""}
-`.trim();
+  `.trim();
 
-  return { text: await openAIResponses(prompt) };
+  const draft = await openAIResponses(prompt);
+  const refined = await culturallyRefineSong(draft, inputs || {}, userProfile || {});
+  const audit = await evaluateCulturalAudit(refined, inputs || {});
+  return { text: refined, audit };
 }
 
 async function generateDynamicOptions(payload: any) {

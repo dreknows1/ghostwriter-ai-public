@@ -1,7 +1,7 @@
 
 import React, { useState, useEffect, useCallback, useMemo } from 'react';
-import { AppStep, AppView, SongInputs, SavedSong, UserProfile } from './types';
-import { generateSong, generateAlbumArt, generateSocialPack, translateLyrics, editSong, generateDynamicOptions, structureImportedSong } from './services/geminiService';
+import { AppStep, AppView, SongInputs, SavedSong, UserProfile, CulturalAudit } from './types';
+import { generateSong, generateAlbumArt, generateSocialPack, translateLyrics, editSong, generateDynamicOptions, structureImportedSong, getLastCulturalAudit } from './services/geminiService';
 import { saveSong } from './services/songService';
 import { getUserProfile } from './services/userService';
 import { getSession, signOut, signIn, signUp, signInWithOAuthEmail, startProviderSignIn } from './services/authService';
@@ -373,6 +373,7 @@ export const App: React.FC = () => {
   const [dynamicOptions, setDynamicOptions] = useState<string[]>([]);
   const [isLoadingOptions, setIsLoadingOptions] = useState(false);
   const [generatedSong, setGeneratedSong] = useState('');
+  const [culturalAudit, setCulturalAudit] = useState<CulturalAudit | null>(null);
   const [albumArt, setAlbumArt] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(false);
   const [loadingMessage, setLoadingMessage] = useState('');
@@ -563,6 +564,7 @@ export const App: React.FC = () => {
               setGeneratedSong(chunk);
               fullText = chunk;
           }
+          setCulturalAudit(getLastCulturalAudit());
           
           await deductCredits(session.user.email || '', COSTS.GENERATE_SONG);
           setStep(AppStep.SONG_DISPLAYED);
@@ -581,6 +583,7 @@ export const App: React.FC = () => {
   const handleStartOver = () => {
       setInputs(DEFAULT_INPUTS);
       setGeneratedSong('');
+      setCulturalAudit(null);
       setAlbumArt(null);
       setStep(AppStep.AWAITING_LANGUAGE);
       setView(AppView.STUDIO);
@@ -642,13 +645,15 @@ export const App: React.FC = () => {
       setView(AppView.STUDIO); // Switch context to studio
 
       try {
-          const generator = structureImportedSong(pasteContent, session.user.email || '');
+          const profile = await getUserProfile(session.user.email || '');
+          const generator = structureImportedSong(pasteContent, session.user.email || '', inputs, profile);
           
           let fullText = '';
           for await (const chunk of generator) {
               setGeneratedSong(chunk);
               fullText = chunk;
           }
+          setCulturalAudit(getLastCulturalAudit());
           
           // Deduct credits for the AI service
           await deductCredits(session.user.email || '', COSTS.GENERATE_SONG);
@@ -819,6 +824,7 @@ export const App: React.FC = () => {
       return <ProfileView email={session.user.email} onLoadSong={(s) => {
           setInputs({ ...DEFAULT_INPUTS, genre: 'Loaded Song' }); 
           setGeneratedSong(`Title: ${s.title || 'Untitled'}\n\n### SUNO Prompt\n${s.suno_prompt || ''}\n\n### Lyrics\n${s.lyrics || ''}`);
+          setCulturalAudit(null);
           setAlbumArt(s.album_art || null);
           setLoadedSongId(s.id);
           setView(AppView.STUDIO);
@@ -1118,6 +1124,8 @@ export const App: React.FC = () => {
                 refreshCredits={loadCredits}
                 isResizing={false}
                 email={session?.user?.email || ''}
+                currentInputs={inputs}
+                initialAudit={culturalAudit}
               />
           ) : step === AppStep.GENERATING ? (
               <div className="flex flex-col items-center justify-center flex-grow animate-pulse">
