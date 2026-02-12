@@ -155,7 +155,7 @@ const LyricsDisplay: React.FC<LyricsDisplayProps> = ({
       }
     } catch (e: any) {
       console.error("Art generation error:", e);
-      alert("Artwork generation failed.");
+      alert(`Artwork generation failed: ${e?.message || "Unknown error"}`);
     } finally {
       setIsGeneratingArt(false);
     }
