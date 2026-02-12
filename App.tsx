@@ -1093,7 +1093,14 @@ export const App: React.FC = () => {
                 onEdit={() => {}}
                 onSave={handleSave}
                 onResizePrompt={async () => {}}
-                onGenerateArt={async (t, p, aspectRatio) => generateAlbumArt(t, p, `${inputs.genre || 'Cinematic'}`, aspectRatio, `${session?.user?.email || ''}`)}
+                onGenerateArt={async (t, p, aspectRatio) => generateAlbumArt(
+                  t,
+                  p,
+                  `${inputs.genre || 'Cinematic'}`,
+                  aspectRatio,
+                  `${session?.user?.email || ''}`,
+                  headerAvatarUrl || undefined
+                )}
                 onGenerateSocial={async (t, l) => generateSocialPack(t, l, `${session?.user?.email || ''}`)}
                 onTranslate={(txt, lang) => translateLyrics(txt, lang, `${session?.user?.email || ''}`)}
                 refreshCredits={loadCredits}

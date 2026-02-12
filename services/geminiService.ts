@@ -74,13 +74,15 @@ export async function generateAlbumArt(
   sunoPrompt: string,
   style: string,
   aspectRatio: "9:16" | "1:1" | "16:9",
-  email: string
+  email: string,
+  avatarUrl?: string
 ): Promise<string> {
   const result = await callAI<{ imageDataUrl: string }>("generateAlbumArt", email, {
     songTitle,
     sunoPrompt,
     style,
     aspectRatio,
+    avatarUrl,
   });
   if (!result.imageDataUrl) throw new Error("Image generation failed");
   return result.imageDataUrl;

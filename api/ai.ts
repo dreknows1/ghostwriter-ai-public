@@ -199,6 +199,22 @@ async function getAvatarBlobByEmail(email: string): Promise<Blob | null> {
   }
 }
 
+async function getAvatarBlob(avatarUrl: string | undefined, email: string): Promise<Blob | null> {
+  const avatar = typeof avatarUrl === "string" ? avatarUrl.trim() : "";
+  if (avatar) {
+    if (avatar.startsWith("data:")) return parseDataUrlToBlob(avatar);
+    if (avatar.startsWith("http://") || avatar.startsWith("https://")) {
+      try {
+        const r = await fetch(avatar);
+        if (r.ok) return await r.blob();
+      } catch {
+        // Ignore and fall back to DB lookup.
+      }
+    }
+  }
+  return getAvatarBlobByEmail(email);
+}
+
 async function openAIImageEditWithAvatar(
   prompt: string,
   aspectRatio: "9:16" | "1:1" | "16:9",
@@ -393,7 +409,7 @@ Rules:
 }
 
 async function generateAlbumArt(payload: any) {
-  const { songTitle, sunoPrompt, style, aspectRatio } = payload || {};
+  const { songTitle, sunoPrompt, style, aspectRatio, avatarUrl } = payload || {};
   const ratio: "9:16" | "1:1" | "16:9" = aspectRatio === "1:1" || aspectRatio === "16:9" ? aspectRatio : "9:16";
   const prompt = `
 Create a professional album cover image.
@@ -405,7 +421,7 @@ The song context dictates the visual theme, scene, color, mood, styling, and com
 No watermark, no logo, no extra text.
 `.trim();
   const imageProvider = getImageProvider();
-  const avatarBlob = await getAvatarBlobByEmail(sanitizeEmail(payload?.email || ""));
+  const avatarBlob = await getAvatarBlob(avatarUrl, sanitizeEmail(payload?.email || ""));
   const avatarPrompt = `${prompt}
 The attached avatar image is the PRIMARY identity reference.
 Keep the same person facial structure, hair, skin tone, and distinguishing features.`;
@@ -414,8 +430,10 @@ Keep the same person facial structure, hair, skin tone, and distinguishing featu
     if (avatarBlob) {
       try {
         return { imageDataUrl: await geminiEditImageWithAvatar(avatarPrompt, avatarBlob) };
-      } catch {
-        return { imageDataUrl: await geminiGenerateImage(avatarPrompt, ratio) };
+      } catch (error: any) {
+        throw new Error(
+          `Avatar-referenced image generation failed. ${error?.message || "Gemini edit request failed."}`
+        );
       }
     }
     return { imageDataUrl: await geminiGenerateImage(prompt, ratio) };
@@ -425,11 +443,9 @@ Keep the same person facial structure, hair, skin tone, and distinguishing featu
     try {
       return { imageDataUrl: await openAIImageEditWithAvatar(avatarPrompt, ratio, avatarBlob) };
     } catch (error: any) {
-      const status = Number(error?.status || 0);
-      if (status === 404 || status === 405 || status === 501) {
-        return { imageDataUrl: await openAIImage(avatarPrompt, ratio) };
-      }
-      throw error;
+      throw new Error(
+        `Avatar-referenced image generation failed. ${error?.message || "OpenAI image edit failed."}`
+      );
     }
   }
 
