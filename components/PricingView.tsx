@@ -19,7 +19,7 @@ const PRICING_TIERS = [
     },
     {
         id: 'starter',
-        name: 'Starter Top-Up',
+        name: 'Starter Credits',
         credits: 250,
         price: 12.00,
         popular: false,
@@ -27,7 +27,7 @@ const PRICING_TIERS = [
     },
     {
         id: 'pro',
-        name: 'Pro Top-Up',
+        name: 'Pro Credits',
         credits: 1000,
         price: 39.00,
         popular: false,
@@ -80,8 +80,8 @@ const PricingView: React.FC<PricingViewProps> = ({ email, onClose }) => {
         <div className="w-full max-w-7xl mx-auto pt-24 md:pt-32 px-4 md:px-6 pb-20 animate-fade-in">
              <div className="text-center mb-16">
                 <button onClick={onClose} className="text-slate-500 hover:text-white mb-6 text-sm font-black uppercase tracking-[0.14em] md:tracking-[0.3em]">← Back to Studio</button>
-                <h2 className="heading-display text-4xl md:text-6xl font-black text-white mb-4 tracking-tighter">Plans & Top-Ups</h2>
-                <p className="text-slate-400 font-black uppercase tracking-[0.2em] text-base">Choose a monthly plan or add one-time credits.</p>
+                <h2 className="heading-display text-4xl md:text-6xl font-black text-white mb-4 tracking-tighter">Plans & Credits</h2>
+                <p className="text-slate-400 font-black uppercase tracking-[0.14em] md:tracking-[0.2em] text-sm md:text-base">Credits mapped to real generation usage.</p>
              </div>
 
              <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
@@ -117,7 +117,7 @@ const PricingView: React.FC<PricingViewProps> = ({ email, onClose }) => {
                                 : 'cta-secondary text-white hover:bg-slate-700 border border-slate-700'
                             }`}
                         >
-                            {processingId === tier.id ? <LoadingSpinner /> : tier.id === 'pro_monthly' ? 'Start Plan' : 'Purchase Now'}
+                            {processingId === tier.id ? <LoadingSpinner /> : tier.id === 'pro_monthly' ? 'Start Plan' : 'Add Credits'}
                         </button>
                     </div>
                 ))}
@@ -126,8 +126,8 @@ const PricingView: React.FC<PricingViewProps> = ({ email, onClose }) => {
              <div className="glass-panel mt-20 text-center max-w-2xl mx-auto p-8 rounded-3xl">
                 <h4 className="text-slate-300 font-black uppercase tracking-widest text-sm mb-2">Secure Payments</h4>
                 <p className="text-slate-500 text-base leading-relaxed">
-                    Payments are processed securely via Stripe. Credits are automatically added to your account immediately after payment confirmation.
-                    <br/><span className="text-sm text-slate-600 mt-2 block">(Refresh your studio dashboard to see updated balance)</span>
+                    Payments are processed securely via Stripe. Credits are granted after payment confirmation and may take a moment to appear.
+                    <br/><span className="text-sm text-slate-600 mt-2 block">If balance is unchanged, refresh your Song Ghost dashboard.</span>
                 </p>
              </div>
         </div>

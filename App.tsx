@@ -507,7 +507,7 @@ export const App: React.FC = () => {
       setCredits(prev => Math.max(0, prev - COSTS.GENERATE_SONG));
 
       setIsLoading(true);
-      setLoadingMessage("Ghostwriter is listening...");
+      setLoadingMessage("Song Ghost is listening...");
       setStep(AppStep.GENERATING);
 
       try {
@@ -632,8 +632,9 @@ export const App: React.FC = () => {
         <div className="relative z-10 w-full max-w-xl rounded-[2rem] border border-slate-800/80 bg-[#0c101a]/95 shadow-[0_24px_90px_rgba(0,0,0,0.62)] overflow-hidden">
           <div className="p-6 sm:p-9">
             <div className="flex justify-center mb-4"><Logo size={68} /></div>
-            <h1 className="text-4xl sm:text-5xl font-black text-center tracking-tight text-white mb-3">{isSignUpMode ? 'Sign Up' : 'Sign In'}</h1>
-            <p className="text-center text-slate-400 text-base sm:text-lg mb-8">Welcome back. Sign in to continue</p>
+            <h1 className="heading-display text-3xl sm:text-4xl font-black text-center tracking-tight text-white mb-3">Write. Refine. Release.</h1>
+            <p className="text-center text-slate-400 text-base sm:text-lg mb-2">Song Ghost helps you draft lyrics, polish structure, and generate cover art in a cohesive style.</p>
+            <p className="text-center text-slate-500 text-xs font-black uppercase tracking-[0.18em] mb-8">{isSignUpMode ? 'Create your Song Ghost account' : 'Sign in to Song Ghost'}</p>
 
             <>
               <div className="grid grid-cols-5 gap-2 sm:gap-3 mb-7">
@@ -818,8 +819,8 @@ export const App: React.FC = () => {
                           Menu
                         </button>
                         <Logo size={100} className="mb-6" />
-                        <h1 className="heading-display text-4xl md:text-5xl font-black text-white tracking-tighter mb-2">Studio Dashboard</h1>
-                        <p className="text-slate-500 font-black uppercase tracking-[0.18em] md:tracking-[0.4em] text-xs md:text-sm">Welcome back, {session?.user?.email?.split('@')[0]}</p>
+                        <h1 className="heading-display text-4xl md:text-5xl font-black text-white tracking-tighter mb-2">Write. Refine. Release.</h1>
+                        <p className="text-slate-500 font-black uppercase tracking-[0.14em] md:tracking-[0.28em] text-[10px] md:text-xs">Song Ghost helps you draft lyrics, polish structure, and generate cover art in a cohesive style.</p>
                      </div>
 
                      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">

@@ -11,6 +11,9 @@
   --accent: #34d399;
   --accent-2: #38bdf8;
   --danger: #ef4444;
+
+  --font-ui: "Manrope", "Avenir Next", "Segoe UI", system-ui, sans-serif;
+  --font-display: "Unbounded", "Manrope", system-ui, sans-serif;
 }
 
 * {
@@ -26,7 +29,7 @@ body {
     radial-gradient(1000px 550px at 100% -10%, rgba(16, 185, 129, 0.14), transparent 45%),
     linear-gradient(160deg, var(--bg-0), var(--bg-1) 45%, var(--bg-2));
   min-height: 100vh;
-  font-family: "Manrope", "Satoshi", "Avenir Next", "Segoe UI", sans-serif;
+  font-family: var(--font-ui);
   overflow-x: hidden;
 }
 
@@ -67,6 +70,7 @@ body {
 }
 
 .heading-display {
+  font-family: var(--font-display);
   letter-spacing: -0.03em;
   line-height: 0.98;
 }

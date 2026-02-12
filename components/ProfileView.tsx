@@ -276,9 +276,9 @@ const ProfileView: React.FC<ProfileViewProps> = ({ email, onLoadSong, onBack, on
                                 </div>
                             )}
 
-                            <button onClick={onBuyCredits} className="mt-2 w-full px-6 py-3 bg-blue-600 hover:bg-blue-500 rounded-2xl text-sm font-black uppercase tracking-widest text-white transition-all shadow-lg">Top Up Balance</button>
+                            <button onClick={onBuyCredits} className="mt-2 w-full px-6 py-3 bg-blue-600 hover:bg-blue-500 rounded-2xl text-sm font-black uppercase tracking-widest text-white transition-all shadow-lg">Add Credits</button>
                             <p className="mt-4 text-[10px] text-slate-400 uppercase tracking-widest leading-relaxed opacity-60">
-                                *Free tier: 30/mo. Pro plan: 2,000/mo. Top-ups are one-time.
+                                *Free tier: 30/mo. Pro plan: 2,000/mo. Credit packs are one-time.
                             </p>
                         </div>
 
@@ -408,7 +408,7 @@ const ProfileView: React.FC<ProfileViewProps> = ({ email, onLoadSong, onBack, on
                             <h2 className="text-3xl font-black text-white tracking-tighter mb-2">Billing & Credits</h2>
                             <p className="text-slate-500 text-base">Manage your studio currency and view transaction history.</p>
                         </div>
-                        <button onClick={onBuyCredits} className="bg-white text-black px-8 py-4 rounded-2xl font-black uppercase tracking-widest text-base hover:scale-105 transition-all shadow-xl">Purchase Credits</button>
+                        <button onClick={onBuyCredits} className="bg-white text-black px-8 py-4 rounded-2xl font-black uppercase tracking-widest text-base hover:scale-105 transition-all shadow-xl">Add Credits</button>
                     </div>
 
                     <div className="bg-[#131722] border border-slate-800 rounded-[2rem] md:rounded-[2.5rem] p-6 md:p-10 mb-12 flex items-center justify-between relative overflow-hidden gap-4">

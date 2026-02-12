@@ -29,17 +29,17 @@ const TermsAndPrivacy: React.FC<TermsAndPrivacyProps> = ({ onBack }) => {
             <div className="space-y-8 text-sm md:text-base leading-relaxed text-slate-400 font-medium">
               <div>
                 <strong className="text-white block mb-2 uppercase tracking-wide text-xs">1. Service Description</strong>
-                <p>Ghostwriter A.I. is a professional AI-assisted songwriting and lyrics generation platform designed to assist creators in breaking creative blocks.</p>
+                <p>Song Ghost is a professional AI-assisted songwriting and lyrics generation platform designed to help creators break through creative blocks.</p>
               </div>
 
               <div>
                 <strong className="text-white block mb-2 uppercase tracking-wide text-xs">2. Access Requirements</strong>
-                <p>Ghostwriter A.I. is available to the public. You must provide accurate account information and keep your credentials secure.</p>
+                <p>Song Ghost is available to the public. You must provide accurate account information and keep your credentials secure.</p>
               </div>
 
               <div className="glass-panel p-6 rounded-3xl">
                 <strong className="text-blue-200 block mb-2 uppercase tracking-wide text-xs">3. Content Ownership</strong>
-                <p className="text-blue-100 font-bold">You retain full, exclusive ownership of all lyrics and content generated using this application. Ghostwriter A.I. claims no intellectual property rights over the output created by your inputs.</p>
+                <p className="text-blue-100 font-bold">You retain full, exclusive ownership of all lyrics and content generated using this application. Song Ghost claims no intellectual property rights over the output created by your inputs.</p>
               </div>
 
               <div>
@@ -59,7 +59,7 @@ const TermsAndPrivacy: React.FC<TermsAndPrivacyProps> = ({ onBack }) => {
 
               <div>
                 <strong className="text-white block mb-2 uppercase tracking-wide text-xs">7. Limitation of Liability</strong>
-                <p>Ghostwriter A.I. shall not be liable for any indirect, incidental, special, consequential, or punitive damages resulting from your use of the service.</p>
+                <p>Song Ghost shall not be liable for any indirect, incidental, special, consequential, or punitive damages resulting from your use of the service.</p>
               </div>
             </div>
           </section>
@@ -103,14 +103,14 @@ const TermsAndPrivacy: React.FC<TermsAndPrivacyProps> = ({ onBack }) => {
 
               <div>
                 <strong className="text-white block mb-2 uppercase tracking-wide text-xs">6. Contact & Deletion</strong>
-                <p>To request data deletion or for privacy inquiries, contact support at support@ghostwriterai.app.</p>
+                <p>To request data deletion or for privacy inquiries, contact support at support@songghost.com.</p>
               </div>
             </div>
           </section>
         </div>
 
         <div className="mt-20 pt-10 border-t border-slate-800 text-center">
-            <p className="text-slate-600 text-xs font-black uppercase tracking-widest">© 2025 Ghostwriter A.I. • All Rights Reserved</p>
+            <p className="text-slate-600 text-xs font-black uppercase tracking-widest">© 2025 Song Ghost • All Rights Reserved</p>
         </div>
       </div>
     </div>

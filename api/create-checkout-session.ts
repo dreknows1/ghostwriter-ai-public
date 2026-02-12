@@ -69,7 +69,7 @@ export default async function handler(req: any, res: any) {
             currency: 'usd',
             product_data: {
               name: product.name,
-              description: `${product.credits} Ghostwriter AI Generation Credits`,
+              description: `${product.credits} Song Ghost generation credits`,
             },
             ...(isSubscription ? { recurring: { interval: 'month' as const } } : {}),
             unit_amount: product.amount,

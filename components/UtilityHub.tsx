@@ -52,7 +52,7 @@ const UtilityHub: React.FC<UtilityHubProps> = ({ email, section, onBack, onOpenT
       {section === "invite" && (
         <div className="glass-panel rounded-3xl p-6 md:p-8 space-y-5">
           <h2 className="text-3xl font-black text-white">Invite Friends</h2>
-          <p className="text-slate-400">Share your invite link. You earn credits when invitees become active.</p>
+          <p className="text-slate-400">Share your invite link. You earn credits when invited users complete their first qualified action.</p>
           <div className="bg-[#131722] border border-slate-800 rounded-2xl p-4 break-all text-cyan-400 font-mono">{inviteLink || "Loading..."}</div>
           <div className="flex flex-col sm:flex-row gap-3">
             <button onClick={() => copy(inviteLink)} className="bg-white text-black px-6 py-3 rounded-xl font-black">Copy Link</button>
@@ -64,7 +64,7 @@ const UtilityHub: React.FC<UtilityHubProps> = ({ email, section, onBack, onOpenT
       {section === "earn" && (
         <div className="glass-panel rounded-3xl p-6 md:p-8 space-y-5">
           <h2 className="text-3xl font-black text-white">Earn Credits</h2>
-          <p className="text-slate-400">Referral rewards: inviter +40, invitee +20 on first qualified action.</p>
+          <p className="text-slate-400">Referral rewards: inviter +40 and invitee +20 after first qualified action.</p>
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
             <div className="bg-[#131722] border border-slate-800 rounded-2xl p-4">
               <div className="text-xs uppercase tracking-widest text-slate-500">Invited</div>
@@ -86,9 +86,9 @@ const UtilityHub: React.FC<UtilityHubProps> = ({ email, section, onBack, onOpenT
         <div className="glass-panel rounded-3xl p-6 md:p-8 space-y-4">
           <h2 className="text-3xl font-black text-white">What&apos;s New</h2>
           <ul className="space-y-2 text-slate-300">
-            <li>DB-backed auth + storage migration completed.</li>
-            <li>New referral program with persistent credit rewards.</li>
-            <li>OpenAI `gpt-5.2` text generation + Nano Banana Pro image model default.</li>
+            <li>Song Ghost brand system is now active across auth, dashboard, and legal copy.</li>
+            <li>Database-backed auth and storage are live.</li>
+            <li>Referral rewards and OAuth sign-in are now integrated into the public app.</li>
           </ul>
         </div>
       )}
@@ -98,9 +98,9 @@ const UtilityHub: React.FC<UtilityHubProps> = ({ email, section, onBack, onOpenT
           <h2 className="text-3xl font-black text-white">Help</h2>
           <p className="text-slate-400">Need support? Start with these quick answers:</p>
           <ul className="space-y-2 text-slate-300">
-            <li>Credits are required for generation actions.</li>
-            <li>Referral rewards apply after first qualified action by invitee.</li>
-            <li>Use Profile → Billing to review transactions and credits.</li>
+            <li>Credits are required for lyric and image generation actions.</li>
+            <li>Referral rewards are granted after the invitee completes a qualified action.</li>
+            <li>Use Profile and Billing to review transactions and credit activity.</li>
           </ul>
         </div>
       )}
@@ -116,7 +116,7 @@ const UtilityHub: React.FC<UtilityHubProps> = ({ email, section, onBack, onOpenT
           />
           <button
             onClick={() => {
-              const subject = encodeURIComponent("SongGhost Feedback");
+              const subject = encodeURIComponent("Song Ghost Feedback");
               const body = encodeURIComponent(feedback || "Feedback");
               window.location.href = `mailto:hello@songghost.com?subject=${subject}&body=${body}`;
             }}
@@ -141,7 +141,7 @@ const UtilityHub: React.FC<UtilityHubProps> = ({ email, section, onBack, onOpenT
         <div className="glass-panel rounded-3xl p-6 md:p-8 space-y-4">
           <h2 className="text-3xl font-black text-white">About</h2>
           <p className="text-slate-300">
-            SongGhost is an AI songwriting studio for ideation, lyric generation, editing, and release assets.
+            Song Ghost helps artists write, refine, and release songs faster while keeping their voice.
           </p>
         </div>
       )}
