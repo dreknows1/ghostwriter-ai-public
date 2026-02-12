@@ -354,6 +354,7 @@ const CreationWizard: React.FC<{
 
 export const App: React.FC = () => {
   const [session, setSession] = useState<any>(null);
+  const [headerAvatarUrl, setHeaderAvatarUrl] = useState<string | null>(null);
   const [view, setView] = useState<AppView>(AppView.AUTH);
   const [step, setStep] = useState<AppStep>(AppStep.AWAITING_LANGUAGE);
   const [inputs, setInputs] = useState<SongInputs>(DEFAULT_INPUTS);
@@ -393,6 +394,19 @@ export const App: React.FC = () => {
      }
   };
 
+  const loadHeaderAvatar = async (email?: string) => {
+    if (!email) {
+      setHeaderAvatarUrl(null);
+      return;
+    }
+    try {
+      const profile = await getUserProfile(email);
+      setHeaderAvatarUrl(profile?.avatar_url || null);
+    } catch {
+      setHeaderAvatarUrl(null);
+    }
+  };
+
   useEffect(() => {
     const bootstrap = async () => {
       const search = new URLSearchParams(window.location.search);
@@ -416,6 +430,7 @@ export const App: React.FC = () => {
             setView(AppView.LANDING);
             const c = await getUserCredits(data.session.user.email || '');
             setCredits(c);
+            await loadHeaderAvatar(data.session.user.email || '');
           }
         } catch (e: any) {
           setAuthError(e?.message || 'OAuth sign in failed');
@@ -434,6 +449,7 @@ export const App: React.FC = () => {
       if (sess) {
         setView(AppView.LANDING); // Default to Landing Dashboard
         getUserCredits(sess.user.email || '').then(c => setCredits(c));
+        loadHeaderAvatar(sess.user.email || '');
 
         if (window.location.search.includes('status=success')) {
           // Public-safe flow: credits should be granted by server webhook only.
@@ -444,6 +460,7 @@ export const App: React.FC = () => {
         }
       } else {
         setView(AppView.AUTH);
+        setHeaderAvatarUrl(null);
       }
     };
 
@@ -779,7 +796,7 @@ export const App: React.FC = () => {
           setLoadedSongId(s.id);
           setView(AppView.STUDIO);
           setStep(AppStep.SONG_DISPLAYED);
-      }} onBack={() => setView(AppView.LANDING)} onSignOut={() => signOut().then(() => { setSession(null); setView(AppView.AUTH); })} onBuyCredits={() => setView(AppView.PRICING)} />;
+      }} onBack={() => setView(AppView.LANDING)} onSignOut={() => signOut().then(() => { setSession(null); setView(AppView.AUTH); setHeaderAvatarUrl(null); })} onProfileUpdate={(updated) => setHeaderAvatarUrl(updated?.avatar_url || null)} onBuyCredits={() => setView(AppView.PRICING)} />;
   }
 
   if (view === AppView.LANDING) {
@@ -818,7 +835,15 @@ export const App: React.FC = () => {
                         >
                           Menu
                         </button>
-                        <Logo size={100} className="mb-6" />
+                        {headerAvatarUrl ? (
+                          <img
+                            src={headerAvatarUrl}
+                            alt="Your avatar"
+                            className="mb-6 w-[100px] h-[100px] rounded-full object-cover border border-slate-600/70 shadow-[0_0_28px_rgba(56,189,248,0.2)]"
+                          />
+                        ) : (
+                          <Logo size={100} className="mb-6" />
+                        )}
                         <h1 className="heading-display text-4xl md:text-5xl font-black text-white tracking-tighter mb-2">Write. Refine. Release.</h1>
                         <p className="text-slate-500 font-black uppercase tracking-[0.14em] md:tracking-[0.28em] text-[10px] md:text-xs">Song Ghost helps you draft lyrics, polish structure, and generate cover art in a cohesive style.</p>
                      </div>
@@ -946,7 +971,15 @@ export const App: React.FC = () => {
       {/* Header */}
       <nav className="glass-panel relative z-50 p-4 md:p-6 mt-3 flex justify-between items-center max-w-7xl mx-auto rounded-2xl md:rounded-3xl gap-3">
          <div onClick={() => setView(AppView.LANDING)} className="cursor-pointer hover:opacity-80 transition-opacity">
-            <Logo size={48} />
+            {headerAvatarUrl ? (
+              <img
+                src={headerAvatarUrl}
+                alt="Your avatar"
+                className="w-12 h-12 rounded-full object-cover border border-slate-600/70"
+              />
+            ) : (
+              <Logo size={48} />
+            )}
          </div>
          <div className="flex items-center gap-2 md:gap-4">
              <div className="md:hidden flex items-center gap-1 px-3 py-2 rounded-full bg-slate-900 border border-slate-800 text-cyan-400">
@@ -964,8 +997,12 @@ export const App: React.FC = () => {
                 </button>
              </div>
 
-             <button onClick={() => setView(AppView.PROFILE)} className="w-10 h-10 rounded-full bg-slate-800 flex items-center justify-center text-slate-400 hover:bg-slate-700 hover:text-white transition-all">
-                 <ProfileIcon />
+             <button onClick={() => setView(AppView.PROFILE)} className="w-10 h-10 rounded-full bg-slate-800 flex items-center justify-center text-slate-400 hover:bg-slate-700 hover:text-white transition-all overflow-hidden border border-slate-700">
+                 {headerAvatarUrl ? (
+                   <img src={headerAvatarUrl} alt="Profile avatar" className="w-full h-full object-cover" />
+                 ) : (
+                   <ProfileIcon />
+                 )}
              </button>
              <button
                onClick={() => setIsMenuOpen((v) => !v)}
