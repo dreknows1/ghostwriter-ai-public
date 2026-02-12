@@ -329,7 +329,17 @@ No watermark, no logo, no extra text.
     const avatarPrompt = `${prompt}
 The attached avatar image is the PRIMARY identity reference.
 Keep the same person facial structure, hair, skin tone, and distinguishing features.`;
-    return { imageDataUrl: await openAIImageEditWithAvatar(avatarPrompt, ratio, avatarBlob) };
+    try {
+      return { imageDataUrl: await openAIImageEditWithAvatar(avatarPrompt, ratio, avatarBlob) };
+    } catch (error: any) {
+      const status = Number(error?.status || 0);
+      // Some providers/models do not expose an image-edit endpoint. Fall back
+      // to standard generation so the user still gets artwork instead of hard failure.
+      if (status === 404 || status === 405 || status === 501) {
+        return { imageDataUrl: await openAIImage(avatarPrompt, ratio) };
+      }
+      throw error;
+    }
   }
   // Fallback mode: no avatar on profile, generate song-themed art only.
   return { imageDataUrl: await openAIImage(prompt, ratio) };
