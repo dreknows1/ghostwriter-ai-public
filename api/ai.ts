@@ -16,11 +16,6 @@ function sanitizeEmail(email?: string): string {
   return (email || "").toLowerCase().trim();
 }
 
-function isSafetyRejection(error: any): boolean {
-  const text = `${error?.message || ""} ${error?.details || ""}`.toLowerCase();
-  return text.includes("safety") || text.includes("safety_violations") || text.includes("content policy");
-}
-
 function isAllowedEmail(email?: string): boolean {
   return sanitizeEmail(email).includes("@");
 }
@@ -33,19 +28,6 @@ function getOpenAIApiKey(): string {
 
 function getTextModel(): string {
   return process.env.OPENAI_TEXT_MODEL || process.env.OPENAI_MODEL || "gpt-5.2";
-}
-
-function getImageModel(): string {
-  return "nano-banana-pro";
-}
-
-function getImageEditModel(): string {
-  return process.env.OPENAI_IMAGE_EDIT_MODEL || "gpt-image-1";
-}
-
-function getImageProvider(): "gemini" | "openai" {
-  const raw = (process.env.IMAGE_PROVIDER || "gemini").toLowerCase().trim();
-  return raw === "openai" ? "openai" : "gemini";
 }
 
 function getGeminiApiKey(): string {
@@ -114,59 +96,6 @@ async function openAIResponses(prompt: string, model = getTextModel()): Promise<
   return chunks.join("\n").trim();
 }
 
-async function openAIImage(
-  prompt: string,
-  aspectRatio: "9:16" | "1:1" | "16:9" = "9:16"
-): Promise<string> {
-  const apiKey = getOpenAIApiKey();
-  const response = await fetch("https://api.openai.com/v1/images/generations", {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-      Authorization: `Bearer ${apiKey}`,
-    },
-    body: JSON.stringify({
-      model: getImageModel(),
-      prompt,
-      size: mapAspectToSize(aspectRatio),
-    }),
-  });
-
-  if (!response.ok) {
-    let errorCode = "provider_error";
-    let errorMessage = "Image generation failed.";
-    try {
-      const data: any = await response.json();
-      errorCode = data?.error?.code || errorCode;
-      errorMessage = data?.error?.message || errorMessage;
-    } catch {
-      // Ignore parse errors and keep safe defaults.
-    }
-
-    const sanitizedMessage =
-      response.status === 401 || errorCode === "invalid_api_key"
-        ? "AI image service authentication failed. Please verify OPENAI_API_KEY in server environment."
-        : `OpenAI image request failed (${response.status}).`;
-
-    throw Object.assign(new Error(sanitizedMessage), {
-      status: response.status,
-      code: errorCode,
-      details: errorMessage,
-    });
-  }
-
-  const data: any = await response.json();
-  const b64 = data?.data?.[0]?.b64_json;
-  if (!b64) throw new Error("Image generation returned no base64 payload");
-  return `data:image/png;base64,${b64}`;
-}
-
-function mapAspectToSize(aspectRatio: "9:16" | "1:1" | "16:9"): "1024x1792" | "1024x1024" | "1792x1024" {
-  if (aspectRatio === "1:1") return "1024x1024";
-  if (aspectRatio === "16:9") return "1792x1024";
-  return "1024x1792";
-}
-
 function parseDataUrlToBlob(dataUrl: string): Blob | null {
   const match = dataUrl.match(/^data:(.+);base64,(.+)$/);
   if (!match) return null;
@@ -212,64 +141,6 @@ async function getAvatarBlob(avatarUrl: string | undefined, email: string): Prom
     }
   }
   return getAvatarBlobByEmail(email);
-}
-
-async function openAIImageEditWithAvatar(
-  prompt: string,
-  aspectRatio: "9:16" | "1:1" | "16:9",
-  avatarBlob: Blob
-): Promise<string> {
-  const apiKey = getOpenAIApiKey();
-  const model = getImageEditModel();
-  const attemptEdit = async (imageField: "image[]" | "image") => {
-    const fd = new FormData();
-    fd.append("model", model);
-    fd.append("prompt", prompt);
-    fd.append(imageField, avatarBlob, "avatar.png");
-
-    const response = await fetch("https://api.openai.com/v1/images/edits", {
-      method: "POST",
-      headers: {
-        Authorization: `Bearer ${apiKey}`,
-      },
-      body: fd,
-    });
-
-    const raw = await response.text();
-    let parsed: any = null;
-    try {
-      parsed = raw ? JSON.parse(raw) : null;
-    } catch {
-      parsed = null;
-    }
-
-    return { response, parsed, raw };
-  };
-
-  let attempt = await attemptEdit("image[]");
-  if (!attempt.response.ok && attempt.response.status === 400) {
-    attempt = await attemptEdit("image");
-  }
-
-  if (!attempt.response.ok) {
-    const errorCode = attempt.parsed?.error?.code || "provider_error";
-    const errorMessage = attempt.parsed?.error?.message || attempt.raw || "Image edit failed.";
-    const sanitizedMessage =
-      attempt.response.status === 401 || errorCode === "invalid_api_key"
-        ? "AI image service authentication failed. Please verify OPENAI_API_KEY in server environment."
-        : `OpenAI image edit request failed (${attempt.response.status}): ${errorMessage}`;
-
-    throw Object.assign(new Error(sanitizedMessage), {
-      status: attempt.response.status,
-      code: errorCode,
-      details: errorMessage,
-    });
-  }
-
-  const data: any = attempt.parsed || {};
-  const b64 = data?.data?.[0]?.b64_json;
-  if (!b64) throw new Error("Image edit returned no base64 payload");
-  return `data:image/png;base64,${b64}`;
 }
 
 async function geminiGenerateImage(
@@ -396,38 +267,19 @@ Aspect ratio: ${ratio}
 The song context dictates the visual theme, scene, color, mood, styling, and composition.
 No watermark, no logo, no extra text.
 `.trim();
+
   const avatarBlob = await getAvatarBlob(avatarUrl, sanitizeEmail(payload?.email || ""));
-  const avatarPrompt = `${prompt}
-The attached avatar image is the PRIMARY identity reference.
-Keep the same person facial structure, hair, skin tone, and distinguishing features.`;
-  const imageProvider = getImageProvider();
 
   if (avatarBlob) {
-    try {
-      return { imageDataUrl: await openAIImageEditWithAvatar(avatarPrompt, ratio, avatarBlob) };
-    } catch (error: any) {
-      if (isSafetyRejection(error)) {
-        const saferAvatarPrompt = `${avatarPrompt}
-Safety constraints:
-- Keep the subject fully clothed in everyday attire.
-- No nudity, lingerie, suggestive pose, or sexual context.
-- Use neutral facial expression and tasteful, mainstream album-cover composition.`;
-        try {
-          return { imageDataUrl: await openAIImageEditWithAvatar(saferAvatarPrompt, ratio, avatarBlob) };
-        } catch {
-          throw new Error(
-            "Avatar-referenced generation was blocked by safety filters. Try a cleaner style/theme and avoid suggestive terms."
-          );
-        }
-      }
-      throw new Error(`Avatar-referenced image generation failed. ${error?.message || "OpenAI image edit failed."}`);
-    }
+    const avatarGuidedPrompt = `${prompt}
+Primary subject guidance:
+- Use the same person identity as the user's avatar.
+- Preserve core facial structure, hairstyle, and skin tone.
+- Keep styling tasteful and non-suggestive for mainstream album artwork.`;
+    return { imageDataUrl: await geminiGenerateImage(avatarGuidedPrompt, ratio) };
   }
 
-  if (imageProvider === "gemini") {
-    return { imageDataUrl: await geminiGenerateImage(prompt, ratio) };
-  }
-  return { imageDataUrl: await openAIImage(prompt, ratio) };
+  return { imageDataUrl: await geminiGenerateImage(prompt, ratio) };
 }
 
 async function generateSocialPack(payload: any) {
