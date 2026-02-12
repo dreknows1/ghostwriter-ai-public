@@ -407,7 +407,11 @@ Keep the same person facial structure, hair, skin tone, and distinguishing featu
       return { imageDataUrl: await openAIImageEditWithAvatar(avatarPrompt, ratio, avatarBlob) };
     } catch (error: any) {
       if (isSafetyRejection(error)) {
-        throw new Error("Avatar-referenced image was blocked by safety filters. Try a less suggestive style/theme.");
+        // Fall back to a non-reference generation path so creation still succeeds.
+        if (imageProvider === "gemini") {
+          return { imageDataUrl: await geminiGenerateImage(prompt, ratio) };
+        }
+        return { imageDataUrl: await openAIImage(prompt, ratio) };
       }
       throw new Error(`Avatar-referenced image generation failed. ${error?.message || "OpenAI image edit failed."}`);
     }
