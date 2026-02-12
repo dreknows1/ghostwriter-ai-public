@@ -39,6 +39,10 @@ function getImageModel(): string {
   return "nano-banana-pro";
 }
 
+function getImageEditModel(): string {
+  return process.env.OPENAI_IMAGE_EDIT_MODEL || "gpt-image-1";
+}
+
 function getImageProvider(): "gemini" | "openai" {
   const raw = (process.env.IMAGE_PROVIDER || "gemini").toLowerCase().trim();
   return raw === "openai" ? "openai" : "gemini";
@@ -216,7 +220,7 @@ async function openAIImageEditWithAvatar(
   avatarBlob: Blob
 ): Promise<string> {
   const apiKey = getOpenAIApiKey();
-  const model = getImageModel();
+  const model = getImageEditModel();
   const attemptEdit = async (imageField: "image[]" | "image") => {
     const fd = new FormData();
     fd.append("model", model);
@@ -398,30 +402,19 @@ The attached avatar image is the PRIMARY identity reference.
 Keep the same person facial structure, hair, skin tone, and distinguishing features.`;
   const imageProvider = getImageProvider();
 
-  if (imageProvider === "gemini") {
-    const geminiPrompt = avatarBlob
-      ? `${prompt}
-Generate a single clearly-defined artist subject and keep identity details visually consistent.
-Do not sexualize the subject; keep styling tasteful and suitable for a mainstream album cover.`
-      : prompt;
-    return { imageDataUrl: await geminiGenerateImage(geminiPrompt, ratio) };
-  }
-
   if (avatarBlob) {
     try {
       return { imageDataUrl: await openAIImageEditWithAvatar(avatarPrompt, ratio, avatarBlob) };
     } catch (error: any) {
-      const details = `${error?.message || ""}`.toLowerCase();
-      if (details.includes("request failed (404)") || details.includes("request failed (400)")) {
-        throw new Error(
-          "Avatar-referenced edits are not supported by nano-banana-pro via current image-edit endpoint. Please generate without avatar reference or switch to an edit-capable model."
-        );
-      }
       if (isSafetyRejection(error)) {
         throw new Error("Avatar-referenced image was blocked by safety filters. Try a less suggestive style/theme.");
       }
       throw new Error(`Avatar-referenced image generation failed. ${error?.message || "OpenAI image edit failed."}`);
     }
+  }
+
+  if (imageProvider === "gemini") {
+    return { imageDataUrl: await geminiGenerateImage(prompt, ratio) };
   }
   return { imageDataUrl: await openAIImage(prompt, ratio) };
 }
