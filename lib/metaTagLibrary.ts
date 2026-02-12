@@ -1,5 +1,15 @@
 export type TagCategoryMap = Record<string, string[]>;
 
+export type MetaTagPlan = {
+  structureTags: string[];
+  vocalTypeTag: string;
+  moodEnergyTags: string[];
+  genreAccentTags: string[];
+  adlibPolicy: string;
+  minTagCount: number;
+  minAdlibCount: number;
+};
+
 export const META_TAG_CATEGORIES: TagCategoryMap = {
   Structure: [
     "[Verse]", "[Chorus]", "[Post-Chorus]", "[Bridge]", "[Pre-Chorus]", "[Intro]", "[Outro]",
@@ -170,5 +180,47 @@ Meta Tag Library directives (use these tags exactly):
 - Adlib policy: ${adlibPolicy}
 - Keep tags musically meaningful; avoid tag spam.
 - Keep tag syntax exact with brackets/parentheses.
+`.trim();
+}
+
+export function buildMetaTagPlan(inputs: {
+  genre?: string;
+  subGenre?: string;
+  vocals?: string;
+  emotion?: string;
+}): MetaTagPlan {
+  const structureTags = inferPrimaryStructureTags(inputs.genre);
+  const genre = (inputs.genre || "").toLowerCase();
+  const adlibHeavy = genre.includes("hip-hop") || genre.includes("rap") || genre.includes("trap") || genre.includes("afrobeats");
+  const adlibMedium = genre.includes("r&b") || genre.includes("soul") || genre.includes("gospel") || genre.includes("reggae");
+
+  return {
+    structureTags,
+    vocalTypeTag: inferVocalTypeTag(inputs.vocals),
+    moodEnergyTags: inferEnergyMoodTags(inputs.emotion),
+    genreAccentTags: inferGenreAccentTags(inputs.genre, inputs.subGenre),
+    adlibPolicy: inferAdlibPolicy(inputs.genre),
+    minTagCount: Math.max(10, structureTags.length + 3),
+    minAdlibCount: adlibHeavy ? 6 : adlibMedium ? 4 : 2,
+  };
+}
+
+export function buildStrictMetaTagSpec(inputs: {
+  genre?: string;
+  subGenre?: string;
+  vocals?: string;
+  emotion?: string;
+}): string {
+  const plan = buildMetaTagPlan(inputs);
+  return `
+Strict meta-tag orchestration plan:
+- Section order to follow: ${plan.structureTags.join(" -> ")}
+- Required vocal identity tag: ${plan.vocalTypeTag}
+- Mood/energy tags to include across song: ${plan.moodEnergyTags.join(", ")}
+- Genre/subgenre accent tags to include naturally: ${plan.genreAccentTags.join(", ")}
+- Minimum bracket tags in Lyrics body: ${plan.minTagCount}
+- Minimum adlibs in parentheses: ${plan.minAdlibCount}
+- Adlib policy: ${plan.adlibPolicy}
+- Tag logic: opening sections establish mood + voice; mid-song sections escalate arrangement tags; final sections resolve with refrain/outro tags.
 `.trim();
 }

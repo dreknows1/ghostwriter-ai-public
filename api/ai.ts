@@ -72,6 +72,42 @@ type MetaTagModule = {
     vocals?: string;
     emotion?: string;
   }) => string;
+  buildMetaTagPlan?: (inputs: {
+    genre?: string;
+    subGenre?: string;
+    vocals?: string;
+    emotion?: string;
+  }) => {
+    structureTags: string[];
+    vocalTypeTag: string;
+    moodEnergyTags: string[];
+    genreAccentTags: string[];
+    adlibPolicy: string;
+    minTagCount: number;
+    minAdlibCount: number;
+  };
+  buildStrictMetaTagSpec?: (inputs: {
+    genre?: string;
+    subGenre?: string;
+    vocals?: string;
+    emotion?: string;
+  }) => string;
+};
+
+type MetaTagPlan = {
+  structureTags: string[];
+  vocalTypeTag: string;
+  moodEnergyTags: string[];
+  genreAccentTags: string[];
+  adlibPolicy: string;
+  minTagCount: number;
+  minAdlibCount: number;
+};
+
+type MetaTagPackage = {
+  guidance: string;
+  strictSpec: string;
+  plan: MetaTagPlan;
 };
 
 const DEFAULT_GENRE_PROFILE: GenreProfile = {
@@ -152,12 +188,55 @@ Meta Tag Library directives (fallback mode):
   `.trim();
 }
 
-async function getMetaTagGuidance(inputs: any): Promise<string> {
+function fallbackMetaTagPlan(inputs: any): MetaTagPlan {
+  const genre = String(inputs?.genre || "Pop").toLowerCase();
+  const heavyAdlib = genre.includes("hip-hop") || genre.includes("rap") || genre.includes("trap") || genre.includes("afrobeats");
+  const mediumAdlib = genre.includes("r&b") || genre.includes("soul") || genre.includes("gospel") || genre.includes("reggae");
+  return {
+    structureTags: ["[Intro]", "[Verse]", "[Pre-Chorus]", "[Chorus]", "[Verse]", "[Chorus]", "[Bridge]", "[Chorus]", "[Outro]"],
+    vocalTypeTag: "[Vocalist: Male]",
+    moodEnergyTags: ["[Energy: High]", "[Mood: Intense]"],
+    genreAccentTags: ["[Build Up]"],
+    adlibPolicy: "Use tasteful adlibs in parentheses where musically useful.",
+    minTagCount: 10,
+    minAdlibCount: heavyAdlib ? 6 : mediumAdlib ? 4 : 2,
+  };
+}
+
+function fallbackStrictMetaTagSpec(inputs: any): string {
+  const plan = fallbackMetaTagPlan(inputs);
+  return `
+Strict meta-tag orchestration plan:
+- Section order to follow: ${plan.structureTags.join(" -> ")}
+- Required vocal identity tag: ${plan.vocalTypeTag}
+- Mood/energy tags to include across song: ${plan.moodEnergyTags.join(", ")}
+- Genre/subgenre accent tags to include naturally: ${plan.genreAccentTags.join(", ")}
+- Minimum bracket tags in Lyrics body: ${plan.minTagCount}
+- Minimum adlibs in parentheses: ${plan.minAdlibCount}
+- Adlib policy: ${plan.adlibPolicy}
+- Tag logic: opening sections establish mood + voice; mid-song sections escalate arrangement tags; final sections resolve with refrain/outro tags.
+  `.trim();
+}
+
+async function getMetaTagPackage(inputs: any): Promise<MetaTagPackage> {
   const mod = await loadMetaTagModule();
   if (mod?.buildMetaTagGuidance && typeof mod.buildMetaTagGuidance === "function") {
-    return mod.buildMetaTagGuidance(inputs || {});
+    const guidance = mod.buildMetaTagGuidance(inputs || {});
+    const plan =
+      typeof mod.buildMetaTagPlan === "function"
+        ? mod.buildMetaTagPlan(inputs || {})
+        : fallbackMetaTagPlan(inputs || {});
+    const strictSpec =
+      typeof mod.buildStrictMetaTagSpec === "function"
+        ? mod.buildStrictMetaTagSpec(inputs || {})
+        : fallbackStrictMetaTagSpec(inputs || {});
+    return { guidance, strictSpec, plan };
   }
-  return fallbackMetaTagGuidance(inputs || {});
+  return {
+    guidance: fallbackMetaTagGuidance(inputs || {}),
+    strictSpec: fallbackStrictMetaTagSpec(inputs || {}),
+    plan: fallbackMetaTagPlan(inputs || {}),
+  };
 }
 
 function sanitizeEmail(email?: string): string {
@@ -361,7 +440,7 @@ ${hipHopCadence ? `- ${hipHopCadence}` : ""}
 async function culturallyRefineSong(rawSong: string, inputs: any, userProfile: any): Promise<string> {
   if (!rawSong?.trim()) return rawSong;
   const culturalContext = await buildCulturalPromptContext(inputs);
-  const metaTagGuidance = await getMetaTagGuidance(inputs || {});
+  const metaTagPackage = await getMetaTagPackage(inputs || {});
   const prompt = `
 You are a senior lyric editor specializing in cultural authenticity.
 Refine the song below for cultural and stylistic accuracy while preserving intent and emotional arc.
@@ -387,7 +466,8 @@ Creator context:
 - Artist persona: ${userProfile?.display_name || "N/A"} | vibe: ${userProfile?.preferred_vibe || "N/A"}
 
 ${culturalContext}
-${metaTagGuidance}
+${metaTagPackage.guidance}
+${metaTagPackage.strictSpec}
 
 Song draft:
 ${rawSong}
@@ -397,6 +477,80 @@ ${rawSong}
     return await openAIResponses(prompt);
   } catch {
     return rawSong;
+  }
+}
+
+function extractLyricsBody(songText: string): string {
+  if (!songText || typeof songText !== "string") return "";
+  const marker = "### Lyrics";
+  const idx = songText.indexOf(marker);
+  if (idx === -1) return songText;
+  return songText.slice(idx + marker.length).trim();
+}
+
+function countBracketTags(lyrics: string): number {
+  if (!lyrics) return 0;
+  const matches = lyrics.match(/\[[^\]\n]{2,80}\]/g);
+  return Array.isArray(matches) ? matches.length : 0;
+}
+
+function countAdlibs(lyrics: string): number {
+  if (!lyrics) return 0;
+  const matches = lyrics.match(/\([^)\n]{1,60}\)/g);
+  return Array.isArray(matches) ? matches.length : 0;
+}
+
+function hasRequiredStructureTags(lyrics: string, required: string[]): boolean {
+  if (!lyrics) return false;
+  const unique = Array.from(new Set(required.filter(Boolean)));
+  return unique.every((tag) => lyrics.includes(tag));
+}
+
+function isMetaTagOrchestrationStrong(songText: string, plan: MetaTagPlan): boolean {
+  const lyrics = extractLyricsBody(songText);
+  if (!lyrics) return false;
+  const tagCount = countBracketTags(lyrics);
+  const adlibCount = countAdlibs(lyrics);
+  const hasStructure = hasRequiredStructureTags(lyrics, plan.structureTags);
+  return hasStructure && tagCount >= plan.minTagCount && adlibCount >= plan.minAdlibCount;
+}
+
+async function enforceMetaTagOrchestration(songText: string, inputs: any): Promise<string> {
+  if (!songText?.trim()) return songText;
+  const pkg = await getMetaTagPackage(inputs || {});
+  if (isMetaTagOrchestrationStrong(songText, pkg.plan)) return songText;
+
+  const prompt = `
+You are a song structure orchestrator.
+Rewrite the song so tags/adlibs are logical, dynamic, and genre-specific without changing the core meaning.
+
+Return ONLY this exact format:
+Title: ...
+### SUNO Prompt
+...
+### Lyrics
+...
+
+Hard requirements:
+${pkg.strictSpec}
+
+Constraints:
+- Keep language, genre, and story intent unchanged.
+- Keep section order logical and musically performable.
+- Place tags where they drive arrangement and vocal delivery (not random).
+- Ensure adlibs are natural and rhythmic, not spammed.
+- Maintain coherent progression from intro to outro.
+
+Song to rewrite:
+${songText}
+  `.trim();
+
+  try {
+    const rewritten = await openAIResponses(prompt);
+    if (isMetaTagOrchestrationStrong(rewritten, pkg.plan)) return rewritten;
+    return songText;
+  } catch {
+    return songText;
   }
 }
 
@@ -668,7 +822,7 @@ async function geminiGenerateImage(
 async function generateSong(payload: any) {
   const { inputs, userProfile } = payload || {};
   const culturalContext = await buildCulturalPromptContext(inputs || {});
-  const metaTagGuidance = await getMetaTagGuidance(inputs || {});
+  const metaTagPackage = await getMetaTagPackage(inputs || {});
   const prompt = `
 You are a professional songwriter.
 Return only:
@@ -699,19 +853,21 @@ Non-negotiable writing directives:
 - Add musically appropriate adlibs in parentheses where helpful, not on every line.
 
 ${culturalContext}
-${metaTagGuidance}
+${metaTagPackage.guidance}
+${metaTagPackage.strictSpec}
   `.trim();
 
   const draft = await openAIResponses(prompt);
   const refined = await culturallyRefineSong(draft, inputs || {}, userProfile || {});
-  const audit = await evaluateCulturalAudit(refined, inputs || {});
-  return { text: refined, audit };
+  const orchestrated = await enforceMetaTagOrchestration(refined, inputs || {});
+  const audit = await evaluateCulturalAudit(orchestrated, inputs || {});
+  return { text: orchestrated, audit };
 }
 
 async function editSong(payload: any) {
   const { originalSong, editInstruction, inputs, userProfile } = payload || {};
   const culturalContext = await buildCulturalPromptContext(inputs || {});
-  const metaTagGuidance = await getMetaTagGuidance(inputs || {});
+  const metaTagPackage = await getMetaTagPackage(inputs || {});
   const prompt = `
 Revise the song per instruction.
 Return only full song in this exact format:
@@ -725,7 +881,8 @@ Instruction: ${editInstruction || ""}
 Cultural context requirements:
 ${culturalContext}
 Meta tag and adlib requirements:
-${metaTagGuidance}
+${metaTagPackage.guidance}
+${metaTagPackage.strictSpec}
 
 Original song:
 ${originalSong || ""}
@@ -733,14 +890,15 @@ ${originalSong || ""}
 
   const draft = await openAIResponses(prompt);
   const refined = await culturallyRefineSong(draft, inputs || {}, userProfile || {});
-  const audit = await evaluateCulturalAudit(refined, inputs || {});
-  return { text: refined, audit };
+  const orchestrated = await enforceMetaTagOrchestration(refined, inputs || {});
+  const audit = await evaluateCulturalAudit(orchestrated, inputs || {});
+  return { text: orchestrated, audit };
 }
 
 async function structureImportedSong(payload: any) {
   const { rawText, inputs, userProfile } = payload || {};
   const culturalContext = await buildCulturalPromptContext(inputs || {});
-  const metaTagGuidance = await getMetaTagGuidance(inputs || {});
+  const metaTagPackage = await getMetaTagPackage(inputs || {});
   const prompt = `
 Turn the input into a full structured song.
 Output format:
@@ -753,7 +911,8 @@ Title: ...
 Cultural context requirements:
 ${culturalContext}
 Meta tag and adlib requirements:
-${metaTagGuidance}
+${metaTagPackage.guidance}
+${metaTagPackage.strictSpec}
 
 Input:
 ${rawText || ""}
@@ -761,8 +920,9 @@ ${rawText || ""}
 
   const draft = await openAIResponses(prompt);
   const refined = await culturallyRefineSong(draft, inputs || {}, userProfile || {});
-  const audit = await evaluateCulturalAudit(refined, inputs || {});
-  return { text: refined, audit };
+  const orchestrated = await enforceMetaTagOrchestration(refined, inputs || {});
+  const audit = await evaluateCulturalAudit(orchestrated, inputs || {});
+  return { text: orchestrated, audit };
 }
 
 async function generateDynamicOptions(payload: any) {
