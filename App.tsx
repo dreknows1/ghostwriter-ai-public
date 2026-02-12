@@ -4,7 +4,7 @@ import { AppStep, AppView, SongInputs, SavedSong, UserProfile } from './types';
 import { generateSong, generateAlbumArt, generateSocialPack, translateLyrics, editSong, generateDynamicOptions, structureImportedSong } from './services/geminiService';
 import { saveSong } from './services/songService';
 import { getUserProfile } from './services/userService';
-import { getSession, signOut, signIn, signUp } from './services/authService';
+import { getSession, signOut, signIn, signUp, signInWithOAuthEmail, startProviderSignIn } from './services/authService';
 import { getUserCredits, hasEnoughCredits, deductCredits, COSTS } from './services/creditService';
 import LyricsDisplay from './components/LyricsDisplay';
 import ProfileView from './components/ProfileView';
@@ -367,6 +367,7 @@ export const App: React.FC = () => {
   const [authPassword, setAuthPassword] = useState('');
   const [referralCode, setReferralCode] = useState('');
   const [isAuthLoading, setIsAuthLoading] = useState(false);
+  const [authError, setAuthError] = useState<string | null>(null);
   const [isSignUpMode, setIsSignUpMode] = useState(false);
   const [loadedSongId, setLoadedSongId] = useState<string | null>(null);
   const [credits, setCredits] = useState<number>(0);
@@ -379,6 +380,12 @@ export const App: React.FC = () => {
   const [isPasteMode, setIsPasteMode] = useState(false);
   const [pasteContent, setPasteContent] = useState('');
 
+  const handleOAuthProvider = (provider: string) => {
+    if (isAuthLoading) return;
+    setAuthError(null);
+    startProviderSignIn(provider);
+  };
+
   const loadCredits = async () => {
      if (session?.user?.email) {
          const c = await getUserCredits(session.user.email || '');
@@ -387,23 +394,60 @@ export const App: React.FC = () => {
   };
 
   useEffect(() => {
-    getSession().then((sess) => {
+    const bootstrap = async () => {
+      const search = new URLSearchParams(window.location.search);
+      const oauthEmail = search.get('oauth_email');
+      const oauthError = search.get('oauth_error');
+
+      if (oauthError) {
+        setAuthError(`OAuth sign in failed: ${oauthError}`);
+        search.delete('oauth_error');
+        const q = search.toString();
+        window.history.replaceState({}, '', q ? `/?${q}` : '/');
+      }
+
+      if (oauthEmail) {
+        setIsAuthLoading(true);
+        try {
+          const { data, error } = await signInWithOAuthEmail(oauthEmail);
+          if (error) throw error;
+          if (data?.session) {
+            setSession(data.session);
+            setView(AppView.LANDING);
+            const c = await getUserCredits(data.session.user.email || '');
+            setCredits(c);
+          }
+        } catch (e: any) {
+          setAuthError(e?.message || 'OAuth sign in failed');
+          setView(AppView.AUTH);
+        } finally {
+          setIsAuthLoading(false);
+          search.delete('oauth_email');
+          const q = search.toString();
+          window.history.replaceState({}, '', q ? `/?${q}` : '/');
+        }
+        return;
+      }
+
+      const sess = await getSession();
       setSession(sess);
       if (sess) {
         setView(AppView.LANDING); // Default to Landing Dashboard
         getUserCredits(sess.user.email || '').then(c => setCredits(c));
 
         if (window.location.search.includes('status=success')) {
-           // Public-safe flow: credits should be granted by server webhook only.
-           // We only refresh balances on return.
-           getUserCredits(sess.user.email || '').then(c => setCredits(c));
-           alert('Payment received. Your credits will update once confirmation completes.');
-           window.history.replaceState({}, '', '/');
+          // Public-safe flow: credits should be granted by server webhook only.
+          // We only refresh balances on return.
+          getUserCredits(sess.user.email || '').then(c => setCredits(c));
+          alert('Payment received. Your credits will update once confirmation completes.');
+          window.history.replaceState({}, '', '/');
         }
       } else {
         setView(AppView.AUTH);
       }
-    });
+    };
+
+    bootstrap();
   }, []);
 
   const handleUpdate = (key: keyof SongInputs, val: string) => {
@@ -514,6 +558,7 @@ export const App: React.FC = () => {
   const handleAuth = async (e: React.FormEvent) => {
       e.preventDefault();
       if (!authEmail || !authPassword) return;
+      setAuthError(null);
       setIsAuthLoading(true);
       try {
           const { data, error } = isSignUpMode
@@ -527,7 +572,7 @@ export const App: React.FC = () => {
             setCredits(c);
           }
       } catch (e: any) {
-          alert(e.message);
+          setAuthError(e?.message || 'Authentication failed');
       } finally {
           setIsAuthLoading(false);
       }
@@ -593,18 +638,20 @@ export const App: React.FC = () => {
             <>
               <div className="grid grid-cols-5 gap-2 sm:gap-3 mb-7">
                 {[
-                  { name: 'Apple', icon: <AuthAppleIcon /> },
-                  { name: 'Discord', icon: <AuthDiscordIcon /> },
-                  { name: 'Facebook', icon: <AuthFacebookIcon /> },
-                  { name: 'Google', icon: <AuthGoogleIcon /> },
-                  { name: 'Microsoft', icon: <AuthMicrosoftIcon /> },
+                  { name: 'Apple', provider: 'apple', icon: <AuthAppleIcon /> },
+                  { name: 'Discord', provider: 'discord', icon: <AuthDiscordIcon /> },
+                  { name: 'Facebook', provider: 'facebook', icon: <AuthFacebookIcon /> },
+                  { name: 'Google', provider: 'google', icon: <AuthGoogleIcon /> },
+                  { name: 'Microsoft', provider: 'microsoft', icon: <AuthMicrosoftIcon /> },
                 ].map((provider) => (
                   <button
                     key={provider.name}
                     type="button"
+                    onClick={() => handleOAuthProvider(provider.provider)}
+                    disabled={isAuthLoading}
                     className="h-12 rounded-xl border border-slate-700/90 bg-[#111522] text-slate-300 flex items-center justify-center hover:border-slate-500 hover:text-white transition-all"
-                    aria-label={`${provider.name} sign in coming soon`}
-                    title={`${provider.name} sign in coming soon`}
+                    aria-label={`${provider.name} sign in`}
+                    title={`${provider.name} sign in`}
                   >
                     {provider.icon}
                   </button>
@@ -618,6 +665,11 @@ export const App: React.FC = () => {
               </div>
 
               <form onSubmit={handleAuth} className="space-y-5">
+                {authError && (
+                  <div className="rounded-xl border border-rose-500/40 bg-rose-900/20 px-4 py-3 text-sm text-rose-200">
+                    {authError}
+                  </div>
+                )}
                 <div>
                   <label className="block text-left text-white font-semibold mb-2.5 text-lg">Email</label>
                   <input
@@ -668,7 +720,10 @@ export const App: React.FC = () => {
               <p className="text-slate-400 text-base sm:text-lg">{isSignUpMode ? 'Already have an account?' : "Don't have an account?"}</p>
               <button
                 type="button"
-                onClick={() => setIsSignUpMode((v) => !v)}
+                onClick={() => {
+                  setIsSignUpMode((v) => !v);
+                  setAuthError(null);
+                }}
                 className="w-full sm:w-auto px-10 h-12 rounded-xl bg-white text-black font-black text-xl"
               >
                 {isSignUpMode ? 'Sign in' : 'Sign up'}

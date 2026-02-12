@@ -41,7 +41,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
 
   try {
     const { action, email, password } = (req.body || {}) as {
-      action?: "signup" | "signin";
+      action?: "signup" | "signin" | "oauth";
       email?: string;
       password?: string;
       referralCode?: string;
@@ -49,15 +49,33 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     const referralCode = (req.body as any)?.referralCode;
 
     const normalizedEmail = normalizeEmail(email || "");
-    if (!action || !normalizedEmail || !password) {
+    if (!action || !normalizedEmail) {
       return res.status(400).json({ error: "Missing required fields" });
     }
-    if (password.length < 8) {
+    if ((action === "signup" || action === "signin") && !password) {
+      return res.status(400).json({ error: "Missing required fields" });
+    }
+    const credentialPassword = (action === "signup" || action === "signin") ? password : undefined;
+    if (credentialPassword && credentialPassword.length < 8) {
       return res.status(400).json({ error: "Password must be at least 8 characters" });
     }
 
     const client = getConvexClient();
     const existing: any = await client.query(getUserByEmailRef as any, { email: normalizedEmail });
+
+    if (action === "oauth") {
+      const user: any = await client.mutation(upsertUserCredentialsRef as any, {
+        email: normalizedEmail,
+      });
+      return res.status(200).json({
+        session: {
+          user: {
+            id: user?._id || `user_${normalizedEmail}`,
+            email: normalizedEmail,
+          },
+        },
+      });
+    }
 
     if (action === "signup") {
       if (existing?.passwordHash && existing?.passwordSalt) {
@@ -65,7 +83,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
       }
 
       const salt = randomBytes(16).toString("hex");
-      const passwordHash = hashPassword(password, salt);
+      const passwordHash = hashPassword(credentialPassword!, salt);
       const user: any = await client.mutation(upsertUserCredentialsRef as any, {
         email: normalizedEmail,
         passwordHash,
@@ -98,7 +116,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
       return res.status(401).json({ error: "Invalid email or password" });
     }
 
-    const candidateHash = hashPassword(password, existing.passwordSalt);
+    const candidateHash = hashPassword(credentialPassword!, existing.passwordSalt);
     const ok = safeEqualHex(candidateHash, existing.passwordHash);
     if (!ok) {
       return res.status(401).json({ error: "Invalid email or password" });
