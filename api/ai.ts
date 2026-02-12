@@ -1,6 +1,7 @@
 import type { VercelRequest, VercelResponse } from "@vercel/node";
 import { ConvexHttpClient } from "convex/browser";
 import { makeFunctionReference } from "convex/server";
+import { GoogleGenAI, PersonGeneration } from "@google/genai";
 
 type AIAction =
   | "generateSong"
@@ -36,6 +37,21 @@ function getTextModel(): string {
 
 function getImageModel(): string {
   return "nano-banana-pro";
+}
+
+function getImageProvider(): "gemini" | "openai" {
+  const raw = (process.env.IMAGE_PROVIDER || "gemini").toLowerCase().trim();
+  return raw === "openai" ? "openai" : "gemini";
+}
+
+function getGeminiApiKey(): string {
+  const key = process.env.GEMINI_API_KEY;
+  if (!key) throw new Error("Missing GEMINI_API_KEY in environment");
+  return key;
+}
+
+function getGeminiImageModel(): string {
+  return process.env.GEMINI_IMAGE_MODEL || "imagen-4.0-generate-001";
 }
 
 const getUserProfileByEmailRef = makeFunctionReference<"query">("app:getUserProfileByEmail");
@@ -252,6 +268,28 @@ async function openAIImageEditWithAvatar(
   return `data:image/png;base64,${b64}`;
 }
 
+async function geminiGenerateImage(
+  prompt: string,
+  aspectRatio: "9:16" | "1:1" | "16:9" = "9:16"
+): Promise<string> {
+  const ai = new GoogleGenAI({ apiKey: getGeminiApiKey() });
+  const response: any = await ai.models.generateImages({
+    model: getGeminiImageModel(),
+    prompt,
+    config: {
+      numberOfImages: 1,
+      aspectRatio,
+      personGeneration: PersonGeneration.ALLOW_ALL,
+    },
+  });
+
+  const b64 = response?.generatedImages?.[0]?.image?.imageBytes;
+  if (!b64 || typeof b64 !== "string") {
+    throw new Error("Gemini image generation returned no base64 payload");
+  }
+  return `data:image/png;base64,${b64}`;
+}
+
 async function generateSong(payload: any) {
   const { inputs, userProfile } = payload || {};
   const prompt = `
@@ -358,6 +396,16 @@ No watermark, no logo, no extra text.
   const avatarPrompt = `${prompt}
 The attached avatar image is the PRIMARY identity reference.
 Keep the same person facial structure, hair, skin tone, and distinguishing features.`;
+  const imageProvider = getImageProvider();
+
+  if (imageProvider === "gemini") {
+    const geminiPrompt = avatarBlob
+      ? `${prompt}
+Generate a single clearly-defined artist subject and keep identity details visually consistent.
+Do not sexualize the subject; keep styling tasteful and suitable for a mainstream album cover.`
+      : prompt;
+    return { imageDataUrl: await geminiGenerateImage(geminiPrompt, ratio) };
+  }
 
   if (avatarBlob) {
     try {
