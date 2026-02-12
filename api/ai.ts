@@ -2,12 +2,6 @@ import type { VercelRequest, VercelResponse } from "@vercel/node";
 import { ConvexHttpClient } from "convex/browser";
 import { makeFunctionReference } from "convex/server";
 import { GoogleGenAI } from "@google/genai";
-import {
-  getGenreProfile,
-  getSubgenreSonicProfile,
-  inferWritingProfile,
-  LANGUAGE_PROFILES,
-} from "../lib/culturalLogic.ts";
 
 type AIAction =
   | "generateSong"
@@ -29,6 +23,95 @@ type CulturalAudit = {
   summary: string;
   checklist: CulturalAuditItem[];
 };
+
+type WritingProfile = {
+  language: string;
+  languageVariant: string;
+  cultureRegion: string;
+  register: string;
+  slang: string;
+  codeSwitchPolicy: string;
+  authenticityGuardrails: string;
+};
+
+type GenreProfile = {
+  genre: string;
+  defaultStructure: string;
+  prosody: string;
+  rhymeGuidance: string;
+  hookGuidance: string;
+  lexiconPolicy: string;
+};
+
+type SubgenreSonicProfile = {
+  subGenre: string;
+  bpmRange: string;
+  groove: string;
+  instrumentation: string;
+  productionStyle: string;
+  arrangement: string;
+};
+
+type CulturalLogicModule = {
+  getGenreProfile: (genre?: string) => GenreProfile;
+  getSubgenreSonicProfile: (subGenre?: string) => SubgenreSonicProfile | null;
+  inferWritingProfile: (inputs: {
+    language?: string;
+    genre?: string;
+    subGenre?: string;
+    allowCodeSwitch?: boolean;
+    register?: "clean" | "radio" | "explicit";
+  }) => WritingProfile;
+  LANGUAGE_PROFILES: Record<string, { notes?: string }>;
+};
+
+const DEFAULT_GENRE_PROFILE: GenreProfile = {
+  genre: "Pop",
+  defaultStructure: "Verse -> Chorus -> Verse -> Chorus -> Bridge -> Chorus",
+  prosody: "Natural stress patterns and singable lines.",
+  rhymeGuidance: "Use clear end-rhyme with occasional internal rhyme.",
+  hookGuidance: "Memorable, repeatable chorus phrase.",
+  lexiconPolicy: "Contemporary, concrete language with minimal cliches.",
+};
+
+const DEFAULT_WRITING_PROFILE: WritingProfile = {
+  language: "English",
+  languageVariant: "English (contemporary, neutral)",
+  cultureRegion: "US/Canada",
+  register: "radio",
+  slang: "light",
+  codeSwitchPolicy: "Do not code-switch unless requested.",
+  authenticityGuardrails:
+    "Use natural phrasing, avoid stereotypes, avoid tokenized dialect or caricature.",
+};
+
+const DEFAULT_SUBGENRE_PROFILE: SubgenreSonicProfile = {
+  subGenre: "Modern",
+  bpmRange: "90-130",
+  groove: "Steady, genre-coherent pulse",
+  instrumentation: "Genre-appropriate instrumentation",
+  productionStyle: "Modern, clear mix",
+  arrangement: "Strong verse/chorus contrast",
+};
+
+let culturalLogicPromise: Promise<CulturalLogicModule | null> | null = null;
+
+async function loadCulturalLogicModule(): Promise<CulturalLogicModule | null> {
+  if (!culturalLogicPromise) {
+    culturalLogicPromise = (async () => {
+      try {
+        return (await import("../lib/culturalLogic")) as unknown as CulturalLogicModule;
+      } catch {
+        try {
+          return (await import("../lib/culturalLogic.ts")) as unknown as CulturalLogicModule;
+        } catch {
+          return null;
+        }
+      }
+    })();
+  }
+  return culturalLogicPromise;
+}
 
 function sanitizeEmail(email?: string): string {
   return (email || "").toLowerCase().trim();
@@ -165,21 +248,26 @@ function getRegionalSceneGuidance(language: string, genre: string, subGenre: str
   return "Regional context: use lived-in scene details from the selected language/region without stereotypes.";
 }
 
-function buildCulturalPromptContext(inputs: any) {
+async function buildCulturalPromptContext(inputs: any) {
+  const logic = await loadCulturalLogicModule();
   const language = inputs?.language || "English";
   const genre = inputs?.genre || "Pop";
   const subGenre = inputs?.subGenre || "Modern";
   const register = detectRegisterHint(inputs);
-  const writingProfile = inferWritingProfile({
+  const writingProfile = logic?.inferWritingProfile({
     language,
     genre,
     subGenre,
     register,
     allowCodeSwitch: false,
-  });
-  const genreProfile = getGenreProfile(genre);
-  const subProfile = getSubgenreSonicProfile(subGenre);
-  const languageNotes = LANGUAGE_PROFILES[language]?.notes || "Use natural native phrasing.";
+  }) || {
+    ...DEFAULT_WRITING_PROFILE,
+    language,
+    languageVariant: `${language} (native, contemporary, singable)`,
+  };
+  const genreProfile = logic?.getGenreProfile(genre) || { ...DEFAULT_GENRE_PROFILE, genre };
+  const subProfile = logic?.getSubgenreSonicProfile(subGenre) || { ...DEFAULT_SUBGENRE_PROFILE, subGenre };
+  const languageNotes = logic?.LANGUAGE_PROFILES?.[language]?.notes || "Use natural native phrasing.";
   const regionalScene = getRegionalSceneGuidance(
     language,
     genre,
@@ -225,7 +313,7 @@ ${hipHopCadence ? `- ${hipHopCadence}` : ""}
 
 async function culturallyRefineSong(rawSong: string, inputs: any, userProfile: any): Promise<string> {
   if (!rawSong?.trim()) return rawSong;
-  const culturalContext = buildCulturalPromptContext(inputs);
+  const culturalContext = await buildCulturalPromptContext(inputs);
   const prompt = `
 You are a senior lyric editor specializing in cultural authenticity.
 Refine the song below for cultural and stylistic accuracy while preserving intent and emotional arc.
@@ -346,7 +434,7 @@ function fallbackAudit(inputs: any): CulturalAudit {
 
 async function evaluateCulturalAudit(songText: string, inputs: any): Promise<CulturalAudit> {
   if (!songText?.trim()) return fallbackAudit(inputs);
-  const culturalContext = buildCulturalPromptContext(inputs || {});
+  const culturalContext = await buildCulturalPromptContext(inputs || {});
   const prompt = `
 You are evaluating one song draft for cultural authenticity and stylistic quality.
 Score strictly and return ONLY JSON:
@@ -527,7 +615,7 @@ async function geminiGenerateImage(
 
 async function generateSong(payload: any) {
   const { inputs, userProfile } = payload || {};
-  const culturalContext = buildCulturalPromptContext(inputs || {});
+  const culturalContext = await buildCulturalPromptContext(inputs || {});
   const prompt = `
 You are a professional songwriter.
 Return only:
@@ -566,7 +654,7 @@ ${culturalContext}
 
 async function editSong(payload: any) {
   const { originalSong, editInstruction, inputs, userProfile } = payload || {};
-  const culturalContext = buildCulturalPromptContext(inputs || {});
+  const culturalContext = await buildCulturalPromptContext(inputs || {});
   const prompt = `
 Revise the song per instruction.
 Return only full song in this exact format:
@@ -592,7 +680,7 @@ ${originalSong || ""}
 
 async function structureImportedSong(payload: any) {
   const { rawText, inputs, userProfile } = payload || {};
-  const culturalContext = buildCulturalPromptContext(inputs || {});
+  const culturalContext = await buildCulturalPromptContext(inputs || {});
   const prompt = `
 Turn the input into a full structured song.
 Output format:
