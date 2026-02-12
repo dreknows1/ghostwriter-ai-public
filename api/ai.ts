@@ -34,7 +34,7 @@ function getImageModel(): string {
 }
 
 function getImageEditModel(): string {
-  return process.env.OPENAI_IMAGE_EDIT_MODEL || "gpt-image-1";
+  return "gpt-image-1";
 }
 
 const getUserProfileByEmailRef = makeFunctionReference<"query">("app:getUserProfileByEmail");
@@ -199,43 +199,52 @@ async function openAIImageEditWithAvatar(
   avatarBlob: Blob
 ): Promise<string> {
   const apiKey = getOpenAIApiKey();
-  const fd = new FormData();
-  fd.append("model", getImageEditModel());
-  fd.append("prompt", prompt);
-  fd.append("image[]", avatarBlob, "avatar.png");
+  const attemptEdit = async (imageField: "image[]" | "image") => {
+    const fd = new FormData();
+    fd.append("model", getImageEditModel());
+    fd.append("prompt", prompt);
+    fd.append(imageField, avatarBlob, "avatar.png");
 
-  const response = await fetch("https://api.openai.com/v1/images/edits", {
-    method: "POST",
-    headers: {
-      Authorization: `Bearer ${apiKey}`,
-    },
-    body: fd,
-  });
+    const response = await fetch("https://api.openai.com/v1/images/edits", {
+      method: "POST",
+      headers: {
+        Authorization: `Bearer ${apiKey}`,
+      },
+      body: fd,
+    });
 
-  if (!response.ok) {
-    let errorCode = "provider_error";
-    let errorMessage = "Image edit failed.";
+    const raw = await response.text();
+    let parsed: any = null;
     try {
-      const data: any = await response.json();
-      errorCode = data?.error?.code || errorCode;
-      errorMessage = data?.error?.message || errorMessage;
+      parsed = raw ? JSON.parse(raw) : null;
     } catch {
-      // Ignore parse errors and keep safe defaults.
+      parsed = null;
     }
 
+    return { response, parsed, raw };
+  };
+
+  let attempt = await attemptEdit("image[]");
+  if (!attempt.response.ok && attempt.response.status === 400) {
+    attempt = await attemptEdit("image");
+  }
+
+  if (!attempt.response.ok) {
+    const errorCode = attempt.parsed?.error?.code || "provider_error";
+    const errorMessage = attempt.parsed?.error?.message || attempt.raw || "Image edit failed.";
     const sanitizedMessage =
-      response.status === 401 || errorCode === "invalid_api_key"
+      attempt.response.status === 401 || errorCode === "invalid_api_key"
         ? "AI image service authentication failed. Please verify OPENAI_API_KEY in server environment."
-        : `OpenAI image edit request failed (${response.status}).`;
+        : `OpenAI image edit request failed (${attempt.response.status}): ${errorMessage}`;
 
     throw Object.assign(new Error(sanitizedMessage), {
-      status: response.status,
+      status: attempt.response.status,
       code: errorCode,
       details: errorMessage,
     });
   }
 
-  const data: any = await response.json();
+  const data: any = attempt.parsed || {};
   const b64 = data?.data?.[0]?.b64_json;
   if (!b64) throw new Error("Image edit returned no base64 payload");
   return `data:image/png;base64,${b64}`;
