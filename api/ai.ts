@@ -279,6 +279,10 @@ function getGeminiImageModel(): string {
   return process.env.GEMINI_IMAGE_MODEL || "gemini-3-pro-image-preview";
 }
 
+function getGeminiVisionModel(): string {
+  return process.env.GEMINI_VISION_MODEL || "gemini-2.5-flash";
+}
+
 function shouldRunMultiPassRefinement(): boolean {
   return process.env.AI_MULTIPASS_REFINEMENT === "1";
 }
@@ -892,6 +896,68 @@ async function geminiGenerateImage(
   return `data:image/png;base64,${b64}`;
 }
 
+async function describeAvatarForPrompt(referenceImage: Blob): Promise<string> {
+  const ai = new GoogleGenAI({ apiKey: getGeminiApiKey() });
+  const arrayBuffer = await referenceImage.arrayBuffer();
+  const base64 = Buffer.from(arrayBuffer).toString("base64");
+
+  const response: any = await ai.models.generateContent({
+    model: getGeminiVisionModel(),
+    contents: [
+      {
+        text: `
+Analyze this avatar image and output a compact identity profile for image generation.
+Use only visible attributes. If unclear, write "not visible" rather than guessing.
+Return ONLY this exact bullet template:
+- Face shape:
+- Skin complexion and undertone:
+- Body type/build (if visible):
+- Apparent age range:
+- Gender presentation:
+- Hair style/color:
+- Eyes:
+- Distinctive facial features:
+- Typical framing in source image (headshot/half/full body):
+- Identity preservation notes:
+        `.trim(),
+      },
+      {
+        inlineData: {
+          mimeType: referenceImage.type || "image/png",
+          data: base64,
+        },
+      },
+    ],
+  });
+
+  const text =
+    typeof response?.text === "string"
+      ? response.text
+      : Array.isArray(response?.candidates?.[0]?.content?.parts)
+        ? response.candidates[0].content.parts
+            .map((part: any) => (typeof part?.text === "string" ? part.text : ""))
+            .join("\n")
+            .trim()
+        : "";
+
+  if (!text) {
+    return [
+      "- Face shape: preserve from avatar",
+      "- Skin complexion and undertone: preserve from avatar",
+      "- Body type/build (if visible): preserve from avatar",
+      "- Apparent age range: preserve from avatar",
+      "- Gender presentation: preserve from avatar",
+      "- Hair style/color: preserve from avatar",
+      "- Eyes: preserve from avatar",
+      "- Distinctive facial features: preserve from avatar",
+      "- Typical framing in source image (headshot/half/full body): preserve framing intent",
+      "- Identity preservation notes: keep same person identity across all outputs",
+    ].join("\n");
+  }
+
+  return text;
+}
+
 async function generateSong(payload: any) {
   const { inputs, userProfile } = payload || {};
   const culturalContext = await buildCulturalPromptContext(inputs || {});
@@ -1066,10 +1132,16 @@ ${stylePrompt}
   const avatarBlob = await getAvatarBlob(avatarUrl, sanitizeEmail(payload?.email || ""));
 
   if (avatarBlob) {
+    const avatarProfile = await describeAvatarForPrompt(avatarBlob);
     const avatarGuidedPrompt = `${prompt}
+Avatar identity profile (strictly preserve):
+${avatarProfile}
+
 Primary subject guidance:
 - Use the same person identity as the user's avatar.
-- Preserve core facial structure, hairstyle, and skin tone.
+- Preserve facial structure, complexion/undertone, and any visible body build characteristics.
+- Match hair, eye details, and distinctive features from avatar profile.
+- If source avatar is portrait-only, avoid inventing conflicting body traits.
 - Keep styling tasteful and non-suggestive for mainstream album artwork.`;
     return { imageDataUrl: await geminiGenerateImage(avatarGuidedPrompt, ratio, avatarBlob) };
   }
