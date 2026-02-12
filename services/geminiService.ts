@@ -18,12 +18,14 @@ async function callAI<T>(action: AIAction, email: string, payload: Record<string
 
   if (!response.ok) {
     const raw = await response.text();
+    let parsedError: string | null = null;
     try {
       const json = JSON.parse(raw);
-      throw new Error(json?.error || `AI request failed (${response.status})`);
+      parsedError = typeof json?.error === "string" ? json.error : null;
     } catch {
-      throw new Error(raw || `AI request failed (${response.status})`);
+      parsedError = null;
     }
+    throw new Error(parsedError || raw || `AI request failed (${response.status})`);
   }
 
   return response.json();
