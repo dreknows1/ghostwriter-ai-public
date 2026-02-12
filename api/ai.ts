@@ -407,11 +407,18 @@ Keep the same person facial structure, hair, skin tone, and distinguishing featu
       return { imageDataUrl: await openAIImageEditWithAvatar(avatarPrompt, ratio, avatarBlob) };
     } catch (error: any) {
       if (isSafetyRejection(error)) {
-        // Fall back to a non-reference generation path so creation still succeeds.
-        if (imageProvider === "gemini") {
-          return { imageDataUrl: await geminiGenerateImage(prompt, ratio) };
+        const saferAvatarPrompt = `${avatarPrompt}
+Safety constraints:
+- Keep the subject fully clothed in everyday attire.
+- No nudity, lingerie, suggestive pose, or sexual context.
+- Use neutral facial expression and tasteful, mainstream album-cover composition.`;
+        try {
+          return { imageDataUrl: await openAIImageEditWithAvatar(saferAvatarPrompt, ratio, avatarBlob) };
+        } catch {
+          throw new Error(
+            "Avatar-referenced generation was blocked by safety filters. Try a cleaner style/theme and avoid suggestive terms."
+          );
         }
-        return { imageDataUrl: await openAIImage(prompt, ratio) };
       }
       throw new Error(`Avatar-referenced image generation failed. ${error?.message || "OpenAI image edit failed."}`);
     }
