@@ -37,12 +37,7 @@ function getTextModel(): string {
 }
 
 function getImageModel(): string {
-  return process.env.OPENAI_IMAGE_MODEL || "nano-banana-pro";
-}
-
-function getImageProvider(): "openai" | "gemini" {
-  const raw = (process.env.IMAGE_PROVIDER || "gemini").toLowerCase().trim();
-  return raw === "openai" ? "openai" : "gemini";
+  return "nano-banana-pro";
 }
 
 function getGeminiApiKey(): string {
@@ -420,7 +415,6 @@ Aspect ratio: ${ratio}
 The song context dictates the visual theme, scene, color, mood, styling, and composition.
 No watermark, no logo, no extra text.
 `.trim();
-  const imageProvider = getImageProvider();
   const avatarBlob = await getAvatarBlob(avatarUrl, sanitizeEmail(payload?.email || ""));
   const avatarPrompt = `${prompt}
 The attached avatar image is the PRIMARY identity reference.
@@ -432,23 +426,9 @@ Keep the same person facial structure, hair, skin tone, and distinguishing featu
     try {
       return { imageDataUrl: await openAIImageEditWithAvatar(avatarPrompt, ratio, avatarBlob) };
     } catch (error: any) {
-      if (imageProvider === "gemini") {
-        try {
-          return { imageDataUrl: await geminiEditImageWithAvatar(avatarPrompt, avatarBlob) };
-        } catch (geminiError: any) {
-          throw new Error(
-            `Avatar-referenced image generation failed. ${geminiError?.message || error?.message || "Image edit failed."}`
-          );
-        }
-      }
       throw new Error(`Avatar-referenced image generation failed. ${error?.message || "OpenAI image edit failed."}`);
     }
   }
-
-  if (imageProvider === "gemini") {
-    return { imageDataUrl: await geminiGenerateImage(prompt, ratio) };
-  }
-
   return { imageDataUrl: await openAIImage(prompt, ratio) };
 }
 
