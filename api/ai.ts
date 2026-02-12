@@ -2,6 +2,7 @@ import type { VercelRequest, VercelResponse } from "@vercel/node";
 import { ConvexHttpClient } from "convex/browser";
 import { makeFunctionReference } from "convex/server";
 import { GoogleGenAI } from "@google/genai";
+import { buildMetaTagGuidance } from "../lib/metaTagLibrary";
 
 type AIAction =
   | "generateSong"
@@ -314,6 +315,7 @@ ${hipHopCadence ? `- ${hipHopCadence}` : ""}
 async function culturallyRefineSong(rawSong: string, inputs: any, userProfile: any): Promise<string> {
   if (!rawSong?.trim()) return rawSong;
   const culturalContext = await buildCulturalPromptContext(inputs);
+  const metaTagGuidance = buildMetaTagGuidance(inputs || {});
   const prompt = `
 You are a senior lyric editor specializing in cultural authenticity.
 Refine the song below for cultural and stylistic accuracy while preserving intent and emotional arc.
@@ -331,11 +333,15 @@ Rules:
 - Improve metaphors, cadence, rhyme texture, and scene authenticity.
 - Do not add stereotypes, slurs, or tokenized dialect.
 - Keep title and hook memorable and aligned with the core story.
+- Keep section meta tags consistent and musically meaningful.
+- Keep adlibs in parentheses tasteful, sparse, and genre-appropriate.
+- Do not invent new tag syntax outside bracket/parenthesis styles.
 
 Creator context:
 - Artist persona: ${userProfile?.display_name || "N/A"} | vibe: ${userProfile?.preferred_vibe || "N/A"}
 
 ${culturalContext}
+${metaTagGuidance}
 
 Song draft:
 ${rawSong}
@@ -616,6 +622,7 @@ async function geminiGenerateImage(
 async function generateSong(payload: any) {
   const { inputs, userProfile } = payload || {};
   const culturalContext = await buildCulturalPromptContext(inputs || {});
+  const metaTagGuidance = buildMetaTagGuidance(inputs || {});
   const prompt = `
 You are a professional songwriter.
 Return only:
@@ -642,8 +649,11 @@ Non-negotiable writing directives:
 - Avoid generic AI patterns, filler hooks, and repetitive cliche imagery.
 - Distinguish verse cadence vs hook cadence clearly.
 - Make the SUNO prompt production-ready and specific to the same cultural/genre profile.
+- In Lyrics, use section meta tags from the library style (e.g., [Verse], [Chorus], [Bridge], [Ad-Lib Section]).
+- Add musically appropriate adlibs in parentheses where helpful, not on every line.
 
 ${culturalContext}
+${metaTagGuidance}
   `.trim();
 
   const draft = await openAIResponses(prompt);
@@ -655,6 +665,7 @@ ${culturalContext}
 async function editSong(payload: any) {
   const { originalSong, editInstruction, inputs, userProfile } = payload || {};
   const culturalContext = await buildCulturalPromptContext(inputs || {});
+  const metaTagGuidance = buildMetaTagGuidance(inputs || {});
   const prompt = `
 Revise the song per instruction.
 Return only full song in this exact format:
@@ -667,6 +678,8 @@ Title: ...
 Instruction: ${editInstruction || ""}
 Cultural context requirements:
 ${culturalContext}
+Meta tag and adlib requirements:
+${metaTagGuidance}
 
 Original song:
 ${originalSong || ""}
@@ -681,6 +694,7 @@ ${originalSong || ""}
 async function structureImportedSong(payload: any) {
   const { rawText, inputs, userProfile } = payload || {};
   const culturalContext = await buildCulturalPromptContext(inputs || {});
+  const metaTagGuidance = buildMetaTagGuidance(inputs || {});
   const prompt = `
 Turn the input into a full structured song.
 Output format:
@@ -692,6 +706,8 @@ Title: ...
 
 Cultural context requirements:
 ${culturalContext}
+Meta tag and adlib requirements:
+${metaTagGuidance}
 
 Input:
 ${rawText || ""}

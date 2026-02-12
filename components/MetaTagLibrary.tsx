@@ -1,48 +1,6 @@
 
 import React, { useState } from 'react';
-
-// Organized based on the "Complete guide to SUNO AI meta tags" (V5)
-const CATEGORIES = {
-    "Structure": [
-        "[Verse]", "[Chorus]", "[Post-Chorus]", "[Bridge]", "[Pre-Chorus]", "[Intro]", "[Outro]", 
-        "[Hook]", "[Interlude]", "[Break]", "[Breakdown]", "[Drop]", "[Pre-Drop]", "[Build]", 
-        "[Transition]", "[Ad-Lib Section]", "[Instrumental]", "[Refrain]", "[Skit]", "[End]"
-    ],
-    "Sections (Styled)": [
-        "[Short Instrumental Intro]", "[Long Melancholy Intro]", "[Ensemble Chorus]", 
-        "[Powerful Outro]", "[Big Finish]", "[Fade to End]", "[Instrumental Bridge]",
-        "[Short Accelerating Interlude]", "[Melodic Interlude]"
-    ],
-    "Vocals (Type)": [
-        "[Male Vocal]", "[Female Vocal]", "[Duet]", "[Choir]", "[Gospel Choir]", 
-        "[Vocalist: Female]", "[Vocalist: Male]", "[Layered Vocals]", "[Female Narrator]",
-        "[Announcer]"
-    ],
-    "Vocal Styles": [
-        "[Whisper]", "[Scream]", "[Falsetto]", "[Growl]", "[Rasp]", "[Melisma]", "[Staccato]",
-        "[Spoken Word]", "[Rap Verse]", "[Belting]", "[Crooning]", "[Vulnerable Vocals]", 
-        "[Opera Verse]", "(Backing Vocals)"
-    ],
-    "Instruments": [
-        "[Guitar Solo]", "[Piano Solo]", "[Drum Solo]", "[Violin Solo]", "[Bass Solo]",
-        "[Saxophone Solo]", "[Synth Solo]", "[Acoustic Guitar]", "[Heavy 808s]",
-        "[Drum Break]", "[Violin Break]", "[Percussion Break]"
-    ],
-    "Instrument FX": [
-        "[Soaring Lead Guitar Solo]", "[Fast and Intense Drum Solo]", "[Soft Piano Solo]", 
-        "[Distorted Bass]", "[Dancing Fiddle Solo]", "[Finger Style Guitar]", "[Playful Flute Solo]"
-    ],
-    "Dynamics / FX": [
-        "[Build Up]", "[Crescendo]", "[Fade-In]", "[Fade-Out]", "[Silence]", "[Pause]",
-        "[Stop]", "[Texture: Lo-fi]", "[Texture: Gritty]",
-        "[Texture: Tape-Saturated]", "[Warm Saturation]"
-    ],
-    "Mood & Energy": [
-        "[Energy: High]", "[Energy: Low]", "[Tempo: Fast]", "[Tempo: Slow]",
-        "[Mood: Intense]", "[Mood: Chill]", "[Mood: Sad]", "[Mood: Uplifting]",
-        "[Mood: Joyful]", "[Mood: Melancholic]"
-    ]
-};
+import { META_TAG_CATEGORIES } from '../lib/metaTagLibrary';
 
 interface MetaTagLibraryProps {
     onDragStart: (e: React.DragEvent, tag: string) => void;
@@ -66,7 +24,7 @@ const MetaTagLibrary: React.FC<MetaTagLibraryProps> = ({ onDragStart }) => {
                 {/* Category Navigation - Pill Style */}
                 <div className="p-4 md:p-8 pb-4">
                     <div className="flex flex-wrap gap-2">
-                        {Object.keys(CATEGORIES).map(cat => (
+                        {Object.keys(META_TAG_CATEGORIES).map(cat => (
                             <button
                                 key={cat}
                                 onClick={() => setActiveCategory(cat)}
@@ -85,7 +43,7 @@ const MetaTagLibrary: React.FC<MetaTagLibraryProps> = ({ onDragStart }) => {
                 {/* Tags Grid Area */}
                 <div className="p-4 md:p-8 pt-4">
                     <div className="flex flex-wrap gap-3 content-start pb-10">
-                        {(CATEGORIES as any)[activeCategory].map((tag: string) => (
+                        {(META_TAG_CATEGORIES as any)[activeCategory].map((tag: string) => (
                             <div
                                 key={tag}
                                 draggable
