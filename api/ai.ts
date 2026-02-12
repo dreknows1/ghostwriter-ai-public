@@ -202,7 +202,7 @@ async function openAIImageEditWithAvatar(
   const fd = new FormData();
   fd.append("model", getImageEditModel());
   fd.append("prompt", prompt);
-  fd.append("image", avatarBlob, "avatar.png");
+  fd.append("image[]", avatarBlob, "avatar.png");
 
   const response = await fetch("https://api.openai.com/v1/images/edits", {
     method: "POST",
