@@ -2,7 +2,6 @@ import type { VercelRequest, VercelResponse } from "@vercel/node";
 import { ConvexHttpClient } from "convex/browser";
 import { makeFunctionReference } from "convex/server";
 import { GoogleGenAI } from "@google/genai";
-import { buildMetaTagGuidance } from "../lib/metaTagLibrary";
 
 type AIAction =
   | "generateSong"
@@ -66,6 +65,15 @@ type CulturalLogicModule = {
   LANGUAGE_PROFILES: Record<string, { notes?: string }>;
 };
 
+type MetaTagModule = {
+  buildMetaTagGuidance: (inputs: {
+    genre?: string;
+    subGenre?: string;
+    vocals?: string;
+    emotion?: string;
+  }) => string;
+};
+
 const DEFAULT_GENRE_PROFILE: GenreProfile = {
   genre: "Pop",
   defaultStructure: "Verse -> Chorus -> Verse -> Chorus -> Bridge -> Chorus",
@@ -96,6 +104,7 @@ const DEFAULT_SUBGENRE_PROFILE: SubgenreSonicProfile = {
 };
 
 let culturalLogicPromise: Promise<CulturalLogicModule | null> | null = null;
+let metaTagModulePromise: Promise<MetaTagModule | null> | null = null;
 
 async function loadCulturalLogicModule(): Promise<CulturalLogicModule | null> {
   if (!culturalLogicPromise) {
@@ -112,6 +121,43 @@ async function loadCulturalLogicModule(): Promise<CulturalLogicModule | null> {
     })();
   }
   return culturalLogicPromise;
+}
+
+async function loadMetaTagModule(): Promise<MetaTagModule | null> {
+  if (!metaTagModulePromise) {
+    metaTagModulePromise = (async () => {
+      try {
+        return (await import("../lib/metaTagLibrary")) as unknown as MetaTagModule;
+      } catch {
+        try {
+          return (await import("../lib/metaTagLibrary.ts")) as unknown as MetaTagModule;
+        } catch {
+          return null;
+        }
+      }
+    })();
+  }
+  return metaTagModulePromise;
+}
+
+function fallbackMetaTagGuidance(inputs: any): string {
+  const genre = inputs?.genre || "Pop";
+  const subGenre = inputs?.subGenre || "Modern";
+  return `
+Meta Tag Library directives (fallback mode):
+- Use clear section tags such as [Intro], [Verse], [Pre-Chorus], [Chorus], [Bridge], [Outro].
+- Keep tags musically meaningful and avoid over-tagging.
+- Use occasional adlibs in parentheses, only where rhythm and delivery benefit.
+- Keep adlibs genre-appropriate for ${genre}/${subGenre}.
+  `.trim();
+}
+
+async function getMetaTagGuidance(inputs: any): Promise<string> {
+  const mod = await loadMetaTagModule();
+  if (mod?.buildMetaTagGuidance && typeof mod.buildMetaTagGuidance === "function") {
+    return mod.buildMetaTagGuidance(inputs || {});
+  }
+  return fallbackMetaTagGuidance(inputs || {});
 }
 
 function sanitizeEmail(email?: string): string {
@@ -315,7 +361,7 @@ ${hipHopCadence ? `- ${hipHopCadence}` : ""}
 async function culturallyRefineSong(rawSong: string, inputs: any, userProfile: any): Promise<string> {
   if (!rawSong?.trim()) return rawSong;
   const culturalContext = await buildCulturalPromptContext(inputs);
-  const metaTagGuidance = buildMetaTagGuidance(inputs || {});
+  const metaTagGuidance = await getMetaTagGuidance(inputs || {});
   const prompt = `
 You are a senior lyric editor specializing in cultural authenticity.
 Refine the song below for cultural and stylistic accuracy while preserving intent and emotional arc.
@@ -622,7 +668,7 @@ async function geminiGenerateImage(
 async function generateSong(payload: any) {
   const { inputs, userProfile } = payload || {};
   const culturalContext = await buildCulturalPromptContext(inputs || {});
-  const metaTagGuidance = buildMetaTagGuidance(inputs || {});
+  const metaTagGuidance = await getMetaTagGuidance(inputs || {});
   const prompt = `
 You are a professional songwriter.
 Return only:
@@ -665,7 +711,7 @@ ${metaTagGuidance}
 async function editSong(payload: any) {
   const { originalSong, editInstruction, inputs, userProfile } = payload || {};
   const culturalContext = await buildCulturalPromptContext(inputs || {});
-  const metaTagGuidance = buildMetaTagGuidance(inputs || {});
+  const metaTagGuidance = await getMetaTagGuidance(inputs || {});
   const prompt = `
 Revise the song per instruction.
 Return only full song in this exact format:
@@ -694,7 +740,7 @@ ${originalSong || ""}
 async function structureImportedSong(payload: any) {
   const { rawText, inputs, userProfile } = payload || {};
   const culturalContext = await buildCulturalPromptContext(inputs || {});
-  const metaTagGuidance = buildMetaTagGuidance(inputs || {});
+  const metaTagGuidance = await getMetaTagGuidance(inputs || {});
   const prompt = `
 Turn the input into a full structured song.
 Output format:
