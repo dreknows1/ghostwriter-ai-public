@@ -331,15 +331,6 @@ const CreationWizard: React.FC<{
 
         {step === AppStep.AWAITING_SPECIFICS && (
           <div className="text-center space-y-6 max-w-2xl mx-auto mt-12">
-            <select
-              className="w-full bg-slate-800 border border-slate-700 p-8 rounded-[2rem] text-white outline-none focus:border-blue-500 text-lg transition-all"
-              value={inputs.artStyle || 'Realism'}
-              onChange={(e) => onUpdate('artStyle', e.target.value)}
-            >
-              {ART_STYLE_OPTIONS.map((style) => (
-                <option key={style} value={style}>{style}</option>
-              ))}
-            </select>
             <input type="text" placeholder="Reference Artist (e.g. Bad Bunny, Utada Hikaru)" className="w-full bg-slate-800 border border-slate-700 p-8 rounded-[2rem] text-white outline-none focus:border-blue-500 text-lg transition-all" value={inputs.referenceArtist || ''} onChange={(e) => onUpdate('referenceArtist', e.target.value)} />
             <input type="text" placeholder="Mundane Objects (e.g. cold coffee, cracked phone)" className="w-full bg-slate-800 border border-slate-700 p-8 rounded-[2rem] text-white outline-none focus:border-blue-500 text-lg transition-all" value={inputs.mundaneObjects || ''} onChange={(e) => onUpdate('mundaneObjects', e.target.value)} />
             <button onClick={() => onNext()} className="w-full bg-blue-600 py-6 md:py-8 rounded-[2rem] text-sm md:text-base font-black uppercase tracking-[0.16em] md:tracking-[0.4em] text-white hover:bg-blue-500 transition-all">Next Module</button>

@@ -7,7 +7,7 @@ import {
   getSubgenreSonicProfile,
   inferWritingProfile,
   LANGUAGE_PROFILES,
-} from "../lib/culturalLogic";
+} from "../lib/culturalLogic.ts";
 
 type AIAction =
   | "generateSong"
