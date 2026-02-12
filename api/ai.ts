@@ -15,6 +15,11 @@ function sanitizeEmail(email?: string): string {
   return (email || "").toLowerCase().trim();
 }
 
+function isSafetyRejection(error: any): boolean {
+  const text = `${error?.message || ""} ${error?.details || ""}`.toLowerCase();
+  return text.includes("safety") || text.includes("safety_violations") || text.includes("content policy");
+}
+
 function isAllowedEmail(email?: string): boolean {
   return sanitizeEmail(email).includes("@");
 }
@@ -363,6 +368,18 @@ Keep the same person facial structure, hair, skin tone, and distinguishing featu
     try {
       return { imageDataUrl: await openAIImageEditWithAvatar(avatarPrompt, ratio, avatarBlob) };
     } catch (error: any) {
+      if (isSafetyRejection(error)) {
+        const safeAvatarPrompt = `${avatarPrompt}
+Safety constraints:
+- Keep the subject fully clothed in non-revealing everyday attire.
+- No nudity, no lingerie, no suggestive pose, no sexual context.
+- No fetish styling; maintain neutral, professional album-cover framing.`;
+        try {
+          return { imageDataUrl: await openAIImageEditWithAvatar(safeAvatarPrompt, ratio, avatarBlob) };
+        } catch {
+          throw new Error("Avatar-referenced image was blocked by safety filters. Try a less suggestive style/theme.");
+        }
+      }
       throw new Error(`Avatar-referenced image generation failed. ${error?.message || "OpenAI image edit failed."}`);
     }
   }
