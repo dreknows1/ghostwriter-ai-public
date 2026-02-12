@@ -38,10 +38,6 @@ function getImageModel(): string {
   return "nano-banana-pro";
 }
 
-function getImageEditModel(): string {
-  return "gpt-image-1";
-}
-
 const getUserProfileByEmailRef = makeFunctionReference<"query">("app:getUserProfileByEmail");
 
 async function openAIResponses(prompt: string, model = getTextModel()): Promise<string> {
@@ -204,9 +200,10 @@ async function openAIImageEditWithAvatar(
   avatarBlob: Blob
 ): Promise<string> {
   const apiKey = getOpenAIApiKey();
+  const model = getImageModel();
   const attemptEdit = async (imageField: "image[]" | "image") => {
     const fd = new FormData();
-    fd.append("model", getImageEditModel());
+    fd.append("model", model);
     fd.append("prompt", prompt);
     fd.append(imageField, avatarBlob, "avatar.png");
 
@@ -363,22 +360,17 @@ The attached avatar image is the PRIMARY identity reference.
 Keep the same person facial structure, hair, skin tone, and distinguishing features.`;
 
   if (avatarBlob) {
-    // Avatar-referenced editing is most reliable through OpenAI image edits.
-    // Gemini edit-with-reference requires Vertex AI auth in some environments.
     try {
       return { imageDataUrl: await openAIImageEditWithAvatar(avatarPrompt, ratio, avatarBlob) };
     } catch (error: any) {
+      const details = `${error?.message || ""}`.toLowerCase();
+      if (details.includes("request failed (404)") || details.includes("request failed (400)")) {
+        throw new Error(
+          "Avatar-referenced edits are not supported by nano-banana-pro via current image-edit endpoint. Please generate without avatar reference or switch to an edit-capable model."
+        );
+      }
       if (isSafetyRejection(error)) {
-        const safeAvatarPrompt = `${avatarPrompt}
-Safety constraints:
-- Keep the subject fully clothed in non-revealing everyday attire.
-- No nudity, no lingerie, no suggestive pose, no sexual context.
-- No fetish styling; maintain neutral, professional album-cover framing.`;
-        try {
-          return { imageDataUrl: await openAIImageEditWithAvatar(safeAvatarPrompt, ratio, avatarBlob) };
-        } catch {
-          throw new Error("Avatar-referenced image was blocked by safety filters. Try a less suggestive style/theme.");
-        }
+        throw new Error("Avatar-referenced image was blocked by safety filters. Try a less suggestive style/theme.");
       }
       throw new Error(`Avatar-referenced image generation failed. ${error?.message || "OpenAI image edit failed."}`);
     }
