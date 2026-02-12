@@ -1,6 +1,13 @@
 import type { VercelRequest, VercelResponse } from "@vercel/node";
 import { ConvexHttpClient } from "convex/browser";
 import { makeFunctionReference } from "convex/server";
+import {
+  GoogleGenAI,
+  PersonGeneration,
+  RawReferenceImage,
+  SubjectReferenceImage,
+  SubjectReferenceType,
+} from "@google/genai";
 
 type AIAction =
   | "generateSong"
@@ -31,6 +38,25 @@ function getTextModel(): string {
 
 function getImageModel(): string {
   return process.env.OPENAI_IMAGE_MODEL || "nano-banana-pro";
+}
+
+function getImageProvider(): "openai" | "gemini" {
+  const raw = (process.env.IMAGE_PROVIDER || "gemini").toLowerCase().trim();
+  return raw === "openai" ? "openai" : "gemini";
+}
+
+function getGeminiApiKey(): string {
+  const key = process.env.GEMINI_API_KEY;
+  if (!key) throw new Error("Missing GEMINI_API_KEY in environment");
+  return key;
+}
+
+function getGeminiImageModel(): string {
+  return process.env.GEMINI_IMAGE_MODEL || "imagen-4.0-generate-001";
+}
+
+function getGeminiImageEditModel(): string {
+  return process.env.GEMINI_IMAGE_EDIT_MODEL || "imagen-3.0-capability-001";
 }
 
 const getUserProfileByEmailRef = makeFunctionReference<"query">("app:getUserProfileByEmail");
@@ -222,6 +248,60 @@ async function openAIImageEditWithAvatar(
   return `data:image/png;base64,${b64}`;
 }
 
+async function geminiGenerateImage(
+  prompt: string,
+  aspectRatio: "9:16" | "1:1" | "16:9" = "9:16"
+): Promise<string> {
+  const ai = new GoogleGenAI({ apiKey: getGeminiApiKey() });
+  const response: any = await ai.models.generateImages({
+    model: getGeminiImageModel(),
+    prompt,
+    config: {
+      numberOfImages: 1,
+      aspectRatio,
+      personGeneration: PersonGeneration.ALLOW_ALL,
+    },
+  });
+
+  const b64 = response?.generatedImages?.[0]?.image?.imageBytes;
+  if (!b64 || typeof b64 !== "string") {
+    throw new Error("Gemini image generation returned no base64 payload");
+  }
+  return `data:image/png;base64,${b64}`;
+}
+
+async function geminiEditImageWithAvatar(
+  prompt: string,
+  avatarBlob: Blob
+): Promise<string> {
+  const ai = new GoogleGenAI({ apiKey: getGeminiApiKey() });
+  const arrayBuffer = await avatarBlob.arrayBuffer();
+  const imageBytes = Buffer.from(arrayBuffer).toString("base64");
+
+  const baseImage = new RawReferenceImage();
+  baseImage.referenceImage = { imageBytes, mimeType: avatarBlob.type || "image/png" };
+
+  const subjectImage = new SubjectReferenceImage();
+  subjectImage.referenceImage = { imageBytes, mimeType: avatarBlob.type || "image/png" };
+  subjectImage.config = { subjectType: SubjectReferenceType.SUBJECT_TYPE_PERSON };
+
+  const response: any = await ai.models.editImage({
+    model: getGeminiImageEditModel(),
+    prompt,
+    referenceImages: [baseImage, subjectImage],
+    config: {
+      numberOfImages: 1,
+      personGeneration: PersonGeneration.ALLOW_ALL,
+    },
+  });
+
+  const b64 = response?.generatedImages?.[0]?.image?.imageBytes;
+  if (!b64 || typeof b64 !== "string") {
+    throw new Error("Gemini image edit returned no base64 payload");
+  }
+  return `data:image/png;base64,${b64}`;
+}
+
 async function generateSong(payload: any) {
   const { inputs, userProfile } = payload || {};
   const prompt = `
@@ -324,24 +404,35 @@ Aspect ratio: ${ratio}
 The song context dictates the visual theme, scene, color, mood, styling, and composition.
 No watermark, no logo, no extra text.
 `.trim();
+  const imageProvider = getImageProvider();
   const avatarBlob = await getAvatarBlobByEmail(sanitizeEmail(payload?.email || ""));
-  if (avatarBlob) {
-    const avatarPrompt = `${prompt}
+  const avatarPrompt = `${prompt}
 The attached avatar image is the PRIMARY identity reference.
 Keep the same person facial structure, hair, skin tone, and distinguishing features.`;
+
+  if (imageProvider === "gemini") {
+    if (avatarBlob) {
+      try {
+        return { imageDataUrl: await geminiEditImageWithAvatar(avatarPrompt, avatarBlob) };
+      } catch {
+        return { imageDataUrl: await geminiGenerateImage(avatarPrompt, ratio) };
+      }
+    }
+    return { imageDataUrl: await geminiGenerateImage(prompt, ratio) };
+  }
+
+  if (avatarBlob) {
     try {
       return { imageDataUrl: await openAIImageEditWithAvatar(avatarPrompt, ratio, avatarBlob) };
     } catch (error: any) {
       const status = Number(error?.status || 0);
-      // Some providers/models do not expose an image-edit endpoint. Fall back
-      // to standard generation so the user still gets artwork instead of hard failure.
       if (status === 404 || status === 405 || status === 501) {
         return { imageDataUrl: await openAIImage(avatarPrompt, ratio) };
       }
       throw error;
     }
   }
-  // Fallback mode: no avatar on profile, generate song-themed art only.
+
   return { imageDataUrl: await openAIImage(prompt, ratio) };
 }
 
