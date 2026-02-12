@@ -55,10 +55,6 @@ export default async function handler(req: any, res: any) {
 
     if (event.type === 'checkout.session.completed') {
       const session = event.data.object as Stripe.Checkout.Session;
-      if (session.mode === 'subscription') {
-        return res.status(200).json({ received: true });
-      }
-
       const metadata = session.metadata || {};
       const userEmail = metadata.userEmail || session.customer_email || session.client_reference_id;
 
@@ -86,6 +82,10 @@ export default async function handler(req: any, res: any) {
 
     if (event.type === 'invoice.paid') {
       const invoice = event.data.object as Stripe.Invoice;
+      if (invoice.billing_reason === 'subscription_create') {
+        // Initial subscription credit is granted on checkout.session.completed.
+        return res.status(200).json({ received: true });
+      }
       const subscriptionId = typeof invoice.subscription === 'string'
         ? invoice.subscription
         : invoice.subscription?.id;

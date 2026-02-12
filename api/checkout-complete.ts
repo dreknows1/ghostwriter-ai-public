@@ -33,10 +33,6 @@ export default async function handler(req: any, res: any) {
       return res.status(409).json({ error: "Checkout not fully paid yet" });
     }
 
-    if (session.mode === "subscription") {
-      return res.status(200).json({ ok: true, mode: "subscription" });
-    }
-
     const metadata = session.metadata || {};
     const userEmail = metadata.userEmail || session.customer_email || session.client_reference_id;
     const credits = Number(metadata.credits || 0);
@@ -59,4 +55,3 @@ export default async function handler(req: any, res: any) {
     return res.status(500).json({ error: err?.message || "Checkout confirmation failed" });
   }
 }
-
