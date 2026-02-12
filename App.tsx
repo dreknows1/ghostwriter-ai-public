@@ -86,6 +86,8 @@ import {
   getBaseEnv
 } from './lib/culturalLogic';
 
+const ART_STYLE_OPTIONS = ['Realism', 'Pixar', 'Comik Book', 'Cyber Punk', 'Anime', 'Fantasy'];
+
 const STEP_ORDER = [
   AppStep.AWAITING_LANGUAGE,
   AppStep.AWAITING_GENRE,
@@ -178,6 +180,7 @@ const EMOTIONS_BY_GENRE: Record<string, string[]> = {
 const DEFAULT_INPUTS: SongInputs = {
   language: 'English',
   genre: '',
+  artStyle: 'Realism',
   subGenre: '',
   audioEnv: 'Studio (Clean)',
   emotion: 'Euphoric',
@@ -328,6 +331,15 @@ const CreationWizard: React.FC<{
 
         {step === AppStep.AWAITING_SPECIFICS && (
           <div className="text-center space-y-6 max-w-2xl mx-auto mt-12">
+            <select
+              className="w-full bg-slate-800 border border-slate-700 p-8 rounded-[2rem] text-white outline-none focus:border-blue-500 text-lg transition-all"
+              value={inputs.artStyle || 'Realism'}
+              onChange={(e) => onUpdate('artStyle', e.target.value)}
+            >
+              {ART_STYLE_OPTIONS.map((style) => (
+                <option key={style} value={style}>{style}</option>
+              ))}
+            </select>
             <input type="text" placeholder="Reference Artist (e.g. Bad Bunny, Utada Hikaru)" className="w-full bg-slate-800 border border-slate-700 p-8 rounded-[2rem] text-white outline-none focus:border-blue-500 text-lg transition-all" value={inputs.referenceArtist || ''} onChange={(e) => onUpdate('referenceArtist', e.target.value)} />
             <input type="text" placeholder="Mundane Objects (e.g. cold coffee, cracked phone)" className="w-full bg-slate-800 border border-slate-700 p-8 rounded-[2rem] text-white outline-none focus:border-blue-500 text-lg transition-all" value={inputs.mundaneObjects || ''} onChange={(e) => onUpdate('mundaneObjects', e.target.value)} />
             <button onClick={() => onNext()} className="w-full bg-blue-600 py-6 md:py-8 rounded-[2rem] text-sm md:text-base font-black uppercase tracking-[0.16em] md:tracking-[0.4em] text-white hover:bg-blue-500 transition-all">Next Module</button>
@@ -1096,7 +1108,7 @@ export const App: React.FC = () => {
                 onGenerateArt={async (t, p, aspectRatio) => generateAlbumArt(
                   t,
                   p,
-                  `${inputs.genre || 'Cinematic'}`,
+                  `${inputs.artStyle || 'Realism'}`,
                   aspectRatio,
                   `${session?.user?.email || ''}`,
                   headerAvatarUrl || undefined

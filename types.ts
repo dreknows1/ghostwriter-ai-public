@@ -33,6 +33,7 @@ export enum AppView {
 export interface SongInputs {
   language?: string;
   genre?: string;
+  artStyle?: string;
   subGenre?: string;
   instrumentation?: string;
   audioEnv?: string;

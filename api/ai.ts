@@ -40,6 +40,59 @@ function getGeminiImageModel(): string {
   return process.env.GEMINI_IMAGE_MODEL || "gemini-3-pro-image-preview";
 }
 
+function getStylePrompt(style?: string): string {
+  const normalized = (style || "Realism").trim().toLowerCase();
+  switch (normalized) {
+    case "realism":
+      return `
+STRICT STYLE: REALISM
+- Photorealistic, ultra-detailed skin texture, realistic lens behavior, natural lighting.
+- True-to-life anatomy and proportions. No stylization or cartoon traits.
+- High dynamic range, cinematic grading, sharp focus on subject identity.
+`.trim();
+    case "pixar":
+      return `
+STRICT STYLE: PIXAR
+- Family-friendly 3D animation look, clean global illumination, expressive features.
+- Stylized but polished 3D shading, soft cinematic lighting, vibrant color design.
+- Keep subject identity recognizable while adapting to animated form.
+`.trim();
+    case "comik book":
+      return `
+STRICT STYLE: COMIK BOOK
+- Bold ink outlines, halftone textures, dynamic panel-like composition.
+- High-contrast cel shading, graphic color blocking, punchy visual storytelling.
+- Keep character identity clear and consistent.
+`.trim();
+    case "cyber punk":
+      return `
+STRICT STYLE: CYBER PUNK
+- Futuristic neon city mood, chrome and holographic accents, rain/atmospheric haze.
+- Strong magenta/cyan contrast, high-tech fashion details, cinematic night lighting.
+- Preserve subject identity while embedding in dystopian future setting.
+`.trim();
+    case "anime":
+      return `
+STRICT STYLE: ANIME
+- Clean linework, stylized anime facial language, cinematic anime composition.
+- Controlled cel shading, expressive eyes, dramatic but tasteful lighting.
+- Keep the same person identity translated into anime form.
+`.trim();
+    case "fantasy":
+      return `
+STRICT STYLE: FANTASY
+- Epic worldbuilding tone, magical atmosphere, rich environmental storytelling.
+- Painterly-cinematic detail, mythic costume motifs, dramatic depth and scale.
+- Preserve subject identity inside a fantasy setting.
+`.trim();
+    default:
+      return `
+STRICT STYLE: REALISM
+- Photorealistic, true-to-life rendering with cinematic quality.
+`.trim();
+  }
+}
+
 const getUserProfileByEmailRef = makeFunctionReference<"query">("app:getUserProfileByEmail");
 
 async function openAIResponses(prompt: string, model = getTextModel()): Promise<string> {
@@ -272,14 +325,16 @@ Rules:
 async function generateAlbumArt(payload: any) {
   const { songTitle, sunoPrompt, style, aspectRatio, avatarUrl } = payload || {};
   const ratio: "9:16" | "1:1" | "16:9" = aspectRatio === "1:1" || aspectRatio === "16:9" ? aspectRatio : "9:16";
+  const stylePrompt = getStylePrompt(style);
   const prompt = `
 Create a professional album cover image.
 Title: ${songTitle || "Untitled"}
-Style: ${style || "Cinematic"}
+Style: ${style || "Realism"}
 Vibe: ${(sunoPrompt || "").slice(0, 200)}
 Aspect ratio: ${ratio}
 The song context dictates the visual theme, scene, color, mood, styling, and composition.
 No watermark, no logo, no extra text.
+${stylePrompt}
 `.trim();
 
   const avatarBlob = await getAvatarBlob(avatarUrl, sanitizeEmail(payload?.email || ""));
