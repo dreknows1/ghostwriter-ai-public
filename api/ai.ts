@@ -1,13 +1,6 @@
 import type { VercelRequest, VercelResponse } from "@vercel/node";
 import { ConvexHttpClient } from "convex/browser";
 import { makeFunctionReference } from "convex/server";
-import {
-  GoogleGenAI,
-  PersonGeneration,
-  RawReferenceImage,
-  SubjectReferenceImage,
-  SubjectReferenceType,
-} from "@google/genai";
 
 type AIAction =
   | "generateSong"
@@ -38,20 +31,6 @@ function getTextModel(): string {
 
 function getImageModel(): string {
   return "nano-banana-pro";
-}
-
-function getGeminiApiKey(): string {
-  const key = process.env.GEMINI_API_KEY;
-  if (!key) throw new Error("Missing GEMINI_API_KEY in environment");
-  return key;
-}
-
-function getGeminiImageModel(): string {
-  return process.env.GEMINI_IMAGE_MODEL || "imagen-4.0-generate-001";
-}
-
-function getGeminiImageEditModel(): string {
-  return process.env.GEMINI_IMAGE_EDIT_MODEL || "imagen-3.0-capability-001";
 }
 
 const getUserProfileByEmailRef = makeFunctionReference<"query">("app:getUserProfileByEmail");
@@ -256,60 +235,6 @@ async function openAIImageEditWithAvatar(
   const data: any = await response.json();
   const b64 = data?.data?.[0]?.b64_json;
   if (!b64) throw new Error("Image edit returned no base64 payload");
-  return `data:image/png;base64,${b64}`;
-}
-
-async function geminiGenerateImage(
-  prompt: string,
-  aspectRatio: "9:16" | "1:1" | "16:9" = "9:16"
-): Promise<string> {
-  const ai = new GoogleGenAI({ apiKey: getGeminiApiKey() });
-  const response: any = await ai.models.generateImages({
-    model: getGeminiImageModel(),
-    prompt,
-    config: {
-      numberOfImages: 1,
-      aspectRatio,
-      personGeneration: PersonGeneration.ALLOW_ALL,
-    },
-  });
-
-  const b64 = response?.generatedImages?.[0]?.image?.imageBytes;
-  if (!b64 || typeof b64 !== "string") {
-    throw new Error("Gemini image generation returned no base64 payload");
-  }
-  return `data:image/png;base64,${b64}`;
-}
-
-async function geminiEditImageWithAvatar(
-  prompt: string,
-  avatarBlob: Blob
-): Promise<string> {
-  const ai = new GoogleGenAI({ apiKey: getGeminiApiKey() });
-  const arrayBuffer = await avatarBlob.arrayBuffer();
-  const imageBytes = Buffer.from(arrayBuffer).toString("base64");
-
-  const baseImage = new RawReferenceImage();
-  baseImage.referenceImage = { imageBytes, mimeType: avatarBlob.type || "image/png" };
-
-  const subjectImage = new SubjectReferenceImage();
-  subjectImage.referenceImage = { imageBytes, mimeType: avatarBlob.type || "image/png" };
-  subjectImage.config = { subjectType: SubjectReferenceType.SUBJECT_TYPE_PERSON };
-
-  const response: any = await ai.models.editImage({
-    model: getGeminiImageEditModel(),
-    prompt,
-    referenceImages: [baseImage, subjectImage],
-    config: {
-      numberOfImages: 1,
-      personGeneration: PersonGeneration.ALLOW_ALL,
-    },
-  });
-
-  const b64 = response?.generatedImages?.[0]?.image?.imageBytes;
-  if (!b64 || typeof b64 !== "string") {
-    throw new Error("Gemini image edit returned no base64 payload");
-  }
   return `data:image/png;base64,${b64}`;
 }
 
