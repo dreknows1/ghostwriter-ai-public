@@ -3,6 +3,7 @@ import React, { useState, useEffect } from 'react';
 import { UserProfile, SavedSong, Transaction } from '../types';
 import { getUserProfile, upsertUserProfile, deleteUserProfile, getUserTransactions } from '../services/userService';
 import { getSavedSongs, deleteSong, deleteAllUserSongs } from '../services/songService';
+import { COSTS, deductCredits, hasEnoughCredits } from '../services/creditService';
 import { 
     LoadingSpinner, ProfileIcon, TrashIcon, EditIcon, ImageIcon, 
     HomeIcon, WalletIcon, ClockIcon, LogoutIcon 
@@ -118,11 +119,12 @@ const ProfileView: React.FC<ProfileViewProps> = ({ email, onLoadSong, onBack, on
 
   const handleAvatarUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
+    e.target.value = '';
     if (file) {
         const reader = new FileReader();
         reader.onload = (readerEvent) => {
             const img = new Image();
-            img.onload = () => {
+            img.onload = async () => {
                 const canvas = document.createElement('canvas');
                 const MAX_SIZE = 512;
                 let width = img.width;
@@ -145,7 +147,15 @@ const ProfileView: React.FC<ProfileViewProps> = ({ email, onLoadSong, onBack, on
                 ctx?.drawImage(img, 0, 0, width, height);
                 const dataUrl = canvas.toDataURL('image/jpeg', 0.8);
                 if (dataUrl && dataUrl.length > 100) {
+                    const canAfford = await hasEnoughCredits(email, COSTS.CREATE_AVATAR);
+                    if (!canAfford) {
+                        alert(`Insufficient credits. Creating an avatar costs ${COSTS.CREATE_AVATAR} credits.`);
+                        onBuyCredits();
+                        return;
+                    }
+                    await deductCredits(email, COSTS.CREATE_AVATAR);
                     setEditData(prev => ({...prev, avatar_url: dataUrl}));
+                    alert(`Avatar created. ${COSTS.CREATE_AVATAR} credits used.`);
                 }
             }
             img.src = readerEvent.target?.result as string;
@@ -357,10 +367,10 @@ const ProfileView: React.FC<ProfileViewProps> = ({ email, onLoadSong, onBack, on
                                             onChange={handleAvatarUpload}
                                             className="w-full bg-[#131722] border border-slate-800 p-3 rounded-2xl text-sm text-slate-300 file:mr-4 file:py-2 file:px-4 file:rounded-xl file:border-0 file:text-xs file:font-black file:uppercase file:bg-slate-800 file:text-white hover:file:bg-slate-700 cursor-pointer"
                                          />
-                                         <p className="mt-3 text-xs text-slate-500 uppercase tracking-widest leading-relaxed">Upload artist persona (JPG/PNG). Used as reference for session art. Max 512px.</p>
+                                            <p className="mt-3 text-xs text-slate-500 uppercase tracking-widest leading-relaxed">Upload artist persona (JPG/PNG). Used as reference for session art. Max 512px. Cost: {COSTS.CREATE_AVATAR} credits.</p>
+                                        </div>
                                     </div>
                                 </div>
-                             </div>
 
                              <div className="col-span-2">
                                 <label className="block text-sm font-black uppercase tracking-widest text-slate-500 mb-3">Preferred Art Style</label>

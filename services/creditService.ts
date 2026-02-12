@@ -5,6 +5,7 @@ export const COSTS = {
   EDIT_SONG: 1,
   GENERATE_ART: 8,
   SOCIAL_PACK: 1,
+  CREATE_AVATAR: 100,
 };
 
 async function callDb(action: string, payload: any) {
