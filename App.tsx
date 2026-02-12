@@ -451,12 +451,27 @@ export const App: React.FC = () => {
         getUserCredits(sess.user.email || '').then(c => setCredits(c));
         loadHeaderAvatar(sess.user.email || '');
 
-        if (window.location.search.includes('status=success')) {
-          // Public-safe flow: credits should be granted by server webhook only.
-          // We only refresh balances on return.
-          getUserCredits(sess.user.email || '').then(c => setCredits(c));
-          alert('Payment received. Your credits will update once confirmation completes.');
-          window.history.replaceState({}, '', '/');
+        const status = search.get('status');
+        const sessionId = search.get('session_id');
+        if (status === 'success') {
+          try {
+            if (sessionId) {
+              await fetch('/api/checkout-complete', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ sessionId }),
+              });
+            }
+            const c = await getUserCredits(sess.user.email || '');
+            setCredits(c);
+            alert('Payment successful. Credits posted to your account.');
+          } catch {
+            const c = await getUserCredits(sess.user.email || '');
+            setCredits(c);
+            alert('Payment received. Credits are being finalized now. Please refresh in a moment.');
+          } finally {
+            window.history.replaceState({}, '', '/');
+          }
         }
       } else {
         setView(AppView.AUTH);

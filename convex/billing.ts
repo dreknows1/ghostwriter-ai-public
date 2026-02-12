@@ -48,6 +48,12 @@ export const applyStripeCheckoutCredits = mutation({
     amountCents: v.number(),
   },
   handler: async (ctx: any, args: any) => {
+    const existingTx = await ctx.db
+      .query("transactions")
+      .withIndex("by_session", (q: any) => q.eq("stripeSessionId", args.sessionId))
+      .first();
+    if (existingTx) return { applied: false, reason: "duplicate_session" };
+
     const seen = await ctx.db
       .query("stripeEvents")
       .withIndex("by_event", (q: any) => q.eq("eventId", args.eventId))
@@ -107,6 +113,12 @@ export const applyStripeCheckoutCreditsByEmail = mutation({
     amountCents: v.number(),
   },
   handler: async (ctx: any, args: any) => {
+    const existingTx = await ctx.db
+      .query("transactions")
+      .withIndex("by_session", (q: any) => q.eq("stripeSessionId", args.sessionId))
+      .first();
+    if (existingTx) return { applied: false, reason: "duplicate_session" };
+
     const seen = await ctx.db
       .query("stripeEvents")
       .withIndex("by_event", (q: any) => q.eq("eventId", args.eventId))
