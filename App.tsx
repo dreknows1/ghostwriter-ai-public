@@ -791,7 +791,7 @@ export const App: React.FC = () => {
   if (view === AppView.PROFILE) {
       return <ProfileView email={session.user.email} onLoadSong={(s) => {
           setInputs({ ...DEFAULT_INPUTS, genre: 'Loaded Song' }); 
-          setGeneratedSong(s.lyrics || `Title: ${s.title}\n\n### SUNO Prompt\n${s.suno_prompt}\n\n### Lyrics\n${s.lyrics}`);
+          setGeneratedSong(`Title: ${s.title || 'Untitled'}\n\n### SUNO Prompt\n${s.suno_prompt || ''}\n\n### Lyrics\n${s.lyrics || ''}`);
           setAlbumArt(s.album_art || null);
           setLoadedSongId(s.id);
           setView(AppView.STUDIO);
