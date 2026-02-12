@@ -512,6 +512,86 @@ function extractLyricsBody(songText: string): string {
   return songText.slice(idx + marker.length).trim();
 }
 
+function parseStructuredSong(songText: string): { title: string; sunoPrompt: string; lyrics: string } {
+  const text = typeof songText === "string" ? songText.trim() : "";
+  if (!text) {
+    return { title: "Untitled", sunoPrompt: "", lyrics: "" };
+  }
+
+  const lines = text.split("\n");
+  const titleLine = lines.find((line) => /^title:\s*/i.test(line)) || "Title: Untitled";
+  const title = titleLine.replace(/^title:\s*/i, "").trim() || "Untitled";
+
+  const promptMarker = "### SUNO Prompt";
+  const lyricsMarker = "### Lyrics";
+  const promptIndex = text.indexOf(promptMarker);
+  const lyricsIndex = text.indexOf(lyricsMarker);
+
+  if (promptIndex === -1 || lyricsIndex === -1 || lyricsIndex <= promptIndex) {
+    return { title, sunoPrompt: "", lyrics: text };
+  }
+
+  const sunoPrompt = text
+    .slice(promptIndex + promptMarker.length, lyricsIndex)
+    .trim();
+  const lyrics = text
+    .slice(lyricsIndex + lyricsMarker.length)
+    .trim();
+
+  return { title, sunoPrompt, lyrics };
+}
+
+function clampPromptLength(text: string, maxLength = 420): string {
+  const clean = text.replace(/\s+/g, " ").trim();
+  if (clean.length <= maxLength) return clean;
+  return `${clean.slice(0, maxLength - 1).trim()}.`;
+}
+
+async function buildSunoPromptDriver(inputs: any, userProfile: any): Promise<string> {
+  const logic = await loadCulturalLogicModule();
+
+  const language = inputs?.language || "English";
+  const genre = inputs?.genre || "Pop";
+  const subGenre = inputs?.subGenre || "Modern";
+  const instrumentation = inputs?.instrumentation || "genre-appropriate instrumentation";
+  const audioEnv = inputs?.audioEnv || "studio-clean mix";
+  const scene = inputs?.scene || "intimate urban night setting";
+  const emotion = inputs?.emotion || "euphoric";
+  const vocals = inputs?.vocals || "Female Solo";
+  const duetType = inputs?.duetType ? `, ${inputs.duetType}` : "";
+  const vibe = userProfile?.preferred_vibe || "emotionally honest";
+  const referenceArtist = (inputs?.referenceArtist || "").trim();
+
+  const writingProfile =
+    logic?.inferWritingProfile?.({
+      language,
+      genre,
+      subGenre,
+      register: detectRegisterHint(inputs),
+      allowCodeSwitch: false,
+    }) || DEFAULT_WRITING_PROFILE;
+
+  const subProfile = logic?.getSubgenreSonicProfile?.(subGenre) || DEFAULT_SUBGENRE_PROFILE;
+  const genreProfile = logic?.getGenreProfile?.(genre) || DEFAULT_GENRE_PROFILE;
+
+  const referenceClause = referenceArtist ? `; reference feel: ${referenceArtist}` : "";
+  const prompt = `
+${genre}/${subGenre} in ${language} (${writingProfile.languageVariant}); ${subProfile.bpmRange} pulse, ${subProfile.groove}.
+Core instrumentation: ${instrumentation}; production: ${subProfile.productionStyle}; arrangement: ${genreProfile.defaultStructure}.
+Vocals: ${vocals}${duetType}; mood: ${emotion}; vibe: ${vibe}; scene: ${scene}; mix: ${audioEnv}${referenceClause}.
+Use culturally authentic ${writingProfile.cultureRegion} phrasing, concrete imagery, and non-cliche writing.
+  `.trim();
+
+  return clampPromptLength(prompt);
+}
+
+async function enforceSunoPromptDriver(songText: string, inputs: any, userProfile: any): Promise<string> {
+  if (!songText?.trim()) return songText;
+  const parsed = parseStructuredSong(songText);
+  const driverPrompt = await buildSunoPromptDriver(inputs || {}, userProfile || {});
+  return `Title: ${parsed.title}\n### SUNO Prompt\n${driverPrompt}\n### Lyrics\n${parsed.lyrics}`.trim();
+}
+
 function countBracketTags(lyrics: string): number {
   if (!lyrics) return 0;
   const matches = lyrics.match(/\[[^\]\n]{2,80}\]/g);
@@ -1241,6 +1321,7 @@ ${metaTagPackage.strictSpec}
   }
 
   finalText = await enforceSongDepthAndTexture(finalText, inputs || {}, userProfile || {});
+  finalText = await enforceSunoPromptDriver(finalText, inputs || {}, userProfile || {});
 
   const audit = shouldRunDeepAudit()
     ? await evaluateCulturalAudit(finalText, inputs || {})
@@ -1282,6 +1363,7 @@ ${originalSong || ""}
   }
 
   finalText = await enforceSongDepthAndTexture(finalText, inputs || {}, userProfile || {});
+  finalText = await enforceSunoPromptDriver(finalText, inputs || {}, userProfile || {});
 
   const audit = shouldRunDeepAudit()
     ? await evaluateCulturalAudit(finalText, inputs || {})
@@ -1322,6 +1404,7 @@ ${rawText || ""}
   }
 
   finalText = await enforceSongDepthAndTexture(finalText, inputs || {}, userProfile || {});
+  finalText = await enforceSunoPromptDriver(finalText, inputs || {}, userProfile || {});
 
   const audit = shouldRunDeepAudit()
     ? await evaluateCulturalAudit(finalText, inputs || {})
