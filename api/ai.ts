@@ -33,6 +33,10 @@ function getImageModel(): string {
   return "nano-banana-pro";
 }
 
+function getImageEditModel(): string {
+  return process.env.OPENAI_IMAGE_EDIT_MODEL || "gpt-image-1";
+}
+
 const getUserProfileByEmailRef = makeFunctionReference<"query">("app:getUserProfileByEmail");
 
 async function openAIResponses(prompt: string, model = getTextModel()): Promise<string> {
@@ -196,7 +200,7 @@ async function openAIImageEditWithAvatar(
 ): Promise<string> {
   const apiKey = getOpenAIApiKey();
   const fd = new FormData();
-  fd.append("model", getImageModel());
+  fd.append("model", getImageEditModel());
   fd.append("prompt", prompt);
   fd.append("size", mapAspectToSize(aspectRatio));
   fd.append("image", avatarBlob, "avatar.png");
