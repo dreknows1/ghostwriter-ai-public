@@ -85,6 +85,9 @@ type MetaTagModule = {
     adlibPolicy: string;
     minTagCount: number;
     minAdlibCount: number;
+    requiredAccentHits: number;
+    requiredMoodHits: number;
+    requireVocalTypeTag: boolean;
   };
   buildStrictMetaTagSpec?: (inputs: {
     genre?: string;
@@ -102,6 +105,9 @@ type MetaTagPlan = {
   adlibPolicy: string;
   minTagCount: number;
   minAdlibCount: number;
+  requiredAccentHits: number;
+  requiredMoodHits: number;
+  requireVocalTypeTag: boolean;
 };
 
 type MetaTagPackage = {
@@ -200,6 +206,9 @@ function fallbackMetaTagPlan(inputs: any): MetaTagPlan {
     adlibPolicy: "Use tasteful adlibs in parentheses where musically useful.",
     minTagCount: 10,
     minAdlibCount: heavyAdlib ? 6 : mediumAdlib ? 4 : 2,
+    requiredAccentHits: heavyAdlib || mediumAdlib ? 2 : 1,
+    requiredMoodHits: 1,
+    requireVocalTypeTag: true,
   };
 }
 
@@ -213,6 +222,9 @@ Strict meta-tag orchestration plan:
 - Genre/subgenre accent tags to include naturally: ${plan.genreAccentTags.join(", ")}
 - Minimum bracket tags in Lyrics body: ${plan.minTagCount}
 - Minimum adlibs in parentheses: ${plan.minAdlibCount}
+- Minimum genre-accent tag hits: ${plan.requiredAccentHits}
+- Minimum mood/energy tag hits: ${plan.requiredMoodHits}
+- Required vocal identity tag must appear in Lyrics: ${plan.requireVocalTypeTag ? "yes" : "no"}
 - Adlib policy: ${plan.adlibPolicy}
 - Tag logic: opening sections establish mood + voice; mid-song sections escalate arrangement tags; final sections resolve with refrain/outro tags.
   `.trim();
@@ -506,19 +518,71 @@ function hasRequiredStructureTags(lyrics: string, required: string[]): boolean {
   return unique.every((tag) => lyrics.includes(tag));
 }
 
-function isMetaTagOrchestrationStrong(songText: string, plan: MetaTagPlan): boolean {
+function countSpecificTagHits(lyrics: string, tags: string[]): number {
+  if (!lyrics || !Array.isArray(tags)) return 0;
+  const uniqueTags = Array.from(new Set(tags.filter(Boolean)));
+  return uniqueTags.reduce((count, tag) => count + (lyrics.includes(tag) ? 1 : 0), 0);
+}
+
+function clamp01(v: number): number {
+  if (!Number.isFinite(v)) return 0;
+  return Math.max(0, Math.min(1, v));
+}
+
+function getMetaTagOrchestrationMetrics(songText: string, plan: MetaTagPlan) {
   const lyrics = extractLyricsBody(songText);
-  if (!lyrics) return false;
+  if (!lyrics) {
+    return {
+      strong: false,
+      score: 0,
+      tagCount: 0,
+      adlibCount: 0,
+      hasStructure: false,
+      accentHits: 0,
+      moodHits: 0,
+      hasVocalTypeTag: false,
+    };
+  }
   const tagCount = countBracketTags(lyrics);
   const adlibCount = countAdlibs(lyrics);
   const hasStructure = hasRequiredStructureTags(lyrics, plan.structureTags);
-  return hasStructure && tagCount >= plan.minTagCount && adlibCount >= plan.minAdlibCount;
+  const accentHits = countSpecificTagHits(lyrics, plan.genreAccentTags);
+  const moodHits = countSpecificTagHits(lyrics, plan.moodEnergyTags);
+  const hasVocalTypeTag = !plan.requireVocalTypeTag || lyrics.includes(plan.vocalTypeTag);
+
+  const structureScore = hasStructure ? 1 : 0;
+  const tagDensityScore = clamp01(tagCount / Math.max(1, plan.minTagCount));
+  const adlibScore = clamp01(adlibCount / Math.max(1, plan.minAdlibCount));
+  const accentScore = clamp01(accentHits / Math.max(1, plan.requiredAccentHits));
+  const moodScore = clamp01(moodHits / Math.max(1, plan.requiredMoodHits));
+  const vocalScore = hasVocalTypeTag ? 1 : 0;
+
+  const score = Math.round(
+    structureScore * 40 +
+      tagDensityScore * 22 +
+      adlibScore * 18 +
+      accentScore * 10 +
+      moodScore * 6 +
+      vocalScore * 4
+  );
+
+  const strong =
+    hasStructure &&
+    tagCount >= plan.minTagCount &&
+    adlibCount >= plan.minAdlibCount &&
+    accentHits >= plan.requiredAccentHits &&
+    moodHits >= plan.requiredMoodHits &&
+    hasVocalTypeTag &&
+    score >= 85;
+
+  return { strong, score, tagCount, adlibCount, hasStructure, accentHits, moodHits, hasVocalTypeTag };
 }
 
 async function enforceMetaTagOrchestration(songText: string, inputs: any): Promise<string> {
   if (!songText?.trim()) return songText;
   const pkg = await getMetaTagPackage(inputs || {});
-  if (isMetaTagOrchestrationStrong(songText, pkg.plan)) return songText;
+  const originalMetrics = getMetaTagOrchestrationMetrics(songText, pkg.plan);
+  if (originalMetrics.strong) return songText;
 
   const prompt = `
 You are a song structure orchestrator.
@@ -547,8 +611,9 @@ ${songText}
 
   try {
     const rewritten = await openAIResponses(prompt);
-    if (isMetaTagOrchestrationStrong(rewritten, pkg.plan)) return rewritten;
-    return songText;
+    const rewrittenMetrics = getMetaTagOrchestrationMetrics(rewritten, pkg.plan);
+    if (rewrittenMetrics.strong) return rewritten;
+    return rewrittenMetrics.score > originalMetrics.score ? rewritten : songText;
   } catch {
     return songText;
   }

@@ -8,6 +8,9 @@ export type MetaTagPlan = {
   adlibPolicy: string;
   minTagCount: number;
   minAdlibCount: number;
+  requiredAccentHits: number;
+  requiredMoodHits: number;
+  requireVocalTypeTag: boolean;
 };
 
 export const META_TAG_CATEGORIES: TagCategoryMap = {
@@ -158,6 +161,61 @@ function inferAdlibPolicy(genre?: string): string {
   return "Use tasteful adlibs in parentheses only where they add musicality, not in every line.";
 }
 
+function inferDensityProfile(genre?: string, subGenre?: string): {
+  minTagCount: number;
+  minAdlibCount: number;
+  requiredAccentHits: number;
+  requiredMoodHits: number;
+} {
+  const g = (genre || "").toLowerCase();
+  const sg = (subGenre || "").toLowerCase();
+  const combined = `${g} ${sg}`;
+
+  if (
+    combined.includes("hip-hop") ||
+    combined.includes("rap") ||
+    combined.includes("trap") ||
+    combined.includes("drill") ||
+    combined.includes("grime") ||
+    combined.includes("boom bap")
+  ) {
+    return { minTagCount: 14, minAdlibCount: 8, requiredAccentHits: 2, requiredMoodHits: 1 };
+  }
+
+  if (
+    combined.includes("r&b") ||
+    combined.includes("soul") ||
+    combined.includes("gospel") ||
+    combined.includes("afrobeats") ||
+    combined.includes("reggaeton") ||
+    combined.includes("dancehall")
+  ) {
+    return { minTagCount: 12, minAdlibCount: 6, requiredAccentHits: 2, requiredMoodHits: 1 };
+  }
+
+  if (
+    combined.includes("pop") ||
+    combined.includes("rock") ||
+    combined.includes("metal") ||
+    combined.includes("edm") ||
+    combined.includes("electronic")
+  ) {
+    return { minTagCount: 11, minAdlibCount: 4, requiredAccentHits: 2, requiredMoodHits: 1 };
+  }
+
+  if (
+    combined.includes("folk") ||
+    combined.includes("jazz") ||
+    combined.includes("blues") ||
+    combined.includes("country") ||
+    combined.includes("classical")
+  ) {
+    return { minTagCount: 9, minAdlibCount: 2, requiredAccentHits: 1, requiredMoodHits: 1 };
+  }
+
+  return { minTagCount: 10, minAdlibCount: 3, requiredAccentHits: 1, requiredMoodHits: 1 };
+}
+
 export function buildMetaTagGuidance(inputs: {
   genre?: string;
   subGenre?: string;
@@ -190,9 +248,8 @@ export function buildMetaTagPlan(inputs: {
   emotion?: string;
 }): MetaTagPlan {
   const structureTags = inferPrimaryStructureTags(inputs.genre);
-  const genre = (inputs.genre || "").toLowerCase();
-  const adlibHeavy = genre.includes("hip-hop") || genre.includes("rap") || genre.includes("trap") || genre.includes("afrobeats");
-  const adlibMedium = genre.includes("r&b") || genre.includes("soul") || genre.includes("gospel") || genre.includes("reggae");
+  const profile = inferDensityProfile(inputs.genre, inputs.subGenre);
+  const minTagCount = Math.max(profile.minTagCount, structureTags.length + 3);
 
   return {
     structureTags,
@@ -200,8 +257,11 @@ export function buildMetaTagPlan(inputs: {
     moodEnergyTags: inferEnergyMoodTags(inputs.emotion),
     genreAccentTags: inferGenreAccentTags(inputs.genre, inputs.subGenre),
     adlibPolicy: inferAdlibPolicy(inputs.genre),
-    minTagCount: Math.max(10, structureTags.length + 3),
-    minAdlibCount: adlibHeavy ? 6 : adlibMedium ? 4 : 2,
+    minTagCount,
+    minAdlibCount: profile.minAdlibCount,
+    requiredAccentHits: profile.requiredAccentHits,
+    requiredMoodHits: profile.requiredMoodHits,
+    requireVocalTypeTag: true,
   };
 }
 
@@ -220,6 +280,9 @@ Strict meta-tag orchestration plan:
 - Genre/subgenre accent tags to include naturally: ${plan.genreAccentTags.join(", ")}
 - Minimum bracket tags in Lyrics body: ${plan.minTagCount}
 - Minimum adlibs in parentheses: ${plan.minAdlibCount}
+- Minimum genre-accent tag hits: ${plan.requiredAccentHits}
+- Minimum mood/energy tag hits: ${plan.requiredMoodHits}
+- Required vocal identity tag must appear in Lyrics: ${plan.requireVocalTypeTag ? "yes" : "no"}
 - Adlib policy: ${plan.adlibPolicy}
 - Tag logic: opening sections establish mood + voice; mid-song sections escalate arrangement tags; final sections resolve with refrain/outro tags.
 `.trim();
