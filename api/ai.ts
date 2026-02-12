@@ -426,27 +426,27 @@ No watermark, no logo, no extra text.
 The attached avatar image is the PRIMARY identity reference.
 Keep the same person facial structure, hair, skin tone, and distinguishing features.`;
 
-  if (imageProvider === "gemini") {
-    if (avatarBlob) {
-      try {
-        return { imageDataUrl: await geminiEditImageWithAvatar(avatarPrompt, avatarBlob) };
-      } catch (error: any) {
-        throw new Error(
-          `Avatar-referenced image generation failed. ${error?.message || "Gemini edit request failed."}`
-        );
-      }
-    }
-    return { imageDataUrl: await geminiGenerateImage(prompt, ratio) };
-  }
-
   if (avatarBlob) {
+    // Avatar-referenced editing is most reliable through OpenAI image edits.
+    // Gemini edit-with-reference requires Vertex AI auth in some environments.
     try {
       return { imageDataUrl: await openAIImageEditWithAvatar(avatarPrompt, ratio, avatarBlob) };
     } catch (error: any) {
-      throw new Error(
-        `Avatar-referenced image generation failed. ${error?.message || "OpenAI image edit failed."}`
-      );
+      if (imageProvider === "gemini") {
+        try {
+          return { imageDataUrl: await geminiEditImageWithAvatar(avatarPrompt, avatarBlob) };
+        } catch (geminiError: any) {
+          throw new Error(
+            `Avatar-referenced image generation failed. ${geminiError?.message || error?.message || "Image edit failed."}`
+          );
+        }
+      }
+      throw new Error(`Avatar-referenced image generation failed. ${error?.message || "OpenAI image edit failed."}`);
     }
+  }
+
+  if (imageProvider === "gemini") {
+    return { imageDataUrl: await geminiGenerateImage(prompt, ratio) };
   }
 
   return { imageDataUrl: await openAIImage(prompt, ratio) };
