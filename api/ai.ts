@@ -3,6 +3,11 @@ import { ConvexHttpClient } from "convex/browser";
 import { makeFunctionReference } from "convex/server";
 import { GoogleGenAI } from "@google/genai";
 
+export const config = {
+  runtime: "nodejs",
+  maxDuration: 60,
+};
+
 type AIAction =
   | "generateSong"
   | "editSong"
@@ -284,7 +289,7 @@ function getGeminiVisionModel(): string {
 }
 
 function shouldRunMultiPassRefinement(): boolean {
-  return process.env.AI_MULTIPASS_REFINEMENT === "1";
+  return process.env.AI_MULTIPASS_REFINEMENT !== "0";
 }
 
 function shouldRunDeepAudit(): boolean {
@@ -480,6 +485,7 @@ Rules:
 - Preserve the original language and regional variant.
 - Keep strong genre/subgenre identity and avoid cliche stock lines.
 - Improve metaphors, cadence, rhyme texture, and scene authenticity.
+- Keep line-to-line narrative continuity so verses feel connected, not like isolated one-liners.
 - Do not add stereotypes, slurs, or tokenized dialect.
 - Keep title and hook memorable and aligned with the core story.
 - Keep section meta tags consistent and musically meaningful.
@@ -541,10 +547,54 @@ function parseStructuredSong(songText: string): { title: string; sunoPrompt: str
   return { title, sunoPrompt, lyrics };
 }
 
-function clampPromptLength(text: string, maxLength = 420): string {
+function clampPromptLength(text: string, maxLength = 260): string {
   const clean = text.replace(/\s+/g, " ").trim();
   if (clean.length <= maxLength) return clean;
   return `${clean.slice(0, maxLength - 1).trim()}.`;
+}
+
+function inferExpectedVocalIdentity(vocals: string | undefined): "male" | "female" | "duet" | "group" | null {
+  const value = (vocals || "").toLowerCase();
+  if (!value) return null;
+  if (value.includes("duet") || value.includes("duo")) return "duet";
+  if (value.includes("group") || value.includes("choir")) return "group";
+  if (value.includes("male")) return "male";
+  if (value.includes("female")) return "female";
+  return null;
+}
+
+function alignVocalIdentityInLyrics(lyrics: string, vocals: string | undefined): string {
+  const expected = inferExpectedVocalIdentity(vocals);
+  if (!expected || !lyrics?.trim()) return lyrics;
+
+  let next = lyrics;
+  if (expected === "female") {
+    next = next
+      .replace(/\[vocalist:\s*male\]/gi, "[Vocalist: Female]")
+      .replace(/\[male vocal\]/gi, "[Female Vocal]");
+  } else if (expected === "male") {
+    next = next
+      .replace(/\[vocalist:\s*female\]/gi, "[Vocalist: Male]")
+      .replace(/\[female vocal\]/gi, "[Male Vocal]");
+  } else if (expected === "duet" || expected === "group") {
+    next = next
+      .replace(/\[vocalist:\s*(male|female)\]/gi, "[Vocalist: Duet]")
+      .replace(/\[(male|female)\s+vocal\]/gi, "[Duet]");
+  }
+
+  const hasVocalTag =
+    /\[vocalist:\s*(male|female|duet|group)\]/i.test(next) ||
+    /\[(male vocal|female vocal|duet|choir)\]/i.test(next);
+  if (!hasVocalTag) {
+    const injected =
+      expected === "female"
+        ? "[Vocalist: Female]"
+        : expected === "male"
+          ? "[Vocalist: Male]"
+          : "[Vocalist: Duet]";
+    return `${injected}\n${next}`.trim();
+  }
+  return next;
 }
 
 async function buildSunoPromptDriver(inputs: any, userProfile: any): Promise<string> {
@@ -572,24 +622,25 @@ async function buildSunoPromptDriver(inputs: any, userProfile: any): Promise<str
     }) || DEFAULT_WRITING_PROFILE;
 
   const subProfile = logic?.getSubgenreSonicProfile?.(subGenre) || DEFAULT_SUBGENRE_PROFILE;
-  const genreProfile = logic?.getGenreProfile?.(genre) || DEFAULT_GENRE_PROFILE;
+  const maxLen = Number(process.env.AI_SUNO_PROMPT_MAX_LEN || 260);
 
   const referenceClause = referenceArtist ? `; reference feel: ${referenceArtist}` : "";
   const prompt = `
-${genre}/${subGenre} in ${language} (${writingProfile.languageVariant}); ${subProfile.bpmRange} pulse, ${subProfile.groove}.
-Core instrumentation: ${instrumentation}; production: ${subProfile.productionStyle}; arrangement: ${genreProfile.defaultStructure}.
-Vocals: ${vocals}${duetType}; mood: ${emotion}; vibe: ${vibe}; scene: ${scene}; mix: ${audioEnv}${referenceClause}.
-Use culturally authentic ${writingProfile.cultureRegion} phrasing, concrete imagery, and non-cliche writing.
+${genre}/${subGenre} in ${language}; ${subProfile.bpmRange} pulse with ${subProfile.groove}.
+Core sound: ${instrumentation}; ${subProfile.productionStyle}; ${audioEnv}.
+Vocals: ${vocals}${duetType}; mood: ${emotion}; vibe: ${vibe}; scene: ${scene}${referenceClause}.
+Cultural lens: ${writingProfile.languageVariant}, ${writingProfile.cultureRegion}; concrete, non-cliche writing.
   `.trim();
 
-  return clampPromptLength(prompt);
+  return clampPromptLength(prompt, maxLen);
 }
 
 async function enforceSunoPromptDriver(songText: string, inputs: any, userProfile: any): Promise<string> {
   if (!songText?.trim()) return songText;
   const parsed = parseStructuredSong(songText);
   const driverPrompt = await buildSunoPromptDriver(inputs || {}, userProfile || {});
-  return `Title: ${parsed.title}\n### SUNO Prompt\n${driverPrompt}\n### Lyrics\n${parsed.lyrics}`.trim();
+  const alignedLyrics = alignVocalIdentityInLyrics(parsed.lyrics, inputs?.vocals);
+  return `Title: ${parsed.title}\n### SUNO Prompt\n${driverPrompt}\n### Lyrics\n${alignedLyrics}`.trim();
 }
 
 function countBracketTags(lyrics: string): number {
@@ -751,15 +802,98 @@ type SongDepthMetrics = {
   chorusEvolutionDelta: number;
   dynamicContour: boolean;
   narratorMismatch: boolean;
+  adlibCount: number;
+  continuityOverlap: number;
+  anchorReuse: number;
+  lexicalDiversity: number;
+  oneLinerRisk: boolean;
   issues: string[];
 };
 
+function getLyricNarrativeContinuity(songText: string): {
+  continuityOverlap: number;
+  anchorReuse: number;
+  lexicalDiversity: number;
+  oneLinerRisk: boolean;
+} {
+  const lyrics = extractLyricsBody(songText || "");
+  const lines = lyrics
+    .split("\n")
+    .map((line) => line.trim())
+    .filter(Boolean)
+    .filter((line) => !/^\[[^\]]+\]$/.test(line))
+    .map((line) => line.replace(/\([^)\n]{1,60}\)/g, "").trim())
+    .filter(Boolean);
+
+  const tokenizedByLine = lines.map((line) => {
+    const clean = line
+      .toLowerCase()
+      .replace(/[^\p{L}\p{N}'\s]/gu, " ")
+      .trim();
+    return Array.from(
+      new Set(
+        clean
+          .split(/\s+/)
+          .map((part) => part.trim())
+          .filter((part) => part.length >= 3 && !/^\d+$/.test(part))
+      )
+    );
+  });
+
+  const jaccard = (a: string[], b: string[]): number => {
+    if (!a.length || !b.length) return 0;
+    const bSet = new Set(b);
+    let intersection = 0;
+    for (const token of a) {
+      if (bSet.has(token)) intersection += 1;
+    }
+    const union = new Set([...a, ...b]).size;
+    return union ? intersection / union : 0;
+  };
+
+  let overlapTotal = 0;
+  let overlapPairs = 0;
+  for (let i = 1; i < tokenizedByLine.length; i += 1) {
+    const prev = tokenizedByLine[i - 1];
+    const current = tokenizedByLine[i];
+    if (prev.length >= 2 && current.length >= 2) {
+      overlapTotal += jaccard(prev, current);
+      overlapPairs += 1;
+    }
+  }
+  const continuityOverlap = overlapPairs ? overlapTotal / overlapPairs : 0;
+
+  const tokenLineHits = new Map<string, number>();
+  const uniqueTokenPool = new Set<string>();
+  let totalTokenCount = 0;
+  for (const lineTokens of tokenizedByLine) {
+    totalTokenCount += lineTokens.length;
+    for (const token of lineTokens) {
+      uniqueTokenPool.add(token);
+      tokenLineHits.set(token, (tokenLineHits.get(token) || 0) + 1);
+    }
+  }
+
+  const anchorReuse = Array.from(tokenLineHits.values()).filter((count) => count >= 3).length;
+  const lexicalDiversity = totalTokenCount ? uniqueTokenPool.size / totalTokenCount : 1;
+  const oneLinerRisk =
+    lines.length >= 8 &&
+    continuityOverlap < 0.07 &&
+    anchorReuse < 2 &&
+    lexicalDiversity > 0.86;
+
+  return { continuityOverlap, anchorReuse, lexicalDiversity, oneLinerRisk };
+}
+
 function getSongDepthMetrics(songText: string): SongDepthMetrics {
+  const lyrics = extractLyricsBody(songText);
   const clicheHits = countClicheHits(songText);
   const performanceTagCount = countPerformanceTags(songText);
   const chorusEvolutionDelta = getChorusEvolutionDelta(songText);
   const dynamicContour = hasDynamicContour(songText);
   const narratorMismatch = hasNarratorIdentityMismatch(songText);
+  const adlibCount = countAdlibs(lyrics);
+  const continuity = getLyricNarrativeContinuity(songText);
 
   let score = 100;
   const issues: string[] = [];
@@ -779,6 +913,13 @@ function getSongDepthMetrics(songText: string): SongDepthMetrics {
     score -= 15;
     issues.push("Performance tags are too shallow to drive arrangement and delivery.");
   }
+  if (adlibCount < 3) {
+    score -= 10;
+    issues.push("Adlibs are too sparse to support vocal texture and personality.");
+  } else if (adlibCount > 18) {
+    score -= 8;
+    issues.push("Adlibs are overused and can feel noisy or gimmicky.");
+  }
   if (chorusEvolutionDelta < 2) {
     score -= 15;
     issues.push("Chorus repeats do not evolve enough across passes.");
@@ -787,9 +928,36 @@ function getSongDepthMetrics(songText: string): SongDepthMetrics {
     score -= 10;
     issues.push("Dynamic contour is flat; no clear low/high performance contrast.");
   }
+  if (continuity.oneLinerRisk) {
+    score -= 18;
+    issues.push("Verses read as disconnected one-liners instead of a continuous scene.");
+  } else if (continuity.continuityOverlap < 0.05) {
+    score -= 8;
+    issues.push("Adjacent lyric lines do not connect enough narratively.");
+  }
+  if (continuity.anchorReuse < 1) {
+    score -= 6;
+    issues.push("Not enough recurring anchors/themes across lines to create coherence.");
+  }
+  if (continuity.lexicalDiversity < 0.35) {
+    score -= 6;
+    issues.push("Word choices are too repetitive and reduce lyrical texture.");
+  }
 
   score = Math.max(0, score);
-  const strong = score >= 82 && !narratorMismatch && clicheHits <= 1 && performanceTagCount >= 3 && chorusEvolutionDelta >= 2 && dynamicContour;
+  const strong =
+    score >= 86 &&
+    !narratorMismatch &&
+    clicheHits <= 1 &&
+    performanceTagCount >= 4 &&
+    chorusEvolutionDelta >= 2 &&
+    dynamicContour &&
+    adlibCount >= 3 &&
+    adlibCount <= 18 &&
+    !continuity.oneLinerRisk &&
+    continuity.continuityOverlap >= 0.05 &&
+    continuity.anchorReuse >= 1 &&
+    continuity.lexicalDiversity >= 0.35;
 
   return {
     score,
@@ -799,19 +967,28 @@ function getSongDepthMetrics(songText: string): SongDepthMetrics {
     chorusEvolutionDelta,
     dynamicContour,
     narratorMismatch,
+    adlibCount,
+    continuityOverlap: continuity.continuityOverlap,
+    anchorReuse: continuity.anchorReuse,
+    lexicalDiversity: continuity.lexicalDiversity,
+    oneLinerRisk: continuity.oneLinerRisk,
     issues,
   };
 }
 
 async function enforceSongDepthAndTexture(songText: string, inputs: any, userProfile: any): Promise<string> {
   if (!songText?.trim()) return songText;
-  const initial = getSongDepthMetrics(songText);
-  if (initial.strong) return songText;
+  let currentSong = songText;
+  let currentMetrics = getSongDepthMetrics(currentSong);
+  if (currentMetrics.strong) return currentSong;
 
-  const issueList = initial.issues.length ? initial.issues.map((issue) => `- ${issue}`).join("\n") : "- Improve texture and specificity.";
   const bannedPhraseList = SONG_CLICHE_PATTERNS.map((pattern) => pattern.source.replace(/\\b/g, "")).slice(0, 8).join(", ");
 
-  const prompt = `
+  for (let attempt = 0; attempt < 2; attempt += 1) {
+    const issueList = currentMetrics.issues.length
+      ? currentMetrics.issues.map((issue) => `- ${issue}`).join("\n")
+      : "- Improve texture and specificity.";
+    const prompt = `
 You are a top-tier songwriter and lyric doctor.
 Rewrite this song to increase texture, originality, and performance depth while preserving core story and emotional intent.
 
@@ -826,10 +1003,12 @@ Hard constraints:
 - Keep language and genre/subgenre intent intact.
 - Make narrator identity consistent with vocalist tags.
 - Replace hallmark/generic wording with concrete, specific imagery.
-- Add arrangement-driving performance tags (at least 3 non-section tags such as [Whisper], [Falsetto], [Harmony Stack], [Drop], [Half-Time], [Belt], [Call-and-Response]).
+- Maintain narrative continuity: verses should feel like unfolding scenes, not disconnected aphorisms.
+- Reuse thematic anchors across sections so the story feels coherent.
+- Add arrangement-driving performance tags (at least 4 non-section tags such as [Whisper], [Falsetto], [Harmony Stack], [Drop], [Half-Time], [Belt], [Call-and-Response]).
 - Ensure each repeated chorus evolves meaningfully (at least 2 changed lines while preserving hook identity).
 - Establish dynamic contour across sections (soft/low moments and high/intense moments).
-- Keep adlibs musical, intentional, and style-aware.
+- Keep adlibs musical, intentional, and style-aware (target range: 3 to 18 total).
 
 Detected issues to fix:
 ${issueList}
@@ -845,16 +1024,95 @@ Session context:
 - Artist persona: ${userProfile?.display_name || "N/A"} | vibe: ${userProfile?.preferred_vibe || "N/A"}
 
 Song:
-${songText}
-  `.trim();
-
-  try {
-    const rewritten = await openAIResponses(prompt);
-    const updated = getSongDepthMetrics(rewritten);
-    return updated.score > initial.score ? rewritten : songText;
-  } catch {
-    return songText;
+${currentSong}
+    `.trim();
+    try {
+      const rewritten = await openAIResponses(prompt);
+      const updated = getSongDepthMetrics(rewritten);
+      if (updated.score > currentMetrics.score) {
+        currentSong = rewritten;
+        currentMetrics = updated;
+      }
+      if (currentMetrics.strong) break;
+    } catch {
+      break;
+    }
   }
+  return currentSong;
+}
+
+function isStructuralSectionTag(tag: string): boolean {
+  const value = (tag || "").trim().toLowerCase();
+  return (
+    /^\[(intro|verse|pre-chorus|prechorus|chorus|post-chorus|postchorus|bridge|outro)(\s*\d+)?\]$/.test(value) ||
+    /^\[(hook|interlude|refrain|ad-lib section|adlib section|end)(\s*\d+)?\]$/.test(value)
+  );
+}
+
+function getSectionBlocksForCoverage(lyrics: string): Array<{ tag: string; lines: string[] }> {
+  const lines = (lyrics || "").split("\n");
+  const blocks: Array<{ tag: string; lines: string[] }> = [];
+  let current: { tag: string; lines: string[] } | null = null;
+
+  for (const raw of lines) {
+    const line = raw.trim();
+    if (!line) continue;
+
+    const firstTagMatch = line.match(/^\s*(\[[^\]\n]{2,80}\])/);
+    const firstTag = firstTagMatch?.[1] || "";
+    if (firstTag && isStructuralSectionTag(firstTag)) {
+      current = { tag: firstTag, lines: [] };
+      blocks.push(current);
+      const remainder = line.slice(line.indexOf(firstTag) + firstTag.length).trim();
+      if (remainder) current.lines.push(remainder);
+      continue;
+    }
+
+    if (!current) {
+      current = { tag: "[Verse]", lines: [] };
+      blocks.push(current);
+    }
+    current.lines.push(line);
+  }
+
+  return blocks;
+}
+
+function getSectionTagCoverage(lyrics: string): {
+  coreSectionCount: number;
+  coreTaggedSections: number;
+  coreCoverage: number;
+  chorusCount: number;
+  chorusTaggedSections: number;
+  chorusCoverage: number;
+} {
+  const blocks = getSectionBlocksForCoverage(lyrics);
+  const coreBlocks = blocks.filter((block) =>
+    /^\[(intro|verse|pre-chorus|prechorus|chorus|bridge|outro)(\s*\d+)?\]$/i.test(block.tag)
+  );
+  const chorusBlocks = coreBlocks.filter((block) => /^\[chorus(\s*\d+)?\]$/i.test(block.tag));
+
+  const hasSectionMeta = (block: { tag: string; lines: string[] }): boolean => {
+    const body = block.lines.join("\n");
+    const tags = body.match(/\[[^\]\n]{2,80}\]/g) || [];
+    const nonSectionTags = tags.filter((tag) => !isSectionTag(tag)).length;
+    const adlibs = countAdlibs(body);
+    return nonSectionTags + adlibs > 0;
+  };
+
+  const coreTaggedSections = coreBlocks.filter(hasSectionMeta).length;
+  const chorusTaggedSections = chorusBlocks.filter(hasSectionMeta).length;
+  const coreCoverage = coreBlocks.length ? coreTaggedSections / coreBlocks.length : 0;
+  const chorusCoverage = chorusBlocks.length ? chorusTaggedSections / chorusBlocks.length : 1;
+
+  return {
+    coreSectionCount: coreBlocks.length,
+    coreTaggedSections,
+    coreCoverage,
+    chorusCount: chorusBlocks.length,
+    chorusTaggedSections,
+    chorusCoverage,
+  };
 }
 
 function getMetaTagOrchestrationMetrics(songText: string, plan: MetaTagPlan) {
@@ -869,6 +1127,8 @@ function getMetaTagOrchestrationMetrics(songText: string, plan: MetaTagPlan) {
       accentHits: 0,
       moodHits: 0,
       hasVocalTypeTag: false,
+      coreCoverage: 0,
+      chorusCoverage: 0,
     };
   }
   const tagCount = countBracketTags(lyrics);
@@ -877,6 +1137,7 @@ function getMetaTagOrchestrationMetrics(songText: string, plan: MetaTagPlan) {
   const accentHits = countSpecificTagHits(lyrics, plan.genreAccentTags);
   const moodHits = countSpecificTagHits(lyrics, plan.moodEnergyTags);
   const hasVocalTypeTag = !plan.requireVocalTypeTag || lyrics.includes(plan.vocalTypeTag);
+  const coverage = getSectionTagCoverage(lyrics);
 
   const structureScore = hasStructure ? 1 : 0;
   const tagDensityScore = clamp01(tagCount / Math.max(1, plan.minTagCount));
@@ -884,14 +1145,18 @@ function getMetaTagOrchestrationMetrics(songText: string, plan: MetaTagPlan) {
   const accentScore = clamp01(accentHits / Math.max(1, plan.requiredAccentHits));
   const moodScore = clamp01(moodHits / Math.max(1, plan.requiredMoodHits));
   const vocalScore = hasVocalTypeTag ? 1 : 0;
+  const coreCoverageScore = clamp01(coverage.coreCoverage);
+  const chorusCoverageScore = clamp01(coverage.chorusCoverage);
 
   const score = Math.round(
-    structureScore * 40 +
-      tagDensityScore * 22 +
-      adlibScore * 18 +
+    structureScore * 30 +
+      tagDensityScore * 18 +
+      adlibScore * 15 +
       accentScore * 10 +
       moodScore * 6 +
-      vocalScore * 4
+      vocalScore * 4 +
+      coreCoverageScore * 10 +
+      chorusCoverageScore * 7
   );
 
   const strong =
@@ -901,18 +1166,34 @@ function getMetaTagOrchestrationMetrics(songText: string, plan: MetaTagPlan) {
     accentHits >= plan.requiredAccentHits &&
     moodHits >= plan.requiredMoodHits &&
     hasVocalTypeTag &&
+    coverage.coreCoverage >= 0.8 &&
+    coverage.chorusCoverage >= 1 &&
     score >= 85;
 
-  return { strong, score, tagCount, adlibCount, hasStructure, accentHits, moodHits, hasVocalTypeTag };
+  return {
+    strong,
+    score,
+    tagCount,
+    adlibCount,
+    hasStructure,
+    accentHits,
+    moodHits,
+    hasVocalTypeTag,
+    coreCoverage: coverage.coreCoverage,
+    chorusCoverage: coverage.chorusCoverage,
+  };
 }
 
 async function enforceMetaTagOrchestration(songText: string, inputs: any): Promise<string> {
   if (!songText?.trim()) return songText;
   const pkg = await getMetaTagPackage(inputs || {});
-  const originalMetrics = getMetaTagOrchestrationMetrics(songText, pkg.plan);
-  if (originalMetrics.strong) return songText;
+  let bestText = songText;
+  let bestMetrics = getMetaTagOrchestrationMetrics(songText, pkg.plan);
+  if (bestMetrics.strong) return songText;
 
-  const prompt = `
+  for (let attempt = 0; attempt < 3; attempt += 1) {
+    const missingCoreCoverage = Math.max(0, 0.8 - bestMetrics.coreCoverage);
+    const prompt = `
 You are a song structure orchestrator.
 Rewrite the song so tags/adlibs are logical, dynamic, and genre-specific without changing the core meaning.
 
@@ -926,6 +1207,16 @@ Title: ...
 Hard requirements:
 ${pkg.strictSpec}
 
+Additional enforcement:
+- Every core section ([Intro]/[Verse]/[Pre-Chorus]/[Chorus]/[Bridge]/[Outro]) should include at least one non-structural performance tag or a musically useful adlib.
+- Every [Chorus] must contain at least one arrangement/vocal meta tag or adlib.
+- Do not stack all tags in one section; distribute them throughout the song arc.
+
+Current quality deficits:
+- Core section tag coverage: ${(bestMetrics.coreCoverage * 100).toFixed(0)}% (target 80%+)
+- Chorus tag coverage: ${(bestMetrics.chorusCoverage * 100).toFixed(0)}% (target 100%)
+- Missing core coverage gap: ${(missingCoreCoverage * 100).toFixed(0)}%
+
 Constraints:
 - Keep language, genre, and story intent unchanged.
 - Keep section order logical and musically performable.
@@ -934,17 +1225,22 @@ Constraints:
 - Maintain coherent progression from intro to outro.
 
 Song to rewrite:
-${songText}
-  `.trim();
+${bestText}
+    `.trim();
 
-  try {
-    const rewritten = await openAIResponses(prompt);
-    const rewrittenMetrics = getMetaTagOrchestrationMetrics(rewritten, pkg.plan);
-    if (rewrittenMetrics.strong) return rewritten;
-    return rewrittenMetrics.score > originalMetrics.score ? rewritten : songText;
-  } catch {
-    return songText;
+    try {
+      const rewritten = await openAIResponses(prompt);
+      const rewrittenMetrics = getMetaTagOrchestrationMetrics(rewritten, pkg.plan);
+      if (rewrittenMetrics.score > bestMetrics.score) {
+        bestText = rewritten;
+        bestMetrics = rewrittenMetrics;
+      }
+      if (bestMetrics.strong) break;
+    } catch {
+      break;
+    }
   }
+  return bestText;
 }
 
 function parseLooseJson(text: string): any | null {
@@ -1077,17 +1373,35 @@ const getUserProfileByEmailRef = makeFunctionReference<"query">("app:getUserProf
 
 async function openAIResponses(prompt: string, model = getTextModel()): Promise<string> {
   const apiKey = getOpenAIApiKey();
-  const response = await fetch("https://api.openai.com/v1/responses", {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-      Authorization: `Bearer ${apiKey}`,
-    },
-    body: JSON.stringify({
-      model,
-      input: prompt,
-    }),
-  });
+  const timeoutMs = Number(process.env.AI_HTTP_TIMEOUT_MS || 25000);
+  const controller = new AbortController();
+  const timeout = setTimeout(() => controller.abort(), timeoutMs);
+  let response: Response;
+
+  try {
+    response = await fetch("https://api.openai.com/v1/responses", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${apiKey}`,
+      },
+      body: JSON.stringify({
+        model,
+        input: prompt,
+      }),
+      signal: controller.signal,
+    });
+  } catch (error: any) {
+    if (error?.name === "AbortError") {
+      throw Object.assign(new Error(`AI text request timed out after ${timeoutMs}ms.`), {
+        status: 504,
+        code: "provider_timeout",
+      });
+    }
+    throw error;
+  } finally {
+    clearTimeout(timeout);
+  }
 
   if (!response.ok) {
     let errorCode = "provider_error";
@@ -1302,6 +1616,7 @@ Context:
 Non-negotiable writing directives:
 - The song must sound native to the selected language/region and faithful to the selected subgenre's writing traditions.
 - Avoid generic AI patterns, filler hooks, and repetitive cliche imagery.
+- Ensure each verse has narrative continuity (linked lines that advance the same lived-in scene).
 - Distinguish verse cadence vs hook cadence clearly.
 - Make the SUNO prompt production-ready and specific to the same cultural/genre profile.
 - In Lyrics, use section meta tags from the library style (e.g., [Verse], [Chorus], [Bridge], [Ad-Lib Section]).
@@ -1316,10 +1631,10 @@ ${metaTagPackage.strictSpec}
   let finalText = draft;
 
   if (shouldRunMultiPassRefinement()) {
-    const refined = await culturallyRefineSong(draft, inputs || {}, userProfile || {});
-    finalText = await enforceMetaTagOrchestration(refined, inputs || {});
+    finalText = await culturallyRefineSong(draft, inputs || {}, userProfile || {});
   }
 
+  finalText = await enforceMetaTagOrchestration(finalText, inputs || {});
   finalText = await enforceSongDepthAndTexture(finalText, inputs || {}, userProfile || {});
   finalText = await enforceSunoPromptDriver(finalText, inputs || {}, userProfile || {});
 
@@ -1358,10 +1673,10 @@ ${originalSong || ""}
   let finalText = draft;
 
   if (shouldRunMultiPassRefinement()) {
-    const refined = await culturallyRefineSong(draft, inputs || {}, userProfile || {});
-    finalText = await enforceMetaTagOrchestration(refined, inputs || {});
+    finalText = await culturallyRefineSong(draft, inputs || {}, userProfile || {});
   }
 
+  finalText = await enforceMetaTagOrchestration(finalText, inputs || {});
   finalText = await enforceSongDepthAndTexture(finalText, inputs || {}, userProfile || {});
   finalText = await enforceSunoPromptDriver(finalText, inputs || {}, userProfile || {});
 
@@ -1399,10 +1714,10 @@ ${rawText || ""}
   let finalText = draft;
 
   if (shouldRunMultiPassRefinement()) {
-    const refined = await culturallyRefineSong(draft, inputs || {}, userProfile || {});
-    finalText = await enforceMetaTagOrchestration(refined, inputs || {});
+    finalText = await culturallyRefineSong(draft, inputs || {}, userProfile || {});
   }
 
+  finalText = await enforceMetaTagOrchestration(finalText, inputs || {});
   finalText = await enforceSongDepthAndTexture(finalText, inputs || {}, userProfile || {});
   finalText = await enforceSunoPromptDriver(finalText, inputs || {}, userProfile || {});
 
