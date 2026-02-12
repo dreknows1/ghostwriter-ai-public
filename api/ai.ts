@@ -541,6 +541,242 @@ function clamp01(v: number): number {
   return Math.max(0, Math.min(1, v));
 }
 
+const SONG_CLICHE_PATTERNS: RegExp[] = [
+  /\brain on the glass\b/i,
+  /\bgrew on trees\b/i,
+  /\bborrow my light\b/i,
+  /\bdays bled to weeks\b/i,
+  /\bcold fries\b/i,
+  /\bopen hands\b/i,
+  /\bsomeday plans?\b/i,
+  /\bbroken heart\b/i,
+  /\btears? (in|on) (my|your) (eyes?|face)\b/i,
+  /\blove (that|it) hurts\b/i,
+];
+
+const PERFORMANCE_TAG_HINTS: RegExp[] = [
+  /\[falsetto\]/i,
+  /\[head voice\]/i,
+  /\[whisper(?:ed)?\]/i,
+  /\[breathy\]/i,
+  /\[harmony(?: stack)?\]/i,
+  /\[double(?: track)?\]/i,
+  /\[octave(?: up| down)?\]/i,
+  /\[call[- ]and[- ]response\]/i,
+  /\[belt\]/i,
+  /\[soft(?:ly)?\]/i,
+  /\[riff(?:s)?\]/i,
+  /\[run(?:s)?\]/i,
+  /\[drop\]/i,
+  /\[breakdown\]/i,
+  /\[half[- ]time\]/i,
+];
+
+function extractAllBracketTags(text: string): string[] {
+  if (!text) return [];
+  const matches = text.match(/\[[^\]\n]{2,80}\]/g);
+  return Array.isArray(matches) ? matches : [];
+}
+
+function isSectionTag(tag: string): boolean {
+  const value = tag.trim().toLowerCase();
+  return (
+    /^\[(intro|verse|pre-chorus|prechorus|chorus|bridge|outro)(\s*\d+)?\]$/.test(value) ||
+    /^\[vocalist:\s*(male|female|duet|group)\]$/.test(value) ||
+    /^\[(energy|mood):/.test(value)
+  );
+}
+
+function countPerformanceTags(text: string): number {
+  const tags = extractAllBracketTags(text);
+  const tagHits = tags.filter((tag) => !isSectionTag(tag)).length;
+  const hintHits = PERFORMANCE_TAG_HINTS.reduce((count, pattern) => count + (pattern.test(text) ? 1 : 0), 0);
+  return Math.max(tagHits, hintHits);
+}
+
+function countClicheHits(text: string): number {
+  if (!text) return 0;
+  return SONG_CLICHE_PATTERNS.reduce((count, pattern) => count + (pattern.test(text) ? 1 : 0), 0);
+}
+
+function getChorusBlocks(songText: string): string[][] {
+  const lines = (songText || "").split("\n");
+  const blocks: string[][] = [];
+  for (let index = 0; index < lines.length; index += 1) {
+    const line = lines[index].trim().toLowerCase();
+    if (line === "[chorus]" || line.startsWith("[chorus ")) {
+      const block: string[] = [];
+      for (let cursor = index + 1; cursor < lines.length; cursor += 1) {
+        const candidate = lines[cursor].trim();
+        if (/^\[[^\]]+\]$/.test(candidate) && candidate.toLowerCase() !== "[build up]") break;
+        if (candidate) block.push(candidate.toLowerCase());
+      }
+      if (block.length) blocks.push(block);
+    }
+  }
+  return blocks;
+}
+
+function getChorusEvolutionDelta(songText: string): number {
+  const blocks = getChorusBlocks(songText);
+  if (blocks.length < 2) return 2;
+  const baseline = blocks[0];
+  let minDelta = Number.POSITIVE_INFINITY;
+  for (let index = 1; index < blocks.length; index += 1) {
+    const current = blocks[index];
+    const maxLines = Math.max(baseline.length, current.length);
+    let changed = 0;
+    for (let lineIndex = 0; lineIndex < maxLines; lineIndex += 1) {
+      if ((baseline[lineIndex] || "") !== (current[lineIndex] || "")) changed += 1;
+    }
+    minDelta = Math.min(minDelta, changed);
+  }
+  return Number.isFinite(minDelta) ? minDelta : 0;
+}
+
+function hasDynamicContour(text: string): boolean {
+  const lower = (text || "").toLowerCase();
+  const hasHigh = lower.includes("[energy: high]") || lower.includes("[build up]") || lower.includes("[belt]");
+  const hasLow =
+    lower.includes("[energy: low]") ||
+    lower.includes("[whisper]") ||
+    lower.includes("[soft]") ||
+    lower.includes("[breathy]");
+  return hasHigh && hasLow;
+}
+
+function hasNarratorIdentityMismatch(songText: string): boolean {
+  const lower = (songText || "").toLowerCase();
+  const male = /\[vocalist:\s*male\]/i.test(songText);
+  const female = /\[vocalist:\s*female\]/i.test(songText);
+
+  if (male) {
+    if (/\bi am (a )?woman\b/.test(lower)) return true;
+    if (/\bthe woman in\b/.test(lower)) return true;
+    if (/\bthis woman\b/.test(lower)) return true;
+  }
+  if (female) {
+    if (/\bi am (a )?man\b/.test(lower)) return true;
+    if (/\bthe man in\b/.test(lower)) return true;
+    if (/\bthis man\b/.test(lower)) return true;
+  }
+  return false;
+}
+
+type SongDepthMetrics = {
+  score: number;
+  strong: boolean;
+  clicheHits: number;
+  performanceTagCount: number;
+  chorusEvolutionDelta: number;
+  dynamicContour: boolean;
+  narratorMismatch: boolean;
+  issues: string[];
+};
+
+function getSongDepthMetrics(songText: string): SongDepthMetrics {
+  const clicheHits = countClicheHits(songText);
+  const performanceTagCount = countPerformanceTags(songText);
+  const chorusEvolutionDelta = getChorusEvolutionDelta(songText);
+  const dynamicContour = hasDynamicContour(songText);
+  const narratorMismatch = hasNarratorIdentityMismatch(songText);
+
+  let score = 100;
+  const issues: string[] = [];
+
+  if (narratorMismatch) {
+    score -= 30;
+    issues.push("Narrator identity does not match vocalist tag.");
+  }
+  if (clicheHits >= 3) {
+    score -= 25;
+    issues.push("Lexicon is cliche-heavy and reads generic.");
+  } else if (clicheHits >= 2) {
+    score -= 15;
+    issues.push("Some hallmark/cliche phrases reduce originality.");
+  }
+  if (performanceTagCount < 3) {
+    score -= 15;
+    issues.push("Performance tags are too shallow to drive arrangement and delivery.");
+  }
+  if (chorusEvolutionDelta < 2) {
+    score -= 15;
+    issues.push("Chorus repeats do not evolve enough across passes.");
+  }
+  if (!dynamicContour) {
+    score -= 10;
+    issues.push("Dynamic contour is flat; no clear low/high performance contrast.");
+  }
+
+  score = Math.max(0, score);
+  const strong = score >= 82 && !narratorMismatch && clicheHits <= 1 && performanceTagCount >= 3 && chorusEvolutionDelta >= 2 && dynamicContour;
+
+  return {
+    score,
+    strong,
+    clicheHits,
+    performanceTagCount,
+    chorusEvolutionDelta,
+    dynamicContour,
+    narratorMismatch,
+    issues,
+  };
+}
+
+async function enforceSongDepthAndTexture(songText: string, inputs: any, userProfile: any): Promise<string> {
+  if (!songText?.trim()) return songText;
+  const initial = getSongDepthMetrics(songText);
+  if (initial.strong) return songText;
+
+  const issueList = initial.issues.length ? initial.issues.map((issue) => `- ${issue}`).join("\n") : "- Improve texture and specificity.";
+  const bannedPhraseList = SONG_CLICHE_PATTERNS.map((pattern) => pattern.source.replace(/\\b/g, "")).slice(0, 8).join(", ");
+
+  const prompt = `
+You are a top-tier songwriter and lyric doctor.
+Rewrite this song to increase texture, originality, and performance depth while preserving core story and emotional intent.
+
+Return ONLY this exact format:
+Title: ...
+### SUNO Prompt
+...
+### Lyrics
+...
+
+Hard constraints:
+- Keep language and genre/subgenre intent intact.
+- Make narrator identity consistent with vocalist tags.
+- Replace hallmark/generic wording with concrete, specific imagery.
+- Add arrangement-driving performance tags (at least 3 non-section tags such as [Whisper], [Falsetto], [Harmony Stack], [Drop], [Half-Time], [Belt], [Call-and-Response]).
+- Ensure each repeated chorus evolves meaningfully (at least 2 changed lines while preserving hook identity).
+- Establish dynamic contour across sections (soft/low moments and high/intense moments).
+- Keep adlibs musical, intentional, and style-aware.
+
+Detected issues to fix:
+${issueList}
+
+Avoid these phrase patterns:
+${bannedPhraseList}
+
+Session context:
+- Genre: ${inputs?.genre || "Pop"}
+- Subgenre: ${inputs?.subGenre || "Modern"}
+- Language: ${inputs?.language || "English"}
+- Emotion: ${inputs?.emotion || "Euphoric"}
+- Artist persona: ${userProfile?.display_name || "N/A"} | vibe: ${userProfile?.preferred_vibe || "N/A"}
+
+Song:
+${songText}
+  `.trim();
+
+  try {
+    const rewritten = await openAIResponses(prompt);
+    const updated = getSongDepthMetrics(rewritten);
+    return updated.score > initial.score ? rewritten : songText;
+  } catch {
+    return songText;
+  }
+}
+
 function getMetaTagOrchestrationMetrics(songText: string, plan: MetaTagPlan) {
   const lyrics = extractLyricsBody(songText);
   if (!lyrics) {
@@ -1004,6 +1240,8 @@ ${metaTagPackage.strictSpec}
     finalText = await enforceMetaTagOrchestration(refined, inputs || {});
   }
 
+  finalText = await enforceSongDepthAndTexture(finalText, inputs || {}, userProfile || {});
+
   const audit = shouldRunDeepAudit()
     ? await evaluateCulturalAudit(finalText, inputs || {})
     : fallbackAudit(inputs || {});
@@ -1043,6 +1281,8 @@ ${originalSong || ""}
     finalText = await enforceMetaTagOrchestration(refined, inputs || {});
   }
 
+  finalText = await enforceSongDepthAndTexture(finalText, inputs || {}, userProfile || {});
+
   const audit = shouldRunDeepAudit()
     ? await evaluateCulturalAudit(finalText, inputs || {})
     : fallbackAudit(inputs || {});
@@ -1080,6 +1320,8 @@ ${rawText || ""}
     const refined = await culturallyRefineSong(draft, inputs || {}, userProfile || {});
     finalText = await enforceMetaTagOrchestration(refined, inputs || {});
   }
+
+  finalText = await enforceSongDepthAndTexture(finalText, inputs || {}, userProfile || {});
 
   const audit = shouldRunDeepAudit()
     ? await evaluateCulturalAudit(finalText, inputs || {})
