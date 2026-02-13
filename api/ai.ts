@@ -102,6 +102,25 @@ type MetaTagModule = {
   }) => string;
 };
 
+type GenreAgentModule = {
+  buildGenreAgentDirectives: (params: {
+    genre?: string;
+    subGenre?: string;
+    language?: string;
+    vocals?: string;
+    instrumentation?: string;
+    emotion?: string;
+    scene?: string;
+    audioEnv?: string;
+  }) => {
+    hasAgent: boolean;
+    agentId?: string;
+    subgenreMatched?: string;
+    sunoPromptDirectives: string;
+    lyricDirectives: string;
+  };
+};
+
 type MetaTagPlan = {
   structureTags: string[];
   vocalTypeTag: string;
@@ -152,6 +171,7 @@ const DEFAULT_SUBGENRE_PROFILE: SubgenreSonicProfile = {
 
 let culturalLogicPromise: Promise<CulturalLogicModule | null> | null = null;
 let metaTagModulePromise: Promise<MetaTagModule | null> | null = null;
+let genreAgentModulePromise: Promise<GenreAgentModule | null> | null = null;
 
 async function loadCulturalLogicModule(): Promise<CulturalLogicModule | null> {
   if (!culturalLogicPromise) {
@@ -185,6 +205,23 @@ async function loadMetaTagModule(): Promise<MetaTagModule | null> {
     })();
   }
   return metaTagModulePromise;
+}
+
+async function loadGenreAgentModule(): Promise<GenreAgentModule | null> {
+  if (!genreAgentModulePromise) {
+    genreAgentModulePromise = (async () => {
+      try {
+        return (await import("../lib/genreAgents")) as unknown as GenreAgentModule;
+      } catch {
+        try {
+          return (await import("../lib/genreAgents.ts")) as unknown as GenreAgentModule;
+        } catch {
+          return null;
+        }
+      }
+    })();
+  }
+  return genreAgentModulePromise;
 }
 
 function fallbackMetaTagGuidance(inputs: any): string {
@@ -254,6 +291,27 @@ async function getMetaTagPackage(inputs: any): Promise<MetaTagPackage> {
     strictSpec: fallbackStrictMetaTagSpec(inputs || {}),
     plan: fallbackMetaTagPlan(inputs || {}),
   };
+}
+
+async function getGenreAgentDirectives(inputs: any) {
+  const mod = await loadGenreAgentModule();
+  if (!mod || typeof mod.buildGenreAgentDirectives !== "function") {
+    return {
+      hasAgent: false,
+      sunoPromptDirectives: "",
+      lyricDirectives: "",
+    };
+  }
+  return mod.buildGenreAgentDirectives({
+    genre: inputs?.genre,
+    subGenre: inputs?.subGenre,
+    language: inputs?.language,
+    vocals: inputs?.vocals,
+    instrumentation: inputs?.instrumentation,
+    emotion: inputs?.emotion,
+    scene: inputs?.scene,
+    audioEnv: inputs?.audioEnv,
+  });
 }
 
 function sanitizeEmail(email?: string): string {
@@ -470,6 +528,7 @@ async function culturallyRefineSong(rawSong: string, inputs: any, userProfile: a
   if (!rawSong?.trim()) return rawSong;
   const culturalContext = await buildCulturalPromptContext(inputs);
   const metaTagPackage = await getMetaTagPackage(inputs || {});
+  const agentDirectives = await getGenreAgentDirectives(inputs || {});
   const prompt = `
 You are a senior lyric editor specializing in cultural authenticity.
 Refine the song below for cultural and stylistic accuracy while preserving intent and emotional arc.
@@ -498,6 +557,7 @@ Creator context:
 ${culturalContext}
 ${metaTagPackage.guidance}
 ${metaTagPackage.strictSpec}
+${agentDirectives.lyricDirectives}
 
 Song draft:
 ${rawSong}
@@ -679,6 +739,7 @@ function alignVocalIdentityInLyrics(lyrics: string, vocals: string | undefined):
 
 async function buildSunoPromptDriver(inputs: any, userProfile: any): Promise<string> {
   const logic = await loadCulturalLogicModule();
+  const agentDirectives = await getGenreAgentDirectives(inputs || {});
 
   const language = inputs?.language || "English";
   const genre = inputs?.genre || "Pop";
@@ -716,7 +777,7 @@ async function buildSunoPromptDriver(inputs: any, userProfile: any): Promise<str
   const instrumentFocus = inferInstrumentFocus(instrumentation, genre);
 
   const referenceClause = referenceArtist ? `; reference feel: ${referenceArtist}` : "";
-  const prompt = `
+  const fallbackPrompt = `
 Style: ${styleDescriptor}.
 Mood/Energy: ${moodEnergyDirection}.
 Vocals: ${vocalApproach}.
@@ -725,6 +786,14 @@ Instrument focus: ${instrumentFocus}.
 Production context: ${subProfile.bpmRange}, ${audioEnv}, ${scene}; vibe ${vibe}${referenceClause}.
 Language/culture: ${language} (${writingProfile.languageVariant}, ${writingProfile.cultureRegion}); avoid cliche writing.
   `.trim();
+
+  const prompt = agentDirectives.hasAgent
+    ? `
+${agentDirectives.sunoPromptDirectives}
+Production context: ${subProfile.bpmRange}, ${audioEnv}, ${scene}; vibe ${vibe}${referenceClause}.
+Language/culture: ${language} (${writingProfile.languageVariant}, ${writingProfile.cultureRegion}); avoid cliche writing.
+      `.trim()
+    : fallbackPrompt;
 
   return clampPromptLength(prompt, maxLen);
 }
@@ -1686,6 +1755,7 @@ async function generateSong(payload: any) {
   const { inputs, userProfile } = payload || {};
   const culturalContext = await buildCulturalPromptContext(inputs || {});
   const metaTagPackage = await getMetaTagPackage(inputs || {});
+  const agentDirectives = await getGenreAgentDirectives(inputs || {});
   const prompt = `
 You are a professional songwriter.
 Return only:
@@ -1719,6 +1789,7 @@ Non-negotiable writing directives:
 ${culturalContext}
 ${metaTagPackage.guidance}
 ${metaTagPackage.strictSpec}
+${agentDirectives.lyricDirectives}
   `.trim();
 
   const draft = await openAIResponses(prompt);
@@ -1743,6 +1814,7 @@ async function editSong(payload: any) {
   const { originalSong, editInstruction, inputs, userProfile } = payload || {};
   const culturalContext = await buildCulturalPromptContext(inputs || {});
   const metaTagPackage = await getMetaTagPackage(inputs || {});
+  const agentDirectives = await getGenreAgentDirectives(inputs || {});
   const prompt = `
 Revise the song per instruction.
 Return only full song in this exact format:
@@ -1758,6 +1830,7 @@ ${culturalContext}
 Meta tag and adlib requirements:
 ${metaTagPackage.guidance}
 ${metaTagPackage.strictSpec}
+${agentDirectives.lyricDirectives}
 
 Original song:
 ${originalSong || ""}
@@ -1785,6 +1858,7 @@ async function structureImportedSong(payload: any) {
   const { rawText, inputs, userProfile } = payload || {};
   const culturalContext = await buildCulturalPromptContext(inputs || {});
   const metaTagPackage = await getMetaTagPackage(inputs || {});
+  const agentDirectives = await getGenreAgentDirectives(inputs || {});
   const prompt = `
 Turn the input into a full structured song.
 Output format:
@@ -1799,6 +1873,7 @@ ${culturalContext}
 Meta tag and adlib requirements:
 ${metaTagPackage.guidance}
 ${metaTagPackage.strictSpec}
+${agentDirectives.lyricDirectives}
 
 Input:
 ${rawText || ""}
