@@ -35,6 +35,40 @@ export type GenreAgentDirectives = {
   lyricDirectives: string;
 };
 
+const UNIVERSAL_155_RESEARCH_SHORT = `
+Deep research requirement:
+- Before writing, run a silent authenticity pass against the full 155-dimension music framework.
+- Calibrate structure, prosody, rhyme, narrative, diction, imagery, repetition, groove, melody, harmony, production, vocal delivery, emotional arc, and cultural context.
+- Resolve key covariance interactions: tempo×syllable density×rhyme density; production clarity×lexical complexity; narrative degree×form×verse length; emotion×diction×figurative language.
+`.trim();
+
+const UNIVERSAL_155_RESEARCH_FULL = `
+Universal 155-point deep-research protocol (silent, pre-generation):
+1. Songwriting craft and form:
+- Validate form architecture, section inventory, bar lengths, intro/outro conventions, verse-chorus weight, and duration norms for the selected genre/subgenre.
+- Validate rhyme architecture: scheme, density, internal/multisyllabic behavior, phonetic hardness/softness, and prosody alignment to beat stress.
+- Validate line and stanza mechanics: syllable counts, line-length variance, enjambment, stanza symmetry, and verse evolution.
+- Validate narrative strategy: POV, pronoun mix, scene density, timeline logic, specificity level, show-vs-tell ratio, and conflict progression.
+- Validate diction and figurative language: register, lexical diversity, slang policy, code-switching policy, metaphor density, and allusion depth.
+- Validate hook system: hook type, placement, repetition profile, title anchoring, and call-response usage.
+2. Musical and sonic constraints:
+- Validate tempo, meter, subdivision, swing/straight feel, backbeat behavior, groove archetype, syncopation, and microtiming pocket.
+- Validate melodic grammar: ambitus, contour, interval vocabulary, syllabic-vs-melismatic setting, phrase-breath limits, and climax note placement.
+- Validate harmony/tonality: chord complexity, harmonic rhythm, mode/scale, tonal stability, chromaticism level, and dissonance budget.
+- Validate arrangement/production: instrumentation palette, texture density, dynamic range, spatial treatment, vocal processing, stacking, and section contrast.
+3. Vocal and performance:
+- Validate delivery mode (sing/rap/chant/etc.), timbre expectations, tessitura, ad-lib policy, intelligibility target, and lyric-vs-music primacy.
+- For rap-derived substyles, validate flow pattern and cadence identity as a primary style marker.
+4. Emotional and psychological:
+- Validate valence, arousal, sincerity-irony balance, vulnerability-braggadocio balance, emotional directness, and arc from first to final section.
+5. Cultural context and authenticity:
+- Validate origin, dialect/register coherence, oral-vs-literary posture, era coding, expected subject matter boundaries, social function, audience mode, and authenticity markers.
+- Avoid caricature, flattening, and stereotype language; preserve culturally situated specificity.
+Output policy:
+- Do not print this checklist.
+- Apply it implicitly to both lyric generation and SUNO driver direction.
+`.trim();
+
 function normalizeKey(value?: string): string {
   return (value || "")
     .toLowerCase()
@@ -1261,6 +1295,7 @@ Vocal approach: ${vocalApproach}
 Arrangement/Dynamics: ${arrangementDynamics}
 Instrument focus: ${instrumentFocus}
 Context fit: ${params.language || "English"}, ${params.vocals || "lead vocal"}, ${params.emotion || "emotional"}, ${params.scene || "song scene"}, ${params.audioEnv || "studio"}
+${UNIVERSAL_155_RESEARCH_SHORT}
 Rules:
 ${sunoRules}
   `.trim();
@@ -1270,6 +1305,7 @@ Genre agent directives (${agent.id}):
 - Genre: ${params.genre || "Pop"}
 - Subgenre: ${params.subGenre || "Modern Pop"}${match?.key ? ` (matched profile: ${match.key})` : ""}
 - Keep lyrics faithful to this style profile while preserving narrative coherence.
+${UNIVERSAL_155_RESEARCH_FULL}
 ${lyricRules}
   `.trim();
 
