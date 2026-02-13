@@ -1107,7 +1107,7 @@ const SWAHILI_AGENT: GenreAgent = {
   },
 };
 
-const AGENTS: GenreAgent[] = [
+const BASE_AGENTS: GenreAgent[] = [
   POP_AGENT,
   HIPHOP_AGENT,
   ROCK_AGENT,
@@ -1135,9 +1135,42 @@ const AGENTS: GenreAgent[] = [
   SWAHILI_AGENT,
 ];
 
+const FAMILY_GENRE_SPLITS: Record<string, string[]> = {
+  [SPANISH_AGENT.genre]: ["Reggaeton", "Bachata", "Salsa", "Merengue", "Latin Trap", "Flamenco", "Latin Pop", "Cumbia", "Regional Mexican"],
+  [FRENCH_AGENT.genre]: ["Chanson", "French Touch", "Afro-Trap", "Indie Rock", "Electro-Pop", "Rap Français", "Zouk", "Variety"],
+  [GERMAN_AGENT.genre]: ["Schlager", "Neue Deutsche Härte", "Techno", "Hip-Hop", "Indie", "Krautrock", "Deutschrock", "Volksmusik"],
+  [JAPANESE_AGENT.genre]: ["J-Pop", "City Pop", "Enka", "Visual Kei", "J-Rock", "Idol Music", "Anime OST", "Kawaii Future Bass"],
+  [KOREAN_AGENT.genre]: ["K-Pop", "K-HipHop", "Trot", "K-Ballad", "K-Indie", "K-Rock", "Trap", "K-R&B"],
+  [CHINESE_AGENT.genre]: ["Mandopop", "Cantopop", "Guofeng (Fusion)", "C-Pop", "C-HipHop", "Chinese Rock"],
+  [PORTUGUESE_AGENT.genre]: ["Samba", "Bossa Nova", "Fado", "Funk Carioca", "Sertanejo", "MPB", "Forró", "Piseiro"],
+  [ITALIAN_AGENT.genre]: ["Italo-Disco", "Opera Pop", "Canzone Napoletana", "Italian Trap", "Sanremo Pop", "Rock Italiano"],
+  [ARABIC_AGENT.genre]: ["Arabic Pop", "Raï", "Khaliji", "Maqam Fusion", "Mahraganat", "Dabke", "Classical Arabic", "Shaabi"],
+  [HINDI_AGENT.genre]: ["Bollywood", "Indi-Pop", "Ghazal", "Bhangra", "Classical Fusion", "Sufi", "Desi Hip-Hop", "Qawwali"],
+  [SWAHILI_AGENT.genre]: ["Bongo Flava", "Taarab", "Gengetone", "Swahili Gospel", "Singeli"],
+};
+
+function toSlug(value: string): string {
+  return normalizeKey(value).replace(/\s+/g, "-");
+}
+
+const SPLIT_AGENTS: GenreAgent[] = BASE_AGENTS.flatMap((agent) => {
+  const splits = FAMILY_GENRE_SPLITS[agent.genre];
+  if (!splits || splits.length === 0) return [];
+  return splits.map((genreName) => ({
+    ...agent,
+    id: `${toSlug(genreName)}-agent`,
+    genre: genreName,
+  }));
+});
+
+const AGENTS: GenreAgent[] = [...BASE_AGENTS, ...SPLIT_AGENTS];
+
 function getAgentByGenre(genre?: string): GenreAgent | null {
   const key = normalizeKey(genre);
   if (!key) return null;
+  for (const agent of AGENTS) {
+    if (normalizeKey(agent.genre) === key) return agent;
+  }
   const aliases: Record<string, string> = {
     "electronic": "edm",
     "electronic edm": "edm",
@@ -1145,80 +1178,18 @@ function getAgentByGenre(genre?: string): GenreAgent | null {
     "rnb": "r&b",
     "rhythm and blues": "r&b",
     "afrobeat": "afrobeats",
-    "reggaeton": "spanish global",
-    "bachata": "spanish global",
-    "salsa": "spanish global",
-    "merengue": "spanish global",
-    "latin trap": "spanish global",
-    "flamenco": "spanish global",
-    "latin pop": "spanish global",
-    "cumbia": "spanish global",
-    "regional mexican": "spanish global",
-    "chanson": "french global",
-    "french touch": "french global",
-    "afro trap": "french global",
-    "rap francais": "french global",
-    "variety": "french global",
-    "schlager": "german global",
-    "neue deutsche harte": "german global",
-    "krautrock": "german global",
-    "deutschrock": "german global",
-    "volksmusik": "german global",
-    "j pop": "japanese global",
-    "city pop": "japanese global",
-    "enka": "japanese global",
-    "visual kei": "japanese global",
-    "j rock": "japanese global",
-    "idol music": "japanese global",
-    "anime ost": "japanese global",
-    "kawaii future bass": "japanese global",
-    "k pop": "korean global",
-    "k hiphop": "korean global",
-    "k ballad": "korean global",
-    "k indie": "korean global",
-    "k rock": "korean global",
-    "k r&b": "korean global",
-    "mandopop": "chinese global",
-    "cantopop": "chinese global",
-    "guofeng fusion": "chinese global",
-    "c pop": "chinese global",
-    "c hiphop": "chinese global",
-    "chinese rock": "chinese global",
-    "samba": "portuguese global",
-    "bossa nova": "portuguese global",
-    "fado": "portuguese global",
-    "funk carioca": "portuguese global",
-    "sertanejo": "portuguese global",
-    "mpb": "portuguese global",
-    "forro": "portuguese global",
-    "piseiro": "portuguese global",
-    "italo disco": "italian global",
-    "opera pop": "italian global",
-    "canzone napoletana": "italian global",
-    "italian trap": "italian global",
-    "sanremo pop": "italian global",
-    "rock italiano": "italian global",
-    "arabic pop": "arabic global",
-    "rai": "arabic global",
-    "khaliji": "arabic global",
-    "maqam fusion": "arabic global",
-    "mahraganat": "arabic global",
-    "dabke": "arabic global",
-    "classical arabic": "arabic global",
-    "shaabi": "arabic global",
-    "bollywood": "hindi global",
-    "indi pop": "hindi global",
-    "ghazal": "hindi global",
-    "bhangra": "hindi global",
-    "classical fusion": "hindi global",
-    "sufi": "hindi global",
-    "desi hip hop": "hindi global",
-    "qawwali": "hindi global",
-    "bongo flava": "swahili global",
-    "taarab": "swahili global",
-    "gengetone": "swahili global",
-    "swahili gospel": "swahili global",
-    "singeli": "swahili global",
+    "rap francais": "rap français",
+    "forro": "forró",
+    "rai": "raï",
+    "j pop": "j-pop",
+    "k pop": "k-pop",
+    "k hiphop": "k-hiphop",
+    "k r&b": "k-r&b",
+    "c pop": "c-pop",
+    "c hiphop": "c-hiphop",
+    "afro trap": "afro-trap",
+    "electro pop": "electro-pop",
+    "indi pop": "indi-pop",
   };
   const resolved = aliases[key] ? normalizeKey(aliases[key]) : key;
   for (const agent of AGENTS) {
