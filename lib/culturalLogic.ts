@@ -107,18 +107,18 @@ export const SUBGENRES: Record<string, string[]> = {
   'Afro-Trap': ['Ivorian Coupe-Decale', 'Parisian Street', 'Afro-Drill', 'Abidjan Vibz', 'Congo Fusion'],
   Pop: ['Synth-Pop', 'Hyper-Pop', 'Bedroom Pop', 'Dance-Pop', 'Indie Pop', 'Bubblegum Pop', 'Electropop', 'Soft Pop', 'Dream Pop', 'Teen Pop'],
   'Hip-Hop': ['Boom Bap', 'Trap', 'Drill', 'Conscious Hip-Hop', 'G-Funk', 'Emo Rap', 'Jazz Rap', 'Gangsta Rap'],
-  'R&B': ['Contemporary R&B', 'Neo-Soul', 'Alternative R&B', 'New Jack Swing', 'Soul', 'Funk'],
+  'R&B': ['Contemporary R&B', 'Neo-Soul', 'Alternative R&B', 'New Jack Swing', 'Bedroom R&B', 'Soul', 'Funk'],
   Rock: ['Alternative Rock', 'Punk Rock', 'Grunge', 'Indie Rock', 'Classic Rock', 'Hard Rock', 'Psychedelic Rock'],
-  'Electronic/EDM': ['House', 'Techno', 'Dubstep', 'Drum & Bass', 'Trance', 'Ambient', 'Synthwave'],
-  Country: ['Bluegrass', 'Honky-Tonk', 'Country Pop', 'Outlaw Country', 'Americana'],
-  Metal: ['Heavy Metal', 'Thrash Metal', 'Death Metal', 'Black Metal', 'Doom Metal', 'Power Metal'],
-  Soul: ['Motown', 'Neo-Soul', 'Classic Soul', 'Psychedelic Soul', 'Blue-Eyed Soul'],
-  Blues: ['Delta Blues', 'Chicago Blues', 'Texas Blues', 'Jump Blues', 'Blues Rock'],
-  Jazz: ['Bebop', 'Cool Jazz', 'Swing', 'Smooth Jazz', 'Fusion', 'Free Jazz'],
-  Folk: ['Traditional Folk', 'Americana', 'Indie Folk', 'Contemporary Folk', 'Folk Rock'],
-  Gospel: ['Traditional Gospel', 'Contemporary Gospel', 'Southern Gospel', 'Gospel Choir', 'Urban Gospel'],
-  Afrobeats: ['Afro-Pop', 'Afropiano', 'Street-Hop', 'Alté', 'Afro-Fusion'],
-  Reggae: ['Roots Reggae', 'Dancehall', 'Dub', 'Ska', 'Lovers Rock', 'Ragga']
+  'Electronic/EDM': ['House', 'Techno', 'Trance', 'Drum & Bass', 'Dubstep', 'Trap EDM', 'Future Bass', 'Electro', 'Ambient', 'Breakbeat', 'Synthwave', 'UK Garage', 'Experimental'],
+  Country: ['Traditional Country', 'Honky-Tonk', 'Outlaw Country', 'Country Pop', 'Contemporary Nashville', 'Americana', 'Bluegrass', 'Alt-Country', 'Country Rock', 'Neo-Traditional', 'Singer-Songwriter Country', 'Western Swing'],
+  Metal: ['Heavy Metal', 'Thrash', 'Death Metal', 'Black Metal', 'Doom', 'Power Metal', 'Progressive', 'Metalcore', 'Deathcore', 'Nu Metal', 'Symphonic', 'Gothic'],
+  Soul: ['Motown', 'Southern Soul', 'Neo-Soul', 'Philly Soul', 'Northern Soul', 'Blue-Eyed Soul', 'Psychedelic Soul', 'Contemporary Soul'],
+  Blues: ['Delta Blues', 'Chicago Blues', 'Texas Blues', 'Piedmont Blues', 'Jump Blues', 'Blues Rock', 'British Blues', 'Soul Blues', 'Modern Blues'],
+  Jazz: ['Swing', 'Bebop', 'Hard Bop', 'Cool Jazz', 'Modal Jazz', 'Free Jazz', 'Latin Jazz', 'Fusion', 'Smooth Jazz', 'Vocal Jazz'],
+  Folk: ['Traditional Folk', 'Contemporary Folk', 'Folk Rock', 'Indie Folk', 'Americana', 'Celtic Folk', 'Bluegrass', 'Folk Pop'],
+  Gospel: ['Traditional Gospel', 'Contemporary Gospel', 'Gospel Blues', 'Southern Gospel', 'Pentecostal Gospel', 'Gospel Choir', 'Gospel Soul', 'Gospel-Jazz', 'Praise & Worship'],
+  Afrobeats: ['Afro Pop', 'Afro-Fusion', 'Amapiano', 'Afro-House', 'Alté', 'Afro-R&B', 'Afro-Swing'],
+  Reggae: ['Ska', 'Rocksteady', 'Roots Reggae', 'Dub', 'Dancehall', 'Lovers Rock', 'Reggae Fusion']
 };
 
 export const LANGUAGE_PROFILES: Record<string, LanguageProfile> = {

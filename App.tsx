@@ -116,21 +116,65 @@ const INSTRUMENTS_BY_GENRE: Record<string, string[]> = {
   'French': ['Accordion', 'Rhodes Piano', 'Saxophone', '808s', 'Upright Bass', 'Synthesizers', 'Nylon Guitar', 'Cora (West Africa)'],
   'Spanish': ['Requinto Guitar', 'Bongo & Güira', 'Classical Guitar', 'Accordion', 'Cajón', 'Castanets', 'Piano Montuno'],
   'Hindi': ['Tabla', 'Sitar', 'Harmonium', 'Dholak', 'Sarangi', 'Bansuri Flute', 'Modern Beats', 'Santoor'],
-  'Pop': ['Synth Lead', 'Clean Electric Guitar', 'Acoustic Piano', '808 Sub-Bass', 'Electronic Drums', 'Vocoder'],
-  'Hip-Hop': ['MPC Samples', 'Thick Sub-Bass', 'Crisp Snare', 'DJ Scratches', 'Synthesizer Bass', 'Electric Keys'],
-  'Metal': ['Electric Guitar (High Gain)', 'Double Kick Drum', 'Bass Guitar (Distorted)', 'Vocals (Aggressive)', 'Synthesizers'],
-  'Rock': ['Electric Guitar', 'Bass Guitar', 'Drum Kit', 'Acoustic Guitar', 'Piano', 'Hammond Organ'],
-  'Electronic/EDM': ['Synthesizers', 'Drum Machines', 'Sequencers', 'Samplers', 'Vocoder', 'Sub-Bass'],
-  'Country': ['Acoustic Guitar', 'Steel Guitar', 'Fiddle', 'Banjo', 'Mandolin', 'Upright Bass'],
-  'R&B': ['Electric Piano', 'Synthesizers', 'Drum Machine', 'Bass Guitar', 'Saxophone', 'Fingersnaps'],
-  'Soul': ['Brass Section', 'String Section', 'Electric Bass', 'Piano', 'Drums', 'Rhodes'],
-  'Blues': ['Acoustic Guitar', 'Electric Guitar', 'Harmonica', 'Upright Bass', 'Drums', 'Piano'],
-  'Jazz': ['Saxophone', 'Trumpet', 'Double Bass', 'Piano', 'Drums (Brushes)', 'Vibraphone'],
-  'Folk': ['Acoustic Guitar', 'Banjo', 'Fiddle', 'Harmonica', 'Upright Bass', 'Mandolin'],
-  'Gospel': ['Hammond Organ', 'Piano', 'Choir Vocals', 'Drums', 'Bass Guitar', 'Tambourine'],
-  'Afrobeats': ['Talking Drum', 'Kalimba', 'Shekere', 'Synth Bass', 'Electric Guitar', 'Log Drum', 'Saxophone'],
-  'Reggae': ['Bass Guitar', 'Electric Guitar (Skank)', 'Hammond Organ', 'Drums (One Drop)', 'Bongos', 'Melodica', 'Brass Section'],
+  'Pop': ['Synth Lead', 'Synth Bass', 'Electronic Drums', 'Clean Electric Guitar', 'Acoustic Piano', 'Vocoder', 'Layered Harmonies'],
+  'Hip-Hop': ['808 Sub-Bass', 'Punchy Kick', 'Snare/Clap', 'Hi-Hat Rolls', 'Sample Loop', 'MPC Chops', 'Dark Bell Synth'],
+  'Metal': ['High-Gain Rhythm Guitar', 'Lead Guitar', 'Distorted Bass', 'Double-Kick Drums', 'Breakdown Snare', 'Orchestral Layers'],
+  'Rock': ['Electric Guitar Riffs', 'Bass Guitar', 'Drum Kit', 'Overdrive Guitar', 'Acoustic Guitar', 'Hammond Organ'],
+  'Electronic/EDM': ['Kick + Sub-Bass', 'Synth Plucks', 'Supersaw Leads', 'Drum Machines', 'FX Risers', 'Vocal Chops'],
+  'Country': ['Acoustic Guitar', 'Pedal Steel', 'Fiddle', 'Banjo', 'Mandolin', 'Upright Bass', 'Honky-Tonk Piano'],
+  'R&B': ['Electric Piano', 'Rhodes', 'Warm Bass', 'Tight Drum Machine', 'Pad Synths', 'Vocal Harmony Stacks'],
+  'Soul': ['Rhodes/Piano', 'Electric Bass', 'Live Drums', 'Brass Section', 'String Section', 'Tambourine'],
+  'Blues': ['Electric Guitar', 'Acoustic Guitar', 'Slide Guitar', 'Harmonica', 'Upright/Electric Bass', 'Shuffle Drums', 'Piano'],
+  'Jazz': ['Piano', 'Double Bass', 'Ride Cymbal Drums', 'Saxophone', 'Trumpet', 'Guitar Comping', 'Vibraphone'],
+  'Folk': ['Acoustic Guitar', 'Fingerpicked Guitar', 'Banjo', 'Fiddle', 'Mandolin', 'Upright Bass', 'Light Percussion'],
+  'Gospel': ['Hammond Organ', 'Piano', 'Choir Vocals', 'Handclaps', 'Bass Guitar', 'Live Drums', 'Tambourine'],
+  'Afrobeats': ['Log Drum', 'Shakers', 'Talking Drum', 'Syncopated Percussion', 'Synth Bass', 'Guitar Plucks', 'Vocal Chants'],
+  'Reggae': ['Bass Guitar', 'Skank Guitar', 'Organ Bubble', 'One-Drop Drums', 'Melodica', 'Bongos/Congas', 'Brass Stabs'],
   'General': ['Piano', 'Acoustic Guitar', 'Drums', 'Strings', 'Synthesizer', 'Electric Guitar']
+};
+
+const INSTRUMENTS_BY_SUBGENRE: Record<string, string[]> = {
+  'Boom Bap': ['Dusty Sample Loop', 'Punchy Kick', 'Crack Snare', 'Upright-Style Bassline', 'DJ Scratches'],
+  Trap: ['808 Sub-Bass', 'Trap Hats', 'Snare/Clap', 'Dark Bell', 'Sparse Pad'],
+  Drill: ['Sliding 808', 'Fast Hats', 'Menacing Bell', 'Punchy Snare'],
+  'Conscious Hip-Hop': ['Warm Keys', 'Sample Chops', 'Round Bass', 'Boom Bap Drums'],
+  'G-Funk': ['Whiny Lead Synth', 'Deep Bass', 'Laid-Back Drums', 'Talkbox Layer'],
+  'Emo Rap': ['Minimal Guitar Loop', 'Sub-Bass', 'Sparse Drums', 'Atmospheric Pad'],
+  'Jazz Rap': ['Jazz Chords', 'Brush Drums', 'Upright Bass', 'Horn Samples'],
+  'Gangsta Rap': ['Heavy Bass', 'Hard Kick', 'Dark Synth', 'Aggressive Snare'],
+  'Neo-Soul': ['Rhodes', 'Live Bass', 'Pocket Drums', 'Warm Guitar Comping'],
+  'Alternative R&B': ['Airy Pads', 'Minimal Drums', 'Subtle Bass', 'Textural FX'],
+  'New Jack Swing': ['Swing Drum Machine', 'Synth Brass', 'Punchy Bass', 'Bright Keys'],
+  'Bedroom R&B': ['Soft Pads', 'Low-Transient Drums', 'Sub Bass', 'Intimate Vocal Doubles'],
+  'Hard Bop': ['Tenor Sax', 'Trumpet', 'Piano Comping', 'Walking Bass', 'Ride Cymbal'],
+  'Modal Jazz': ['Piano Drones', 'Double Bass', 'Sparse Drums', 'Exploratory Horn Lead'],
+  'Latin Jazz': ['Congas', 'Timbales', 'Piano Montuno', 'Bass Tumbao', 'Brass'],
+  'Delta Blues': ['Slide Acoustic Guitar', 'Foot Stomp', 'Raw Vocal', 'Harmonica'],
+  'Chicago Blues': ['Electric Guitar', 'Harmonica', 'Shuffle Drums', 'Piano'],
+  'Piedmont Blues': ['Fingerpicked Acoustic', 'Thumb Bass Pattern', 'Light Percussion'],
+  'Jump Blues': ['Horn Section', 'Boogie Piano', 'Walking Bass', 'Swing Drums'],
+  'Traditional Gospel': ['Choir', 'Piano', 'Hammond Organ', 'Handclaps', 'Tambourine'],
+  'Pentecostal Gospel': ['Live Organ', 'Call-and-Response Choir', 'Energetic Drums', 'Bass Guitar'],
+  'Praise & Worship': ['Acoustic Guitar', 'Pad Synth', 'Piano', 'Steady Drums'],
+  Ska: ['Walking Bass', 'Offbeat Guitar', 'Punchy Horns', 'Fast Drums'],
+  Rocksteady: ['Bassline Lead', 'Soft Skank Guitar', 'Organ'],
+  Dub: ['Sub Bass', 'One-Drop Drums', 'Echo FX', 'Delay Throws'],
+  Dancehall: ['Digital Riddim Drums', 'Sub Bass', 'Percussive Synth Stabs'],
+  Amapiano: ['Log Drum', 'Airy Keys', 'Shakers', 'Deep Bass'],
+  'Afro-House': ['Four-on-Floor Kick', 'African Percussion', 'Sub Bass', 'Vocal Chant'],
+  Alté: ['Sparse Drums', 'Ambient Pads', 'Detached Bass Groove'],
+  Bluegrass: ['Banjo Rolls', 'Fiddle Lead', 'Mandolin Chop', 'Upright Bass'],
+  'Western Swing': ['Swing Fiddle', 'Steel Guitar', 'Jazz Piano', 'Brush Drums'],
+  'Country Rock': ['Overdriven Guitar', 'Live Drums', 'Bass Guitar', 'Pedal Steel'],
+  'Neo-Traditional': ['Pedal Steel', 'Fiddle', 'Honky-Tonk Piano', 'Two-Step Rhythm'],
+  'Future Bass': ['Detuned Supersaw Chords', 'Vocal Chops', 'Punchy Snare', 'Sub Bass'],
+  'Drum & Bass': ['Breakbeat Kit', 'Reese Bass', 'Atmospheric Pads', 'Rapid Percussion'],
+  'UK Garage': ['Shuffled Drums', 'Warm Sub Bass', 'Chopped Vocal', 'Rhodes Chords'],
+  Synthwave: ['Analog Bass', 'Gated Snare', 'Arpeggiated Synth', 'Retro Pad'],
+  Metalcore: ['Chug Guitars', 'Breakdown Drums', 'Tight Bass', 'Clean Chorus Layer'],
+  Deathcore: ['Downtuned Guitars', 'Blast Drums', 'Sub Drop', 'Growl Layers'],
+  Symphonic: ['Orchestral Strings', 'Choir Pad', 'Heavy Guitar Wall', 'Double-Kick Drums'],
+  Gothic: ['Dark Pads', 'Baritone Lead', 'Heavy Guitars', 'Atmospheric Drums'],
 };
 
 const SCENES_BY_GENRE: Record<string, string[]> = {
@@ -162,11 +206,61 @@ const SCENES_BY_GENRE: Record<string, string[]> = {
   'General': ['Recording Studio', 'Live Concert Stage', 'Intimate Bedroom Studio', 'Cinematic Landscape']
 };
 
+const SCENES_BY_SUBGENRE: Record<string, string[]> = {
+  'Boom Bap': ['Crate-Digging Studio', 'Subway Platform Cypher', '90s Brick Rooftop'],
+  Trap: ['Nighttime Warehouse', 'Neon Alley', 'Luxury Loft'],
+  Drill: ['Foggy City Block', 'Underground Parking Structure', 'Concrete Stairwell'],
+  'Neo-Soul': ['Candlelit Live Room', 'Vintage Studio Lounge', 'Late-Night Apartment Session'],
+  'Alternative R&B': ['Minimalist Art Loft', 'Rain-Soaked Window Room', 'Neon-Shadow Bedroom'],
+  'Hard Bop': ['1950s Jazz Club', 'Smoky Quintet Stage', 'Midnight Blue Room'],
+  'Modal Jazz': ['Minimal Stage Blackbox', 'Abstract Gallery Hall', 'Open Loft Session'],
+  'Delta Blues': ['Front Porch at Dusk', 'Crossroads Dirt Road', 'Juke Joint Corner'],
+  'Chicago Blues': ['South Side Blues Club', 'Amplified Bar Stage', 'Back Alley Club Entrance'],
+  'Traditional Gospel': ['Historic Church Sanctuary', 'Sunday Morning Revival', 'Choir Loft'],
+  'Praise & Worship': ['Modern Worship Stage', 'Arena Church Hall', 'Intimate Prayer Room'],
+  Ska: ['Kingston Dance Hall', 'Street Brass Parade', 'Summer Block Party'],
+  Dub: ['Sound System Yard', 'Studio Dub Booth', 'Late-Night Selector Room'],
+  Amapiano: ['Johannesburg Lounge', 'Sunset Rooftop Set', 'Private Groove Session'],
+  Bluegrass: ['Appalachian Barn', 'Front Porch Jam', 'County Fair Stage'],
+  'Western Swing': ['Texas Dance Hall', 'Honky-Tonk Dance Floor', 'Neon Ballroom'],
+  'Future Bass': ['LED Festival Stage', 'Cloudy Dreamscape', 'Neon Skyline Rooftop'],
+  'Drum & Bass': ['Underground Rave Tunnel', 'Industrial Club', 'Rainy Neon Underpass'],
+  Synthwave: ['Retro Arcade', '80s Neon Highway', 'Sunset Boulevard Drive'],
+  Metalcore: ['Abandoned Warehouse Stage', 'Mosh Pit Arena', 'Concrete Rehearsal Hall'],
+};
+
 const AUDIO_ENV_BY_GENRE: Record<string, string[]> = {
   'Traditional': ['Natural Reverb', 'Outdoor Space', 'Vintage Tape', 'Acoustic Room', 'Temple Hall', 'Palace Courtyard'],
   'Urban': ['Studio (Heavy Sub)', 'Club PA System', 'Street Recording', 'Radio Edit', 'Warehouse Reverb', 'Ghetto PA System'],
   'Pop': ['Modern Polished Studio', 'Radio Ready', 'Stadium Echo', 'Bedroom Demo', 'Vocal Booth'],
+  'R&B': ['Studio (Warm + Intimate)', 'Late-Night Dry Room', 'Lo-Fi Silk', 'Live Lounge'],
+  'Hip-Hop': ['Studio (Heavy Sub)', 'Dry Vocal Booth', 'Club PA', 'Street Tape'],
+  'Rock': ['Live Room', 'Amp Room', 'Arena Reverb', 'Garage Room'],
+  'Metal': ['Tight Modern Metal Mix', 'Rehearsal Hall', 'Large Hall Reverb', 'Raw Demo Room'],
+  'Electronic/EDM': ['Festival PA', 'Club System', 'Wide Stereo Studio', 'Headphone Mix'],
+  'Country': ['Dry Nashville Booth', 'Warm Analog Room', 'Live Bar Stage'],
+  'Jazz': ['Small Club Room', 'Live Studio A', 'Vintage Ribbon Room'],
+  'Blues': ['Juke Joint Room', 'Raw Live Room', 'Tube Amp Space'],
+  'Gospel': ['Church Hall Reverb', 'Live Sanctuary', 'Modern Worship Stage'],
+  'Reggae': ['Dub Chamber', 'Yard Sound System', 'Warm Tape Room'],
+  'Afrobeats': ['Lagos Club PA', 'Polished Afro Studio', 'Open-Air Party'],
+  'Soul': ['Vintage Analog Room', 'Large Live Room', 'Motown-Style Chamber'],
+  'Folk': ['Cabin Room', 'Natural Outdoor Ambience', 'Close-Mic Acoustic Room'],
   'General': ['Studio (Clean)', 'Live Performance', 'Lo-Fi Tape', 'Acoustic Hall', 'Vintage Vinyl', 'Radio Edit']
+};
+
+const AUDIO_ENV_BY_SUBGENRE: Record<string, string[]> = {
+  'Neo-Soul': ['Warm Analog Room', 'Tape-Saturated Studio', 'Live Lounge'],
+  'Alternative R&B': ['Dark Minimal Room', 'Airy Stereo Space', 'Textured Lo-Fi Room'],
+  'Hard Bop': ['Vintage Club Room', 'Live Quintet Room'],
+  'Modal Jazz': ['Wide Dry Room', 'Minimal Hall Space'],
+  'Delta Blues': ['Dry Porch Mic', 'Mono Tape Room'],
+  'Chicago Blues': ['Live Club Room', 'Amp-Forward Studio'],
+  Dub: ['Deep Echo Chamber', 'Space Delay Room', 'Sub-Heavy Sound System'],
+  Amapiano: ['Deep Club PA', 'Polished Dance Studio'],
+  Bluegrass: ['Dry Acoustic Hall', 'Live Barn Room'],
+  Synthwave: ['Retro Tape Studio', 'Wide Neon Stereo'],
+  Metalcore: ['Tight Modern Mix Room', 'Large Impact Hall'],
 };
 
 const EMOTIONS_BY_GENRE: Record<string, string[]> = {
@@ -220,6 +314,7 @@ const CreationWizard: React.FC<{
 
     const lang = (inputs.language || 'English') as keyof typeof GENRES_BY_LANG;
     const genre = inputs.genre || 'General';
+    const subGenre = inputs.subGenre || '';
     
     const baseCulture = getBaseCulture(lang);
     const baseEnv = getBaseEnv(genre);
@@ -228,9 +323,12 @@ const CreationWizard: React.FC<{
       case AppStep.AWAITING_LANGUAGE: return LANGUAGES;
       case AppStep.AWAITING_GENRE: return GENRES_BY_LANG[lang] || GENRES_BY_LANG.English;
       case AppStep.AWAITING_SUBGENRE: return SUBGENRES[genre] || ['Alternative', 'Mainstream', 'Underground', 'Experimental', 'Classic', 'Modern', 'Fusion'];
-      case AppStep.AWAITING_INSTRUMENTATION: return INSTRUMENTS_BY_GENRE[genre] || INSTRUMENTS_BY_GENRE[lang] || INSTRUMENTS_BY_GENRE['General'];
-      case AppStep.AWAITING_AUDIO_ENV: return AUDIO_ENV_BY_GENRE[baseEnv] || AUDIO_ENV_BY_GENRE['General'];
-      case AppStep.AWAITING_SCENE: return SCENES_BY_GENRE[genre] || SCENES_BY_GENRE[lang] || SCENES_BY_GENRE['Pop'] || SCENES_BY_GENRE['General'];
+      case AppStep.AWAITING_INSTRUMENTATION:
+        return INSTRUMENTS_BY_SUBGENRE[subGenre] || INSTRUMENTS_BY_GENRE[genre] || INSTRUMENTS_BY_GENRE[lang] || INSTRUMENTS_BY_GENRE['General'];
+      case AppStep.AWAITING_AUDIO_ENV:
+        return AUDIO_ENV_BY_SUBGENRE[subGenre] || AUDIO_ENV_BY_GENRE[genre] || AUDIO_ENV_BY_GENRE[baseEnv] || AUDIO_ENV_BY_GENRE['General'];
+      case AppStep.AWAITING_SCENE:
+        return SCENES_BY_SUBGENRE[subGenre] || SCENES_BY_GENRE[genre] || SCENES_BY_GENRE[lang] || SCENES_BY_GENRE['Pop'] || SCENES_BY_GENRE['General'];
       case AppStep.AWAITING_EMOTION: return EMOTIONS_BY_GENRE[baseCulture] || EMOTIONS_BY_GENRE['General'];
       case AppStep.AWAITING_VOCALS: return ['Female Solo', 'Male Solo', 'Duo/Group', 'Duet (Mixed)', 'Whisper', 'Soulful', 'Choir', 'Auto-Tuned', 'Spoken Word', 'Screaming', 'Growling'];
       case AppStep.AWAITING_DUET_CONFIG: return ['Male & Female', 'Female Duo', 'Male Duo', 'Artist & AI Feature', 'Rapper & Singer', 'Choir & Lead', 'Call & Response', 'Harmonized'];
