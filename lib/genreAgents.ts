@@ -384,13 +384,392 @@ const RNB_AGENT: GenreAgent = {
   },
 };
 
-const AGENTS: GenreAgent[] = [POP_AGENT, HIPHOP_AGENT, ROCK_AGENT, RNB_AGENT];
+const JAZZ_AGENT: GenreAgent = {
+  id: "jazz-agent",
+  genre: "Jazz",
+  model: "head-solo-head jazz architecture",
+  version: "2026-02-13",
+  baseline: {
+    style: "improvisation-led jazz with rich harmony, head/solo dynamics, and ensemble interplay",
+    moodEnergy: "dynamic contour from restrained statement to expressive improvisational lift",
+    vocalApproach: "instrumental-first; if vocal, use phrasing-aware croon/scat with rhythmic nuance",
+    arrangementDynamics: "clear head statement, solo space, and return/reprise logic",
+    instrumentFocus: "piano/bass/drums + horn dialogue; harmonic extensions and comping clarity",
+    lyricRules: [
+      "Keep lyrics sparse, elegant, and image-rich when vocals are present.",
+      "Use prosody aligned to swing feel and phrase accents.",
+      "Avoid pop-cliche hooks that ignore jazz phrasing.",
+    ],
+    sunoRules: [
+      "Specify swing vs straight feel and tempo class.",
+      "Specify harmonic density (ii-V-I, modal, altered tensions) by subgenre.",
+      "Specify solo responsibility and section handoffs.",
+    ],
+  },
+  subgenres: {
+    "swing": { style: "swing/big-band dance jazz with arranged ensemble hits", instrumentFocus: "horn sections + walking bass + ride-led drums" },
+    "bebop": { style: "bebop with rapid changes and virtuosic melodic lines", moodEnergy: "high velocity and intellectual tension", instrumentFocus: "small-combo horns, fast ride cymbal, walking bass" },
+    "hard bop": { style: "hard bop blending jazz complexity with blues/gospel soul", instrumentFocus: "quintet feel, punchy backbeat accents, soulful comping" },
+    "cool jazz": { style: "cool jazz with relaxed phrasing and airy textures", moodEnergy: "subdued, introspective", instrumentFocus: "brushes, mellow horns, spacious comping" },
+    "modal jazz": { style: "modal jazz centered on scalar exploration over static harmony", arrangementDynamics: "long-form improvisational expansion", instrumentFocus: "pedal points, sparse harmonic movement" },
+    "free jazz": { style: "free jazz with atonal/open-form collective improvisation", arrangementDynamics: "unfixed form and meter with intentional volatility" },
+    "latin jazz": { style: "latin jazz with clave-driven rhythmic framework", instrumentFocus: "congas/timbales + montuno + brass/horn solos" },
+    "fusion": { style: "jazz fusion with rock/funk-electric language", instrumentFocus: "electric bass/guitar/synth and hybrid drum articulation" },
+    "smooth jazz": { style: "smooth jazz with melody-first polish and soft groove", moodEnergy: "warm and relaxed", instrumentFocus: "lead sax/guitar, glossy rhythm bed" },
+    "vocal jazz": { style: "vocal jazz/standards interpretation with lyrical clarity", vocalApproach: "fronted vocalist with expressive phrasing and tasteful scat" },
+  },
+};
+
+const BLUES_AGENT: GenreAgent = {
+  id: "blues-agent",
+  genre: "Blues",
+  model: "12-bar-and-call-response blues architecture",
+  version: "2026-02-13",
+  baseline: {
+    style: "blues rooted in 12-bar cyclic gravity, call-response, and emotional directness",
+    moodEnergy: "grounded groove with expressive vocal ache and controlled intensity",
+    vocalApproach: "speech-like phrasing, grit, and emotive bends over melisma-heavy delivery",
+    arrangementDynamics: "cyclic verse development with riff callbacks and turnaround logic",
+    instrumentFocus: "guitar-led motifs, I-IV-V7 gravity, bass/drums pocket, harmonica/piano support",
+    lyricRules: [
+      "Use concrete first-person or direct address with emotional honesty.",
+      "Favor memorable refrain lines and AAB-like rhetorical recurrence where natural.",
+      "Leave phrase space for instrumental responses.",
+    ],
+    sunoRules: [
+      "Specify shuffle/swing vs straight blues-rock feel.",
+      "Specify guitar/harp/piano role and turnaround behavior.",
+      "Specify vocal roughness and live-room intimacy.",
+    ],
+  },
+  subgenres: {
+    "delta blues": { style: "delta/acoustic blues with raw rural intimacy", instrumentFocus: "slide/fingerpicked acoustic guitar with sparse percussion" },
+    "chicago blues": { style: "chicago electric blues with amplified urban grit", instrumentFocus: "electric guitar + harp + rhythm section shuffle" },
+    "texas blues": { style: "texas blues with swing and melodic guitar authority", instrumentFocus: "lead guitar phrasing + boogie piano option" },
+    "piedmont blues": { style: "piedmont fingerstyle blues with ragtime syncopation", instrumentFocus: "thumb-bass fingerpicking and clear vocal narration" },
+    "jump blues": { style: "jump blues with uptempo swing and party-band drive", moodEnergy: "high and celebratory", instrumentFocus: "horn section + boogie piano + brisk rhythm" },
+    "blues rock": { style: "blues-rock with distorted riff energy and extended solos", moodEnergy: "aggressive and anthemic", instrumentFocus: "overdriven guitars and hard backbeat drums" },
+    "soul blues": { style: "soul blues with R&B warmth and gospel-tinted vocals", instrumentFocus: "horn/keys support with smooth groove pocket" },
+    "british blues": { style: "british blues revival tone with rock-weighted attack" },
+    "modern blues": { style: "contemporary blues blending tradition and modern polish" },
+  },
+};
+
+const GOSPEL_AGENT: GenreAgent = {
+  id: "gospel-agent",
+  genre: "Gospel",
+  model: "testimony-and-chorus gospel architecture",
+  version: "2026-02-13",
+  baseline: {
+    style: "gospel rooted in testimony language, call-response, and spiritually driven chorus lift",
+    moodEnergy: "from intimate testimony to communal exultation",
+    vocalApproach: "lead-choir interplay with strong dynamic expression and intentional runs",
+    arrangementDynamics: "verse testimony to repetitive anthem/tag sections with possible modulation",
+    instrumentFocus: "piano/organ core, rhythm section groove, choir stack support",
+    lyricRules: [
+      "Use respectful faith-centered language and communal resonance.",
+      "Allow repetitive refrain logic for congregational singability.",
+      "Preserve emotional sincerity over ornamental phrasing.",
+    ],
+    sunoRules: [
+      "Specify call-response behavior and choir prominence.",
+      "Specify groove type (shuffle, pop-gospel, worship steady) and build path.",
+      "Specify modulation/tag behavior when needed.",
+    ],
+  },
+  subgenres: {
+    "traditional gospel": { style: "traditional choir gospel with church-live intensity", instrumentFocus: "piano/organ + handclaps + full choir" },
+    "contemporary gospel": { style: "contemporary/urban gospel with polished modern rhythm bed", instrumentFocus: "modern drums/keys with layered vocals" },
+    "gospel blues": { style: "gospel blues with raw spiritual ache", instrumentFocus: "acoustic/piano-led sparse support" },
+    "southern gospel": { style: "southern gospel quartet style with country tint", vocalApproach: "tight multi-part harmony-led delivery" },
+    "pentecostal gospel": { moodEnergy: "high-energy, spontaneous praise momentum", arrangementDynamics: "flexible vamp/tag with rising intensity" },
+    "gospel soul": { style: "gospel soul blend with secular-adjacent soul groove", instrumentFocus: "soul rhythm section + gospel vocal intensity" },
+    "gospel jazz": { style: "gospel-jazz fusion with extended harmony and improv pockets", instrumentFocus: "jazz piano/horns + gospel lead phrasing" },
+    "praise and worship": { style: "modern praise/worship with simple progression and anthem repetition", moodEnergy: "uplifting and reverent" },
+  },
+};
+
+const REGGAE_AGENT: GenreAgent = {
+  id: "reggae-agent",
+  genre: "Reggae",
+  model: "bass-and-skank reggae architecture",
+  version: "2026-02-13",
+  baseline: {
+    style: "reggae grounded in one-drop gravity, offbeat skank, and bass-led melodic groove",
+    moodEnergy: "laid-back but purposeful, with chant-ready chorus lift",
+    vocalApproach: "conversational melodic delivery with room for patois/rhythmic phrasing",
+    arrangementDynamics: "groove continuity with selective dub-style dropouts and chorus reinforcement",
+    instrumentFocus: "bassline leadership, guitar/keys skank, drum one-drop, optional horn punctuations",
+    lyricRules: [
+      "Maintain clear socio-personal voice without caricatured dialect forcing.",
+      "Use chant/refrain repetition for hooks.",
+      "Keep lines breathable and groove-synchronous.",
+    ],
+    sunoRules: [
+      "Specify one-drop/steppers/dancehall pulse behavior.",
+      "Specify bass prominence and skank placement.",
+      "Specify dub FX usage (delay/reverb) if requested.",
+    ],
+  },
+  subgenres: {
+    ska: { style: "ska with fast dance pulse and horn-led brightness", moodEnergy: "jubilant, high tempo", instrumentFocus: "walking bass, offbeat piano/guitar, horn riffs" },
+    rocksteady: { style: "rocksteady with slower romantic sway and bass focus", instrumentFocus: "smooth vocals, bass-forward pocket, reduced horn density" },
+    "roots reggae": { style: "roots reggae with conscious themes and meditative groove", instrumentFocus: "deep bass, organ bubble, sparse militant drums" },
+    dub: { style: "dub with space-focused mix performance and FX-driven variation", arrangementDynamics: "dropouts, echoes, and instrumental focus" },
+    dancehall: { style: "dancehall with digital riddim pulse and deejay-friendly energy", moodEnergy: "club-forward kinetic pressure" },
+    "lovers rock": { style: "lovers rock with soft romantic tone and smooth vocal center", moodEnergy: "warm and intimate" },
+    "reggae fusion": { style: "reggae fusion with pop/hip-hop crossover edges" },
+  },
+};
+
+const AFROBEATS_AGENT: GenreAgent = {
+  id: "afrobeats-agent",
+  genre: "Afrobeats",
+  model: "polyrhythmic groove-and-melody afrobeats architecture",
+  version: "2026-02-13",
+  baseline: {
+    style: "afrobeats with syncopated polyrhythm, melodic hook economy, and dance-forward bounce",
+    moodEnergy: "buoyant mid/high energy with groove-first emotional delivery",
+    vocalApproach: "melodic lead with rhythmic phrasing, chant support, and multilingual agility",
+    arrangementDynamics: "loop-groove continuity with incremental texture lifts and hook reinforcement",
+    instrumentFocus: "interlocked percussion, sub-bass pulse, guitar/keys motifs, vocal hook stacks",
+    lyricRules: [
+      "Use culturally respectful phrasing and avoid generic pan-African flattening.",
+      "Prioritize rhythmic singability and concise hook language.",
+      "Keep verses groove-compatible; avoid dense over-writing.",
+    ],
+    sunoRules: [
+      "Specify percussion lattice and bounce character.",
+      "Specify vocal language blend and chant/harmony behavior.",
+      "Specify groove evolution rather than dramatic structural drops.",
+    ],
+  },
+  subgenres: {
+    "afro pop": { style: "afropop with bright chorus-first accessibility", moodEnergy: "uplifting and radio-forward" },
+    "afro-fusion": { style: "afro-fusion blending afrobeats with alt/global textures" },
+    amapiano: { style: "amapiano-influenced afrobeats with log-drum bass signature", instrumentFocus: "log-drum low end + airy keys + shaker grid" },
+    "afro-house": { style: "afro-house leaning afrobeats with four-on-floor momentum", instrumentFocus: "house kick grid + African percussion + chant hooks" },
+    alté: { style: "alté with left-field cool, airy textures, and understated swagger", moodEnergy: "moody but dance-capable" },
+    "afro-r&b": { style: "afro-r&b with smoother harmony and intimate vocal color" },
+    "afro-swing": { style: "afro-swing with UK urban crossover cadence and bounce" },
+  },
+};
+
+const FOLK_AGENT: GenreAgent = {
+  id: "folk-agent",
+  genre: "Folk",
+  model: "story-and-acoustic folk architecture",
+  version: "2026-02-13",
+  baseline: {
+    style: "folk songwriting driven by narrative clarity, acoustic intimacy, and melodic humility",
+    moodEnergy: "human-scale emotional arc with subtle sectional growth",
+    vocalApproach: "natural diction and conversational singing over virtuosic display",
+    arrangementDynamics: "verse-led storytelling, restrained chorus lift, optional instrumental turn",
+    instrumentFocus: "acoustic guitar/strings core, light percussion, organic room realism",
+    lyricRules: [
+      "Prioritize story coherence and meaningful image progression.",
+      "Use concrete place/character details over abstract slogans.",
+      "Keep rhyme/prosody natural; avoid forced cleverness.",
+    ],
+    sunoRules: [
+      "Specify acoustic texture and room realism.",
+      "Specify narrative pacing and chorus intensity ceiling.",
+      "Specify folk-region flavor only when requested and respectful.",
+    ],
+  },
+  subgenres: {
+    "traditional folk": { style: "traditional folk with oral-tradition simplicity and communal cadence" },
+    "contemporary folk": { style: "contemporary folk with modern clarity and singer-songwriter focus" },
+    "folk rock": { style: "folk-rock with acoustic narrative plus rock rhythm support", moodEnergy: "moderate drive with lyrical frontness" },
+    "indie folk": { style: "indie folk with intimate textures and modern restraint" },
+    "americana": { style: "americana with roots blend and road-worn narrative realism" },
+    "celtic folk": { style: "celtic-inflected folk with modal melody and traditional lilt" },
+    bluegrass: { style: "bluegrass with fast acoustic virtuosity and high-tenor harmony", instrumentFocus: "banjo/fiddle/mandolin + upright bass drive" },
+    "folk pop": { style: "folk-pop with cleaner hooks and gentle contemporary polish" },
+  },
+};
+
+const SOUL_AGENT: GenreAgent = {
+  id: "soul-agent",
+  genre: "Soul",
+  model: "gospel-rnb-pop soul architecture",
+  version: "2026-02-13",
+  baseline: {
+    style: "soul rooted in gospel emotion, r&b groove, and hook-driven melodic sincerity",
+    moodEnergy: "intimate ache to cathartic vocal release",
+    vocalApproach: "expressive lead with tasteful melisma, call-response, and dynamic grit control",
+    arrangementDynamics: "verse-to-chorus emotional climb with bridge/reprise payoff",
+    instrumentFocus: "piano/keys, bass-drums pocket, horns/strings as emotional punctuation",
+    lyricRules: [
+      "Write emotionally specific lines with lived detail, not slogans.",
+      "Build chorus as emotional thesis with repeated anchor phrase.",
+      "Use ad-libs and response tags as expressive intent, not filler.",
+    ],
+    sunoRules: [
+      "Specify vocal timbre arc and arrangement lift mechanics.",
+      "Specify rhythm pocket and harmonic extension density.",
+      "Specify whether horns/strings are foreground accents or bed layers.",
+    ],
+  },
+  subgenres: {
+    motown: { style: "motown soul with polished pop-soul bounce and tight hooks", instrumentFocus: "driving bass line, tambourine/snare snap, vocal harmony stack" },
+    "southern soul": { style: "southern/deep soul with raw gospel grit and slower burn", vocalApproach: "earthy, impassioned, chest-forward delivery" },
+    "neo soul": { style: "neo-soul with rich jazz harmony and pocket looseness", instrumentFocus: "rhodes/piano color, live-feel drums, expressive bass movement" },
+    "philly soul": { style: "philly soul with lush orchestration and elegant groove polish", instrumentFocus: "strings/horns + smooth rhythm bed" },
+    "northern soul": { style: "northern soul with uptempo dance pulse and classic vocal drive", moodEnergy: "bright, urgent, dancefloor-ready" },
+    "blue eyed soul": { style: "blue-eyed soul with pop-accessible phrasing and soul arrangement grammar" },
+    "psychedelic soul": { style: "psychedelic soul with experimental textures over groove core" },
+    "contemporary soul": { style: "contemporary soul blending classic emotionality with modern production detail" },
+  },
+};
+
+const METAL_AGENT: GenreAgent = {
+  id: "metal-agent",
+  genre: "Metal",
+  model: "riff-and-impact metal architecture",
+  version: "2026-02-13",
+  baseline: {
+    style: "metal built on riff primacy, rhythm precision, and high-contrast section impact",
+    moodEnergy: "controlled aggression with structural peaks (breakdowns, solos, climactic choruses)",
+    vocalApproach: "subgenre-specific harsh/clean strategy with articulation matching intensity",
+    arrangementDynamics: "riff motif development, pre-drop tension, and decisive impact sections",
+    instrumentFocus: "distorted guitar stacks, locked bass, assertive drums, targeted lead work",
+    lyricRules: [
+      "Keep imagery specific and emotionally committed, not cartoon-generic.",
+      "Match diction density to tempo and vocal technique.",
+      "Use recurring motif phrases for identity under heavy arrangements.",
+    ],
+    sunoRules: [
+      "Specify rhythm engine (gallop, blast, breakdown, chug) by subgenre.",
+      "Specify vocal split (clean/harsh) and mix-frontness.",
+      "Specify guitar tuning density and solo/breakdown placement.",
+    ],
+  },
+  subgenres: {
+    "heavy metal": { style: "classic heavy metal with galloping riffs and anthemic hooks" },
+    thrash: { style: "thrash metal with high-speed palm-muted aggression", moodEnergy: "frenetic and confrontational" },
+    "death metal": { style: "death metal with brutal precision and guttural intensity", instrumentFocus: "blast-capable drums, tremolo riffs, growl-forward mix" },
+    "black metal": { style: "black metal with icy tremolo and raw atmospheric hostility", arrangementDynamics: "hypnotic repetition and bleak build-outs" },
+    doom: { style: "doom metal with slow crushing weight and dark sustain", moodEnergy: "oppressive, mournful" },
+    "power metal": { style: "power metal with heroic melodic charge and high-register clean vocals" },
+    progressive: { style: "progressive metal with meter/harmony complexity and technical shifts" },
+    metalcore: { style: "metalcore with breakdown architecture and clean/harsh contrast", instrumentFocus: "syncopated chugs + breakdown drops + chorus lift" },
+    deathcore: { style: "deathcore with extreme breakdown brutality and low-register vocal violence" },
+    "nu metal": { style: "nu-metal with groove/hip-hop-influenced rhythm and angst-forward hooks" },
+    symphonic: { style: "symphonic metal with orchestral layers and cinematic scale", instrumentFocus: "strings/choir + heavy rhythm bed" },
+    gothic: { style: "gothic metal with dark romantic atmosphere and dramatic vocal contrast" },
+  },
+};
+
+const EDM_AGENT: GenreAgent = {
+  id: "edm-agent",
+  genre: "EDM",
+  model: "drop-and-groove edm architecture",
+  version: "2026-02-13",
+  baseline: {
+    style: "electronic dance music centered on groove grid, repeated hook motif, and energy architecture",
+    moodEnergy: "build-release cycles with high dancefloor continuity",
+    vocalApproach: "minimal-to-hook-centric vocals, often processed and rhythm-locked",
+    arrangementDynamics: "intro/build/drop/release logic with motif recurrence",
+    instrumentFocus: "kick-bass engine, synth motif hierarchy, FX transitions, stereo energy design",
+    lyricRules: [
+      "Keep lyrics concise and hook-compatible; avoid dense narrative overload.",
+      "Use repeatable phrases that survive looping.",
+      "Match vowel rhythm to beat grid and drop timing.",
+    ],
+    sunoRules: [
+      "Specify BPM range and primary beat grid behavior.",
+      "Specify drop identity (bass, lead, chord-stab, breakbeat, etc.).",
+      "Specify build devices and post-drop variation plan.",
+    ],
+  },
+  subgenres: {
+    house: { style: "house/deep/progressive house with four-on-floor groove", instrumentFocus: "steady kick, groove bassline, chord stabs/pads" },
+    techno: { style: "techno with mechanical pulse and percussive hypnotic loops", moodEnergy: "driving and relentless" },
+    trance: { style: "trance with soaring melodies and long euphoric builds", arrangementDynamics: "extended breakdown + melodic supersaw payoff" },
+    "drum and bass": { style: "drum & bass with high-BPM breakbeat propulsion", instrumentFocus: "breakbeat kit + reese/sub bass + rapid rhythmic edits" },
+    dubstep: { style: "dubstep with half-time drop and bass modulation focus", instrumentFocus: "wobble/growl bass + sparse heavy drum pattern" },
+    "trap edm": { style: "trap EDM with 808-centric half-time bounce and hat-roll articulation" },
+    "future bass": { style: "future bass with lush detuned chord hits and emotional vocal chops" },
+    electro: { style: "electro with staccato synth stabs and robotic vocal texture" },
+    ambient: { style: "ambient/chillout with texture-first pacing and minimal drop logic", moodEnergy: "calm, immersive" },
+    breakbeat: { style: "breakbeat/big beat with syncopated drum-loop dominance and sampled grit" },
+    synthwave: { style: "synthwave/retrowave with nostalgic 80s analog timbre and midtempo drive" },
+    "uk garage": { style: "uk garage/2-step with shuffled syncopation and chopped soulful hooks" },
+    experimental: { style: "experimental EDM with boundary-pushing form and sound-design-first identity" },
+  },
+};
+
+const COUNTRY_AGENT: GenreAgent = {
+  id: "country-agent",
+  genre: "Country",
+  model: "story-first country architecture",
+  version: "2026-02-13",
+  baseline: {
+    style: "country songwriting anchored in narrative clarity, melodic honesty, and roots-informed groove",
+    moodEnergy: "steady emotional arc with singalong chorus payoff",
+    vocalApproach: "clear storytelling diction with natural twang inflection by substyle",
+    arrangementDynamics: "verse narrative build, hooky chorus, optional bridge or instrumental turn",
+    instrumentFocus: "acoustic/electric guitar core with bass-drums support, steel/fiddle color",
+    lyricRules: [
+      "Prioritize story specificity (place, object, relationship stakes).",
+      "Keep hooks memorable and conversational.",
+      "Avoid caricature checklists; write culturally grounded detail with restraint.",
+    ],
+    sunoRules: [
+      "Specify rhythm feel (shuffle, straight, two-step, train beat).",
+      "Specify country color instruments and their functional role.",
+      "Specify vocal tone target (raw, polished, intimate, anthemic).",
+    ],
+  },
+  subgenres: {
+    "traditional country": { style: "traditional/honky-tonk country with barroom swing and heartbreak realism", instrumentFocus: "honky-tonk piano + steel/fiddle + two-step rhythm" },
+    "honky tonk": { style: "honky-tonk country with swung two-beat and colloquial emotional directness" },
+    outlaw: { style: "outlaw country with gritty rebel edge and rock-weighted rhythm" },
+    "country pop": { style: "country pop with polished mainstream structure and melodic accessibility" },
+    "contemporary nashville": { style: "mainstream nashville country with modern pop/hip-hop production cross-currents" },
+    americana: { style: "americana/folk-country with rootsy instrumentation and reflective narrative tone" },
+    bluegrass: { style: "bluegrass with fast acoustic virtuosity and high-tenor harmony stacks", instrumentFocus: "banjo/fiddle/mandolin + upright bass, no heavy kit" },
+    "alt country": { style: "alt-country/indie country with raw electric textures and moodier lyric posture" },
+    "country rock": { style: "country-rock with strong backbeat and guitar-forward anthem dynamics" },
+    "bro country": { style: "bro-country with party-hook repetition and hybrid trap-pop rhythm" },
+    "neo traditional": { style: "neo-traditional country with classic steel/fiddle grammar and warm analog tone" },
+    "singer songwriter country": { style: "singer-songwriter country with minimal arrangement and confessional detail" },
+    "western swing": { style: "western swing with dance-band shuffle and jazz-leaning harmonic turns" },
+  },
+};
+
+const AGENTS: GenreAgent[] = [
+  POP_AGENT,
+  HIPHOP_AGENT,
+  ROCK_AGENT,
+  RNB_AGENT,
+  JAZZ_AGENT,
+  BLUES_AGENT,
+  GOSPEL_AGENT,
+  REGGAE_AGENT,
+  AFROBEATS_AGENT,
+  FOLK_AGENT,
+  SOUL_AGENT,
+  METAL_AGENT,
+  EDM_AGENT,
+  COUNTRY_AGENT,
+];
 
 function getAgentByGenre(genre?: string): GenreAgent | null {
   const key = normalizeKey(genre);
   if (!key) return null;
+  const aliases: Record<string, string> = {
+    "electronic": "edm",
+    "electronic edm": "edm",
+    "electronic dance music": "edm",
+    "rnb": "r&b",
+    "rhythm and blues": "r&b",
+    "afrobeat": "afrobeats",
+  };
+  const resolved = aliases[key] ? normalizeKey(aliases[key]) : key;
   for (const agent of AGENTS) {
-    if (normalizeKey(agent.genre) === key) return agent;
+    if (normalizeKey(agent.genre) === resolved) return agent;
   }
   return null;
 }
