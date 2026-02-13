@@ -5,7 +5,7 @@ import { GoogleGenAI } from "@google/genai";
 
 export const config = {
   runtime: "nodejs",
-  maxDuration: 60,
+  maxDuration: 300,
 };
 
 type AIAction =
@@ -1373,7 +1373,7 @@ const getUserProfileByEmailRef = makeFunctionReference<"query">("app:getUserProf
 
 async function openAIResponses(prompt: string, model = getTextModel()): Promise<string> {
   const apiKey = getOpenAIApiKey();
-  const timeoutMs = Number(process.env.AI_HTTP_TIMEOUT_MS || 25000);
+  const timeoutMs = Number(process.env.AI_HTTP_TIMEOUT_MS || 45000);
   const controller = new AbortController();
   const timeout = setTimeout(() => controller.abort(), timeoutMs);
   let response: Response;
