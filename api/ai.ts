@@ -553,6 +553,86 @@ function clampPromptLength(text: string, maxLength = 260): string {
   return `${clean.slice(0, maxLength - 1).trim()}.`;
 }
 
+function inferStyleDescriptor(genre: string, subGenre: string, productionStyle: string): string {
+  const g = genre.toLowerCase();
+  const sg = subGenre.toLowerCase();
+  if (g.includes("r&b") || g.includes("soul")) {
+    return `modern ${subGenre} ${genre} with rich harmony and groove-forward phrasing (${productionStyle})`;
+  }
+  if (g.includes("hip-hop") || g.includes("rap") || g.includes("trap")) {
+    return `${subGenre} ${genre} with rhythm-led delivery, punchy pockets, and hard drum presence (${productionStyle})`;
+  }
+  if (g.includes("pop")) {
+    return `${subGenre} pop with melodic hook-first writing and polished radio-ready production (${productionStyle})`;
+  }
+  if (g.includes("rock") || g.includes("metal")) {
+    return `${subGenre} ${genre} with live-band intensity, dynamic builds, and strong section contrast (${productionStyle})`;
+  }
+  return `${subGenre} ${genre} with culturally grounded writing and contemporary production (${productionStyle})`;
+}
+
+function inferMoodEnergyDirection(emotion: string): string {
+  const e = (emotion || "").toLowerCase();
+  if (e.includes("heartbroken") || e.includes("sad") || e.includes("melanch")) {
+    return "start restrained and wounded, then escalate into high emotional intensity by bridge/final chorus";
+  }
+  if (e.includes("intense") || e.includes("angry") || e.includes("empower")) {
+    return "high-pressure and confrontational, with controlled peaks and sharper late-song impact";
+  }
+  if (e.includes("chill")) {
+    return "low-energy, smooth pocket with gentle lift in choruses";
+  }
+  if (e.includes("euphor") || e.includes("joy")) {
+    return "buoyant and uplifted, with bigger chorus energy and celebratory finish";
+  }
+  return "clear emotional arc from intimate opening to stronger final chorus release";
+}
+
+function inferVocalApproach(vocals: string, genre: string, emotion: string, duetType: string): string {
+  const v = (vocals || "").toLowerCase();
+  const g = (genre || "").toLowerCase();
+  const e = (emotion || "").toLowerCase();
+  const texture =
+    g.includes("r&b") || g.includes("soul")
+      ? "textured runs, soft grit, expressive melisma"
+      : g.includes("hip-hop") || g.includes("rap")
+        ? "conversational cadence, crisp consonants, dynamic emphasis"
+        : "clear lead tone with dynamic phrasing";
+  const emotionalColor =
+    e.includes("heartbroken") || e.includes("sad")
+      ? "restrained pain to controlled fire"
+      : e.includes("intense") || e.includes("angry")
+        ? "controlled aggression with emotional bite"
+        : "emotionally direct and present";
+
+  if (v.includes("duet")) {
+    return `duet interplay (${duetType || "complementary call-and-response"}), ${texture}, ${emotionalColor}`;
+  }
+  if (v.includes("male")) return `male lead, ${texture}, ${emotionalColor}`;
+  if (v.includes("female")) return `female lead, ${texture}, ${emotionalColor}`;
+  return `${vocals || "lead vocal"}, ${texture}, ${emotionalColor}`;
+}
+
+function inferArrangementDynamics(defaultStructure: string, arrangement: string, groove: string): string {
+  return `${defaultStructure}; ${arrangement}; preserve verse/chorus contrast, controlled builds, and impactful final chorus`;
+}
+
+function inferInstrumentFocus(instrumentation: string, genre: string): string {
+  const raw = (instrumentation || "").trim();
+  if (!raw) return "feature genre-core instruments with a tasteful bridge solo or motif handoff";
+  const primary = raw.split(/[,&/]| and /i).map((part) => part.trim()).filter(Boolean);
+  if (!primary.length) return "feature genre-core instruments with purposeful motifs";
+  const lead = primary[0];
+  const support = primary.slice(1, 3).join(", ");
+  const soloTag =
+    genre.toLowerCase().includes("hip-hop") || genre.toLowerCase().includes("rap")
+      ? "spotlight motif/riff moments rather than long solos"
+      : "allow a short expressive solo or lead break in bridge/outro";
+  return support
+    ? `feature ${lead}; support with ${support}; ${soloTag}`
+    : `feature ${lead}; ${soloTag}`;
+}
+
 function inferExpectedVocalIdentity(vocals: string | undefined): "male" | "female" | "duet" | "group" | null {
   const value = (vocals || "").toLowerCase();
   if (!value) return null;
@@ -622,14 +702,28 @@ async function buildSunoPromptDriver(inputs: any, userProfile: any): Promise<str
     }) || DEFAULT_WRITING_PROFILE;
 
   const subProfile = logic?.getSubgenreSonicProfile?.(subGenre) || DEFAULT_SUBGENRE_PROFILE;
-  const maxLen = Number(process.env.AI_SUNO_PROMPT_MAX_LEN || 260);
+  const genreProfile = logic?.getGenreProfile?.(genre) || DEFAULT_GENRE_PROFILE;
+  const maxLen = Number(process.env.AI_SUNO_PROMPT_MAX_LEN || 320);
+
+  const styleDescriptor = inferStyleDescriptor(genre, subGenre, subProfile.productionStyle);
+  const moodEnergyDirection = inferMoodEnergyDirection(emotion);
+  const vocalApproach = inferVocalApproach(vocals, genre, emotion, duetType);
+  const arrangementDynamics = inferArrangementDynamics(
+    genreProfile.defaultStructure,
+    subProfile.arrangement,
+    subProfile.groove
+  );
+  const instrumentFocus = inferInstrumentFocus(instrumentation, genre);
 
   const referenceClause = referenceArtist ? `; reference feel: ${referenceArtist}` : "";
   const prompt = `
-${genre}/${subGenre} in ${language}; ${subProfile.bpmRange} pulse with ${subProfile.groove}.
-Core sound: ${instrumentation}; ${subProfile.productionStyle}; ${audioEnv}.
-Vocals: ${vocals}${duetType}; mood: ${emotion}; vibe: ${vibe}; scene: ${scene}${referenceClause}.
-Cultural lens: ${writingProfile.languageVariant}, ${writingProfile.cultureRegion}; concrete, non-cliche writing.
+Style: ${styleDescriptor}.
+Mood/Energy: ${moodEnergyDirection}.
+Vocals: ${vocalApproach}.
+Arrangement/Dynamics: ${arrangementDynamics}.
+Instrument focus: ${instrumentFocus}.
+Production context: ${subProfile.bpmRange}, ${audioEnv}, ${scene}; vibe ${vibe}${referenceClause}.
+Language/culture: ${language} (${writingProfile.languageVariant}, ${writingProfile.cultureRegion}); avoid cliche writing.
   `.trim();
 
   return clampPromptLength(prompt, maxLen);
