@@ -2043,6 +2043,61 @@ ${agentDirectives.lyricDirectives}
       },
     };
   }
+  if (gated.audit.overallScore < 85 && hasTimeBudget(startMs, 12000)) {
+    const recoveryPrompt = `
+You are a professional songwriter in recovery mode.
+Create a brand-new song draft (do NOT lightly edit the previous one) with stronger first-pass quality.
+
+Return only:
+Title: ...
+### SUNO Prompt
+...
+### Lyrics
+...
+
+Context:
+- Language: ${inputs?.language || "English"}
+- Genre: ${inputs?.genre || "Pop"}
+- Subgenre: ${inputs?.subGenre || "Modern"}
+- Instrumentation: ${inputs?.instrumentation || "Piano"}
+- Mood: ${inputs?.emotion || "Euphoric"}
+- Scene: ${inputs?.scene || "Studio"}
+- Audio: ${inputs?.audioEnv || "Studio (Clean)"}
+- Vocals: ${inputs?.vocals || "Female Solo"} ${inputs?.duetType ? `(Duet: ${inputs.duetType})` : ""}
+- Extra details: ${inputs?.mundaneObjects || ""} ${inputs?.awkwardMoment || ""}
+- Artist persona: ${userProfile?.display_name || "N/A"} | vibe: ${userProfile?.preferred_vibe || "N/A"}
+
+Must improve:
+- Language Authenticity
+- Cultural Context
+- Genre Fidelity
+- Subgenre Fidelity
+- Lyrical Originality
+- Cadence & Prosody
+
+${culturalContext}
+${getAuditRubricPromptBlock(92)}
+${metaTagPackage.guidance}
+${metaTagPackage.strictSpec}
+${agentDirectives.lyricDirectives}
+    `.trim();
+
+    const recoveryDraft = await openAIResponses(recoveryPrompt);
+    let recoveryText = recoveryDraft;
+    if (hasTimeBudget(startMs, 9000)) {
+      recoveryText = await enforceMetaTagOrchestration(recoveryText, inputs || {});
+    }
+    if (hasTimeBudget(startMs, 7000)) {
+      recoveryText = await enforceSongDepthAndTexture(recoveryText, inputs || {}, userProfile || {});
+    }
+    if (hasTimeBudget(startMs, 5000)) {
+      recoveryText = await enforceSunoPromptDriver(recoveryText, inputs || {}, userProfile || {});
+    }
+    const recoveryGated = await enforceMinimumAuditScore(recoveryText, inputs || {}, userProfile || {}, 85, 1);
+    if (recoveryGated.audit.overallScore > gated.audit.overallScore) {
+      gated = recoveryGated;
+    }
+  }
   if (gated.audit.overallScore < 85) {
     throw Object.assign(
       new Error(`Quality gate failed (${gated.audit.overallScore}/100). Song was not released. Please retry.`),
