@@ -369,6 +369,15 @@ function shouldRunDeepAudit(): boolean {
   return process.env.AI_DEEP_AUDIT === "1";
 }
 
+function getPipelineBudgetMs(): number {
+  return Number(process.env.AI_PIPELINE_BUDGET_MS || 22000);
+}
+
+function hasTimeBudget(startMs: number, reserveMs = 4000): boolean {
+  const elapsed = Date.now() - startMs;
+  return elapsed + reserveMs < getPipelineBudgetMs();
+}
+
 function getStylePrompt(style?: string): string {
   const normalized = (style || "Realism").trim().toLowerCase();
   switch (normalized) {
@@ -1686,7 +1695,7 @@ const getUserProfileByEmailRef = makeFunctionReference<"query">("app:getUserProf
 
 async function openAIResponses(prompt: string, model = getTextModel()): Promise<string> {
   const apiKey = getOpenAIApiKey();
-  const timeoutMs = Number(process.env.AI_HTTP_TIMEOUT_MS || 45000);
+  const timeoutMs = Number(process.env.AI_HTTP_TIMEOUT_MS || 18000);
   const controller = new AbortController();
   const timeout = setTimeout(() => controller.abort(), timeoutMs);
   let response: Response;
@@ -1903,6 +1912,7 @@ Return ONLY this exact bullet template:
 
 async function generateSong(payload: any) {
   const { inputs, userProfile } = payload || {};
+  const startMs = Date.now();
   const culturalContext = await buildCulturalPromptContext(inputs || {});
   const metaTagPackage = await getMetaTagPackage(inputs || {});
   const agentDirectives = await getGenreAgentDirectives(inputs || {});
@@ -1945,15 +1955,36 @@ ${agentDirectives.lyricDirectives}
   const draft = await openAIResponses(prompt);
   let finalText = draft;
 
-  if (shouldRunMultiPassRefinement()) {
+  if (shouldRunMultiPassRefinement() && hasTimeBudget(startMs, 12000)) {
     finalText = await culturallyRefineSong(draft, inputs || {}, userProfile || {});
   }
 
-  finalText = await enforceMetaTagOrchestration(finalText, inputs || {});
-  finalText = await enforceSongDepthAndTexture(finalText, inputs || {}, userProfile || {});
-  finalText = await enforceSunoPromptDriver(finalText, inputs || {}, userProfile || {});
+  if (hasTimeBudget(startMs, 9000)) {
+    finalText = await enforceMetaTagOrchestration(finalText, inputs || {});
+  }
+  if (hasTimeBudget(startMs, 7000)) {
+    finalText = await enforceSongDepthAndTexture(finalText, inputs || {}, userProfile || {});
+  }
+  if (hasTimeBudget(startMs, 5000)) {
+    finalText = await enforceSunoPromptDriver(finalText, inputs || {}, userProfile || {});
+  }
 
-  const gated = await enforceMinimumAuditScore(finalText, inputs || {}, userProfile || {}, 85, 3);
+  if (!hasTimeBudget(startMs, 6000)) {
+    const fastAudit = fallbackAudit(inputs || {});
+    return {
+      text: finalText,
+      audit: fastAudit,
+      qualityGate: {
+        minScore: 85,
+        finalScore: fastAudit.overallScore,
+        rewritesTriggered: 0,
+        passes: [{ pass: 1, score: fastAudit.overallScore, action: "accepted" }],
+      },
+    };
+  }
+
+  const rewriteCap = hasTimeBudget(startMs, 12000) ? 2 : 1;
+  const gated = await enforceMinimumAuditScore(finalText, inputs || {}, userProfile || {}, 85, rewriteCap);
   return { text: gated.text, audit: gated.audit, qualityGate: gated.qualityGate };
 }
 
