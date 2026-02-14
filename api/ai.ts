@@ -388,7 +388,7 @@ If uncertain, choose the safer authentic option over novelty.
 }
 
 function getPipelineBudgetMs(): number {
-  return Number(process.env.AI_PIPELINE_BUDGET_MS || 32000);
+  return Number(process.env.AI_PIPELINE_BUDGET_MS || 42000);
 }
 
 function hasTimeBudget(startMs: number, reserveMs = 4000): boolean {
@@ -2001,13 +2001,15 @@ ${agentDirectives.lyricDirectives}
     finalText = await enforceSunoPromptDriver(finalText, inputs || {}, userProfile || {});
   }
 
-  const rewriteCap = hasTimeBudget(startMs, 15000)
-    ? 3
-    : hasTimeBudget(startMs, 10000)
-      ? 2
-      : hasTimeBudget(startMs, 6500)
-        ? 1
-        : 0;
+  const rewriteCap = hasTimeBudget(startMs, 18000)
+    ? 4
+    : hasTimeBudget(startMs, 13000)
+      ? 3
+      : hasTimeBudget(startMs, 9000)
+        ? 2
+        : hasTimeBudget(startMs, 6500)
+          ? 1
+          : 0;
   let gated = await enforceMinimumAuditScore(finalText, inputs || {}, userProfile || {}, 85, rewriteCap);
   for (let rescuePass = 0; rescuePass < 2; rescuePass += 1) {
     if (gated.audit.overallScore < 75 || gated.audit.overallScore >= 85) break;
@@ -2095,7 +2097,7 @@ ${agentDirectives.lyricDirectives}
     if (hasTimeBudget(startMs, 5000)) {
       recoveryText = await enforceSunoPromptDriver(recoveryText, inputs || {}, userProfile || {});
     }
-    const recoveryGated = await enforceMinimumAuditScore(recoveryText, inputs || {}, userProfile || {}, 85, 1);
+    const recoveryGated = await enforceMinimumAuditScore(recoveryText, inputs || {}, userProfile || {}, 85, 2);
     if (recoveryGated.audit.overallScore > gated.audit.overallScore) {
       gated = recoveryGated;
     }
