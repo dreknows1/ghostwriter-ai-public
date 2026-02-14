@@ -88,6 +88,15 @@ import {
 
 const ART_STYLE_OPTIONS = ['Realism', 'Pixar', 'Comik Book', 'Cyber Punk', 'Anime', 'Fantasy'];
 
+const GENERATION_STAGES = [
+  { label: 'Initialize Session', keywords: ['listening', 'analyzing'] },
+  { label: 'Draft Song Core', keywords: ['drafting', 'structure'] },
+  { label: 'Apply Genre Agent', keywords: ['agent', 'genre', 'subgenre'] },
+  { label: 'Run Quality Scoring', keywords: ['quality', 'score', 'audit'] },
+  { label: 'Rewrite If < 85', keywords: ['rewrite', 'under 85'] },
+  { label: 'Finalize Output', keywords: ['finalizing', 'suno prompt'] },
+] as const;
+
 const STEP_ORDER = [
   AppStep.AWAITING_LANGUAGE,
   AppStep.AWAITING_GENRE,
@@ -466,6 +475,8 @@ export const App: React.FC = () => {
   const [albumArt, setAlbumArt] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(false);
   const [loadingMessage, setLoadingMessage] = useState('');
+  const [generationStageIndex, setGenerationStageIndex] = useState(0);
+  const [generationLog, setGenerationLog] = useState<string[]>([]);
   const [authEmail, setAuthEmail] = useState('');
   const [authPassword, setAuthPassword] = useState('');
   const [referralCode, setReferralCode] = useState('');
@@ -482,6 +493,26 @@ export const App: React.FC = () => {
   // Paste / Import State
   const [isPasteMode, setIsPasteMode] = useState(false);
   const [pasteContent, setPasteContent] = useState('');
+
+  const resetGenerationTelemetry = (initialMessage: string) => {
+    setLoadingMessage(initialMessage);
+    setGenerationStageIndex(0);
+    setGenerationLog([initialMessage]);
+  };
+
+  const updateGenerationTelemetry = (message: string) => {
+    const clean = (message || '').trim();
+    if (!clean) return;
+    setLoadingMessage(clean);
+    setGenerationLog(prev => {
+      if (prev[prev.length - 1] === clean) return prev;
+      const next = [...prev, clean];
+      return next.slice(-7);
+    });
+    const lower = clean.toLowerCase();
+    const idx = GENERATION_STAGES.findIndex(stage => stage.keywords.some(k => lower.includes(k)));
+    if (idx >= 0) setGenerationStageIndex(prev => Math.max(prev, idx));
+  };
 
   const handleOAuthProvider = (provider: string) => {
     if (isAuthLoading) return;
@@ -641,7 +672,7 @@ export const App: React.FC = () => {
       setCredits(prev => Math.max(0, prev - COSTS.GENERATE_SONG));
 
       setIsLoading(true);
-      setLoadingMessage("Song Ghost is listening...");
+      resetGenerationTelemetry("Song Ghost is listening...");
       setStep(AppStep.GENERATING);
       setLoadedSongId(null);
       setAlbumArt(null);
@@ -653,7 +684,7 @@ export const App: React.FC = () => {
           let fullText = '';
           for await (const chunk of generator) {
               if (typeof chunk === 'string' && chunk.startsWith('__STATUS__:')) {
-                  setLoadingMessage(chunk.replace('__STATUS__:', '').trim() || 'Processing...');
+                  updateGenerationTelemetry(chunk.replace('__STATUS__:', '').trim() || 'Processing...');
                   continue;
               }
               setGeneratedSong(chunk);
@@ -662,7 +693,7 @@ export const App: React.FC = () => {
           setCulturalAudit(getLastCulturalAudit());
           const quality = getLastQualityGateReport();
           if (quality && quality.rewritesTriggered > 0) {
-            setLoadingMessage(`Quality gate passed after ${quality.rewritesTriggered} rewrite ${quality.rewritesTriggered === 1 ? 'pass' : 'passes'} (score ${quality.finalScore}).`);
+            updateGenerationTelemetry(`Quality gate passed after ${quality.rewritesTriggered} rewrite ${quality.rewritesTriggered === 1 ? 'pass' : 'passes'} (score ${quality.finalScore}).`);
           }
           
           await deductCredits(session.user.email || '', COSTS.GENERATE_SONG);
@@ -768,7 +799,7 @@ export const App: React.FC = () => {
       }
 
       setIsLoading(true);
-      setLoadingMessage("Analyzing Structure & Formatting...");
+      resetGenerationTelemetry("Analyzing Structure & Formatting...");
       setStep(AppStep.GENERATING);
       setIsPasteMode(false); // Close the modal
       setView(AppView.STUDIO); // Switch context to studio
@@ -779,6 +810,10 @@ export const App: React.FC = () => {
           
           let fullText = '';
           for await (const chunk of generator) {
+              if (typeof chunk === 'string' && chunk.startsWith('__STATUS__:')) {
+                  updateGenerationTelemetry(chunk.replace('__STATUS__:', '').trim() || 'Processing...');
+                  continue;
+              }
               setGeneratedSong(chunk);
               fullText = chunk;
           }
@@ -1258,10 +1293,59 @@ export const App: React.FC = () => {
                 initialAudit={culturalAudit}
               />
           ) : step === AppStep.GENERATING ? (
-              <div className="flex flex-col items-center justify-center flex-grow animate-pulse">
-                  <LoadingSpinner />
-                  <h2 className="mt-8 text-2xl font-black text-white tracking-tight">{loadingMessage}</h2>
-                  <p className="mt-2 text-slate-500 font-black uppercase tracking-widest text-xs">Quality gate rewrites below 85 during creation</p>
+              <div className="w-full max-w-3xl mx-auto flex flex-col gap-6">
+                  <div className="rounded-3xl border border-slate-700 bg-slate-900/60 p-6 md:p-8">
+                    <div className="flex items-center gap-4">
+                      <LoadingSpinner />
+                      <div>
+                        <h2 className="text-2xl font-black text-white tracking-tight">{loadingMessage}</h2>
+                        <p className="mt-2 text-slate-400 font-black uppercase tracking-widest text-xs">Quality gate rewrites below 85 during creation</p>
+                      </div>
+                    </div>
+                    <div className="mt-5 h-2 w-full rounded-full bg-slate-800 overflow-hidden">
+                      <div
+                        className="h-full bg-gradient-to-r from-blue-500 to-cyan-400 transition-all duration-500"
+                        style={{ width: `${Math.min(100, Math.round(((generationStageIndex + 1) / GENERATION_STAGES.length) * 100))}%` }}
+                      />
+                    </div>
+                  </div>
+
+                  <div className="rounded-3xl border border-slate-700 bg-slate-900/50 p-6">
+                    <p className="text-xs font-black uppercase tracking-widest text-slate-400 mb-4">Process Stages</p>
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                      {GENERATION_STAGES.map((stage, idx) => {
+                        const isDone = idx < generationStageIndex;
+                        const isActive = idx === generationStageIndex;
+                        return (
+                          <div
+                            key={stage.label}
+                            className={`rounded-2xl border px-4 py-3 text-sm font-bold tracking-wide transition-all ${
+                              isActive
+                                ? 'border-cyan-400 bg-cyan-500/10 text-cyan-200'
+                                : isDone
+                                  ? 'border-blue-500/50 bg-blue-500/10 text-blue-200'
+                                  : 'border-slate-700 bg-slate-800/30 text-slate-400'
+                            }`}
+                          >
+                            {isDone ? 'DONE - ' : isActive ? 'LIVE - ' : 'PENDING - '}
+                            {stage.label}
+                          </div>
+                        );
+                      })}
+                    </div>
+                  </div>
+
+                  <div className="rounded-3xl border border-slate-700 bg-slate-900/50 p-6">
+                    <p className="text-xs font-black uppercase tracking-widest text-slate-400 mb-3">Live Activity</p>
+                    <div className="space-y-2">
+                      {generationLog.map((entry, idx) => (
+                        <div key={`${entry}-${idx}`} className="text-sm text-slate-300">
+                          {idx === generationLog.length - 1 ? '-> ' : '- '}
+                          {entry}
+                        </div>
+                      ))}
+                    </div>
+                  </div>
               </div>
           ) : (
               <CreationWizard 
