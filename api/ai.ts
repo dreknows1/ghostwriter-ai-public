@@ -388,7 +388,7 @@ If uncertain, choose the safer authentic option over novelty.
 }
 
 function getPipelineBudgetMs(): number {
-  return Number(process.env.AI_PIPELINE_BUDGET_MS || 55000);
+  return Number(process.env.AI_PIPELINE_BUDGET_MS || 70000);
 }
 
 function hasTimeBudget(startMs: number, reserveMs = 4000): boolean {
@@ -1717,6 +1717,54 @@ ${songText}
   return openAIResponses(prompt);
 }
 
+async function finalNearPassUpgrade(songText: string, inputs: any, userProfile: any, audit: CulturalAudit): Promise<string> {
+  const culturalContext = await buildCulturalPromptContext(inputs || {});
+  const metaTagPackage = await getMetaTagPackage(inputs || {});
+  const agentDirectives = await getGenreAgentDirectives(inputs || {});
+  const weakest = (Array.isArray(audit?.checklist) ? [...audit.checklist] : [])
+    .sort((a, b) => a.score - b.score)
+    .slice(0, 4)
+    .map((item) => `- ${item.dimension}: ${item.notes || "Improve this dimension."} (current ${item.score})`)
+    .join("\n");
+
+  const prompt = `
+You are doing a final near-pass quality rescue.
+The song is close but below release threshold. Keep story/hook identity and elevate craft quality.
+
+Return only:
+Title: ...
+### SUNO Prompt
+...
+### Lyrics
+...
+
+Hard target:
+- Raise overall audit to >= 90.
+- Raise each weak dimension to >= 85.
+- Keep language/region authenticity and subgenre fidelity strict.
+
+Weak dimensions to repair:
+${weakest || "- Improve authenticity, context, and cadence/prosody."}
+
+Rules:
+- Do not flatten emotion or remove stylistic personality.
+- Tighten line-level cadence and remove generic phrasing.
+- Keep dynamic meta tags/adlibs musical, logical, and distributed.
+- Preserve narrative continuity and concrete scene details.
+
+${culturalContext}
+${getAuditRubricPromptBlock(94)}
+${metaTagPackage.guidance}
+${metaTagPackage.strictSpec}
+${agentDirectives.lyricDirectives}
+
+Song:
+${songText}
+  `.trim();
+
+  return openAIResponses(prompt);
+}
+
 async function enforceMinimumAuditScore(
   songText: string,
   inputs: any,
@@ -2179,6 +2227,41 @@ ${agentDirectives.lyricDirectives}
               pass: gated.qualityGate.passes.length + 1,
               score: surgicalAudit.overallScore,
               action: surgicalAudit.overallScore < 85 ? "rewrite" : "accepted",
+            },
+          ],
+        },
+      };
+    }
+  }
+  for (let finalPass = 0; finalPass < 2; finalPass += 1) {
+    if (gated.audit.overallScore < 80 || gated.audit.overallScore >= 85) break;
+    if (!hasTimeBudget(startMs, 5000)) break;
+    const upgradedDraft = await finalNearPassUpgrade(gated.text, inputs || {}, userProfile || {}, gated.audit);
+    let upgradedText = upgradedDraft;
+    if (hasTimeBudget(startMs, 3600)) {
+      upgradedText = await enforceMetaTagOrchestration(upgradedText, inputs || {});
+    }
+    if (hasTimeBudget(startMs, 2600)) {
+      upgradedText = await enforceSongDepthAndTexture(upgradedText, inputs || {}, userProfile || {});
+    }
+    if (hasTimeBudget(startMs, 1800)) {
+      upgradedText = await enforceSunoPromptDriver(upgradedText, inputs || {}, userProfile || {});
+    }
+    const upgradedAudit = await evaluateCulturalAudit(upgradedText, inputs || {});
+    if (upgradedAudit.overallScore > gated.audit.overallScore) {
+      gated = {
+        text: upgradedText,
+        audit: upgradedAudit,
+        qualityGate: {
+          ...gated.qualityGate,
+          finalScore: upgradedAudit.overallScore,
+          rewritesTriggered: gated.qualityGate.rewritesTriggered + 1,
+          passes: [
+            ...gated.qualityGate.passes,
+            {
+              pass: gated.qualityGate.passes.length + 1,
+              score: upgradedAudit.overallScore,
+              action: upgradedAudit.overallScore < 85 ? "rewrite" : "accepted",
             },
           ],
         },
