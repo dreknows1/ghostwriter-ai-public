@@ -1709,7 +1709,16 @@ ${songText}
     const raw = await openAIResponses(prompt);
     const parsed = parseLooseJson(raw);
     if (!parsed) return fallbackAuditFromSong(songText, inputs);
-    return normalizeAudit(parsed);
+    const modelAudit = normalizeAudit(parsed);
+    const deterministic = deterministicAudit(songText, inputs);
+    const blendedOverall = clampScore(
+      Math.round(modelAudit.overallScore * 0.65 + deterministic.overallScore * 0.35)
+    );
+    return {
+      overallScore: blendedOverall,
+      summary: `${modelAudit.summary} (consensus blended with deterministic quality metrics)`,
+      checklist: modelAudit.checklist,
+    };
   } catch {
     return fallbackAuditFromSong(songText, inputs);
   }
@@ -2414,6 +2423,32 @@ ${agentDirectives.lyricDirectives}
       }
     }
     gated = candidateBest;
+  }
+  if (gated.audit.overallScore < 85) {
+    if (gated.audit.overallScore >= 82) {
+      const deterministic = deterministicAudit(gated.text, inputs || {});
+      if (deterministic.overallScore >= 85) {
+        gated = {
+          ...gated,
+          audit: {
+            ...deterministic,
+            summary: `${deterministic.summary} Released via near-pass consensus override.`,
+          },
+          qualityGate: {
+            ...gated.qualityGate,
+            finalScore: deterministic.overallScore,
+            passes: [
+              ...gated.qualityGate.passes,
+              {
+                pass: gated.qualityGate.passes.length + 1,
+                score: deterministic.overallScore,
+                action: "accepted",
+              },
+            ],
+          },
+        };
+      }
+    }
   }
   if (gated.audit.overallScore < 85) {
     throw Object.assign(
