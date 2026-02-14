@@ -1981,7 +1981,41 @@ ${agentDirectives.lyricDirectives}
   }
 
   const rewriteCap = hasTimeBudget(startMs, 12000) ? 2 : hasTimeBudget(startMs, 7000) ? 1 : 0;
-  const gated = await enforceMinimumAuditScore(finalText, inputs || {}, userProfile || {}, 85, rewriteCap);
+  let gated = await enforceMinimumAuditScore(finalText, inputs || {}, userProfile || {}, 85, rewriteCap);
+  if (
+    gated.audit.overallScore >= 80 &&
+    gated.audit.overallScore < 85 &&
+    hasTimeBudget(startMs, 5000)
+  ) {
+    const rescueDraft = await rewriteFromAudit(gated.text, inputs || {}, userProfile || {}, gated.audit);
+    let rescueText = rescueDraft;
+    if (hasTimeBudget(startMs, 4000)) {
+      rescueText = await enforceSongDepthAndTexture(rescueText, inputs || {}, userProfile || {});
+    }
+    if (hasTimeBudget(startMs, 3000)) {
+      rescueText = await enforceSunoPromptDriver(rescueText, inputs || {}, userProfile || {});
+    }
+    const rescueAudit = await evaluateCulturalAudit(rescueText, inputs || {});
+    if (rescueAudit.overallScore > gated.audit.overallScore) {
+      gated = {
+        text: rescueText,
+        audit: rescueAudit,
+        qualityGate: {
+          ...gated.qualityGate,
+          finalScore: rescueAudit.overallScore,
+          rewritesTriggered: gated.qualityGate.rewritesTriggered + 1,
+          passes: [
+            ...gated.qualityGate.passes,
+            {
+              pass: gated.qualityGate.passes.length + 1,
+              score: rescueAudit.overallScore,
+              action: rescueAudit.overallScore < 85 ? "rewrite" : "accepted",
+            },
+          ],
+        },
+      };
+    }
+  }
   if (gated.audit.overallScore < 85) {
     throw Object.assign(
       new Error(`Quality gate failed (${gated.audit.overallScore}/100). Song was not released. Please retry.`),
