@@ -476,6 +476,32 @@ function getHipHopCadenceGuidance(subGenre?: string): string {
   return "Hip-Hop lens: cadence contrast between verse and hook, meaningful multis, no recycled cliches.";
 }
 
+function getGenreLengthDirective(genre?: string, subGenre?: string): string {
+  const g = (genre || "").toLowerCase();
+  const sg = (subGenre || "").toLowerCase();
+  if (g.includes("hip-hop") || g.includes("rap") || sg.includes("drill") || sg.includes("trap")) {
+    return "Target concise radio-friendly length: ~2:10-3:10, usually 2 verses + 2-3 choruses + bridge optional.";
+  }
+  if (g.includes("r&b") || g.includes("soul") || g.includes("pop")) {
+    return "Target mainstream song length: ~2:40-3:40 with tight sections; avoid overly long repeated blocks.";
+  }
+  if (g.includes("rock") || g.includes("metal")) {
+    return "Target focused song length: ~2:45-4:00 with clear dynamic arc and no unnecessary section bloat.";
+  }
+  return "Target concise commercial length: ~2:30-3:40 unless user explicitly asks for extended form.";
+}
+
+function getTaxonomyGuardrailDirective(inputs: any): string {
+  return `
+Taxonomy-to-lyrics guardrails:
+- Genre/Subgenre/Instrumentation/Scene/Audio choices are CREATIVE DIRECTION signals, not literal lyric subjects.
+- Do not name-drop selected configuration terms unless they occur naturally in a human-written lyric.
+- Only user-supplied mundane objects are allowed as explicit concrete inserts.
+- Keep setting details atmospheric/subtextual unless the user explicitly asks for literal references.
+- Highest-priority shaping input is the user's final custom prompt/instruction.
+  `.trim();
+}
+
 function getRegionalSceneGuidance(language: string, genre: string, subGenre: string, cultureRegion: string): string {
   const l = language.toLowerCase();
   const g = genre.toLowerCase();
@@ -587,6 +613,8 @@ Rules:
 - Keep strong genre/subgenre identity and avoid cliche stock lines.
 - Improve metaphors, cadence, rhyme texture, and scene authenticity.
 - Keep line-to-line narrative continuity so verses feel connected, not like isolated one-liners.
+- Keep rhyme discipline: meaningful rhyme presence across sections (end-rhyme and/or internal rhyme), do not drift into mostly unrhymed prose.
+- Keep sections concise and genre-appropriate in total runtime footprint.
 - Do not add stereotypes, slurs, or tokenized dialect.
 - Keep title and hook memorable and aligned with the core story.
 - Keep section meta tags consistent and musically meaningful.
@@ -597,6 +625,8 @@ Creator context:
 - Artist persona: ${userProfile?.display_name || "N/A"} | vibe: ${userProfile?.preferred_vibe || "N/A"}
 
 ${culturalContext}
+${getGenreLengthDirective(inputs?.genre, inputs?.subGenre)}
+${getTaxonomyGuardrailDirective(inputs)}
 ${getAuditRubricPromptBlock()}
 ${metaTagPackage.guidance}
 ${metaTagPackage.strictSpec}
@@ -1757,6 +1787,9 @@ Required:
 - Keep the hook identity and emotional arc intact.
 - Keep dynamic inline tags/adlibs musical and distributed.
 - Avoid cliche wording and disconnected one-liners.
+- Keep meaningful rhyme density for the selected genre/subgenre (not flat free-verse feel).
+- Keep total section count/line count tight to genre-typical song duration.
+- Treat taxonomy fields as direction only (not literal lyric subject matter), except user-provided mundane objects.
 
 Audit issues to fix:
 ${issueList}
@@ -1770,6 +1803,8 @@ Context:
 - Artist persona: ${userProfile?.display_name || "N/A"} | vibe: ${userProfile?.preferred_vibe || "N/A"}
 
 ${culturalContext}
+${getGenreLengthDirective(inputs?.genre, inputs?.subGenre)}
+${getTaxonomyGuardrailDirective(inputs)}
 ${getAuditRubricPromptBlock()}
 ${metaTagPackage.guidance}
 ${metaTagPackage.strictSpec}
@@ -1813,8 +1848,12 @@ Rules:
 - Lift the weakest dimensions to >= 85 and target overall >= 88.
 - Keep dynamic inline tags/adlibs musical and non-spammy.
 - Avoid flattening or generic phrasing.
+- Improve rhyme discipline and reduce overlong phrasing.
+- Do not make taxonomy selections literal lyric subjects unless they are user-provided mundane objects.
 
 ${culturalContext}
+${getGenreLengthDirective(inputs?.genre, inputs?.subGenre)}
+${getTaxonomyGuardrailDirective(inputs)}
 ${getAuditRubricPromptBlock(93)}
 ${metaTagPackage.guidance}
 ${metaTagPackage.strictSpec}
@@ -1861,8 +1900,13 @@ Rules:
 - Tighten line-level cadence and remove generic phrasing.
 - Keep dynamic meta tags/adlibs musical, logical, and distributed.
 - Preserve narrative continuity and concrete scene details.
+- Strengthen rhyme density without sounding forced.
+- Keep structure concise for genre-standard runtime.
+- Keep taxonomy selections atmospheric/directional, not literal lyric mentions (except user mundane objects).
 
 ${culturalContext}
+${getGenreLengthDirective(inputs?.genre, inputs?.subGenre)}
+${getTaxonomyGuardrailDirective(inputs)}
 ${getAuditRubricPromptBlock(94)}
 ${metaTagPackage.guidance}
 ${metaTagPackage.strictSpec}
@@ -2181,6 +2225,7 @@ Context:
 - Audio: ${inputs?.audioEnv || "Studio (Clean)"}
 - Vocals: ${inputs?.vocals || "Female Solo"} ${inputs?.duetType ? `(Duet: ${inputs.duetType})` : ""}
 - Extra details: ${inputs?.mundaneObjects || ""} ${inputs?.awkwardMoment || ""}
+- User core prompt (highest priority): ${inputs?.additionalInfo || inputs?.awkwardMoment || ""}
 - Artist persona: ${userProfile?.display_name || "N/A"} | vibe: ${userProfile?.preferred_vibe || "N/A"}
 
 Non-negotiable writing directives:
@@ -2192,8 +2237,15 @@ Non-negotiable writing directives:
 - In Lyrics, use section meta tags from the library style (e.g., [Verse], [Chorus], [Bridge], [Ad-Lib Section]).
 - Add musically appropriate adlibs in parentheses where helpful, not on every line.
 - Internally draft and compare at least 2 candidate versions, then output only the strongest one.
+- Treat genre/subgenre/instrumentation/scene/audio selections as creative direction only, not literal lyric topics.
+- Only user-provided mundane objects may be inserted as explicit concrete lyric details.
+- Maintain clear rhyme discipline appropriate to genre/subgenre (not mostly unrhymed lines).
+- Respect genre-standard length and keep song concise.
+- If any instruction conflicts, prioritize the user's core prompt.
 
 ${culturalContext}
+${getGenreLengthDirective(inputs?.genre, inputs?.subGenre)}
+${getTaxonomyGuardrailDirective(inputs)}
 ${getAuditRubricPromptBlock()}
 ${metaTagPackage.guidance}
 ${metaTagPackage.strictSpec}
@@ -2287,6 +2339,7 @@ Context:
 - Audio: ${inputs?.audioEnv || "Studio (Clean)"}
 - Vocals: ${inputs?.vocals || "Female Solo"} ${inputs?.duetType ? `(Duet: ${inputs.duetType})` : ""}
 - Extra details: ${inputs?.mundaneObjects || ""} ${inputs?.awkwardMoment || ""}
+- User core prompt (highest priority): ${inputs?.additionalInfo || inputs?.awkwardMoment || ""}
 - Artist persona: ${userProfile?.display_name || "N/A"} | vibe: ${userProfile?.preferred_vibe || "N/A"}
 
 Must improve:
@@ -2297,8 +2350,13 @@ Must improve:
 - Lyrical Originality
 - Cadence & Prosody
 - Internally draft and compare at least 2 candidates, then output only the stronger draft.
+- Keep taxonomy choices directional (not literal lyric mentions), except user-provided mundane objects.
+- Keep rhyme discipline and concise genre-appropriate song length.
+- Prioritize the user's core prompt over all other optional context.
 
 ${culturalContext}
+${getGenreLengthDirective(inputs?.genre, inputs?.subGenre)}
+${getTaxonomyGuardrailDirective(inputs)}
 ${getAuditRubricPromptBlock(92)}
 ${metaTagPackage.guidance}
 ${metaTagPackage.strictSpec}
