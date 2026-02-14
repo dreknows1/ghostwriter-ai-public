@@ -369,6 +369,24 @@ function shouldRunDeepAudit(): boolean {
   return process.env.AI_DEEP_AUDIT === "1";
 }
 
+function getQualityTargetScore(): number {
+  return Number(process.env.AI_QUALITY_TARGET_SCORE || 90);
+}
+
+function getAuditRubricPromptBlock(minTarget = getQualityTargetScore()): string {
+  return `
+Quality-first generation rubric (optimize first draft for this):
+- Language Authenticity: native phrasing, culturally coherent idiom/register.
+- Cultural Context: scene, references, and perspective match selected culture/region.
+- Genre Fidelity: writing and structure match genre conventions.
+- Subgenre Fidelity: cadence, imagery, arrangement language, and vocal cues match subgenre.
+- Lyrical Originality: avoid cliches and generic filler; use concrete, memorable details.
+- Cadence & Prosody: stress/flow sing naturally; line lengths support performance.
+Hard drafting target: produce a draft that would realistically score >= ${minTarget}/100.
+If uncertain, choose the safer authentic option over novelty.
+  `.trim();
+}
+
 function getPipelineBudgetMs(): number {
   return Number(process.env.AI_PIPELINE_BUDGET_MS || 32000);
 }
@@ -579,6 +597,7 @@ Creator context:
 - Artist persona: ${userProfile?.display_name || "N/A"} | vibe: ${userProfile?.preferred_vibe || "N/A"}
 
 ${culturalContext}
+${getAuditRubricPromptBlock()}
 ${metaTagPackage.guidance}
 ${metaTagPackage.strictSpec}
 ${agentDirectives.lyricDirectives}
@@ -1640,6 +1659,7 @@ Context:
 - Artist persona: ${userProfile?.display_name || "N/A"} | vibe: ${userProfile?.preferred_vibe || "N/A"}
 
 ${culturalContext}
+${getAuditRubricPromptBlock()}
 ${metaTagPackage.guidance}
 ${metaTagPackage.strictSpec}
 ${agentDirectives.lyricDirectives}
@@ -1958,6 +1978,7 @@ Non-negotiable writing directives:
 - Add musically appropriate adlibs in parentheses where helpful, not on every line.
 
 ${culturalContext}
+${getAuditRubricPromptBlock()}
 ${metaTagPackage.guidance}
 ${metaTagPackage.strictSpec}
 ${agentDirectives.lyricDirectives}
@@ -2048,6 +2069,7 @@ Title: ...
 Instruction: ${editInstruction || ""}
 Cultural context requirements:
 ${culturalContext}
+${getAuditRubricPromptBlock()}
 Meta tag and adlib requirements:
 ${metaTagPackage.guidance}
 ${metaTagPackage.strictSpec}
@@ -2091,6 +2113,7 @@ Title: ...
 
 Cultural context requirements:
 ${culturalContext}
+${getAuditRubricPromptBlock()}
 Meta tag and adlib requirements:
 ${metaTagPackage.guidance}
 ${metaTagPackage.strictSpec}
