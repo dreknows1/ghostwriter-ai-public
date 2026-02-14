@@ -1875,6 +1875,8 @@ async function enforceMinimumAuditScore(
 ): Promise<{ text: string; audit: CulturalAudit; qualityGate: QualityGateReport }> {
   let workingText = songText;
   let audit = await evaluateCulturalAudit(workingText, inputs || {});
+  let bestText = workingText;
+  let bestAudit = audit;
   const passes: QualityGatePass[] = [];
   let rewritesTriggered = 0;
 
@@ -1888,18 +1890,27 @@ async function enforceMinimumAuditScore(
     if (!shouldRewrite) break;
     rewritesTriggered += 1;
     const rewritten = await rewriteFromAudit(workingText, inputs || {}, userProfile || {}, audit);
-    workingText = await enforceMetaTagOrchestration(rewritten, inputs || {});
-    workingText = await enforceSongDepthAndTexture(workingText, inputs || {}, userProfile || {});
-    workingText = await enforceSunoPromptDriver(workingText, inputs || {}, userProfile || {});
-    audit = await evaluateCulturalAudit(workingText, inputs || {});
+    let rewrittenText = await enforceMetaTagOrchestration(rewritten, inputs || {});
+    rewrittenText = await enforceSongDepthAndTexture(rewrittenText, inputs || {}, userProfile || {});
+    rewrittenText = await enforceSunoPromptDriver(rewrittenText, inputs || {}, userProfile || {});
+    const rewrittenAudit = await evaluateCulturalAudit(rewrittenText, inputs || {});
+    if (rewrittenAudit.overallScore >= bestAudit.overallScore) {
+      bestText = rewrittenText;
+      bestAudit = rewrittenAudit;
+      workingText = rewrittenText;
+      audit = rewrittenAudit;
+    } else {
+      workingText = bestText;
+      audit = bestAudit;
+    }
   }
 
   return {
-    text: workingText,
-    audit,
+    text: bestText,
+    audit: bestAudit,
     qualityGate: {
       minScore,
-      finalScore: audit.overallScore,
+      finalScore: bestAudit.overallScore,
       rewritesTriggered,
       passes,
     },
@@ -2243,7 +2254,7 @@ ${agentDirectives.lyricDirectives}
       },
     };
   }
-  for (let regenAttempt = 0; regenAttempt < 2; regenAttempt += 1) {
+  for (let regenAttempt = 0; regenAttempt < 4; regenAttempt += 1) {
     if (gated.audit.overallScore >= 85) break;
     if (!hasTimeBudget(startMs, 11000)) break;
     const recoveryPrompt = `
