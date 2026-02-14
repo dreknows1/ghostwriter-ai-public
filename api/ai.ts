@@ -2043,7 +2043,9 @@ ${agentDirectives.lyricDirectives}
       },
     };
   }
-  if (gated.audit.overallScore < 85 && hasTimeBudget(startMs, 12000)) {
+  for (let regenAttempt = 0; regenAttempt < 2; regenAttempt += 1) {
+    if (gated.audit.overallScore >= 85) break;
+    if (!hasTimeBudget(startMs, 11000)) break;
     const recoveryPrompt = `
 You are a professional songwriter in recovery mode.
 Create a brand-new song draft (do NOT lightly edit the previous one) with stronger first-pass quality.
@@ -2097,6 +2099,7 @@ ${agentDirectives.lyricDirectives}
     if (recoveryGated.audit.overallScore > gated.audit.overallScore) {
       gated = recoveryGated;
     }
+    if (gated.audit.overallScore >= 85) break;
   }
   if (gated.audit.overallScore < 85) {
     throw Object.assign(
