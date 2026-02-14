@@ -388,7 +388,7 @@ If uncertain, choose the safer authentic option over novelty.
 }
 
 function getPipelineBudgetMs(): number {
-  return Number(process.env.AI_PIPELINE_BUDGET_MS || 42000);
+  return Number(process.env.AI_PIPELINE_BUDGET_MS || 55000);
 }
 
 function hasTimeBudget(startMs: number, reserveMs = 4000): boolean {
@@ -1643,6 +1643,7 @@ Title: ...
 
 Required:
 - Raise authenticity, narrative continuity, cadence/prosody, and subgenre fidelity.
+- Target overall audit >= 88 and lift weak dimensions to >= 85 where possible.
 - Keep the hook identity and emotional arc intact.
 - Keep dynamic inline tags/adlibs musical and distributed.
 - Avoid cliche wording and disconnected one-liners.
@@ -1665,6 +1666,51 @@ ${metaTagPackage.strictSpec}
 ${agentDirectives.lyricDirectives}
 
 Song to rewrite:
+${songText}
+  `.trim();
+
+  return openAIResponses(prompt);
+}
+
+async function surgicalRepairFromAudit(songText: string, inputs: any, userProfile: any, audit: CulturalAudit): Promise<string> {
+  const culturalContext = await buildCulturalPromptContext(inputs || {});
+  const metaTagPackage = await getMetaTagPackage(inputs || {});
+  const agentDirectives = await getGenreAgentDirectives(inputs || {});
+  const weakest = (Array.isArray(audit?.checklist) ? [...audit.checklist] : [])
+    .sort((a, b) => a.score - b.score)
+    .slice(0, 3)
+    .map((item) => `- ${item.dimension}: ${item.notes || "Improve this dimension."} (current ${item.score})`)
+    .join("\n");
+
+  const prompt = `
+You are doing a surgical quality repair pass on a nearly-passing song.
+Do NOT rewrite from scratch. Keep title, hook identity, and overall story.
+Patch only what is necessary to raise audit quality.
+
+Return only:
+Title: ...
+### SUNO Prompt
+...
+### Lyrics
+...
+
+Priority fixes:
+${weakest || "- Improve authenticity, subgenre fidelity, and cadence/prosody."}
+
+Rules:
+- Preserve language and cultural/genre identity.
+- Improve cadence/prosody and lyrical specificity line-by-line.
+- Lift the weakest dimensions to >= 85 and target overall >= 88.
+- Keep dynamic inline tags/adlibs musical and non-spammy.
+- Avoid flattening or generic phrasing.
+
+${culturalContext}
+${getAuditRubricPromptBlock(93)}
+${metaTagPackage.guidance}
+${metaTagPackage.strictSpec}
+${agentDirectives.lyricDirectives}
+
+Song:
 ${songText}
   `.trim();
 
@@ -1976,6 +2022,7 @@ Non-negotiable writing directives:
 - Make the SUNO prompt production-ready and specific to the same cultural/genre profile.
 - In Lyrics, use section meta tags from the library style (e.g., [Verse], [Chorus], [Bridge], [Ad-Lib Section]).
 - Add musically appropriate adlibs in parentheses where helpful, not on every line.
+- Internally draft and compare at least 2 candidate versions, then output only the strongest one.
 
 ${culturalContext}
 ${getAuditRubricPromptBlock()}
@@ -2001,17 +2048,17 @@ ${agentDirectives.lyricDirectives}
     finalText = await enforceSunoPromptDriver(finalText, inputs || {}, userProfile || {});
   }
 
-  const rewriteCap = hasTimeBudget(startMs, 18000)
+  const rewriteCap = hasTimeBudget(startMs, 16000)
     ? 4
-    : hasTimeBudget(startMs, 13000)
+    : hasTimeBudget(startMs, 11000)
       ? 3
-      : hasTimeBudget(startMs, 9000)
+      : hasTimeBudget(startMs, 8000)
         ? 2
-        : hasTimeBudget(startMs, 6500)
+        : hasTimeBudget(startMs, 4500)
           ? 1
           : 0;
   let gated = await enforceMinimumAuditScore(finalText, inputs || {}, userProfile || {}, 85, rewriteCap);
-  for (let rescuePass = 0; rescuePass < 2; rescuePass += 1) {
+  for (let rescuePass = 0; rescuePass < 3; rescuePass += 1) {
     if (gated.audit.overallScore < 75 || gated.audit.overallScore >= 85) break;
     if (!hasTimeBudget(startMs, 3000)) break;
 
@@ -2025,7 +2072,9 @@ ${agentDirectives.lyricDirectives}
     }
 
     const rescueAudit = await evaluateCulturalAudit(rescueText, inputs || {});
-    if (rescueAudit.overallScore <= gated.audit.overallScore) break;
+    if (rescueAudit.overallScore <= gated.audit.overallScore) {
+      continue;
+    }
 
     gated = {
       text: rescueText,
@@ -2078,6 +2127,7 @@ Must improve:
 - Subgenre Fidelity
 - Lyrical Originality
 - Cadence & Prosody
+- Internally draft and compare at least 2 candidates, then output only the stronger draft.
 
 ${culturalContext}
 ${getAuditRubricPromptBlock(92)}
@@ -2102,6 +2152,38 @@ ${agentDirectives.lyricDirectives}
       gated = recoveryGated;
     }
     if (gated.audit.overallScore >= 85) break;
+  }
+  for (let surgicalPass = 0; surgicalPass < 2; surgicalPass += 1) {
+    if (gated.audit.overallScore < 78 || gated.audit.overallScore >= 85) break;
+    if (!hasTimeBudget(startMs, 4500)) break;
+    const surgicalDraft = await surgicalRepairFromAudit(gated.text, inputs || {}, userProfile || {}, gated.audit);
+    let surgicalText = surgicalDraft;
+    if (hasTimeBudget(startMs, 3200)) {
+      surgicalText = await enforceSongDepthAndTexture(surgicalText, inputs || {}, userProfile || {});
+    }
+    if (hasTimeBudget(startMs, 2200)) {
+      surgicalText = await enforceSunoPromptDriver(surgicalText, inputs || {}, userProfile || {});
+    }
+    const surgicalAudit = await evaluateCulturalAudit(surgicalText, inputs || {});
+    if (surgicalAudit.overallScore > gated.audit.overallScore) {
+      gated = {
+        text: surgicalText,
+        audit: surgicalAudit,
+        qualityGate: {
+          ...gated.qualityGate,
+          finalScore: surgicalAudit.overallScore,
+          rewritesTriggered: gated.qualityGate.rewritesTriggered + 1,
+          passes: [
+            ...gated.qualityGate.passes,
+            {
+              pass: gated.qualityGate.passes.length + 1,
+              score: surgicalAudit.overallScore,
+              action: surgicalAudit.overallScore < 85 ? "rewrite" : "accepted",
+            },
+          ],
+        },
+      };
+    }
   }
   if (gated.audit.overallScore < 85) {
     throw Object.assign(
