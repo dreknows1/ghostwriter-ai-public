@@ -233,6 +233,7 @@ Meta Tag Library directives (fallback mode):
 - Keep tags musically meaningful and avoid over-tagging.
 - Use occasional adlibs in parentheses, only where rhythm and delivery benefit.
 - Keep adlibs genre-appropriate for ${genre}/${subGenre}.
+- Place performance cues inside section lines too (word/phrase/line level), not only at section boundaries.
   `.trim();
 }
 
@@ -268,6 +269,7 @@ Strict meta-tag orchestration plan:
 - Minimum mood/energy tag hits: ${plan.requiredMoodHits}
 - Required vocal identity tag must appear in Lyrics: ${plan.requireVocalTypeTag ? "yes" : "no"}
 - Adlib policy: ${plan.adlibPolicy}
+- Inline rule: core sections should carry line-level cueing (target ~40% of lines with inline tag/adlib direction).
 - Tag logic: opening sections establish mood + voice; mid-song sections escalate arrangement tags; final sections resolve with refrain/outro tags.
   `.trim();
 }
@@ -1169,6 +1171,7 @@ Hard constraints:
 - Maintain narrative continuity: verses should feel like unfolding scenes, not disconnected aphorisms.
 - Reuse thematic anchors across sections so the story feels coherent.
 - Add arrangement-driving performance tags (at least 4 non-section tags such as [Whisper], [Falsetto], [Harmony Stack], [Drop], [Half-Time], [Belt], [Call-and-Response]).
+- Distribute performance tags/adlibs within section lines (word/phrase/line cues), not only at section starts/ends.
 - Ensure each repeated chorus evolves meaningfully (at least 2 changed lines while preserving hook identity).
 - Establish dynamic contour across sections (soft/low moments and high/intense moments).
 - Keep adlibs musical, intentional, and style-aware (target range: 3 to 18 total).
@@ -1248,6 +1251,8 @@ function getSectionTagCoverage(lyrics: string): {
   chorusCount: number;
   chorusTaggedSections: number;
   chorusCoverage: number;
+  coreInlineCoverage: number;
+  chorusInlineCoverage: number;
 } {
   const blocks = getSectionBlocksForCoverage(lyrics);
   const coreBlocks = blocks.filter((block) =>
@@ -1267,6 +1272,25 @@ function getSectionTagCoverage(lyrics: string): {
   const chorusTaggedSections = chorusBlocks.filter(hasSectionMeta).length;
   const coreCoverage = coreBlocks.length ? coreTaggedSections / coreBlocks.length : 0;
   const chorusCoverage = chorusBlocks.length ? chorusTaggedSections / chorusBlocks.length : 1;
+  const getInlineLineCoverage = (block: { tag: string; lines: string[] }): number => {
+    const candidateLines = block.lines
+      .map((line) => line.trim())
+      .filter((line) => line && !/^\[[^\]]+\]$/.test(line));
+    if (!candidateLines.length) return 0;
+    const linesWithInlineCue = candidateLines.filter((line) => {
+      const adlib = /\([^)\n]{1,60}\)/.test(line);
+      const tags = line.match(/\[[^\]\n]{2,80}\]/g) || [];
+      const nonStructuralTags = tags.filter((tag) => !isSectionTag(tag) && !isStructuralSectionTag(tag)).length;
+      return adlib || nonStructuralTags > 0;
+    }).length;
+    return linesWithInlineCue / candidateLines.length;
+  };
+  const coreInlineCoverage = coreBlocks.length
+    ? coreBlocks.reduce((acc, block) => acc + getInlineLineCoverage(block), 0) / coreBlocks.length
+    : 0;
+  const chorusInlineCoverage = chorusBlocks.length
+    ? chorusBlocks.reduce((acc, block) => acc + getInlineLineCoverage(block), 0) / chorusBlocks.length
+    : 1;
 
   return {
     coreSectionCount: coreBlocks.length,
@@ -1275,6 +1299,8 @@ function getSectionTagCoverage(lyrics: string): {
     chorusCount: chorusBlocks.length,
     chorusTaggedSections,
     chorusCoverage,
+    coreInlineCoverage,
+    chorusInlineCoverage,
   };
 }
 
@@ -1292,6 +1318,8 @@ function getMetaTagOrchestrationMetrics(songText: string, plan: MetaTagPlan) {
       hasVocalTypeTag: false,
       coreCoverage: 0,
       chorusCoverage: 0,
+      coreInlineCoverage: 0,
+      chorusInlineCoverage: 0,
     };
   }
   const tagCount = countBracketTags(lyrics);
@@ -1310,6 +1338,8 @@ function getMetaTagOrchestrationMetrics(songText: string, plan: MetaTagPlan) {
   const vocalScore = hasVocalTypeTag ? 1 : 0;
   const coreCoverageScore = clamp01(coverage.coreCoverage);
   const chorusCoverageScore = clamp01(coverage.chorusCoverage);
+  const coreInlineCoverageScore = clamp01(coverage.coreInlineCoverage / 0.4);
+  const chorusInlineCoverageScore = clamp01(coverage.chorusInlineCoverage / 0.4);
 
   const score = Math.round(
     structureScore * 30 +
@@ -1318,8 +1348,10 @@ function getMetaTagOrchestrationMetrics(songText: string, plan: MetaTagPlan) {
       accentScore * 10 +
       moodScore * 6 +
       vocalScore * 4 +
-      coreCoverageScore * 10 +
-      chorusCoverageScore * 7
+      coreCoverageScore * 7 +
+      chorusCoverageScore * 5 +
+      coreInlineCoverageScore * 3 +
+      chorusInlineCoverageScore * 2
   );
 
   const strong =
@@ -1331,6 +1363,8 @@ function getMetaTagOrchestrationMetrics(songText: string, plan: MetaTagPlan) {
     hasVocalTypeTag &&
     coverage.coreCoverage >= 0.8 &&
     coverage.chorusCoverage >= 1 &&
+    coverage.coreInlineCoverage >= 0.4 &&
+    coverage.chorusInlineCoverage >= 0.4 &&
     score >= 85;
 
   return {
@@ -1344,6 +1378,8 @@ function getMetaTagOrchestrationMetrics(songText: string, plan: MetaTagPlan) {
     hasVocalTypeTag,
     coreCoverage: coverage.coreCoverage,
     chorusCoverage: coverage.chorusCoverage,
+    coreInlineCoverage: coverage.coreInlineCoverage,
+    chorusInlineCoverage: coverage.chorusInlineCoverage,
   };
 }
 
@@ -1374,16 +1410,21 @@ Additional enforcement:
 - Every core section ([Intro]/[Verse]/[Pre-Chorus]/[Chorus]/[Bridge]/[Outro]) should include at least one non-structural performance tag or a musically useful adlib.
 - Every [Chorus] must contain at least one arrangement/vocal meta tag or adlib.
 - Do not stack all tags in one section; distribute them throughout the song arc.
+- Inject dynamic cues inside lines too: tags/adlibs can target single words, short phrases, or full lines.
+- In core sections, aim for at least ~40% of lyric lines carrying an inline cue (tag/adlib), while keeping readability.
 
 Current quality deficits:
 - Core section tag coverage: ${(bestMetrics.coreCoverage * 100).toFixed(0)}% (target 80%+)
 - Chorus tag coverage: ${(bestMetrics.chorusCoverage * 100).toFixed(0)}% (target 100%)
+- Core inline line coverage: ${(bestMetrics.coreInlineCoverage * 100).toFixed(0)}% (target 40%+)
+- Chorus inline line coverage: ${(bestMetrics.chorusInlineCoverage * 100).toFixed(0)}% (target 40%+)
 - Missing core coverage gap: ${(missingCoreCoverage * 100).toFixed(0)}%
 
 Constraints:
 - Keep language, genre, and story intent unchanged.
 - Keep section order logical and musically performable.
 - Place tags where they drive arrangement and vocal delivery (not random).
+- Prefer line-level performance direction over header-only tagging.
 - Ensure adlibs are natural and rhythmic, not spammed.
 - Maintain coherent progression from intro to outro.
 

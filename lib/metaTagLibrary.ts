@@ -238,6 +238,8 @@ Meta Tag Library directives (use these tags exactly):
 - Adlib policy: ${adlibPolicy}
 - Distribute tags across the whole song arc; avoid concentrating them in only one section.
 - Every [Chorus] should include at least one musical tag or adlib for performance lift.
+- Use inline performance cues across lines (not only section starts/ends). Cues can sit before a line, mid-line, or after key words.
+- Apply line-level dynamics in [Intro], [Verse], [Pre-Chorus], [Chorus], and [Bridge] so delivery evolves bar-to-bar.
 - Keep tags musically meaningful; avoid tag spam.
 - Keep tag syntax exact with brackets/parentheses.
 `.trim();
@@ -288,6 +290,8 @@ Strict meta-tag orchestration plan:
 - Adlib policy: ${plan.adlibPolicy}
 - Coverage rule: every core section ([Intro]/[Verse]/[Pre-Chorus]/[Chorus]/[Bridge]/[Outro]) should include at least one non-structural tag or adlib.
 - Coverage rule: every [Chorus] must include at least one performance tag or adlib.
+- Inline rule: add performance cues throughout section bodies (not just at headers/section boundaries).
+- Inline rule: in core sections, target at least ~40% of lyric lines containing an inline tag/adlib cue.
 - Tag logic: opening sections establish mood + voice; mid-song sections escalate arrangement tags; final sections resolve with refrain/outro tags.
 `.trim();
 }
