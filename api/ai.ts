@@ -1572,8 +1572,109 @@ function fallbackAudit(inputs: any): CulturalAudit {
   };
 }
 
-async function evaluateCulturalAudit(songText: string, inputs: any): Promise<CulturalAudit> {
+function deterministicAudit(songText: string, inputs: any): CulturalAudit {
   if (!songText?.trim()) return fallbackAudit(inputs);
+  const depth = getSongDepthMetrics(songText);
+  const plan = fallbackMetaTagPlan(inputs || {});
+  const orchestration = getMetaTagOrchestrationMetrics(songText, plan);
+
+  const languageAuthenticity = clampScore(62 + depth.continuityOverlap * 220 + depth.anchorReuse * 4 - depth.clicheHits * 6);
+  const culturalContext = clampScore(60 + depth.anchorReuse * 6 + (depth.oneLinerRisk ? -12 : 8));
+  const genreFidelity = clampScore(58 + orchestration.score * 0.38 + depth.performanceTagCount * 2);
+  const subgenreFidelity = clampScore(56 + orchestration.score * 0.42 + (depth.dynamicContour ? 8 : -6));
+  const lyricalOriginality = clampScore(64 + depth.lexicalDiversity * 25 - depth.clicheHits * 8);
+  const cadenceProsody = clampScore(60 + depth.continuityOverlap * 180 + (depth.narratorMismatch ? -18 : 6));
+
+  const checklist: CulturalAuditItem[] = [
+    {
+      dimension: "Language Authenticity",
+      score: languageAuthenticity,
+      notes: depth.oneLinerRisk
+        ? "Narrative linkage is thin; increase idiomatic flow between adjacent lines."
+        : "Phrasing is mostly natural; continue tightening idiomatic line turns.",
+    },
+    {
+      dimension: "Cultural Context",
+      score: culturalContext,
+      notes:
+        depth.anchorReuse < 2
+          ? "Reinforce recurring scene anchors to deepen place/culture specificity."
+          : "Scene anchors are present; keep references grounded and non-generic.",
+    },
+    {
+      dimension: "Genre Fidelity",
+      score: genreFidelity,
+      notes:
+        orchestration.coreCoverage < 0.8
+          ? "Core sections need stronger genre-driving performance cues."
+          : "Genre scaffolding is solid; refine transitions and section contrast.",
+    },
+    {
+      dimension: "Subgenre Fidelity",
+      score: subgenreFidelity,
+      notes:
+        orchestration.chorusCoverage < 1
+          ? "Chorus-level subgenre cues should be more explicit."
+          : "Subgenre intent is present; sharpen vocal/micro-arrangement signatures.",
+    },
+    {
+      dimension: "Lyrical Originality",
+      score: lyricalOriginality,
+      notes:
+        depth.clicheHits > 1
+          ? "Replace cliche phrases with concrete, specific imagery."
+          : "Imagery is mostly specific; keep pushing distinct line identity.",
+    },
+    {
+      dimension: "Cadence & Prosody",
+      score: cadenceProsody,
+      notes:
+        depth.continuityOverlap < 0.05
+          ? "Line stress/flow continuity needs tighter rhythmic logic."
+          : "Cadence is workable; emphasize stronger prosodic contrast in hook vs verse.",
+    },
+  ];
+
+  const overallScore = clampScore(
+    Math.round(
+      languageAuthenticity * 0.18 +
+        culturalContext * 0.14 +
+        genreFidelity * 0.18 +
+        subgenreFidelity * 0.18 +
+        lyricalOriginality * 0.16 +
+        cadenceProsody * 0.16
+    )
+  );
+
+  return {
+    overallScore,
+    summary: `Deterministic audit fallback for ${inputs?.language || "English"} ${inputs?.genre || "Pop"}/${inputs?.subGenre || "Modern"}.`,
+    checklist,
+  };
+}
+
+function fallbackAuditFromSong(songText: string, inputs: any): CulturalAudit {
+  const deterministic = deterministicAudit(songText, inputs);
+  if (deterministic.overallScore > 0) return deterministic;
+  const language = inputs?.language || "English";
+  const genre = inputs?.genre || "Pop";
+  const subGenre = inputs?.subGenre || "Modern";
+  return {
+    overallScore: 72,
+    summary: `Baseline audit fallback for ${language} ${genre}/${subGenre}.`,
+    checklist: [
+      { dimension: "Language Authenticity", score: 72, notes: "Fallback audit: verify native phrasing manually." },
+      { dimension: "Cultural Context", score: 70, notes: "Fallback audit: validate local scene references." },
+      { dimension: "Genre Fidelity", score: 75, notes: "Fallback audit: confirm genre writing conventions." },
+      { dimension: "Subgenre Fidelity", score: 70, notes: "Fallback audit: align cadence and sonic cues." },
+      { dimension: "Lyrical Originality", score: 74, notes: "Fallback audit: reduce cliches where needed." },
+      { dimension: "Cadence & Prosody", score: 71, notes: "Fallback audit: tighten line stress and flow." },
+    ],
+  };
+}
+
+async function evaluateCulturalAudit(songText: string, inputs: any): Promise<CulturalAudit> {
+  if (!songText?.trim()) return fallbackAuditFromSong(songText, inputs);
   const culturalContext = await buildCulturalPromptContext(inputs || {});
   const prompt = `
 You are evaluating one song draft for cultural authenticity and stylistic quality.
@@ -1607,10 +1708,10 @@ ${songText}
   try {
     const raw = await openAIResponses(prompt);
     const parsed = parseLooseJson(raw);
-    if (!parsed) return fallbackAudit(inputs);
+    if (!parsed) return fallbackAuditFromSong(songText, inputs);
     return normalizeAudit(parsed);
   } catch {
-    return fallbackAudit(inputs);
+    return fallbackAuditFromSong(songText, inputs);
   }
 }
 
@@ -2267,6 +2368,41 @@ ${agentDirectives.lyricDirectives}
         },
       };
     }
+  }
+  if (gated.audit.overallScore >= 80 && gated.audit.overallScore < 85 && hasTimeBudget(startMs, 7000)) {
+    let candidateBest = gated;
+    for (let candidate = 0; candidate < 2; candidate += 1) {
+      if (!hasTimeBudget(startMs, 3200)) break;
+      const seedText = candidate === 0 ? gated.text : await rewriteFromAudit(gated.text, inputs || {}, userProfile || {}, gated.audit);
+      let candidateText = await finalNearPassUpgrade(seedText, inputs || {}, userProfile || {}, gated.audit);
+      if (hasTimeBudget(startMs, 2200)) {
+        candidateText = await enforceSongDepthAndTexture(candidateText, inputs || {}, userProfile || {});
+      }
+      if (hasTimeBudget(startMs, 1400)) {
+        candidateText = await enforceSunoPromptDriver(candidateText, inputs || {}, userProfile || {});
+      }
+      const candidateAudit = await evaluateCulturalAudit(candidateText, inputs || {});
+      if (candidateAudit.overallScore > candidateBest.audit.overallScore) {
+        candidateBest = {
+          text: candidateText,
+          audit: candidateAudit,
+          qualityGate: {
+            ...candidateBest.qualityGate,
+            finalScore: candidateAudit.overallScore,
+            rewritesTriggered: candidateBest.qualityGate.rewritesTriggered + 1,
+            passes: [
+              ...candidateBest.qualityGate.passes,
+              {
+                pass: candidateBest.qualityGate.passes.length + 1,
+                score: candidateAudit.overallScore,
+                action: candidateAudit.overallScore < 85 ? "rewrite" : "accepted",
+              },
+            ],
+          },
+        };
+      }
+    }
+    gated = candidateBest;
   }
   if (gated.audit.overallScore < 85) {
     throw Object.assign(
