@@ -1980,7 +1980,13 @@ ${agentDirectives.lyricDirectives}
     finalText = await enforceSunoPromptDriver(finalText, inputs || {}, userProfile || {});
   }
 
-  const rewriteCap = hasTimeBudget(startMs, 12000) ? 2 : hasTimeBudget(startMs, 7000) ? 1 : 0;
+  const rewriteCap = hasTimeBudget(startMs, 15000)
+    ? 3
+    : hasTimeBudget(startMs, 10000)
+      ? 2
+      : hasTimeBudget(startMs, 6500)
+        ? 1
+        : 0;
   let gated = await enforceMinimumAuditScore(finalText, inputs || {}, userProfile || {}, 85, rewriteCap);
   if (
     gated.audit.overallScore >= 80 &&
