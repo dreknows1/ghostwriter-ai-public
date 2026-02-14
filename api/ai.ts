@@ -1988,39 +1988,39 @@ ${agentDirectives.lyricDirectives}
         ? 1
         : 0;
   let gated = await enforceMinimumAuditScore(finalText, inputs || {}, userProfile || {}, 85, rewriteCap);
-  if (
-    gated.audit.overallScore >= 80 &&
-    gated.audit.overallScore < 85 &&
-    hasTimeBudget(startMs, 5000)
-  ) {
+  for (let rescuePass = 0; rescuePass < 2; rescuePass += 1) {
+    if (gated.audit.overallScore < 75 || gated.audit.overallScore >= 85) break;
+    if (!hasTimeBudget(startMs, 4500)) break;
+
     const rescueDraft = await rewriteFromAudit(gated.text, inputs || {}, userProfile || {}, gated.audit);
     let rescueText = rescueDraft;
-    if (hasTimeBudget(startMs, 4000)) {
+    if (hasTimeBudget(startMs, 3500)) {
       rescueText = await enforceSongDepthAndTexture(rescueText, inputs || {}, userProfile || {});
     }
-    if (hasTimeBudget(startMs, 3000)) {
+    if (hasTimeBudget(startMs, 2500)) {
       rescueText = await enforceSunoPromptDriver(rescueText, inputs || {}, userProfile || {});
     }
+
     const rescueAudit = await evaluateCulturalAudit(rescueText, inputs || {});
-    if (rescueAudit.overallScore > gated.audit.overallScore) {
-      gated = {
-        text: rescueText,
-        audit: rescueAudit,
-        qualityGate: {
-          ...gated.qualityGate,
-          finalScore: rescueAudit.overallScore,
-          rewritesTriggered: gated.qualityGate.rewritesTriggered + 1,
-          passes: [
-            ...gated.qualityGate.passes,
-            {
-              pass: gated.qualityGate.passes.length + 1,
-              score: rescueAudit.overallScore,
-              action: rescueAudit.overallScore < 85 ? "rewrite" : "accepted",
-            },
-          ],
-        },
-      };
-    }
+    if (rescueAudit.overallScore <= gated.audit.overallScore) break;
+
+    gated = {
+      text: rescueText,
+      audit: rescueAudit,
+      qualityGate: {
+        ...gated.qualityGate,
+        finalScore: rescueAudit.overallScore,
+        rewritesTriggered: gated.qualityGate.rewritesTriggered + 1,
+        passes: [
+          ...gated.qualityGate.passes,
+          {
+            pass: gated.qualityGate.passes.length + 1,
+            score: rescueAudit.overallScore,
+            action: rescueAudit.overallScore < 85 ? "rewrite" : "accepted",
+          },
+        ],
+      },
+    };
   }
   if (gated.audit.overallScore < 85) {
     throw Object.assign(
