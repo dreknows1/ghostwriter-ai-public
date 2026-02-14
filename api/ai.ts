@@ -1980,14 +1980,7 @@ ${agentDirectives.lyricDirectives}
     finalText = await enforceSunoPromptDriver(finalText, inputs || {}, userProfile || {});
   }
 
-  if (!hasTimeBudget(startMs, 6000)) {
-    throw Object.assign(
-      new Error("Quality gate not completed before timeout. Song was not released. Please retry generation."),
-      { status: 422, code: "quality_gate_incomplete" }
-    );
-  }
-
-  const rewriteCap = hasTimeBudget(startMs, 12000) ? 2 : 1;
+  const rewriteCap = hasTimeBudget(startMs, 12000) ? 2 : hasTimeBudget(startMs, 7000) ? 1 : 0;
   const gated = await enforceMinimumAuditScore(finalText, inputs || {}, userProfile || {}, 85, rewriteCap);
   if (gated.audit.overallScore < 85) {
     throw Object.assign(
