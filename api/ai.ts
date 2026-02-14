@@ -2135,21 +2135,65 @@ async function geminiGenerateImage(
     });
   }
 
-  const response: any = await ai.models.generateContent({
-    model: getGeminiImageModel(),
-    contents,
-    config: {
-      responseModalities: ["TEXT", "IMAGE"],
-    },
-  });
+  const maxAttempts = Math.max(1, Number(process.env.GEMINI_IMAGE_RETRY_ATTEMPTS || 3));
+  const baseBackoffMs = Math.max(200, Number(process.env.GEMINI_IMAGE_RETRY_BASE_MS || 700));
+  let lastError: any = null;
 
-  const parts = Array.isArray(response?.parts) ? response.parts : Array.isArray(response?.candidates?.[0]?.content?.parts) ? response.candidates[0].content.parts : [];
-  const imagePart = parts.find((part: any) => part?.inlineData?.data);
-  const b64 = imagePart?.inlineData?.data;
-  if (!b64 || typeof b64 !== "string") {
-    throw new Error("Gemini image generation returned no base64 payload");
+  for (let attempt = 1; attempt <= maxAttempts; attempt += 1) {
+    try {
+      const response: any = await ai.models.generateContent({
+        model: getGeminiImageModel(),
+        contents,
+        config: {
+          responseModalities: ["TEXT", "IMAGE"],
+        },
+      });
+
+      const parts = Array.isArray(response?.parts)
+        ? response.parts
+        : Array.isArray(response?.candidates?.[0]?.content?.parts)
+          ? response.candidates[0].content.parts
+          : [];
+      const imagePart = parts.find((part: any) => part?.inlineData?.data);
+      const b64 = imagePart?.inlineData?.data;
+      if (!b64 || typeof b64 !== "string") {
+        throw Object.assign(new Error("Gemini image generation returned no base64 payload"), {
+          status: 502,
+          code: "gemini_no_image_payload",
+        });
+      }
+      return `data:image/png;base64,${b64}`;
+    } catch (error: any) {
+      lastError = error;
+      const text = `${error?.message || ""} ${error?.details || ""}`.toLowerCase();
+      const transient =
+        text.includes("deadline expired") ||
+        text.includes("deadline exceeded") ||
+        text.includes("unavailable") ||
+        text.includes("503");
+      if (!transient || attempt >= maxAttempts) break;
+      const waitMs = baseBackoffMs * attempt;
+      await new Promise((resolve) => setTimeout(resolve, waitMs));
+    }
   }
-  return `data:image/png;base64,${b64}`;
+
+  const errorText = `${lastError?.message || ""} ${lastError?.details || ""}`.toLowerCase();
+  const isTransientFailure =
+    errorText.includes("deadline expired") ||
+    errorText.includes("deadline exceeded") ||
+    errorText.includes("unavailable") ||
+    errorText.includes("503");
+  if (isTransientFailure) {
+    throw Object.assign(
+      new Error("Artwork generation service is temporarily unavailable. Please retry in a few seconds."),
+      {
+        status: 503,
+        code: "artwork_provider_unavailable",
+      }
+    );
+  }
+
+  throw lastError || Object.assign(new Error("Artwork generation failed."), { status: 500, code: "artwork_failed" });
 }
 
 async function describeAvatarForPrompt(referenceImage: Blob): Promise<string> {
