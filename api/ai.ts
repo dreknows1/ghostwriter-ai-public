@@ -502,6 +502,16 @@ Taxonomy-to-lyrics guardrails:
   `.trim();
 }
 
+function getFreshRenditionDirective(sessionSeed: string): string {
+  return `
+Fresh rendition protocol (session seed: ${sessionSeed}):
+- Treat this generation as a clean-slate creative session.
+- Do not reuse exact lines or repeated 5+ word phrases from prior unseen drafts.
+- Use new imagery, fresh rhyme paths, and varied section phrasings.
+- Keep the same core story intent, but render a distinct lyrical expression.
+  `.trim();
+}
+
 function getRegionalSceneGuidance(language: string, genre: string, subGenre: string, cultureRegion: string): string {
   const l = language.toLowerCase();
   const g = genre.toLowerCase();
@@ -627,6 +637,7 @@ Creator context:
 ${culturalContext}
 ${getGenreLengthDirective(inputs?.genre, inputs?.subGenre)}
 ${getTaxonomyGuardrailDirective(inputs)}
+${getFreshRenditionDirective(`refine-${Date.now().toString(36)}-${Math.random().toString(36).slice(2, 8)}`)}
 ${getAuditRubricPromptBlock()}
 ${metaTagPackage.guidance}
 ${metaTagPackage.strictSpec}
@@ -1805,6 +1816,7 @@ Context:
 ${culturalContext}
 ${getGenreLengthDirective(inputs?.genre, inputs?.subGenre)}
 ${getTaxonomyGuardrailDirective(inputs)}
+${getFreshRenditionDirective(`rewrite-${Date.now().toString(36)}-${Math.random().toString(36).slice(2, 8)}`)}
 ${getAuditRubricPromptBlock()}
 ${metaTagPackage.guidance}
 ${metaTagPackage.strictSpec}
@@ -1854,6 +1866,7 @@ Rules:
 ${culturalContext}
 ${getGenreLengthDirective(inputs?.genre, inputs?.subGenre)}
 ${getTaxonomyGuardrailDirective(inputs)}
+${getFreshRenditionDirective(`surgical-${Date.now().toString(36)}-${Math.random().toString(36).slice(2, 8)}`)}
 ${getAuditRubricPromptBlock(93)}
 ${metaTagPackage.guidance}
 ${metaTagPackage.strictSpec}
@@ -1907,6 +1920,7 @@ Rules:
 ${culturalContext}
 ${getGenreLengthDirective(inputs?.genre, inputs?.subGenre)}
 ${getTaxonomyGuardrailDirective(inputs)}
+${getFreshRenditionDirective(`upgrade-${Date.now().toString(36)}-${Math.random().toString(36).slice(2, 8)}`)}
 ${getAuditRubricPromptBlock(94)}
 ${metaTagPackage.guidance}
 ${metaTagPackage.strictSpec}
@@ -2203,6 +2217,7 @@ Return ONLY this exact bullet template:
 async function generateSong(payload: any) {
   const { inputs, userProfile } = payload || {};
   const startMs = Date.now();
+  const generationSeed = `gen-${Date.now().toString(36)}-${Math.random().toString(36).slice(2, 10)}`;
   const culturalContext = await buildCulturalPromptContext(inputs || {});
   const metaTagPackage = await getMetaTagPackage(inputs || {});
   const agentDirectives = await getGenreAgentDirectives(inputs || {});
@@ -2246,6 +2261,7 @@ Non-negotiable writing directives:
 ${culturalContext}
 ${getGenreLengthDirective(inputs?.genre, inputs?.subGenre)}
 ${getTaxonomyGuardrailDirective(inputs)}
+${getFreshRenditionDirective(generationSeed)}
 ${getAuditRubricPromptBlock()}
 ${metaTagPackage.guidance}
 ${metaTagPackage.strictSpec}
@@ -2357,6 +2373,7 @@ Must improve:
 ${culturalContext}
 ${getGenreLengthDirective(inputs?.genre, inputs?.subGenre)}
 ${getTaxonomyGuardrailDirective(inputs)}
+${getFreshRenditionDirective(`${generationSeed}-recovery-${regenAttempt + 1}`)}
 ${getAuditRubricPromptBlock(92)}
 ${metaTagPackage.guidance}
 ${metaTagPackage.strictSpec}
