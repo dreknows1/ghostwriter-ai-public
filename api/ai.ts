@@ -1695,60 +1695,71 @@ const getUserProfileByEmailRef = makeFunctionReference<"query">("app:getUserProf
 
 async function openAIResponses(prompt: string, model = getTextModel()): Promise<string> {
   const apiKey = getOpenAIApiKey();
-  const timeoutMs = Number(process.env.AI_HTTP_TIMEOUT_MS || 18000);
-  const controller = new AbortController();
-  const timeout = setTimeout(() => controller.abort(), timeoutMs);
-  let response: Response;
+  const timeoutMs = Number(process.env.AI_HTTP_TIMEOUT_MS || 30000);
+  const maxAttempts = Math.max(1, Number(process.env.AI_HTTP_RETRY_ATTEMPTS || 2));
+  let data: any = null;
+  let lastError: any = null;
 
-  try {
-    response = await fetch("https://api.openai.com/v1/responses", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${apiKey}`,
-      },
-      body: JSON.stringify({
-        model,
-        input: prompt,
-      }),
-      signal: controller.signal,
-    });
-  } catch (error: any) {
-    if (error?.name === "AbortError") {
-      throw Object.assign(new Error(`AI text request timed out after ${timeoutMs}ms.`), {
-        status: 504,
-        code: "provider_timeout",
-      });
-    }
-    throw error;
-  } finally {
-    clearTimeout(timeout);
-  }
-
-  if (!response.ok) {
-    let errorCode = "provider_error";
-    let errorMessage = "Text generation failed.";
+  for (let attempt = 1; attempt <= maxAttempts; attempt += 1) {
+    const controller = new AbortController();
+    const timeout = setTimeout(() => controller.abort(), timeoutMs);
     try {
-      const data: any = await response.json();
-      errorCode = data?.error?.code || errorCode;
-      errorMessage = data?.error?.message || errorMessage;
-    } catch {
-      // Ignore parse errors and keep safe defaults.
+      const response = await fetch("https://api.openai.com/v1/responses", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${apiKey}`,
+        },
+        body: JSON.stringify({
+          model,
+          input: prompt,
+        }),
+        signal: controller.signal,
+      });
+      clearTimeout(timeout);
+
+      if (!response.ok) {
+        let errorCode = "provider_error";
+        let errorMessage = "Text generation failed.";
+        try {
+          const errData: any = await response.json();
+          errorCode = errData?.error?.code || errorCode;
+          errorMessage = errData?.error?.message || errorMessage;
+        } catch {
+          // Ignore parse errors and keep safe defaults.
+        }
+
+        const sanitizedMessage =
+          response.status === 401 || errorCode === "invalid_api_key"
+            ? "AI service authentication failed. Please verify OPENAI_API_KEY in server environment."
+            : `OpenAI text request failed (${response.status}).`;
+
+        throw Object.assign(new Error(sanitizedMessage), {
+          status: response.status,
+          code: errorCode,
+          details: errorMessage,
+        });
+      }
+
+      data = await response.json();
+      lastError = null;
+      break;
+    } catch (error: any) {
+      clearTimeout(timeout);
+      if (error?.name === "AbortError") {
+        lastError = Object.assign(new Error(`AI text request timed out after ${timeoutMs}ms.`), {
+          status: 504,
+          code: "provider_timeout",
+        });
+      } else {
+        lastError = error;
+      }
+      if (attempt < maxAttempts) continue;
     }
-
-    const sanitizedMessage =
-      response.status === 401 || errorCode === "invalid_api_key"
-        ? "AI service authentication failed. Please verify OPENAI_API_KEY in server environment."
-        : `OpenAI text request failed (${response.status}).`;
-
-    throw Object.assign(new Error(sanitizedMessage), {
-      status: response.status,
-      code: errorCode,
-      details: errorMessage,
-    });
   }
 
-  const data: any = await response.json();
+  if (lastError) throw lastError;
+
   const text = data?.output_text;
   if (typeof text === "string") return text;
 
