@@ -370,7 +370,7 @@ function shouldRunDeepAudit(): boolean {
 }
 
 function getPipelineBudgetMs(): number {
-  return Number(process.env.AI_PIPELINE_BUDGET_MS || 22000);
+  return Number(process.env.AI_PIPELINE_BUDGET_MS || 32000);
 }
 
 function hasTimeBudget(startMs: number, reserveMs = 4000): boolean {
@@ -1990,14 +1990,14 @@ ${agentDirectives.lyricDirectives}
   let gated = await enforceMinimumAuditScore(finalText, inputs || {}, userProfile || {}, 85, rewriteCap);
   for (let rescuePass = 0; rescuePass < 2; rescuePass += 1) {
     if (gated.audit.overallScore < 75 || gated.audit.overallScore >= 85) break;
-    if (!hasTimeBudget(startMs, 4500)) break;
+    if (!hasTimeBudget(startMs, 3000)) break;
 
     const rescueDraft = await rewriteFromAudit(gated.text, inputs || {}, userProfile || {}, gated.audit);
     let rescueText = rescueDraft;
-    if (hasTimeBudget(startMs, 3500)) {
+    if (hasTimeBudget(startMs, 2500)) {
       rescueText = await enforceSongDepthAndTexture(rescueText, inputs || {}, userProfile || {});
     }
-    if (hasTimeBudget(startMs, 2500)) {
+    if (hasTimeBudget(startMs, 1500)) {
       rescueText = await enforceSunoPromptDriver(rescueText, inputs || {}, userProfile || {});
     }
 
