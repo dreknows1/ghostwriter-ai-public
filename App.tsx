@@ -692,8 +692,17 @@ export const App: React.FC = () => {
           }
           setCulturalAudit(getLastCulturalAudit());
           const quality = getLastQualityGateReport();
-          if (quality && quality.rewritesTriggered > 0) {
-            updateGenerationTelemetry(`Quality gate passed after ${quality.rewritesTriggered} rewrite ${quality.rewritesTriggered === 1 ? 'pass' : 'passes'} (score ${quality.finalScore}).`);
+          if (quality) {
+            quality.passes.forEach((pass) => {
+              updateGenerationTelemetry(
+                `Quality Pass ${pass.pass}: score ${pass.score} -> ${pass.action === 'rewrite' ? 'rewrite triggered' : 'accepted'}`
+              );
+            });
+            if (quality.rewritesTriggered > 0) {
+              updateGenerationTelemetry(`Quality gate passed after ${quality.rewritesTriggered} rewrite ${quality.rewritesTriggered === 1 ? 'pass' : 'passes'} (final score ${quality.finalScore}).`);
+            } else {
+              updateGenerationTelemetry(`Quality gate accepted on first pass (score ${quality.finalScore}).`);
+            }
           }
           
           await deductCredits(session.user.email || '', COSTS.GENERATE_SONG);
