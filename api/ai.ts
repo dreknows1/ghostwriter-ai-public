@@ -1981,21 +1981,20 @@ ${agentDirectives.lyricDirectives}
   }
 
   if (!hasTimeBudget(startMs, 6000)) {
-    const fastAudit = fallbackAudit(inputs || {});
-    return {
-      text: finalText,
-      audit: fastAudit,
-      qualityGate: {
-        minScore: 85,
-        finalScore: fastAudit.overallScore,
-        rewritesTriggered: 0,
-        passes: [{ pass: 1, score: fastAudit.overallScore, action: "accepted" }],
-      },
-    };
+    throw Object.assign(
+      new Error("Quality gate not completed before timeout. Song was not released. Please retry generation."),
+      { status: 422, code: "quality_gate_incomplete" }
+    );
   }
 
   const rewriteCap = hasTimeBudget(startMs, 12000) ? 2 : 1;
   const gated = await enforceMinimumAuditScore(finalText, inputs || {}, userProfile || {}, 85, rewriteCap);
+  if (gated.audit.overallScore < 85) {
+    throw Object.assign(
+      new Error(`Quality gate failed (${gated.audit.overallScore}/100). Song was not released. Please retry.`),
+      { status: 422, code: "quality_gate_failed" }
+    );
+  }
   return { text: gated.text, audit: gated.audit, qualityGate: gated.qualityGate };
 }
 
