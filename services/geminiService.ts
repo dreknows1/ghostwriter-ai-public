@@ -1,4 +1,4 @@
-import { CulturalAudit, SongInputs, SocialPack, UserProfile } from "../types";
+import { CulturalAudit, QualityGateReport, SongInputs, SocialPack, UserProfile } from "../types";
 
 type AIAction =
   | "generateSong"
@@ -10,6 +10,7 @@ type AIAction =
   | "translateLyrics";
 
 let lastCulturalAudit: CulturalAudit | null = null;
+let lastQualityGateReport: QualityGateReport | null = null;
 
 function setLastCulturalAudit(audit?: CulturalAudit | null) {
   if (!audit) return;
@@ -19,6 +20,14 @@ function setLastCulturalAudit(audit?: CulturalAudit | null) {
 
 export function getLastCulturalAudit(): CulturalAudit | null {
   return lastCulturalAudit;
+}
+
+export function getLastQualityGateReport(): QualityGateReport | null {
+  return lastQualityGateReport;
+}
+
+function sleep(ms: number): Promise<void> {
+  return new Promise((resolve) => setTimeout(resolve, ms));
 }
 
 async function callAI<T>(action: AIAction, email: string, payload: Record<string, unknown>): Promise<T> {
@@ -52,8 +61,31 @@ export async function* generateSong(
   email: string,
   userProfile?: UserProfile | null
 ): AsyncGenerator<string> {
-  const result = await callAI<{ text: string; audit?: CulturalAudit }>("generateSong", email, { inputs, userProfile });
+  const pending = callAI<{ text: string; audit?: CulturalAudit; qualityGate?: QualityGateReport }>("generateSong", email, { inputs, userProfile });
+  const statusMessages = [
+    "Song Ghost is listening...",
+    "Drafting lyrics and structure...",
+    "Applying genre/subgenre agent rules...",
+    "Running cultural authenticity score...",
+    "If score is under 85, rewrite pass starts automatically...",
+    "Finalizing SUNO prompt + dynamic tag orchestration...",
+  ];
+  let statusIndex = 0;
+  let settled = false;
+  pending.finally(() => {
+    settled = true;
+  });
+
+  while (!settled) {
+    const msg = statusMessages[Math.min(statusIndex, statusMessages.length - 1)];
+    yield `__STATUS__:${msg}`;
+    statusIndex += 1;
+    await sleep(1400);
+  }
+
+  const result = await pending;
   setLastCulturalAudit(result.audit || null);
+  lastQualityGateReport = result.qualityGate || null;
   yield* singleYield(result.text || "");
 }
 

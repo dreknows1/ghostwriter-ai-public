@@ -29,6 +29,19 @@ type CulturalAudit = {
   checklist: CulturalAuditItem[];
 };
 
+type QualityGatePass = {
+  pass: number;
+  score: number;
+  action: "accepted" | "rewrite";
+};
+
+type QualityGateReport = {
+  minScore: number;
+  finalScore: number;
+  rewritesTriggered: number;
+  passes: QualityGatePass[];
+};
+
 type WritingProfile = {
   language: string;
   languageVariant: string;
@@ -1573,6 +1586,102 @@ ${songText}
   }
 }
 
+function buildAuditIssueList(audit: CulturalAudit): string {
+  const items = Array.isArray(audit?.checklist) ? audit.checklist : [];
+  if (!items.length) return "- Improve language authenticity, genre fidelity, and lyrical originality.";
+  return items
+    .sort((a, b) => a.score - b.score)
+    .slice(0, 4)
+    .map((item) => `- ${item.dimension}: ${item.notes || "Improve this area."} (score ${item.score})`)
+    .join("\n");
+}
+
+async function rewriteFromAudit(songText: string, inputs: any, userProfile: any, audit: CulturalAudit): Promise<string> {
+  const culturalContext = await buildCulturalPromptContext(inputs || {});
+  const metaTagPackage = await getMetaTagPackage(inputs || {});
+  const agentDirectives = await getGenreAgentDirectives(inputs || {});
+  const issueList = buildAuditIssueList(audit);
+
+  const prompt = `
+You are a senior songwriting editor.
+Rewrite this song to improve audit quality while preserving core meaning, language, and genre identity.
+
+Return only:
+Title: ...
+### SUNO Prompt
+...
+### Lyrics
+...
+
+Required:
+- Raise authenticity, narrative continuity, cadence/prosody, and subgenre fidelity.
+- Keep the hook identity and emotional arc intact.
+- Keep dynamic inline tags/adlibs musical and distributed.
+- Avoid cliche wording and disconnected one-liners.
+
+Audit issues to fix:
+${issueList}
+
+Context:
+- Language: ${inputs?.language || "English"}
+- Genre: ${inputs?.genre || "Pop"}
+- Subgenre: ${inputs?.subGenre || "Modern"}
+- Mood: ${inputs?.emotion || "Euphoric"}
+- Scene: ${inputs?.scene || "Studio"}
+- Artist persona: ${userProfile?.display_name || "N/A"} | vibe: ${userProfile?.preferred_vibe || "N/A"}
+
+${culturalContext}
+${metaTagPackage.guidance}
+${metaTagPackage.strictSpec}
+${agentDirectives.lyricDirectives}
+
+Song to rewrite:
+${songText}
+  `.trim();
+
+  return openAIResponses(prompt);
+}
+
+async function enforceMinimumAuditScore(
+  songText: string,
+  inputs: any,
+  userProfile: any,
+  minScore = 85,
+  maxRewrites = 3
+): Promise<{ text: string; audit: CulturalAudit; qualityGate: QualityGateReport }> {
+  let workingText = songText;
+  let audit = await evaluateCulturalAudit(workingText, inputs || {});
+  const passes: QualityGatePass[] = [];
+  let rewritesTriggered = 0;
+
+  for (let pass = 1; pass <= maxRewrites + 1; pass += 1) {
+    const shouldRewrite = audit.overallScore < minScore && pass <= maxRewrites;
+    passes.push({
+      pass,
+      score: audit.overallScore,
+      action: shouldRewrite ? "rewrite" : "accepted",
+    });
+    if (!shouldRewrite) break;
+    rewritesTriggered += 1;
+    const rewritten = await rewriteFromAudit(workingText, inputs || {}, userProfile || {}, audit);
+    workingText = await enforceMetaTagOrchestration(rewritten, inputs || {});
+    workingText = await enforceSongDepthAndTexture(workingText, inputs || {}, userProfile || {});
+    workingText = await enforceSunoPromptDriver(workingText, inputs || {}, userProfile || {});
+    audit = await evaluateCulturalAudit(workingText, inputs || {});
+  }
+
+  return {
+    text: workingText,
+    audit,
+    qualityGate: {
+      minScore,
+      finalScore: audit.overallScore,
+      rewritesTriggered,
+      passes,
+    },
+  };
+}
+
 const getUserProfileByEmailRef = makeFunctionReference<"query">("app:getUserProfileByEmail");
 
 async function openAIResponses(prompt: string, model = getTextModel()): Promise<string> {
@@ -1844,11 +1953,8 @@ ${agentDirectives.lyricDirectives}
   finalText = await enforceSongDepthAndTexture(finalText, inputs || {}, userProfile || {});
   finalText = await enforceSunoPromptDriver(finalText, inputs || {}, userProfile || {});
 
-  const audit = shouldRunDeepAudit()
-    ? await evaluateCulturalAudit(finalText, inputs || {})
-    : fallbackAudit(inputs || {});
-
-  return { text: finalText, audit };
+  const gated = await enforceMinimumAuditScore(finalText, inputs || {}, userProfile || {}, 85, 3);
+  return { text: gated.text, audit: gated.audit, qualityGate: gated.qualityGate };
 }
 
 async function editSong(payload: any) {

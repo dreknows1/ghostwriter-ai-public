@@ -1,7 +1,7 @@
 
 import React, { useState, useEffect, useCallback, useMemo } from 'react';
 import { AppStep, AppView, SongInputs, SavedSong, UserProfile, CulturalAudit } from './types';
-import { generateSong, generateAlbumArt, generateSocialPack, translateLyrics, editSong, generateDynamicOptions, structureImportedSong, getLastCulturalAudit } from './services/geminiService';
+import { generateSong, generateAlbumArt, generateSocialPack, translateLyrics, editSong, generateDynamicOptions, structureImportedSong, getLastCulturalAudit, getLastQualityGateReport } from './services/geminiService';
 import { saveSong } from './services/songService';
 import { getUserProfile } from './services/userService';
 import { getSession, signOut, signIn, signUp, signInWithOAuthEmail, startProviderSignIn } from './services/authService';
@@ -652,10 +652,18 @@ export const App: React.FC = () => {
           
           let fullText = '';
           for await (const chunk of generator) {
+              if (typeof chunk === 'string' && chunk.startsWith('__STATUS__:')) {
+                  setLoadingMessage(chunk.replace('__STATUS__:', '').trim() || 'Processing...');
+                  continue;
+              }
               setGeneratedSong(chunk);
               fullText = chunk;
           }
           setCulturalAudit(getLastCulturalAudit());
+          const quality = getLastQualityGateReport();
+          if (quality && quality.rewritesTriggered > 0) {
+            setLoadingMessage(`Quality gate passed after ${quality.rewritesTriggered} rewrite ${quality.rewritesTriggered === 1 ? 'pass' : 'passes'} (score ${quality.finalScore}).`);
+          }
           
           await deductCredits(session.user.email || '', COSTS.GENERATE_SONG);
           setStep(AppStep.SONG_DISPLAYED);
@@ -1253,7 +1261,7 @@ export const App: React.FC = () => {
               <div className="flex flex-col items-center justify-center flex-grow animate-pulse">
                   <LoadingSpinner />
                   <h2 className="mt-8 text-2xl font-black text-white tracking-tight">{loadingMessage}</h2>
-                  <p className="mt-2 text-slate-500 font-black uppercase tracking-widest text-xs">This may take up to 30 seconds</p>
+                  <p className="mt-2 text-slate-500 font-black uppercase tracking-widest text-xs">Quality gate rewrites below 85 during creation</p>
               </div>
           ) : (
               <CreationWizard 
