@@ -1,4 +1,4 @@
-import { query, mutation, internalMutation } from "./_generated/server";
+import { query, mutation, internalMutation, internalQuery } from "./_generated/server";
 import { v } from "convex/values";
 
 const CODE_PREFIX = "BLACKAI";
@@ -37,10 +37,16 @@ export const createCode = mutation({
     maxUses: v.number(),
   },
   handler: async (ctx: any, args: any) => {
-    if (args.ownerEmail.toLowerCase() !== OWNER_EMAIL) {
-      throw new Error("Unauthorized");
-    }
-
+    throw new Error("Unauthorized. Use internal mutation inviteCodes:createCodeInternal.");
+  },
+});
+export const createCodeInternal = internalMutation({
+  args: {
+    code: v.string(),
+    tier: v.string(),
+    maxUses: v.number(),
+  },
+  handler: async (ctx: any, args: any) => {
     return await ctx.db.insert("inviteCodes", {
       code: args.code.toUpperCase().trim(),
       tier: args.tier,
@@ -78,8 +84,11 @@ export const rotateSkoolCode = internalMutation({
 export const getActiveCode = query({
   args: { ownerEmail: v.string() },
   handler: async (ctx: any, args: any) => {
-    if (args.ownerEmail.toLowerCase() !== OWNER_EMAIL) return null;
-
+    return null;
+  },
+});
+export const getActiveCodeInternal = internalQuery({
+  handler: async (ctx: any) => {
     const allCodes = await ctx.db.query("inviteCodes").collect();
     return allCodes.find((c: any) => c.code.startsWith(CODE_PREFIX) && c.active) || null;
   },
@@ -88,8 +97,12 @@ export const getActiveCode = query({
 export const deactivateCode = mutation({
   args: { ownerEmail: v.string(), code: v.string() },
   handler: async (ctx: any, args: any) => {
-    if (args.ownerEmail.toLowerCase() !== OWNER_EMAIL) throw new Error("Unauthorized");
-
+    throw new Error("Unauthorized. Use internal mutation inviteCodes:deactivateCodeInternal.");
+  },
+});
+export const deactivateCodeInternal = internalMutation({
+  args: { code: v.string() },
+  handler: async (ctx: any, args: any) => {
     const record = await ctx.db
       .query("inviteCodes")
       .withIndex("by_code", (q: any) => q.eq("code", args.code.toUpperCase().trim()))
@@ -103,8 +116,11 @@ export const deactivateCode = mutation({
 export const listCodes = query({
   args: { ownerEmail: v.string() },
   handler: async (ctx: any, args: any) => {
-    if (args.ownerEmail.toLowerCase() !== OWNER_EMAIL) return [];
-
+    return [];
+  },
+});
+export const listCodesInternal = internalQuery({
+  handler: async (ctx: any) => {
     return await ctx.db.query("inviteCodes").order("desc").collect();
   },
 });

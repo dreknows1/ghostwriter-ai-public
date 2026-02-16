@@ -2,7 +2,7 @@
 import fs from "node:fs";
 import path from "node:path";
 import { ConvexHttpClient } from "convex/browser";
-import { api } from "../convex/_generated/api.js";
+import { internal } from "../convex/_generated/api.js";
 
 function normalizeEmail(value) {
   return String(value || "").trim().toLowerCase();
@@ -86,17 +86,15 @@ async function main() {
   }));
 
   const convexUrl = process.env.CONVEX_URL;
-  const ownerEmail = normalizeEmail(process.env.OWNER_EMAIL || "andre7171973@gmail.com");
+  const adminKey = process.env.CONVEX_ADMIN_KEY;
 
-  if (!convexUrl) {
-    console.error("Missing CONVEX_URL in environment.");
+  if (!convexUrl || !adminKey) {
+    console.error("Missing CONVEX_URL or CONVEX_ADMIN_KEY in environment.");
     process.exit(1);
   }
 
   const client = new ConvexHttpClient(convexUrl);
-  if (process.env.CONVEX_ADMIN_KEY) {
-    client.setAdminAuth(process.env.CONVEX_ADMIN_KEY);
-  }
+  client.setAdminAuth(adminKey);
 
   const batches = chunk(mappings, 25);
   const totals = {
@@ -108,8 +106,7 @@ async function main() {
   };
 
   for (let i = 0; i < batches.length; i += 1) {
-    const res = await client.mutation(api.app.relinkSongsByEmailAliases, {
-      ownerEmail,
+    const res = await client.mutation(internal.app.relinkSongsByEmailAliases, {
       dryRun: !apply,
       mappings: batches[i],
     });

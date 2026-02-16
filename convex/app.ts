@@ -1,11 +1,10 @@
-import { mutation, query } from "./_generated/server";
+import { mutation, query, internalMutation } from "./_generated/server";
 import { v } from "convex/values";
 
 const CREDITS_PUBLIC = 25;
 const CREDITS_SKOOL = 100;
 const REFERRAL_INVITER_CREDITS = 40;
 const REFERRAL_INVITEE_CREDITS = 20;
-const OWNER_EMAIL = "andre7171973@gmail.com";
 
 function normalizeEmail(email: string) {
   return email.toLowerCase().trim();
@@ -432,9 +431,8 @@ export const getReferralSummaryByEmail = query({
   },
 });
 
-export const relinkSongsByEmailAliases = mutation({
+export const relinkSongsByEmailAliases = internalMutation({
   args: {
-    ownerEmail: v.string(),
     dryRun: v.optional(v.boolean()),
     mappings: v.array(
       v.object({
@@ -444,11 +442,6 @@ export const relinkSongsByEmailAliases = mutation({
     ),
   },
   handler: async (ctx: any, args: any) => {
-    const owner = normalizeEmail(args.ownerEmail);
-    if (owner !== OWNER_EMAIL) {
-      throw new Error("Unauthorized");
-    }
-
     const dryRun = args.dryRun !== false;
     const summary = {
       dryRun,
