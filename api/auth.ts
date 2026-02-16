@@ -33,6 +33,64 @@ function getConvexClient() {
   return client;
 }
 
+function splitNameFromEmail(email: string): { firstName: string; lastName: string } {
+  const local = email.split("@")[0] || "";
+  const cleaned = local.replace(/[._-]+/g, " ").replace(/\s+/g, " ").trim();
+  if (!cleaned) return { firstName: "", lastName: "" };
+  const parts = cleaned.split(" ");
+  const firstName = parts[0] || "";
+  const lastName = parts.slice(1).join(" ");
+  return { firstName, lastName };
+}
+
+async function syncContactToGHL(input: {
+  email: string;
+  phone?: string;
+  firstName?: string;
+  lastName?: string;
+}) {
+  const apiUrl = process.env.GHL_API_URL || "https://services.leadconnectorhq.com/contacts/";
+  const apiToken = process.env.GHL_API_TOKEN;
+  const locationId = process.env.GHL_LOCATION_ID;
+  const apiVersion = process.env.GHL_API_VERSION || "2021-07-28";
+  const appTag = process.env.GHL_APP_TAG || "song-ghost";
+  const campaignTag = process.env.GHL_CAMPAIGN_TAG || "campaign-song-ghost";
+  const source = process.env.GHL_SOURCE || "Song Ghost";
+
+  if (!apiToken || !locationId) {
+    return;
+  }
+
+  const guessedName = splitNameFromEmail(input.email);
+  const firstName = (input.firstName || guessedName.firstName || "").slice(0, 50);
+  const lastName = (input.lastName || guessedName.lastName || "").slice(0, 50);
+
+  const payload = {
+    locationId,
+    firstName,
+    lastName,
+    email: input.email,
+    phone: input.phone || "",
+    source,
+    tags: [appTag, campaignTag],
+  };
+
+  const response = await fetch(apiUrl, {
+    method: "POST",
+    headers: {
+      Authorization: `Bearer ${apiToken}`,
+      Version: apiVersion,
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(payload),
+  });
+
+  if (!response.ok) {
+    const details = await response.text().catch(() => "");
+    throw new Error(`GHL sync failed (${response.status}): ${details || "Unknown error"}`);
+  }
+}
+
 export default async function handler(req: VercelRequest, res: VercelResponse) {
   if (req.method !== "POST") {
     res.setHeader("Allow", "POST");
@@ -62,11 +120,19 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
 
     const client = getConvexClient();
     const existing: any = await client.query(getUserByEmailRef as any, { email: normalizedEmail });
+    const isNetNewUser = !existing?._id;
 
     if (action === "oauth") {
       const user: any = await client.mutation(upsertUserCredentialsRef as any, {
         email: normalizedEmail,
       });
+      if (isNetNewUser) {
+        try {
+          await syncContactToGHL({ email: normalizedEmail });
+        } catch (e: any) {
+          console.error("[GHL Sync Error][oauth]", e?.message || e);
+        }
+      }
       return res.status(200).json({
         session: {
           user: {
@@ -89,6 +155,13 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
         passwordHash,
         passwordSalt: salt,
       });
+      if (isNetNewUser) {
+        try {
+          await syncContactToGHL({ email: normalizedEmail });
+        } catch (e: any) {
+          console.error("[GHL Sync Error][signup]", e?.message || e);
+        }
+      }
 
       if (referralCode && String(referralCode).trim()) {
         try {
