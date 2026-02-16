@@ -91,6 +91,21 @@ body {
   background: rgba(30, 41, 59, 0.5);
 }
 
+@keyframes communityCodePulse {
+  0%, 100% {
+    box-shadow: 0 0 0 0 rgba(34, 211, 238, 0.18);
+    transform: translateY(0);
+  }
+  50% {
+    box-shadow: 0 0 0 8px rgba(34, 211, 238, 0.06);
+    transform: translateY(-1px);
+  }
+}
+
+.community-code-cta {
+  animation: communityCodePulse 2.2s ease-in-out 3;
+}
+
 @media (max-width: 768px) {
   .heading-display {
     letter-spacing: -0.02em;

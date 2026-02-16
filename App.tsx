@@ -889,19 +889,20 @@ export const App: React.FC = () => {
 
             <>
               {communityCodeValidated ? (
-                <div className="mb-6 rounded-xl border border-emerald-500/40 bg-emerald-900/20 px-5 py-4 text-center animate-fade-in">
-                  <p className="text-emerald-300 font-black text-sm uppercase tracking-widest mb-1">Community Access Unlocked</p>
-                  <p className="text-emerald-400/70 text-xs">100 monthly credits + 50% off all purchases</p>
+                <div className="mb-6 rounded-xl border border-emerald-400/70 bg-emerald-900/35 px-5 py-4 text-center animate-fade-in shadow-[0_0_0_1px_rgba(74,222,128,0.25)]">
+                  <p className="text-emerald-200 font-black text-sm uppercase tracking-widest mb-1">Community Access Unlocked</p>
+                  <p className="text-emerald-100 text-xs font-semibold">100 monthly credits + 50% off all purchases</p>
                 </div>
               ) : showCommunityCode ? (
-                <div className="mb-6 animate-fade-in">
+                <div className="mb-6 animate-fade-in rounded-xl border border-cyan-400/45 bg-cyan-950/20 p-3">
+                  <p className="text-cyan-100 text-xs font-black uppercase tracking-[0.18em] mb-2">Community Code</p>
                   <div className="flex gap-2 mb-2">
                     <input
                       type="text"
                       placeholder="Enter community code"
                       value={communityCode}
                       onChange={(e) => { setCommunityCode(e.target.value.toUpperCase()); setCommunityCodeError(null); }}
-                      className="flex-1 bg-[#0b1223] border border-slate-700 p-3 rounded-xl text-white outline-none focus:border-blue-400 text-sm placeholder:text-slate-500 transition-all uppercase tracking-widest"
+                      className="flex-1 bg-[#0b1223] border border-cyan-300/45 p-3 rounded-xl text-white outline-none focus:border-cyan-200 text-sm placeholder:text-slate-400 transition-all uppercase tracking-widest"
                     />
                     <button
                       type="button"
@@ -929,16 +930,20 @@ export const App: React.FC = () => {
                           setIsAuthLoading(false);
                         }
                       }}
-                      className="px-5 h-12 rounded-xl bg-white text-black font-black text-sm hover:bg-slate-200 transition-all disabled:opacity-50"
+                      className="px-5 h-12 rounded-xl bg-cyan-300 text-slate-950 font-black text-sm hover:bg-cyan-200 transition-all disabled:opacity-50"
                     >
                       Verify
                     </button>
                   </div>
-                  {communityCodeError && <p className="text-rose-400 text-xs mt-1">{communityCodeError}</p>}
-                  <button type="button" onClick={() => setShowCommunityCode(false)} className="text-slate-500 text-xs hover:text-white mt-1">Cancel</button>
+                  {communityCodeError && <p className="text-rose-300 text-xs font-semibold mt-1">{communityCodeError}</p>}
+                  <button type="button" onClick={() => setShowCommunityCode(false)} className="text-slate-300 text-xs font-semibold hover:text-white mt-1">Cancel</button>
                 </div>
               ) : (
-                <button type="button" onClick={() => setShowCommunityCode(true)} className="w-full text-center text-slate-500 text-xs font-bold hover:text-white mb-5 transition-colors">
+                <button
+                  type="button"
+                  onClick={() => setShowCommunityCode(true)}
+                  className="community-code-cta w-full mb-5 rounded-xl border border-cyan-400/55 bg-cyan-950/30 px-4 py-3 text-center text-cyan-100 text-sm font-black uppercase tracking-[0.12em] hover:border-cyan-300 hover:bg-cyan-900/35 transition-colors"
+                >
                   Have a community code?
                 </button>
               )}
