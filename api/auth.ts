@@ -53,8 +53,8 @@ async function syncContactToGHL(input: {
   const apiToken = process.env.GHL_API_TOKEN;
   const locationId = process.env.GHL_LOCATION_ID;
   const apiVersion = process.env.GHL_API_VERSION || "2021-07-28";
-  const appTag = process.env.GHL_APP_TAG || "app2";
-  const campaignTag = process.env.GHL_CAMPAIGN_TAG || "campaign-app2";
+  const appTag = process.env.GHL_APP_TAG || "app1";
+  const campaignTag = process.env.GHL_CAMPAIGN_TAG || "campaign-app1";
   const source = process.env.GHL_SOURCE || "Song Ghost";
 
   if (!apiToken || !locationId) {
