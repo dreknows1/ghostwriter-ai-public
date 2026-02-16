@@ -5,6 +5,7 @@ const CREDITS_PUBLIC = 25;
 const CREDITS_SKOOL = 100;
 const REFERRAL_INVITER_CREDITS = 40;
 const REFERRAL_INVITEE_CREDITS = 20;
+const OWNER_EMAIL = "andre7171973@gmail.com";
 
 function normalizeEmail(email: string) {
   return email.toLowerCase().trim();
@@ -428,5 +429,104 @@ export const getReferralSummaryByEmail = query({
       rewardedCount: invited.filter((r: any) => r.status === "rewarded").length,
       earnedCredits: earned,
     };
+  },
+});
+
+export const relinkSongsByEmailAliases = mutation({
+  args: {
+    ownerEmail: v.string(),
+    dryRun: v.optional(v.boolean()),
+    mappings: v.array(
+      v.object({
+        primaryEmail: v.string(),
+        aliasEmails: v.array(v.string()),
+      })
+    ),
+  },
+  handler: async (ctx: any, args: any) => {
+    const owner = normalizeEmail(args.ownerEmail);
+    if (owner !== OWNER_EMAIL) {
+      throw new Error("Unauthorized");
+    }
+
+    const dryRun = args.dryRun !== false;
+    const summary = {
+      dryRun,
+      mappingsProcessed: 0,
+      primaryUsersResolved: 0,
+      aliasUsersResolved: 0,
+      songsRelinked: 0,
+      aliasesNotFound: 0,
+      details: [] as Array<{
+        primaryEmail: string;
+        movedSongs: number;
+        aliasesFound: number;
+        aliasesNotFound: string[];
+      }>,
+    };
+
+    for (const item of args.mappings || []) {
+      const primaryEmail = normalizeEmail(item.primaryEmail || "");
+      if (!primaryEmail) continue;
+      summary.mappingsProcessed += 1;
+
+      const { user: primaryUser } = await ensureUserAndProfile(ctx, primaryEmail);
+      summary.primaryUsersResolved += 1;
+
+      const aliasSet = new Set<string>();
+      for (const raw of item.aliasEmails || []) {
+        const email = normalizeEmail(raw || "");
+        if (email) aliasSet.add(email);
+      }
+      aliasSet.delete(primaryEmail);
+
+      let movedForPrimary = 0;
+      let aliasesFound = 0;
+      const aliasesNotFound: string[] = [];
+
+      for (const aliasEmail of aliasSet) {
+        const aliasUser = await ctx.db
+          .query("users")
+          .withIndex("by_email", (q: any) => q.eq("email", aliasEmail))
+          .first();
+
+        if (!aliasUser) {
+          summary.aliasesNotFound += 1;
+          aliasesNotFound.push(aliasEmail);
+          continue;
+        }
+
+        aliasesFound += 1;
+        summary.aliasUsersResolved += 1;
+        if (String(aliasUser._id) === String(primaryUser._id)) continue;
+
+        const songs = await ctx.db
+          .query("savedSongs")
+          .withIndex("by_user", (q: any) => q.eq("userId", aliasUser._id))
+          .collect();
+
+        if (!dryRun) {
+          const now = Date.now();
+          for (const song of songs) {
+            await ctx.db.patch(song._id, {
+              userId: primaryUser._id,
+              updatedAt: now,
+            });
+          }
+        }
+
+        movedForPrimary += songs.length;
+        summary.songsRelinked += songs.length;
+      }
+
+      summary.details.push({
+        primaryEmail,
+        movedSongs: movedForPrimary,
+        aliasesFound,
+        aliasesNotFound,
+      });
+    }
+
+    return summary;
   },
 });
