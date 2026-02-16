@@ -1,7 +1,8 @@
 import { mutation, query } from "./_generated/server";
 import { v } from "convex/values";
 
-const FREE_MONTHLY_CREDITS = 30;
+const CREDITS_PUBLIC = 25;
+const CREDITS_SKOOL = 100;
 const REFERRAL_INVITER_CREDITS = 40;
 const REFERRAL_INVITEE_CREDITS = 20;
 
@@ -33,11 +34,22 @@ async function ensureUserAndProfile(ctx: any, emailRaw: string) {
     .first();
 
   if (!profile) {
+    // Check if user is a Skool member by email whitelist
+    const skoolMember = await ctx.db
+      .query("skoolMembers")
+      .withIndex("by_email", (q: any) => q.eq("email", email))
+      .first();
+
+    const isSkool = !!skoolMember;
+    const tier = isSkool ? "skool" : "public";
+    const credits = isSkool ? CREDITS_SKOOL : CREDITS_PUBLIC;
+
     const now = new Date().toISOString();
     const profileId = await ctx.db.insert("profiles", {
       userId: user._id,
-      credits: FREE_MONTHLY_CREDITS,
+      credits,
       lastResetDate: now,
+      tier,
       updatedAt: Date.now(),
     });
     profile = await ctx.db.get(profileId);
@@ -114,6 +126,7 @@ export const getUserProfileByEmail = query({
       preferred_vibe: profile.preferredVibe,
       preferred_art_style: profile.preferredArtStyle,
       last_reset_date: profile.lastResetDate,
+      tier: profile.tier || "public",
     };
   },
 });
@@ -149,6 +162,23 @@ export const upsertUserProfileByEmail = mutation({
   },
 });
 
+export const setProfileTier = mutation({
+  args: { email: v.string(), tier: v.string() },
+  handler: async (ctx: any, args: any) => {
+    const { profile } = await ensureUserAndProfile(ctx, args.email);
+    const isSkool = args.tier === "skool";
+    const credits = isSkool ? CREDITS_SKOOL : CREDITS_PUBLIC;
+
+    await ctx.db.patch(profile._id, {
+      tier: args.tier,
+      credits: Math.max(profile.credits, credits),
+      updatedAt: Date.now(),
+    });
+
+    return { tier: args.tier, credits: Math.max(profile.credits, credits) };
+  },
+});
+
 export const getCreditsByEmail = mutation({
   args: { email: v.string() },
   handler: async (ctx: any, args: any) => {
@@ -156,18 +186,21 @@ export const getCreditsByEmail = mutation({
     const now = Date.now();
     const lastReset = profile.lastResetDate ? new Date(profile.lastResetDate).getTime() : 0;
     if (monthKey(now) !== monthKey(lastReset)) {
+      const isSkool = profile.tier === "skool";
+      const monthlyCredits = isSkool ? CREDITS_SKOOL : CREDITS_PUBLIC;
+
       await ctx.db.patch(profile._id, {
-        credits: FREE_MONTHLY_CREDITS,
+        credits: monthlyCredits,
         lastResetDate: new Date(now).toISOString(),
         updatedAt: now,
       });
       await ctx.db.insert("creditLedger", {
         userId: profile.userId,
-        delta: FREE_MONTHLY_CREDITS,
+        delta: monthlyCredits,
         reason: "monthly_reset",
         createdAt: now,
       });
-      return FREE_MONTHLY_CREDITS;
+      return monthlyCredits;
     }
     return profile.credits;
   },

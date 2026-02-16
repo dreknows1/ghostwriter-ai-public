@@ -20,6 +20,7 @@ export default defineSchema({
     preferredArtStyle: v.optional(v.string()),
     credits: v.number(),
     lastResetDate: v.optional(v.string()),
+    tier: v.optional(v.string()), // "public" | "skool"
     updatedAt: v.number(),
   }).index("by_user", ["userId"]),
 
@@ -78,4 +79,20 @@ export default defineSchema({
     .index("by_referred", ["referredUserId"])
     .index("by_referrer", ["referrerUserId"])
     .index("by_referrer_referred", ["referrerUserId", "referredUserId"]),
+
+  skoolMembers: defineTable({
+    email: v.string(),
+    firstName: v.optional(v.string()),
+    lastName: v.optional(v.string()),
+    joinedDate: v.optional(v.string()),
+  }).index("by_email", ["email"]),
+
+  inviteCodes: defineTable({
+    code: v.string(),
+    tier: v.string(),
+    maxUses: v.number(),
+    currentUses: v.number(),
+    active: v.boolean(),
+    createdAt: v.number(),
+  }).index("by_code", ["code"]),
 });

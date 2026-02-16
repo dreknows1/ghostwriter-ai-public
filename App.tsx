@@ -480,6 +480,11 @@ export const App: React.FC = () => {
   const [authEmail, setAuthEmail] = useState('');
   const [authPassword, setAuthPassword] = useState('');
   const [referralCode, setReferralCode] = useState('');
+  const [communityCode, setCommunityCode] = useState('');
+  const [showCommunityCode, setShowCommunityCode] = useState(false);
+  const [communityCodeValidated, setCommunityCodeValidated] = useState(false);
+  const [communityCodeError, setCommunityCodeError] = useState<string | null>(null);
+  const [pendingTier, setPendingTier] = useState<string | null>(null);
   const [isAuthLoading, setIsAuthLoading] = useState(false);
   const [authError, setAuthError] = useState<string | null>(null);
   const [isSignUpMode, setIsSignUpMode] = useState(false);
@@ -559,6 +564,18 @@ export const App: React.FC = () => {
           const { data, error } = await signInWithOAuthEmail(oauthEmail);
           if (error) throw error;
           if (data?.session) {
+            // Apply pending tier from community code if validated
+            const savedTier = localStorage.getItem('sg_pending_tier');
+            if (savedTier === 'skool') {
+              try {
+                await fetch('/api/db', {
+                  method: 'POST',
+                  headers: { 'Content-Type': 'application/json' },
+                  body: JSON.stringify({ action: 'setProfileTier', payload: { email: data.session.user.email, tier: 'skool' } }),
+                });
+                localStorage.removeItem('sg_pending_tier');
+              } catch (e) { console.error('Failed to set tier:', e); }
+            }
             setSession(data.session);
             setView(AppView.LANDING);
             const c = await getUserCredits(data.session.user.email || '');
@@ -782,6 +799,18 @@ export const App: React.FC = () => {
             : await signIn(authEmail, authPassword);
           if (error) throw error;
           if (data?.session) {
+            // Apply pending tier from community code if validated
+            const savedTier = localStorage.getItem('sg_pending_tier');
+            if (savedTier === 'skool') {
+              try {
+                await fetch('/api/db', {
+                  method: 'POST',
+                  headers: { 'Content-Type': 'application/json' },
+                  body: JSON.stringify({ action: 'setProfileTier', payload: { email: data.session.user.email, tier: 'skool' } }),
+                });
+                localStorage.removeItem('sg_pending_tier');
+              } catch (e) { console.error('Failed to set tier:', e); }
+            }
             setSession(data.session);
             setView(AppView.LANDING);
             const c = await getUserCredits(data.session.user.email || '');
@@ -859,6 +888,61 @@ export const App: React.FC = () => {
             <p className="text-center text-slate-500 text-xs font-black uppercase tracking-[0.18em] mb-8">{isSignUpMode ? 'Create your Song Ghost account' : 'Sign in to Song Ghost'}</p>
 
             <>
+              {communityCodeValidated ? (
+                <div className="mb-6 rounded-xl border border-emerald-500/40 bg-emerald-900/20 px-5 py-4 text-center animate-fade-in">
+                  <p className="text-emerald-300 font-black text-sm uppercase tracking-widest mb-1">Community Access Unlocked</p>
+                  <p className="text-emerald-400/70 text-xs">100 monthly credits + 50% off all purchases</p>
+                </div>
+              ) : showCommunityCode ? (
+                <div className="mb-6 animate-fade-in">
+                  <div className="flex gap-2 mb-2">
+                    <input
+                      type="text"
+                      placeholder="Enter community code"
+                      value={communityCode}
+                      onChange={(e) => { setCommunityCode(e.target.value.toUpperCase()); setCommunityCodeError(null); }}
+                      className="flex-1 bg-[#0b1223] border border-slate-700 p-3 rounded-xl text-white outline-none focus:border-blue-400 text-sm placeholder:text-slate-500 transition-all uppercase tracking-widest"
+                    />
+                    <button
+                      type="button"
+                      disabled={!communityCode.trim() || isAuthLoading}
+                      onClick={async () => {
+                        setIsAuthLoading(true);
+                        setCommunityCodeError(null);
+                        try {
+                          const res = await fetch('/api/db', {
+                            method: 'POST',
+                            headers: { 'Content-Type': 'application/json' },
+                            body: JSON.stringify({ action: 'validateInviteCode', payload: { code: communityCode.trim() } }),
+                          });
+                          const json = await res.json();
+                          if (json.data?.valid) {
+                            setCommunityCodeValidated(true);
+                            setPendingTier(json.data.tier);
+                            localStorage.setItem('sg_pending_tier', json.data.tier);
+                          } else {
+                            setCommunityCodeError('Invalid or expired code');
+                          }
+                        } catch (e) {
+                          setCommunityCodeError('Validation failed');
+                        } finally {
+                          setIsAuthLoading(false);
+                        }
+                      }}
+                      className="px-5 h-12 rounded-xl bg-white text-black font-black text-sm hover:bg-slate-200 transition-all disabled:opacity-50"
+                    >
+                      Verify
+                    </button>
+                  </div>
+                  {communityCodeError && <p className="text-rose-400 text-xs mt-1">{communityCodeError}</p>}
+                  <button type="button" onClick={() => setShowCommunityCode(false)} className="text-slate-500 text-xs hover:text-white mt-1">Cancel</button>
+                </div>
+              ) : (
+                <button type="button" onClick={() => setShowCommunityCode(true)} className="w-full text-center text-slate-500 text-xs font-bold hover:text-white mb-5 transition-colors">
+                  Have a community code?
+                </button>
+              )}
+
               <div className="grid grid-cols-5 gap-2 sm:gap-3 mb-7">
                 {[
                   { name: 'Apple', provider: 'apple', icon: <AuthAppleIcon /> },

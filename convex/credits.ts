@@ -1,7 +1,8 @@
 import { mutation, query } from "./_generated/server";
 import { v } from "convex/values";
 
-const FREE_MONTHLY_CREDITS = 30;
+const CREDITS_PUBLIC = 25;
+const CREDITS_SKOOL = 100;
 
 export const getCredits = query({
   args: { userId: v.id("users") },
@@ -67,19 +68,22 @@ export const grantMonthlyCredits = mutation({
 
     if (!shouldReset) return profile.credits;
 
+    const isSkool = profile.tier === "skool";
+    const monthlyCredits = isSkool ? CREDITS_SKOOL : CREDITS_PUBLIC;
+
     await ctx.db.patch(profile._id, {
-      credits: FREE_MONTHLY_CREDITS,
+      credits: monthlyCredits,
       lastResetDate: now.toISOString(),
       updatedAt: Date.now(),
     });
 
     await ctx.db.insert("creditLedger", {
       userId: args.userId,
-      delta: FREE_MONTHLY_CREDITS,
+      delta: monthlyCredits,
       reason: "monthly_reset",
       createdAt: Date.now(),
     });
 
-    return FREE_MONTHLY_CREDITS;
+    return monthlyCredits;
   },
 });

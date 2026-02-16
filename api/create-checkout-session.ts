@@ -6,6 +6,9 @@ import { makeFunctionReference } from 'convex/server';
 const createStripeCheckoutPendingByEmailRef = makeFunctionReference<'mutation'>(
   'billing:createStripeCheckoutPendingByEmail'
 );
+const getUserProfileByEmailRef = makeFunctionReference<'query'>(
+  'app:getUserProfileByEmail'
+);
 
 export default async function handler(req: any, res: any) {
   const apiKey = process.env.STRIPE_SECRET_KEY;
@@ -34,22 +37,40 @@ export default async function handler(req: any, res: any) {
       return res.status(400).json({ error: 'Email is required' });
     }
 
+    // Look up user tier for Skool discount
+    let userTier = "public";
+    try {
+      const convexUrl = process.env.CONVEX_URL;
+      const convexAdminKey = process.env.CONVEX_ADMIN_KEY;
+      if (convexUrl && convexAdminKey) {
+        const client: any = new ConvexHttpClient(convexUrl);
+        client.setAdminAuth(convexAdminKey);
+        const profile = await client.query(getUserProfileByEmailRef as any, { email: normalizedEmail });
+        if (profile?.tier) userTier = profile.tier;
+      }
+    } catch (e) {
+      console.error('[Tier Lookup Error]:', e);
+    }
+
+    const isSkool = userTier === "skool";
+    const discountMultiplier = isSkool ? 0.5 : 1; // 50% off for Skool
+
     const products: Record<string, { name: string; amount: number; credits: number; mode: 'payment' | 'subscription' }> = {
       'pro_monthly': {
         name: 'Pro Monthly (2000 Credits)',
-        amount: 2900, // $29.00 per month in cents
+        amount: Math.round(2900 * discountMultiplier), // $29.00 or $14.50
         credits: 2000,
         mode: 'subscription'
       },
       'starter': { 
         name: 'Starter Top-Up (250 Credits)', 
-        amount: 1200, // $12.00 in cents
+        amount: Math.round(1200 * discountMultiplier), // $12.00 or $6.00
         credits: 250,
         mode: 'payment'
       },
       'pro': { 
         name: 'Pro Top-Up (1000 Credits)', 
-        amount: 3900, // $39.00 in cents
+        amount: Math.round(3900 * discountMultiplier), // $39.00 or $19.50
         credits: 1000,
         mode: 'payment'
       },
@@ -74,7 +95,7 @@ export default async function handler(req: any, res: any) {
           price_data: {
             currency: 'usd',
             product_data: {
-              name: product.name,
+              name: isSkool ? `${product.name} (Skool 50% Off)` : product.name,
               description: `${product.credits} Song Ghost generation credits`,
             },
             ...(isSubscription ? { recurring: { interval: 'month' as const } } : {}),

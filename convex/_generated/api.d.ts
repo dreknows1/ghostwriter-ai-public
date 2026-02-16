@@ -11,6 +11,8 @@
 import type * as app from "../app.js";
 import type * as billing from "../billing.js";
 import type * as credits from "../credits.js";
+import type * as crons from "../crons.js";
+import type * as inviteCodes from "../inviteCodes.js";
 import type * as profiles from "../profiles.js";
 import type * as songs from "../songs.js";
 import type * as users from "../users.js";
@@ -25,6 +27,8 @@ declare const fullApi: ApiFromModules<{
   app: typeof app;
   billing: typeof billing;
   credits: typeof credits;
+  crons: typeof crons;
+  inviteCodes: typeof inviteCodes;
   profiles: typeof profiles;
   songs: typeof songs;
   users: typeof users;

@@ -1,6 +1,9 @@
 import { mutation } from "./_generated/server";
 import { v } from "convex/values";
 
+const CREDITS_PUBLIC = 25;
+const CREDITS_SKOOL = 100;
+
 async function ensureUserAndProfile(ctx: any, email: string) {
   const normalizedEmail = email.toLowerCase().trim();
   let user = await ctx.db
@@ -25,10 +28,21 @@ async function ensureUserAndProfile(ctx: any, email: string) {
     .first();
 
   if (!profile) {
+    // Check if user is a Skool member by email whitelist
+    const skoolMember = await ctx.db
+      .query("skoolMembers")
+      .withIndex("by_email", (q: any) => q.eq("email", normalizedEmail))
+      .first();
+
+    const isSkool = !!skoolMember;
+    const tier = isSkool ? "skool" : "public";
+    const credits = isSkool ? CREDITS_SKOOL : CREDITS_PUBLIC;
+
     const profileId = await ctx.db.insert("profiles", {
       userId: user._id,
-      credits: 30,
+      credits,
       lastResetDate: new Date().toISOString(),
+      tier,
       updatedAt: Date.now(),
     });
     profile = await ctx.db.get(profileId);
