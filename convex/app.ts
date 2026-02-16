@@ -523,3 +523,176 @@ export const relinkSongsByEmailAliases = internalMutation({
     return summary;
   },
 });
+
+export const backfillSupabaseData = internalMutation({
+  args: {
+    dryRun: v.optional(v.boolean()),
+    songs: v.optional(
+      v.array(
+        v.object({
+          email: v.string(),
+          title: v.string(),
+          sunoPrompt: v.string(),
+          lyrics: v.string(),
+          albumArt: v.optional(v.string()),
+          socialPack: v.optional(v.any()),
+          createdAt: v.optional(v.number()),
+          updatedAt: v.optional(v.number()),
+        })
+      )
+    ),
+    transactions: v.optional(
+      v.array(
+        v.object({
+          email: v.string(),
+          stripeSessionId: v.string(),
+          item: v.string(),
+          amountCents: v.number(),
+          creditsGranted: v.number(),
+          status: v.optional(v.string()),
+          createdAt: v.optional(v.number()),
+        })
+      )
+    ),
+    applyCreditAdjustments: v.optional(v.boolean()),
+  },
+  handler: async (ctx: any, args: any) => {
+    const dryRun = args.dryRun !== false;
+    const applyCreditAdjustments = args.applyCreditAdjustments !== false;
+    const songs = Array.isArray(args.songs) ? args.songs : [];
+    const transactions = Array.isArray(args.transactions) ? args.transactions : [];
+
+    const summary = {
+      dryRun,
+      songsSeen: songs.length,
+      songsInserted: 0,
+      songsSkippedDuplicate: 0,
+      songsMissingEmail: 0,
+      transactionsSeen: transactions.length,
+      transactionsInserted: 0,
+      transactionsSkippedDuplicate: 0,
+      creditsAdjustedUsers: 0,
+      creditsTotalDelta: 0,
+      usersTouched: 0,
+      warnings: [] as string[],
+    };
+
+    const touchedUsers = new Set<string>();
+    const creditDeltaByEmail = new Map<string, number>();
+
+    for (const row of songs) {
+      const email = normalizeEmail(row.email || "");
+      if (!email) {
+        summary.songsMissingEmail += 1;
+        continue;
+      }
+
+      const { user } = await ensureUserAndProfile(ctx, email);
+      touchedUsers.add(String(user._id));
+      const createdAt = row.createdAt || Date.now();
+      const updatedAt = row.updatedAt || createdAt;
+
+      const existingSongs = await ctx.db
+        .query("savedSongs")
+        .withIndex("by_user", (q: any) => q.eq("userId", user._id))
+        .collect();
+
+      const duplicate = existingSongs.find((s: any) => {
+        if (s.title !== row.title) return false;
+        if (s.sunoPrompt !== row.sunoPrompt) return false;
+        if (s.lyrics !== row.lyrics) return false;
+        return true;
+      });
+
+      if (duplicate) {
+        summary.songsSkippedDuplicate += 1;
+        continue;
+      }
+
+      if (!dryRun) {
+        await ctx.db.insert("savedSongs", {
+          userId: user._id,
+          title: row.title,
+          sunoPrompt: row.sunoPrompt,
+          lyrics: row.lyrics,
+          albumArt: row.albumArt,
+          socialPack: row.socialPack,
+          createdAt,
+          updatedAt,
+        });
+      }
+      summary.songsInserted += 1;
+    }
+
+    for (const tx of transactions) {
+      const email = normalizeEmail(tx.email || "");
+      if (!email) {
+        summary.warnings.push(`Transaction missing email for session ${tx.stripeSessionId}`);
+        continue;
+      }
+      if (!tx.stripeSessionId) {
+        summary.warnings.push(`Transaction missing stripeSessionId for ${email}`);
+        continue;
+      }
+
+      const { user } = await ensureUserAndProfile(ctx, email);
+      touchedUsers.add(String(user._id));
+
+      const existing = await ctx.db
+        .query("transactions")
+        .withIndex("by_session", (q: any) => q.eq("stripeSessionId", tx.stripeSessionId))
+        .first();
+
+      if (existing) {
+        summary.transactionsSkippedDuplicate += 1;
+        continue;
+      }
+
+      if (!dryRun) {
+        await ctx.db.insert("transactions", {
+          userId: user._id,
+          stripeSessionId: tx.stripeSessionId,
+          item: tx.item || "Legacy Purchase",
+          amountCents: tx.amountCents || 0,
+          creditsGranted: tx.creditsGranted || 0,
+          status: tx.status || "completed",
+          createdAt: tx.createdAt || Date.now(),
+        });
+      }
+      summary.transactionsInserted += 1;
+
+      const shouldAdjust = (tx.status || "completed") === "completed" && applyCreditAdjustments && (tx.creditsGranted || 0) > 0;
+      if (shouldAdjust) {
+        creditDeltaByEmail.set(email, (creditDeltaByEmail.get(email) || 0) + (tx.creditsGranted || 0));
+      }
+    }
+
+    for (const [email, delta] of creditDeltaByEmail.entries()) {
+      if (delta <= 0) continue;
+      const { profile } = await ensureUserAndProfile(ctx, email);
+      if (!profile) {
+        summary.warnings.push(`Missing profile for ${email} while applying credit delta ${delta}`);
+        continue;
+      }
+
+      if (!dryRun) {
+        await ctx.db.patch(profile._id, {
+          credits: profile.credits + delta,
+          updatedAt: Date.now(),
+        });
+        await ctx.db.insert("creditLedger", {
+          userId: profile.userId,
+          delta,
+          reason: "legacy_migration_backfill",
+          metadata: { source: "supabase", type: "transactions_backfill" },
+          createdAt: Date.now(),
+        });
+      }
+      summary.creditsAdjustedUsers += 1;
+      summary.creditsTotalDelta += delta;
+    }
+
+    summary.usersTouched = touchedUsers.size;
+    return summary;
+  },
+});
