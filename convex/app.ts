@@ -326,6 +326,62 @@ export const upsertSkoolMembers = internalMutation({
   },
 });
 
+export const auditSkoolTierMismatches = internalMutation({
+  args: {
+    limit: v.optional(v.number()),
+  },
+  handler: async (ctx: any, args: any) => {
+    const limit = Math.max(1, Math.min(args.limit ?? 200, 1000));
+    const members = await ctx.db.query("skoolMembers").collect();
+    const users = await ctx.db.query("users").collect();
+
+    const memberEmailSet = new Set(
+      members.map((m: any) => normalizeEmail(m.email || "")).filter((email: string) => !!email)
+    );
+    const userByEmail = new Map(
+      users.map((u: any) => [normalizeEmail(u.email || ""), u]).filter(([email]) => !!email)
+    );
+
+    const shouldBeSkoolButMissingUser: string[] = [];
+    const shouldBeSkoolButPublic: string[] = [];
+    const shouldBeSkoolButNoProfile: string[] = [];
+
+    for (const email of memberEmailSet) {
+      const user = userByEmail.get(email);
+      if (!user) {
+        shouldBeSkoolButMissingUser.push(email);
+        continue;
+      }
+      const profile = await ctx.db
+        .query("profiles")
+        .withIndex("by_user", (q: any) => q.eq("userId", user._id))
+        .first();
+      if (!profile) {
+        shouldBeSkoolButNoProfile.push(email);
+        continue;
+      }
+      if (profile.tier !== "skool" || (profile.credits || 0) < CREDITS_SKOOL) {
+        shouldBeSkoolButPublic.push(email);
+      }
+    }
+
+    return {
+      membersCount: memberEmailSet.size,
+      usersCount: users.length,
+      mismatches: {
+        shouldBeSkoolButMissingUserCount: shouldBeSkoolButMissingUser.length,
+        shouldBeSkoolButNoProfileCount: shouldBeSkoolButNoProfile.length,
+        shouldBeSkoolButPublicCount: shouldBeSkoolButPublic.length,
+      },
+      samples: {
+        shouldBeSkoolButMissingUser: shouldBeSkoolButMissingUser.slice(0, limit),
+        shouldBeSkoolButNoProfile: shouldBeSkoolButNoProfile.slice(0, limit),
+        shouldBeSkoolButPublic: shouldBeSkoolButPublic.slice(0, limit),
+      },
+    };
+  },
+});
+
 export const getCreditsByEmail = mutation({
   args: { email: v.string() },
   handler: async (ctx: any, args: any) => {
