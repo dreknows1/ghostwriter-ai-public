@@ -54,6 +54,21 @@ async function ensureUserAndProfile(ctx: any, emailRaw: string) {
     });
     profile = await ctx.db.get(profileId);
   }
+  if (profile) {
+    const skoolMember = await ctx.db
+      .query("skoolMembers")
+      .withIndex("by_email", (q: any) => q.eq("email", email))
+      .first();
+    if (skoolMember && profile.tier !== "skool") {
+      const upgradedCredits = Math.max(profile.credits || 0, CREDITS_SKOOL);
+      await ctx.db.patch(profile._id, {
+        tier: "skool",
+        credits: upgradedCredits,
+        updatedAt: Date.now(),
+      });
+      profile = await ctx.db.get(profile._id);
+    }
+  }
   if (!profile) throw new Error("Profile not found");
 
   return { user, profile, email };
