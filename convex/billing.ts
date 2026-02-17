@@ -4,8 +4,24 @@ import { v } from "convex/values";
 const CREDITS_PUBLIC = 25;
 const CREDITS_SKOOL = 100;
 
+function normalizeEmail(email: string) {
+  return email.toLowerCase().trim();
+}
+
+async function findSkoolMemberByEmail(ctx: any, emailRaw: string) {
+  const email = normalizeEmail(emailRaw);
+  const exact = await ctx.db
+    .query("skoolMembers")
+    .withIndex("by_email", (q: any) => q.eq("email", email))
+    .first();
+  if (exact) return exact;
+
+  const allMembers = await ctx.db.query("skoolMembers").collect();
+  return allMembers.find((member: any) => normalizeEmail(member.email || "") === email) || null;
+}
+
 async function ensureUserAndProfile(ctx: any, email: string) {
-  const normalizedEmail = email.toLowerCase().trim();
+  const normalizedEmail = normalizeEmail(email);
   let user = await ctx.db
     .query("users")
     .withIndex("by_email", (q: any) => q.eq("email", normalizedEmail))
@@ -28,11 +44,7 @@ async function ensureUserAndProfile(ctx: any, email: string) {
     .first();
 
   if (!profile) {
-    // Check if user is a Skool member by email whitelist
-    const skoolMember = await ctx.db
-      .query("skoolMembers")
-      .withIndex("by_email", (q: any) => q.eq("email", normalizedEmail))
-      .first();
+    const skoolMember = await findSkoolMemberByEmail(ctx, normalizedEmail);
 
     const isSkool = !!skoolMember;
     const tier = isSkool ? "skool" : "public";
@@ -46,6 +58,17 @@ async function ensureUserAndProfile(ctx: any, email: string) {
       updatedAt: Date.now(),
     });
     profile = await ctx.db.get(profileId);
+  }
+  if (profile) {
+    const skoolMember = await findSkoolMemberByEmail(ctx, normalizedEmail);
+    if (skoolMember && profile.tier !== "skool") {
+      await ctx.db.patch(profile._id, {
+        tier: "skool",
+        credits: Math.max(profile.credits || 0, CREDITS_SKOOL),
+        updatedAt: Date.now(),
+      });
+      profile = await ctx.db.get(profile._id);
+    }
   }
 
   if (!profile) throw new Error("Profile creation failed");
