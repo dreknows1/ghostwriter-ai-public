@@ -10,6 +10,18 @@ function normalizeEmail(email: string) {
   return email.toLowerCase().trim();
 }
 
+async function findSkoolMemberByEmail(ctx: any, emailRaw: string) {
+  const email = normalizeEmail(emailRaw);
+  const exact = await ctx.db
+    .query("skoolMembers")
+    .withIndex("by_email", (q: any) => q.eq("email", email))
+    .first();
+  if (exact) return exact;
+
+  const allMembers = await ctx.db.query("skoolMembers").collect();
+  return allMembers.find((member: any) => normalizeEmail(member.email || "") === email) || null;
+}
+
 async function ensureUserAndProfile(ctx: any, emailRaw: string) {
   const email = normalizeEmail(emailRaw);
   let user = await ctx.db
@@ -35,10 +47,7 @@ async function ensureUserAndProfile(ctx: any, emailRaw: string) {
 
   if (!profile) {
     // Check if user is a Skool member by email whitelist
-    const skoolMember = await ctx.db
-      .query("skoolMembers")
-      .withIndex("by_email", (q: any) => q.eq("email", email))
-      .first();
+    const skoolMember = await findSkoolMemberByEmail(ctx, email);
 
     const isSkool = !!skoolMember;
     const tier = isSkool ? "skool" : "public";
@@ -55,10 +64,7 @@ async function ensureUserAndProfile(ctx: any, emailRaw: string) {
     profile = await ctx.db.get(profileId);
   }
   if (profile) {
-    const skoolMember = await ctx.db
-      .query("skoolMembers")
-      .withIndex("by_email", (q: any) => q.eq("email", email))
-      .first();
+    const skoolMember = await findSkoolMemberByEmail(ctx, email);
     if (skoolMember && profile.tier !== "skool") {
       const upgradedCredits = Math.max(profile.credits || 0, CREDITS_SKOOL);
       await ctx.db.patch(profile._id, {
@@ -198,11 +204,125 @@ export const isSkoolMemberByEmail = query({
   args: { email: v.string() },
   handler: async (ctx: any, args: any) => {
     const email = normalizeEmail(args.email);
-    const skoolMember = await ctx.db
-      .query("skoolMembers")
-      .withIndex("by_email", (q: any) => q.eq("email", email))
-      .first();
+    const skoolMember = await findSkoolMemberByEmail(ctx, email);
     return Boolean(skoolMember);
+  },
+});
+
+export const enforceSkoolTiersFromMembers = internalMutation({
+  args: {
+    dryRun: v.optional(v.boolean()),
+  },
+  handler: async (ctx: any, args: any) => {
+    const dryRun = args.dryRun !== false;
+    const summary = {
+      dryRun,
+      membersSeen: 0,
+      usersMatched: 0,
+      profilesUpgraded: 0,
+      creditsRaised: 0,
+      missingUsers: 0,
+    };
+
+    const members = await ctx.db.query("skoolMembers").collect();
+    summary.membersSeen = members.length;
+
+    for (const member of members) {
+      const email = normalizeEmail(member.email || "");
+      if (!email) continue;
+
+      const user = await ctx.db
+        .query("users")
+        .withIndex("by_email", (q: any) => q.eq("email", email))
+        .first();
+      if (!user) {
+        summary.missingUsers += 1;
+        continue;
+      }
+      summary.usersMatched += 1;
+
+      const profile = await ctx.db
+        .query("profiles")
+        .withIndex("by_user", (q: any) => q.eq("userId", user._id))
+        .first();
+      if (!profile) continue;
+
+      const targetCredits = Math.max(profile.credits || 0, CREDITS_SKOOL);
+      const needsTier = profile.tier !== "skool";
+      const needsCredits = targetCredits !== profile.credits;
+      if (!needsTier && !needsCredits) continue;
+
+      if (!dryRun) {
+        await ctx.db.patch(profile._id, {
+          tier: "skool",
+          credits: targetCredits,
+          updatedAt: Date.now(),
+        });
+      }
+
+      summary.profilesUpgraded += 1;
+      summary.creditsRaised += Math.max(0, targetCredits - (profile.credits || 0));
+    }
+
+    return summary;
+  },
+});
+
+export const upsertSkoolMembers = internalMutation({
+  args: {
+    dryRun: v.optional(v.boolean()),
+    rows: v.array(
+      v.object({
+        email: v.string(),
+        firstName: v.optional(v.string()),
+        lastName: v.optional(v.string()),
+        joinedDate: v.optional(v.string()),
+      })
+    ),
+  },
+  handler: async (ctx: any, args: any) => {
+    const dryRun = args.dryRun !== false;
+    const summary = {
+      dryRun,
+      rowsSeen: 0,
+      inserted: 0,
+      updated: 0,
+      skippedNoEmail: 0,
+    };
+
+    for (const row of args.rows || []) {
+      summary.rowsSeen += 1;
+      const email = normalizeEmail(row.email || "");
+      if (!email) {
+        summary.skippedNoEmail += 1;
+        continue;
+      }
+
+      const existing = await findSkoolMemberByEmail(ctx, email);
+      if (existing) {
+        if (!dryRun) {
+          await ctx.db.patch(existing._id, {
+            email,
+            firstName: row.firstName || existing.firstName,
+            lastName: row.lastName || existing.lastName,
+            joinedDate: row.joinedDate || existing.joinedDate,
+          });
+        }
+        summary.updated += 1;
+      } else {
+        if (!dryRun) {
+          await ctx.db.insert("skoolMembers", {
+            email,
+            firstName: row.firstName,
+            lastName: row.lastName,
+            joinedDate: row.joinedDate,
+          });
+        }
+        summary.inserted += 1;
+      }
+    }
+
+    return summary;
   },
 });
 
