@@ -105,7 +105,7 @@ const PricingView: React.FC<PricingViewProps> = ({ email, onClose }) => {
                 <p className="text-slate-400 font-black uppercase tracking-[0.14em] md:tracking-[0.2em] text-sm md:text-base">Credits mapped to real generation usage.</p>
                 {isSkool && (
                     <div className="mt-4 inline-block rounded-full bg-emerald-500/10 border border-emerald-500/30 px-6 py-2">
-                        <span className="text-emerald-400 text-sm font-black uppercase tracking-widest">Skool Member — 50% Off All Purchases</span>
+                        <span className="text-emerald-400 text-sm font-black uppercase tracking-widest">Community Discount — 50% Off All Purchases</span>
                     </div>
                 )}
              </div>
@@ -134,7 +134,7 @@ const PricingView: React.FC<PricingViewProps> = ({ email, onClose }) => {
                             {isSkool && (
                                 <p className="text-emerald-400 text-xs font-bold line-through-none mb-4">
                                     <span className="line-through text-slate-600">${tier.basePrice.toFixed(2)}</span>
-                                    <span className="ml-2">50% Off</span>
+                                    <span className="ml-2">Community Discount (50% Off)</span>
                                 </p>
                             )}
                             <div className="px-6 py-4 bg-slate-900 rounded-2xl inline-block border border-slate-800">

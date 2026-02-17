@@ -179,6 +179,18 @@ export const setProfileTier = mutation({
   },
 });
 
+export const isSkoolMemberByEmail = query({
+  args: { email: v.string() },
+  handler: async (ctx: any, args: any) => {
+    const email = normalizeEmail(args.email);
+    const skoolMember = await ctx.db
+      .query("skoolMembers")
+      .withIndex("by_email", (q: any) => q.eq("email", email))
+      .first();
+    return Boolean(skoolMember);
+  },
+});
+
 export const getCreditsByEmail = mutation({
   args: { email: v.string() },
   handler: async (ctx: any, args: any) => {

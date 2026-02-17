@@ -891,7 +891,7 @@ export const App: React.FC = () => {
               {communityCodeValidated ? (
                 <div className="mb-6 rounded-xl border border-emerald-400/70 bg-emerald-900/35 px-5 py-4 text-center animate-fade-in shadow-[0_0_0_1px_rgba(74,222,128,0.25)]">
                   <p className="text-emerald-200 font-black text-sm uppercase tracking-widest mb-1">Community Access Unlocked</p>
-                  <p className="text-emerald-100 text-xs font-semibold">100 monthly credits + 50% off all purchases</p>
+                  <p className="text-emerald-100 text-xs font-semibold">Community Discount Active — 100 monthly credits + 50% off all purchases</p>
                 </div>
               ) : showCommunityCode ? (
                 <div className="mb-6 animate-fade-in rounded-xl border border-cyan-400/45 bg-cyan-950/20 p-3">

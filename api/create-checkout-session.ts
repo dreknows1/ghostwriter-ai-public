@@ -95,7 +95,7 @@ export default async function handler(req: any, res: any) {
           price_data: {
             currency: 'usd',
             product_data: {
-              name: isSkool ? `${product.name} (Skool 50% Off)` : product.name,
+              name: isSkool ? `${product.name} (Community Discount 50% Off)` : product.name,
               description: `${product.credits} Song Ghost generation credits`,
             },
             ...(isSubscription ? { recurring: { interval: 'month' as const } } : {}),

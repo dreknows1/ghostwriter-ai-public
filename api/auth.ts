@@ -6,6 +6,8 @@ import { pbkdf2Sync, randomBytes, timingSafeEqual } from "node:crypto";
 const getUserByEmailRef = makeFunctionReference<"query">("users:getUserByEmail");
 const upsertUserCredentialsRef = makeFunctionReference<"mutation">("users:upsertUserCredentials");
 const claimReferralCodeByEmailRef = makeFunctionReference<"mutation">("app:claimReferralCodeByEmail");
+const isSkoolMemberByEmailRef = makeFunctionReference<"query">("app:isSkoolMemberByEmail");
+const setProfileTierRef = makeFunctionReference<"mutation">("app:setProfileTier");
 
 function normalizeEmail(email: string): string {
   return email.toLowerCase().trim();
@@ -31,6 +33,17 @@ function getConvexClient() {
   const client: any = new ConvexHttpClient(convexUrl);
   client.setAdminAuth(convexAdminKey);
   return client;
+}
+
+async function enforceSkoolTierIfEligible(client: any, email: string) {
+  try {
+    const isSkoolMember = await client.query(isSkoolMemberByEmailRef as any, { email });
+    if (isSkoolMember) {
+      await client.mutation(setProfileTierRef as any, { email, tier: "skool" });
+    }
+  } catch (e: any) {
+    console.error("[Skool Tier Sync Error]", e?.message || e);
+  }
 }
 
 function splitNameFromEmail(email: string): { firstName: string; lastName: string } {
@@ -126,6 +139,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
       const user: any = await client.mutation(upsertUserCredentialsRef as any, {
         email: normalizedEmail,
       });
+      await enforceSkoolTierIfEligible(client, normalizedEmail);
       if (isNetNewUser) {
         try {
           await syncContactToGHL({ email: normalizedEmail });
@@ -155,6 +169,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
         passwordHash,
         passwordSalt: salt,
       });
+      await enforceSkoolTierIfEligible(client, normalizedEmail);
       if (isNetNewUser) {
         try {
           await syncContactToGHL({ email: normalizedEmail });
@@ -194,6 +209,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     if (!ok) {
       return res.status(401).json({ error: "Invalid email or password" });
     }
+    await enforceSkoolTierIfEligible(client, normalizedEmail);
 
     return res.status(200).json({
       session: {
