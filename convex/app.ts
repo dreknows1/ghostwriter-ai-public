@@ -338,15 +338,16 @@ export const auditSkoolTierMismatches = internalMutation({
     const memberEmailSet = new Set(
       members.map((m: any) => normalizeEmail(m.email || "")).filter((email: string) => !!email)
     );
-    const userByEmail = new Map(
-      users.map((u: any) => [normalizeEmail(u.email || ""), u]).filter(([email]) => !!email)
-    );
+    const userEntries: Array<[string, any]> = users
+      .map((u: any) => [normalizeEmail(u.email || ""), u] as [string, any])
+      .filter((entry: [string, any]) => Boolean(entry[0]));
+    const userByEmail = new Map<string, any>(userEntries);
 
     const shouldBeSkoolButMissingUser: string[] = [];
     const shouldBeSkoolButPublic: string[] = [];
     const shouldBeSkoolButNoProfile: string[] = [];
 
-    for (const email of memberEmailSet) {
+    for (const email of Array.from(memberEmailSet) as string[]) {
       const user = userByEmail.get(email);
       if (!user) {
         shouldBeSkoolButMissingUser.push(email);

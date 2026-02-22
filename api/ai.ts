@@ -344,7 +344,7 @@ function getOpenAIApiKey(): string {
 }
 
 function getTextModel(): string {
-  return process.env.OPENAI_TEXT_MODEL || process.env.OPENAI_MODEL || "gpt-5.2";
+  return process.env.GEMINI_TEXT_MODEL || "gemini-2.5-flash";
 }
 
 function getGeminiApiKey(): string {
@@ -1987,86 +1987,57 @@ async function enforceMinimumAuditScore(
 const getUserProfileByEmailRef = makeFunctionReference<"query">("app:getUserProfileByEmail");
 
 async function openAIResponses(prompt: string, model = getTextModel()): Promise<string> {
-  const apiKey = getOpenAIApiKey();
-  const timeoutMs = Number(process.env.AI_HTTP_TIMEOUT_MS || 30000);
-  const maxAttempts = Math.max(1, Number(process.env.AI_HTTP_RETRY_ATTEMPTS || 2));
-  let data: any = null;
-  let lastError: any = null;
-
-  for (let attempt = 1; attempt <= maxAttempts; attempt += 1) {
-    const controller = new AbortController();
-    const timeout = setTimeout(() => controller.abort(), timeoutMs);
-    try {
-      const response = await fetch("https://api.openai.com/v1/responses", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${apiKey}`,
-        },
-        body: JSON.stringify({
-          model,
-          input: prompt,
-        }),
-        signal: controller.signal,
+  const apiKey = getRequestGeminiTextApiKey();
+  const ai = new GoogleGenAI({ apiKey });
+  try {
+    const response: any = await ai.models.generateContent({
+      model,
+      contents: [{ text: prompt }],
+    });
+    const text =
+      typeof response?.text === "string"
+        ? response.text
+        : Array.isArray(response?.candidates?.[0]?.content?.parts)
+          ? response.candidates[0].content.parts
+              .map((part: any) => (typeof part?.text === "string" ? part.text : ""))
+              .join("\n")
+              .trim()
+          : "";
+    if (!text) {
+      throw Object.assign(new Error("Gemini text generation returned no text."), {
+        status: 502,
+        code: "gemini_no_text",
       });
-      clearTimeout(timeout);
-
-      if (!response.ok) {
-        let errorCode = "provider_error";
-        let errorMessage = "Text generation failed.";
-        try {
-          const errData: any = await response.json();
-          errorCode = errData?.error?.code || errorCode;
-          errorMessage = errData?.error?.message || errorMessage;
-        } catch {
-          // Ignore parse errors and keep safe defaults.
-        }
-
-        const sanitizedMessage =
-          response.status === 401 || errorCode === "invalid_api_key"
-            ? "AI service authentication failed. Please verify OPENAI_API_KEY in server environment."
-            : `OpenAI text request failed (${response.status}).`;
-
-        throw Object.assign(new Error(sanitizedMessage), {
-          status: response.status,
-          code: errorCode,
-          details: errorMessage,
-        });
-      }
-
-      data = await response.json();
-      lastError = null;
-      break;
-    } catch (error: any) {
-      clearTimeout(timeout);
-      if (error?.name === "AbortError") {
-        lastError = Object.assign(new Error(`AI text request timed out after ${timeoutMs}ms.`), {
-          status: 504,
-          code: "provider_timeout",
-        });
-      } else {
-        lastError = error;
-      }
-      if (attempt < maxAttempts) continue;
     }
-  }
-
-  if (lastError) throw lastError;
-
-  const text = data?.output_text;
-  if (typeof text === "string") return text;
-
-  const chunks: string[] = [];
-  const output = Array.isArray(data?.output) ? data.output : [];
-  for (const item of output) {
-    const content = Array.isArray(item?.content) ? item.content : [];
-    for (const part of content) {
-      if (part?.type === "output_text" && typeof part?.text === "string") {
-        chunks.push(part.text);
+    return text;
+  } catch (error: any) {
+    const details = error?.message || error?.details || "Gemini text generation failed.";
+    const lower = String(details).toLowerCase();
+    const isAuth = lower.includes("api key") || lower.includes("permission") || lower.includes("unauth");
+    throw Object.assign(
+      new Error(
+        isAuth
+          ? "Gemini API key is required or invalid. Add your own Gemini API key in the app and try again."
+          : "Gemini text generation failed."
+      ),
+      {
+        status: isAuth ? 401 : 502,
+        code: isAuth ? "gemini_text_auth" : "gemini_text_failed",
+        details,
       }
-    }
+    );
   }
-  return chunks.join("\n").trim();
+}
+
+let requestGeminiTextApiKey: string | null = null;
+
+function getRequestGeminiTextApiKey(): string {
+  const key = (requestGeminiTextApiKey || "").trim();
+  if (key) return key;
+  throw Object.assign(new Error("Missing Gemini API key. Please add your own Gemini API key in the app."), {
+    status: 401,
+    code: "missing_user_gemini_api_key",
+  });
 }
 
 function parseDataUrlToBlob(dataUrl: string): Blob | null {
@@ -2789,6 +2760,9 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
 
     if (!action) return res.status(400).json({ error: "Missing action" });
     if (!isAllowedEmail(email)) return res.status(401).json({ error: "Invalid user identity" });
+    requestGeminiTextApiKey =
+      String(payload?.userGeminiApiKey || req.headers["x-gemini-api-key"] || "")
+        .trim() || null;
 
     switch (action) {
       case "generateSong":
@@ -2820,5 +2794,8 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
       error: error?.message || "AI API failed",
       code: error?.code || "ai_request_failed",
     });
+  }
+  finally {
+    requestGeminiTextApiKey = null;
   }
 }

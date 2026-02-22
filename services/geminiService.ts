@@ -31,10 +31,30 @@ function sleep(ms: number): Promise<void> {
 }
 
 async function callAI<T>(action: AIAction, email: string, payload: Record<string, unknown>): Promise<T> {
+  const textActions = new Set<AIAction>([
+    "generateSong",
+    "editSong",
+    "structureImportedSong",
+    "generateDynamicOptions",
+    "generateSocialPack",
+    "translateLyrics",
+  ]);
+  let userGeminiApiKey = "";
+  if (typeof window !== "undefined" && textActions.has(action)) {
+    userGeminiApiKey = window.localStorage.getItem("songghost_gemini_api_key") || "";
+    if (!userGeminiApiKey.trim()) {
+      const entered = window.prompt("Enter your Gemini API key to use text generation:");
+      if (entered && entered.trim()) {
+        userGeminiApiKey = entered.trim();
+        window.localStorage.setItem("songghost_gemini_api_key", userGeminiApiKey);
+      }
+    }
+  }
+
   const response = await fetch("/api/ai", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ action, email, payload }),
+    body: JSON.stringify({ action, email, payload: { ...payload, userGeminiApiKey } }),
   });
 
   if (!response.ok) {
