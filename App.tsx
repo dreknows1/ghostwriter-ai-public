@@ -545,6 +545,24 @@ export const App: React.FC = () => {
     }
   };
 
+  const promptForGeminiApiKeyIfMissing = useCallback(() => {
+    if (typeof window === 'undefined') return;
+    const existing = (window.localStorage.getItem('songghost_gemini_api_key') || '').trim();
+    if (existing) return;
+
+    const wantsHelp = window.confirm(
+      'Song Ghost now uses your Gemini API key for text generation. Click OK for setup/help link, or Cancel to enter your key now.'
+    );
+    if (wantsHelp) {
+      window.open('https://aistudio.google.com/app/apikey', '_blank', 'noopener,noreferrer');
+    }
+
+    const entered = window.prompt('Paste your Gemini API key (you can add it now or later):');
+    if (entered && entered.trim()) {
+      window.localStorage.setItem('songghost_gemini_api_key', entered.trim());
+    }
+  }, []);
+
   useEffect(() => {
     const bootstrap = async () => {
       const search = new URLSearchParams(window.location.search);
@@ -581,6 +599,7 @@ export const App: React.FC = () => {
             const c = await getUserCredits(data.session.user.email || '');
             setCredits(c);
             await loadHeaderAvatar(data.session.user.email || '');
+            promptForGeminiApiKeyIfMissing();
           }
         } catch (e: any) {
           setAuthError(e?.message || 'OAuth sign in failed');
@@ -600,6 +619,7 @@ export const App: React.FC = () => {
         setView(AppView.LANDING); // Default to Landing Dashboard
         getUserCredits(sess.user.email || '').then(c => setCredits(c));
         loadHeaderAvatar(sess.user.email || '');
+        promptForGeminiApiKeyIfMissing();
 
         const status = search.get('status');
         const sessionId = search.get('session_id');
@@ -815,6 +835,7 @@ export const App: React.FC = () => {
             setView(AppView.LANDING);
             const c = await getUserCredits(data.session.user.email || '');
             setCredits(c);
+            promptForGeminiApiKeyIfMissing();
           }
       } catch (e: any) {
           setAuthError(e?.message || 'Authentication failed');
