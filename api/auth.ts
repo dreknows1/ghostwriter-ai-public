@@ -201,6 +201,21 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
 
     // signin
     if (!existing?.passwordHash || !existing?.passwordSalt) {
+      const isSkoolMember = await client.query(isSkoolMemberByEmailRef as any, { email: normalizedEmail });
+      if (isSkoolMember) {
+        const user: any = await client.mutation(upsertUserCredentialsRef as any, {
+          email: normalizedEmail,
+        });
+        await enforceSkoolTierIfEligible(client, normalizedEmail);
+        return res.status(200).json({
+          session: {
+            user: {
+              id: user?._id || `user_${normalizedEmail}`,
+              email: normalizedEmail,
+            },
+          },
+        });
+      }
       return res.status(401).json({ error: "Invalid email or password" });
     }
 
