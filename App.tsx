@@ -1,7 +1,7 @@
 
 import React, { useState, useEffect, useCallback, useMemo } from 'react';
 import { AppStep, AppView, SongInputs, SavedSong, UserProfile, CulturalAudit } from './types';
-import { generateSong, generateAlbumArt, generateSocialPack, translateLyrics, editSong, generateDynamicOptions, structureImportedSong, getLastCulturalAudit, getLastQualityGateReport } from './services/geminiService';
+import { generateSong, generateAlbumArt, generateSocialPack, translateLyrics, editSong, generateDynamicOptions, structureImportedSong, getLastCulturalAudit, getLastQualityGateReport, promptToSetGeminiApiKey } from './services/geminiService';
 import { saveSong } from './services/songService';
 import { getUserProfile } from './services/userService';
 import { getSession, signOut, signIn, signUp, signInWithOAuthEmail, startProviderSignIn } from './services/authService';
@@ -561,6 +561,10 @@ export const App: React.FC = () => {
     if (entered && entered.trim()) {
       window.localStorage.setItem('songghost_gemini_api_key', entered.trim());
     }
+  }, []);
+
+  const handleManageGeminiApiKey = useCallback(() => {
+    promptToSetGeminiApiKey();
   }, []);
 
   useEffect(() => {
@@ -1218,6 +1222,7 @@ export const App: React.FC = () => {
                              <WalletIcon className="w-4 h-4 text-slate-500" />
                              <span className="text-xs font-black text-slate-300 uppercase tracking-widest">Balance: {credits}</span>
                          </div>
+                         <button onClick={handleManageGeminiApiKey} className="text-xs font-black text-slate-400 uppercase tracking-widest hover:text-white transition-colors">Set AI Key</button>
                          <button onClick={() => signOut().then(() => { setSession(null); setView(AppView.AUTH); })} className="text-xs font-black text-slate-600 uppercase tracking-widest hover:text-white transition-colors">Sign Out</button>
                      </div>
                  </div>
@@ -1232,6 +1237,12 @@ export const App: React.FC = () => {
                  />
                  <div className="fixed right-3 top-16 bottom-3 z-[70] w-[19rem] rounded-[1.1rem] border border-slate-700/70 bg-[#21232d] shadow-2xl flex flex-col overflow-hidden">
                    <div className="p-3 overflow-y-auto">
+                     <button
+                       onClick={() => { handleManageGeminiApiKey(); setIsMenuOpen(false); }}
+                       className="w-full text-left px-4 py-3 rounded-xl text-cyan-300 text-[2.05rem] sm:text-[2.2rem] font-medium leading-none hover:bg-slate-700/40 hover:text-cyan-200"
+                     >
+                       Set AI Key
+                     </button>
                      {[
                        ['Invite Friends', 'invite'],
                        ['Earn Credits', 'earn'],

@@ -11,6 +11,7 @@ type AIAction =
 
 let lastCulturalAudit: CulturalAudit | null = null;
 let lastQualityGateReport: QualityGateReport | null = null;
+const GEMINI_KEY_STORAGE = "songghost_gemini_api_key";
 
 function setLastCulturalAudit(audit?: CulturalAudit | null) {
   if (!audit) return;
@@ -39,37 +40,68 @@ async function callAI<T>(action: AIAction, email: string, payload: Record<string
     "generateSocialPack",
     "translateLyrics",
   ]);
-  let userGeminiApiKey = "";
-  if (typeof window !== "undefined" && textActions.has(action)) {
-    userGeminiApiKey = window.localStorage.getItem("songghost_gemini_api_key") || "";
-    if (!userGeminiApiKey.trim()) {
+  const getKeyFromUserIfNeeded = () => {
+    if (typeof window === "undefined" || !textActions.has(action)) return "";
+    let value = window.localStorage.getItem(GEMINI_KEY_STORAGE) || "";
+    if (!value.trim()) {
       const entered = window.prompt("Enter your Gemini API key to use text generation:");
       if (entered && entered.trim()) {
-        userGeminiApiKey = entered.trim();
-        window.localStorage.setItem("songghost_gemini_api_key", userGeminiApiKey);
+        value = entered.trim();
+        window.localStorage.setItem(GEMINI_KEY_STORAGE, value);
       }
     }
-  }
+    return value;
+  };
 
-  const response = await fetch("/api/ai", {
+  const sendRequest = async (userGeminiApiKey: string) => fetch("/api/ai", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ action, email, payload: { ...payload, userGeminiApiKey } }),
   });
 
+  let userGeminiApiKey = getKeyFromUserIfNeeded();
+  let response = await sendRequest(userGeminiApiKey);
+
   if (!response.ok) {
     const raw = await response.text();
     let parsedError: string | null = null;
+    let parsedCode: string | null = null;
     try {
       const json = JSON.parse(raw);
       parsedError = typeof json?.error === "string" ? json.error : null;
+      parsedCode = typeof json?.code === "string" ? json.code : null;
     } catch {
       parsedError = null;
+    }
+    const canRetryKey =
+      textActions.has(action) &&
+      typeof window !== "undefined" &&
+      (parsedCode === "gemini_text_auth" || parsedCode === "missing_user_gemini_api_key");
+    if (canRetryKey) {
+      window.localStorage.removeItem(GEMINI_KEY_STORAGE);
+      const entered = window.prompt("Your Gemini API key is missing or invalid. Paste a valid Gemini API key:");
+      if (entered && entered.trim()) {
+        userGeminiApiKey = entered.trim();
+        window.localStorage.setItem(GEMINI_KEY_STORAGE, userGeminiApiKey);
+        response = await sendRequest(userGeminiApiKey);
+        if (response.ok) return response.json();
+      }
     }
     throw new Error(parsedError || raw || `AI request failed (${response.status})`);
   }
 
   return response.json();
+}
+
+export function promptToSetGeminiApiKey(): void {
+  if (typeof window === "undefined") return;
+  const entered = window.prompt(
+    "Paste your Gemini API key (get one at https://aistudio.google.com/app/apikey):",
+    window.localStorage.getItem(GEMINI_KEY_STORAGE) || ""
+  );
+  if (entered && entered.trim()) {
+    window.localStorage.setItem(GEMINI_KEY_STORAGE, entered.trim());
+  }
 }
 
 async function* singleYield(text: string): AsyncGenerator<string> {
