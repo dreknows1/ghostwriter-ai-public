@@ -58,6 +58,7 @@ export interface UserProfile {
   preferred_art_style?: string; // New field for art style preference
   credits: number;
   last_reset_date?: string; // ISO String for monthly reset tracking
+  tier?: 'public' | 'skool' | string;
 }
 
 export interface Transaction {
