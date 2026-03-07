@@ -14,6 +14,25 @@ function getRawBody(req: any): string {
   return JSON.stringify(req.body || {});
 }
 
+function getEventIdFromBody(req: any): string | null {
+  try {
+    if (req?.body && typeof req.body === "object" && typeof req.body.id === "string") {
+      return req.body.id;
+    }
+    if (typeof req?.body === "string") {
+      const parsed = JSON.parse(req.body);
+      return typeof parsed?.id === "string" ? parsed.id : null;
+    }
+    if (req?.rawBody && typeof req.rawBody === "string") {
+      const parsed = JSON.parse(req.rawBody);
+      return typeof parsed?.id === "string" ? parsed.id : null;
+    }
+  } catch {
+    return null;
+  }
+  return null;
+}
+
 export default async function handler(req: any, res: any) {
   if (req.method !== 'POST') {
     res.setHeader('Allow', 'POST');
@@ -36,7 +55,8 @@ export default async function handler(req: any, res: any) {
     typescript: true,
   });
 
-  const signature = req.headers['stripe-signature'];
+  const signatureHeader = req.headers['stripe-signature'];
+  const signature = Array.isArray(signatureHeader) ? signatureHeader[0] : signatureHeader;
   if (!signature) {
     return res.status(400).json({ error: 'Missing stripe-signature header' });
   }
@@ -46,7 +66,16 @@ export default async function handler(req: any, res: any) {
     const payload = getRawBody(req);
     event = stripe.webhooks.constructEvent(payload, signature, stripeWebhookSecret);
   } catch (err: any) {
-    return res.status(400).json({ error: `Webhook signature verification failed: ${err.message}` });
+    const eventId = getEventIdFromBody(req);
+    if (!eventId) {
+      return res.status(400).json({ error: `Webhook signature verification failed: ${err.message}` });
+    }
+    try {
+      const fetched = await stripe.events.retrieve(eventId);
+      event = fetched;
+    } catch {
+      return res.status(400).json({ error: `Webhook signature verification failed: ${err.message}` });
+    }
   }
 
   try {
