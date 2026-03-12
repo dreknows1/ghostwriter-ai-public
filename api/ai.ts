@@ -151,6 +151,11 @@ type GenreAgentModule = {
   };
 };
 
+type ReferenceFeaturesModule = {
+  buildReferenceFeatureBlock: (params: { genre?: string; subGenre?: string; language?: string }) => string;
+  getReferenceFeatureScore: (params: { songText: string; genre?: string; subGenre?: string }) => number;
+};
+
 type MetaTagPlan = {
   structureTags: string[];
   vocalTypeTag: string;
@@ -202,6 +207,7 @@ const DEFAULT_SUBGENRE_PROFILE: SubgenreSonicProfile = {
 let culturalLogicPromise: Promise<CulturalLogicModule | null> | null = null;
 let metaTagModulePromise: Promise<MetaTagModule | null> | null = null;
 let genreAgentModulePromise: Promise<GenreAgentModule | null> | null = null;
+let referenceFeaturesModulePromise: Promise<ReferenceFeaturesModule | null> | null = null;
 
 async function loadCulturalLogicModule(): Promise<CulturalLogicModule | null> {
   if (!culturalLogicPromise) {
@@ -252,6 +258,23 @@ async function loadGenreAgentModule(): Promise<GenreAgentModule | null> {
     })();
   }
   return genreAgentModulePromise;
+}
+
+async function loadReferenceFeaturesModule(): Promise<ReferenceFeaturesModule | null> {
+  if (!referenceFeaturesModulePromise) {
+    referenceFeaturesModulePromise = (async () => {
+      try {
+        return (await import("../lib/referenceFeatures")) as unknown as ReferenceFeaturesModule;
+      } catch {
+        try {
+          return (await import("../lib/referenceFeatures.ts")) as unknown as ReferenceFeaturesModule;
+        } catch {
+          return null;
+        }
+      }
+    })();
+  }
+  return referenceFeaturesModulePromise;
 }
 
 function fallbackMetaTagGuidance(inputs: any): string {
@@ -392,6 +415,30 @@ async function getGenreReferenceBlueprint(inputs: any): Promise<{
       "keep vocalist identity consistent with selected vocals",
     ],
   };
+}
+
+async function getReferenceFeatureBlock(inputs: any): Promise<string> {
+  const mod = await loadReferenceFeaturesModule();
+  if (mod?.buildReferenceFeatureBlock) {
+    return mod.buildReferenceFeatureBlock({
+      genre: inputs?.genre,
+      subGenre: inputs?.subGenre,
+      language: inputs?.language,
+    });
+  }
+  return "Reference feature library: use proven structure, hook, cadence, and diction patterns for this lane.";
+}
+
+async function getReferenceFeatureScore(songText: string, inputs: any): Promise<number> {
+  const mod = await loadReferenceFeaturesModule();
+  if (mod?.getReferenceFeatureScore) {
+    return mod.getReferenceFeatureScore({
+      songText,
+      genre: inputs?.genre,
+      subGenre: inputs?.subGenre,
+    });
+  }
+  return 80;
 }
 
 function sanitizeEmail(email?: string): string {
@@ -809,6 +856,7 @@ async function culturallyRefineSong(rawSong: string, inputs: any, userProfile: a
   const metaTagPackage = await getMetaTagPackage(inputs || {});
   const agentDirectives = await getGenreAgentDirectives(inputs || {});
   const referenceBlueprint = await getGenreReferenceBlueprint(inputs || {});
+  const referenceFeatureBlock = await getReferenceFeatureBlock(inputs || {});
   const prompt = `
 You are a senior lyric editor specializing in cultural authenticity.
 Refine the song below for cultural and stylistic accuracy while preserving intent and emotional arc.
@@ -847,6 +895,7 @@ ${metaTagPackage.guidance}
 ${metaTagPackage.strictSpec}
 ${agentDirectives.lyricDirectives}
 ${referenceBlueprint.promptBlock}
+${referenceFeatureBlock}
 
 Song draft:
 ${rawSong}
@@ -1884,7 +1933,8 @@ function deterministicAudit(
     languageRegisterModel: string;
     hookModel: string;
     arrangementModel: string;
-  }
+  },
+  referenceFeatureScore = 80
 ): CulturalAudit {
   if (!songText?.trim()) return fallbackAudit(inputs);
   const depth = getSongDepthMetrics(songText);
@@ -1900,7 +1950,7 @@ function deterministicAudit(
   const subgenreFidelity = clampScore(56 + orchestration.score * 0.42 + (depth.dynamicContour ? 8 : -6) - (selectedVocalMismatch ? 12 : 0));
   const lyricalOriginality = clampScore(64 + depth.lexicalDiversity * 25 - depth.clicheHits * 12);
   const cadenceProsody = clampScore(60 + depth.continuityOverlap * 180 + (depth.narratorMismatch ? -18 : 6) - (selectedVocalMismatch ? 10 : 0));
-  const referenceStyleCompliance = getReferenceStyleComplianceScore(
+  const blueprintCompliance = getReferenceStyleComplianceScore(
     songText,
     referenceBlueprint || {
       structureModel: "balanced verse-chorus structure",
@@ -1910,6 +1960,7 @@ function deterministicAudit(
       arrangementModel: "clear section contrast",
     }
   );
+  const referenceStyleCompliance = clampScore(Math.round(blueprintCompliance * 0.6 + referenceFeatureScore * 0.4));
 
   const checklist: CulturalAuditItem[] = [
     {
@@ -1991,7 +2042,7 @@ function deterministicAudit(
 }
 
 function fallbackAuditFromSong(songText: string, inputs: any): CulturalAudit {
-  const deterministic = deterministicAudit(songText, inputs);
+  const deterministic = deterministicAudit(songText, inputs, undefined, 80);
   if (deterministic.overallScore > 0) return deterministic;
   const language = inputs?.language || "English";
   const genre = inputs?.genre || "Pop";
@@ -2014,6 +2065,8 @@ async function evaluateCulturalAudit(songText: string, inputs: any): Promise<Cul
   if (!songText?.trim()) return fallbackAuditFromSong(songText, inputs);
   const culturalContext = await buildCulturalPromptContext(inputs || {});
   const referenceBlueprint = await getGenreReferenceBlueprint(inputs || {});
+  const referenceFeatureBlock = await getReferenceFeatureBlock(inputs || {});
+  const referenceFeatureScore = await getReferenceFeatureScore(songText, inputs || {});
   const prompt = `
 You are evaluating one song draft for cultural authenticity and stylistic quality.
 Score strictly and return ONLY JSON:
@@ -2041,6 +2094,7 @@ Scoring rules:
 
 ${culturalContext}
 ${referenceBlueprint.promptBlock}
+${referenceFeatureBlock}
 
 Song to audit:
 ${songText}
@@ -2051,7 +2105,7 @@ ${songText}
     const parsed = parseLooseJson(raw);
     if (!parsed) return fallbackAuditFromSong(songText, inputs);
     const modelAudit = normalizeAudit(parsed);
-    const deterministic = deterministicAudit(songText, inputs, referenceBlueprint);
+    const deterministic = deterministicAudit(songText, inputs, referenceBlueprint, referenceFeatureScore);
     const blendedOverall = clampScore(
       Math.round(modelAudit.overallScore * 0.65 + deterministic.overallScore * 0.35)
     );
@@ -2543,6 +2597,7 @@ async function generateSong(payload: any) {
   const metaTagPackage = await getMetaTagPackage(inputs || {});
   const agentDirectives = await getGenreAgentDirectives(inputs || {});
   const referenceBlueprint = await getGenreReferenceBlueprint(inputs || {});
+  const referenceFeatureBlock = await getReferenceFeatureBlock(inputs || {});
   const prompt = `
 You are a professional songwriter.
 Return only:
@@ -2591,6 +2646,8 @@ ${metaTagPackage.guidance}
 ${metaTagPackage.strictSpec}
 ${agentDirectives.lyricDirectives}
 ${referenceBlueprint.promptBlock}
+${referenceFeatureBlock}
+${referenceFeatureBlock}
   `.trim();
 
   const draft = await openAIResponses(prompt);
@@ -2707,6 +2764,7 @@ ${metaTagPackage.guidance}
 ${metaTagPackage.strictSpec}
 ${agentDirectives.lyricDirectives}
 ${referenceBlueprint.promptBlock}
+${referenceFeatureBlock}
     `.trim();
 
     const recoveryDraft = await openAIResponses(recoveryPrompt);
@@ -2830,7 +2888,7 @@ ${referenceBlueprint.promptBlock}
   }
   if (gated.audit.overallScore < 85) {
     if (gated.audit.overallScore >= 82) {
-      const deterministic = deterministicAudit(gated.text, inputs || {});
+      const deterministic = deterministicAudit(gated.text, inputs || {}, undefined, await getReferenceFeatureScore(gated.text, inputs || {}));
       if (deterministic.overallScore >= 85) {
         gated = {
           ...gated,
@@ -2869,6 +2927,7 @@ async function editSong(payload: any) {
   const metaTagPackage = await getMetaTagPackage(inputs || {});
   const agentDirectives = await getGenreAgentDirectives(inputs || {});
   const referenceBlueprint = await getGenreReferenceBlueprint(inputs || {});
+  const referenceFeatureBlock = await getReferenceFeatureBlock(inputs || {});
   const prompt = `
 Revise the song per instruction.
 Return only full song in this exact format:
@@ -2888,6 +2947,7 @@ ${metaTagPackage.guidance}
 ${metaTagPackage.strictSpec}
 ${agentDirectives.lyricDirectives}
 ${referenceBlueprint.promptBlock}
+${referenceFeatureBlock}
 
 Original song:
 ${originalSong || ""}
