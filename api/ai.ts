@@ -2647,7 +2647,6 @@ ${metaTagPackage.strictSpec}
 ${agentDirectives.lyricDirectives}
 ${referenceBlueprint.promptBlock}
 ${referenceFeatureBlock}
-${referenceFeatureBlock}
   `.trim();
 
   const draft = await openAIResponses(prompt);
@@ -2911,6 +2910,58 @@ ${referenceFeatureBlock}
         };
       }
     }
+  }
+  if (gated.audit.overallScore < 85) {
+    let best = gated;
+    for (let retry = 0; retry < 4; retry += 1) {
+      if (best.audit.overallScore >= 85) break;
+      if (!hasTimeBudget(startMs, 3200)) break;
+      const rescuePrompt = `
+You are in final recovery mode. Improve this draft until it clears 85 quality.
+Return only:
+Title: ...
+### SUNO Prompt
+...
+### Lyrics
+...
+
+Priorities:
+- Enforce user instruction compliance.
+- Raise weakest audit dimensions first.
+- Keep cultural/genre/subgenre authenticity.
+
+Current best score: ${best.audit.overallScore}
+Draft:
+${best.text}
+      `.trim();
+      const rescueDraft = await openAIResponses(rescuePrompt);
+      let rescueText = rescueDraft;
+      rescueText = await enforceMetaTagOrchestration(rescueText, inputs || {});
+      rescueText = await enforceSongDepthAndTexture(rescueText, inputs || {}, userProfile || {});
+      rescueText = await enforceSunoPromptDriver(rescueText, inputs || {}, userProfile || {});
+      rescueText = await enforceRequestedAdlibLanguage(rescueText, inputs?.additionalInfo || inputs?.awkwardMoment || "");
+      const rescueAudit = await evaluateCulturalAudit(rescueText, inputs || {});
+      if (rescueAudit.overallScore > best.audit.overallScore) {
+        best = {
+          text: rescueText,
+          audit: rescueAudit,
+          qualityGate: {
+            ...best.qualityGate,
+            finalScore: rescueAudit.overallScore,
+            rewritesTriggered: best.qualityGate.rewritesTriggered + 1,
+            passes: [
+              ...best.qualityGate.passes,
+              {
+                pass: best.qualityGate.passes.length + 1,
+                score: rescueAudit.overallScore,
+                action: rescueAudit.overallScore < 85 ? "rewrite" : "accepted",
+              },
+            ],
+          },
+        };
+      }
+    }
+    gated = best;
   }
   if (gated.audit.overallScore < 85) {
     throw Object.assign(
