@@ -1314,6 +1314,7 @@ Genre agent directives (${agent.id}):
 - Genre: ${params.genre || "Pop"}
 - Subgenre: ${params.subGenre || "Modern Pop"}${match?.key ? ` (matched profile: ${match.key})` : ""}
 - Keep lyrics faithful to this style profile while preserving narrative coherence.
+- Obey explicit user structure/edit requests exactly (e.g., "start with chorus").
 - ${inferVocalLockDirective(params.vocals)}
 - Ban cliché opener formulas: do not use variants of "sunrise paints the window pane" or "streetlights paint the window pane".
 ${UNIVERSAL_155_RESEARCH_FULL}

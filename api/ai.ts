@@ -296,23 +296,26 @@ Strict meta-tag orchestration plan:
 }
 
 async function getMetaTagPackage(inputs: any): Promise<MetaTagPackage> {
+  const instructionText = `${inputs?.additionalInfo || ""} ${inputs?.awkwardMoment || ""}`;
   const mod = await loadMetaTagModule();
   if (mod?.buildMetaTagGuidance && typeof mod.buildMetaTagGuidance === "function") {
     const guidance = mod.buildMetaTagGuidance(inputs || {});
-    const plan =
+    const rawPlan =
       typeof mod.buildMetaTagPlan === "function"
         ? mod.buildMetaTagPlan(inputs || {})
         : fallbackMetaTagPlan(inputs || {});
+    const plan = applyStructureOverrideToPlan(rawPlan, instructionText);
     const strictSpec =
       typeof mod.buildStrictMetaTagSpec === "function"
         ? mod.buildStrictMetaTagSpec(inputs || {})
         : fallbackStrictMetaTagSpec(inputs || {});
     return { guidance, strictSpec, plan };
   }
+  const fallbackPlan = applyStructureOverrideToPlan(fallbackMetaTagPlan(inputs || {}), instructionText);
   return {
     guidance: fallbackMetaTagGuidance(inputs || {}),
     strictSpec: fallbackStrictMetaTagSpec(inputs || {}),
-    plan: fallbackMetaTagPlan(inputs || {}),
+    plan: fallbackPlan,
   };
 }
 
@@ -520,6 +523,60 @@ Fresh rendition protocol (session seed: ${sessionSeed}):
   `.trim();
 }
 
+function normalizeForComparison(text: string): string {
+  return (text || "")
+    .toLowerCase()
+    .replace(/[^\p{L}\p{N}\s]/gu, " ")
+    .replace(/\s+/g, " ")
+    .trim();
+}
+
+function looksLikeChorusFirstRequest(text: string): boolean {
+  const value = (text || "").toLowerCase();
+  return (
+    /start with (the )?chorus/.test(value) ||
+    /begin with (the )?chorus/.test(value) ||
+    /open with (the )?chorus/.test(value) ||
+    /chorus first/.test(value) ||
+    /put (the )?chorus first/.test(value)
+  );
+}
+
+function getInstructionResponsivenessDirective(instructionText: string): string {
+  const mustStartWithChorus = looksLikeChorusFirstRequest(instructionText);
+  return `
+- Instruction compliance is mandatory: if the user requests any structural or lyrical change, apply it explicitly.
+- Non-compliance with user edit requests is a hard failure.
+${mustStartWithChorus ? "- Required structure override: Lyrics must start with [Chorus]." : ""}
+  `.trim();
+}
+
+function applyStructureOverrideToPlan(plan: MetaTagPlan, instructionText: string): MetaTagPlan {
+  if (!looksLikeChorusFirstRequest(instructionText)) return plan;
+  return {
+    ...plan,
+    structureTags: ["[Chorus]", "[Verse]", "[Chorus]", "[Verse]", "[Bridge]", "[Chorus]", "[Outro]"],
+  };
+}
+
+function lyricsStartWithChorus(songText: string): boolean {
+  const lyrics = extractLyricsBody(songText || "");
+  const firstTag = (lyrics.match(/^\s*(\[[^\]\n]{2,80}\])/m) || [])[1] || "";
+  return /^\[chorus(\s*\d+)?\]$/i.test(firstTag.trim());
+}
+
+function isInstructionApplied(originalSong: string, revisedSong: string, instructionText: string): boolean {
+  const instruction = (instructionText || "").trim();
+  if (!instruction) return true;
+  if (looksLikeChorusFirstRequest(instruction) && !lyricsStartWithChorus(revisedSong)) {
+    return false;
+  }
+  const before = normalizeForComparison(originalSong || "");
+  const after = normalizeForComparison(revisedSong || "");
+  if (before && after && before === after) return false;
+  return true;
+}
+
 function getVocalAndClicheHardDirective(inputs: any): string {
   const expected = inferExpectedVocalIdentity(inputs?.vocals);
   const vocalRule =
@@ -664,6 +721,7 @@ ${culturalContext}
 ${getGenreLengthDirective(inputs?.genre, inputs?.subGenre)}
 ${getTaxonomyGuardrailDirective(inputs)}
 ${getVocalAndClicheHardDirective(inputs)}
+${getInstructionResponsivenessDirective(inputs?.additionalInfo || inputs?.awkwardMoment || "")}
 ${getFreshRenditionDirective(`refine-${Date.now().toString(36)}-${Math.random().toString(36).slice(2, 8)}`)}
 ${getAuditRubricPromptBlock()}
 ${metaTagPackage.guidance}
@@ -1871,6 +1929,7 @@ ${culturalContext}
 ${getGenreLengthDirective(inputs?.genre, inputs?.subGenre)}
 ${getTaxonomyGuardrailDirective(inputs)}
 ${getVocalAndClicheHardDirective(inputs)}
+${getInstructionResponsivenessDirective(inputs?.additionalInfo || inputs?.awkwardMoment || "")}
 ${getFreshRenditionDirective(`rewrite-${Date.now().toString(36)}-${Math.random().toString(36).slice(2, 8)}`)}
 ${getAuditRubricPromptBlock()}
 ${metaTagPackage.guidance}
@@ -1922,6 +1981,7 @@ ${culturalContext}
 ${getGenreLengthDirective(inputs?.genre, inputs?.subGenre)}
 ${getTaxonomyGuardrailDirective(inputs)}
 ${getVocalAndClicheHardDirective(inputs)}
+${getInstructionResponsivenessDirective(inputs?.additionalInfo || inputs?.awkwardMoment || "")}
 ${getFreshRenditionDirective(`surgical-${Date.now().toString(36)}-${Math.random().toString(36).slice(2, 8)}`)}
 ${getAuditRubricPromptBlock(93)}
 ${metaTagPackage.guidance}
@@ -1977,6 +2037,7 @@ ${culturalContext}
 ${getGenreLengthDirective(inputs?.genre, inputs?.subGenre)}
 ${getTaxonomyGuardrailDirective(inputs)}
 ${getVocalAndClicheHardDirective(inputs)}
+${getInstructionResponsivenessDirective(inputs?.additionalInfo || inputs?.awkwardMoment || "")}
 ${getFreshRenditionDirective(`upgrade-${Date.now().toString(36)}-${Math.random().toString(36).slice(2, 8)}`)}
 ${getAuditRubricPromptBlock(94)}
 ${metaTagPackage.guidance}
@@ -2334,6 +2395,7 @@ ${culturalContext}
 ${getGenreLengthDirective(inputs?.genre, inputs?.subGenre)}
 ${getTaxonomyGuardrailDirective(inputs)}
 ${getVocalAndClicheHardDirective(inputs)}
+${getInstructionResponsivenessDirective(inputs?.additionalInfo || inputs?.awkwardMoment || "")}
 ${getFreshRenditionDirective(generationSeed)}
 ${getAuditRubricPromptBlock()}
 ${metaTagPackage.guidance}
@@ -2447,6 +2509,7 @@ ${culturalContext}
 ${getGenreLengthDirective(inputs?.genre, inputs?.subGenre)}
 ${getTaxonomyGuardrailDirective(inputs)}
 ${getVocalAndClicheHardDirective(inputs)}
+${getInstructionResponsivenessDirective(inputs?.additionalInfo || inputs?.awkwardMoment || "")}
 ${getFreshRenditionDirective(`${generationSeed}-recovery-${regenAttempt + 1}`)}
 ${getAuditRubricPromptBlock(92)}
 ${metaTagPackage.guidance}
@@ -2626,6 +2689,7 @@ Instruction: ${editInstruction || ""}
 Cultural context requirements:
 ${culturalContext}
 ${getAuditRubricPromptBlock()}
+${getInstructionResponsivenessDirective(editInstruction || "")}
 Meta tag and adlib requirements:
 ${metaTagPackage.guidance}
 ${metaTagPackage.strictSpec}
@@ -2645,6 +2709,24 @@ ${originalSong || ""}
   finalText = await enforceMetaTagOrchestration(finalText, inputs || {});
   finalText = await enforceSongDepthAndTexture(finalText, inputs || {}, userProfile || {});
   finalText = await enforceSunoPromptDriver(finalText, inputs || {}, userProfile || {});
+  if (!isInstructionApplied(originalSong || "", finalText, editInstruction || "")) {
+    const compliancePrompt = `
+Apply the user's instruction exactly. Non-compliance is not allowed.
+Instruction: ${editInstruction || ""}
+${getInstructionResponsivenessDirective(editInstruction || "")}
+Return only:
+Title: ...
+### SUNO Prompt
+...
+### Lyrics
+...
+
+Current revision:
+${finalText}
+    `.trim();
+    const complianceDraft = await openAIResponses(compliancePrompt);
+    finalText = await enforceSunoPromptDriver(complianceDraft, inputs || {}, userProfile || {});
+  }
 
   const rewriteCap = shouldRunMultiPassRefinement() ? 2 : 1;
   const gated = await enforceMinimumAuditScore(finalText, inputs || {}, userProfile || {}, 85, rewriteCap);
@@ -2682,6 +2764,7 @@ ${agentDirectives.lyricDirectives}
 
 Input:
 ${rawText || ""}
+${getInstructionResponsivenessDirective(rawText || "")}
   `.trim();
 
   const draft = await openAIResponses(prompt);
@@ -2694,6 +2777,23 @@ ${rawText || ""}
   finalText = await enforceMetaTagOrchestration(finalText, inputs || {});
   finalText = await enforceSongDepthAndTexture(finalText, inputs || {}, userProfile || {});
   finalText = await enforceSunoPromptDriver(finalText, inputs || {}, userProfile || {});
+  if (looksLikeChorusFirstRequest(rawText || "") && !lyricsStartWithChorus(finalText)) {
+    const compliancePrompt = `
+Restructure this song so lyrics start with [Chorus] exactly.
+${getInstructionResponsivenessDirective(rawText || "")}
+Return only:
+Title: ...
+### SUNO Prompt
+...
+### Lyrics
+...
+
+Current draft:
+${finalText}
+    `.trim();
+    const complianceDraft = await openAIResponses(compliancePrompt);
+    finalText = await enforceSunoPromptDriver(complianceDraft, inputs || {}, userProfile || {});
+  }
 
   const rewriteCap = shouldRunMultiPassRefinement() ? 2 : 1;
   const gated = await enforceMinimumAuditScore(finalText, inputs || {}, userProfile || {}, 85, rewriteCap);
