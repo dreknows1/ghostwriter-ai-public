@@ -132,6 +132,23 @@ type GenreAgentModule = {
     sunoPromptDirectives: string;
     lyricDirectives: string;
   };
+  buildGenreReferenceBlueprint?: (params: {
+    genre?: string;
+    subGenre?: string;
+    language?: string;
+    vocals?: string;
+  }) => {
+    hasAgent: boolean;
+    agentId?: string;
+    promptBlock: string;
+    structureModel: string;
+    writingStyle: string;
+    rhymeCadenceModel: string;
+    languageRegisterModel: string;
+    hookModel: string;
+    arrangementModel: string;
+    guardrails: string[];
+  };
 };
 
 type MetaTagPlan = {
@@ -340,6 +357,43 @@ async function getGenreAgentDirectives(inputs: any) {
   });
 }
 
+async function getGenreReferenceBlueprint(inputs: any): Promise<{
+  hasAgent: boolean;
+  promptBlock: string;
+  structureModel: string;
+  writingStyle: string;
+  rhymeCadenceModel: string;
+  languageRegisterModel: string;
+  hookModel: string;
+  arrangementModel: string;
+  guardrails: string[];
+}> {
+  const mod = await loadGenreAgentModule();
+  if (mod?.buildGenreReferenceBlueprint) {
+    return mod.buildGenreReferenceBlueprint({
+      genre: inputs?.genre,
+      subGenre: inputs?.subGenre,
+      language: inputs?.language,
+      vocals: inputs?.vocals,
+    });
+  }
+  return {
+    hasAgent: false,
+    promptBlock: "Reference writing blueprint: balanced modern songcraft with strong structure/hook coherence.",
+    structureModel: "balanced verse-chorus structure",
+    writingStyle: "concrete, coherent, non-cliche writing",
+    rhymeCadenceModel: "singable stress alignment with meaningful rhyme texture",
+    languageRegisterModel: `${inputs?.language || "English"} native-like contemporary register`,
+    hookModel: "memorable hook with controlled repetition",
+    arrangementModel: "clear section contrast",
+    guardrails: [
+      "avoid generic/cliche openers",
+      "obey explicit user structure and edit requests",
+      "keep vocalist identity consistent with selected vocals",
+    ],
+  };
+}
+
 function sanitizeEmail(email?: string): string {
   return (email || "").toLowerCase().trim();
 }
@@ -391,6 +445,7 @@ Quality-first generation rubric (optimize first draft for this):
 - Cultural Context: scene, references, and perspective match selected culture/region.
 - Genre Fidelity: writing and structure match genre conventions.
 - Subgenre Fidelity: cadence, imagery, arrangement language, and vocal cues match subgenre.
+- Reference Style Compliance: align structure/hook/rhyme/diction to the genre-subgenre reference blueprint.
 - Lyrical Originality: avoid cliches and generic filler; use concrete, memorable details.
 - Cadence & Prosody: stress/flow sing naturally; line lengths support performance.
 Hard drafting target: produce a draft that would realistically score >= ${minTarget}/100.
@@ -753,6 +808,7 @@ async function culturallyRefineSong(rawSong: string, inputs: any, userProfile: a
   const culturalContext = await buildCulturalPromptContext(inputs);
   const metaTagPackage = await getMetaTagPackage(inputs || {});
   const agentDirectives = await getGenreAgentDirectives(inputs || {});
+  const referenceBlueprint = await getGenreReferenceBlueprint(inputs || {});
   const prompt = `
 You are a senior lyric editor specializing in cultural authenticity.
 Refine the song below for cultural and stylistic accuracy while preserving intent and emotional arc.
@@ -790,6 +846,7 @@ ${getAuditRubricPromptBlock()}
 ${metaTagPackage.guidance}
 ${metaTagPackage.strictSpec}
 ${agentDirectives.lyricDirectives}
+${referenceBlueprint.promptBlock}
 
 Song draft:
 ${rawSong}
@@ -1781,7 +1838,54 @@ function fallbackAudit(inputs: any): CulturalAudit {
   };
 }
 
-function deterministicAudit(songText: string, inputs: any): CulturalAudit {
+function getReferenceStyleComplianceScore(
+  songText: string,
+  blueprint: {
+    structureModel: string;
+    writingStyle: string;
+    rhymeCadenceModel: string;
+    hookModel: string;
+    arrangementModel: string;
+  }
+): number {
+  const depth = getSongDepthMetrics(songText);
+  const lower = (songText || "").toLowerCase();
+  const hasChorus = /\[chorus(\s*\d+)?\]/i.test(songText);
+  const hasVerse = /\[verse(\s*\d+)?\]/i.test(songText);
+  const hasBridge = /\[bridge(\s*\d+)?\]/i.test(songText);
+  const structureCoverage = [hasChorus, hasVerse, hasBridge].filter(Boolean).length / 3;
+  const hookIndicators = (lower.match(/\[chorus/gi) || []).length;
+  const hookScore = clamp01(hookIndicators >= 2 ? 1 : hookIndicators / 2);
+  const styleSignal =
+    normalizeForComparison(
+      `${blueprint.structureModel} ${blueprint.writingStyle} ${blueprint.rhymeCadenceModel} ${blueprint.hookModel} ${blueprint.arrangementModel}`
+    ).length > 0
+      ? 1
+      : 0;
+  return clampScore(
+    Math.round(
+      50 +
+        structureCoverage * 16 +
+        hookScore * 12 +
+        (1 - Math.min(depth.clicheHits, 3) / 3) * 12 +
+        clamp01(depth.continuityOverlap / 0.12) * 10 +
+        styleSignal * 4
+    )
+  );
+}
+
+function deterministicAudit(
+  songText: string,
+  inputs: any,
+  referenceBlueprint?: {
+    structureModel: string;
+    writingStyle: string;
+    rhymeCadenceModel: string;
+    languageRegisterModel: string;
+    hookModel: string;
+    arrangementModel: string;
+  }
+): CulturalAudit {
   if (!songText?.trim()) return fallbackAudit(inputs);
   const depth = getSongDepthMetrics(songText);
   const plan = fallbackMetaTagPlan(inputs || {});
@@ -1796,6 +1900,16 @@ function deterministicAudit(songText: string, inputs: any): CulturalAudit {
   const subgenreFidelity = clampScore(56 + orchestration.score * 0.42 + (depth.dynamicContour ? 8 : -6) - (selectedVocalMismatch ? 12 : 0));
   const lyricalOriginality = clampScore(64 + depth.lexicalDiversity * 25 - depth.clicheHits * 12);
   const cadenceProsody = clampScore(60 + depth.continuityOverlap * 180 + (depth.narratorMismatch ? -18 : 6) - (selectedVocalMismatch ? 10 : 0));
+  const referenceStyleCompliance = getReferenceStyleComplianceScore(
+    songText,
+    referenceBlueprint || {
+      structureModel: "balanced verse-chorus structure",
+      writingStyle: "coherent, concrete writing",
+      rhymeCadenceModel: "balanced rhyme and cadence",
+      hookModel: "repeatable hook",
+      arrangementModel: "clear section contrast",
+    }
+  );
 
   const checklist: CulturalAuditItem[] = [
     {
@@ -1847,6 +1961,14 @@ function deterministicAudit(songText: string, inputs: any): CulturalAudit {
           ? "Line stress/flow continuity needs tighter rhythmic logic."
           : "Cadence is workable; emphasize stronger prosodic contrast in hook vs verse.",
     },
+    {
+      dimension: "Reference Style Compliance",
+      score: referenceStyleCompliance,
+      notes:
+        referenceStyleCompliance < 85
+          ? "Draft under-matches learned genre/subgenre structure and hook-writing patterns."
+          : "Draft matches the reference blueprint for structure, cadence, and hook behavior.",
+    },
   ];
 
   const overallScore = clampScore(
@@ -1855,8 +1977,9 @@ function deterministicAudit(songText: string, inputs: any): CulturalAudit {
         culturalContext * 0.14 +
         genreFidelity * 0.18 +
         subgenreFidelity * 0.18 +
-        lyricalOriginality * 0.16 +
-        cadenceProsody * 0.16
+        lyricalOriginality * 0.13 +
+        cadenceProsody * 0.13 +
+        referenceStyleCompliance * 0.08
     )
   );
 
@@ -1890,6 +2013,7 @@ function fallbackAuditFromSong(songText: string, inputs: any): CulturalAudit {
 async function evaluateCulturalAudit(songText: string, inputs: any): Promise<CulturalAudit> {
   if (!songText?.trim()) return fallbackAuditFromSong(songText, inputs);
   const culturalContext = await buildCulturalPromptContext(inputs || {});
+  const referenceBlueprint = await getGenreReferenceBlueprint(inputs || {});
   const prompt = `
 You are evaluating one song draft for cultural authenticity and stylistic quality.
 Score strictly and return ONLY JSON:
@@ -1916,6 +2040,7 @@ Scoring rules:
 - Penalize heavily for cliché opener formulas (sunrise/streetlights + window pane variants).
 
 ${culturalContext}
+${referenceBlueprint.promptBlock}
 
 Song to audit:
 ${songText}
@@ -1926,7 +2051,7 @@ ${songText}
     const parsed = parseLooseJson(raw);
     if (!parsed) return fallbackAuditFromSong(songText, inputs);
     const modelAudit = normalizeAudit(parsed);
-    const deterministic = deterministicAudit(songText, inputs);
+    const deterministic = deterministicAudit(songText, inputs, referenceBlueprint);
     const blendedOverall = clampScore(
       Math.round(modelAudit.overallScore * 0.65 + deterministic.overallScore * 0.35)
     );
@@ -2417,6 +2542,7 @@ async function generateSong(payload: any) {
   const culturalContext = await buildCulturalPromptContext(inputs || {});
   const metaTagPackage = await getMetaTagPackage(inputs || {});
   const agentDirectives = await getGenreAgentDirectives(inputs || {});
+  const referenceBlueprint = await getGenreReferenceBlueprint(inputs || {});
   const prompt = `
 You are a professional songwriter.
 Return only:
@@ -2464,6 +2590,7 @@ ${getAuditRubricPromptBlock()}
 ${metaTagPackage.guidance}
 ${metaTagPackage.strictSpec}
 ${agentDirectives.lyricDirectives}
+${referenceBlueprint.promptBlock}
   `.trim();
 
   const draft = await openAIResponses(prompt);
@@ -2579,6 +2706,7 @@ ${getAuditRubricPromptBlock(92)}
 ${metaTagPackage.guidance}
 ${metaTagPackage.strictSpec}
 ${agentDirectives.lyricDirectives}
+${referenceBlueprint.promptBlock}
     `.trim();
 
     const recoveryDraft = await openAIResponses(recoveryPrompt);
@@ -2740,6 +2868,7 @@ async function editSong(payload: any) {
   const culturalContext = await buildCulturalPromptContext(inputs || {});
   const metaTagPackage = await getMetaTagPackage(inputs || {});
   const agentDirectives = await getGenreAgentDirectives(inputs || {});
+  const referenceBlueprint = await getGenreReferenceBlueprint(inputs || {});
   const prompt = `
 Revise the song per instruction.
 Return only full song in this exact format:
@@ -2758,6 +2887,7 @@ Meta tag and adlib requirements:
 ${metaTagPackage.guidance}
 ${metaTagPackage.strictSpec}
 ${agentDirectives.lyricDirectives}
+${referenceBlueprint.promptBlock}
 
 Original song:
 ${originalSong || ""}
@@ -2811,6 +2941,7 @@ async function structureImportedSong(payload: any) {
   const culturalContext = await buildCulturalPromptContext(inputs || {});
   const metaTagPackage = await getMetaTagPackage(inputs || {});
   const agentDirectives = await getGenreAgentDirectives(inputs || {});
+  const referenceBlueprint = await getGenreReferenceBlueprint(inputs || {});
   const prompt = `
 Turn the input into a full structured song.
 Output format:
@@ -2827,6 +2958,7 @@ Meta tag and adlib requirements:
 ${metaTagPackage.guidance}
 ${metaTagPackage.strictSpec}
 ${agentDirectives.lyricDirectives}
+${referenceBlueprint.promptBlock}
 
 Input:
 ${rawText || ""}

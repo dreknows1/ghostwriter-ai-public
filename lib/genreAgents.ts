@@ -35,6 +35,21 @@ export type GenreAgentDirectives = {
   lyricDirectives: string;
 };
 
+export type GenreReferenceBlueprint = {
+  hasAgent: boolean;
+  agentId?: string;
+  genre?: string;
+  subGenre?: string;
+  structureModel: string;
+  writingStyle: string;
+  rhymeCadenceModel: string;
+  languageRegisterModel: string;
+  hookModel: string;
+  arrangementModel: string;
+  guardrails: string[];
+  promptBlock: string;
+};
+
 const UNIVERSAL_155_RESEARCH_SHORT = `
 Deep research requirement:
 - Before writing, run a silent authenticity pass against the full 155-dimension music framework.
@@ -1327,5 +1342,83 @@ ${lyricRules}
     subgenreMatched: match?.key,
     sunoPromptDirectives,
     lyricDirectives,
+  };
+}
+
+export function buildGenreReferenceBlueprint(params: {
+  genre?: string;
+  subGenre?: string;
+  language?: string;
+  vocals?: string;
+}): GenreReferenceBlueprint {
+  const agent = getAgentByGenre(params.genre);
+  if (!agent) {
+    return {
+      hasAgent: false,
+      structureModel: "verse-chorus-pop-default",
+      writingStyle: "concrete, emotionally direct, culturally coherent",
+      rhymeCadenceModel: "balanced end-rhyme + internal-rhyme, singable stress alignment",
+      languageRegisterModel: `${params.language || "English"} native-like contemporary register`,
+      hookModel: "title-anchored memorable chorus with controlled repetition",
+      arrangementModel: "clear verse/chorus contrast with dynamic bridge lift",
+      guardrails: [
+        "avoid generic/cliche openers",
+        "obey explicit user structure and edit requests",
+        "keep vocalist identity consistent with selected vocals",
+      ],
+      promptBlock: `Reference writing blueprint (fallback):
+- Structure model: verse-chorus-pop-default
+- Writing style: concrete, emotionally direct, culturally coherent
+- Rhyme/cadence: balanced end-rhyme + internal-rhyme, singable stress alignment
+- Language register: ${params.language || "English"} native-like contemporary register
+- Hook model: title-anchored memorable chorus with controlled repetition
+- Arrangement model: clear verse/chorus contrast with dynamic bridge lift`,
+    };
+  }
+
+  const match = getSubgenreDelta(agent, params.subGenre);
+  const delta = match?.delta || {};
+  const style = delta.style || agent.baseline.style;
+  const moodEnergy = delta.moodEnergy || agent.baseline.moodEnergy;
+  const vocalApproach = delta.vocalApproach || agent.baseline.vocalApproach;
+  const arrangementDynamics = delta.arrangementDynamics || agent.baseline.arrangementDynamics;
+  const instrumentFocus = delta.instrumentFocus || agent.baseline.instrumentFocus;
+
+  const structureModel = arrangementDynamics;
+  const writingStyle = style;
+  const rhymeCadenceModel = `${agent.model}; ${vocalApproach}`;
+  const languageRegisterModel = `${params.language || "English"} genre-native register`;
+  const hookModel = moodEnergy;
+  const arrangementModel = instrumentFocus;
+  const guardrails = [
+    "avoid generic/cliche openers",
+    "obey explicit user structure and edit requests",
+    "keep vocalist identity consistent with selected vocals",
+  ];
+
+  const promptBlock = `
+Reference writing blueprint (${agent.id}${match?.key ? ` / ${match.key}` : ""}):
+- Structure model: ${structureModel}
+- Writing style: ${writingStyle}
+- Rhyme/cadence model: ${rhymeCadenceModel}
+- Language/register model: ${languageRegisterModel}
+- Hook model: ${hookModel}
+- Arrangement model: ${arrangementModel}
+- Guardrails: ${guardrails.join("; ")}
+  `.trim();
+
+  return {
+    hasAgent: true,
+    agentId: agent.id,
+    genre: params.genre || agent.genre,
+    subGenre: params.subGenre || match?.key,
+    structureModel,
+    writingStyle,
+    rhymeCadenceModel,
+    languageRegisterModel,
+    hookModel,
+    arrangementModel,
+    guardrails,
+    promptBlock,
   };
 }
