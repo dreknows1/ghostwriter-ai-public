@@ -252,11 +252,19 @@ Meta Tag Library directives (fallback mode):
 
 function fallbackMetaTagPlan(inputs: any): MetaTagPlan {
   const genre = String(inputs?.genre || "Pop").toLowerCase();
+  const vocal = String(inputs?.vocals || "").toLowerCase();
   const heavyAdlib = genre.includes("hip-hop") || genre.includes("rap") || genre.includes("trap") || genre.includes("afrobeats");
   const mediumAdlib = genre.includes("r&b") || genre.includes("soul") || genre.includes("gospel") || genre.includes("reggae");
+  const vocalTypeTag = vocal.includes("female")
+    ? "[Vocalist: Female]"
+    : vocal.includes("duet") || vocal.includes("duo")
+      ? "[Vocalist: Duet]"
+      : vocal.includes("group") || vocal.includes("choir")
+        ? "[Vocalist: Group]"
+        : "[Vocalist: Male]";
   return {
     structureTags: ["[Intro]", "[Verse]", "[Pre-Chorus]", "[Chorus]", "[Verse]", "[Chorus]", "[Bridge]", "[Chorus]", "[Outro]"],
-    vocalTypeTag: "[Vocalist: Male]",
+    vocalTypeTag,
     moodEnergyTags: ["[Energy: High]", "[Mood: Intense]"],
     genreAccentTags: ["[Build Up]"],
     adlibPolicy: "Use tasteful adlibs in parentheses where musically useful.",
@@ -512,6 +520,24 @@ Fresh rendition protocol (session seed: ${sessionSeed}):
   `.trim();
 }
 
+function getVocalAndClicheHardDirective(inputs: any): string {
+  const expected = inferExpectedVocalIdentity(inputs?.vocals);
+  const vocalRule =
+    expected === "female"
+      ? "Vocal lock: Female lead only. Do NOT output male lead tags/references."
+      : expected === "male"
+        ? "Vocal lock: Male lead only. Do NOT output female lead tags/references."
+        : expected === "duet"
+          ? "Vocal lock: Duet interplay only; avoid single-lead gender tags."
+          : expected === "group"
+            ? "Vocal lock: Group/choir vocal identity only."
+            : "Vocal lock: Keep vocalist identity consistent with selected option.";
+  return `
+- ${vocalRule}
+- Ban cliché opener formulas: do NOT use variants of "sunrise paints the window pane" or "streetlights paint the window pane".
+  `.trim();
+}
+
 function getRegionalSceneGuidance(language: string, genre: string, subGenre: string, cultureRegion: string): string {
   const l = language.toLowerCase();
   const g = genre.toLowerCase();
@@ -637,6 +663,7 @@ Creator context:
 ${culturalContext}
 ${getGenreLengthDirective(inputs?.genre, inputs?.subGenre)}
 ${getTaxonomyGuardrailDirective(inputs)}
+${getVocalAndClicheHardDirective(inputs)}
 ${getFreshRenditionDirective(`refine-${Date.now().toString(36)}-${Math.random().toString(36).slice(2, 8)}`)}
 ${getAuditRubricPromptBlock()}
 ${metaTagPackage.guidance}
@@ -920,6 +947,10 @@ function clamp01(v: number): number {
 }
 
 const SONG_CLICHE_PATTERNS: RegExp[] = [
+  /\bsunrise paints? (the )?window pane\b/i,
+  /\bstreetlights? paints? (the )?window pane\b/i,
+  /\bsunrise paints? (my|your|the) window pain\b/i,
+  /\bstreetlights? paints? (my|your|the) window pain\b/i,
   /\brain on the glass\b/i,
   /\bgrew on trees\b/i,
   /\bborrow my light\b/i,
@@ -1037,6 +1068,22 @@ function hasNarratorIdentityMismatch(songText: string): boolean {
     if (/\bi am (a )?man\b/.test(lower)) return true;
     if (/\bthe man in\b/.test(lower)) return true;
     if (/\bthis man\b/.test(lower)) return true;
+  }
+  return false;
+}
+
+function hasSelectedVocalMismatch(songText: string, vocals: string | undefined): boolean {
+  const expected = inferExpectedVocalIdentity(vocals);
+  if (!expected || expected === "duet" || expected === "group") return false;
+  const lower = (songText || "").toLowerCase();
+
+  if (expected === "female") {
+    if (/\[vocalist:\s*male\]/i.test(songText)) return true;
+    if (/\bmale lead\b/.test(lower) || /\[male vocal\]/i.test(songText)) return true;
+  }
+  if (expected === "male") {
+    if (/\[vocalist:\s*female\]/i.test(songText)) return true;
+    if (/\bfemale lead\b/.test(lower) || /\[female vocal\]/i.test(songText)) return true;
   }
   return false;
 }
@@ -1618,13 +1665,16 @@ function deterministicAudit(songText: string, inputs: any): CulturalAudit {
   const depth = getSongDepthMetrics(songText);
   const plan = fallbackMetaTagPlan(inputs || {});
   const orchestration = getMetaTagOrchestrationMetrics(songText, plan);
+  const selectedVocalMismatch = hasSelectedVocalMismatch(songText, inputs?.vocals);
 
-  const languageAuthenticity = clampScore(62 + depth.continuityOverlap * 220 + depth.anchorReuse * 4 - depth.clicheHits * 6);
+  const languageAuthenticity = clampScore(
+    62 + depth.continuityOverlap * 220 + depth.anchorReuse * 4 - depth.clicheHits * 6 - (selectedVocalMismatch ? 14 : 0)
+  );
   const culturalContext = clampScore(60 + depth.anchorReuse * 6 + (depth.oneLinerRisk ? -12 : 8));
   const genreFidelity = clampScore(58 + orchestration.score * 0.38 + depth.performanceTagCount * 2);
-  const subgenreFidelity = clampScore(56 + orchestration.score * 0.42 + (depth.dynamicContour ? 8 : -6));
-  const lyricalOriginality = clampScore(64 + depth.lexicalDiversity * 25 - depth.clicheHits * 8);
-  const cadenceProsody = clampScore(60 + depth.continuityOverlap * 180 + (depth.narratorMismatch ? -18 : 6));
+  const subgenreFidelity = clampScore(56 + orchestration.score * 0.42 + (depth.dynamicContour ? 8 : -6) - (selectedVocalMismatch ? 12 : 0));
+  const lyricalOriginality = clampScore(64 + depth.lexicalDiversity * 25 - depth.clicheHits * 12);
+  const cadenceProsody = clampScore(60 + depth.continuityOverlap * 180 + (depth.narratorMismatch ? -18 : 6) - (selectedVocalMismatch ? 10 : 0));
 
   const checklist: CulturalAuditItem[] = [
     {
@@ -1632,7 +1682,9 @@ function deterministicAudit(songText: string, inputs: any): CulturalAudit {
       score: languageAuthenticity,
       notes: depth.oneLinerRisk
         ? "Narrative linkage is thin; increase idiomatic flow between adjacent lines."
-        : "Phrasing is mostly natural; continue tightening idiomatic line turns.",
+        : selectedVocalMismatch
+          ? "Vocal identity conflicts with selected vocalist; lock tags and delivery to requested voice."
+          : "Phrasing is mostly natural; continue tightening idiomatic line turns.",
     },
     {
       dimension: "Cultural Context",
@@ -1663,7 +1715,7 @@ function deterministicAudit(songText: string, inputs: any): CulturalAudit {
       score: lyricalOriginality,
       notes:
         depth.clicheHits > 1
-          ? "Replace cliche phrases with concrete, specific imagery."
+          ? "Replace cliché opener formulas (sunrise/streetlights + window pane) with concrete, specific imagery."
           : "Imagery is mostly specific; keep pushing distinct line identity.",
     },
     {
@@ -1739,6 +1791,8 @@ Scoring rules:
 - 60-74: mixed quality with clear authenticity gaps
 - below 60: weak authenticity/fidelity
 - Keep notes concise and actionable.
+- Penalize heavily when vocalist identity conflicts with the selected vocalist option.
+- Penalize heavily for cliché opener formulas (sunrise/streetlights + window pane variants).
 
 ${culturalContext}
 
@@ -1816,6 +1870,7 @@ Context:
 ${culturalContext}
 ${getGenreLengthDirective(inputs?.genre, inputs?.subGenre)}
 ${getTaxonomyGuardrailDirective(inputs)}
+${getVocalAndClicheHardDirective(inputs)}
 ${getFreshRenditionDirective(`rewrite-${Date.now().toString(36)}-${Math.random().toString(36).slice(2, 8)}`)}
 ${getAuditRubricPromptBlock()}
 ${metaTagPackage.guidance}
@@ -1866,6 +1921,7 @@ Rules:
 ${culturalContext}
 ${getGenreLengthDirective(inputs?.genre, inputs?.subGenre)}
 ${getTaxonomyGuardrailDirective(inputs)}
+${getVocalAndClicheHardDirective(inputs)}
 ${getFreshRenditionDirective(`surgical-${Date.now().toString(36)}-${Math.random().toString(36).slice(2, 8)}`)}
 ${getAuditRubricPromptBlock(93)}
 ${metaTagPackage.guidance}
@@ -1920,6 +1976,7 @@ Rules:
 ${culturalContext}
 ${getGenreLengthDirective(inputs?.genre, inputs?.subGenre)}
 ${getTaxonomyGuardrailDirective(inputs)}
+${getVocalAndClicheHardDirective(inputs)}
 ${getFreshRenditionDirective(`upgrade-${Date.now().toString(36)}-${Math.random().toString(36).slice(2, 8)}`)}
 ${getAuditRubricPromptBlock(94)}
 ${metaTagPackage.guidance}
@@ -2276,6 +2333,7 @@ Non-negotiable writing directives:
 ${culturalContext}
 ${getGenreLengthDirective(inputs?.genre, inputs?.subGenre)}
 ${getTaxonomyGuardrailDirective(inputs)}
+${getVocalAndClicheHardDirective(inputs)}
 ${getFreshRenditionDirective(generationSeed)}
 ${getAuditRubricPromptBlock()}
 ${metaTagPackage.guidance}
@@ -2388,6 +2446,7 @@ Must improve:
 ${culturalContext}
 ${getGenreLengthDirective(inputs?.genre, inputs?.subGenre)}
 ${getTaxonomyGuardrailDirective(inputs)}
+${getVocalAndClicheHardDirective(inputs)}
 ${getFreshRenditionDirective(`${generationSeed}-recovery-${regenAttempt + 1}`)}
 ${getAuditRubricPromptBlock(92)}
 ${metaTagPackage.guidance}

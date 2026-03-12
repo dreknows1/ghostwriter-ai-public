@@ -1251,6 +1251,15 @@ function mergeRules(baseline: string[], delta?: string[]): string[] {
   return Array.from(new Set(merged));
 }
 
+function inferVocalLockDirective(vocals?: string): string {
+  const value = normalizeKey(vocals || "");
+  if (value.includes("female")) return "Vocal lock: female lead only; never output male lead tags/references.";
+  if (value.includes("male")) return "Vocal lock: male lead only; never output female lead tags/references.";
+  if (value.includes("duet") || value.includes("duo")) return "Vocal lock: duet interplay only; avoid single-lead gender swaps.";
+  if (value.includes("group") || value.includes("choir")) return "Vocal lock: group/choir vocal identity only.";
+  return "Vocal lock: keep vocalist identity fully aligned with the selected vocal option.";
+}
+
 export function buildGenreAgentDirectives(params: {
   genre?: string;
   subGenre?: string;
@@ -1305,6 +1314,8 @@ Genre agent directives (${agent.id}):
 - Genre: ${params.genre || "Pop"}
 - Subgenre: ${params.subGenre || "Modern Pop"}${match?.key ? ` (matched profile: ${match.key})` : ""}
 - Keep lyrics faithful to this style profile while preserving narrative coherence.
+- ${inferVocalLockDirective(params.vocals)}
+- Ban cliché opener formulas: do not use variants of "sunrise paints the window pane" or "streetlights paint the window pane".
 ${UNIVERSAL_155_RESEARCH_FULL}
 ${lyricRules}
   `.trim();
