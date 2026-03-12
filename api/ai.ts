@@ -544,11 +544,74 @@ function looksLikeChorusFirstRequest(text: string): boolean {
 
 function getInstructionResponsivenessDirective(instructionText: string): string {
   const mustStartWithChorus = looksLikeChorusFirstRequest(instructionText);
+  const adlibLanguage = inferRequestedAdlibLanguage(instructionText);
   return `
 - Instruction compliance is mandatory: if the user requests any structural or lyrical change, apply it explicitly.
 - Non-compliance with user edit requests is a hard failure.
 ${mustStartWithChorus ? "- Required structure override: Lyrics must start with [Chorus]." : ""}
+${adlibLanguage ? `- Required ad-lib language override: include ad-libs in ${adlibLanguage}.` : ""}
   `.trim();
+}
+
+function inferRequestedAdlibLanguage(text: string): string | null {
+  const value = (text || "").toLowerCase();
+  if (!value.includes("adlib")) return null;
+  if (value.includes("spanish")) return "Spanish";
+  if (value.includes("french")) return "French";
+  if (value.includes("portuguese")) return "Portuguese";
+  if (value.includes("arabic")) return "Arabic";
+  if (value.includes("hindi")) return "Hindi";
+  if (value.includes("japanese")) return "Japanese";
+  if (value.includes("korean")) return "Korean";
+  return null;
+}
+
+function hasAdlibInLanguage(songText: string, language: string): boolean {
+  const lyrics = extractLyricsBody(songText || "");
+  const adlibs = lyrics.match(/\(([^)\n]{1,80})\)/g) || [];
+  if (!adlibs.length) return false;
+  const tokensByLanguage: Record<string, string[]> = {
+    Spanish: ["ay", "mami", "dale", "vamos", "corazón", "mi amor", "oye", "sí"],
+    French: ["oh là", "bébé", "allez", "mon amour", "oui"],
+    Portuguese: ["amor", "vem", "vai", "meu bem", "coração"],
+    Arabic: ["habibi", "yalla", "allah", "qalbi"],
+    Hindi: ["jaan", "dil", "yaar", "chalo"],
+    Japanese: ["ne", "yo", "suki", "koi"],
+    Korean: ["sarang", "neo", "geurae", "gaja"],
+  };
+  const hints = tokensByLanguage[language] || [];
+  const lowerAdlibs = adlibs.map((a) => a.toLowerCase());
+  return lowerAdlibs.some((line) => hints.some((hint) => line.includes(hint)));
+}
+
+async function enforceRequestedAdlibLanguage(songText: string, instructionText: string): Promise<string> {
+  const language = inferRequestedAdlibLanguage(instructionText);
+  if (!language) return songText;
+  if (hasAdlibInLanguage(songText, language)) return songText;
+
+  const prompt = `
+Apply the user's ad-lib language request exactly.
+Requirement: Add musically natural ad-libs in ${language} throughout the lyrics.
+- Keep song meaning, structure, and vocal identity unchanged.
+- Add at least 4 tasteful ad-libs in ${language}.
+- Keep ad-libs in parentheses.
+
+Return only:
+Title: ...
+### SUNO Prompt
+...
+### Lyrics
+...
+
+Song:
+${songText}
+  `.trim();
+
+  try {
+    return await openAIResponses(prompt);
+  } catch {
+    return songText;
+  }
 }
 
 function applyStructureOverrideToPlan(plan: MetaTagPlan, instructionText: string): MetaTagPlan {
@@ -2419,6 +2482,7 @@ ${agentDirectives.lyricDirectives}
   if (hasTimeBudget(startMs, 5000)) {
     finalText = await enforceSunoPromptDriver(finalText, inputs || {}, userProfile || {});
   }
+  finalText = await enforceRequestedAdlibLanguage(finalText, inputs?.additionalInfo || inputs?.awkwardMoment || "");
 
   const rewriteCap = hasTimeBudget(startMs, 16000)
     ? 4
@@ -2709,6 +2773,7 @@ ${originalSong || ""}
   finalText = await enforceMetaTagOrchestration(finalText, inputs || {});
   finalText = await enforceSongDepthAndTexture(finalText, inputs || {}, userProfile || {});
   finalText = await enforceSunoPromptDriver(finalText, inputs || {}, userProfile || {});
+  finalText = await enforceRequestedAdlibLanguage(finalText, editInstruction || "");
   if (!isInstructionApplied(originalSong || "", finalText, editInstruction || "")) {
     const compliancePrompt = `
 Apply the user's instruction exactly. Non-compliance is not allowed.
@@ -2726,6 +2791,7 @@ ${finalText}
     `.trim();
     const complianceDraft = await openAIResponses(compliancePrompt);
     finalText = await enforceSunoPromptDriver(complianceDraft, inputs || {}, userProfile || {});
+    finalText = await enforceRequestedAdlibLanguage(finalText, editInstruction || "");
   }
 
   const rewriteCap = shouldRunMultiPassRefinement() ? 2 : 1;
@@ -2777,6 +2843,7 @@ ${getInstructionResponsivenessDirective(rawText || "")}
   finalText = await enforceMetaTagOrchestration(finalText, inputs || {});
   finalText = await enforceSongDepthAndTexture(finalText, inputs || {}, userProfile || {});
   finalText = await enforceSunoPromptDriver(finalText, inputs || {}, userProfile || {});
+  finalText = await enforceRequestedAdlibLanguage(finalText, rawText || "");
   if (looksLikeChorusFirstRequest(rawText || "") && !lyricsStartWithChorus(finalText)) {
     const compliancePrompt = `
 Restructure this song so lyrics start with [Chorus] exactly.
@@ -2793,6 +2860,7 @@ ${finalText}
     `.trim();
     const complianceDraft = await openAIResponses(compliancePrompt);
     finalText = await enforceSunoPromptDriver(complianceDraft, inputs || {}, userProfile || {});
+    finalText = await enforceRequestedAdlibLanguage(finalText, rawText || "");
   }
 
   const rewriteCap = shouldRunMultiPassRefinement() ? 2 : 1;
