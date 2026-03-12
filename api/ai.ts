@@ -2964,6 +2964,54 @@ ${best.text}
     gated = best;
   }
   if (gated.audit.overallScore < 85) {
+    let forced = gated;
+    for (let retry = 0; retry < 2; retry += 1) {
+      if (forced.audit.overallScore >= 85) break;
+      const forcePrompt = `
+Last-chance quality recovery.
+You must improve this draft above 85 quality while preserving user intent.
+Return only:
+Title: ...
+### SUNO Prompt
+...
+### Lyrics
+...
+
+Current score: ${forced.audit.overallScore}
+Draft:
+${forced.text}
+      `.trim();
+      try {
+        let forcedText = await openAIResponses(forcePrompt);
+        forcedText = await enforceSunoPromptDriver(forcedText, inputs || {}, userProfile || {});
+        forcedText = await enforceRequestedAdlibLanguage(forcedText, inputs?.additionalInfo || inputs?.awkwardMoment || "");
+        const forcedAudit = await evaluateCulturalAudit(forcedText, inputs || {});
+        if (forcedAudit.overallScore > forced.audit.overallScore) {
+          forced = {
+            text: forcedText,
+            audit: forcedAudit,
+            qualityGate: {
+              ...forced.qualityGate,
+              finalScore: forcedAudit.overallScore,
+              rewritesTriggered: forced.qualityGate.rewritesTriggered + 1,
+              passes: [
+                ...forced.qualityGate.passes,
+                {
+                  pass: forced.qualityGate.passes.length + 1,
+                  score: forcedAudit.overallScore,
+                  action: forcedAudit.overallScore < 85 ? "rewrite" : "accepted",
+                },
+              ],
+            },
+          };
+        }
+      } catch {
+        // Keep best-known draft and continue retrying.
+      }
+    }
+    gated = forced;
+  }
+  if (gated.audit.overallScore < 85) {
     throw Object.assign(
       new Error(`Quality gate failed (${gated.audit.overallScore}/100). Song was not released. Please retry.`),
       { status: 422, code: "quality_gate_failed" }
