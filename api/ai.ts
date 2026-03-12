@@ -2646,11 +2646,16 @@ ${originalSong || ""}
   finalText = await enforceSongDepthAndTexture(finalText, inputs || {}, userProfile || {});
   finalText = await enforceSunoPromptDriver(finalText, inputs || {}, userProfile || {});
 
-  const audit = shouldRunDeepAudit()
-    ? await evaluateCulturalAudit(finalText, inputs || {})
-    : fallbackAudit(inputs || {});
+  const rewriteCap = shouldRunMultiPassRefinement() ? 2 : 1;
+  const gated = await enforceMinimumAuditScore(finalText, inputs || {}, userProfile || {}, 85, rewriteCap);
+  if (gated.audit.overallScore < 85) {
+    throw Object.assign(
+      new Error(`Revision quality gate failed (${gated.audit.overallScore}/100). Please retry.`),
+      { status: 422, code: "revision_quality_gate_failed" }
+    );
+  }
 
-  return { text: finalText, audit };
+  return { text: gated.text, audit: gated.audit };
 }
 
 async function structureImportedSong(payload: any) {
@@ -2690,11 +2695,16 @@ ${rawText || ""}
   finalText = await enforceSongDepthAndTexture(finalText, inputs || {}, userProfile || {});
   finalText = await enforceSunoPromptDriver(finalText, inputs || {}, userProfile || {});
 
-  const audit = shouldRunDeepAudit()
-    ? await evaluateCulturalAudit(finalText, inputs || {})
-    : fallbackAudit(inputs || {});
+  const rewriteCap = shouldRunMultiPassRefinement() ? 2 : 1;
+  const gated = await enforceMinimumAuditScore(finalText, inputs || {}, userProfile || {}, 85, rewriteCap);
+  if (gated.audit.overallScore < 85) {
+    throw Object.assign(
+      new Error(`Import quality gate failed (${gated.audit.overallScore}/100). Please retry.`),
+      { status: 422, code: "import_quality_gate_failed" }
+    );
+  }
 
-  return { text: finalText, audit };
+  return { text: gated.text, audit: gated.audit };
 }
 
 async function generateDynamicOptions(payload: any) {

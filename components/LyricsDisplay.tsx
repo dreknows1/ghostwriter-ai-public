@@ -42,6 +42,27 @@ const LyricsDisplay: React.FC<LyricsDisplayProps> = ({
     currentInputs,
     initialAudit
 }) => {
+  const questionnaireItems = useMemo(() => {
+    const inputs = currentInputs || {};
+    const rows: Array<{ label: string; value: string }> = [
+      { label: "Language", value: String(inputs.language || "") },
+      { label: "Genre", value: String(inputs.genre || "") },
+      { label: "Subgenre", value: String(inputs.subGenre || "") },
+      { label: "Instrumentation", value: String(inputs.instrumentation || "") },
+      { label: "Audio Environment", value: String(inputs.audioEnv || "") },
+      { label: "Scene", value: String(inputs.scene || "") },
+      { label: "Emotion", value: String(inputs.emotion || "") },
+      { label: "Vocals", value: String(inputs.vocals || "") },
+      { label: "Duet Type", value: String(inputs.duetType || "") },
+      { label: "Performer Type", value: String(inputs.performerType || "") },
+      { label: "Reference Artist", value: String(inputs.referenceArtist || "") },
+      { label: "Additional Direction", value: String(inputs.additionalInfo || "") },
+      { label: "Mundane Objects", value: String(inputs.mundaneObjects || "") },
+      { label: "Awkward Moment", value: String(inputs.awkwardMoment || "") },
+    ];
+    return rows.filter((row) => row.value.trim().length > 0);
+  }, [currentInputs]);
+
   const [history, setHistory] = useState<string[]>([song]);
   const [historyIndex, setHistoryIndex] = useState(0);
   const currentFullSong = history[historyIndex];
@@ -271,6 +292,22 @@ const LyricsDisplay: React.FC<LyricsDisplayProps> = ({
                           <div key={item.dimension} className="flex items-start justify-between gap-3 text-[11px]">
                             <span className="text-slate-400">{item.dimension}</span>
                             <span className="text-slate-200 font-black tabular-nums">{item.score}</span>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  )}
+                  {questionnaireItems.length > 0 && (
+                    <div className="mb-6 rounded-2xl border border-indigo-900/40 bg-[#11142a] p-4">
+                      <div className="flex items-center justify-between mb-2">
+                        <span className="text-[11px] font-black uppercase tracking-[0.15em] text-indigo-300">Questionnaire Context</span>
+                        <span className="text-[11px] font-black text-indigo-200">{questionnaireItems.length} fields</span>
+                      </div>
+                      <div className="space-y-1.5 max-h-64 overflow-auto pr-1">
+                        {questionnaireItems.map((item) => (
+                          <div key={item.label} className="text-[11px]">
+                            <span className="text-slate-400">{item.label}: </span>
+                            <span className="text-slate-200">{item.value}</span>
                           </div>
                         ))}
                       </div>
