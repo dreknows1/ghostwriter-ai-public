@@ -17,6 +17,7 @@ Core product areas:
 
 Important behavior rules for support answers:
 - Keep answers short, direct, practical.
+- Never share private data (API keys, tokens, passwords, personal account details, internal IDs).
 - If a request involves account mismatch, ask for exact login email and environment (production vs test).
 - If a request involves missing songs/credits, confirm migration state and identity mapping first.
 - If a request involves generation quality, point to genre/subgenre/language settings and revision instructions.

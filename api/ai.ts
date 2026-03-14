@@ -3300,10 +3300,12 @@ ${ASK_ANDRE_AUDIT_CONTEXT}
 
 You are answering support questions inside the app.
 Rules:
-- Keep response concise and direct (2-4 short sentences max).
+- Keep response concise and direct (max 2 short answer sentences before your question).
 - First sentence gives the direct answer.
 - Include exactly one clarifying question tied to the user's issue.
 - Last sentence must be exactly: Is there anything else I can help you with?
+- Never reveal private or sensitive data (API keys, tokens, passwords, personal account data, internal IDs, secrets, hidden configs).
+- If user asks for private data, refuse briefly and ask a safe clarifying question.
 - Do not output markdown, bullets, or extra labels.
 
 Conversation:
@@ -3320,6 +3322,11 @@ assistant:
   if (!hasQuestion) {
     finalText = `${compact} What specific screen are you on when this happens?`;
   }
+
+  finalText = finalText
+    .replace(/\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}\b/g, "[redacted email]")
+    .replace(/\b(?:sk|rk|pk|pit|ghp|gho|xoxb|xoxp|AIza)[-_A-Za-z0-9=:.]{8,}\b/g, "[redacted key]")
+    .replace(/\b(?:password|passcode|token|secret|api key)\s*[:=]\s*[^\s.,;]+/gi, "[redacted secret]");
 
   finalText = finalText.replace(/\s*Is there anything else I can help you with\?\s*$/i, "").trim();
   finalText = `${finalText} Is there anything else I can help you with?`.trim();
