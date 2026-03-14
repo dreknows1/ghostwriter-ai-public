@@ -3330,6 +3330,7 @@ Rules:
 - First sentence gives the direct answer.
 - If the user is still troubleshooting, include exactly one clarifying question tied to their issue and do NOT add a conversation-ending line.
 - If the user message clearly indicates they are done, end with exactly: Is there anything else I can help you with?
+- Include one direct URL when it helps the user complete the step.
 - Never reveal private or sensitive data (API keys, tokens, passwords, personal account data, internal IDs, secrets, hidden configs).
 - If user asks for private data, refuse briefly and ask a safe clarifying question.
 - Do not output markdown, bullets, or extra labels.
@@ -3349,8 +3350,8 @@ assistant:
     if (q.includes("credit") && (q.includes("cost") || q.includes("price") || q.includes("how much"))) {
       return {
         text: shouldCloseConversation
-          ? "Open Billing & Credits to see the current credit packs and your community discount (if eligible). Is there anything else I can help you with?"
-          : "Open Billing & Credits to see the current credit packs and your community discount (if eligible). Are you asking about one-time packs or your current balance?",
+          ? "Open Billing & Credits to see the current credit packs and your community discount (if eligible): https://www.songghost.com Is there anything else I can help you with?"
+          : "Open Billing & Credits to see the current credit packs and your community discount (if eligible): https://www.songghost.com Are you asking about one-time packs or your current balance?",
       };
     }
     return {
@@ -3365,6 +3366,15 @@ assistant:
 
   if (!hasQuestion && !shouldCloseConversation) {
     finalText = `${compact} What specific screen are you on when this happens?`;
+  }
+
+  if (!/https?:\/\//i.test(finalText)) {
+    const lowerQ = question.toLowerCase();
+    if (lowerQ.includes("api key") || lowerQ.includes("gemini")) {
+      finalText = `${finalText} https://aistudio.google.com/app/apikey`;
+    } else if (lowerQ.includes("credit") || lowerQ.includes("billing") || lowerQ.includes("purchase")) {
+      finalText = `${finalText} https://www.songghost.com`;
+    }
   }
 
   finalText = finalText

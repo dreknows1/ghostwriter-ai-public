@@ -21,6 +21,20 @@ const AskAndreWidget: React.FC<AskAndreWidgetProps> = ({ email }) => {
 
   const visibleMessages = useMemo(() => messages.slice(-10), [messages]);
 
+  const renderWithLinks = (text: string) => {
+    const parts = text.split(/(https?:\/\/[^\s]+)/g);
+    return parts.map((part, index) => {
+      if (/^https?:\/\/[^\s]+$/.test(part)) {
+        return (
+          <a key={`${part}-${index}`} href={part} target="_blank" rel="noreferrer" className="text-cyan-300 underline break-all">
+            {part}
+          </a>
+        );
+      }
+      return <React.Fragment key={`${index}-txt`}>{part}</React.Fragment>;
+    });
+  };
+
   const handleSend = async () => {
     const question = input.trim();
     if (!question || loading) return;
@@ -62,7 +76,7 @@ const AskAndreWidget: React.FC<AskAndreWidgetProps> = ({ email }) => {
                     : "bg-cyan-900/40 border border-cyan-800 text-cyan-100 ml-8"
                 }`}
               >
-                {msg.content}
+                {renderWithLinks(msg.content)}
               </div>
             ))}
             {loading && <div className="text-xs text-slate-400">Thinking...</div>}
