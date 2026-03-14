@@ -2472,7 +2472,7 @@ async function geminiGenerateImage(
   aspectRatio: "9:16" | "1:1" | "16:9" = "9:16",
   referenceImage?: Blob | null
 ): Promise<string> {
-  const ai = new GoogleGenAI({ apiKey: getGeminiApiKey() });
+  const ai = new GoogleGenAI({ apiKey: getRequestGeminiTextApiKey() });
   const promptWithAspect = `${prompt}\nTarget aspect ratio: ${aspectRatio}.`;
   const contents: any[] = [{ text: promptWithAspect }];
 
@@ -2548,7 +2548,7 @@ async function geminiGenerateImage(
 }
 
 async function describeAvatarForPrompt(referenceImage: Blob): Promise<string> {
-  const ai = new GoogleGenAI({ apiKey: getGeminiApiKey() });
+  const ai = new GoogleGenAI({ apiKey: getRequestGeminiTextApiKey() });
   const arrayBuffer = await referenceImage.arrayBuffer();
   const base64 = Buffer.from(arrayBuffer).toString("base64");
 
