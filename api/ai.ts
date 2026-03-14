@@ -3338,7 +3338,20 @@ user: ${question}
 assistant:
   `.trim();
 
-  const raw = await openAIResponses(prompt);
+  let raw = "";
+  try {
+    raw = await openAIResponses(prompt);
+  } catch {
+    const q = question.toLowerCase();
+    if (q.includes("credit") && (q.includes("cost") || q.includes("price") || q.includes("how much"))) {
+      return {
+        text: "Open Billing & Credits to see the current credit packs and your community discount (if eligible). Are you asking about one-time packs or your current balance? Is there anything else I can help you with?",
+      };
+    }
+    return {
+      text: "I can help with account, billing, credits, song generation, and member access. What screen are you on right now so I can give the exact step? Is there anything else I can help you with?",
+    };
+  }
   const compact = raw.replace(/\s+/g, " ").trim();
   const hasQuestion = compact.includes("?");
   let finalText = compact;
@@ -3372,7 +3385,8 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
 
     if (!action) return res.status(400).json({ error: "Missing action" });
     if (!isAllowedEmail(email)) return res.status(401).json({ error: "Invalid user identity" });
-    requestRequiresUserGeminiKey = await shouldRequireUserGeminiKey(String(email || ""));
+    requestRequiresUserGeminiKey =
+      action === "askAndre" ? false : await shouldRequireUserGeminiKey(String(email || ""));
     requestGeminiTextApiKey =
       String(payload?.userGeminiApiKey || req.headers["x-gemini-api-key"] || "")
         .trim() || null;
