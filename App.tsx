@@ -11,6 +11,7 @@ import ProfileView from './components/ProfileView';
 import PricingView from './components/PricingView';
 import TermsAndPrivacy from './components/TermsAndPrivacy';
 import UtilityHub, { UtilitySection } from './components/UtilityHub';
+import AskAndreWidget from './components/AskAndreWidget';
 import { Logo } from './components/Logo';
 import { LoadingSpinner, ProfileIcon, WalletIcon, CheckIcon, MagicWandIcon, EditIcon, ClockIcon } from './components/icons';
 
@@ -903,9 +904,10 @@ export const App: React.FC = () => {
 
   if (!session || view === AppView.AUTH) {
     return (
-      <div className="app-shell min-h-screen flex flex-col items-center justify-center p-3 sm:p-4 relative overflow-hidden">
-        <div className="fixed top-0 left-0 w-full h-full bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-slate-900 via-[#0a0d17] to-[#06080f] pointer-events-none z-0"></div>
-        <div className="relative z-10 w-full max-w-xl rounded-[2rem] border border-slate-800/80 bg-[#0c101a]/95 shadow-[0_24px_90px_rgba(0,0,0,0.62)] overflow-hidden">
+      <>
+        <div className="app-shell min-h-screen flex flex-col items-center justify-center p-3 sm:p-4 relative overflow-hidden">
+          <div className="fixed top-0 left-0 w-full h-full bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-slate-900 via-[#0a0d17] to-[#06080f] pointer-events-none z-0"></div>
+          <div className="relative z-10 w-full max-w-xl rounded-[2rem] border border-slate-800/80 bg-[#0c101a]/95 shadow-[0_24px_90px_rgba(0,0,0,0.62)] overflow-hidden">
           <div className="p-6 sm:p-9">
             <div className="flex justify-center mb-4"><Logo size={68} /></div>
             <h1 className="heading-display text-3xl sm:text-4xl font-black text-center tracking-tight text-white mb-3">Write. Refine. Release.</h1>
@@ -1078,49 +1080,70 @@ export const App: React.FC = () => {
               </button>
             </div>
           </div>
+          </div>
         </div>
-      </div>
+        <AskAndreWidget email={session?.user?.email || ''} />
+      </>
     );
   }
 
   if (view === AppView.TERMS) {
-      return <TermsAndPrivacy onBack={() => setView(termsReturnView)} />;
+      return (
+        <>
+          <TermsAndPrivacy onBack={() => setView(termsReturnView)} />
+          <AskAndreWidget email={session?.user?.email || ''} />
+        </>
+      );
   }
 
   if (view === AppView.HELP && session) {
       return (
-        <div className="app-shell min-h-screen text-slate-200">
-          <UtilityHub
-            email={session.user.email}
-            section={utilitySection}
-            onBack={() => setView(utilityReturnView)}
-            onOpenTerms={() => {
-              setTermsReturnView(AppView.HELP);
-              setView(AppView.TERMS);
-            }}
-          />
-        </div>
+        <>
+          <div className="app-shell min-h-screen text-slate-200">
+            <UtilityHub
+              email={session.user.email}
+              section={utilitySection}
+              onBack={() => setView(utilityReturnView)}
+              onOpenTerms={() => {
+                setTermsReturnView(AppView.HELP);
+                setView(AppView.TERMS);
+              }}
+            />
+          </div>
+          <AskAndreWidget email={session?.user?.email || ''} />
+        </>
       );
   }
 
   if (view === AppView.PRICING) {
-      return <PricingView email={session.user.email} onClose={() => setView(AppView.LANDING)} onPurchaseComplete={() => {}} />;
+      return (
+        <>
+          <PricingView email={session.user.email} onClose={() => setView(AppView.LANDING)} onPurchaseComplete={() => {}} />
+          <AskAndreWidget email={session?.user?.email || ''} />
+        </>
+      );
   }
 
   if (view === AppView.PROFILE) {
-      return <ProfileView email={session.user.email} onLoadSong={(s) => {
-          setInputs({ ...DEFAULT_INPUTS, genre: 'Loaded Song' }); 
-          setGeneratedSong(`Title: ${s.title || 'Untitled'}\n\n### SUNO Prompt\n${s.suno_prompt || ''}\n\n### Lyrics\n${s.lyrics || ''}`);
-          setCulturalAudit(null);
-          setAlbumArt(s.album_art || null);
-          setLoadedSongId(s.id);
-          setView(AppView.STUDIO);
-          setStep(AppStep.SONG_DISPLAYED);
-      }} onBack={() => setView(AppView.LANDING)} onSignOut={() => signOut().then(() => { setSession(null); setView(AppView.AUTH); setHeaderAvatarUrl(null); })} onProfileUpdate={(updated) => setHeaderAvatarUrl(updated?.avatar_url || null)} onBuyCredits={() => setView(AppView.PRICING)} />;
+      return (
+        <>
+          <ProfileView email={session.user.email} onLoadSong={(s) => {
+            setInputs({ ...DEFAULT_INPUTS, genre: 'Loaded Song' }); 
+            setGeneratedSong(`Title: ${s.title || 'Untitled'}\n\n### SUNO Prompt\n${s.suno_prompt || ''}\n\n### Lyrics\n${s.lyrics || ''}`);
+            setCulturalAudit(null);
+            setAlbumArt(s.album_art || null);
+            setLoadedSongId(s.id);
+            setView(AppView.STUDIO);
+            setStep(AppStep.SONG_DISPLAYED);
+          }} onBack={() => setView(AppView.LANDING)} onSignOut={() => signOut().then(() => { setSession(null); setView(AppView.AUTH); setHeaderAvatarUrl(null); })} onProfileUpdate={(updated) => setHeaderAvatarUrl(updated?.avatar_url || null)} onBuyCredits={() => setView(AppView.PRICING)} />
+          <AskAndreWidget email={session?.user?.email || ''} />
+        </>
+      );
   }
 
   if (view === AppView.LANDING) {
       return (
+        <>
         <div className="app-shell min-h-screen text-slate-200 font-sans selection:bg-blue-500/30 relative overflow-hidden flex flex-col items-center justify-center p-4 md:p-6">
              <div className="fixed top-0 left-0 w-full h-full bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-slate-900 via-[#020617] to-[#020617] pointer-events-none z-0"></div>
              
@@ -1287,11 +1310,14 @@ export const App: React.FC = () => {
                </>
              )}
         </div>
+        <AskAndreWidget email={session?.user?.email || ''} />
+        </>
       );
   }
 
   // STUDIO VIEW
   return (
+    <>
     <div className="app-shell min-h-screen text-slate-200 font-sans selection:bg-blue-500/30 relative overflow-x-hidden">
       <div className="fixed top-0 left-0 w-full h-full bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-slate-900 via-[#020617] to-[#020617] pointer-events-none z-0"></div>
       
@@ -1491,5 +1517,7 @@ export const App: React.FC = () => {
           )}
       </div>
     </div>
+    <AskAndreWidget email={session?.user?.email || ''} />
+    </>
   );
 };

@@ -7,7 +7,8 @@ type AIAction =
   | "generateDynamicOptions"
   | "generateAlbumArt"
   | "generateSocialPack"
-  | "translateLyrics";
+  | "translateLyrics"
+  | "askAndre";
 
 let lastCulturalAudit: CulturalAudit | null = null;
 let lastQualityGateReport: QualityGateReport | null = null;
@@ -211,6 +212,11 @@ export async function generateSocialPack(songTitle: string, lyrics: string, emai
 export async function translateLyrics(lyrics: string, targetLanguage: string, email: string): Promise<string> {
   const result = await callAI<{ text: string }>("translateLyrics", email, { lyrics, targetLanguage });
   return result.text || "Translation failed.";
+}
+
+export async function askAndre(question: string, email: string, history: Array<{ role: "user" | "assistant"; content: string }>): Promise<string> {
+  const result = await callAI<{ text: string }>("askAndre", email || "guest@songghost.local", { question, history });
+  return result.text || "I can help with that. What exact step are you on? Is there anything else I can help you with?";
 }
 
 export async function* polishSong(currentLyrics: string, genre: string, email: string): AsyncGenerator<string> {

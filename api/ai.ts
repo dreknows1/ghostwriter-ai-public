@@ -2,6 +2,7 @@ import type { VercelRequest, VercelResponse } from "@vercel/node";
 import { ConvexHttpClient } from "convex/browser";
 import { makeFunctionReference } from "convex/server";
 import { GoogleGenAI } from "@google/genai";
+import { ASK_ANDRE_AUDIT_CONTEXT } from "../lib/askAndreContext";
 
 export const config = {
   runtime: "nodejs",
@@ -15,7 +16,8 @@ type AIAction =
   | "generateDynamicOptions"
   | "generateAlbumArt"
   | "generateSocialPack"
-  | "translateLyrics";
+  | "translateLyrics"
+  | "askAndre";
 
 type CulturalAuditItem = {
   dimension: string;
@@ -3273,6 +3275,57 @@ ${lyrics || ""}
   return { text: await openAIResponses(prompt) };
 }
 
+async function askAndre(payload: any) {
+  const question = String(payload?.question || "").trim();
+  const history = Array.isArray(payload?.history) ? payload.history : [];
+  if (!question) {
+    return {
+      text: "Please share your question in one sentence. What screen or action are you trying to use? Is there anything else I can help you with?",
+    };
+  }
+
+  const historyBlock = history
+    .slice(-8)
+    .map((entry: any) => {
+      const role = entry?.role === "assistant" ? "assistant" : "user";
+      const content = String(entry?.content || "").trim();
+      if (!content) return "";
+      return `${role}: ${content}`;
+    })
+    .filter(Boolean)
+    .join("\n");
+
+  const prompt = `
+${ASK_ANDRE_AUDIT_CONTEXT}
+
+You are answering support questions inside the app.
+Rules:
+- Keep response concise and direct (2-4 short sentences max).
+- First sentence gives the direct answer.
+- Include exactly one clarifying question tied to the user's issue.
+- Last sentence must be exactly: Is there anything else I can help you with?
+- Do not output markdown, bullets, or extra labels.
+
+Conversation:
+${historyBlock || "(no prior messages)"}
+user: ${question}
+assistant:
+  `.trim();
+
+  const raw = await openAIResponses(prompt);
+  const compact = raw.replace(/\s+/g, " ").trim();
+  const hasQuestion = compact.includes("?");
+  let finalText = compact;
+
+  if (!hasQuestion) {
+    finalText = `${compact} What specific screen are you on when this happens?`;
+  }
+
+  finalText = finalText.replace(/\s*Is there anything else I can help you with\?\s*$/i, "").trim();
+  finalText = `${finalText} Is there anything else I can help you with?`.trim();
+  return { text: finalText };
+}
+
 export default async function handler(req: VercelRequest, res: VercelResponse) {
   if (req.method !== "POST") {
     res.setHeader("Allow", "POST");
@@ -3307,6 +3360,8 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
         return res.status(200).json(await generateSocialPack(payload));
       case "translateLyrics":
         return res.status(200).json(await translateLyrics(payload));
+      case "askAndre":
+        return res.status(200).json(await askAndre(payload));
       default:
         return res.status(400).json({ error: "Unsupported action" });
     }
