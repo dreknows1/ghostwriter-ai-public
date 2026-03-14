@@ -3302,9 +3302,11 @@ ${lyrics || ""}
 async function askAndre(payload: any) {
   const question = String(payload?.question || "").trim();
   const history = Array.isArray(payload?.history) ? payload.history : [];
+  const closeSignals = /\b(thanks|thank you|got it|that'?s all|all good|resolved|done|no thanks|no, thanks|i'?m good)\b/i;
+  const shouldCloseConversation = closeSignals.test(question);
   if (!question) {
     return {
-      text: "Please share your question in one sentence. What screen or action are you trying to use? Is there anything else I can help you with?",
+      text: "Please share your question in one sentence. What screen or action are you trying to use?",
     };
   }
 
@@ -3326,8 +3328,8 @@ You are answering support questions inside the app.
 Rules:
 - Keep response concise and direct (max 2 short answer sentences before your question).
 - First sentence gives the direct answer.
-- Include exactly one clarifying question tied to the user's issue.
-- Last sentence must be exactly: Is there anything else I can help you with?
+- If the user is still troubleshooting, include exactly one clarifying question tied to their issue and do NOT add a conversation-ending line.
+- If the user message clearly indicates they are done, end with exactly: Is there anything else I can help you with?
 - Never reveal private or sensitive data (API keys, tokens, passwords, personal account data, internal IDs, secrets, hidden configs).
 - If user asks for private data, refuse briefly and ask a safe clarifying question.
 - Do not output markdown, bullets, or extra labels.
@@ -3335,6 +3337,7 @@ Rules:
 Conversation:
 ${historyBlock || "(no prior messages)"}
 user: ${question}
+conversation_end_intent: ${shouldCloseConversation ? "yes" : "no"}
 assistant:
   `.trim();
 
@@ -3345,18 +3348,22 @@ assistant:
     const q = question.toLowerCase();
     if (q.includes("credit") && (q.includes("cost") || q.includes("price") || q.includes("how much"))) {
       return {
-        text: "Open Billing & Credits to see the current credit packs and your community discount (if eligible). Are you asking about one-time packs or your current balance? Is there anything else I can help you with?",
+        text: shouldCloseConversation
+          ? "Open Billing & Credits to see the current credit packs and your community discount (if eligible). Is there anything else I can help you with?"
+          : "Open Billing & Credits to see the current credit packs and your community discount (if eligible). Are you asking about one-time packs or your current balance?",
       };
     }
     return {
-      text: "I can help with account, billing, credits, song generation, and member access. What screen are you on right now so I can give the exact step? Is there anything else I can help you with?",
+      text: shouldCloseConversation
+        ? "I can help with account, billing, credits, song generation, and member access. Is there anything else I can help you with?"
+        : "I can help with account, billing, credits, song generation, and member access. What screen are you on right now so I can give the exact step?",
     };
   }
   const compact = raw.replace(/\s+/g, " ").trim();
   const hasQuestion = compact.includes("?");
   let finalText = compact;
 
-  if (!hasQuestion) {
+  if (!hasQuestion && !shouldCloseConversation) {
     finalText = `${compact} What specific screen are you on when this happens?`;
   }
 
@@ -3366,7 +3373,9 @@ assistant:
     .replace(/\b(?:password|passcode|token|secret|api key)\s*[:=]\s*[^\s.,;]+/gi, "[redacted secret]");
 
   finalText = finalText.replace(/\s*Is there anything else I can help you with\?\s*$/i, "").trim();
-  finalText = `${finalText} Is there anything else I can help you with?`.trim();
+  if (shouldCloseConversation) {
+    finalText = `${finalText} Is there anything else I can help you with?`.trim();
+  }
   return { text: finalText };
 }
 

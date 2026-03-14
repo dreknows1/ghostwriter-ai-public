@@ -11,7 +11,7 @@ type AskAndreWidgetProps = {
 };
 
 const STARTER =
-  "Ask me anything about SongGhost: login, members access, credits, songs, revisions, billing, or setup. What do you need help with? Is there anything else I can help you with?";
+  "Ask me anything about SongGhost: login, members access, credits, songs, revisions, billing, or setup. What do you need help with first?";
 
 const AskAndreWidget: React.FC<AskAndreWidgetProps> = ({ email }) => {
   const [open, setOpen] = useState(false);
