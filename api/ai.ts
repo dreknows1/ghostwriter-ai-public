@@ -2392,10 +2392,14 @@ async function openAIResponses(prompt: string, model = getTextModel()): Promise<
 }
 
 let requestGeminiTextApiKey: string | null = null;
+let requestRequiresUserGeminiKey = false;
 
 function getRequestGeminiTextApiKey(): string {
   const key = (requestGeminiTextApiKey || "").trim();
   if (key) return key;
+  if (!requestRequiresUserGeminiKey) {
+    return getGeminiApiKey();
+  }
   throw Object.assign(new Error("Missing Gemini API key. Please add your own Gemini API key in the app."), {
     status: 401,
     code: "missing_user_gemini_api_key",
@@ -2430,6 +2434,20 @@ async function getAvatarBlobByEmail(email: string): Promise<Blob | null> {
     return null;
   } catch {
     return null;
+  }
+}
+
+async function shouldRequireUserGeminiKey(email: string): Promise<boolean> {
+  const convexUrl = process.env.CONVEX_URL;
+  const convexAdminKey = process.env.CONVEX_ADMIN_KEY;
+  if (!convexUrl || !convexAdminKey) return false;
+  try {
+    const client: any = new ConvexHttpClient(convexUrl);
+    client.setAdminAuth(convexAdminKey);
+    const profile: any = await client.query(getUserProfileByEmailRef as any, { email });
+    return String(profile?.tier || "").toLowerCase() === "skool";
+  } catch {
+    return false;
   }
 }
 
@@ -3348,6 +3366,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
 
     if (!action) return res.status(400).json({ error: "Missing action" });
     if (!isAllowedEmail(email)) return res.status(401).json({ error: "Invalid user identity" });
+    requestRequiresUserGeminiKey = await shouldRequireUserGeminiKey(String(email || ""));
     requestGeminiTextApiKey =
       String(payload?.userGeminiApiKey || req.headers["x-gemini-api-key"] || "")
         .trim() || null;
@@ -3387,5 +3406,6 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
   }
   finally {
     requestGeminiTextApiKey = null;
+    requestRequiresUserGeminiKey = false;
   }
 }

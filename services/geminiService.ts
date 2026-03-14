@@ -43,15 +43,7 @@ async function callAI<T>(action: AIAction, email: string, payload: Record<string
   ]);
   const getKeyFromUserIfNeeded = () => {
     if (typeof window === "undefined" || !textActions.has(action)) return "";
-    let value = window.localStorage.getItem(GEMINI_KEY_STORAGE) || "";
-    if (!value.trim()) {
-      const entered = window.prompt("Enter your Gemini API key to use text generation:");
-      if (entered && entered.trim()) {
-        value = entered.trim();
-        window.localStorage.setItem(GEMINI_KEY_STORAGE, value);
-      }
-    }
-    return value;
+    return window.localStorage.getItem(GEMINI_KEY_STORAGE) || "";
   };
 
   const sendRequest = async (userGeminiApiKey: string) => fetch("/api/ai", {
@@ -80,7 +72,7 @@ async function callAI<T>(action: AIAction, email: string, payload: Record<string
       (parsedCode === "gemini_text_auth" || parsedCode === "missing_user_gemini_api_key");
     if (canRetryKey) {
       window.localStorage.removeItem(GEMINI_KEY_STORAGE);
-      const entered = window.prompt("Your Gemini API key is missing or invalid. Paste a valid Gemini API key:");
+      const entered = window.prompt("Members must use their own Gemini API key. Paste a valid Gemini API key:");
       if (entered && entered.trim()) {
         userGeminiApiKey = entered.trim();
         window.localStorage.setItem(GEMINI_KEY_STORAGE, userGeminiApiKey);
