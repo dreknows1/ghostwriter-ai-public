@@ -86,6 +86,7 @@ import {
   getBaseCulture,
   getBaseEnv
 } from './lib/culturalLogic';
+import { sanitizeEmail, sanitizeText, sanitizeUnknown } from './lib/sanitizeInput';
 
 const ART_STYLE_OPTIONS = ['Realism', 'Pixar', 'Comik Book', 'Cyber Punk', 'Anime', 'Fantasy'];
 
@@ -704,6 +705,7 @@ export const App: React.FC = () => {
 
   const handleGenerate = async () => {
       if (!session) return;
+      const cleanedInputs = sanitizeUnknown(inputs);
       const canAfford = await hasEnoughCredits(session.user.email || '', COSTS.GENERATE_SONG);
       if (!canAfford) {
           setView(AppView.PRICING);
@@ -721,7 +723,7 @@ export const App: React.FC = () => {
 
       try {
           const profile = await getUserProfile(session.user.email || '');
-          const generator = generateSong(inputs, session.user.email || '', profile);
+          const generator = generateSong(cleanedInputs, session.user.email || '', profile);
           
           let fullText = '';
           for await (const chunk of generator) {
@@ -815,13 +817,16 @@ export const App: React.FC = () => {
 
   const handleAuth = async (e: React.FormEvent) => {
       e.preventDefault();
-      if (!authEmail || !authPassword) return;
+      const cleanEmail = sanitizeEmail(authEmail);
+      const cleanPassword = sanitizeText(authPassword, 200);
+      const cleanReferral = sanitizeText(referralCode, 64);
+      if (!cleanEmail || !cleanPassword) return;
       setAuthError(null);
       setIsAuthLoading(true);
       try {
           const { data, error } = isSignUpMode
-            ? await signUp(authEmail, authPassword, referralCode)
-            : await signIn(authEmail, authPassword);
+            ? await signUp(cleanEmail, cleanPassword, cleanReferral)
+            : await signIn(cleanEmail, cleanPassword);
           if (error) throw error;
           if (data?.session) {
             // Apply pending tier from community code if validated
@@ -851,9 +856,11 @@ export const App: React.FC = () => {
 
   // Handle manual paste import with intelligent structuring
   const handlePasteImport = async () => {
-      if (!pasteContent.trim()) return;
+      const cleanPasteContent = sanitizeText(pasteContent, 12000);
+      if (!cleanPasteContent.trim()) return;
 
       if (!session) return;
+      const cleanedInputs = sanitizeUnknown(inputs);
       
       // Cost of "Structuring" is treated as a FULL GENERATION (5 credits) as it builds the song.
       const canAfford = await hasEnoughCredits(session.user.email || '', COSTS.GENERATE_SONG);
@@ -870,7 +877,7 @@ export const App: React.FC = () => {
 
       try {
           const profile = await getUserProfile(session.user.email || '');
-          const generator = structureImportedSong(pasteContent, session.user.email || '', inputs, profile);
+          const generator = structureImportedSong(cleanPasteContent, session.user.email || '', cleanedInputs, profile);
           
           let fullText = '';
           for await (const chunk of generator) {

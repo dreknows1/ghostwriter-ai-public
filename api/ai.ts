@@ -2,6 +2,7 @@ import type { VercelRequest, VercelResponse } from "@vercel/node";
 import { ConvexHttpClient } from "convex/browser";
 import { makeFunctionReference } from "convex/server";
 import { GoogleGenAI } from "@google/genai";
+import { sanitizeUnknown, sanitizeText } from "../lib/sanitizeInput";
 
 const ASK_ANDRE_AUDIT_CONTEXT = `
 You are "Ask Andre" inside SongGhost.
@@ -450,7 +451,7 @@ async function getReferenceFeatureScore(songText: string, inputs: any): Promise<
 }
 
 function sanitizeEmail(email?: string): string {
-  return (email || "").toLowerCase().trim();
+  return sanitizeText(email || "", 320).toLowerCase();
 }
 
 function isAllowedEmail(email?: string): boolean {
@@ -3401,32 +3402,34 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
       email?: string;
       payload?: any;
     };
+    const cleanEmail = sanitizeEmail(email || "");
+    const cleanPayload = sanitizeUnknown(payload || {});
 
     if (!action) return res.status(400).json({ error: "Missing action" });
-    if (!isAllowedEmail(email)) return res.status(401).json({ error: "Invalid user identity" });
+    if (!isAllowedEmail(cleanEmail)) return res.status(401).json({ error: "Invalid user identity" });
     requestRequiresUserGeminiKey =
-      action === "askAndre" ? false : await shouldRequireUserGeminiKey(String(email || ""));
+      action === "askAndre" ? false : await shouldRequireUserGeminiKey(cleanEmail);
     requestGeminiTextApiKey =
-      String(payload?.userGeminiApiKey || req.headers["x-gemini-api-key"] || "")
+      String(cleanPayload?.userGeminiApiKey || req.headers["x-gemini-api-key"] || "")
         .trim() || null;
 
     switch (action) {
       case "generateSong":
-        return res.status(200).json(await generateSong(payload));
+        return res.status(200).json(await generateSong(cleanPayload));
       case "editSong":
-        return res.status(200).json(await editSong(payload));
+        return res.status(200).json(await editSong(cleanPayload));
       case "structureImportedSong":
-        return res.status(200).json(await structureImportedSong(payload));
+        return res.status(200).json(await structureImportedSong(cleanPayload));
       case "generateDynamicOptions":
-        return res.status(200).json(await generateDynamicOptions(payload));
+        return res.status(200).json(await generateDynamicOptions(cleanPayload));
       case "generateAlbumArt":
-        return res.status(200).json(await generateAlbumArt({ ...(payload || {}), email }));
+        return res.status(200).json(await generateAlbumArt({ ...(cleanPayload || {}), email: cleanEmail }));
       case "generateSocialPack":
-        return res.status(200).json(await generateSocialPack(payload));
+        return res.status(200).json(await generateSocialPack(cleanPayload));
       case "translateLyrics":
-        return res.status(200).json(await translateLyrics(payload));
+        return res.status(200).json(await translateLyrics(cleanPayload));
       case "askAndre":
-        return res.status(200).json(await askAndre(payload));
+        return res.status(200).json(await askAndre(cleanPayload));
       default:
         return res.status(400).json({ error: "Unsupported action" });
     }

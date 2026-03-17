@@ -1,6 +1,7 @@
 import type { VercelRequest, VercelResponse } from "@vercel/node";
 import { ConvexHttpClient } from "convex/browser";
 import { makeFunctionReference } from "convex/server";
+import { sanitizeUnknown, sanitizeText } from "../lib/sanitizeInput";
 
 const refs = {
   getUserProfileByEmail: { mode: "query", ref: makeFunctionReference<"query">("app:getUserProfileByEmail") },
@@ -37,13 +38,15 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
   }
   try {
     const { action, payload } = (req.body || {}) as { action?: keyof typeof refs; payload?: any };
-    if (!action || !refs[action]) return res.status(400).json({ error: "Invalid action" });
+    const cleanAction = sanitizeText(String(action || ""), 120) as keyof typeof refs;
+    const cleanPayload = sanitizeUnknown(payload || {});
+    if (!cleanAction || !refs[cleanAction]) return res.status(400).json({ error: "Invalid action" });
     const client = getClient();
-    const selected: any = (refs as any)[action];
+    const selected: any = (refs as any)[cleanAction];
     const data =
       selected.mode === "query"
-        ? await client.query(selected.ref, payload || {})
-        : await client.mutation(selected.ref, payload || {});
+        ? await client.query(selected.ref, cleanPayload || {})
+        : await client.mutation(selected.ref, cleanPayload || {});
     return res.status(200).json({ data });
   } catch (e: any) {
     return res.status(500).json({ error: e?.message || "DB API failed" });
