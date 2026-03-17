@@ -3,6 +3,7 @@ import { ConvexHttpClient } from "convex/browser";
 import { makeFunctionReference } from "convex/server";
 import { GoogleGenAI } from "@google/genai";
 import { sanitizeUnknown, sanitizeText } from "../lib/sanitizeInput";
+import { checkRateLimit, getRequestClientId } from "../lib/rateLimit";
 
 const ASK_ANDRE_AUDIT_CONTEXT = `
 You are "Ask Andre" inside SongGhost.
@@ -3407,8 +3408,20 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
 
     if (!action) return res.status(400).json({ error: "Missing action" });
     if (!isAllowedEmail(cleanEmail)) return res.status(401).json({ error: "Invalid user identity" });
-    requestRequiresUserGeminiKey =
-      action === "askAndre" ? false : await shouldRequireUserGeminiKey(cleanEmail);
+    const isMember = await shouldRequireUserGeminiKey(cleanEmail);
+    if (!isMember) {
+      const clientId = getRequestClientId(req as any);
+      const limit = action === "askAndre" ? 80 : 45;
+      const result = checkRateLimit(`ai:${clientId}:${cleanEmail}:${action}`, limit, 60_000);
+      if (!result.allowed) {
+        return res.status(429).json({
+          error: "Rate limit reached. Please wait a minute and try again.",
+          code: "rate_limited",
+        });
+      }
+    }
+
+    requestRequiresUserGeminiKey = action === "askAndre" ? false : isMember;
     requestGeminiTextApiKey =
       String(cleanPayload?.userGeminiApiKey || req.headers["x-gemini-api-key"] || "")
         .trim() || null;
