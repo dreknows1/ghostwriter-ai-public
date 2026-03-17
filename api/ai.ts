@@ -4,6 +4,7 @@ import { makeFunctionReference } from "convex/server";
 import { GoogleGenAI } from "@google/genai";
 import { sanitizeUnknown, sanitizeText } from "../lib/sanitizeInput";
 import { checkRateLimit, getRequestClientId } from "../lib/rateLimit";
+import { getSessionEmailFromRequest } from "../lib/serverSession";
 
 const ASK_ANDRE_AUDIT_CONTEXT = `
 You are "Ask Andre" inside SongGhost.
@@ -3403,10 +3404,17 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
       email?: string;
       payload?: any;
     };
-    const cleanEmail = sanitizeEmail(email || "");
+    const sessionEmail = getSessionEmailFromRequest(req as any);
+    const cleanEmail = sanitizeEmail(sessionEmail || email || "");
     const cleanPayload = sanitizeUnknown(payload || {});
 
     if (!action) return res.status(400).json({ error: "Missing action" });
+    if (action !== "askAndre" && !sessionEmail) {
+      return res.status(401).json({ error: "Unauthorized" });
+    }
+    if (action !== "askAndre" && sessionEmail && cleanEmail !== sessionEmail) {
+      return res.status(403).json({ error: "Email mismatch" });
+    }
     if (!isAllowedEmail(cleanEmail)) return res.status(401).json({ error: "Invalid user identity" });
     const isMember = await shouldRequireUserGeminiKey(cleanEmail);
     if (!isMember) {

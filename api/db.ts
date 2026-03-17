@@ -3,6 +3,7 @@ import { ConvexHttpClient } from "convex/browser";
 import { makeFunctionReference } from "convex/server";
 import { sanitizeUnknown, sanitizeText } from "../lib/sanitizeInput";
 import { checkRateLimit, getRequestClientId } from "../lib/rateLimit";
+import { getSessionEmailFromRequest } from "../lib/serverSession";
 
 const refs = {
   getUserProfileByEmail: { mode: "query", ref: makeFunctionReference<"query">("app:getUserProfileByEmail") },
@@ -42,8 +43,18 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     const cleanAction = sanitizeText(String(action || ""), 120) as keyof typeof refs;
     const cleanPayload = sanitizeUnknown(payload || {});
     if (!cleanAction || !refs[cleanAction]) return res.status(400).json({ error: "Invalid action" });
+    const publicActions = new Set<keyof typeof refs>(["validateInviteCode"]);
+    const sessionEmail = getSessionEmailFromRequest(req as any);
+    if (!publicActions.has(cleanAction) && !sessionEmail) {
+      return res.status(401).json({ error: "Unauthorized" });
+    }
     const client = getClient();
-    const emailValue = typeof (cleanPayload as any)?.email === "string" ? sanitizeText((cleanPayload as any).email, 320).toLowerCase() : "";
+    const emailValue = typeof (cleanPayload as any)?.email === "string"
+      ? sanitizeText((cleanPayload as any).email, 320).toLowerCase()
+      : (sessionEmail || "");
+    if (!publicActions.has(cleanAction) && sessionEmail && emailValue && emailValue !== sessionEmail) {
+      return res.status(403).json({ error: "Email mismatch" });
+    }
     let isMember = false;
     if (emailValue.includes("@")) {
       try {
