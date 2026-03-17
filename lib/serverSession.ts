@@ -29,8 +29,11 @@ export function readCookieValue(cookieHeader: string | undefined, key: string): 
 }
 
 export function getSessionEmailFromRequest(req: { headers: Record<string, string | string[] | undefined> }): string | null {
+  const headerToken = Array.isArray(req.headers["x-session-token"])
+    ? req.headers["x-session-token"][0]
+    : req.headers["x-session-token"];
   const cookieHeader = Array.isArray(req.headers.cookie) ? req.headers.cookie.join("; ") : req.headers.cookie;
-  const token = readCookieValue(cookieHeader, SESSION_COOKIE);
+  const token = String(headerToken || readCookieValue(cookieHeader, SESSION_COOKIE) || "");
   if (!token || !token.includes(".")) return null;
   const [encoded, signature] = token.split(".");
   if (!encoded || !signature) return null;
