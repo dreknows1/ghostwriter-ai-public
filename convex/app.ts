@@ -80,6 +80,20 @@ async function ensureUserAndProfile(ctx: any, emailRaw: string) {
   return { user, profile, email };
 }
 
+async function getExistingUserAndProfile(ctx: any, emailRaw: string) {
+  const email = normalizeEmail(emailRaw);
+  const user = await ctx.db
+    .query("users")
+    .withIndex("by_email", (q: any) => q.eq("email", email))
+    .first();
+  if (!user) return { user: null, profile: null, email };
+  const profile = await ctx.db
+    .query("profiles")
+    .withIndex("by_user", (q: any) => q.eq("userId", user._id))
+    .first();
+  return { user, profile: profile || null, email };
+}
+
 function monthKey(ts: number) {
   const d = new Date(ts);
   return `${d.getUTCFullYear()}-${d.getUTCMonth() + 1}`;
@@ -136,7 +150,8 @@ async function qualifyAndRewardReferral(ctx: any, referredUserId: any) {
 export const getUserProfileByEmail = query({
   args: { email: v.string() },
   handler: async (ctx: any, args: any) => {
-    const { user, profile, email } = await ensureUserAndProfile(ctx, args.email);
+    const { user, profile, email } = await getExistingUserAndProfile(ctx, args.email);
+    if (!user || !profile) return null;
     return {
       id: user._id,
       user_email: email,
@@ -429,7 +444,8 @@ export const spendCreditsByEmail = mutation({
 export const getSongsByEmail = query({
   args: { email: v.string() },
   handler: async (ctx: any, args: any) => {
-    const { user, email } = await ensureUserAndProfile(ctx, args.email);
+    const { user, email } = await getExistingUserAndProfile(ctx, args.email);
+    if (!user) return [];
     const rows = await ctx.db
       .query("savedSongs")
       .withIndex("by_user", (q: any) => q.eq("userId", user._id))
@@ -452,7 +468,8 @@ export const getSongsByEmail = query({
 export const getSongCountByEmail = query({
   args: { email: v.string() },
   handler: async (ctx: any, args: any) => {
-    const { user } = await ensureUserAndProfile(ctx, args.email);
+    const { user } = await getExistingUserAndProfile(ctx, args.email);
+    if (!user) return 0;
     const rows = await ctx.db
       .query("savedSongs")
       .withIndex("by_user", (q: any) => q.eq("userId", user._id))
@@ -527,7 +544,8 @@ export const deleteAllSongsByEmail = mutation({
 export const getTransactionsByEmail = query({
   args: { email: v.string() },
   handler: async (ctx: any, args: any) => {
-    const { user } = await ensureUserAndProfile(ctx, args.email);
+    const { user } = await getExistingUserAndProfile(ctx, args.email);
+    if (!user) return [];
     const rows = await ctx.db
       .query("transactions")
       .withIndex("by_user", (q: any) => q.eq("userId", user._id))
@@ -622,7 +640,15 @@ export const claimReferralCodeByEmail = mutation({
 export const getReferralSummaryByEmail = query({
   args: { email: v.string() },
   handler: async (ctx: any, args: any) => {
-    const { user } = await ensureUserAndProfile(ctx, args.email);
+    const { user } = await getExistingUserAndProfile(ctx, args.email);
+    if (!user) {
+      return {
+        code: null,
+        invitedCount: 0,
+        rewardedCount: 0,
+        earnedCredits: 0,
+      };
+    }
     const code = await ctx.db.query("referralCodes").withIndex("by_user", (q: any) => q.eq("userId", user._id)).first();
     const invited = await ctx.db.query("referrals").withIndex("by_referrer", (q: any) => q.eq("referrerUserId", user._id)).collect();
     const earned = invited.filter((r: any) => r.status === "rewarded").length * REFERRAL_INVITER_CREDITS;
