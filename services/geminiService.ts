@@ -1,6 +1,5 @@
 import { CulturalAudit, QualityGateReport, SongInputs, SocialPack, UserProfile } from "../types";
 import { sanitizeEmail, sanitizeUnknown } from "../lib/sanitizeInput";
-import { getServerSessionToken } from "./authService";
 
 type AIAction =
   | "generateSong"
@@ -50,17 +49,11 @@ async function callAI<T>(action: AIAction, email: string, payload: Record<string
 
   const safeEmail = sanitizeEmail(email || "");
   const safePayload = sanitizeUnknown(payload || {});
-  const sendRequest = async (userGeminiApiKey: string) => {
-    const token = getServerSessionToken();
-    return fetch("/api/ai", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        ...(token ? { "x-session-token": token } : {}),
-      },
-      body: JSON.stringify({ action, email: safeEmail, payload: { ...safePayload, userGeminiApiKey } }),
-    });
-  };
+  const sendRequest = async (userGeminiApiKey: string) => fetch("/api/ai", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ action, email: safeEmail, payload: { ...safePayload, userGeminiApiKey } }),
+  });
 
   let userGeminiApiKey = getKeyFromUserIfNeeded();
   let response = await sendRequest(userGeminiApiKey);

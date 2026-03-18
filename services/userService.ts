@@ -1,20 +1,12 @@
 import { UserProfile, Transaction } from "../types";
-import { getServerSessionToken } from "./authService";
 
 async function callDb(action: string, payload: any) {
-  const token = getServerSessionToken();
   const res = await fetch("/api/db", {
     method: "POST",
-    headers: { "Content-Type": "application/json", ...(token ? { "x-session-token": token } : {}) },
+    headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ action, payload }),
   });
-  const text = await res.text();
-  let json: any = {};
-  try {
-    json = text ? JSON.parse(text) : {};
-  } catch {
-    json = { error: text || "Invalid server response" };
-  }
+  const json = await res.json();
   if (!res.ok) throw new Error(json?.error || "DB call failed");
   return json.data;
 }
