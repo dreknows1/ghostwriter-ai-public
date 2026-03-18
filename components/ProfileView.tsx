@@ -53,15 +53,26 @@ const ProfileView: React.FC<ProfileViewProps> = ({ email, onLoadSong, onBack, on
     const loadData = async () => {
       setIsLoading(true);
       try {
-        const [p, s, t] = await Promise.all([
+        const [profileResult, songsResult, txResult] = await Promise.allSettled([
           getUserProfile(email),
           getSavedSongs(email),
           getUserTransactions(email)
         ]);
-        
+        const p = profileResult.status === 'fulfilled' ? profileResult.value : null;
+        const s = songsResult.status === 'fulfilled' ? songsResult.value : [];
+        const t = txResult.status === 'fulfilled' ? txResult.value : [];
+
         setProfile(p);
         setSongs(s || []);
         setTransactions(t || []);
+
+        if (profileResult.status === 'rejected' || songsResult.status === 'rejected' || txResult.status === 'rejected') {
+          console.error("Partial dashboard load failure:", {
+            profileError: profileResult.status === 'rejected' ? profileResult.reason : null,
+            songsError: songsResult.status === 'rejected' ? songsResult.reason : null,
+            txError: txResult.status === 'rejected' ? txResult.reason : null,
+          });
+        }
         
         if (p) {
             setEditData({
