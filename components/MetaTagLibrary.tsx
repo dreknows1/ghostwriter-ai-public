@@ -10,7 +10,7 @@ const MetaTagLibrary: React.FC<MetaTagLibraryProps> = ({ onDragStart }) => {
     const [activeCategory, setActiveCategory] = useState("Structure");
 
     return (
-        <div className="bg-[#1e1250] border border-slate-800 rounded-[2rem] md:rounded-[3rem] h-[560px] md:h-[700px] flex flex-col shadow-2xl overflow-hidden">
+        <div className="bg-[#251860] border border-slate-800 rounded-[2rem] md:rounded-[3rem] h-[560px] md:h-[700px] flex flex-col shadow-2xl overflow-hidden">
             {/* Main Header - Fixed */}
             <div className="px-4 md:px-10 py-5 md:py-8 bg-slate-900/40 border-b border-slate-800 flex justify-between items-center shrink-0 gap-3">
                 <h3 className="text-white text-sm md:text-base font-black uppercase tracking-[0.12em] md:tracking-[0.2em] flex items-center gap-3">
@@ -76,7 +76,7 @@ const MetaTagLibrary: React.FC<MetaTagLibraryProps> = ({ onDragStart }) => {
                 .custom-scrollbar::-webkit-scrollbar-thumb { 
                     background: #1e293b; 
                     border-radius: 10px;
-                    border: 2px solid #0c0420;
+                    border: 2px solid #0d0525;
                 }
                 .custom-scrollbar::-webkit-scrollbar-thumb:hover {
                     background: #334155;

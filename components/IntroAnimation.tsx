@@ -33,7 +33,7 @@ const IntroAnimation: React.FC<IntroAnimationProps> = ({ onComplete }) => {
           flexDirection: 'column',
           alignItems: 'center',
           justifyContent: 'center',
-          background: 'radial-gradient(ellipse at 50% 40%, rgba(139,92,246,0.35), transparent 60%), linear-gradient(160deg, #0c0420, #150d38 45%, #1e1250)',
+          background: 'radial-gradient(ellipse at 50% 40%, rgba(139,92,246,0.45), transparent 60%), radial-gradient(ellipse at 80% 20%, rgba(244,114,182,0.20), transparent 50%), linear-gradient(160deg, #0d0525, #18103e 45%, #251860)',
           willChange: 'opacity, transform',
         }}
         initial={{ opacity: 1 }}
