@@ -23,8 +23,6 @@ export const validateCode = mutation({
       return { valid: false, tier: null };
     }
 
-    await ctx.db.patch(record._id, { currentUses: record.currentUses + 1 });
-
     return { valid: true, tier: record.tier };
   },
 });
