@@ -24,7 +24,7 @@ const TermsAndPrivacy: React.FC<TermsAndPrivacyProps> = ({ onBack }) => {
           {/* TERMS OF SERVICE */}
           <section>
             <h2 className="text-2xl font-black text-white tracking-tight mb-8 uppercase flex items-center gap-3">
-              <span className="text-blue-500">#</span> Terms of Service
+              <span className="text-violet-500">#</span> Terms of Service
             </h2>
             <div className="space-y-8 text-sm md:text-base leading-relaxed text-slate-400 font-medium">
               <div>
@@ -38,8 +38,8 @@ const TermsAndPrivacy: React.FC<TermsAndPrivacyProps> = ({ onBack }) => {
               </div>
 
               <div className="glass-panel p-6 rounded-3xl">
-                <strong className="text-blue-200 block mb-2 uppercase tracking-wide text-xs">3. Content Ownership</strong>
-                <p className="text-blue-100 font-bold">You retain full, exclusive ownership of all lyrics and content generated using this application. Song Ghost claims no intellectual property rights over the output created by your inputs.</p>
+                <strong className="text-violet-200 block mb-2 uppercase tracking-wide text-xs">3. Content Ownership</strong>
+                <p className="text-violet-100 font-bold">You retain full, exclusive ownership of all lyrics and content generated using this application. Song Ghost claims no intellectual property rights over the output created by your inputs.</p>
               </div>
 
               <div>

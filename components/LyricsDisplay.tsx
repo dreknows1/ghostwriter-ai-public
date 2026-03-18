@@ -237,7 +237,7 @@ const LyricsDisplay: React.FC<LyricsDisplayProps> = ({
           <div className="lg:col-span-8 flex flex-col gap-8">
             <div className={`glass-panel-strong rounded-[2rem] md:rounded-[3.5rem] flex flex-col shadow-2xl ring-1 ring-white/5 min-h-[900px] md:min-h-[1200px] relative studio-container overflow-hidden`}>
                 
-                <div className="bg-[#131722]/60 px-4 md:px-10 py-5 md:py-7 border-b border-slate-800 flex justify-between items-center relative z-40 gap-3">
+                <div className="bg-[#140e2d]/60 px-4 md:px-10 py-5 md:py-7 border-b border-slate-800 flex justify-between items-center relative z-40 gap-3">
                     <span className="text-sm uppercase font-black tracking-[0.2em] text-slate-500">Master Session Lyrics</span>
                     <button onClick={() => copyToClipboard(parsed.lyrics, setCopiedLyrics)} className={`px-4 md:px-6 py-2.5 md:py-3 rounded-2xl text-xs md:text-sm font-black uppercase tracking-wide md:tracking-widest border transition-all whitespace-nowrap ${copiedLyrics ? 'bg-green-500/10 border-green-500/50 text-green-400' : 'bg-white text-black hover:bg-slate-200'}`}>
                         {copiedLyrics ? 'Copied' : 'Copy Lyrics'}
@@ -251,7 +251,7 @@ const LyricsDisplay: React.FC<LyricsDisplayProps> = ({
                          {copiedPrompt ? <CheckIcon /> : <CopyIcon />}
                       </button>
                    </div>
-                   <textarea value={parsed.prompt} onChange={(e) => addToHistory(`Title: ${parsed.title}\n\n### SUNO Prompt\n${e.target.value}\n\n### Lyrics\n${parsed.lyrics}`)} className="w-full bg-[#131722] border border-slate-800/60 rounded-3xl p-6 text-sm font-mono text-white/70 focus:border-[#6366F1] outline-none resize-none transition-all" rows={4} />
+                   <textarea value={parsed.prompt} onChange={(e) => addToHistory(`Title: ${parsed.title}\n\n### SUNO Prompt\n${e.target.value}\n\n### Lyrics\n${parsed.lyrics}`)} className="w-full bg-[#140e2d] border border-slate-800/60 rounded-3xl p-6 text-sm font-mono text-white/70 focus:border-[#6366F1] outline-none resize-none transition-all" rows={4} />
                 </div>
 
                 <div className="relative flex-grow cursor-text overflow-hidden">
@@ -281,7 +281,7 @@ const LyricsDisplay: React.FC<LyricsDisplayProps> = ({
                     <MagicWandIcon /> STUDIO REVISION
                   </h3>
                   {localAudit && (
-                    <div className="mb-6 rounded-2xl border border-cyan-900/40 bg-[#101629] p-4">
+                    <div className="mb-6 rounded-2xl border border-cyan-900/40 bg-[#130e2d] p-4">
                       <div className="flex items-center justify-between mb-2">
                         <span className="text-[11px] font-black uppercase tracking-[0.15em] text-cyan-300">Cultural Audit</span>
                         <span className="text-sm font-black text-cyan-200 tabular-nums">{localAudit.overallScore}/100</span>
@@ -298,7 +298,7 @@ const LyricsDisplay: React.FC<LyricsDisplayProps> = ({
                     </div>
                   )}
                   {questionnaireItems.length > 0 && (
-                    <div className="mb-6 rounded-2xl border border-indigo-900/40 bg-[#11142a] p-4">
+                    <div className="mb-6 rounded-2xl border border-indigo-900/40 bg-[#140e2d] p-4">
                       <div className="flex items-center justify-between mb-2">
                         <span className="text-[11px] font-black uppercase tracking-[0.15em] text-indigo-300">Questionnaire Context</span>
                         <span className="text-[11px] font-black text-indigo-200">{questionnaireItems.length} fields</span>
@@ -334,9 +334,9 @@ const LyricsDisplay: React.FC<LyricsDisplayProps> = ({
                   e.dataTransfer.setDragImage(img, 0, 0);
               }} />
 
-              <div className="bg-[#131722] border border-slate-800 p-6 md:p-10 rounded-[2rem] md:rounded-[3rem] shadow-xl">
+              <div className="bg-[#140e2d] border border-slate-800 p-6 md:p-10 rounded-[2rem] md:rounded-[3rem] shadow-xl">
                   <h3 className="text-white text-sm font-black uppercase tracking-widest mb-8 flex items-center gap-3"><ImageIcon /> Session Art</h3>
-                  <div className={`${artAspect === "9:16" ? "aspect-[9/16]" : artAspect === "1:1" ? "aspect-square" : "aspect-[16/9]"} w-full bg-[#0b0f19] rounded-[2rem] flex items-center justify-center text-slate-800 border-2 border-dashed border-slate-800/40 mb-5 overflow-hidden relative`}>
+                  <div className={`${artAspect === "9:16" ? "aspect-[9/16]" : artAspect === "1:1" ? "aspect-square" : "aspect-[16/9]"} w-full bg-[#0e0822] rounded-[2rem] flex items-center justify-center text-slate-800 border-2 border-dashed border-slate-800/40 mb-5 overflow-hidden relative`}>
                       {isGeneratingArt ? <LoadingSpinner /> : albumArt ? <img src={albumArt} alt="Artwork" className="w-full h-full object-cover" /> : <ImageIcon />}
                   </div>
                   <div className="grid grid-cols-3 gap-2 mb-5">

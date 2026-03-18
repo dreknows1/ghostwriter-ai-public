@@ -30,7 +30,7 @@ const MetaTagLibrary: React.FC<MetaTagLibraryProps> = ({ onDragStart }) => {
                                 onClick={() => setActiveCategory(cat)}
                                 className={`px-5 py-2.5 rounded-xl text-[11px] font-black uppercase tracking-widest transition-all ${
                                     activeCategory === cat 
-                                    ? 'bg-blue-600 text-white shadow-[0_5px_15px_rgba(37,99,235,0.4)]' 
+                                    ? 'bg-violet-600 text-white shadow-[0_5px_15px_rgba(37,99,235,0.4)]' 
                                     : 'bg-slate-800 text-slate-400 hover:bg-slate-700 hover:text-slate-200'
                                 }`}
                             >
@@ -54,7 +54,7 @@ const MetaTagLibrary: React.FC<MetaTagLibraryProps> = ({ onDragStart }) => {
                                     border transition-all active:scale-95 shadow-lg
                                     ${tag.startsWith('(') 
                                         ? 'bg-emerald-600 border-emerald-500 text-white hover:bg-emerald-500 shadow-emerald-900/40' 
-                                        : 'bg-blue-600 border-blue-500 text-white hover:bg-blue-500 shadow-blue-900/40'
+                                        : 'bg-violet-600 border-violet-500 text-white hover:bg-violet-500 shadow-violet-900/40'
                                     }
                                 `}
                             >

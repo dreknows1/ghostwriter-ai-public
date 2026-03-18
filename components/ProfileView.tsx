@@ -240,7 +240,7 @@ const ProfileView: React.FC<ProfileViewProps> = ({ email, onLoadSong, onBack, on
   const NavItem = ({ id, icon: Icon, label }: { id: Tab, icon: any, label: string }) => (
       <button 
         onClick={() => setActiveTab(id)}
-        className={`w-full flex items-center gap-4 px-6 py-4 rounded-2xl transition-all mb-2 ${activeTab === id ? 'bg-blue-600 text-white shadow-lg' : 'text-slate-500 hover:bg-slate-800 hover:text-white'}`}
+        className={`w-full flex items-center gap-4 px-6 py-4 rounded-2xl transition-all mb-2 ${activeTab === id ? 'bg-violet-600 text-white shadow-lg' : 'text-slate-500 hover:bg-slate-800 hover:text-white'}`}
       >
           <Icon />
           <span className="text-sm font-black uppercase tracking-[0.2em]">{label}</span>
@@ -292,17 +292,17 @@ const ProfileView: React.FC<ProfileViewProps> = ({ email, onLoadSong, onBack, on
                     </div>
 
                     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                        <div className="glass-panel bg-gradient-to-br from-blue-900/35 to-slate-900 rounded-[2rem] md:rounded-[2.5rem] p-8 relative overflow-hidden">
-                            <h3 className="text-sm font-black uppercase tracking-[0.2em] text-blue-400 mb-4">Available Credits</h3>
+                        <div className="glass-panel bg-gradient-to-br from-violet-900/35 to-slate-900 rounded-[2rem] md:rounded-[2.5rem] p-8 relative overflow-hidden">
+                            <h3 className="text-sm font-black uppercase tracking-[0.2em] text-violet-400 mb-4">Available Credits</h3>
                             <div className="text-5xl md:text-6xl font-black text-white mb-2">{profile?.credits || 0}</div>
                             
                             {nextRefillDate && (
-                                <div className="mb-4 inline-block px-3 py-1 bg-blue-500/10 rounded-lg border border-blue-500/20">
-                                     <span className="text-xs text-blue-300 font-bold uppercase tracking-wider">Next Refill: {nextRefillDate}</span>
+                                <div className="mb-4 inline-block px-3 py-1 bg-violet-500/10 rounded-lg border border-violet-500/20">
+                                     <span className="text-xs text-violet-300 font-bold uppercase tracking-wider">Next Refill: {nextRefillDate}</span>
                                 </div>
                             )}
 
-                            <button onClick={onBuyCredits} className="mt-2 w-full px-6 py-3 bg-blue-600 hover:bg-blue-500 rounded-2xl text-sm font-black uppercase tracking-widest text-white transition-all shadow-lg">Add Credits</button>
+                            <button onClick={onBuyCredits} className="mt-2 w-full px-6 py-3 bg-violet-600 hover:bg-violet-500 rounded-2xl text-sm font-black uppercase tracking-widest text-white transition-all shadow-lg">Add Credits</button>
                             <p className="mt-4 text-[10px] text-slate-400 uppercase tracking-widest leading-relaxed opacity-60">
                                 *Free tier: 25/mo. Members: 100/mo. Pro subscription: 500/mo.
                             </p>
@@ -331,12 +331,12 @@ const ProfileView: React.FC<ProfileViewProps> = ({ email, onLoadSong, onBack, on
                     <div>
                         <div className="flex justify-between items-end mb-6">
                              <h3 className="text-xl font-black text-white tracking-tight">Recent Activity</h3>
-                             <button onClick={() => setActiveTab('history')} className="text-sm font-black uppercase tracking-widest text-blue-500 hover:text-white">View All</button>
+                             <button onClick={() => setActiveTab('history')} className="text-sm font-black uppercase tracking-widest text-violet-500 hover:text-white">View All</button>
                         </div>
                         {songs.length > 0 ? (
                             <div className="space-y-4">
                                 {songs.slice(0, 3).map(song => (
-                                    <div key={song.id} className="glass-panel bg-[#131722]/70 p-6 rounded-3xl flex items-center justify-between">
+                                    <div key={song.id} className="glass-panel bg-[#140e2d]/70 p-6 rounded-3xl flex items-center justify-between">
                                         <div className="flex items-center gap-6">
                                             <div className="w-14 h-14 bg-slate-800 rounded-xl flex items-center justify-center text-slate-600">
                                                 {song.album_art ? <img src={song.album_art} className="w-full h-full object-cover rounded-xl" /> : <ImageIcon />}
@@ -366,7 +366,7 @@ const ProfileView: React.FC<ProfileViewProps> = ({ email, onLoadSong, onBack, on
                         <div className="grid grid-cols-2 gap-8">
                              <div className="col-span-2">
                                 <label className="block text-sm font-black uppercase tracking-widest text-slate-500 mb-3">Display Name</label>
-                                <input type="text" value={editData.display_name} onChange={e => setEditData({...editData, display_name: e.target.value})} className="w-full bg-[#131722] border border-slate-800 p-4 rounded-2xl text-white text-base outline-none focus:border-blue-500 transition-all" />
+                                <input type="text" value={editData.display_name} onChange={e => setEditData({...editData, display_name: e.target.value})} className="w-full bg-[#140e2d] border border-slate-800 p-4 rounded-2xl text-white text-base outline-none focus:border-violet-500 transition-all" />
                              </div>
                              
                              {/* AVATAR UPLOAD SECTION */}
@@ -381,7 +381,7 @@ const ProfileView: React.FC<ProfileViewProps> = ({ email, onLoadSong, onBack, on
                                             type="file" 
                                             accept="image/*"
                                             onChange={handleAvatarUpload}
-                                            className="w-full bg-[#131722] border border-slate-800 p-3 rounded-2xl text-sm text-slate-300 file:mr-4 file:py-2 file:px-4 file:rounded-xl file:border-0 file:text-xs file:font-black file:uppercase file:bg-slate-800 file:text-white hover:file:bg-slate-700 cursor-pointer"
+                                            className="w-full bg-[#140e2d] border border-slate-800 p-3 rounded-2xl text-sm text-slate-300 file:mr-4 file:py-2 file:px-4 file:rounded-xl file:border-0 file:text-xs file:font-black file:uppercase file:bg-slate-800 file:text-white hover:file:bg-slate-700 cursor-pointer"
                                          />
                                             <p className="mt-3 text-xs text-slate-500 uppercase tracking-widest leading-relaxed">Upload artist persona (JPG/PNG). Used as reference for session art. Max 512px. {(profile?.tier || '').toLowerCase() === 'skool' ? 'Free for Members.' : `Cost: ${COSTS.CREATE_AVATAR} credits.`}</p>
                                         </div>
@@ -393,7 +393,7 @@ const ProfileView: React.FC<ProfileViewProps> = ({ email, onLoadSong, onBack, on
                                 <select 
                                     value={editData.preferred_art_style} 
                                     onChange={e => setEditData({...editData, preferred_art_style: e.target.value})}
-                                    className="w-full bg-[#131722] border border-slate-800 p-4 rounded-2xl text-white text-base outline-none focus:border-blue-500 transition-all appearance-none cursor-pointer"
+                                    className="w-full bg-[#140e2d] border border-slate-800 p-4 rounded-2xl text-white text-base outline-none focus:border-violet-500 transition-all appearance-none cursor-pointer"
                                 >
                                     <option value="" disabled>Select a visual style</option>
                                     {ART_STYLES.map(style => (
@@ -404,16 +404,16 @@ const ProfileView: React.FC<ProfileViewProps> = ({ email, onLoadSong, onBack, on
 
                              <div className="col-span-2">
                                 <label className="block text-sm font-black uppercase tracking-widest text-slate-500 mb-3">Musical Vibe / Style</label>
-                                <input type="text" value={editData.preferred_vibe} onChange={e => setEditData({...editData, preferred_vibe: e.target.value})} className="w-full bg-[#131722] border border-slate-800 p-4 rounded-2xl text-white text-base outline-none focus:border-blue-500 transition-all" />
+                                <input type="text" value={editData.preferred_vibe} onChange={e => setEditData({...editData, preferred_vibe: e.target.value})} className="w-full bg-[#140e2d] border border-slate-800 p-4 rounded-2xl text-white text-base outline-none focus:border-violet-500 transition-all" />
                              </div>
                              <div className="col-span-2">
                                 <label className="block text-sm font-black uppercase tracking-widest text-slate-500 mb-3">Bio / Manifesto</label>
-                                <textarea value={editData.bio} onChange={e => setEditData({...editData, bio: e.target.value})} className="w-full h-32 bg-[#131722] border border-slate-800 p-4 rounded-2xl text-white text-base outline-none focus:border-blue-500 transition-all resize-none" />
+                                <textarea value={editData.bio} onChange={e => setEditData({...editData, bio: e.target.value})} className="w-full h-32 bg-[#140e2d] border border-slate-800 p-4 rounded-2xl text-white text-base outline-none focus:border-violet-500 transition-all resize-none" />
                              </div>
                         </div>
 
                         <div className="pt-6 flex items-center gap-4">
-                            <button onClick={handleSaveProfile} disabled={isSavingProfile} className="bg-blue-600 px-10 py-5 rounded-2xl text-white font-black uppercase tracking-widest text-base hover:bg-blue-500 transition-all shadow-lg min-h-[56px] flex items-center justify-center min-w-[200px]">
+                            <button onClick={handleSaveProfile} disabled={isSavingProfile} className="bg-violet-600 px-10 py-5 rounded-2xl text-white font-black uppercase tracking-widest text-base hover:bg-violet-500 transition-all shadow-lg min-h-[56px] flex items-center justify-center min-w-[200px]">
                                 {isSavingProfile ? <LoadingSpinner /> : 'Save Changes'}
                             </button>
                         </div>
@@ -437,7 +437,7 @@ const ProfileView: React.FC<ProfileViewProps> = ({ email, onLoadSong, onBack, on
                         <button onClick={onBuyCredits} className="bg-white text-black px-8 py-4 rounded-2xl font-black uppercase tracking-widest text-base hover:scale-105 transition-all shadow-xl">Add Credits</button>
                     </div>
 
-                    <div className="bg-[#131722] border border-slate-800 rounded-[2rem] md:rounded-[2.5rem] p-6 md:p-10 mb-12 flex items-center justify-between relative overflow-hidden gap-4">
+                    <div className="bg-[#140e2d] border border-slate-800 rounded-[2rem] md:rounded-[2.5rem] p-6 md:p-10 mb-12 flex items-center justify-between relative overflow-hidden gap-4">
                         <div className="relative z-10">
                             <span className="text-sm font-black uppercase tracking-[0.2em] text-slate-400 block mb-2">Current Balance</span>
                             <span className="text-5xl md:text-7xl font-black text-white tracking-tighter block mb-4">{profile?.credits}</span>
@@ -445,7 +445,7 @@ const ProfileView: React.FC<ProfileViewProps> = ({ email, onLoadSong, onBack, on
                             {nextRefillDate && (
                                 <div className="flex flex-col gap-1 mt-2">
                                      <span className="text-sm text-slate-500 font-bold uppercase tracking-widest">
-                                        Next Monthly Reset: <span className="text-blue-400">{nextRefillDate}</span>
+                                        Next Monthly Reset: <span className="text-violet-400">{nextRefillDate}</span>
                                      </span>
                                      <span className="text-[10px] text-slate-600 uppercase tracking-widest">
                                         (Free balance resets to 30 monthly. Pro monthly grants 2,000 on renewal.)
@@ -453,14 +453,14 @@ const ProfileView: React.FC<ProfileViewProps> = ({ email, onLoadSong, onBack, on
                                 </div>
                             )}
                         </div>
-                        <div className="absolute right-0 top-0 h-full w-1/2 bg-gradient-to-l from-blue-900/20 to-transparent pointer-events-none"></div>
+                        <div className="absolute right-0 top-0 h-full w-1/2 bg-gradient-to-l from-violet-900/20 to-transparent pointer-events-none"></div>
                         <div className="relative z-10 hidden md:block">
                             <WalletIcon />
                         </div>
                     </div>
 
                     <h3 className="text-xl font-black text-white mb-6">Transaction History</h3>
-                    <div className="bg-[#0b0f19] border border-slate-800 rounded-3xl overflow-hidden">
+                    <div className="bg-[#0e0822] border border-slate-800 rounded-3xl overflow-hidden">
                         <div className="overflow-x-auto">
                         <table className="w-full min-w-[560px] text-left">
                             <thead className="bg-slate-900/50 border-b border-slate-800">
@@ -497,13 +497,13 @@ const ProfileView: React.FC<ProfileViewProps> = ({ email, onLoadSong, onBack, on
                     <h2 className="text-3xl font-black text-white tracking-tighter mb-8">Studio History</h2>
                     <div className="grid grid-cols-1 gap-6">
                         {songs.length > 0 ? songs.map(song => (
-                             <div key={song.id} className="group bg-[#0b0f19] border border-slate-800 p-4 md:p-6 rounded-3xl flex flex-col md:flex-row items-start md:items-center justify-between gap-4 md:gap-6 hover:border-blue-500/30 transition-all">
+                             <div key={song.id} className="group bg-[#0e0822] border border-slate-800 p-4 md:p-6 rounded-3xl flex flex-col md:flex-row items-start md:items-center justify-between gap-4 md:gap-6 hover:border-violet-500/30 transition-all">
                                  <div className="flex items-center gap-6">
                                      <div className="w-20 h-20 bg-slate-800 rounded-2xl flex-shrink-0 overflow-hidden">
                                          {song.album_art ? <img src={song.album_art} className="w-full h-full object-cover" /> : <div className="w-full h-full flex items-center justify-center text-slate-600"><ImageIcon /></div>}
                                      </div>
                                      <div>
-                                        <h4 className="text-lg md:text-xl font-bold text-white mb-1 group-hover:text-blue-400 transition-colors">{song.title}</h4>
+                                        <h4 className="text-lg md:text-xl font-bold text-white mb-1 group-hover:text-violet-400 transition-colors">{song.title}</h4>
                                          <p className="text-sm text-slate-500 font-mono line-clamp-1 max-w-md">{song.lyrics.slice(0, 70)}...</p>
                                          <span className="text-xs text-slate-600 uppercase tracking-widest mt-2 block">{new Date(song.created_at).toLocaleDateString()}</span>
                                      </div>

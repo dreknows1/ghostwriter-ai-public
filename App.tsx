@@ -13,6 +13,7 @@ import TermsAndPrivacy from './components/TermsAndPrivacy';
 import UtilityHub, { UtilitySection } from './components/UtilityHub';
 import AskAndreWidget from './components/AskAndreWidget';
 import { Logo } from './components/Logo';
+import IntroAnimation from './components/IntroAnimation';
 import { LoadingSpinner, ProfileIcon, WalletIcon, CheckIcon, MagicWandIcon, EditIcon, ClockIcon } from './components/icons';
 
 const SocialXIcon = () => (
@@ -365,7 +366,7 @@ const CreationWizard: React.FC<{
                 onClick={() => { onUpdate(field, opt); onNext(); }}
                 className={`w-full p-4 sm:p-5 lg:p-6 rounded-3xl border transition-all text-sm sm:text-base leading-tight font-black uppercase tracking-[0.08em] sm:tracking-widest min-h-[56px] flex items-center justify-center text-center break-words ${
                   inputs[field] === opt 
-                  ? 'bg-blue-600 border-blue-400 text-white shadow-lg z-10' 
+                  ? 'bg-violet-600 border-violet-400 text-white shadow-lg z-10' 
                   : 'bg-slate-700 border-slate-600 text-slate-200 hover:bg-slate-600 hover:border-slate-500 hover:text-white'
                 }`}
               >
@@ -415,7 +416,7 @@ const CreationWizard: React.FC<{
                 if (s === AppStep.AWAITING_DUET_CONFIG && (inputs.vocals !== 'Duo/Group' && inputs.vocals !== 'Duet (Mixed)')) return false;
                 return true;
             }).map((s, i) => (
-                <div key={i} className={`h-1.5 w-5 sm:w-8 rounded-full transition-all duration-500 ${STEP_ORDER.indexOf(step) >= STEP_ORDER.indexOf(s) ? 'bg-blue-600 shadow-[0_0_10px_rgba(37,99,235,0.5)]' : 'bg-slate-800'}`}></div>
+                <div key={i} className={`h-1.5 w-5 sm:w-8 rounded-full transition-all duration-500 ${STEP_ORDER.indexOf(step) >= STEP_ORDER.indexOf(s) ? 'bg-violet-600 shadow-[0_0_10px_rgba(37,99,235,0.5)]' : 'bg-slate-800'}`}></div>
             ))}
             </div>
             <span className="text-[10px] md:text-xs font-black text-slate-600 uppercase tracking-wide md:tracking-widest text-center">Studio Progress: {Math.round((STEP_ORDER.indexOf(step) / STEP_ORDER.length) * 100)}%</span>
@@ -440,16 +441,16 @@ const CreationWizard: React.FC<{
 
         {step === AppStep.AWAITING_SPECIFICS && (
           <div className="text-center space-y-6 max-w-2xl mx-auto mt-12">
-            <input type="text" placeholder="Reference Artist (e.g. Bad Bunny, Utada Hikaru)" className="w-full bg-slate-800 border border-slate-700 p-8 rounded-[2rem] text-white outline-none focus:border-blue-500 text-lg transition-all" value={inputs.referenceArtist || ''} onChange={(e) => onUpdate('referenceArtist', e.target.value)} />
-            <input type="text" placeholder="Mundane Objects (e.g. cold coffee, cracked phone)" className="w-full bg-slate-800 border border-slate-700 p-8 rounded-[2rem] text-white outline-none focus:border-blue-500 text-lg transition-all" value={inputs.mundaneObjects || ''} onChange={(e) => onUpdate('mundaneObjects', e.target.value)} />
-            <button onClick={() => onNext()} className="w-full bg-blue-600 py-6 md:py-8 rounded-[2rem] text-sm md:text-base font-black uppercase tracking-[0.16em] md:tracking-[0.4em] text-white hover:bg-blue-500 transition-all">Next Module</button>
+            <input type="text" placeholder="Reference Artist (e.g. Bad Bunny, Utada Hikaru)" className="w-full bg-slate-800 border border-slate-700 p-8 rounded-[2rem] text-white outline-none focus:border-violet-500 text-lg transition-all" value={inputs.referenceArtist || ''} onChange={(e) => onUpdate('referenceArtist', e.target.value)} />
+            <input type="text" placeholder="Mundane Objects (e.g. cold coffee, cracked phone)" className="w-full bg-slate-800 border border-slate-700 p-8 rounded-[2rem] text-white outline-none focus:border-violet-500 text-lg transition-all" value={inputs.mundaneObjects || ''} onChange={(e) => onUpdate('mundaneObjects', e.target.value)} />
+            <button onClick={() => onNext()} className="w-full bg-violet-600 py-6 md:py-8 rounded-[2rem] text-sm md:text-base font-black uppercase tracking-[0.16em] md:tracking-[0.4em] text-white hover:bg-violet-500 transition-all">Next Module</button>
           </div>
         )}
 
         {step === AppStep.AWAITING_ADDITIONAL_INFO && (
           <div className="text-center space-y-6 max-w-2xl mx-auto mt-12">
-            <textarea autoFocus placeholder="e.g. A conversation at a train station in the rain..." className="w-full bg-slate-800 border border-slate-700 p-8 rounded-[2rem] text-white outline-none focus:border-blue-500 min-h-[250px] text-lg leading-relaxed" value={inputs.awkwardMoment || ''} onChange={(e) => onUpdate('awkwardMoment', e.target.value)} />
-            <button onClick={onGenerate} className="w-full bg-gradient-to-r from-blue-600 to-cyan-500 py-6 md:py-8 rounded-[2rem] text-base md:text-xl font-black uppercase tracking-[0.16em] md:tracking-[0.5em] text-white shadow-xl transition-all hover:scale-[1.02]">MASTER THE RECORD</button>
+            <textarea autoFocus placeholder="e.g. A conversation at a train station in the rain..." className="w-full bg-slate-800 border border-slate-700 p-8 rounded-[2rem] text-white outline-none focus:border-violet-500 min-h-[250px] text-lg leading-relaxed" value={inputs.awkwardMoment || ''} onChange={(e) => onUpdate('awkwardMoment', e.target.value)} />
+            <button onClick={onGenerate} className="w-full bg-gradient-to-r from-violet-600 to-cyan-500 py-6 md:py-8 rounded-[2rem] text-base md:text-xl font-black uppercase tracking-[0.16em] md:tracking-[0.5em] text-white shadow-xl transition-all hover:scale-[1.02]">MASTER THE RECORD</button>
             <p className="text-sm text-slate-500 uppercase tracking-widest mt-4">COST: {COSTS.GENERATE_SONG} CREDITS</p>
           </div>
         )}
@@ -457,7 +458,7 @@ const CreationWizard: React.FC<{
 
       <div className="mt-20 flex flex-wrap justify-center gap-4">
           <div className="px-4 py-2 bg-slate-900 border border-slate-800 rounded-full text-xs font-black uppercase tracking-widest text-slate-500">DNA: {inputs.language || '???'}</div>
-          {inputs.genre && <div className="px-4 py-2 bg-blue-900/20 border border-blue-500/30 rounded-full text-xs font-black uppercase tracking-widest text-blue-400">GENRE: {inputs.genre}</div>}
+          {inputs.genre && <div className="px-4 py-2 bg-violet-900/20 border border-violet-500/30 rounded-full text-xs font-black uppercase tracking-widest text-violet-400">GENRE: {inputs.genre}</div>}
           {inputs.instrumentation && <div className="px-4 py-2 bg-cyan-900/20 border border-cyan-500/30 rounded-full text-xs font-black uppercase tracking-widest text-cyan-400">CORE: {inputs.instrumentation}</div>}
       </div>
     </div>
@@ -465,6 +466,7 @@ const CreationWizard: React.FC<{
 }
 
 export const App: React.FC = () => {
+  const [introComplete, setIntroComplete] = useState(() => sessionStorage.getItem('sg_intro_seen') === '1');
   const [session, setSession] = useState<any>(null);
   const [headerAvatarUrl, setHeaderAvatarUrl] = useState<string | null>(null);
   const [view, setView] = useState<AppView>(AppView.AUTH);
@@ -909,12 +911,16 @@ export const App: React.FC = () => {
       }
   };
 
+  if (!introComplete) {
+    return <IntroAnimation onComplete={() => setIntroComplete(true)} />;
+  }
+
   if (!session || view === AppView.AUTH) {
     return (
       <>
         <div className="app-shell min-h-screen flex flex-col items-center justify-center p-3 sm:p-4 relative overflow-hidden">
-          <div className="fixed top-0 left-0 w-full h-full bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-slate-900 via-[#0a0d17] to-[#06080f] pointer-events-none z-0"></div>
-          <div className="relative z-10 w-full max-w-xl rounded-[2rem] border border-slate-800/80 bg-[#0c101a]/95 shadow-[0_24px_90px_rgba(0,0,0,0.62)] overflow-hidden">
+          <div className="fixed top-0 left-0 w-full h-full bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-slate-900 via-[#0e0822] to-[#06080f] pointer-events-none z-0"></div>
+          <div className="relative z-10 w-full max-w-xl rounded-[2rem] border border-slate-800/80 bg-[#120b2e]/95 shadow-[0_24px_90px_rgba(0,0,0,0.62)] overflow-hidden">
           <div className="p-6 sm:p-9">
             <div className="flex justify-center mb-4"><Logo size={68} /></div>
             <h1 className="heading-display text-3xl sm:text-4xl font-black text-center tracking-tight text-white mb-3">Write. Refine. Release.</h1>
@@ -936,7 +942,7 @@ export const App: React.FC = () => {
                       placeholder="Enter community code"
                       value={communityCode}
                       onChange={(e) => { setCommunityCode(e.target.value.toUpperCase()); setCommunityCodeError(null); }}
-                      className="flex-1 bg-[#0b1223] border border-cyan-300/45 p-3 rounded-xl text-white outline-none focus:border-cyan-200 text-sm placeholder:text-slate-400 transition-all uppercase tracking-widest"
+                      className="flex-1 bg-[#10082a] border border-cyan-300/45 p-3 rounded-xl text-white outline-none focus:border-cyan-200 text-sm placeholder:text-slate-400 transition-all uppercase tracking-widest"
                     />
                     <button
                       type="button"
@@ -1033,7 +1039,7 @@ export const App: React.FC = () => {
                     placeholder="Enter your email"
                     value={authEmail}
                     onChange={(e) => setAuthEmail(e.target.value)}
-                    className="w-full bg-[#0b1223] border border-slate-700 p-4 rounded-xl text-white outline-none focus:border-blue-400 text-base placeholder:text-slate-500 transition-all"
+                    className="w-full bg-[#10082a] border border-slate-700 p-4 rounded-xl text-white outline-none focus:border-violet-400 text-base placeholder:text-slate-500 transition-all"
                     required
                   />
                 </div>
@@ -1044,7 +1050,7 @@ export const App: React.FC = () => {
                     placeholder="Enter your password"
                     value={authPassword}
                     onChange={(e) => setAuthPassword(e.target.value)}
-                    className="w-full bg-[#0b1223] border border-slate-700 p-4 rounded-xl text-white outline-none focus:border-blue-400 text-base placeholder:text-slate-500 transition-all"
+                    className="w-full bg-[#10082a] border border-slate-700 p-4 rounded-xl text-white outline-none focus:border-violet-400 text-base placeholder:text-slate-500 transition-all"
                     required
                     minLength={8}
                   />
@@ -1057,7 +1063,7 @@ export const App: React.FC = () => {
                       placeholder="Enter referral code"
                       value={referralCode}
                       onChange={(e) => setReferralCode(e.target.value.toUpperCase())}
-                      className="w-full bg-[#0b1223] border border-slate-700 p-4 rounded-xl text-white outline-none focus:border-blue-400 text-base placeholder:text-slate-500 transition-all"
+                      className="w-full bg-[#10082a] border border-slate-700 p-4 rounded-xl text-white outline-none focus:border-violet-400 text-base placeholder:text-slate-500 transition-all"
                     />
                   </div>
                 )}
@@ -1161,8 +1167,8 @@ export const App: React.FC = () => {
   if (view === AppView.LANDING) {
       return (
         <>
-        <div className="app-shell min-h-screen text-slate-200 font-sans selection:bg-blue-500/30 relative overflow-hidden flex flex-col items-center justify-center p-4 md:p-6">
-             <div className="fixed top-0 left-0 w-full h-full bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-slate-900 via-[#020617] to-[#020617] pointer-events-none z-0"></div>
+        <div className="app-shell min-h-screen text-slate-200 font-sans selection:bg-violet-500/30 relative overflow-hidden flex flex-col items-center justify-center p-4 md:p-6">
+             <div className="fixed top-0 left-0 w-full h-full bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-slate-900 via-[#0a0618] to-[#0a0618] pointer-events-none z-0"></div>
              
              {isPasteMode ? (
                  <div className="glass-panel-strong relative z-10 w-full max-w-2xl p-6 md:p-8 rounded-[2rem] md:rounded-[3rem] animate-fade-in shadow-emerald-900/20">
@@ -1170,7 +1176,7 @@ export const App: React.FC = () => {
                      <p className="text-slate-500 text-sm font-black uppercase tracking-widest mb-6">Paste lyrics, choruses, verses, or just an idea. The AI will format and complete the song structure.</p>
                      
                      <textarea 
-                        className="w-full h-64 bg-[#131722] border border-slate-800 rounded-3xl p-6 text-slate-300 focus:border-emerald-500 outline-none resize-none mb-6 font-mono text-sm shadow-inner"
+                        className="w-full h-64 bg-[#140e2d] border border-slate-800 rounded-3xl p-6 text-slate-300 focus:border-emerald-500 outline-none resize-none mb-6 font-mono text-sm shadow-inner"
                         placeholder="Paste your lyrics or raw ideas here..."
                         value={pasteContent}
                         onChange={(e) => setPasteContent(e.target.value)}
@@ -1213,14 +1219,14 @@ export const App: React.FC = () => {
                          {/* Option 1: New Session (BLUE) */}
                          <button 
                             onClick={() => { setView(AppView.STUDIO); setStep(AppStep.AWAITING_LANGUAGE); setInputs(DEFAULT_INPUTS); }}
-                            className="group glass-panel bg-[#0b0f19]/65 hover:border-blue-400 p-8 rounded-[2rem] md:rounded-[2.5rem] flex flex-col items-center gap-6 transition-all hover:-translate-y-1 hover:shadow-2xl hover:shadow-blue-600/20 relative overflow-hidden"
+                            className="group glass-panel bg-[#0e0822]/65 hover:border-violet-400 p-8 rounded-[2rem] md:rounded-[2.5rem] flex flex-col items-center gap-6 transition-all hover:-translate-y-1 hover:shadow-2xl hover:shadow-violet-600/20 relative overflow-hidden"
                          >
-                             <div className="absolute inset-0 bg-blue-600/5 opacity-0 group-hover:opacity-100 transition-opacity"></div>
-                             <div className="w-20 h-20 rounded-full bg-blue-900/20 text-blue-400 flex items-center justify-center group-hover:bg-blue-600 group-hover:text-white transition-all relative z-10">
+                             <div className="absolute inset-0 bg-violet-600/5 opacity-0 group-hover:opacity-100 transition-opacity"></div>
+                             <div className="w-20 h-20 rounded-full bg-violet-900/20 text-violet-400 flex items-center justify-center group-hover:bg-violet-600 group-hover:text-white transition-all relative z-10">
                                  <MagicWandIcon />
                              </div>
                              <div className="relative z-10">
-                                 <h3 className="text-xl font-black text-white uppercase tracking-wider mb-2 group-hover:text-blue-400 transition-colors">New Session</h3>
+                                 <h3 className="text-xl font-black text-white uppercase tracking-wider mb-2 group-hover:text-violet-400 transition-colors">New Session</h3>
                                  <p className="text-xs text-slate-500 font-bold uppercase tracking-widest">Start from scratch</p>
                              </div>
                          </button>
@@ -1228,7 +1234,7 @@ export const App: React.FC = () => {
                          {/* Option 2: Paste Lyrics (EMERALD) */}
                          <button 
                             onClick={() => setIsPasteMode(true)}
-                            className="group glass-panel bg-[#0b0f19]/65 hover:border-emerald-400 p-8 rounded-[2rem] md:rounded-[2.5rem] flex flex-col items-center gap-6 transition-all hover:-translate-y-1 hover:shadow-2xl hover:shadow-emerald-600/20 relative overflow-hidden"
+                            className="group glass-panel bg-[#0e0822]/65 hover:border-emerald-400 p-8 rounded-[2rem] md:rounded-[2.5rem] flex flex-col items-center gap-6 transition-all hover:-translate-y-1 hover:shadow-2xl hover:shadow-emerald-600/20 relative overflow-hidden"
                          >
                              <div className="absolute inset-0 bg-emerald-600/5 opacity-0 group-hover:opacity-100 transition-opacity"></div>
                              <div className="w-20 h-20 rounded-full bg-emerald-900/20 text-emerald-400 flex items-center justify-center group-hover:bg-emerald-600 group-hover:text-white transition-all relative z-10">
@@ -1243,7 +1249,7 @@ export const App: React.FC = () => {
                          {/* Option 3: Discography (VIOLET/PURPLE) */}
                          <button 
                             onClick={() => setView(AppView.PROFILE)}
-                            className="group glass-panel bg-[#0b0f19]/65 hover:border-cyan-400 p-8 rounded-[2rem] md:rounded-[2.5rem] flex flex-col items-center gap-6 transition-all hover:-translate-y-1 hover:shadow-2xl hover:shadow-cyan-600/20 relative overflow-hidden"
+                            className="group glass-panel bg-[#0e0822]/65 hover:border-cyan-400 p-8 rounded-[2rem] md:rounded-[2.5rem] flex flex-col items-center gap-6 transition-all hover:-translate-y-1 hover:shadow-2xl hover:shadow-cyan-600/20 relative overflow-hidden"
                          >
                              <div className="absolute inset-0 bg-violet-600/5 opacity-0 group-hover:opacity-100 transition-opacity"></div>
                              <div className="w-20 h-20 rounded-full bg-violet-900/20 text-violet-400 flex items-center justify-center group-hover:bg-violet-600 group-hover:text-white transition-all relative z-10">
@@ -1335,8 +1341,8 @@ export const App: React.FC = () => {
   // STUDIO VIEW
   return (
     <>
-    <div className="app-shell min-h-screen text-slate-200 font-sans selection:bg-blue-500/30 relative overflow-x-hidden">
-      <div className="fixed top-0 left-0 w-full h-full bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-slate-900 via-[#020617] to-[#020617] pointer-events-none z-0"></div>
+    <div className="app-shell min-h-screen text-slate-200 font-sans selection:bg-violet-500/30 relative overflow-x-hidden">
+      <div className="fixed top-0 left-0 w-full h-full bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-slate-900 via-[#0a0618] to-[#0a0618] pointer-events-none z-0"></div>
       
       {/* Header */}
       <nav className="glass-panel relative z-50 p-4 md:p-6 mt-3 flex justify-between items-center max-w-7xl mx-auto rounded-2xl md:rounded-3xl gap-3">
@@ -1357,7 +1363,7 @@ export const App: React.FC = () => {
                 <span className="text-[11px] font-black tracking-wider tabular-nums">{credits}</span>
              </div>
              {/* Credit Monitor & Add Button */}
-             <div className="hidden md:flex items-center bg-[#0b0f19] border border-slate-800 rounded-full p-1 pl-1 pr-4 gap-3 shadow-inner">
+             <div className="hidden md:flex items-center bg-[#0e0822] border border-slate-800 rounded-full p-1 pl-1 pr-4 gap-3 shadow-inner">
                 <div className="flex items-center gap-2 px-4 py-2 rounded-full bg-slate-800 border border-slate-700 text-cyan-400">
                     <WalletIcon className="w-4 h-4" />
                     <span className="text-sm font-black tracking-widest tabular-nums">{credits}</span>
@@ -1477,7 +1483,7 @@ export const App: React.FC = () => {
                     </div>
                     <div className="mt-5 h-2 w-full rounded-full bg-slate-800 overflow-hidden">
                       <div
-                        className="h-full bg-gradient-to-r from-blue-500 to-cyan-400 transition-all duration-500"
+                        className="h-full bg-gradient-to-r from-violet-500 to-cyan-400 transition-all duration-500"
                         style={{ width: `${Math.min(100, Math.round(((generationStageIndex + 1) / GENERATION_STAGES.length) * 100))}%` }}
                       />
                     </div>
@@ -1496,7 +1502,7 @@ export const App: React.FC = () => {
                               isActive
                                 ? 'border-cyan-400 bg-cyan-500/10 text-cyan-200'
                                 : isDone
-                                  ? 'border-blue-500/50 bg-blue-500/10 text-blue-200'
+                                  ? 'border-violet-500/50 bg-violet-500/10 text-violet-200'
                                   : 'border-slate-700 bg-slate-800/30 text-slate-400'
                             }`}
                           >
