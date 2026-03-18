@@ -8,6 +8,7 @@ const upsertUserCredentialsRef = makeFunctionReference<"mutation">("users:upsert
 const claimReferralCodeByEmailRef = makeFunctionReference<"mutation">("app:claimReferralCodeByEmail");
 const isSkoolMemberByEmailRef = makeFunctionReference<"query">("app:isSkoolMemberByEmail");
 const setProfileTierRef = makeFunctionReference<"mutation">("app:setProfileTier");
+const validateInviteCodeRef = makeFunctionReference<"mutation">("inviteCodes:validateCode");
 
 function normalizeEmail(email: string): string {
   return email.toLowerCase().trim();
@@ -112,12 +113,20 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
 
   try {
     const { action, email, password } = (req.body || {}) as {
-      action?: "signup" | "signin" | "oauth";
+      action?: "signup" | "signin" | "oauth" | "validateCommunityCode";
       email?: string;
       password?: string;
       referralCode?: string;
     };
     const referralCode = (req.body as any)?.referralCode;
+    const communityCode = String((req.body as any)?.code || "").toUpperCase().trim();
+
+    if (action === "validateCommunityCode") {
+      if (!communityCode) return res.status(400).json({ error: "Missing code" });
+      const client = getConvexClient();
+      const data = await client.mutation(validateInviteCodeRef as any, { code: communityCode });
+      return res.status(200).json({ data });
+    }
 
     const normalizedEmail = normalizeEmail(email || "");
     if (!action || !normalizedEmail) {

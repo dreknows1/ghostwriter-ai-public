@@ -945,10 +945,10 @@ export const App: React.FC = () => {
                         setIsAuthLoading(true);
                         setCommunityCodeError(null);
                         try {
-                          const res = await fetch('/api/community-code', {
+                          const res = await fetch('/api/auth', {
                             method: 'POST',
                             headers: { 'Content-Type': 'application/json' },
-                            body: JSON.stringify({ code: communityCode.trim() }),
+                            body: JSON.stringify({ action: 'validateCommunityCode', code: communityCode.trim() }),
                           });
                           const text = await res.text();
                           let json: any = {};
