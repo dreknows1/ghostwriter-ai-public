@@ -159,17 +159,19 @@ const ProfileView: React.FC<ProfileViewProps> = ({ email, onLoadSong, onBack, on
                 const dataUrl = canvas.toDataURL('image/jpeg', 0.8);
                 if (dataUrl && dataUrl.length > 100) {
                     const isMember = (profile?.tier || '').toLowerCase() === 'skool';
-                    if (!isMember) {
+                    const alreadyHasAvatar = !!(profile?.avatar_url || editData.avatar_url);
+                    if (!isMember && !alreadyHasAvatar) {
                         const canAfford = await hasEnoughCredits(email, COSTS.CREATE_AVATAR);
                         if (!canAfford) {
                             alert(`Insufficient credits. Creating an avatar costs ${COSTS.CREATE_AVATAR} credits.`);
                             onBuyCredits();
                             return;
                         }
-                        await deductCredits(email, COSTS.CREATE_AVATAR);
+                        await deductCredits(email, COSTS.CREATE_AVATAR, "avatar_creation");
                     }
                     setEditData(prev => ({...prev, avatar_url: dataUrl}));
-                    alert(isMember ? 'Avatar created. Free for members.' : `Avatar created. ${COSTS.CREATE_AVATAR} credits used.`);
+                    const msg = isMember ? 'Avatar updated. Free for members.' : alreadyHasAvatar ? 'Avatar updated.' : `Avatar created. ${COSTS.CREATE_AVATAR} credits used.`;
+                    alert(msg);
                 }
             }
             img.src = readerEvent.target?.result as string;
@@ -302,7 +304,7 @@ const ProfileView: React.FC<ProfileViewProps> = ({ email, onLoadSong, onBack, on
 
                             <button onClick={onBuyCredits} className="mt-2 w-full px-6 py-3 bg-blue-600 hover:bg-blue-500 rounded-2xl text-sm font-black uppercase tracking-widest text-white transition-all shadow-lg">Add Credits</button>
                             <p className="mt-4 text-[10px] text-slate-400 uppercase tracking-widest leading-relaxed opacity-60">
-                                *Free tier: 30/mo. Pro plan: 2,000/mo. Credit packs are one-time.
+                                *Free tier: 25/mo. Members: 100/mo. Pro subscription: 500/mo.
                             </p>
                         </div>
 

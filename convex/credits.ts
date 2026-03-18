@@ -1,8 +1,6 @@
 import { mutation, query } from "./_generated/server";
 import { v } from "convex/values";
-
-const CREDITS_PUBLIC = 25;
-const CREDITS_SKOOL = 100;
+import { CREDITS_PUBLIC, CREDITS_SKOOL } from "./constants";
 
 export const getCredits = query({
   args: { userId: v.id("users") },
@@ -79,7 +77,7 @@ export const grantMonthlyCredits = mutation({
 
     await ctx.db.insert("creditLedger", {
       userId: args.userId,
-      delta: monthlyCredits,
+      delta: monthlyCredits - (profile.credits || 0),
       reason: "monthly_reset",
       createdAt: Date.now(),
     });

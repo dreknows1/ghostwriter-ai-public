@@ -165,7 +165,7 @@ const LyricsDisplay: React.FC<LyricsDisplayProps> = ({
           addToHistory(res); 
           setLocalAudit(getLastCulturalAudit());
           setQuickEditInput(''); 
-          await deductCredits(email, COSTS.EDIT_SONG);
+          await deductCredits(email, COSTS.EDIT_SONG, "song_edit");
           if (refreshCredits) await refreshCredits();
       }
     } catch (e) { console.error(e); } finally { setIsQuickEditing(false); }
@@ -186,7 +186,7 @@ const LyricsDisplay: React.FC<LyricsDisplayProps> = ({
             console.error("Auto-save artwork failed:", saveError);
           }
         }
-        await deductCredits(email, COSTS.GENERATE_ART);
+        await deductCredits(email, COSTS.GENERATE_ART, "art_generation");
         if (refreshCredits) await refreshCredits();
       }
     } catch (e: any) {

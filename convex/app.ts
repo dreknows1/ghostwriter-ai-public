@@ -1,8 +1,6 @@
 import { mutation, query, internalMutation } from "./_generated/server";
 import { v } from "convex/values";
-
-const CREDITS_PUBLIC = 25;
-const CREDITS_SKOOL = 100;
+import { CREDITS_PUBLIC, CREDITS_SKOOL } from "./constants";
 const REFERRAL_INVITER_CREDITS = 40;
 const REFERRAL_INVITEE_CREDITS = 20;
 
