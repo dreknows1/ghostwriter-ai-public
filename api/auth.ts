@@ -9,6 +9,24 @@ const claimReferralCodeByEmailRef = makeFunctionReference<"mutation">("app:claim
 const isSkoolMemberByEmailRef = makeFunctionReference<"query">("app:isSkoolMemberByEmail");
 const setProfileTierRef = makeFunctionReference<"mutation">("app:setProfileTier");
 const validateInviteCodeRef = makeFunctionReference<"mutation">("inviteCodes:validateCode");
+const dbRefs = {
+  getUserProfileByEmail: { mode: "query", ref: makeFunctionReference<"query">("app:getUserProfileByEmail") },
+  upsertUserProfileByEmail: { mode: "mutation", ref: makeFunctionReference<"mutation">("app:upsertUserProfileByEmail") },
+  getCreditsByEmail: { mode: "mutation", ref: makeFunctionReference<"mutation">("app:getCreditsByEmail") },
+  spendCreditsByEmail: { mode: "mutation", ref: makeFunctionReference<"mutation">("app:spendCreditsByEmail") },
+  getSongsByEmail: { mode: "query", ref: makeFunctionReference<"query">("app:getSongsByEmail") },
+  getSongCountByEmail: { mode: "query", ref: makeFunctionReference<"query">("app:getSongCountByEmail") },
+  saveSongByEmail: { mode: "mutation", ref: makeFunctionReference<"mutation">("app:saveSongByEmail") },
+  deleteSongById: { mode: "mutation", ref: makeFunctionReference<"mutation">("app:deleteSongById") },
+  deleteAllSongsByEmail: { mode: "mutation", ref: makeFunctionReference<"mutation">("app:deleteAllSongsByEmail") },
+  getTransactionsByEmail: { mode: "query", ref: makeFunctionReference<"query">("app:getTransactionsByEmail") },
+  deleteAccountByEmail: { mode: "mutation", ref: makeFunctionReference<"mutation">("app:deleteAccountByEmail") },
+  getOrCreateReferralCodeByEmail: { mode: "mutation", ref: makeFunctionReference<"mutation">("app:getOrCreateReferralCodeByEmail") },
+  claimReferralCodeByEmail: { mode: "mutation", ref: makeFunctionReference<"mutation">("app:claimReferralCodeByEmail") },
+  getReferralSummaryByEmail: { mode: "query", ref: makeFunctionReference<"query">("app:getReferralSummaryByEmail") },
+  validateInviteCode: { mode: "mutation", ref: makeFunctionReference<"mutation">("inviteCodes:validateCode") },
+  setProfileTier: { mode: "mutation", ref: makeFunctionReference<"mutation">("app:setProfileTier") },
+} as const;
 
 function normalizeEmail(email: string): string {
   return email.toLowerCase().trim();
@@ -113,18 +131,31 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
 
   try {
     const { action, email, password } = (req.body || {}) as {
-      action?: "signup" | "signin" | "oauth" | "validateCommunityCode";
+      action?: "signup" | "signin" | "oauth" | "validateCommunityCode" | "db";
       email?: string;
       password?: string;
       referralCode?: string;
     };
     const referralCode = (req.body as any)?.referralCode;
     const communityCode = String((req.body as any)?.code || "").toUpperCase().trim();
+    const dbAction = String((req.body as any)?.dbAction || "") as keyof typeof dbRefs;
+    const dbPayload = (req.body as any)?.payload || {};
 
     if (action === "validateCommunityCode") {
       if (!communityCode) return res.status(400).json({ error: "Missing code" });
       const client = getConvexClient();
       const data = await client.mutation(validateInviteCodeRef as any, { code: communityCode });
+      return res.status(200).json({ data });
+    }
+
+    if (action === "db") {
+      if (!dbAction || !dbRefs[dbAction]) return res.status(400).json({ error: "Invalid db action" });
+      const client = getConvexClient();
+      const selected: any = (dbRefs as any)[dbAction];
+      const data =
+        selected.mode === "query"
+          ? await client.query(selected.ref, dbPayload)
+          : await client.mutation(selected.ref, dbPayload);
       return res.status(200).json({ data });
     }
 

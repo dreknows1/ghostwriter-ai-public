@@ -1,10 +1,10 @@
 import { UserProfile, Transaction } from "../types";
 
 async function callDb(action: string, payload: any) {
-  const res = await fetch("/api/db", {
+  const res = await fetch("/api/auth", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ action, payload }),
+    body: JSON.stringify({ action: "db", dbAction: action, payload }),
   });
   const json = await res.json();
   if (!res.ok) throw new Error(json?.error || "DB call failed");

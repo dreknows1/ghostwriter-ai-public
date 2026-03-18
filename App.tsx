@@ -595,7 +595,7 @@ export const App: React.FC = () => {
                 await fetch('/api/db', {
                   method: 'POST',
                   headers: { 'Content-Type': 'application/json' },
-                  body: JSON.stringify({ action: 'setProfileTier', payload: { email: data.session.user.email, tier: 'skool' } }),
+                  body: JSON.stringify({ action: 'db', dbAction: 'setProfileTier', payload: { email: data.session.user.email, tier: 'skool' } }),
                 });
                 localStorage.removeItem('sg_pending_tier');
               } catch (e) { console.error('Failed to set tier:', e); }
@@ -836,7 +836,7 @@ export const App: React.FC = () => {
                 await fetch('/api/db', {
                   method: 'POST',
                   headers: { 'Content-Type': 'application/json' },
-                  body: JSON.stringify({ action: 'setProfileTier', payload: { email: data.session.user.email, tier: 'skool' } }),
+                  body: JSON.stringify({ action: 'db', dbAction: 'setProfileTier', payload: { email: data.session.user.email, tier: 'skool' } }),
                 });
                 localStorage.removeItem('sg_pending_tier');
               } catch (e) { console.error('Failed to set tier:', e); }
