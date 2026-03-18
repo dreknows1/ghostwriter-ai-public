@@ -1,15 +1,15 @@
 :root {
-  --bg-0: #0d0525;
-  --bg-1: #18103e;
-  --bg-2: #251860;
-  --panel: rgba(35, 20, 80, 0.80);
-  --panel-strong: rgba(28, 16, 68, 0.94);
-  --line: rgba(168, 148, 214, 0.35);
-  --line-strong: rgba(168, 148, 214, 0.55);
-  --text: #f0ecff;
+  --bg-0: #0a0318;
+  --bg-1: #110a2a;
+  --bg-2: #1a1045;
+  --panel: rgba(20, 10, 50, 0.82);
+  --panel-strong: rgba(16, 8, 42, 0.94);
+  --line: rgba(192, 140, 255, 0.28);
+  --line-strong: rgba(192, 140, 255, 0.45);
+  --text: #f5f0ff;
   --text-dim: #c0b0e0;
-  --accent: #a78bfa;
-  --accent-2: #38bdf8;
+  --accent: #c084fc;
+  --accent-2: #22d3ee;
   --danger: #ef4444;
 
   --font-ui: "Manrope", "Avenir Next", "Segoe UI", system-ui, sans-serif;
@@ -25,10 +25,9 @@ body {
   margin: 0;
   color: var(--text);
   background:
-    radial-gradient(1400px 800px at 8% -15%, rgba(139, 92, 246, 0.45), transparent 50%),
-    radial-gradient(1200px 600px at 95% -5%, rgba(244, 114, 182, 0.30), transparent 45%),
-    radial-gradient(900px 450px at 50% 85%, rgba(56, 189, 248, 0.15), transparent 50%),
-    radial-gradient(600px 600px at 50% 40%, rgba(124, 58, 237, 0.12), transparent 60%),
+    radial-gradient(1400px 800px at 8% -15%, rgba(168, 85, 247, 0.50), transparent 50%),
+    radial-gradient(1200px 600px at 95% -5%, rgba(236, 72, 153, 0.35), transparent 45%),
+    radial-gradient(900px 450px at 50% 85%, rgba(34, 211, 238, 0.18), transparent 50%),
     linear-gradient(160deg, var(--bg-0), var(--bg-1) 40%, var(--bg-2));
   min-height: 100vh;
   font-family: var(--font-ui);
@@ -52,24 +51,24 @@ body {
   pointer-events: none;
   z-index: -1;
   background:
-    radial-gradient(1000px 550px at 15% 5%, rgba(139, 92, 246, 0.38), transparent 55%),
-    radial-gradient(1000px 500px at 88% 12%, rgba(244, 114, 182, 0.28), transparent 55%),
-    radial-gradient(700px 350px at 50% 50%, rgba(167, 139, 250, 0.14), transparent 50%);
-  filter: saturate(140%);
+    radial-gradient(1000px 550px at 15% 5%, rgba(168, 85, 247, 0.40), transparent 55%),
+    radial-gradient(1000px 500px at 88% 12%, rgba(236, 72, 153, 0.30), transparent 55%),
+    radial-gradient(700px 350px at 50% 60%, rgba(34, 211, 238, 0.12), transparent 50%);
+  filter: saturate(150%);
 }
 
 .glass-panel {
   background: var(--panel);
-  border: 1px solid var(--line);
+  border: 1px solid rgba(192, 140, 255, 0.25);
   backdrop-filter: blur(14px);
-  box-shadow: 0 18px 40px rgba(6, 2, 23, 0.40), inset 0 1px 0 rgba(167, 139, 250, 0.12);
+  box-shadow: 0 18px 40px rgba(0, 0, 0, 0.45), inset 0 1px 0 rgba(255, 255, 255, 0.06);
 }
 
 .glass-panel-strong {
   background: var(--panel-strong);
-  border: 1px solid var(--line-strong);
+  border: 1px solid rgba(192, 140, 255, 0.40);
   backdrop-filter: blur(16px);
-  box-shadow: 0 24px 52px rgba(6, 2, 23, 0.50), inset 0 1px 0 rgba(167, 139, 250, 0.18);
+  box-shadow: 0 24px 52px rgba(0, 0, 0, 0.55), inset 0 1px 0 rgba(255, 255, 255, 0.08);
 }
 
 .heading-display {
@@ -80,28 +79,29 @@ body {
 
 .cta-primary {
   background: linear-gradient(130deg, var(--accent-2), var(--accent));
-  color: #0f0520;
-  border: 1px solid rgba(167, 139, 250, 0.55);
-  box-shadow: 0 10px 30px rgba(139, 92, 246, 0.40), 0 0 80px rgba(139, 92, 246, 0.20);
+  color: #0a0318;
+  font-weight: 800;
+  border: 1px solid rgba(192, 132, 252, 0.60);
+  box-shadow: 0 8px 25px rgba(192, 132, 252, 0.45), 0 0 60px rgba(192, 132, 252, 0.18);
 }
 
 .cta-primary:hover {
-  filter: brightness(1.08);
-  box-shadow: 0 10px 40px rgba(139, 92, 246, 0.50), 0 0 100px rgba(139, 92, 246, 0.25);
+  filter: brightness(1.12);
+  box-shadow: 0 8px 35px rgba(192, 132, 252, 0.55), 0 0 80px rgba(192, 132, 252, 0.25);
 }
 
 .cta-secondary {
-  border: 1px solid var(--line);
-  background: rgba(50, 30, 100, 0.55);
+  border: 1px solid rgba(192, 140, 255, 0.25);
+  background: rgba(30, 15, 65, 0.60);
 }
 
 @keyframes communityCodePulse {
   0%, 100% {
-    box-shadow: 0 0 0 0 rgba(167, 139, 250, 0.22);
+    box-shadow: 0 0 0 0 rgba(192, 132, 252, 0.25);
     transform: translateY(0);
   }
   50% {
-    box-shadow: 0 0 0 10px rgba(167, 139, 250, 0.08);
+    box-shadow: 0 0 0 10px rgba(192, 132, 252, 0.08);
     transform: translateY(-1px);
   }
 }
