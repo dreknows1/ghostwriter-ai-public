@@ -1,7 +1,7 @@
-const FREE_MONTHLY_CREDITS = 30;
+const FREE_MONTHLY_CREDITS = 25;
 
 export const COSTS = {
-  GENERATE_SONG: 4,
+  GENERATE_SONG: 10,
   EDIT_SONG: 1,
   GENERATE_ART: 8,
   SOCIAL_PACK: 1,
@@ -34,9 +34,9 @@ export const hasEnoughCredits = async (email: string, cost: number = 1): Promise
   return credits >= cost;
 };
 
-export const deductCredits = async (email: string, amount: number = 1): Promise<number> => {
+export const deductCredits = async (email: string, amount: number = 1, reason: string = "app_usage"): Promise<number> => {
   try {
-    const next = await callDb("spendCreditsByEmail", { email, amount, reason: "app_usage" });
+    const next = await callDb("spendCreditsByEmail", { email, amount, reason });
     return Number(next ?? 0);
   } catch (e) {
     console.error("Credit deduction failed:", e);

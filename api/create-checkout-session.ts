@@ -53,25 +53,31 @@ export default async function handler(req: any, res: any) {
     }
 
     const isSkool = userTier === "skool";
-    const discountMultiplier = isSkool ? 0.5 : 1; // 50% off for Skool
+    const discountMultiplier = isSkool ? 0.75 : 1; // 25% off for Skool members
 
     const products: Record<string, { name: string; amount: number; credits: number; mode: 'payment' | 'subscription' }> = {
       'pro_monthly': {
-        name: 'Pro Monthly (2000 Credits)',
-        amount: Math.round(2900 * discountMultiplier), // $29.00 or $14.50
-        credits: 2000,
+        name: 'Pro Monthly (500 Credits)',
+        amount: Math.round(2499 * discountMultiplier), // $24.99 or $18.74
+        credits: 500,
         mode: 'subscription'
       },
-      'starter': { 
-        name: 'Starter Top-Up (250 Credits)', 
-        amount: Math.round(1200 * discountMultiplier), // $12.00 or $6.00
+      'pack_250': {
+        name: 'Credit Pack (250 Credits)',
+        amount: 1499, // $14.99 — no member discount on packs
         credits: 250,
         mode: 'payment'
       },
-      'pro': { 
-        name: 'Pro Top-Up (1000 Credits)', 
-        amount: Math.round(3900 * discountMultiplier), // $39.00 or $19.50
-        credits: 1000,
+      'pack_100': {
+        name: 'Credit Pack (100 Credits)',
+        amount: 799, // $7.99
+        credits: 100,
+        mode: 'payment'
+      },
+      'pack_50': {
+        name: 'Credit Pack (50 Credits)',
+        amount: 499, // $4.99
+        credits: 50,
         mode: 'payment'
       },
     };

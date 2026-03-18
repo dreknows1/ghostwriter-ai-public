@@ -749,12 +749,12 @@ export const App: React.FC = () => {
             }
           }
           
-          await deductCredits(session.user.email || '', COSTS.GENERATE_SONG);
+          await deductCredits(session.user.email || '', COSTS.GENERATE_SONG, "song_generation");
           setStep(AppStep.SONG_DISPLAYED);
       } catch (err: any) {
           console.error(err);
           alert("Generation failed: " + err.message);
-          // Revert credits if failed? 
+          // Revert credits if failed?
           // For simplicity we just reload actual from DB in case of error
           loadCredits();
           setStep(AppStep.AWAITING_ADDITIONAL_INFO);
@@ -891,7 +891,7 @@ export const App: React.FC = () => {
           setCulturalAudit(getLastCulturalAudit());
           
           // Deduct credits for the AI service
-          await deductCredits(session.user.email || '', COSTS.GENERATE_SONG);
+          await deductCredits(session.user.email || '', COSTS.GENERATE_SONG, "song_generation");
           setCredits(prev => Math.max(0, prev - COSTS.GENERATE_SONG));
 
           setInputs(DEFAULT_INPUTS);

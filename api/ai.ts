@@ -222,10 +222,11 @@ async function loadCulturalLogicModule(): Promise<CulturalLogicModule | null> {
     culturalLogicPromise = (async () => {
       try {
         return (await import("../lib/culturalLogic")) as unknown as CulturalLogicModule;
-      } catch {
+      } catch (e1) {
         try {
           return (await import("../lib/culturalLogic.ts")) as unknown as CulturalLogicModule;
-        } catch {
+        } catch (e2) {
+          console.error("Failed to load culturalLogic module:", e1, e2);
           return null;
         }
       }
@@ -239,10 +240,11 @@ async function loadMetaTagModule(): Promise<MetaTagModule | null> {
     metaTagModulePromise = (async () => {
       try {
         return (await import("../lib/metaTagLibrary")) as unknown as MetaTagModule;
-      } catch {
+      } catch (e1) {
         try {
           return (await import("../lib/metaTagLibrary.ts")) as unknown as MetaTagModule;
-        } catch {
+        } catch (e2) {
+          console.error("Failed to load metaTagLibrary module:", e1, e2);
           return null;
         }
       }
@@ -256,10 +258,11 @@ async function loadGenreAgentModule(): Promise<GenreAgentModule | null> {
     genreAgentModulePromise = (async () => {
       try {
         return (await import("../lib/genreAgents")) as unknown as GenreAgentModule;
-      } catch {
+      } catch (e1) {
         try {
           return (await import("../lib/genreAgents.ts")) as unknown as GenreAgentModule;
-        } catch {
+        } catch (e2) {
+          console.error("Failed to load genreAgents module:", e1, e2);
           return null;
         }
       }
@@ -273,10 +276,11 @@ async function loadReferenceFeaturesModule(): Promise<ReferenceFeaturesModule | 
     referenceFeaturesModulePromise = (async () => {
       try {
         return (await import("../lib/referenceFeatures")) as unknown as ReferenceFeaturesModule;
-      } catch {
+      } catch (e1) {
         try {
           return (await import("../lib/referenceFeatures.ts")) as unknown as ReferenceFeaturesModule;
-        } catch {
+        } catch (e2) {
+          console.error("Failed to load referenceFeatures module:", e1, e2);
           return null;
         }
       }
