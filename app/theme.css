@@ -1,13 +1,13 @@
 :root {
-  --bg-0: #0a0618;
-  --bg-1: #120b2e;
-  --bg-2: #1a1040;
-  --panel: rgba(18, 12, 46, 0.72);
-  --panel-strong: rgba(14, 10, 38, 0.9);
-  --line: rgba(168, 148, 214, 0.22);
-  --line-strong: rgba(168, 148, 214, 0.4);
-  --text: #ede8f7;
-  --text-dim: #a89bc4;
+  --bg-0: #0c0420;
+  --bg-1: #150d38;
+  --bg-2: #1e1250;
+  --panel: rgba(28, 16, 68, 0.78);
+  --panel-strong: rgba(22, 14, 58, 0.92);
+  --line: rgba(168, 148, 214, 0.30);
+  --line-strong: rgba(168, 148, 214, 0.50);
+  --text: #f0ecff;
+  --text-dim: #b8a8d8;
   --accent: #a78bfa;
   --accent-2: #38bdf8;
   --danger: #ef4444;
@@ -25,8 +25,9 @@ body {
   margin: 0;
   color: var(--text);
   background:
-    radial-gradient(1400px 700px at 10% -20%, rgba(139, 92, 246, 0.20), transparent 50%),
-    radial-gradient(1000px 550px at 100% -10%, rgba(244, 114, 182, 0.14), transparent 45%),
+    radial-gradient(1400px 700px at 10% -20%, rgba(139, 92, 246, 0.35), transparent 50%),
+    radial-gradient(1000px 550px at 100% -10%, rgba(244, 114, 182, 0.22), transparent 45%),
+    radial-gradient(800px 400px at 50% 80%, rgba(56, 189, 248, 0.10), transparent 50%),
     linear-gradient(160deg, var(--bg-0), var(--bg-1) 45%, var(--bg-2));
   min-height: 100vh;
   font-family: var(--font-ui);
@@ -50,23 +51,24 @@ body {
   pointer-events: none;
   z-index: -1;
   background:
-    radial-gradient(900px 500px at 18% 8%, rgba(139, 92, 246, 0.18), transparent 55%),
-    radial-gradient(900px 480px at 85% 16%, rgba(244, 114, 182, 0.12), transparent 60%);
-  filter: saturate(115%);
+    radial-gradient(900px 500px at 18% 8%, rgba(139, 92, 246, 0.30), transparent 55%),
+    radial-gradient(900px 480px at 85% 16%, rgba(244, 114, 182, 0.20), transparent 60%),
+    radial-gradient(600px 300px at 50% 50%, rgba(167, 139, 250, 0.08), transparent 50%);
+  filter: saturate(130%);
 }
 
 .glass-panel {
   background: var(--panel);
   border: 1px solid var(--line);
   backdrop-filter: blur(14px);
-  box-shadow: 0 18px 40px rgba(6, 2, 23, 0.36);
+  box-shadow: 0 18px 40px rgba(6, 2, 23, 0.36), inset 0 1px 0 rgba(167, 139, 250, 0.08);
 }
 
 .glass-panel-strong {
   background: var(--panel-strong);
   border: 1px solid var(--line-strong);
   backdrop-filter: blur(16px);
-  box-shadow: 0 24px 52px rgba(6, 2, 23, 0.45);
+  box-shadow: 0 24px 52px rgba(6, 2, 23, 0.45), inset 0 1px 0 rgba(167, 139, 250, 0.12);
 }
 
 .heading-display {
@@ -78,8 +80,8 @@ body {
 .cta-primary {
   background: linear-gradient(130deg, var(--accent-2), var(--accent));
   color: #0f0520;
-  border: 1px solid rgba(167, 139, 250, 0.4);
-  box-shadow: 0 10px 30px rgba(139, 92, 246, 0.25);
+  border: 1px solid rgba(167, 139, 250, 0.5);
+  box-shadow: 0 10px 30px rgba(139, 92, 246, 0.35), 0 0 60px rgba(139, 92, 246, 0.15);
 }
 
 .cta-primary:hover {
