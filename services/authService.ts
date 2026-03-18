@@ -72,15 +72,6 @@ export const startProviderSignIn = (provider: string) => {
 };
 
 export const signOut = async () => {
-  try {
-    await fetch('/api/auth', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ action: 'signout' }),
-    });
-  } catch {
-    // Ignore network errors; local session is still cleared.
-  }
   localStorage.removeItem(SESSION_KEY);
   return { error: null };
 };

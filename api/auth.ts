@@ -2,7 +2,6 @@ import type { VercelRequest, VercelResponse } from "@vercel/node";
 import { ConvexHttpClient } from "convex/browser";
 import { makeFunctionReference } from "convex/server";
 import { pbkdf2Sync, randomBytes, timingSafeEqual } from "node:crypto";
-import { buildSessionClearCookie, buildSessionCookie } from "../lib/serverSession";
 
 const getUserByEmailRef = makeFunctionReference<"query">("users:getUserByEmail");
 const upsertUserCredentialsRef = makeFunctionReference<"mutation">("users:upsertUserCredentials");
@@ -113,17 +112,12 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
 
   try {
     const { action, email, password } = (req.body || {}) as {
-      action?: "signup" | "signin" | "oauth" | "signout";
+      action?: "signup" | "signin" | "oauth";
       email?: string;
       password?: string;
       referralCode?: string;
     };
     const referralCode = (req.body as any)?.referralCode;
-
-    if (action === "signout") {
-      res.setHeader("Set-Cookie", buildSessionClearCookie());
-      return res.status(200).json({ ok: true });
-    }
 
     const normalizedEmail = normalizeEmail(email || "");
     if (!action || !normalizedEmail) {
@@ -153,7 +147,6 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
           console.error("[GHL Sync Error][oauth]", e?.message || e);
         }
       }
-      res.setHeader("Set-Cookie", buildSessionCookie(normalizedEmail));
       return res.status(200).json({
         session: {
           user: {
@@ -196,7 +189,6 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
         }
       }
 
-      res.setHeader("Set-Cookie", buildSessionCookie(normalizedEmail));
       return res.status(200).json({
         session: {
           user: {
@@ -215,7 +207,6 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
           email: normalizedEmail,
         });
         await enforceSkoolTierIfEligible(client, normalizedEmail);
-        res.setHeader("Set-Cookie", buildSessionCookie(normalizedEmail));
         return res.status(200).json({
           session: {
             user: {
@@ -234,7 +225,6 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
       return res.status(401).json({ error: "Invalid email or password" });
     }
     await enforceSkoolTierIfEligible(client, normalizedEmail);
-    res.setHeader("Set-Cookie", buildSessionCookie(normalizedEmail));
 
     return res.status(200).json({
       session: {
