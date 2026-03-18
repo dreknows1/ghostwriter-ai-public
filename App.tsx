@@ -945,12 +945,13 @@ export const App: React.FC = () => {
                         setIsAuthLoading(true);
                         setCommunityCodeError(null);
                         try {
-                          const res = await fetch('/api/db', {
+                          const res = await fetch('/api/community-code', {
                             method: 'POST',
                             headers: { 'Content-Type': 'application/json' },
-                            body: JSON.stringify({ action: 'validateInviteCode', payload: { code: communityCode.trim() } }),
+                            body: JSON.stringify({ code: communityCode.trim() }),
                           });
-                          const json = await res.json();
+                          const text = await res.text();
+                          const json = text ? JSON.parse(text) : {};
                           if (json.data?.valid) {
                             setCommunityCodeValidated(true);
                             setPendingTier(json.data.tier);
