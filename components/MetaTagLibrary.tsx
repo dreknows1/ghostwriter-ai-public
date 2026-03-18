@@ -10,7 +10,7 @@ const MetaTagLibrary: React.FC<MetaTagLibraryProps> = ({ onDragStart }) => {
     const [activeCategory, setActiveCategory] = useState("Structure");
 
     return (
-        <div className="bg-[#160d38] border border-slate-800 rounded-[2rem] md:rounded-[3rem] h-[560px] md:h-[700px] flex flex-col shadow-2xl overflow-hidden">
+        <div className="bg-[#161030] border border-slate-800 rounded-[2rem] md:rounded-[3rem] h-[560px] md:h-[700px] flex flex-col shadow-2xl overflow-hidden">
             {/* Main Header - Fixed */}
             <div className="px-4 md:px-10 py-5 md:py-8 bg-slate-900/40 border-b border-slate-800 flex justify-between items-center shrink-0 gap-3">
                 <h3 className="text-white text-sm md:text-base font-black uppercase tracking-[0.12em] md:tracking-[0.2em] flex items-center gap-3">
@@ -30,7 +30,7 @@ const MetaTagLibrary: React.FC<MetaTagLibraryProps> = ({ onDragStart }) => {
                                 onClick={() => setActiveCategory(cat)}
                                 className={`px-5 py-2.5 rounded-xl text-[11px] font-black uppercase tracking-widest transition-all ${
                                     activeCategory === cat 
-                                    ? 'bg-violet-600 text-white shadow-[0_5px_15px_rgba(37,99,235,0.4)]' 
+                                    ? 'bg-orange-500 text-white shadow-[0_5px_15px_rgba(37,99,235,0.4)]' 
                                     : 'bg-slate-800 text-slate-400 hover:bg-slate-700 hover:text-slate-200'
                                 }`}
                             >
@@ -54,7 +54,7 @@ const MetaTagLibrary: React.FC<MetaTagLibraryProps> = ({ onDragStart }) => {
                                     border transition-all active:scale-95 shadow-lg
                                     ${tag.startsWith('(') 
                                         ? 'bg-emerald-600 border-emerald-500 text-white hover:bg-emerald-500 shadow-emerald-900/40' 
-                                        : 'bg-violet-600 border-violet-500 text-white hover:bg-violet-500 shadow-violet-900/40'
+                                        : 'bg-orange-500 border-orange-500 text-white hover:bg-orange-400 shadow-orange-900/40'
                                     }
                                 `}
                             >
@@ -74,9 +74,9 @@ const MetaTagLibrary: React.FC<MetaTagLibraryProps> = ({ onDragStart }) => {
                     border-radius: 10px;
                 }
                 .custom-scrollbar::-webkit-scrollbar-thumb { 
-                    background: #1e293b; 
+                    background: #1e1540; 
                     border-radius: 10px;
-                    border: 2px solid #0a0318;
+                    border: 2px solid #0c0a1d;
                 }
                 .custom-scrollbar::-webkit-scrollbar-thumb:hover {
                     background: #334155;
