@@ -1,8 +1,6 @@
 import type { VercelRequest, VercelResponse } from "@vercel/node";
 import { ConvexHttpClient } from "convex/browser";
 import { makeFunctionReference } from "convex/server";
-import { sanitizeUnknown, sanitizeText } from "../lib/sanitizeInput";
-import { checkRateLimit, getRequestClientId } from "../lib/rateLimit";
 
 const refs = {
   getUserProfileByEmail: { mode: "query", ref: makeFunctionReference<"query">("app:getUserProfileByEmail") },
@@ -39,33 +37,13 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
   }
   try {
     const { action, payload } = (req.body || {}) as { action?: keyof typeof refs; payload?: any };
-    const cleanAction = sanitizeText(String(action || ""), 120) as keyof typeof refs;
-    const cleanPayload = sanitizeUnknown(payload || {});
-    if (!cleanAction || !refs[cleanAction]) return res.status(400).json({ error: "Invalid action" });
+    if (!action || !refs[action]) return res.status(400).json({ error: "Invalid action" });
     const client = getClient();
-    const emailValue = typeof (cleanPayload as any)?.email === "string" ? sanitizeText((cleanPayload as any).email, 320).toLowerCase() : "";
-    let isMember = false;
-    if (emailValue.includes("@")) {
-      try {
-        const profileRef: any = refs.getUserProfileByEmail.ref;
-        const profile: any = await client.query(profileRef, { email: emailValue });
-        isMember = String(profile?.tier || "").toLowerCase() === "skool";
-      } catch {
-        isMember = false;
-      }
-    }
-    if (!isMember) {
-      const clientId = getRequestClientId(req as any);
-      const rate = checkRateLimit(`db:${clientId}:${emailValue || "anon"}:${cleanAction}`, 120, 60_000);
-      if (!rate.allowed) {
-        return res.status(429).json({ error: "Rate limit reached. Please wait a minute and try again.", code: "rate_limited" });
-      }
-    }
-    const selected: any = (refs as any)[cleanAction];
+    const selected: any = (refs as any)[action];
     const data =
       selected.mode === "query"
-        ? await client.query(selected.ref, cleanPayload || {})
-        : await client.mutation(selected.ref, cleanPayload || {});
+        ? await client.query(selected.ref, payload || {})
+        : await client.mutation(selected.ref, payload || {});
     return res.status(200).json({ data });
   } catch (e: any) {
     return res.status(500).json({ error: e?.message || "DB API failed" });
