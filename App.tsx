@@ -919,8 +919,8 @@ export const App: React.FC = () => {
     return (
       <>
         <div className="app-shell min-h-screen flex flex-col items-center justify-center p-3 sm:p-4 relative overflow-hidden">
-          <div className="fixed top-0 left-0 w-full h-full bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-slate-900 via-[#1e1248] to-[#0d0525] pointer-events-none z-0"></div>
-          <div className="relative z-10 w-full max-w-xl rounded-[2rem] border border-slate-800/80 bg-[#18103e]/95 shadow-[0_24px_90px_rgba(0,0,0,0.62)] overflow-hidden">
+          <div className="fixed top-0 left-0 w-full h-full bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-slate-900 via-[#130a30] to-[#0a0318] pointer-events-none z-0"></div>
+          <div className="relative z-10 w-full max-w-xl rounded-[2rem] border border-slate-800/80 bg-[#110a2a]/95 shadow-[0_24px_90px_rgba(0,0,0,0.62)] overflow-hidden">
           <div className="p-6 sm:p-9">
             <div className="flex justify-center mb-4"><Logo size={68} /></div>
             <h1 className="heading-display text-3xl sm:text-4xl font-black text-center tracking-tight text-white mb-3">Write. Refine. Release.</h1>
@@ -942,7 +942,7 @@ export const App: React.FC = () => {
                       placeholder="Enter community code"
                       value={communityCode}
                       onChange={(e) => { setCommunityCode(e.target.value.toUpperCase()); setCommunityCodeError(null); }}
-                      className="flex-1 bg-[#221558] border border-cyan-300/45 p-3 rounded-xl text-white outline-none focus:border-cyan-200 text-sm placeholder:text-slate-400 transition-all uppercase tracking-widest"
+                      className="flex-1 bg-[#160d38] border border-cyan-300/45 p-3 rounded-xl text-white outline-none focus:border-cyan-200 text-sm placeholder:text-slate-400 transition-all uppercase tracking-widest"
                     />
                     <button
                       type="button"
@@ -1039,7 +1039,7 @@ export const App: React.FC = () => {
                     placeholder="Enter your email"
                     value={authEmail}
                     onChange={(e) => setAuthEmail(e.target.value)}
-                    className="w-full bg-[#221558] border border-slate-700 p-4 rounded-xl text-white outline-none focus:border-violet-400 text-base placeholder:text-slate-500 transition-all"
+                    className="w-full bg-[#160d38] border border-slate-700 p-4 rounded-xl text-white outline-none focus:border-violet-400 text-base placeholder:text-slate-500 transition-all"
                     required
                   />
                 </div>
@@ -1050,7 +1050,7 @@ export const App: React.FC = () => {
                     placeholder="Enter your password"
                     value={authPassword}
                     onChange={(e) => setAuthPassword(e.target.value)}
-                    className="w-full bg-[#221558] border border-slate-700 p-4 rounded-xl text-white outline-none focus:border-violet-400 text-base placeholder:text-slate-500 transition-all"
+                    className="w-full bg-[#160d38] border border-slate-700 p-4 rounded-xl text-white outline-none focus:border-violet-400 text-base placeholder:text-slate-500 transition-all"
                     required
                     minLength={8}
                   />
@@ -1063,7 +1063,7 @@ export const App: React.FC = () => {
                       placeholder="Enter referral code"
                       value={referralCode}
                       onChange={(e) => setReferralCode(e.target.value.toUpperCase())}
-                      className="w-full bg-[#221558] border border-slate-700 p-4 rounded-xl text-white outline-none focus:border-violet-400 text-base placeholder:text-slate-500 transition-all"
+                      className="w-full bg-[#160d38] border border-slate-700 p-4 rounded-xl text-white outline-none focus:border-violet-400 text-base placeholder:text-slate-500 transition-all"
                     />
                   </div>
                 )}
@@ -1168,7 +1168,7 @@ export const App: React.FC = () => {
       return (
         <>
         <div className="app-shell min-h-screen text-slate-200 font-sans selection:bg-violet-500/30 relative overflow-hidden flex flex-col items-center justify-center p-4 md:p-6">
-             <div className="fixed top-0 left-0 w-full h-full bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-slate-900 via-[#0d0525] to-[#0d0525] pointer-events-none z-0"></div>
+             <div className="fixed top-0 left-0 w-full h-full bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-slate-900 via-[#0a0318] to-[#0a0318] pointer-events-none z-0"></div>
              
              {isPasteMode ? (
                  <div className="glass-panel-strong relative z-10 w-full max-w-2xl p-6 md:p-8 rounded-[2rem] md:rounded-[3rem] animate-fade-in shadow-emerald-900/20">
@@ -1176,7 +1176,7 @@ export const App: React.FC = () => {
                      <p className="text-slate-500 text-sm font-black uppercase tracking-widest mb-6">Paste lyrics, choruses, verses, or just an idea. The AI will format and complete the song structure.</p>
                      
                      <textarea 
-                        className="w-full h-64 bg-[#251860] border border-slate-800 rounded-3xl p-6 text-slate-300 focus:border-emerald-500 outline-none resize-none mb-6 font-mono text-sm shadow-inner"
+                        className="w-full h-64 bg-[#160d38] border border-slate-800 rounded-3xl p-6 text-slate-300 focus:border-emerald-500 outline-none resize-none mb-6 font-mono text-sm shadow-inner"
                         placeholder="Paste your lyrics or raw ideas here..."
                         value={pasteContent}
                         onChange={(e) => setPasteContent(e.target.value)}
@@ -1219,14 +1219,14 @@ export const App: React.FC = () => {
                          {/* Option 1: New Session (BLUE) */}
                          <button 
                             onClick={() => { setView(AppView.STUDIO); setStep(AppStep.AWAITING_LANGUAGE); setInputs(DEFAULT_INPUTS); }}
-                            className="group glass-panel bg-[#1e1248]/65 hover:border-violet-400 p-8 rounded-[2rem] md:rounded-[2.5rem] flex flex-col items-center gap-6 transition-all hover:-translate-y-1 hover:shadow-2xl hover:shadow-violet-600/20 relative overflow-hidden"
+                            className="group glass-panel bg-[#130a30]/65 hover:border-purple-400 p-8 rounded-[2rem] md:rounded-[2.5rem] flex flex-col items-center gap-6 transition-all hover:-translate-y-1 hover:shadow-2xl hover:shadow-purple-500/30 relative overflow-hidden"
                          >
-                             <div className="absolute inset-0 bg-violet-600/5 opacity-0 group-hover:opacity-100 transition-opacity"></div>
-                             <div className="w-20 h-20 rounded-full bg-violet-900/20 text-violet-400 flex items-center justify-center group-hover:bg-violet-600 group-hover:text-white transition-all relative z-10">
+                             <div className="absolute inset-0 bg-purple-500/5 opacity-0 group-hover:opacity-100 transition-opacity"></div>
+                             <div className="w-20 h-20 rounded-full bg-purple-500/20 text-purple-300 flex items-center justify-center group-hover:bg-purple-500 group-hover:text-white group-hover:shadow-[0_0_30px_rgba(168,85,247,0.5)] transition-all relative z-10">
                                  <MagicWandIcon />
                              </div>
                              <div className="relative z-10">
-                                 <h3 className="text-xl font-black text-white uppercase tracking-wider mb-2 group-hover:text-violet-400 transition-colors">New Session</h3>
+                                 <h3 className="text-xl font-black text-white uppercase tracking-wider mb-2 group-hover:text-purple-300 transition-colors">New Session</h3>
                                  <p className="text-xs text-slate-500 font-bold uppercase tracking-widest">Start from scratch</p>
                              </div>
                          </button>
@@ -1234,14 +1234,14 @@ export const App: React.FC = () => {
                          {/* Option 2: Paste Lyrics (EMERALD) */}
                          <button 
                             onClick={() => setIsPasteMode(true)}
-                            className="group glass-panel bg-[#1e1248]/65 hover:border-emerald-400 p-8 rounded-[2rem] md:rounded-[2.5rem] flex flex-col items-center gap-6 transition-all hover:-translate-y-1 hover:shadow-2xl hover:shadow-emerald-600/20 relative overflow-hidden"
+                            className="group glass-panel bg-[#130a30]/65 hover:border-emerald-400 p-8 rounded-[2rem] md:rounded-[2.5rem] flex flex-col items-center gap-6 transition-all hover:-translate-y-1 hover:shadow-2xl hover:shadow-emerald-400/30 relative overflow-hidden"
                          >
-                             <div className="absolute inset-0 bg-emerald-600/5 opacity-0 group-hover:opacity-100 transition-opacity"></div>
-                             <div className="w-20 h-20 rounded-full bg-emerald-900/20 text-emerald-400 flex items-center justify-center group-hover:bg-emerald-600 group-hover:text-white transition-all relative z-10">
+                             <div className="absolute inset-0 bg-emerald-500/5 opacity-0 group-hover:opacity-100 transition-opacity"></div>
+                             <div className="w-20 h-20 rounded-full bg-emerald-500/20 text-emerald-300 flex items-center justify-center group-hover:bg-emerald-500 group-hover:text-white group-hover:shadow-[0_0_30px_rgba(52,211,153,0.5)] transition-all relative z-10">
                                  <EditIcon />
                              </div>
                              <div className="relative z-10">
-                                 <h3 className="text-xl font-black text-white uppercase tracking-wider mb-2 group-hover:text-emerald-400 transition-colors">Paste / Import</h3>
+                                 <h3 className="text-xl font-black text-white uppercase tracking-wider mb-2 group-hover:text-emerald-300 transition-colors">Paste / Import</h3>
                                  <p className="text-xs text-slate-500 font-bold uppercase tracking-widest">Structure Lyrics & Ideas</p>
                              </div>
                          </button>
@@ -1249,14 +1249,14 @@ export const App: React.FC = () => {
                          {/* Option 3: Discography (VIOLET/PURPLE) */}
                          <button 
                             onClick={() => setView(AppView.PROFILE)}
-                            className="group glass-panel bg-[#1e1248]/65 hover:border-cyan-400 p-8 rounded-[2rem] md:rounded-[2.5rem] flex flex-col items-center gap-6 transition-all hover:-translate-y-1 hover:shadow-2xl hover:shadow-cyan-600/20 relative overflow-hidden"
+                            className="group glass-panel bg-[#130a30]/65 hover:border-cyan-400 p-8 rounded-[2rem] md:rounded-[2.5rem] flex flex-col items-center gap-6 transition-all hover:-translate-y-1 hover:shadow-2xl hover:shadow-cyan-400/30 relative overflow-hidden"
                          >
-                             <div className="absolute inset-0 bg-violet-600/5 opacity-0 group-hover:opacity-100 transition-opacity"></div>
-                             <div className="w-20 h-20 rounded-full bg-violet-900/20 text-violet-400 flex items-center justify-center group-hover:bg-violet-600 group-hover:text-white transition-all relative z-10">
+                             <div className="absolute inset-0 bg-cyan-500/5 opacity-0 group-hover:opacity-100 transition-opacity"></div>
+                             <div className="w-20 h-20 rounded-full bg-cyan-500/20 text-cyan-300 flex items-center justify-center group-hover:bg-cyan-500 group-hover:text-white group-hover:shadow-[0_0_30px_rgba(34,211,238,0.5)] transition-all relative z-10">
                                  <ClockIcon />
                              </div>
                              <div className="relative z-10">
-                                 <h3 className="text-xl font-black text-white uppercase tracking-wider mb-2 group-hover:text-cyan-400 transition-colors">Discography</h3>
+                                 <h3 className="text-xl font-black text-white uppercase tracking-wider mb-2 group-hover:text-cyan-300 transition-colors">Discography</h3>
                                  <p className="text-xs text-slate-500 font-bold uppercase tracking-widest">View Past Sessions</p>
                              </div>
                          </button>
@@ -1342,7 +1342,7 @@ export const App: React.FC = () => {
   return (
     <>
     <div className="app-shell min-h-screen text-slate-200 font-sans selection:bg-violet-500/30 relative overflow-x-hidden">
-      <div className="fixed top-0 left-0 w-full h-full bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-slate-900 via-[#0d0525] to-[#0d0525] pointer-events-none z-0"></div>
+      <div className="fixed top-0 left-0 w-full h-full bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-slate-900 via-[#0a0318] to-[#0a0318] pointer-events-none z-0"></div>
       
       {/* Header */}
       <nav className="glass-panel relative z-50 p-4 md:p-6 mt-3 flex justify-between items-center max-w-7xl mx-auto rounded-2xl md:rounded-3xl gap-3">
@@ -1363,7 +1363,7 @@ export const App: React.FC = () => {
                 <span className="text-[11px] font-black tracking-wider tabular-nums">{credits}</span>
              </div>
              {/* Credit Monitor & Add Button */}
-             <div className="hidden md:flex items-center bg-[#1e1248] border border-slate-800 rounded-full p-1 pl-1 pr-4 gap-3 shadow-inner">
+             <div className="hidden md:flex items-center bg-[#130a30] border border-slate-800 rounded-full p-1 pl-1 pr-4 gap-3 shadow-inner">
                 <div className="flex items-center gap-2 px-4 py-2 rounded-full bg-slate-800 border border-slate-700 text-cyan-400">
                     <WalletIcon className="w-4 h-4" />
                     <span className="text-sm font-black tracking-widest tabular-nums">{credits}</span>
