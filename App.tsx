@@ -951,7 +951,16 @@ export const App: React.FC = () => {
                             body: JSON.stringify({ code: communityCode.trim() }),
                           });
                           const text = await res.text();
-                          const json = text ? JSON.parse(text) : {};
+                          let json: any = {};
+                          try {
+                            json = text ? JSON.parse(text) : {};
+                          } catch {
+                            json = { error: text || 'Community code validation failed' };
+                          }
+                          if (!res.ok) {
+                            setCommunityCodeError(json?.error || 'Validation failed');
+                            return;
+                          }
                           if (json.data?.valid) {
                             setCommunityCodeValidated(true);
                             setPendingTier(json.data.tier);
