@@ -147,9 +147,9 @@ const IntroAnimation: React.FC<IntroAnimationProps> = ({ onComplete }) => {
 
         {/* Auto-dismiss after animation */}
         <motion.div
-          initial={{ opacity: 0 }}
+          initial={{ opacity: 1 }}
           animate={{ opacity: 0 }}
-          transition={{ delay: 3.5 }}
+          transition={{ delay: 3.2, duration: 0.3 }}
           onAnimationComplete={() => {
             sessionStorage.setItem('sg_intro_seen', '1');
             onComplete();
