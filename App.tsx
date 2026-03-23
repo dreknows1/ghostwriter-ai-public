@@ -95,8 +95,8 @@ const GENERATION_STAGES = [
   { label: 'Initialize Session', keywords: ['listening', 'analyzing'] },
   { label: 'Draft Song Core', keywords: ['drafting', 'structure'] },
   { label: 'Apply Genre Agent', keywords: ['agent', 'genre', 'subgenre'] },
-  { label: 'Run Quality Scoring', keywords: ['quality', 'score', 'audit'] },
-  { label: 'Rewrite If < 85', keywords: ['rewrite', 'under 85'] },
+  { label: 'Apply Guide Compliance', keywords: ['guide', 'compliance', 'check'] },
+  { label: 'Refine Output', keywords: ['refine', 'polish'] },
   { label: 'Finalize Output', keywords: ['finalizing', 'suno prompt'] },
 ] as const;
 
@@ -356,7 +356,7 @@ const CreationWizard: React.FC<{
         {isLoadingOptions ? (
           <div className="col-span-full py-12 flex flex-col items-center gap-4 animate-pulse">
             <LoadingSpinner />
-            <span className="text-slate-500 font-black uppercase tracking-[0.14em] md:tracking-[0.3em] text-xs text-center">Researching cultural parameters...</span>
+            <span className="text-slate-500 font-black uppercase tracking-[0.14em] md:tracking-[0.3em] text-xs text-center">Loading genre options...</span>
           </div>
         ) : (
           <>
@@ -1459,7 +1459,7 @@ export const App: React.FC = () => {
                       <LoadingSpinner />
                       <div>
                         <h2 className="text-2xl font-black text-white tracking-tight">{loadingMessage}</h2>
-                        <p className="mt-2 text-slate-400 font-black uppercase tracking-widest text-xs">Quality gate rewrites below 85 during creation</p>
+                        <p className="mt-2 text-slate-400 font-black uppercase tracking-widest text-xs">Applying genre guide directives during creation</p>
                       </div>
                     </div>
                     <div className="mt-5 h-2 w-full rounded-full bg-slate-800 overflow-hidden">
