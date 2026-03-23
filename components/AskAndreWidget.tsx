@@ -58,7 +58,7 @@ const AskAndreWidget: React.FC<AskAndreWidgetProps> = ({ email }) => {
   return (
     <div className="fixed bottom-4 right-4 z-[95]">
       {open ? (
-        <div className="w-[22rem] max-w-[92vw] rounded-2xl border border-slate-700 bg-[#0f172a] shadow-2xl overflow-hidden">
+        <div className="w-[22rem] max-w-[92vw] rounded-2xl border border-slate-700 bg-[#120e24] shadow-2xl overflow-hidden">
           <div className="flex items-center justify-between px-4 py-3 border-b border-slate-700">
             <div>
               <p className="text-sm font-bold text-cyan-300">Ask Andre</p>
@@ -81,7 +81,7 @@ const AskAndreWidget: React.FC<AskAndreWidgetProps> = ({ email }) => {
             ))}
             {loading && <div className="text-xs text-slate-400">Thinking...</div>}
           </div>
-          <div className="p-3 border-t border-slate-700 bg-[#0b1220]">
+          <div className="p-3 border-t border-slate-700 bg-[#0e0c20]">
             <div className="flex gap-2">
               <input
                 value={input}

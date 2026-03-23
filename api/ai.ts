@@ -25,31 +25,6 @@ type AIAction =
   | "translateLyrics"
   | "askAndre";
 
-type CulturalAuditItem = {
-  dimension: string;
-  score: number;
-  notes: string;
-};
-
-type CulturalAudit = {
-  overallScore: number;
-  summary: string;
-  checklist: CulturalAuditItem[];
-};
-
-type QualityGatePass = {
-  pass: number;
-  score: number;
-  action: "accepted" | "rewrite";
-};
-
-type QualityGateReport = {
-  minScore: number;
-  finalScore: number;
-  rewritesTriggered: number;
-  passes: QualityGatePass[];
-};
-
 type WritingProfile = {
   language: string;
   languageVariant: string;
@@ -164,6 +139,13 @@ type ReferenceFeaturesModule = {
   getReferenceFeatureScore: (params: { songText: string; genre?: string; subGenre?: string }) => number;
 };
 
+type GenreGuideModule = {
+  getGuideById: (id: string) => import("../lib/guides/types").GenreGuide | undefined;
+  getGuidesByLanguage: (language: string) => import("../lib/guides/types").GenreGuide[];
+  resolveSubGenreGuide: (guide: import("../lib/guides/types").GenreGuide, subGenreName: string) => import("../lib/guides/types").GenreGuide;
+  ALL_GUIDES: import("../lib/guides/types").GenreGuide[];
+};
+
 type MetaTagPlan = {
   structureTags: string[];
   vocalTypeTag: string;
@@ -216,6 +198,7 @@ let culturalLogicPromise: Promise<CulturalLogicModule | null> | null = null;
 let metaTagModulePromise: Promise<MetaTagModule | null> | null = null;
 let genreAgentModulePromise: Promise<GenreAgentModule | null> | null = null;
 let referenceFeaturesModulePromise: Promise<ReferenceFeaturesModule | null> | null = null;
+let genreGuideModulePromise: Promise<GenreGuideModule | null> | null = null;
 
 async function loadCulturalLogicModule(): Promise<CulturalLogicModule | null> {
   if (!culturalLogicPromise) {
@@ -287,6 +270,24 @@ async function loadReferenceFeaturesModule(): Promise<ReferenceFeaturesModule | 
     })();
   }
   return referenceFeaturesModulePromise;
+}
+
+async function loadGenreGuideModule(): Promise<GenreGuideModule | null> {
+  if (!genreGuideModulePromise) {
+    genreGuideModulePromise = (async () => {
+      try {
+        return (await import("../lib/guides")) as unknown as GenreGuideModule;
+      } catch (e1) {
+        try {
+          return (await import("../lib/guides/index.ts")) as unknown as GenreGuideModule;
+        } catch (e2) {
+          console.error("Failed to load genre guides module:", e1, e2);
+          return null;
+        }
+      }
+    })();
+  }
+  return genreGuideModulePromise;
 }
 
 function fallbackMetaTagGuidance(inputs: any): string {
@@ -453,6 +454,327 @@ async function getReferenceFeatureScore(songText: string, inputs: any): Promise<
   return 80;
 }
 
+/**
+ * Resolve the genre guide with sub-genre deltas merged in.
+ * Returns null if no guide found.
+ */
+async function resolveGuide(inputs: any): Promise<import("../lib/guides/types").GenreGuide | null> {
+  const mod = await loadGenreGuideModule();
+  if (!mod) return null;
+
+  const genreId = (inputs?.genre || "").toLowerCase().replace(/\s+/g, "-");
+  const guide = mod.getGuideById(genreId);
+  if (!guide) return null;
+
+  const subGenreName = inputs?.subGenre || "";
+  return subGenreName ? mod.resolveSubGenreGuide(guide, subGenreName) : guide;
+}
+
+type DirectiveMode = "lyrics" | "structure" | "suno" | "full";
+
+/**
+ * Compile a resolved genre guide into imperative DO/DO NOT craft directives.
+ * Replaces the old descriptive getGenreGuideContext().
+ */
+async function compileGuideToDirectives(inputs: any, mode: DirectiveMode): Promise<string> {
+  const guide = await resolveGuide(inputs);
+  if (!guide) return "";
+
+  const subGenreName = inputs?.subGenre || "";
+  const matchedSub = guide.subGenres.find(
+    (s) => s.name.toLowerCase() === (subGenreName || "").toLowerCase()
+  );
+
+  const sections: string[] = [];
+
+  // ── GROOVE & TIMING ──
+  if (mode === "full" || mode === "structure") {
+    sections.push([
+      `GROOVE & TIMING DIRECTIVES (${guide.name}${matchedSub ? ` / ${matchedSub.name}` : ""}):`,
+      `- DO: Target BPM ${guide.rhythmAndGroove.bpmRange.sweet} (range ${guide.rhythmAndGroove.bpmRange.min}–${guide.rhythmAndGroove.bpmRange.max}), feel: ${guide.rhythmAndGroove.feel}`,
+      `- DO: Use groove archetype — ${guide.rhythmAndGroove.grooveArchetype}`,
+      `- DO: ${guide.microTimingAndFeel.genreSpecificFeel}`,
+      `- DO: Beat placement — ${guide.microTimingAndFeel.aheadBehindBeat}`,
+      guide.rhythmAndGroove.swing !== "none" ? `- DO: Apply swing — ${guide.rhythmAndGroove.swing}` : "",
+      `- DO: Syncopation — ${guide.rhythmAndGroove.syncopation}`,
+      `- PSYCHOLOGICAL TEMPO: ${guide.tempoFeelVsNumber.psychologicalTempo}`,
+      `- WEIGHT/MOMENTUM: ${guide.tempoFeelVsNumber.weightAndMomentum}`,
+    ].filter(Boolean).join("\n"));
+  }
+
+  // ── SPACE & TEXTURE ──
+  if (mode === "full" || mode === "structure") {
+    sections.push([
+      `SPACE & TEXTURE DIRECTIVES:`,
+      `- DO: ${guide.silenceAndSpace.negativeSpaceRole}`,
+      `- DO: Breathing — ${guide.silenceAndSpace.breathingPatterns}`,
+      `- DO: Dynamic contrast — ${guide.silenceAndSpace.dynamicContrast}`,
+      `- DELIBERATELY ABSENT: ${guide.silenceAndSpace.whatIsDeliberatelyAbsent.join("; ")}`,
+      `- DO NOT: Risk overproduction — ${guide.mistakeConventions.overproductionRisks.slice(0, 3).join("; ")}`,
+      `- DO: Authentic roughness — ${guide.mistakeConventions.authenticRoughness}`,
+      `- CELEBRATED FLAWS: ${guide.mistakeConventions.celebratedFlaws.slice(0, 3).join("; ")}`,
+    ].join("\n"));
+  }
+
+  // ── LYRIC CRAFT ──
+  if (mode === "full" || mode === "lyrics") {
+    sections.push([
+      `LYRIC CRAFT DIRECTIVES:`,
+      `- DO: Perspective — ${guide.lyricalConventions.perspective}`,
+      `- DO: Storytelling — ${guide.lyricalConventions.storytellingApproach}`,
+      `- DO: Figurative language — ${guide.lyricalConventions.figurativeLanguage}`,
+      `- DO: Vocabulary register — ${guide.lyricalConventions.vocabulary}`,
+      `- DO: Themes — ${guide.lyricalConventions.themes.slice(0, 5).join(", ")}`,
+      `- DO NOT: Use these clichés — ${guide.lyricalConventions.cliches.join("; ")}`,
+      `- LINEAGE SIGNIFIERS: ${guide.intertextualityAndSampling.lineageSignifiers.slice(0, 4).join(", ")}`,
+      `- SAMPLING TRADITION: ${guide.intertextualityAndSampling.samplingTradition}`,
+    ].join("\n"));
+  }
+
+  // ── VOCAL DELIVERY ──
+  if (mode === "full" || mode === "lyrics") {
+    sections.push([
+      `VOCAL DELIVERY DIRECTIVES:`,
+      `- DO: Phrasing — ${guide.vocalDelivery.phrasing}`,
+      `- DO: Affect — ${guide.vocalDelivery.affect}`,
+      `- DO: Techniques — ${guide.vocalDelivery.techniques.slice(0, 4).join(", ")}`,
+      `- DO: Adlib style — ${guide.vocalDelivery.adlibStyle}`,
+      `- DO: Grit level — ${guide.vocalDelivery.grit}`,
+      `- REGIONAL ACCENT: ${guide.regionalDialectSpecificity.accentInfluence}`,
+      guide.regionalDialectSpecificity.dialectVocabulary.length > 0
+        ? `- DIALECT VOCABULARY: ${guide.regionalDialectSpecificity.dialectVocabulary.slice(0, 5).join(", ")}`
+        : "",
+    ].filter(Boolean).join("\n"));
+  }
+
+  // ── STRUCTURE ──
+  if (mode === "full" || mode === "structure") {
+    sections.push([
+      `STRUCTURE DIRECTIVES:`,
+      `- FORM: ${guide.songStructure.form}`,
+      `- SECTIONS: ${guide.songStructure.sections.join(", ")}`,
+      `- HOOK PLACEMENT: ${guide.songStructure.hookPlacement}`,
+      `- BAR LENGTHS: ${guide.songStructure.barLengths}`,
+      `- ARRANGEMENT: ${guide.songStructure.arrangement}`,
+      `- INTRO/OUTRO: ${guide.songStructure.introOutro}`,
+      `- CALL-AND-RESPONSE: ${guide.callAndResponse.patterns.slice(0, 3).join("; ")}`,
+    ].join("\n"));
+  }
+
+  // ── PRODUCTION & INSTRUMENTATION ──
+  if (mode === "full" || mode === "structure" || mode === "suno") {
+    sections.push([
+      `PRODUCTION DIRECTIVES:`,
+      `- DO: Mix aesthetic — ${guide.productionFingerprint.mixAesthetic}`,
+      `- DO: Signal chain — ${guide.productionFingerprint.signalChain}`,
+      `- CORE INSTRUMENTS: ${guide.instrumentation.coreInstruments.slice(0, 6).join(", ")}`,
+      `- SIGNATURE SOUNDS: ${guide.instrumentation.signatureSounds.slice(0, 4).join(", ")}`,
+      `- DO NOT: Use these instruments — ${guide.instrumentation.avoidInstruments.join(", ")}`,
+      `- SONIC PALETTE: ${guide.sonicPalette.overview}`,
+      `- TIMBRE: ${guide.sonicPalette.timbre.slice(0, 4).join(", ")}`,
+    ].join("\n"));
+  }
+
+  // ── CULTURAL AUTHENTICITY ──
+  if (mode === "full") {
+    sections.push([
+      `CULTURAL AUTHENTICITY MARKERS:`,
+      `- ${guide.culturalContext.overview}`,
+      `- AUTHENTICITY: ${guide.culturalContext.authenticityMarkers.slice(0, 3).join("; ")}`,
+      `- SCENE EXPECTATIONS: ${guide.sceneAndAudienceCodes.fanExpectations.slice(0, 3).join("; ")}`,
+      `- HARMONIC LANGUAGE: ${guide.harmonicLanguage.overview}`,
+      `- PROGRESSIONS: ${guide.harmonicLanguage.chordProgressions.slice(0, 3).join("; ")}`,
+    ].join("\n"));
+  }
+
+  // ── SUNO-SPECIFIC (compressed) ──
+  if (mode === "suno") {
+    const kw = guide.sunoPromptGuide.essentialKeywords.slice(0, 6);
+    const avoid = guide.sunoPromptGuide.avoidKeywords.slice(0, 4);
+    if (matchedSub) {
+      kw.push(...matchedSub.sunoPromptKeywords.slice(0, 3));
+    }
+    sections.push([
+      `SUNO PROMPT GUIDE:`,
+      `- ESSENTIAL KEYWORDS: ${[...new Set(kw)].join(", ")}`,
+      `- AVOID KEYWORDS: ${avoid.join(", ")}`,
+      `- GROOVE: ${guide.rhythmAndGroove.grooveArchetype}, ${guide.rhythmAndGroove.feel}`,
+      `- TEMPO FEEL: ${guide.tempoFeelVsNumber.psychologicalTempo}`,
+    ].join("\n"));
+  }
+
+  // ── SUB-GENRE CONTEXT ──
+  if (matchedSub) {
+    sections.push([
+      `SUB-GENRE SPECIFICS (${matchedSub.name}):`,
+      `- ${matchedSub.description}`,
+      `- DISTINGUISHING: ${matchedSub.distinguishingFeatures.join("; ")}`,
+      `- PRODUCTION: ${matchedSub.productionNotes}`,
+      `- LYRICS: ${matchedSub.lyricNotes}`,
+      matchedSub.bpmRange ? `- BPM: ${matchedSub.bpmRange.min}–${matchedSub.bpmRange.max}` : "",
+      `- REFERENCE ARTISTS: ${matchedSub.keyArtists.slice(0, 4).join(", ")}`,
+    ].filter(Boolean).join("\n"));
+  }
+
+  return sections.join("\n\n");
+}
+
+async function getGenreGuideSunoKeywords(inputs: any): Promise<{ keywords: string[]; avoid: string[]; tips: string[] }> {
+  const mod = await loadGenreGuideModule();
+  if (!mod) return { keywords: [], avoid: [], tips: [] };
+
+  const genreId = (inputs?.genre || "").toLowerCase().replace(/\s+/g, "-");
+  const guide = mod.getGuideById(genreId);
+  if (!guide) return { keywords: [], avoid: [], tips: [] };
+
+  const subGenreName = inputs?.subGenre || "";
+  const matchedSub = guide.subGenres.find(
+    (s) => s.name.toLowerCase() === subGenreName.toLowerCase()
+  );
+
+  const keywords = [
+    ...guide.sunoPromptGuide.essentialKeywords,
+    ...(matchedSub?.sunoPromptKeywords || []),
+  ];
+
+  return {
+    keywords: Array.from(new Set(keywords)),
+    avoid: guide.sunoPromptGuide.avoidKeywords,
+    tips: guide.sunoPromptGuide.tips,
+  };
+}
+
+// ── Guide Compliance Check ──────────────────────────────────────
+
+type ComplianceViolation = {
+  dimension: string;
+  rule: string;
+  evidence: string;
+  severity: "hard" | "soft";
+};
+
+type ComplianceResult = {
+  passed: boolean;
+  violations: ComplianceViolation[];
+};
+
+/**
+ * Deterministic check: does the song output contradict genre guide data?
+ * No LLM call — pure string/regex matching against guide arrays.
+ */
+async function checkGuideCompliance(songText: string, inputs: any): Promise<ComplianceResult> {
+  const guide = await resolveGuide(inputs);
+  if (!guide || !songText) return { passed: true, violations: [] };
+
+  const violations: ComplianceViolation[] = [];
+  const lowerText = songText.toLowerCase();
+
+  // Extract lyrics section (after ### Lyrics)
+  const lyricsMatch = songText.match(/###\s*Lyrics\s*\n([\s\S]*)/i);
+  const lyrics = lyricsMatch ? lyricsMatch[1].toLowerCase() : lowerText;
+
+  // Extract meta tags [...]
+  const metaTags = (songText.match(/\[[^\]\n]{2,80}\]/g) || []).map(t => t.toLowerCase());
+
+  // Extract SUNO prompt section
+  const sunoMatch = songText.match(/###\s*SUNO\s*Prompt\s*\n([\s\S]*?)(?=###|$)/i);
+  const sunoPrompt = sunoMatch ? sunoMatch[1].toLowerCase() : "";
+
+  // 1. Cliché detection (hard)
+  for (const cliche of guide.lyricalConventions.cliches) {
+    const clicheLower = cliche.toLowerCase();
+    if (lyrics.includes(clicheLower)) {
+      violations.push({
+        dimension: "lyricalConventions.cliches",
+        rule: `Avoid cliché: "${cliche}"`,
+        evidence: cliche,
+        severity: "hard",
+      });
+    }
+  }
+
+  // 2. Avoid-instrument detection (hard)
+  for (const inst of guide.instrumentation.avoidInstruments) {
+    const instLower = inst.toLowerCase();
+    if (metaTags.some(t => t.includes(instLower))) {
+      violations.push({
+        dimension: "instrumentation.avoidInstruments",
+        rule: `Avoid instrument in meta tags: "${inst}"`,
+        evidence: inst,
+        severity: "hard",
+      });
+    }
+  }
+
+  // 3. Avoid-keyword detection in SUNO prompt (hard)
+  for (const kw of guide.sunoPromptGuide.avoidKeywords) {
+    const kwLower = kw.toLowerCase();
+    if (sunoPrompt.includes(kwLower)) {
+      violations.push({
+        dimension: "sunoPromptGuide.avoidKeywords",
+        rule: `Avoid keyword in SUNO prompt: "${kw}"`,
+        evidence: kw,
+        severity: "hard",
+      });
+    }
+  }
+
+  // 4. Deliberately absent elements appearing in output (soft)
+  for (const absent of guide.silenceAndSpace.whatIsDeliberatelyAbsent) {
+    const absentLower = absent.toLowerCase();
+    if (metaTags.some(t => t.includes(absentLower)) || sunoPrompt.includes(absentLower)) {
+      violations.push({
+        dimension: "silenceAndSpace.whatIsDeliberatelyAbsent",
+        rule: `Element should be absent: "${absent}"`,
+        evidence: absent,
+        severity: "soft",
+      });
+    }
+  }
+
+  // 5. Overproduction risk patterns in meta tags (soft)
+  for (const risk of guide.mistakeConventions.overproductionRisks) {
+    const riskLower = risk.toLowerCase();
+    // Check if any meta tag or SUNO prompt contains the overproduction pattern
+    const riskWords = riskLower.split(/\s+/).filter(w => w.length > 3);
+    if (riskWords.length > 0 && riskWords.every(w => sunoPrompt.includes(w) || metaTags.some(t => t.includes(w)))) {
+      violations.push({
+        dimension: "mistakeConventions.overproductionRisks",
+        rule: `Overproduction risk: "${risk}"`,
+        evidence: risk,
+        severity: "soft",
+      });
+    }
+  }
+
+  const hasHard = violations.some(v => v.severity === "hard");
+  return { passed: !hasHard, violations };
+}
+
+/**
+ * Build a targeted fix prompt for hard compliance violations.
+ * Concise, specific — tells the LLM exactly what to fix and why.
+ */
+function buildComplianceFixPrompt(songText: string, violations: ComplianceViolation[]): string {
+  const hardViolations = violations.filter(v => v.severity === "hard");
+  if (hardViolations.length === 0) return "";
+
+  const fixes = hardViolations.map((v, i) =>
+    `${i + 1}. ${v.rule} (found: "${v.evidence}")`
+  ).join("\n");
+
+  return `
+Fix these specific genre compliance issues in the song. Preserve everything else unchanged.
+Return the full song in the same format (Title / ### SUNO Prompt / ### Lyrics).
+
+Issues to fix:
+${fixes}
+
+Current song:
+${songText}
+  `.trim();
+}
+
 function sanitizeEmail(email?: string): string {
   return (email || "").toLowerCase().trim();
 }
@@ -483,33 +805,6 @@ function getGeminiImageModel(): string {
 
 function getGeminiVisionModel(): string {
   return process.env.GEMINI_VISION_MODEL || "gemini-2.5-flash";
-}
-
-function shouldRunMultiPassRefinement(): boolean {
-  return process.env.AI_MULTIPASS_REFINEMENT !== "0";
-}
-
-function shouldRunDeepAudit(): boolean {
-  return process.env.AI_DEEP_AUDIT === "1";
-}
-
-function getQualityTargetScore(): number {
-  return Number(process.env.AI_QUALITY_TARGET_SCORE || 90);
-}
-
-function getAuditRubricPromptBlock(minTarget = getQualityTargetScore()): string {
-  return `
-Quality-first generation rubric (optimize first draft for this):
-- Language Authenticity: native phrasing, culturally coherent idiom/register.
-- Cultural Context: scene, references, and perspective match selected culture/region.
-- Genre Fidelity: writing and structure match genre conventions.
-- Subgenre Fidelity: cadence, imagery, arrangement language, and vocal cues match subgenre.
-- Reference Style Compliance: align structure/hook/rhyme/diction to the genre-subgenre reference blueprint.
-- Lyrical Originality: avoid cliches and generic filler; use concrete, memorable details.
-- Cadence & Prosody: stress/flow sing naturally; line lengths support performance.
-Hard drafting target: produce a draft that would realistically score >= ${minTarget}/100.
-If uncertain, choose the safer authentic option over novelty.
-  `.trim();
 }
 
 function getPipelineBudgetMs(): number {
@@ -862,64 +1157,6 @@ ${hipHopCadence ? `- ${hipHopCadence}` : ""}
   `.trim();
 }
 
-async function culturallyRefineSong(rawSong: string, inputs: any, userProfile: any): Promise<string> {
-  if (!rawSong?.trim()) return rawSong;
-  const culturalContext = await buildCulturalPromptContext(inputs);
-  const metaTagPackage = await getMetaTagPackage(inputs || {});
-  const agentDirectives = await getGenreAgentDirectives(inputs || {});
-  const referenceBlueprint = await getGenreReferenceBlueprint(inputs || {});
-  const referenceFeatureBlock = await getReferenceFeatureBlock(inputs || {});
-  const prompt = `
-You are a senior lyric editor specializing in cultural authenticity.
-Refine the song below for cultural and stylistic accuracy while preserving intent and emotional arc.
-
-Return ONLY this exact format:
-Title: ...
-### SUNO Prompt
-...
-### Lyrics
-...
-
-Rules:
-- Preserve the original language and regional variant.
-- Keep strong genre/subgenre identity and avoid cliche stock lines.
-- Improve metaphors, cadence, rhyme texture, and scene authenticity.
-- Keep line-to-line narrative continuity so verses feel connected, not like isolated one-liners.
-- Keep rhyme discipline: meaningful rhyme presence across sections (end-rhyme and/or internal rhyme), do not drift into mostly unrhymed prose.
-- Keep sections concise and genre-appropriate in total runtime footprint.
-- Do not add stereotypes, slurs, or tokenized dialect.
-- Keep title and hook memorable and aligned with the core story.
-- Keep section meta tags consistent and musically meaningful.
-- Keep adlibs in parentheses tasteful, sparse, and genre-appropriate.
-- Do not invent new tag syntax outside bracket/parenthesis styles.
-
-Creator context:
-- Artist persona: ${userProfile?.display_name || "N/A"} | vibe: ${userProfile?.preferred_vibe || "N/A"}
-
-${culturalContext}
-${getGenreLengthDirective(inputs?.genre, inputs?.subGenre)}
-${getTaxonomyGuardrailDirective(inputs)}
-${getVocalAndClicheHardDirective(inputs)}
-${getInstructionResponsivenessDirective(inputs?.additionalInfo || inputs?.awkwardMoment || "")}
-${getFreshRenditionDirective(`refine-${Date.now().toString(36)}-${Math.random().toString(36).slice(2, 8)}`)}
-${getAuditRubricPromptBlock()}
-${metaTagPackage.guidance}
-${metaTagPackage.strictSpec}
-${agentDirectives.lyricDirectives}
-${referenceBlueprint.promptBlock}
-${referenceFeatureBlock}
-
-Song draft:
-${rawSong}
-  `.trim();
-
-  try {
-    return await openAIResponses(prompt);
-  } catch {
-    return rawSong;
-  }
-}
-
 function extractLyricsBody(songText: string): string {
   if (!songText || typeof songText !== "string") return "";
   const marker = "### Lyrics";
@@ -1090,6 +1327,7 @@ function alignVocalIdentityInLyrics(lyrics: string, vocals: string | undefined):
 async function buildSunoPromptDriver(inputs: any, userProfile: any): Promise<string> {
   const logic = await loadCulturalLogicModule();
   const agentDirectives = await getGenreAgentDirectives(inputs || {});
+  const guideKeywords = await getGenreGuideSunoKeywords(inputs || {});
 
   const language = inputs?.language || "English";
   const genre = inputs?.genre || "Pop";
@@ -1126,6 +1364,13 @@ async function buildSunoPromptDriver(inputs: any, userProfile: any): Promise<str
   );
   const instrumentFocus = inferInstrumentFocus(instrumentation, genre);
 
+  const guideKeywordClause = guideKeywords.keywords.length > 0
+    ? `; genre-essential: ${guideKeywords.keywords.slice(0, 6).join(", ")}`
+    : "";
+  const guideAvoidClause = guideKeywords.avoid.length > 0
+    ? `; avoid: ${guideKeywords.avoid.slice(0, 4).join(", ")}`
+    : "";
+
   const referenceClause = referenceArtist ? `; reference feel: ${referenceArtist}` : "";
   const fallbackPrompt = `
 Style: ${styleDescriptor}.
@@ -1133,14 +1378,14 @@ Mood/Energy: ${moodEnergyDirection}.
 Vocals: ${vocalApproach}.
 Arrangement/Dynamics: ${arrangementDynamics}.
 Instrument focus: ${instrumentFocus}.
-Production context: ${subProfile.bpmRange}, ${audioEnv}, ${scene}; vibe ${vibe}${referenceClause}.
+Production context: ${subProfile.bpmRange}, ${audioEnv}, ${scene}; vibe ${vibe}${referenceClause}${guideKeywordClause}${guideAvoidClause}.
 Language/culture: ${language} (${writingProfile.languageVariant}, ${writingProfile.cultureRegion}); avoid cliche writing.
   `.trim();
 
   const prompt = agentDirectives.hasAgent
     ? `
 ${agentDirectives.sunoPromptDirectives}
-Production context: ${subProfile.bpmRange}, ${audioEnv}, ${scene}; vibe ${vibe}${referenceClause}.
+Production context: ${subProfile.bpmRange}, ${audioEnv}, ${scene}; vibe ${vibe}${referenceClause}${guideKeywordClause}${guideAvoidClause}.
 Language/culture: ${language} (${writingProfile.languageVariant}, ${writingProfile.cultureRegion}); avoid cliche writing.
       `.trim()
     : fallbackPrompt;
@@ -1836,525 +2081,6 @@ function parseLooseJson(text: string): any | null {
   }
 }
 
-function clampScore(value: any): number {
-  const n = Number(value);
-  if (!Number.isFinite(n)) return 0;
-  return Math.max(0, Math.min(100, Math.round(n)));
-}
-
-function normalizeAudit(raw: any): CulturalAudit {
-  const fallbackChecklist: CulturalAuditItem[] = [
-    { dimension: "Language Authenticity", score: 0, notes: "" },
-    { dimension: "Cultural Context", score: 0, notes: "" },
-    { dimension: "Genre Fidelity", score: 0, notes: "" },
-    { dimension: "Subgenre Fidelity", score: 0, notes: "" },
-    { dimension: "Lyrical Originality", score: 0, notes: "" },
-    { dimension: "Cadence & Prosody", score: 0, notes: "" },
-  ];
-
-  const checklist = Array.isArray(raw?.checklist)
-    ? raw.checklist
-        .map((item: any) => ({
-          dimension: typeof item?.dimension === "string" ? item.dimension : "",
-          score: clampScore(item?.score),
-          notes: typeof item?.notes === "string" ? item.notes : "",
-        }))
-        .filter((item: CulturalAuditItem) => item.dimension)
-        .slice(0, 8)
-    : [];
-
-  const normalizedChecklist = checklist.length ? checklist : fallbackChecklist;
-  const derivedAverage = Math.round(
-    normalizedChecklist.reduce((acc: number, item: CulturalAuditItem) => acc + item.score, 0) /
-      normalizedChecklist.length
-  );
-  const overallScore = raw?.overallScore !== undefined ? clampScore(raw.overallScore) : derivedAverage;
-  const summary =
-    typeof raw?.summary === "string" && raw.summary.trim()
-      ? raw.summary.trim()
-      : "Audit completed using cultural authenticity rubric.";
-
-  return {
-    overallScore,
-    summary,
-    checklist: normalizedChecklist,
-  };
-}
-
-function fallbackAudit(inputs: any): CulturalAudit {
-  const language = inputs?.language || "English";
-  const genre = inputs?.genre || "Pop";
-  const subGenre = inputs?.subGenre || "Modern";
-  return {
-    overallScore: 72,
-    summary: `Baseline audit fallback for ${language} ${genre}/${subGenre}.`,
-    checklist: [
-      { dimension: "Language Authenticity", score: 72, notes: "Fallback audit: verify native phrasing manually." },
-      { dimension: "Cultural Context", score: 70, notes: "Fallback audit: validate local scene references." },
-      { dimension: "Genre Fidelity", score: 75, notes: "Fallback audit: confirm genre writing conventions." },
-      { dimension: "Subgenre Fidelity", score: 70, notes: "Fallback audit: align cadence and sonic cues." },
-      { dimension: "Lyrical Originality", score: 74, notes: "Fallback audit: reduce cliches where needed." },
-      { dimension: "Cadence & Prosody", score: 71, notes: "Fallback audit: tighten line stress and flow." },
-    ],
-  };
-}
-
-function getReferenceStyleComplianceScore(
-  songText: string,
-  blueprint: {
-    structureModel: string;
-    writingStyle: string;
-    rhymeCadenceModel: string;
-    hookModel: string;
-    arrangementModel: string;
-  }
-): number {
-  const depth = getSongDepthMetrics(songText);
-  const lower = (songText || "").toLowerCase();
-  const hasChorus = /\[chorus(\s*\d+)?\]/i.test(songText);
-  const hasVerse = /\[verse(\s*\d+)?\]/i.test(songText);
-  const hasBridge = /\[bridge(\s*\d+)?\]/i.test(songText);
-  const structureCoverage = [hasChorus, hasVerse, hasBridge].filter(Boolean).length / 3;
-  const hookIndicators = (lower.match(/\[chorus/gi) || []).length;
-  const hookScore = clamp01(hookIndicators >= 2 ? 1 : hookIndicators / 2);
-  const styleSignal =
-    normalizeForComparison(
-      `${blueprint.structureModel} ${blueprint.writingStyle} ${blueprint.rhymeCadenceModel} ${blueprint.hookModel} ${blueprint.arrangementModel}`
-    ).length > 0
-      ? 1
-      : 0;
-  return clampScore(
-    Math.round(
-      50 +
-        structureCoverage * 16 +
-        hookScore * 12 +
-        (1 - Math.min(depth.clicheHits, 3) / 3) * 12 +
-        clamp01(depth.continuityOverlap / 0.12) * 10 +
-        styleSignal * 4
-    )
-  );
-}
-
-function deterministicAudit(
-  songText: string,
-  inputs: any,
-  referenceBlueprint?: {
-    structureModel: string;
-    writingStyle: string;
-    rhymeCadenceModel: string;
-    languageRegisterModel: string;
-    hookModel: string;
-    arrangementModel: string;
-  },
-  referenceFeatureScore = 80
-): CulturalAudit {
-  if (!songText?.trim()) return fallbackAudit(inputs);
-  const depth = getSongDepthMetrics(songText);
-  const plan = fallbackMetaTagPlan(inputs || {});
-  const orchestration = getMetaTagOrchestrationMetrics(songText, plan);
-  const selectedVocalMismatch = hasSelectedVocalMismatch(songText, inputs?.vocals);
-
-  const languageAuthenticity = clampScore(
-    62 + depth.continuityOverlap * 220 + depth.anchorReuse * 4 - depth.clicheHits * 6 - (selectedVocalMismatch ? 14 : 0)
-  );
-  const culturalContext = clampScore(60 + depth.anchorReuse * 6 + (depth.oneLinerRisk ? -12 : 8));
-  const genreFidelity = clampScore(58 + orchestration.score * 0.38 + depth.performanceTagCount * 2);
-  const subgenreFidelity = clampScore(56 + orchestration.score * 0.42 + (depth.dynamicContour ? 8 : -6) - (selectedVocalMismatch ? 12 : 0));
-  const lyricalOriginality = clampScore(64 + depth.lexicalDiversity * 25 - depth.clicheHits * 12);
-  const cadenceProsody = clampScore(60 + depth.continuityOverlap * 180 + (depth.narratorMismatch ? -18 : 6) - (selectedVocalMismatch ? 10 : 0));
-  const blueprintCompliance = getReferenceStyleComplianceScore(
-    songText,
-    referenceBlueprint || {
-      structureModel: "balanced verse-chorus structure",
-      writingStyle: "coherent, concrete writing",
-      rhymeCadenceModel: "balanced rhyme and cadence",
-      hookModel: "repeatable hook",
-      arrangementModel: "clear section contrast",
-    }
-  );
-  const referenceStyleCompliance = clampScore(Math.round(blueprintCompliance * 0.6 + referenceFeatureScore * 0.4));
-
-  const checklist: CulturalAuditItem[] = [
-    {
-      dimension: "Language Authenticity",
-      score: languageAuthenticity,
-      notes: depth.oneLinerRisk
-        ? "Narrative linkage is thin; increase idiomatic flow between adjacent lines."
-        : selectedVocalMismatch
-          ? "Vocal identity conflicts with selected vocalist; lock tags and delivery to requested voice."
-          : "Phrasing is mostly natural; continue tightening idiomatic line turns.",
-    },
-    {
-      dimension: "Cultural Context",
-      score: culturalContext,
-      notes:
-        depth.anchorReuse < 2
-          ? "Reinforce recurring scene anchors to deepen place/culture specificity."
-          : "Scene anchors are present; keep references grounded and non-generic.",
-    },
-    {
-      dimension: "Genre Fidelity",
-      score: genreFidelity,
-      notes:
-        orchestration.coreCoverage < 0.8
-          ? "Core sections need stronger genre-driving performance cues."
-          : "Genre scaffolding is solid; refine transitions and section contrast.",
-    },
-    {
-      dimension: "Subgenre Fidelity",
-      score: subgenreFidelity,
-      notes:
-        orchestration.chorusCoverage < 1
-          ? "Chorus-level subgenre cues should be more explicit."
-          : "Subgenre intent is present; sharpen vocal/micro-arrangement signatures.",
-    },
-    {
-      dimension: "Lyrical Originality",
-      score: lyricalOriginality,
-      notes:
-        depth.clicheHits > 1
-          ? "Replace cliché opener formulas (sunrise/streetlights + window pane) with concrete, specific imagery."
-          : "Imagery is mostly specific; keep pushing distinct line identity.",
-    },
-    {
-      dimension: "Cadence & Prosody",
-      score: cadenceProsody,
-      notes:
-        depth.continuityOverlap < 0.05
-          ? "Line stress/flow continuity needs tighter rhythmic logic."
-          : "Cadence is workable; emphasize stronger prosodic contrast in hook vs verse.",
-    },
-    {
-      dimension: "Reference Style Compliance",
-      score: referenceStyleCompliance,
-      notes:
-        referenceStyleCompliance < 85
-          ? "Draft under-matches learned genre/subgenre structure and hook-writing patterns."
-          : "Draft matches the reference blueprint for structure, cadence, and hook behavior.",
-    },
-  ];
-
-  const overallScore = clampScore(
-    Math.round(
-      languageAuthenticity * 0.18 +
-        culturalContext * 0.14 +
-        genreFidelity * 0.18 +
-        subgenreFidelity * 0.18 +
-        lyricalOriginality * 0.13 +
-        cadenceProsody * 0.13 +
-        referenceStyleCompliance * 0.08
-    )
-  );
-
-  return {
-    overallScore,
-    summary: `Deterministic audit fallback for ${inputs?.language || "English"} ${inputs?.genre || "Pop"}/${inputs?.subGenre || "Modern"}.`,
-    checklist,
-  };
-}
-
-function fallbackAuditFromSong(songText: string, inputs: any): CulturalAudit {
-  const deterministic = deterministicAudit(songText, inputs, undefined, 80);
-  if (deterministic.overallScore > 0) return deterministic;
-  const language = inputs?.language || "English";
-  const genre = inputs?.genre || "Pop";
-  const subGenre = inputs?.subGenre || "Modern";
-  return {
-    overallScore: 72,
-    summary: `Baseline audit fallback for ${language} ${genre}/${subGenre}.`,
-    checklist: [
-      { dimension: "Language Authenticity", score: 72, notes: "Fallback audit: verify native phrasing manually." },
-      { dimension: "Cultural Context", score: 70, notes: "Fallback audit: validate local scene references." },
-      { dimension: "Genre Fidelity", score: 75, notes: "Fallback audit: confirm genre writing conventions." },
-      { dimension: "Subgenre Fidelity", score: 70, notes: "Fallback audit: align cadence and sonic cues." },
-      { dimension: "Lyrical Originality", score: 74, notes: "Fallback audit: reduce cliches where needed." },
-      { dimension: "Cadence & Prosody", score: 71, notes: "Fallback audit: tighten line stress and flow." },
-    ],
-  };
-}
-
-async function evaluateCulturalAudit(songText: string, inputs: any): Promise<CulturalAudit> {
-  if (!songText?.trim()) return fallbackAuditFromSong(songText, inputs);
-  const culturalContext = await buildCulturalPromptContext(inputs || {});
-  const referenceBlueprint = await getGenreReferenceBlueprint(inputs || {});
-  const referenceFeatureBlock = await getReferenceFeatureBlock(inputs || {});
-  const referenceFeatureScore = await getReferenceFeatureScore(songText, inputs || {});
-  const prompt = `
-You are evaluating one song draft for cultural authenticity and stylistic quality.
-Score strictly and return ONLY JSON:
-{
-  "overallScore": number,
-  "summary": string,
-  "checklist": [
-    { "dimension": "Language Authenticity", "score": number, "notes": string },
-    { "dimension": "Cultural Context", "score": number, "notes": string },
-    { "dimension": "Genre Fidelity", "score": number, "notes": string },
-    { "dimension": "Subgenre Fidelity", "score": number, "notes": string },
-    { "dimension": "Lyrical Originality", "score": number, "notes": string },
-    { "dimension": "Cadence & Prosody", "score": number, "notes": string }
-  ]
-}
-
-Scoring rules:
-- 90-100: excellent/authentic
-- 75-89: strong but has notable improvements
-- 60-74: mixed quality with clear authenticity gaps
-- below 60: weak authenticity/fidelity
-- Keep notes concise and actionable.
-- Penalize heavily when vocalist identity conflicts with the selected vocalist option.
-- Penalize heavily for cliché opener formulas (sunrise/streetlights + window pane variants).
-
-${culturalContext}
-${referenceBlueprint.promptBlock}
-${referenceFeatureBlock}
-
-Song to audit:
-${songText}
-  `.trim();
-
-  try {
-    const raw = await openAIResponses(prompt);
-    const parsed = parseLooseJson(raw);
-    if (!parsed) return fallbackAuditFromSong(songText, inputs);
-    const modelAudit = normalizeAudit(parsed);
-    const deterministic = deterministicAudit(songText, inputs, referenceBlueprint, referenceFeatureScore);
-    const blendedOverall = clampScore(
-      Math.round(modelAudit.overallScore * 0.65 + deterministic.overallScore * 0.35)
-    );
-    return {
-      overallScore: blendedOverall,
-      summary: `${modelAudit.summary} (consensus blended with deterministic quality metrics)`,
-      checklist: modelAudit.checklist,
-    };
-  } catch {
-    return fallbackAuditFromSong(songText, inputs);
-  }
-}
-
-function buildAuditIssueList(audit: CulturalAudit): string {
-  const items = Array.isArray(audit?.checklist) ? audit.checklist : [];
-  if (!items.length) return "- Improve language authenticity, genre fidelity, and lyrical originality.";
-  return items
-    .sort((a, b) => a.score - b.score)
-    .slice(0, 4)
-    .map((item) => `- ${item.dimension}: ${item.notes || "Improve this area."} (score ${item.score})`)
-    .join("\n");
-}
-
-async function rewriteFromAudit(songText: string, inputs: any, userProfile: any, audit: CulturalAudit): Promise<string> {
-  const culturalContext = await buildCulturalPromptContext(inputs || {});
-  const metaTagPackage = await getMetaTagPackage(inputs || {});
-  const agentDirectives = await getGenreAgentDirectives(inputs || {});
-  const issueList = buildAuditIssueList(audit);
-
-  const prompt = `
-You are a senior songwriting editor.
-Rewrite this song to improve audit quality while preserving core meaning, language, and genre identity.
-
-Return only:
-Title: ...
-### SUNO Prompt
-...
-### Lyrics
-...
-
-Required:
-- Raise authenticity, narrative continuity, cadence/prosody, and subgenre fidelity.
-- Target overall audit >= 88 and lift weak dimensions to >= 85 where possible.
-- Keep the hook identity and emotional arc intact.
-- Keep dynamic inline tags/adlibs musical and distributed.
-- Avoid cliche wording and disconnected one-liners.
-- Keep meaningful rhyme density for the selected genre/subgenre (not flat free-verse feel).
-- Keep total section count/line count tight to genre-typical song duration.
-- Treat taxonomy fields as direction only (not literal lyric subject matter), except user-provided mundane objects.
-
-Audit issues to fix:
-${issueList}
-
-Context:
-- Language: ${inputs?.language || "English"}
-- Genre: ${inputs?.genre || "Pop"}
-- Subgenre: ${inputs?.subGenre || "Modern"}
-- Mood: ${inputs?.emotion || "Euphoric"}
-- Scene: ${inputs?.scene || "Studio"}
-- Artist persona: ${userProfile?.display_name || "N/A"} | vibe: ${userProfile?.preferred_vibe || "N/A"}
-
-${culturalContext}
-${getGenreLengthDirective(inputs?.genre, inputs?.subGenre)}
-${getTaxonomyGuardrailDirective(inputs)}
-${getVocalAndClicheHardDirective(inputs)}
-${getInstructionResponsivenessDirective(inputs?.additionalInfo || inputs?.awkwardMoment || "")}
-${getFreshRenditionDirective(`rewrite-${Date.now().toString(36)}-${Math.random().toString(36).slice(2, 8)}`)}
-${getAuditRubricPromptBlock()}
-${metaTagPackage.guidance}
-${metaTagPackage.strictSpec}
-${agentDirectives.lyricDirectives}
-
-Song to rewrite:
-${songText}
-  `.trim();
-
-  return openAIResponses(prompt);
-}
-
-async function surgicalRepairFromAudit(songText: string, inputs: any, userProfile: any, audit: CulturalAudit): Promise<string> {
-  const culturalContext = await buildCulturalPromptContext(inputs || {});
-  const metaTagPackage = await getMetaTagPackage(inputs || {});
-  const agentDirectives = await getGenreAgentDirectives(inputs || {});
-  const weakest = (Array.isArray(audit?.checklist) ? [...audit.checklist] : [])
-    .sort((a, b) => a.score - b.score)
-    .slice(0, 3)
-    .map((item) => `- ${item.dimension}: ${item.notes || "Improve this dimension."} (current ${item.score})`)
-    .join("\n");
-
-  const prompt = `
-You are doing a surgical quality repair pass on a nearly-passing song.
-Do NOT rewrite from scratch. Keep title, hook identity, and overall story.
-Patch only what is necessary to raise audit quality.
-
-Return only:
-Title: ...
-### SUNO Prompt
-...
-### Lyrics
-...
-
-Priority fixes:
-${weakest || "- Improve authenticity, subgenre fidelity, and cadence/prosody."}
-
-Rules:
-- Preserve language and cultural/genre identity.
-- Improve cadence/prosody and lyrical specificity line-by-line.
-- Lift the weakest dimensions to >= 85 and target overall >= 88.
-- Keep dynamic inline tags/adlibs musical and non-spammy.
-- Avoid flattening or generic phrasing.
-- Improve rhyme discipline and reduce overlong phrasing.
-- Do not make taxonomy selections literal lyric subjects unless they are user-provided mundane objects.
-
-${culturalContext}
-${getGenreLengthDirective(inputs?.genre, inputs?.subGenre)}
-${getTaxonomyGuardrailDirective(inputs)}
-${getVocalAndClicheHardDirective(inputs)}
-${getInstructionResponsivenessDirective(inputs?.additionalInfo || inputs?.awkwardMoment || "")}
-${getFreshRenditionDirective(`surgical-${Date.now().toString(36)}-${Math.random().toString(36).slice(2, 8)}`)}
-${getAuditRubricPromptBlock(93)}
-${metaTagPackage.guidance}
-${metaTagPackage.strictSpec}
-${agentDirectives.lyricDirectives}
-
-Song:
-${songText}
-  `.trim();
-
-  return openAIResponses(prompt);
-}
-
-async function finalNearPassUpgrade(songText: string, inputs: any, userProfile: any, audit: CulturalAudit): Promise<string> {
-  const culturalContext = await buildCulturalPromptContext(inputs || {});
-  const metaTagPackage = await getMetaTagPackage(inputs || {});
-  const agentDirectives = await getGenreAgentDirectives(inputs || {});
-  const weakest = (Array.isArray(audit?.checklist) ? [...audit.checklist] : [])
-    .sort((a, b) => a.score - b.score)
-    .slice(0, 4)
-    .map((item) => `- ${item.dimension}: ${item.notes || "Improve this dimension."} (current ${item.score})`)
-    .join("\n");
-
-  const prompt = `
-You are doing a final near-pass quality rescue.
-The song is close but below release threshold. Keep story/hook identity and elevate craft quality.
-
-Return only:
-Title: ...
-### SUNO Prompt
-...
-### Lyrics
-...
-
-Hard target:
-- Raise overall audit to >= 90.
-- Raise each weak dimension to >= 85.
-- Keep language/region authenticity and subgenre fidelity strict.
-
-Weak dimensions to repair:
-${weakest || "- Improve authenticity, context, and cadence/prosody."}
-
-Rules:
-- Do not flatten emotion or remove stylistic personality.
-- Tighten line-level cadence and remove generic phrasing.
-- Keep dynamic meta tags/adlibs musical, logical, and distributed.
-- Preserve narrative continuity and concrete scene details.
-- Strengthen rhyme density without sounding forced.
-- Keep structure concise for genre-standard runtime.
-- Keep taxonomy selections atmospheric/directional, not literal lyric mentions (except user mundane objects).
-
-${culturalContext}
-${getGenreLengthDirective(inputs?.genre, inputs?.subGenre)}
-${getTaxonomyGuardrailDirective(inputs)}
-${getVocalAndClicheHardDirective(inputs)}
-${getInstructionResponsivenessDirective(inputs?.additionalInfo || inputs?.awkwardMoment || "")}
-${getFreshRenditionDirective(`upgrade-${Date.now().toString(36)}-${Math.random().toString(36).slice(2, 8)}`)}
-${getAuditRubricPromptBlock(94)}
-${metaTagPackage.guidance}
-${metaTagPackage.strictSpec}
-${agentDirectives.lyricDirectives}
-
-Song:
-${songText}
-  `.trim();
-
-  return openAIResponses(prompt);
-}
-
-async function enforceMinimumAuditScore(
-  songText: string,
-  inputs: any,
-  userProfile: any,
-  minScore = 85,
-  maxRewrites = 3
-): Promise<{ text: string; audit: CulturalAudit; qualityGate: QualityGateReport }> {
-  let workingText = songText;
-  let audit = await evaluateCulturalAudit(workingText, inputs || {});
-  let bestText = workingText;
-  let bestAudit = audit;
-  const passes: QualityGatePass[] = [];
-  let rewritesTriggered = 0;
-
-  for (let pass = 1; pass <= maxRewrites + 1; pass += 1) {
-    const shouldRewrite = audit.overallScore < minScore && pass <= maxRewrites;
-    passes.push({
-      pass,
-      score: audit.overallScore,
-      action: shouldRewrite ? "rewrite" : "accepted",
-    });
-    if (!shouldRewrite) break;
-    rewritesTriggered += 1;
-    const rewritten = await rewriteFromAudit(workingText, inputs || {}, userProfile || {}, audit);
-    let rewrittenText = await enforceMetaTagOrchestration(rewritten, inputs || {});
-    rewrittenText = await enforceSongDepthAndTexture(rewrittenText, inputs || {}, userProfile || {});
-    rewrittenText = await enforceSunoPromptDriver(rewrittenText, inputs || {}, userProfile || {});
-    const rewrittenAudit = await evaluateCulturalAudit(rewrittenText, inputs || {});
-    if (rewrittenAudit.overallScore >= bestAudit.overallScore) {
-      bestText = rewrittenText;
-      bestAudit = rewrittenAudit;
-      workingText = rewrittenText;
-      audit = rewrittenAudit;
-    } else {
-      workingText = bestText;
-      audit = bestAudit;
-    }
-  }
-
-  return {
-    text: bestText,
-    audit: bestAudit,
-    qualityGate: {
-      minScore,
-      finalScore: bestAudit.overallScore,
-      rewritesTriggered,
-      passes,
-    },
-  };
-}
 
 const getUserProfileByEmailRef = makeFunctionReference<"query">("app:getUserProfileByEmail");
 
@@ -2628,6 +2354,7 @@ async function generateSong(payload: any) {
   const agentDirectives = await getGenreAgentDirectives(inputs || {});
   const referenceBlueprint = await getGenreReferenceBlueprint(inputs || {});
   const referenceFeatureBlock = await getReferenceFeatureBlock(inputs || {});
+  const craftDirectives = await compileGuideToDirectives(inputs || {}, "full");
   const prompt = `
 You are a professional songwriter.
 Return only:
@@ -2665,13 +2392,13 @@ Non-negotiable writing directives:
 - Respect genre-standard length and keep song concise.
 - If any instruction conflicts, prioritize the user's core prompt.
 
+${craftDirectives}
 ${culturalContext}
 ${getGenreLengthDirective(inputs?.genre, inputs?.subGenre)}
 ${getTaxonomyGuardrailDirective(inputs)}
 ${getVocalAndClicheHardDirective(inputs)}
 ${getInstructionResponsivenessDirective(inputs?.additionalInfo || inputs?.awkwardMoment || "")}
 ${getFreshRenditionDirective(generationSeed)}
-${getAuditRubricPromptBlock()}
 ${metaTagPackage.guidance}
 ${metaTagPackage.strictSpec}
 ${agentDirectives.lyricDirectives}
@@ -2682,8 +2409,15 @@ ${referenceFeatureBlock}
   const draft = await openAIResponses(prompt);
   let finalText = draft;
 
-  if (shouldRunMultiPassRefinement() && hasTimeBudget(startMs, 12000)) {
-    finalText = await culturallyRefineSong(draft, inputs || {}, userProfile || {});
+  // Guide compliance check — fix hard violations in one pass
+  if (hasTimeBudget(startMs, 11000)) {
+    const compliance = await checkGuideCompliance(finalText, inputs || {});
+    if (!compliance.passed) {
+      const fixPrompt = buildComplianceFixPrompt(finalText, compliance.violations);
+      if (fixPrompt) {
+        finalText = await openAIResponses(fixPrompt);
+      }
+    }
   }
 
   if (hasTimeBudget(startMs, 9000)) {
@@ -2697,357 +2431,7 @@ ${referenceFeatureBlock}
   }
   finalText = await enforceRequestedAdlibLanguage(finalText, inputs?.additionalInfo || inputs?.awkwardMoment || "");
 
-  const rewriteCap = hasTimeBudget(startMs, 16000)
-    ? 4
-    : hasTimeBudget(startMs, 11000)
-      ? 3
-      : hasTimeBudget(startMs, 8000)
-        ? 2
-        : hasTimeBudget(startMs, 4500)
-          ? 1
-          : 0;
-  let gated = await enforceMinimumAuditScore(finalText, inputs || {}, userProfile || {}, 85, rewriteCap);
-  for (let rescuePass = 0; rescuePass < 3; rescuePass += 1) {
-    if (gated.audit.overallScore < 75 || gated.audit.overallScore >= 85) break;
-    if (!hasTimeBudget(startMs, 3000)) break;
-
-    const rescueDraft = await rewriteFromAudit(gated.text, inputs || {}, userProfile || {}, gated.audit);
-    let rescueText = rescueDraft;
-    if (hasTimeBudget(startMs, 2500)) {
-      rescueText = await enforceSongDepthAndTexture(rescueText, inputs || {}, userProfile || {});
-    }
-    if (hasTimeBudget(startMs, 1500)) {
-      rescueText = await enforceSunoPromptDriver(rescueText, inputs || {}, userProfile || {});
-    }
-
-    const rescueAudit = await evaluateCulturalAudit(rescueText, inputs || {});
-    if (rescueAudit.overallScore <= gated.audit.overallScore) {
-      continue;
-    }
-
-    gated = {
-      text: rescueText,
-      audit: rescueAudit,
-      qualityGate: {
-        ...gated.qualityGate,
-        finalScore: rescueAudit.overallScore,
-        rewritesTriggered: gated.qualityGate.rewritesTriggered + 1,
-        passes: [
-          ...gated.qualityGate.passes,
-          {
-            pass: gated.qualityGate.passes.length + 1,
-            score: rescueAudit.overallScore,
-            action: rescueAudit.overallScore < 85 ? "rewrite" : "accepted",
-          },
-        ],
-      },
-    };
-  }
-  for (let regenAttempt = 0; regenAttempt < 4; regenAttempt += 1) {
-    if (gated.audit.overallScore >= 85) break;
-    if (!hasTimeBudget(startMs, 11000)) break;
-    const recoveryPrompt = `
-You are a professional songwriter in recovery mode.
-Create a brand-new song draft (do NOT lightly edit the previous one) with stronger first-pass quality.
-
-Return only:
-Title: ...
-### SUNO Prompt
-...
-### Lyrics
-...
-
-Context:
-- Language: ${inputs?.language || "English"}
-- Genre: ${inputs?.genre || "Pop"}
-- Subgenre: ${inputs?.subGenre || "Modern"}
-- Instrumentation: ${inputs?.instrumentation || "Piano"}
-- Mood: ${inputs?.emotion || "Euphoric"}
-- Scene: ${inputs?.scene || "Studio"}
-- Audio: ${inputs?.audioEnv || "Studio (Clean)"}
-- Vocals: ${inputs?.vocals || "Female Solo"} ${inputs?.duetType ? `(Duet: ${inputs.duetType})` : ""}
-- Extra details: ${inputs?.mundaneObjects || ""} ${inputs?.awkwardMoment || ""}
-- User core prompt (highest priority): ${inputs?.additionalInfo || inputs?.awkwardMoment || ""}
-- Artist persona: ${userProfile?.display_name || "N/A"} | vibe: ${userProfile?.preferred_vibe || "N/A"}
-
-Must improve:
-- Language Authenticity
-- Cultural Context
-- Genre Fidelity
-- Subgenre Fidelity
-- Lyrical Originality
-- Cadence & Prosody
-- Internally draft and compare at least 2 candidates, then output only the stronger draft.
-- Keep taxonomy choices directional (not literal lyric mentions), except user-provided mundane objects.
-- Keep rhyme discipline and concise genre-appropriate song length.
-- Prioritize the user's core prompt over all other optional context.
-
-${culturalContext}
-${getGenreLengthDirective(inputs?.genre, inputs?.subGenre)}
-${getTaxonomyGuardrailDirective(inputs)}
-${getVocalAndClicheHardDirective(inputs)}
-${getInstructionResponsivenessDirective(inputs?.additionalInfo || inputs?.awkwardMoment || "")}
-${getFreshRenditionDirective(`${generationSeed}-recovery-${regenAttempt + 1}`)}
-${getAuditRubricPromptBlock(92)}
-${metaTagPackage.guidance}
-${metaTagPackage.strictSpec}
-${agentDirectives.lyricDirectives}
-${referenceBlueprint.promptBlock}
-${referenceFeatureBlock}
-    `.trim();
-
-    const recoveryDraft = await openAIResponses(recoveryPrompt);
-    let recoveryText = recoveryDraft;
-    if (hasTimeBudget(startMs, 9000)) {
-      recoveryText = await enforceMetaTagOrchestration(recoveryText, inputs || {});
-    }
-    if (hasTimeBudget(startMs, 7000)) {
-      recoveryText = await enforceSongDepthAndTexture(recoveryText, inputs || {}, userProfile || {});
-    }
-    if (hasTimeBudget(startMs, 5000)) {
-      recoveryText = await enforceSunoPromptDriver(recoveryText, inputs || {}, userProfile || {});
-    }
-    const recoveryGated = await enforceMinimumAuditScore(recoveryText, inputs || {}, userProfile || {}, 85, 2);
-    if (recoveryGated.audit.overallScore > gated.audit.overallScore) {
-      gated = recoveryGated;
-    }
-    if (gated.audit.overallScore >= 85) break;
-  }
-  for (let surgicalPass = 0; surgicalPass < 2; surgicalPass += 1) {
-    if (gated.audit.overallScore < 78 || gated.audit.overallScore >= 85) break;
-    if (!hasTimeBudget(startMs, 4500)) break;
-    const surgicalDraft = await surgicalRepairFromAudit(gated.text, inputs || {}, userProfile || {}, gated.audit);
-    let surgicalText = surgicalDraft;
-    if (hasTimeBudget(startMs, 3200)) {
-      surgicalText = await enforceSongDepthAndTexture(surgicalText, inputs || {}, userProfile || {});
-    }
-    if (hasTimeBudget(startMs, 2200)) {
-      surgicalText = await enforceSunoPromptDriver(surgicalText, inputs || {}, userProfile || {});
-    }
-    const surgicalAudit = await evaluateCulturalAudit(surgicalText, inputs || {});
-    if (surgicalAudit.overallScore > gated.audit.overallScore) {
-      gated = {
-        text: surgicalText,
-        audit: surgicalAudit,
-        qualityGate: {
-          ...gated.qualityGate,
-          finalScore: surgicalAudit.overallScore,
-          rewritesTriggered: gated.qualityGate.rewritesTriggered + 1,
-          passes: [
-            ...gated.qualityGate.passes,
-            {
-              pass: gated.qualityGate.passes.length + 1,
-              score: surgicalAudit.overallScore,
-              action: surgicalAudit.overallScore < 85 ? "rewrite" : "accepted",
-            },
-          ],
-        },
-      };
-    }
-  }
-  for (let finalPass = 0; finalPass < 2; finalPass += 1) {
-    if (gated.audit.overallScore < 80 || gated.audit.overallScore >= 85) break;
-    if (!hasTimeBudget(startMs, 5000)) break;
-    const upgradedDraft = await finalNearPassUpgrade(gated.text, inputs || {}, userProfile || {}, gated.audit);
-    let upgradedText = upgradedDraft;
-    if (hasTimeBudget(startMs, 3600)) {
-      upgradedText = await enforceMetaTagOrchestration(upgradedText, inputs || {});
-    }
-    if (hasTimeBudget(startMs, 2600)) {
-      upgradedText = await enforceSongDepthAndTexture(upgradedText, inputs || {}, userProfile || {});
-    }
-    if (hasTimeBudget(startMs, 1800)) {
-      upgradedText = await enforceSunoPromptDriver(upgradedText, inputs || {}, userProfile || {});
-    }
-    const upgradedAudit = await evaluateCulturalAudit(upgradedText, inputs || {});
-    if (upgradedAudit.overallScore > gated.audit.overallScore) {
-      gated = {
-        text: upgradedText,
-        audit: upgradedAudit,
-        qualityGate: {
-          ...gated.qualityGate,
-          finalScore: upgradedAudit.overallScore,
-          rewritesTriggered: gated.qualityGate.rewritesTriggered + 1,
-          passes: [
-            ...gated.qualityGate.passes,
-            {
-              pass: gated.qualityGate.passes.length + 1,
-              score: upgradedAudit.overallScore,
-              action: upgradedAudit.overallScore < 85 ? "rewrite" : "accepted",
-            },
-          ],
-        },
-      };
-    }
-  }
-  if (gated.audit.overallScore >= 80 && gated.audit.overallScore < 85 && hasTimeBudget(startMs, 7000)) {
-    let candidateBest = gated;
-    for (let candidate = 0; candidate < 2; candidate += 1) {
-      if (!hasTimeBudget(startMs, 3200)) break;
-      const seedText = candidate === 0 ? gated.text : await rewriteFromAudit(gated.text, inputs || {}, userProfile || {}, gated.audit);
-      let candidateText = await finalNearPassUpgrade(seedText, inputs || {}, userProfile || {}, gated.audit);
-      if (hasTimeBudget(startMs, 2200)) {
-        candidateText = await enforceSongDepthAndTexture(candidateText, inputs || {}, userProfile || {});
-      }
-      if (hasTimeBudget(startMs, 1400)) {
-        candidateText = await enforceSunoPromptDriver(candidateText, inputs || {}, userProfile || {});
-      }
-      const candidateAudit = await evaluateCulturalAudit(candidateText, inputs || {});
-      if (candidateAudit.overallScore > candidateBest.audit.overallScore) {
-        candidateBest = {
-          text: candidateText,
-          audit: candidateAudit,
-          qualityGate: {
-            ...candidateBest.qualityGate,
-            finalScore: candidateAudit.overallScore,
-            rewritesTriggered: candidateBest.qualityGate.rewritesTriggered + 1,
-            passes: [
-              ...candidateBest.qualityGate.passes,
-              {
-                pass: candidateBest.qualityGate.passes.length + 1,
-                score: candidateAudit.overallScore,
-                action: candidateAudit.overallScore < 85 ? "rewrite" : "accepted",
-              },
-            ],
-          },
-        };
-      }
-    }
-    gated = candidateBest;
-  }
-  if (gated.audit.overallScore < 85) {
-    if (gated.audit.overallScore >= 82) {
-      const deterministic = deterministicAudit(gated.text, inputs || {}, undefined, await getReferenceFeatureScore(gated.text, inputs || {}));
-      if (deterministic.overallScore >= 85) {
-        gated = {
-          ...gated,
-          audit: {
-            ...deterministic,
-            summary: `${deterministic.summary} Released via near-pass consensus override.`,
-          },
-          qualityGate: {
-            ...gated.qualityGate,
-            finalScore: deterministic.overallScore,
-            passes: [
-              ...gated.qualityGate.passes,
-              {
-                pass: gated.qualityGate.passes.length + 1,
-                score: deterministic.overallScore,
-                action: "accepted",
-              },
-            ],
-          },
-        };
-      }
-    }
-  }
-  if (gated.audit.overallScore < 85) {
-    let best = gated;
-    for (let retry = 0; retry < 4; retry += 1) {
-      if (best.audit.overallScore >= 85) break;
-      if (!hasTimeBudget(startMs, 3200)) break;
-      const rescuePrompt = `
-You are in final recovery mode. Improve this draft until it clears 85 quality.
-Return only:
-Title: ...
-### SUNO Prompt
-...
-### Lyrics
-...
-
-Priorities:
-- Enforce user instruction compliance.
-- Raise weakest audit dimensions first.
-- Keep cultural/genre/subgenre authenticity.
-
-Current best score: ${best.audit.overallScore}
-Draft:
-${best.text}
-      `.trim();
-      const rescueDraft = await openAIResponses(rescuePrompt);
-      let rescueText = rescueDraft;
-      rescueText = await enforceMetaTagOrchestration(rescueText, inputs || {});
-      rescueText = await enforceSongDepthAndTexture(rescueText, inputs || {}, userProfile || {});
-      rescueText = await enforceSunoPromptDriver(rescueText, inputs || {}, userProfile || {});
-      rescueText = await enforceRequestedAdlibLanguage(rescueText, inputs?.additionalInfo || inputs?.awkwardMoment || "");
-      const rescueAudit = await evaluateCulturalAudit(rescueText, inputs || {});
-      if (rescueAudit.overallScore > best.audit.overallScore) {
-        best = {
-          text: rescueText,
-          audit: rescueAudit,
-          qualityGate: {
-            ...best.qualityGate,
-            finalScore: rescueAudit.overallScore,
-            rewritesTriggered: best.qualityGate.rewritesTriggered + 1,
-            passes: [
-              ...best.qualityGate.passes,
-              {
-                pass: best.qualityGate.passes.length + 1,
-                score: rescueAudit.overallScore,
-                action: rescueAudit.overallScore < 85 ? "rewrite" : "accepted",
-              },
-            ],
-          },
-        };
-      }
-    }
-    gated = best;
-  }
-  if (gated.audit.overallScore < 85) {
-    let forced = gated;
-    for (let retry = 0; retry < 2; retry += 1) {
-      if (forced.audit.overallScore >= 85) break;
-      const forcePrompt = `
-Last-chance quality recovery.
-You must improve this draft above 85 quality while preserving user intent.
-Return only:
-Title: ...
-### SUNO Prompt
-...
-### Lyrics
-...
-
-Current score: ${forced.audit.overallScore}
-Draft:
-${forced.text}
-      `.trim();
-      try {
-        let forcedText = await openAIResponses(forcePrompt);
-        forcedText = await enforceSunoPromptDriver(forcedText, inputs || {}, userProfile || {});
-        forcedText = await enforceRequestedAdlibLanguage(forcedText, inputs?.additionalInfo || inputs?.awkwardMoment || "");
-        const forcedAudit = await evaluateCulturalAudit(forcedText, inputs || {});
-        if (forcedAudit.overallScore > forced.audit.overallScore) {
-          forced = {
-            text: forcedText,
-            audit: forcedAudit,
-            qualityGate: {
-              ...forced.qualityGate,
-              finalScore: forcedAudit.overallScore,
-              rewritesTriggered: forced.qualityGate.rewritesTriggered + 1,
-              passes: [
-                ...forced.qualityGate.passes,
-                {
-                  pass: forced.qualityGate.passes.length + 1,
-                  score: forcedAudit.overallScore,
-                  action: forcedAudit.overallScore < 85 ? "rewrite" : "accepted",
-                },
-              ],
-            },
-          };
-        }
-      } catch {
-        // Keep best-known draft and continue retrying.
-      }
-    }
-    gated = forced;
-  }
-  if (gated.audit.overallScore < 85) {
-    throw Object.assign(
-      new Error(`Quality gate failed (${gated.audit.overallScore}/100). Song was not released. Please retry.`),
-      { status: 422, code: "quality_gate_failed" }
-    );
-  }
-  return { text: gated.text, audit: gated.audit, qualityGate: gated.qualityGate };
+  return { text: finalText };
 }
 
 async function editSong(payload: any) {
@@ -3057,6 +2441,7 @@ async function editSong(payload: any) {
   const agentDirectives = await getGenreAgentDirectives(inputs || {});
   const referenceBlueprint = await getGenreReferenceBlueprint(inputs || {});
   const referenceFeatureBlock = await getReferenceFeatureBlock(inputs || {});
+  const craftDirectives = await compileGuideToDirectives(inputs || {}, "full");
   const prompt = `
 Revise the song per instruction.
 Return only full song in this exact format:
@@ -3067,9 +2452,9 @@ Title: ...
 ...
 
 Instruction: ${editInstruction || ""}
+${craftDirectives}
 Cultural context requirements:
 ${culturalContext}
-${getAuditRubricPromptBlock()}
 ${getInstructionResponsivenessDirective(editInstruction || "")}
 Meta tag and adlib requirements:
 ${metaTagPackage.guidance}
@@ -3084,10 +2469,6 @@ ${originalSong || ""}
 
   const draft = await openAIResponses(prompt);
   let finalText = draft;
-
-  if (shouldRunMultiPassRefinement()) {
-    finalText = await culturallyRefineSong(draft, inputs || {}, userProfile || {});
-  }
 
   finalText = await enforceMetaTagOrchestration(finalText, inputs || {});
   finalText = await enforceSongDepthAndTexture(finalText, inputs || {}, userProfile || {});
@@ -3113,16 +2494,7 @@ ${finalText}
     finalText = await enforceRequestedAdlibLanguage(finalText, editInstruction || "");
   }
 
-  const rewriteCap = shouldRunMultiPassRefinement() ? 2 : 1;
-  const gated = await enforceMinimumAuditScore(finalText, inputs || {}, userProfile || {}, 85, rewriteCap);
-  if (gated.audit.overallScore < 85) {
-    throw Object.assign(
-      new Error(`Revision quality gate failed (${gated.audit.overallScore}/100). Please retry.`),
-      { status: 422, code: "revision_quality_gate_failed" }
-    );
-  }
-
-  return { text: gated.text, audit: gated.audit };
+  return { text: finalText };
 }
 
 async function structureImportedSong(payload: any) {
@@ -3131,6 +2503,7 @@ async function structureImportedSong(payload: any) {
   const metaTagPackage = await getMetaTagPackage(inputs || {});
   const agentDirectives = await getGenreAgentDirectives(inputs || {});
   const referenceBlueprint = await getGenreReferenceBlueprint(inputs || {});
+  const craftDirectives = await compileGuideToDirectives(inputs || {}, "structure");
   const prompt = `
 Turn the input into a full structured song.
 Output format:
@@ -3140,9 +2513,9 @@ Title: ...
 ### Lyrics
 ...
 
+${craftDirectives}
 Cultural context requirements:
 ${culturalContext}
-${getAuditRubricPromptBlock()}
 Meta tag and adlib requirements:
 ${metaTagPackage.guidance}
 ${metaTagPackage.strictSpec}
@@ -3156,10 +2529,6 @@ ${getInstructionResponsivenessDirective(rawText || "")}
 
   const draft = await openAIResponses(prompt);
   let finalText = draft;
-
-  if (shouldRunMultiPassRefinement()) {
-    finalText = await culturallyRefineSong(draft, inputs || {}, userProfile || {});
-  }
 
   finalText = await enforceMetaTagOrchestration(finalText, inputs || {});
   finalText = await enforceSongDepthAndTexture(finalText, inputs || {}, userProfile || {});
@@ -3184,16 +2553,7 @@ ${finalText}
     finalText = await enforceRequestedAdlibLanguage(finalText, rawText || "");
   }
 
-  const rewriteCap = shouldRunMultiPassRefinement() ? 2 : 1;
-  const gated = await enforceMinimumAuditScore(finalText, inputs || {}, userProfile || {}, 85, rewriteCap);
-  if (gated.audit.overallScore < 85) {
-    throw Object.assign(
-      new Error(`Import quality gate failed (${gated.audit.overallScore}/100). Please retry.`),
-      { status: 422, code: "import_quality_gate_failed" }
-    );
-  }
-
-  return { text: gated.text, audit: gated.audit };
+  return { text: finalText };
 }
 
 async function generateDynamicOptions(payload: any) {

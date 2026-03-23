@@ -1,0 +1,483 @@
+import type { GenreGuide } from './types';
+
+export const KPOP_GUIDE: GenreGuide = {
+  id: 'kpop',
+  name: 'K-Pop',
+  language: 'Korean',
+
+  sonicPalette: {
+    overview: 'Maximalist, trend-forward, and genre-fluid. K-Pop absorbs global sounds (EDM, hip-hop, R&B, Latin, rock) and reassembles them into high-impact, choreography-ready pop with pristine production quality.',
+    timbre: [
+      'supersaw synth stacks',
+      'punchy 808 kicks and snares',
+      'bright brass and horn stabs',
+      'clean electric guitar with effects',
+      'atmospheric synth pads',
+      'processed and layered vocals',
+    ],
+    texture: 'Dense and maximalist in group tracks; intimate and spacious in ballads. Frequent texture shifts within songs — a verse may be sparse trap, the pre-chorus builds, and the chorus explodes.',
+    tonality: 'Minor-leaning with dramatic shifts. Chromaticism and unexpected key changes create tension. Dark minor verses contrasting with euphoric major choruses.',
+    signatureSounds: [
+      'EDM-style drop with synth brass',
+      'trap hi-hat rolls under pop melody',
+      'pitched vocal chops as rhythmic elements',
+      'massive reverb-drenched snare hits',
+      'whispered or spoken pre-chorus buildup',
+    ],
+  },
+
+  rhythmAndGroove: {
+    overview: 'Rhythmically eclectic — a single K-Pop song may traverse trap, house, future bass, and boom-bap feels. Choreography requirements demand strong, consistent pulse despite genre shifts.',
+    bpmRange: { min: 70, max: 150, sweet: 100 },
+    feel: 'Punchy and choreography-optimized. The groove must translate to synchronized group dance. Strong downbeats for visual impact.',
+    swing: 'Mostly straight. Trap-influenced triplet hi-hats provide rhythmic texture without true swing.',
+    syncopation: 'High in rap verses and vocal ad-libs. Chorus hooks tend to lock to the downbeat for maximum singability.',
+    grooveArchetype: 'Trap-pop hybrid, future bass drop, house four-on-the-floor, R&B half-time.',
+    rhythmicSignatures: [
+      'trap hi-hat rolls with open hat accents',
+      'four-on-the-floor with side-chained synths',
+      'half-time boom-bap for rap sections',
+      'double-time drum fills at section transitions',
+    ],
+  },
+
+  harmonicLanguage: {
+    overview: 'Harmonically bold — K-Pop uses unexpected progressions, chromatic movement, and abrupt modulations. The influence of J-Pop harmony is filtered through Western EDM and R&B.',
+    scales: [
+      'natural minor',
+      'harmonic minor',
+      'pentatonic minor',
+      'Dorian mode',
+      'major (for bright choruses)',
+    ],
+    chordProgressions: [
+      'i – bVII – bVI – V (dark minor descent)',
+      'vi – IV – I – V (pop standard)',
+      'i – bVI – bIII – bVII (epic minor)',
+      'I – V – vi – iii – IV (extended pop)',
+    ],
+    harmonyNotes: 'Section-to-section harmonic contrast is a design principle. Verse, pre-chorus, and chorus may each have different tonal centres. "Noise music" sub-trend uses dissonant, atonal elements.',
+    modality: 'Primarily minor for impact and drama. Major choruses provide emotional release. Tonal ambiguity between sections is embraced.',
+  },
+
+  songStructure: {
+    overview: 'K-Pop structure is modular and genre-shifting. A single song may contain distinct sonic worlds for each section. The "switch-up" (dramatic change in production style mid-song) is a signature device.',
+    form: 'Intro – Verse – Pre-Chorus – Chorus – Verse 2 – Pre-Chorus – Chorus – Bridge/Rap Break – Final Chorus – Outro',
+    sections: [
+      'Intro (dramatic opening, often with spoken/whispered vocal)',
+      'Verse (lower energy, often rap-influenced)',
+      'Pre-Chorus (tension build, melodic lift)',
+      'Chorus (maximum impact, hook-driven)',
+      'Bridge/Rap Break (genre switch, rap feature)',
+      'Final Chorus (often with key change or added layers)',
+    ],
+    arrangement: 'Modular — each section can have entirely different production. Drops, breakdowns, and switch-ups keep the listener off-balance. The final chorus often strips back before exploding.',
+    introOutro: 'Intros are attention-grabbing — dramatic sound design, spoken words, or iconic melodic hooks. Outros are short or absent; the song ends at peak energy.',
+    barLengths: 'Sections are typically 8 bars. Pre-choruses: 4-8 bars. Total song: 3-3.5 minutes (streaming-optimized).',
+    hookPlacement: 'Chorus hook arrives quickly (within first 45-60 seconds). Multiple hooks across sections — "killing parts" assigned to specific members.',
+  },
+
+  vocalDelivery: {
+    overview: 'K-Pop vocal delivery spans the full spectrum — from delicate whispered verses to powerful belt, from rapid-fire rap to smooth R&B. Group dynamics create vocal variety within a single song.',
+    phrasing: 'Precise and choreography-synced. Vocal lines are designed to be performed while dancing. Short phrases with clear rhythmic placement.',
+    affect: 'Intense and committed. Emotional range from vulnerable intimacy to fierce confidence. Aegyo (cute) and girl-crush/boy-crush personas alternate.',
+    techniques: [
+      'high-register belt for chorus climaxes',
+      'whispered or breathy verses',
+      'rapid-fire rap verses in Korean',
+      'English-language hooks and ad-libs',
+      'vocal fry and stylized speech-singing',
+    ],
+    adlibStyle: 'Frequent and stylized: "yeah", "uh", "let\'s go", "hey", English phrases. Producer tags. Chanted group vocals.',
+    harmony: 'Dense layered group harmonies. Octave doubling. Parallel thirds and fifths. Vocal processing and tuning as standard practice.',
+    grit: 'Variable — clean bright vocals for pop; raspy edge for hip-hop influenced tracks; full grit in rock-influenced "noise" tracks.',
+  },
+
+  lyricalConventions: {
+    overview: 'K-Pop lyrics blend Korean and English phrases fluently. Themes range from love and empowerment to darker concepts tied to album storylines. Visual albums and concept storytelling elevate lyrics beyond standalone songs.',
+    themes: [
+      'romantic love and heartbreak',
+      'self-empowerment and confidence',
+      'youth, rebellion, and identity',
+      'fantasy and worldbuilding (album concepts)',
+      'social commentary (subtle)',
+      'dance and celebration',
+    ],
+    perspective: 'First-person and "we" perspectives. Direct address to love interest or fan. Group identity reinforced through collective voice.',
+    figurativeLanguage: 'Metaphors tied to concept albums (butterflies, stars, shadows). Light and darkness contrasts. Fire and ice imagery. Night/moonlight for romance.',
+    vocabulary: 'Korean with natural English integration. Key English hooks for international appeal. Slang and neologisms. Fan-culture vocabulary.',
+    storytellingApproach: 'Concept-driven — lyrics tie to visual narrative across MVs and albums. Individual songs serve a larger storyline. Emotional mood over linear plot.',
+    cliches: [
+      '"I can\'t stop" / "don\'t stop" as hook',
+      'fire/flame metaphors for passion',
+      '"we are one" group solidarity',
+      'night and moonlight romance',
+    ],
+  },
+
+  productionFingerprint: {
+    overview: 'K-Pop production is a global enterprise — tracks are assembled by international songwriter teams (often Scandinavian, American, and Korean co-writers) to exacting standards.',
+    mixAesthetic: 'Loud, bright, and punchy. Heavily compressed for maximum impact. Bass is tight and controlled. Vocals always clear and forward.',
+    era: 'Current era: post-BTS global expansion. Multiple generation groups coexist. Streaming-first release strategy with physical albums as collector items.',
+    signalChain: 'Top-tier studios (SM, YG, JYP, HYBE). International production camps. Heavy vocal processing. Mastered for streaming loudness.',
+    modernTrends: 'Y2K nostalgia aesthetics. "Noise music" experimental trend. Latin-pop fusion. Rock revival elements. AI-assisted production. Shorter songs for streaming.',
+  },
+
+  instrumentation: {
+    coreInstruments: [
+      'synthesizers (supersaw, pluck, pad)',
+      'programmed drums (808, trap kit)',
+      'electric guitar (clean and distorted)',
+      'bass synth and 808 sub',
+      'brass and horn samples',
+      'piano and keys',
+    ],
+    signatureSounds: [
+      'supersaw chord stab on the drop',
+      'trap 808 with pitch glide',
+      'pitched vocal chop loop',
+      'massive reverb snare hit',
+    ],
+    layering: 'Extremely dense in choruses. Sparse in verses for contrast. Each section has a distinct sonic palette. Sound design elements fill gaps.',
+    avoidInstruments: [
+      'country instruments (banjo, pedal steel)',
+      'traditional Korean instruments (unless concept-driven)',
+      'raw acoustic folk instruments',
+      'lo-fi or deliberately unpolished sounds',
+    ],
+  },
+
+  culturalContext: {
+    overview: 'K-Pop is South Korea\'s most successful cultural export — a pillar of the Korean Wave (Hallyu). It operates as an entertainment industry system: trainee programs, idol groups, fan engagement, and global brand strategy.',
+    origin: 'Seoul, South Korea. Modern K-Pop dates from Seo Taiji and Boys (1992). The idol system was formalized by SM Entertainment in the late 1990s.',
+    identity: 'Korean language and Korean aesthetic sensibility are core. K-Pop represents Korean soft power globally. Bilingual (Korean-English) identity reflects Korea\'s global aspirations.',
+    community: 'Global fandom organized through social media (Twitter/X, Weverse, VLive). Fan armies (ARMY, BLINK, ONCE) are intensely organized with streaming campaigns and chart manipulation.',
+    socialFunction: 'Cultural pride and soft power for Korea. Parasocial connection for global fans. Youth identity expression. Community belonging through fandom.',
+    authenticityMarkers: [
+      'Korean lyrics as primary language',
+      'high production quality',
+      'synchronized choreography',
+      'concept and worldbuilding coherence',
+      'trainee-to-debut journey narrative',
+    ],
+  },
+
+  historicalLineage: {
+    overview: 'From Seo Taiji\'s 1992 revolution through three generations of idol groups to BTS\'s global breakthrough and the current fourth generation.',
+    roots: [
+      'Seo Taiji and Boys (1992 — birth of modern K-Pop)',
+      'American hip-hop, R&B, and new jack swing',
+      'J-Pop idol system influence',
+      'European electronic dance music',
+    ],
+    evolution: 'Seo Taiji (1992) → 1st gen idols: H.O.T., S.E.S. (late 1990s) → 2nd gen: TVXQ, Super Junior, Girls\' Generation, Big Bang (2000s) → 3rd gen: BTS, EXO, BLACKPINK, TWICE (2010s) → 4th gen: Stray Kids, aespa, NewJeans (2020s).',
+    keyEras: [
+      '1992: Seo Taiji revolution',
+      'Late 1990s: 1st gen idol system established',
+      '2000s-2010s: 2nd gen Hallyu wave across Asia',
+      '2017-2020: BTS global breakthrough',
+      '2020s: 4th gen and global expansion',
+    ],
+    influencedBy: [
+      'American hip-hop, pop, and R&B',
+      'J-Pop idol system',
+      'European EDM',
+      'Scandinavian pop songwriting',
+    ],
+    influenced: [
+      'global pop production trends',
+      'idol systems in Southeast Asia and China',
+      'fan culture worldwide',
+      'music video production standards',
+    ],
+  },
+
+  subGenres: [
+    {
+      name: 'Boy Group Pop',
+      description: 'High-energy, choreography-driven pop performed by male idol groups. Ranges from powerful "hard-hitting" concepts to softer romantic material.',
+      distinguishingFeatures: ['synchronized choreography', 'concept-based comebacks', 'rap-vocal line structure', 'powerful performance energy'],
+      bpmRange: { min: 90, max: 140 },
+      keyArtists: ['BTS', 'EXO', 'Stray Kids', 'SEVENTEEN', 'NCT'],
+      productionNotes: 'Powerful, bass-heavy production. EDM drops. Dramatic builds. Rap sections with distinct production.',
+      lyricNotes: 'Self-empowerment, love, youth angst, concept-driven narratives. Korean with English hooks.',
+      sunoPromptKeywords: ['K-Pop boy group', 'BTS style', 'powerful K-Pop', 'Korean idol pop', 'hard-hitting K-Pop'],
+    },
+    {
+      name: 'Girl Group Pop',
+      description: 'Versatile female group pop spanning cute concepts, girl-crush power, and retro aesthetics. Among K-Pop\'s most commercially successful formats.',
+      distinguishingFeatures: ['concept versatility (cute, girl-crush, retro)', 'catchy hook-driven choruses', 'point choreography', 'bright or fierce styling'],
+      bpmRange: { min: 100, max: 140 },
+      keyArtists: ['BLACKPINK', 'TWICE', 'NewJeans', 'aespa', 'Red Velvet'],
+      productionNotes: 'Bright and punchy. Pop-trap hybrid. Clean vocal production. Catchy melodic hooks prioritized.',
+      lyricNotes: 'Confidence, love, fun, empowerment. English phrases prominent. Accessible and singable.',
+      sunoPromptKeywords: ['K-Pop girl group', 'BLACKPINK style', 'NewJeans style', 'Korean girl group', 'catchy K-Pop'],
+    },
+    {
+      name: 'K-R&B',
+      description: 'Korean R&B fusing American neo-soul with Korean melodic and lyrical sensibility. Often released by soloists or sub-units. Intimate and musically sophisticated.',
+      distinguishingFeatures: ['neo-soul production', 'intimate vocal delivery', 'jazz-influenced harmony', 'Korean language over Western R&B grooves'],
+      bpmRange: { min: 65, max: 95 },
+      keyArtists: ['DEAN', 'Crush', 'Heize', 'Zion.T', 'BIBI'],
+      productionNotes: 'Warm pads, lo-fi drums, Rhodes piano. Spacious mix. Subtle vocal processing. Bedroom-intimate production.',
+      lyricNotes: 'Love, late nights, introspection, urban loneliness. Korean with natural English.',
+      sunoPromptKeywords: ['K-R&B', 'Korean R&B', 'DEAN style', 'Korean neo-soul', 'Seoul R&B'],
+    },
+    {
+      name: 'K-Hip-Hop',
+      description: 'Korean hip-hop from Show Me The Money culture through underground to mainstream crossover. Distinct from idol rap — emphasizes lyrical skill and authenticity.',
+      distinguishingFeatures: ['lyrical emphasis', 'boom-bap and trap production', 'battle rap culture', 'independence from idol system'],
+      bpmRange: { min: 75, max: 100 },
+      keyArtists: ['Epik High', 'Jay Park', 'Zico', 'pH-1', 'Dok2'],
+      productionNotes: 'American hip-hop production adapted. Trap 808s and boom-bap drums. Vocal clarity for rapid Korean flows.',
+      lyricNotes: 'Street credibility, social commentary, flex, personal narrative. Korean wordplay.',
+      sunoPromptKeywords: ['K-hip-hop', 'Korean rap', 'Seoul hip-hop', 'Show Me The Money style'],
+    },
+    {
+      name: 'K-Ballad',
+      description: 'Emotional Korean power ballads — the enduring heart of Korean popular music. OST (drama soundtrack) ballads are a major commercial force.',
+      distinguishingFeatures: ['piano-driven arrangements', 'powerful vocal climaxes', 'orchestral swells', 'drama OST tie-ins'],
+      bpmRange: { min: 60, max: 80 },
+      keyArtists: ['IU', 'Baek Yerin', 'Chen (EXO)', 'Davichi', 'Paul Kim'],
+      productionNotes: 'Piano foundation, strings for emotional peaks. Vocal is everything — pristine recording, minimal processing. Dynamic build to climax.',
+      lyricNotes: 'Heartbreak, longing, devotion. Poetic Korean. Tied to drama narratives.',
+      sunoPromptKeywords: ['K-ballad', 'Korean ballad', 'Korean drama OST', 'emotional Korean', 'IU style ballad'],
+    },
+    {
+      name: 'K-Indie',
+      description: 'Korean independent music scene — diverse, artistically driven, and separate from the idol system. Ranges from folk to shoegaze to electronic experimentation.',
+      distinguishingFeatures: ['artistic independence', 'genre diversity', 'Hongdae scene origins', 'lo-fi or alternative aesthetics'],
+      bpmRange: { min: 70, max: 130 },
+      keyArtists: ['Hyukoh', 'The Black Skirts', 'Se So Neon', 'Jannabi'],
+      productionNotes: 'Intentionally less polished than mainstream K-Pop. Live band feel. Analog warmth. Guitar-driven or electronic-experimental.',
+      lyricNotes: 'Introspective, poetic, literary Korean. Social alienation, youth, identity. Anti-commercial stance.',
+      sunoPromptKeywords: ['K-indie', 'Korean indie', 'Hongdae indie', 'Korean alternative', 'Hyukoh style'],
+    },
+    {
+      name: 'Trot',
+      description: 'Korea\'s oldest popular music form — rhythmic, melodic, and emotionally direct. Experiencing massive revival through talent shows. The enka-adjacent Korean tradition.',
+      distinguishingFeatures: ['distinctive "trot" rhythm (two-beat bounce)', 'vibrato-heavy vocal delivery', 'pentatonic melodies', 'emotional directness'],
+      bpmRange: { min: 100, max: 140 },
+      keyArtists: ['Lim Young-woong', 'Song Ga-in', 'Hong Jin-young', 'Na Hoon-a'],
+      productionNotes: 'Traditional: live band with accordion, guitar, drums. Modern: full pop production with trot rhythm maintained. Vocal clarity essential.',
+      lyricNotes: 'Love, heartache, drinking, nostalgia. Simple direct Korean. Emotional without pretension.',
+      sunoPromptKeywords: ['trot', 'Korean trot', 'Korean traditional pop', 'Lim Young-woong style'],
+    },
+    {
+      name: 'K-EDM',
+      description: 'Korean electronic dance music — both standalone and integrated into K-Pop production. Festival-ready drops with K-Pop vocal sensibility.',
+      distinguishingFeatures: ['EDM drops and builds', 'Korean vocals over electronic production', 'festival-oriented energy', 'K-Pop crossover'],
+      bpmRange: { min: 125, max: 150 },
+      keyArtists: ['DJ Snake × K-Pop collabs', 'ZEDD × K-Pop', 'Peggy Gou', 'TOKiMONSTA'],
+      productionNotes: 'Standard EDM production with K-Pop vocal hooks. Big room, future bass, or progressive house frameworks.',
+      lyricNotes: 'Simple, hook-driven. Party and energy themes. Bilingual Korean-English.',
+      sunoPromptKeywords: ['K-EDM', 'Korean EDM', 'K-Pop electronic', 'Korean dance music'],
+    },
+    {
+      name: 'K-Rock',
+      description: 'Korean rock spanning pop-rock to post-punk revival. Strong underground scene alongside mainstream crossover acts.',
+      distinguishingFeatures: ['guitar-driven arrangements', 'Korean vocal melodies over rock instrumentation', 'emotional intensity', 'live performance focus'],
+      bpmRange: { min: 110, max: 170 },
+      keyArtists: ['NELL', 'DAY6', 'CNBLUE', 'Jaurim'],
+      productionNotes: 'Live band recording. Guitar tones from clean to high-gain. Drums live and punchy. Less processed than mainstream K-Pop.',
+      lyricNotes: 'Emotional, introspective, sometimes political. Korean with rock-influenced vocal delivery.',
+      sunoPromptKeywords: ['K-rock', 'Korean rock', 'DAY6 style', 'Korean band', 'Seoul rock'],
+    },
+    {
+      name: 'K-Soul',
+      description: 'Korean soul and jazz-pop — smooth, vocally sophisticated, and musically refined. Influenced by American soul, gospel, and contemporary jazz.',
+      distinguishingFeatures: ['soul and gospel vocal influence', 'jazzy harmony', 'sophisticated arrangements', 'vocal virtuosity showcase'],
+      bpmRange: { min: 65, max: 100 },
+      keyArtists: ['Yoon Mirae', 'Kim Bum Soo', 'Musiq Soulchild collabs', 'Soulstar'],
+      productionNotes: 'Live instruments: Rhodes, bass, drums. Warm production. Vocal runs and melisma showcased. Gospel-influenced backing vocals.',
+      lyricNotes: 'Love, soulful emotion, empowerment. Korean with English phrases. Emotionally rich vocabulary.',
+      sunoPromptKeywords: ['K-soul', 'Korean soul', 'Korean gospel pop', 'Seoul soul music'],
+    },
+  ],
+
+  sceneAndAudienceCodes: {
+    overview: 'K-Pop fandom is the most organized in global music — streaming campaigns, voting, and social media coordination are standard. Fans see themselves as active participants in their group\'s success.',
+    fanExpectations: [
+      'flawless production quality',
+      'synchronized choreography in performances and MVs',
+      'concept coherence across comeback',
+      'fan engagement through social media and fan platforms',
+      'regular content (vlogs, behind-the-scenes, variety shows)',
+    ],
+    gatekeeping: 'Complex. Idol fans have strict loyalty expectations. Hip-hop fans value authenticity and independence. Crossover between these worlds creates tension.',
+    livePerformance: 'Concerts are spectacular productions with elaborate staging, VCR interludes, and fan lightstick synchronization. Music show performances are weekly rituals.',
+    fashionAndAesthetic: 'Central to K-Pop identity. Each comeback has coordinated styling. Luxury brand partnerships are status markers. Fashion is part of the artistic concept.',
+    crossoverPotential: 'At historic peak. BTS and BLACKPINK proved K-Pop can top global charts. Korean language is no longer a barrier. K-Pop production standards now influence global pop.',
+  },
+
+  // ── Relational & Embodied Dimensions ──────────────────────────────
+
+  microTimingAndFeel: {
+    overview: 'K-Pop production aspires to machine-level perfection. Quantization is not a compromise but the aesthetic ideal — every element is grid-locked, pitch-corrected, and dynamically controlled to create a sound that is superhuman by design.',
+    quantizationDeviation: 'Near zero. Programmed elements are mathematically precise. Live-recorded elements (rare) are edited to match. The grid is a creative canvas, not a constraint.',
+    aheadBehindBeat: 'Rap verses often sit fractionally ahead of the beat for aggression. Vocal hooks land precisely on grid. Bass and kick are phase-aligned. R&B-influenced sections may pull slightly behind for laid-back feel.',
+    humanizationMarkers: [
+      'deliberate vocal breathiness left in for intimacy (whispered pre-choruses)',
+      'micro-timing variation in live guitar recordings kept for texture',
+      'vocal ad-libs placed slightly off-grid for naturalness',
+      'intentional swing in K-R&B drum programming',
+      'live string recordings retaining ensemble timing variation',
+    ],
+    genreSpecificFeel: 'The K-Pop feel is hyperreal — more precise than human performance, more dynamic than pure electronic music. This superhuman quality is the point, creating a listening experience that mirrors the impossibly polished visual presentation.',
+  },
+
+  silenceAndSpace: {
+    overview: 'K-Pop weaponizes silence through the "drop" and the "switch-up" — moments where the production suddenly strips away before slamming back. These calculated absences create maximum impact.',
+    negativeSpaceRole: 'Silence functions as a production device — the beat drop, the post-chorus void, the spoken-word bridge over near-silence. Space is never accidental; it is choreographed as precisely as the sound.',
+    breathingPatterns: 'Whispered or spoken sections create the illusion of intimacy within maximalist production. The pre-chorus often strips elements to build tension for the chorus explosion.',
+    dynamicContrast: 'Among the highest in pop music. K-Pop routinely swings from whispered verse to screaming chorus, from solo vocal to full group + orchestra + EDM drop within seconds.',
+    whatIsDeliberatelyAbsent: [
+      'sustained drone or ambient texture — K-Pop favors punchy attacks over sustained sound',
+      'natural room reverb — spaces are synthetic and precisely controlled',
+      'organic instrument decay — sounds are gated and sculpted',
+      'unprogrammed silence — even the quiet moments are deliberately placed',
+    ],
+  },
+
+  callAndResponse: {
+    overview: 'Call-and-response is structurally embedded in K-Pop through the group format — vocal line/rap line alternation, member-to-member relay, and the organized fandom chant culture.',
+    vocalInstrumentalDialogue: 'The "killing part" system assigns specific melodic moments to specific members, creating a relay effect. Rap verses answer sung choruses. Ad-libs respond to lead vocal lines.',
+    sectionInternal: 'Within verses, members trade lines in rapid succession. Pre-chorus builds often feature vocal layering where each member adds a phrase. Choruses shift between solo and unison.',
+    audienceParticipation: 'Fan chants are precisely choreographed — each member\'s name is called at specific moments. Lightstick (bong) colour coordination responds to song mood. Fan projects (banners, ocean events) are organized responses to performance.',
+    patterns: [
+      'member name fan chants timed between vocal lines',
+      'fanchant lyrics that fill instrumental gaps in the song',
+      'lightstick colour changes coordinated to song sections',
+      'rap line call followed by vocal line melodic response',
+      'leader shout-out with group response ("Are you ready?" → fan scream)',
+    ],
+  },
+
+  regionalDialectSpecificity: {
+    overview: 'K-Pop primarily uses standard Seoul Korean, but regional dialects appear as character elements. The Korean-English bilingual nature of K-Pop is itself a form of "dialect" that defines the genre.',
+    phoneticMarkers: [
+      'standard Seoul Korean pronunciation as the universal base',
+      'English phrases with Korean-accented pronunciation as genre marker',
+      'aegyo-sal (cutesy) speech register in specific concept tracks',
+      'deliberate American English pronunciation in rap verses',
+      'Busan/Gyeongsang satoori (dialect) used for comedic or endearing effect',
+    ],
+    accentInfluence: 'Seoul standard dominates. Members from other regions may use their native dialect in variety shows but rarely in songs. English pronunciation follows American patterns due to training.',
+    dialectVocabulary: [
+      'English loan words and code-switching as K-Pop "dialect" ("let\'s go", "oh my god")',
+      'Korean internet slang and neologisms entering lyrics',
+      'aegyo vocabulary for cute concepts',
+      'satoori phrases for comedic contrast in songs',
+    ],
+    regionWithinCulture: 'Seoul is the absolute centre — all major labels (SM, YG, JYP, HYBE) are Seoul-based. Regional identity is subordinate to label and group identity. The K-Pop industry is one of the most geographically centralized in global music.',
+  },
+
+  performancePractice: {
+    overview: 'K-Pop performance is a total art form where synchronized choreography is as important as the music. The trainee system produces performers who can sing, dance, rap, and maintain visual presentation simultaneously.',
+    improvisationConventions: 'Almost none during performances. Choreography is fixed. Vocal delivery matches recorded versions closely. Freestyle sections in concerts are pre-planned. The only true improvisation is in fan interaction during MC segments.',
+    crowdInteraction: 'Highly structured. Fan chants are expected and practiced. Lightstick synchronization creates visual spectacle. Fan events (hi-touch, video calls) are formalized. Concert VCR interludes provide planned interaction moments.',
+    stagePresence: 'Formation-based — members move between precise positions. Center position rotates by song. Visual focus is distributed across members. Eye contact with cameras is trained and consistent.',
+    livVsRecordedDifferences: 'Live vocals may be partially backed by track (MR — music recorded). Dance-heavy performances commonly use backing track with live vocal additions. Ballad stages showcase live vocal ability. Encore stages may be more relaxed.',
+    whatMakesAGoodShow: 'Flawless synchronized choreography. Stable live vocals during intense dancing. Fan service moments (individual member spotlight). Concert-specific arrangements or remixes. Emotional MC segments connecting with fans.',
+  },
+
+  socioeconomicSubtext: {
+    overview: 'K-Pop operates within South Korea\'s intensely competitive educational and economic system. The trainee-to-debut pipeline mirrors the country\'s broader culture of extreme preparation and performance pressure.',
+    materialConditions: 'The K-Pop economy runs on album sales (multiple versions encouraging multiple purchases), concert merchandise, brand endorsements, and fan platform subscriptions. Trainees often incur debt to their companies during training.',
+    classIdentity: 'K-Pop presents aspirational, upwardly mobile personas. The "rags to riches through hard work" trainee narrative is central. Hip-hop sub-genres engage more directly with economic disparity.',
+    politicalUndercurrent: 'Generally avoided in mainstream K-Pop. Social commentary appears coded in concept albums. Military service obligation affects male groups\' careers. K-Pop\'s role in Korean soft power (Hallyu) is a national policy concern.',
+    implicitReferences: [
+      'trainee debt and contract structures reflected in "sacrifice for dreams" lyrics',
+      'Korea\'s education pressure system mirrored in perfectionism and performance standards',
+      'military service anxiety in male group comeback timelines',
+      'generational economic anxiety expressed through self-empowerment themes',
+      'beauty standards and cosmetic surgery culture visible in visual presentation norms',
+    ],
+  },
+
+  intertextualityAndSampling: {
+    overview: 'K-Pop is deeply intertextual — concept albums reference each other across groups, production teams create sonic lineages across labels, and global pop trends are absorbed and transformed.',
+    canonKnowledge: 'Essential references include H.O.T. and S.E.S. as first-generation foundations, TVXQ and Girls\' Generation as second-generation peaks, BTS\'s global breakthrough, and SM Entertainment\'s production legacy.',
+    samplingTradition: 'Direct sampling is uncommon. International songwriter camps produce original tracks that interpolate global trends. Lee Soo-man\'s (SM) "culture technology" concept treats production formulas as intellectual property.',
+    quotationPractice: 'Groups reference their own discography through recurring musical motifs across albums. "Easter eggs" in MVs and songs reference other groups\' work. Cover stages at award shows pay tribute to seniors.',
+    expectedReferences: [
+      'senior group choreography or song homage during debut stages',
+      'label-specific production DNA (SM\'s experimental pop, JYP\'s groove, YG\'s hip-hop)',
+      'BTS\'s Bangtan Universe narrative as concept album benchmark',
+      'EXO\'s "Growl" as boy-group dance track template',
+      'NewJeans\' Y2K production as fourth-generation sonic reference',
+    ],
+    lineageSignifiers: [
+      'trainee-to-debut survival show format as origin story',
+      'label identity as primary lineage marker (SM vs. JYP vs. YG vs. HYBE)',
+      'generational classification (1st, 2nd, 3rd, 4th gen) as historical framing',
+      'senior-junior (sunbae-hoobae) system as industry relationship structure',
+      'music show win as career milestone signifier',
+    ],
+  },
+
+  genderAndBodyConventions: {
+    overview: 'K-Pop has highly specific gender presentation systems organized around "concepts" — predetermined aesthetic and performance personas that groups adopt for each comeback cycle.',
+    vocalGenderCodes: 'Male groups operate across a spectrum from powerful belt to soft falsetto, often within the same song. Female groups similarly range from bright and airy to full chest-voice power. High-register male vocals and lower-register female vocals are both common and accepted.',
+    physicalityInPerformance: 'Choreography follows concept-specific physical vocabularies. "Powerful" concepts for both male and female groups emphasize sharp, synchronized movement. "Elegant" or "cute" concepts use softer, more flowing choreography.',
+    genderNarratives: 'Male groups explore confidence, vulnerability, devotion, and self-discovery. Female groups navigate empowerment, romance, independence, and playfulness. Both operate within defined concept frameworks — "girl crush," "boy crush," "cute," "dark," "elegant."',
+    subversionExamples: [
+      'male groups incorporating traditionally feminine softness and vulnerability in concepts',
+      'BLACKPINK\'s "girl crush" concept establishing aggressive female performance as mainstream',
+      'male idols\' makeup and fashion pushing against traditional masculinity norms',
+      'Holland as the first openly gay K-Pop idol challenging industry heteronormativity',
+      'non-binary and gender-fluid styling in fourth-generation groups',
+    ],
+  },
+
+  tempoFeelVsNumber: {
+    overview: 'K-Pop tempo is often misleading because the genre\'s modular structure means a single song may feel like it operates at multiple tempos despite maintaining one BPM throughout.',
+    psychologicalTempo: 'A K-Pop song at 100 BPM can feel frenetic during verse rap sections (subdivided into rapid 16th notes) and then expansive during a half-time chorus. The switch-up can make the same BPM feel like a completely different tempo.',
+    weightAndMomentum: 'K-Pop at mid-tempo (90-110 BPM) feels heavier and more impactful than Western pop at the same tempo due to aggressive compression, punchy 808s, and the physical weight of synchronized choreography.',
+    urgencyScale: 'Highly variable within a single song. Builds create urgency through ascending pitch and increasing density. Drops release it. The emotional urgency of K-Pop is independent of tempo — a 75 BPM ballad can feel more intense than a 140 BPM dance track.',
+    comparisonToSameBPM: 'K-Pop at 100 BPM is denser, more sectionally varied, and more dynamically extreme than Western pop at 100 BPM. Where a Western pop song at that tempo maintains a consistent vibe, K-Pop uses the same tempo as a canvas for radical production shifts.',
+  },
+
+  mistakeConventions: {
+    overview: 'K-Pop has near-zero tolerance for imperfection in recorded music and extremely low tolerance in performance. The aesthetic standard is superhuman polish.',
+    toleratedImperfections: [
+      'live vocal strain during intense choreography (shows dedication)',
+      'slight choreography desynchronization in encore stages (shows authenticity)',
+      'emotional vocal breaks during farewell or emotional concert moments',
+      'candid personality moments during variety shows (endearing)',
+    ],
+    celebratedFlaws: [
+      'K-indie\'s deliberate lo-fi production as anti-idol statement',
+      'trot\'s emotional vocal trembling as expressive authenticity',
+      'K-hip-hop\'s raw recording aesthetic as credibility marker',
+      'concert encore stages performed without backing track showing real vocal ability',
+    ],
+    overproductionRisks: [
+      'noise music experiments alienating mainstream fandom',
+      'excessive auto-tune obscuring a vocalist known for live ability',
+      'too many switch-ups making a song incoherent',
+      'production complexity overshadowing the melodic hook',
+      'trend-chasing that erases a group\'s established sonic identity',
+    ],
+    authenticRoughness: 'Almost entirely absent from mainstream K-Pop releases. Roughness is reserved for K-indie, K-hip-hop, and specific "raw" concept tracks designed to contrast with the group\'s usual polish.',
+  },
+
+  sunoPromptGuide: {
+    essentialKeywords: [
+      'K-Pop', 'Korean pop', 'idol pop',
+      'K-R&B', 'Seoul', 'Korean vocals',
+      'EDM drop', 'choreography-ready',
+    ],
+    avoidKeywords: [
+      'country', 'bluegrass', 'jazz fusion',
+      'lo-fi folk', 'ambient', 'classical',
+    ],
+    promptTemplate: '[sub-genre] K-Pop, [BPM] BPM, [concept/mood], [production style], Korean vocals with English hooks',
+    tips: [
+      'Specify the concept: dark, bright, retro, girl-crush, cute — this drives the entire production.',
+      'Include "drop" or "switch-up" to encourage K-Pop\'s signature structural surprises.',
+      'Reference generation: 2nd gen (polished pop), 3rd gen (genre-blending), 4th gen (experimental).',
+      'For K-R&B, specify "intimate", "neo-soul", and "lo-fi drums" to distinguish from idol pop.',
+    ],
+  },
+};

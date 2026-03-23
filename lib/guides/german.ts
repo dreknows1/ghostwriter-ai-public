@@ -1,0 +1,483 @@
+import type { GenreGuide } from './types';
+
+export const GERMAN_GUIDE: GenreGuide = {
+  id: 'german',
+  name: 'German Music',
+  language: 'German',
+
+  sonicPalette: {
+    overview: 'German popular music spans an enormous sonic range — from the warm accordion-driven sentimentality of Schlager to the cold precision of Berlin techno, from Krautrock\'s cosmic synthesizers to Neue Deutsche Härte\'s industrial metal. The through-line is a certain precision and directness.',
+    timbre: [
+      'warm accordion and brass (Schlager, Volksmusik)',
+      'analog synthesizers (Krautrock, techno)',
+      'distorted industrial guitar (NDH)',
+      'electronic drum machines (TR-808, TR-909)',
+      'clean acoustic guitar (Liedermacher)',
+      'aggressive bass synths (techno, NDH)',
+    ],
+    texture: 'Variable: Schlager is warm and full; techno is sparse and mechanical; Krautrock is hypnotic and layered; NDH is dense and aggressive. German music tends toward clarity even in dense arrangements.',
+    tonality: 'Minor keys predominate in hip-hop, NDH, and Liedermacher. Major keys in Schlager and Volksmusik. Techno is often atonal or minimal. Krautrock explores modal and ambient tonalities.',
+    signatureSounds: [
+      'motorik beat (steady 4/4 driving pattern)',
+      'Roland TR-909 kick and hi-hat (techno)',
+      'Rammstein-style distorted guitar riff',
+      'Schlager brass fanfare',
+      'Kraftwerk-style vocoder',
+    ],
+  },
+
+  rhythmAndGroove: {
+    overview: 'German rhythm ranges from the metronomic motorik beat (Krautrock) and four-on-the-floor techno to the oom-pah of Volksmusik. Precision is valued across genres.',
+    bpmRange: { min: 70, max: 150, sweet: 125 },
+    feel: 'Mechanical precision in electronic genres. Driving and relentless in motorik and techno. Bouncy and warm in Schlager. Aggressive in NDH and punk.',
+    swing: 'Generally minimal — German electronic and rock music tends toward grid-locked precision. Schlager has a light bounce.',
+    syncopation: 'Low in most genres. Hip-hop introduces syncopation. The motorik beat is deliberately non-syncopated — its power comes from relentless forward motion.',
+    grooveArchetype: 'Motorik 4/4 (Krautrock), four-on-the-floor (techno), oom-pah 2/4 (Volksmusik), marching beat (NDH).',
+    rhythmicSignatures: [
+      'motorik beat: steady 4/4 with snare on 2 and 4, no swing',
+      'techno: 909 kick every quarter note, open hi-hat on upbeats',
+      'Schlager: polka-derived bounce',
+      'NDH: industrial march rhythm',
+    ],
+  },
+
+  harmonicLanguage: {
+    overview: 'German popular music harmony is generally functional and direct. Schlager uses bright, simple progressions. Krautrock explores drones and modal ambiguity. NDH uses power chords. Hip-hop borrows minor loops.',
+    scales: [
+      'major (Schlager, Volksmusik)',
+      'natural minor (hip-hop, NDH)',
+      'Dorian mode (Krautrock)',
+      'pentatonic (folk-influenced)',
+      'chromatic (NDH riffs)',
+    ],
+    chordProgressions: [
+      'I – IV – V – I (Schlager, Volksmusik)',
+      'i – bVI – bIII – bVII (minor pop)',
+      'I – V – vi – IV (German pop)',
+      'single chord drone (Krautrock)',
+    ],
+    harmonyNotes: 'Schlager harmony is deliberately simple and uplifting. Krautrock often abandons traditional harmony for drones, clusters, and modal repetition. German pop follows international pop harmony.',
+    modality: 'Major for Schlager cheerfulness. Minor for dramatic or serious music. Modal and atonal exploration in Krautrock and experimental electronics.',
+  },
+
+  songStructure: {
+    overview: 'Structure varies by sub-genre. Schlager follows tight verse-chorus pop form. Krautrock experiments with extended jams and repetition. Techno is loop-based with gradual evolution.',
+    form: 'Verse – Chorus – Verse – Chorus – Bridge – Chorus (pop/Schlager). Extended loop evolution (techno). Free form (Krautrock).',
+    sections: [
+      'Intro (atmospheric or rhythmic)',
+      'Strophe (verse)',
+      'Refrain (chorus)',
+      'Bridge (breakdown or key change)',
+      'Outro (fade or dramatic ending)',
+    ],
+    arrangement: 'Schlager: full band arrangement with brass and strings. Techno: additive loop layering. Krautrock: gradual evolution of repeating patterns.',
+    introOutro: 'Schlager: short melodic intro. Techno: beat-driven intro building layers. Krautrock: atmospheric drone establishing mood.',
+    barLengths: 'Pop/Schlager: standard 8-bar sections. Techno: 16-32 bar evolution cycles. Krautrock: indefinite.',
+    hookPlacement: 'Schlager chorus is catchy and arrives quickly. German pop follows international patterns. Techno hooks are rhythmic loops rather than melodic phrases.',
+  },
+
+  vocalDelivery: {
+    overview: 'German vocal delivery reflects the language\'s directness and consonant-heavy structure. From Schlager\'s warm baritone to hip-hop\'s aggressive flow to Rammstein\'s operatic growl.',
+    phrasing: 'German\'s compound words and consonant clusters create naturally percussive phrasing. Sentences are often end-weighted (verb-final), creating natural phrase build-up.',
+    affect: 'Direct and emotionally committed. Schlager: warm and sentimental. Hip-hop: aggressive and socially conscious. NDH: theatrical and powerful. Liedermacher: intimate and literary.',
+    techniques: [
+      'rolled R consonants for emphasis',
+      'operatic projection (NDH, Schlager)',
+      'rapid-fire German rap flow',
+      'intimate spoken-word (Liedermacher)',
+    ],
+    adlibStyle: 'Minimal in Schlager. Call-and-response in folk contexts. Hip-hop uses standard ad-lib culture adapted to German.',
+    harmony: 'Choir harmonies in Volksmusik and Schlager. Minimal harmonies in hip-hop and punk. Backing vocal chants in NDH.',
+    grit: 'High in NDH and Deutschpunk — aggressive, raw delivery. Clean in Schlager and pop. Variable in hip-hop.',
+  },
+
+  lyricalConventions: {
+    overview: 'German lyrics carry the weight of a literary language — from Goethe\'s poetry tradition through Brecht\'s political songs to contemporary street poetry. German rap has produced some of the language\'s most innovative wordplay.',
+    themes: [
+      'romantic love and Sehnsucht (yearning)',
+      'social commentary and political critique',
+      'Heimat (homeland) and identity',
+      'rebellion and anti-establishment',
+      'nature and landscapes',
+      'existential philosophy',
+    ],
+    perspective: 'First-person dominant. "Wir" (we) in community and protest songs. Direct address in love songs.',
+    figurativeLanguage: 'German compound words allow creative neologisms. Nature imagery (forest, rivers, mountains). Philosophical abstraction. Dark humour and irony (especially in NDW and punk).',
+    vocabulary: 'High German (Hochdeutsch) standard. Regional dialects in Volksmusik. Street slang in hip-hop. Archaic or literary German in Liedermacher tradition.',
+    storytellingApproach: 'Direct and narrative. German songwriting tends toward clear statement rather than ambiguity. Political songs are explicitly political. Love songs name the emotion.',
+    cliches: [
+      '"Sehnsucht" (longing) as emotional default',
+      'forest and nature as identity metaphor',
+      '"Heimat" references in folk contexts',
+      'Autobahn and driving as freedom metaphor',
+    ],
+  },
+
+  productionFingerprint: {
+    overview: 'Germany has a world-leading electronic music production culture. Berlin is a global centre for techno. Kraftwerk pioneered electronic pop production. German studios are technically excellent.',
+    mixAesthetic: 'Precise and clean. German engineering culture extends to music production. Techno: deep bass, crisp highs. Schlager: warm and radio-friendly. NDH: massive and aggressive.',
+    era: 'Current era: German hip-hop dominates domestic charts. Techno remains globally influential. Schlager has a commercial revival. NDH has international cult following.',
+    signalChain: 'Techno: hardware synths (Moog, Roland, Korg) → Ableton Live. Pop: standard modern DAW production. NDH: high-gain guitar amps → industrial processing.',
+    modernTrends: 'German hip-hop trap influence. Deutschrap as dominant youth genre. Berlin techno as global brand. Schlager pop crossover. Lo-fi and bedroom pop in German indie.',
+  },
+
+  instrumentation: {
+    coreInstruments: [
+      'analog synthesizers (Moog, Roland, Korg)',
+      'drum machines (TR-808, TR-909)',
+      'acoustic guitar (Liedermacher)',
+      'accordion (Schlager, Volksmusik)',
+      'electric guitar (rock, NDH, punk)',
+      'brass section (Schlager, Volksmusik)',
+    ],
+    signatureSounds: [
+      'Kraftwerk vocoder',
+      'TR-909 kick (Berlin techno)',
+      'motorik drum pattern',
+      'Rammstein industrial guitar tone',
+    ],
+    layering: 'Techno: minimal layers, each precisely placed. Schlager: full arrangement with brass, strings, backing vocals. NDH: wall of guitars over electronic foundation.',
+    avoidInstruments: [
+      'banjo or country instruments',
+      'Latin percussion',
+      'sitar or tabla',
+      'reggae-specific instruments',
+    ],
+  },
+
+  culturalContext: {
+    overview: 'German music culture is shaped by the country\'s complex history — post-war cultural anxiety, reunification, immigration, and a perpetual negotiation between tradition and modernity.',
+    origin: 'Berlin (techno, hip-hop, punk). Düsseldorf (Kraftwerk, electronic pioneers). Munich and Bavaria (Volksmusik, Schlager). Hamburg (NDW, indie). Cologne (carnival music).',
+    identity: 'Singing in German is a deliberate cultural choice — English dominance in pop creates pressure. German-language music carries identity politics. Heimat concept is complex post-WWII.',
+    community: 'German music communities are sub-genre specific. Techno has a massive club culture (Berghain, Tresor). Hip-hop has a street and media presence. Schlager has cross-generational family appeal.',
+    socialFunction: 'Techno: club culture, community, and liberation. Schlager: family entertainment and sentiment. Hip-hop: immigrant youth expression. Liedermacher: political engagement.',
+    authenticityMarkers: [
+      'German-language lyrics',
+      'cultural specificity to German experience',
+      'production quality appropriate to genre',
+      'understanding of sub-genre conventions',
+      'regional identity where appropriate',
+    ],
+  },
+
+  historicalLineage: {
+    overview: 'From Weimar cabaret through Kraftwerk\'s electronic revolution, through punk and NDW, to the current hip-hop and techno dominance.',
+    roots: [
+      'Weimar cabaret and political song (1920s-30s)',
+      'post-war Schlager (1950s-60s)',
+      'Liedermacher tradition (German singer-songwriter)',
+      'Krautrock (1960s-70s experimental)',
+      'Kraftwerk (electronic pioneers, 1970s)',
+    ],
+    evolution: 'Schlager dominance (1950s-70s) → Krautrock and Kraftwerk (1970s) → Neue Deutsche Welle (1980s) → German reunification techno explosion (1990s) → Neue Deutsche Härte (Rammstein, late 1990s) → Deutschrap mainstream (2010s-present).',
+    keyEras: [
+      '1970s: Kraftwerk and Krautrock',
+      '1980s: Neue Deutsche Welle',
+      '1990s: Berlin techno explosion post-reunification',
+      'Late 1990s: Rammstein and NDH',
+      '2010s-present: Deutschrap dominance',
+    ],
+    influencedBy: [
+      'American rock and roll (1950s-60s)',
+      'British punk (Deutschpunk)',
+      'American hip-hop (Deutschrap)',
+      'electronic music pioneers (Stockhausen)',
+    ],
+    influenced: [
+      'global electronic music (Kraftwerk\'s foundational influence)',
+      'industrial metal worldwide (Rammstein)',
+      'techno globally (Berlin as capital)',
+      'synth-pop and new wave internationally',
+    ],
+  },
+
+  subGenres: [
+    {
+      name: 'Schlager',
+      description: 'Germany\'s mainstream entertainment pop — warm, melodic, sentimental, and unabashedly cheerful. Massive commercial presence through TV shows and festivals.',
+      distinguishingFeatures: ['bright major-key melodies', 'accordion and brass', 'sentimental lyrics', 'polished production'],
+      bpmRange: { min: 100, max: 140 },
+      keyArtists: ['Helene Fischer', 'Andrea Berg', 'Roland Kaiser', 'Howard Carpendale'],
+      productionNotes: 'Bright, polished, radio-friendly. Full arrangement with brass and strings. Vocal clear and warm.',
+      lyricNotes: 'Love, happiness, dancing, nature. Simple, direct, emotionally warm German. Refrain must be singable by everyone.',
+      sunoPromptKeywords: ['Schlager', 'German pop', 'Helene Fischer style', 'cheerful German', 'party Schlager'],
+    },
+    {
+      name: 'Neue Deutsche Welle',
+      description: 'German new wave (1980s) — synth-pop and post-punk sung in German. From Nena\'s pop to DAF\'s electronic aggression. Brief but culturally significant.',
+      distinguishingFeatures: ['synth-driven production', 'German lyrics over new wave', 'post-punk energy', 'ironic and playful attitude'],
+      bpmRange: { min: 110, max: 140 },
+      keyArtists: ['Nena', 'Falco', 'DAF', 'Trio', 'Peter Schilling'],
+      productionNotes: '1980s synth production — drum machines, analog synths, bright and punchy. Deliberately artificial aesthetic.',
+      lyricNotes: 'Ironic, playful, sometimes political. Simple German with new wave attitude. Anti-establishment undertone.',
+      sunoPromptKeywords: ['Neue Deutsche Welle', 'NDW', 'German new wave', '80s German synth', 'Nena style'],
+    },
+    {
+      name: 'German Hip-Hop',
+      description: 'Deutschrap — the dominant youth genre in Germany. From conscious rap to gangsta to cloud rap. German language flow adapted to hip-hop rhythm.',
+      distinguishingFeatures: ['German-language rap flow', 'trap and boom-bap production', 'street and immigrant themes', 'dominant chart presence'],
+      bpmRange: { min: 70, max: 95 },
+      keyArtists: ['Sido', 'Bushido', 'Capital Bra', 'Apache 207', 'Cro'],
+      productionNotes: 'Standard hip-hop/trap production. 808 bass, hi-hat rolls. Vocal clarity for rapid German flow. Autotune on melodic rap.',
+      lyricNotes: 'Street life, immigrant experience, social commentary, flex. German with Turkish and Arabic loan words. Regional slang.',
+      sunoPromptKeywords: ['Deutschrap', 'German rap', 'German hip-hop', 'Berlin rap', 'trap German'],
+    },
+    {
+      name: 'Krautrock',
+      description: 'The cosmic, experimental German rock of the 1970s — motorik beats, long-form improvisation, and synthesizer exploration. Can, Tangerine Dream, and Kraftwerk\'s early work. Hugely influential on global music.',
+      distinguishingFeatures: ['motorik beat', 'extended improvisation', 'analog synthesizer exploration', 'hypnotic repetition'],
+      bpmRange: { min: 90, max: 130 },
+      keyArtists: ['Can', 'Tangerine Dream', 'Neu!', 'Faust', 'Amon Düül II'],
+      productionNotes: 'Analog warmth. Tape recording aesthetic. Repetition as structural device. Space and texture over melody.',
+      lyricNotes: 'Minimal or absent. When present: abstract, cosmic, philosophical. Some English, some German.',
+      sunoPromptKeywords: ['Krautrock', 'motorik', 'German experimental', 'cosmic rock', 'Can style', 'Neu! style'],
+    },
+    {
+      name: 'Volksmusik',
+      description: 'Traditional German and Austrian folk music — Alpine yodelling, brass bands, and regional folk traditions. Distinct from Schlager in its roots-authenticity.',
+      distinguishingFeatures: ['Alpine yodelling', 'brass band instrumentation', 'regional dialect lyrics', 'traditional dance rhythms'],
+      bpmRange: { min: 90, max: 140 },
+      keyArtists: ['Hansi Hinterseer', 'Kastelruther Spatzen', 'Die Flippers'],
+      productionNotes: 'Live band recording. Accordion, brass, zither prominent. Traditional arrangements. Natural reverb.',
+      lyricNotes: 'Nature, Heimat, love, drinking, Alpine life. Regional German dialects (Bavarian, Austrian, Swiss).',
+      sunoPromptKeywords: ['Volksmusik', 'German folk', 'Alpine music', 'Bavarian folk', 'yodelling'],
+    },
+    {
+      name: 'German Techno',
+      description: 'Berlin techno — the global capital of electronic dance music. Minimal, hypnotic, and relentless. From Love Parade to Berghain, German techno defines the genre worldwide.',
+      distinguishingFeatures: ['four-on-the-floor kick', 'minimal arrangement', 'hypnotic repetition', 'dark atmospheric textures'],
+      bpmRange: { min: 125, max: 145 },
+      keyArtists: ['Sven Väth', 'Paul Kalkbrenner', 'Ellen Allien', 'Richie Hawtin (Berlin-associated)'],
+      productionNotes: 'Hardware-driven. TR-909 as foundation. Minimal elements, maximum impact. Deep sub-bass. Precise EQ. Designed for massive sound systems.',
+      lyricNotes: 'Minimal or none. Occasional vocoded phrases. The music speaks through rhythm and texture.',
+      sunoPromptKeywords: ['Berlin techno', 'German techno', 'minimal techno', 'Berghain style', 'dark techno'],
+    },
+    {
+      name: 'Deutschpunk',
+      description: 'German punk rock — raw, political, and deliberately anti-establishment. Die Toten Hosen and Die Ärzte lead a tradition of sharp political satire and energetic live performance.',
+      distinguishingFeatures: ['fast punk rock', 'German-language political lyrics', 'DIY aesthetic', 'sharp humour and satire'],
+      bpmRange: { min: 140, max: 200 },
+      keyArtists: ['Die Toten Hosen', 'Die Ärzte', 'Wizo', 'Slime'],
+      productionNotes: 'Raw, fast, energetic. Guitar-bass-drums punk foundation. Vocal recorded hot with edge. Minimal production polish.',
+      lyricNotes: 'Political satire, anti-fascism, social commentary, dark humour. Direct, aggressive German.',
+      sunoPromptKeywords: ['Deutschpunk', 'German punk', 'Die Toten Hosen style', 'punk rock German'],
+    },
+    {
+      name: 'Neue Deutsche Härte',
+      description: 'Industrial metal in German — Rammstein is the genre. Heavy guitars, electronic elements, German vocals with operatic projection, and theatrical provocation.',
+      distinguishingFeatures: ['industrial metal guitar riffs', 'electronic elements', 'operatic German vocals', 'theatrical provocation'],
+      bpmRange: { min: 100, max: 140 },
+      keyArtists: ['Rammstein', 'Oomph!', 'Eisbrecher', 'Megaherz'],
+      productionNotes: 'Massive, heavy production. High-gain guitars doubled and layered. Electronic beats and samples. Vocal with power and theatricality.',
+      lyricNotes: 'Provocative, dark, theatrical. Fire, violence, taboo subjects. Simple but impactful German.',
+      sunoPromptKeywords: ['Neue Deutsche Härte', 'NDH', 'Rammstein style', 'German industrial metal', 'heavy German'],
+    },
+    {
+      name: 'German Pop',
+      description: 'Contemporary mainstream German-language pop — internationally influenced but sung in German. Artists like Mark Forster and LEA represent modern German pop sensibility.',
+      distinguishingFeatures: ['international pop production', 'German lyrics', 'radio-friendly hooks', 'contemporary sound design'],
+      bpmRange: { min: 90, max: 130 },
+      keyArtists: ['Mark Forster', 'LEA', 'Wincent Weiss', 'Max Giesinger'],
+      productionNotes: 'International pop production standards. Clean, bright, streaming-optimized. Guitar and synth hybrid. Vocal forward.',
+      lyricNotes: 'Love, self-discovery, everyday life. Accessible modern German. Emotional and relatable.',
+      sunoPromptKeywords: ['German pop', 'contemporary German', 'Mark Forster style', 'modern German pop'],
+    },
+    {
+      name: 'Liedermacher',
+      description: 'German singer-songwriter tradition — political, literary, and acoustic. The German equivalent of the chansonnier or folk protest singer.',
+      distinguishingFeatures: ['acoustic guitar foundation', 'literary German lyrics', 'political and social commentary', 'intimate performance style'],
+      bpmRange: { min: 70, max: 110 },
+      keyArtists: ['Reinhard Mey', 'Konstantin Wecker', 'Hannes Wader', 'Gerhard Schöne'],
+      productionNotes: 'Intimate acoustic recording. Guitar and voice primary. Minimal production. The song and the words are everything.',
+      lyricNotes: 'Political critique, social observation, nature poetry, philosophical reflection. Literary High German.',
+      sunoPromptKeywords: ['Liedermacher', 'German singer-songwriter', 'German folk', 'acoustic German', 'protest German'],
+    },
+  ],
+
+  sceneAndAudienceCodes: {
+    overview: 'German music audiences are sub-genre specific with limited crossover. Schlager fans and techno fans inhabit different cultural worlds entirely. German hip-hop bridges generational and ethnic divides.',
+    fanExpectations: [
+      'German-language lyrics',
+      'genre-appropriate production quality',
+      'cultural authenticity',
+      'live performance capability',
+      'musical substance over image',
+    ],
+    gatekeeping: 'High in techno (Berghain\'s door policy is legendary). Moderate in hip-hop (street credibility matters). Low in Schlager (mass entertainment). Krautrock fans value knowledge and purity.',
+    livePerformance: 'Club culture is central for techno (Berghain, Tresor, Watergate). Festival culture for rock and pop (Rock am Ring, Wacken). Schlager has massive TV shows and arena tours.',
+    fashionAndAesthetic: 'Techno: all black, minimal. Schlager: glamorous and colourful. Hip-hop: international streetwear. Punk: DIY and anti-fashion. NDH: theatrical and industrial.',
+    crossoverPotential: 'Kraftwerk and Rammstein achieved global fame. Berlin techno is a global brand. German hip-hop is primarily domestic. Schlager is German-speaking markets only.',
+  },
+
+  // ── Relational & Embodied Dimensions ──────────────────────────────
+
+  microTimingAndFeel: {
+    overview: 'German music has a deep relationship with mechanical precision — from Kraftwerk\'s deliberate machine-rhythm aesthetic through Berlin techno\'s grid-locked 909 patterns to Schlager\'s rigid march-like bounce. Precision is both cultural value and artistic statement.',
+    quantizationDeviation: 'Near zero in techno and electronic music — the grid IS the art form. Schlager is tightly quantized with a metronomic bounce. Krautrock\'s motorik beat is humanly played but aims for machine consistency. Deutschpunk is deliberately looser.',
+    aheadBehindBeat: 'Techno sits exactly on grid — timing deviation would undermine the hypnotic effect. Schlager sits slightly ahead for cheerful forward momentum. Deutschrap follows American hip-hop conventions (often slightly behind for swagger).',
+    humanizationMarkers: [
+      'Krautrock motorik beat\'s human-machine tension — played by humans aspiring to machine precision',
+      'Liedermacher acoustic guitar retaining natural finger-timing variation',
+      'Volksmusik accordion with natural bellows-breathing rhythm',
+      'punk rock\'s deliberate timing looseness as anti-establishment statement',
+      'jazz-influenced NDW tracks retaining swing feel',
+    ],
+    genreSpecificFeel: 'The German relationship with mechanical timing is unique in world music — Kraftwerk turned machine precision into art, Berlin techno made it transcendent, and this legacy means that "sounding like a machine" is a compliment in German electronic music.',
+  },
+
+  silenceAndSpace: {
+    overview: 'German music uses space with characteristic directness. Techno strips elements to their essence — silence between kicks is structural. Krautrock uses repetition to create meditative space. Schlager fills every moment with warmth.',
+    negativeSpaceRole: 'In techno, the space between elements IS the music — the kick, the silence, the hi-hat, the silence. Krautrock uses repetitive minimal patterns to create vast psychic space. Rammstein uses silence before the riff drops for maximum impact.',
+    breathingPatterns: 'Techno breathes through filter sweeps and element removal/addition over 32-bar cycles. Schlager has no deliberate breathing — it fills all space with cheerful instrumentation. Liedermacher breathes naturally with the acoustic guitar.',
+    dynamicContrast: 'Low in techno (deliberate — the consistent volume is hypnotic). High in NDH (quiet industrial ambience before explosive riff). Moderate in Schlager (verse-chorus contrast is gentle). Extreme in Deutschpunk (quiet verse, loud chorus).',
+    whatIsDeliberatelyAbsent: [
+      'melody in minimal techno — rhythm and texture carry the music',
+      'lyrics in much German electronic music — sound communicates directly',
+      'conventional song structure in Krautrock — repetition replaces development',
+      'emotional sentimentality in NDH — replaced by theatrical intensity',
+      'warmth in Berlin techno — cold precision is the aesthetic',
+    ],
+  },
+
+  callAndResponse: {
+    overview: 'Call-and-response in German music appears in Volksmusik\'s communal singing, Schlager\'s Mitsingrefrain (sing-along chorus), and the techno DJ-crowd energy feedback loop.',
+    vocalInstrumentalDialogue: 'Rammstein uses guitar riff as call, vocal as response — the interplay between industrial guitar and operatic voice defines NDH. Kraftwerk\'s vocoder "sings" to the synth patterns.',
+    sectionInternal: 'Schlager builds call-and-response into the chorus structure — lead vocal phrase followed by backing vocal repetition. Volksmusik yodelling is inherently call-and-response between chest and head voice.',
+    audienceParticipation: 'Schlager and Volksmusik audiences sing along loudly and enthusiastically — the Mitsingrefrain is designed for this. Techno crowds respond to DJ builds with physical intensity. Punk crowds participate through moshing and shouting.',
+    patterns: [
+      'Schlager Mitsingrefrain — chorus designed for audience sing-along',
+      'Volksmusik call-response between lead singer and choir',
+      'techno DJ build-up and crowd energy release at the drop',
+      'punk crowd chanting anti-establishment slogans between songs',
+      'Rammstein\'s theatrical call-and-response with pyrotechnic punctuation',
+    ],
+  },
+
+  regionalDialectSpecificity: {
+    overview: 'German regional dialect diversity is enormous and culturally significant. Hochdeutsch (Standard German) serves as the pop lingua franca, but Bavarian, Swabian, Saxon, Austrian, and Swiss German each carry distinct cultural identities and musical traditions.',
+    phoneticMarkers: [
+      'Hochdeutsch (Standard German) clear consonant articulation as mainstream default',
+      'Bavarian vowel rounding and soft consonants in Volksmusik',
+      'Austrian German melodic intonation in Austro-pop and Wienerlied',
+      'Swiss German (Schweizerdeutsch) uvular R and distinctive vowels in Swiss hip-hop',
+      'Berlin dialect (Berlinerisch) in Berlin-based Deutschrap',
+    ],
+    accentInfluence: 'Standard German dominates commercial pop and hip-hop. Regional dialects mark specific sub-genres — Bavarian for Volksmusik, Austrian for Austro-pop, Swiss German for Swiss hip-hop. Using dialect is a deliberate cultural identity statement.',
+    dialectVocabulary: [
+      'Turkish-German vocabulary in Deutschrap reflecting immigrant experience',
+      'Bavarian terms in Volksmusik marking Alpine identity',
+      'Austrian expressions in Austro-pop (Falco\'s Viennese German was distinctive)',
+      'Kiezdeutsch (multi-ethnic urban German) in Berlin street rap',
+    ],
+    regionWithinCulture: 'Berlin dominates techno, hip-hop, and punk. Munich and Bavaria own Volksmusik. Düsseldorf birthed Kraftwerk and electronic music. Hamburg shaped NDW and indie. Cologne has carnival music. The former East Germany has distinct post-reunification musical identity.',
+  },
+
+  performancePractice: {
+    overview: 'German performance practice is sharply divided by sub-genre. Techno is about the DJ and the sound system. Schlager is family entertainment spectacle. Punk is raw energy. NDH is theatrical provocation.',
+    improvisationConventions: 'Techno DJs improvise sets in real-time — song selection, mixing, and EQ are creative choices. Krautrock bands improvise extensively in the jam tradition. Schlager and NDH are precisely rehearsed. Liedermacher may vary arrangements.',
+    crowdInteraction: 'Techno: the crowd is co-creator — DJ reads the room and responds. Schlager: audience sings, claps, and dances together. Punk: moshing, crowd-surfing, barrier-breaking. NDH: theatrical spectacle demands audience awe.',
+    stagePresence: 'Kraftwerk: anti-performance (standing motionless behind machines). Rammstein: maximum theatrical spectacle (fire, pyro, costumes). Schlager: warm, accessible, audience-embracing. Deutschrap: American hip-hop influenced stage swagger.',
+    livVsRecordedDifferences: 'Techno is inherently live — every DJ set is unique. Rammstein\'s live show is theatrically enhanced far beyond the recording. Schlager reproduces recordings faithfully. Punk is rawer and more chaotic live.',
+    whatMakesAGoodShow: 'Techno: reading the room, building the set arc over hours, perfect sound system. Schlager: audience sing-along, warmth, nostalgia. NDH: theatrical spectacle, pyrotechnics, danger. Punk: authentic energy, political engagement.',
+  },
+
+  socioeconomicSubtext: {
+    overview: 'German music is deeply shaped by the country\'s 20th-century history — post-war cultural reconstruction, the East-West divide, reunification, and immigration have all produced distinct musical responses.',
+    materialConditions: 'Germany\'s strong economy supports robust concert infrastructure (world-class clubs, festivals). Public broadcasting supports some independent music. The streaming transition has affected Schlager and physical sales-dependent genres.',
+    classIdentity: 'Schlager appeals broadly across classes as mainstream entertainment. Techno emerged from reunification-era economic disruption in Berlin. Deutschrap reflects immigrant working-class experience. Liedermacher carries intellectual-class associations.',
+    politicalUndercurrent: 'German music has an unusually explicit relationship with politics. Deutschpunk is overtly anti-fascist. Liedermacher is protest music. Techno carries reunification-era liberation politics. Hip-hop addresses immigrant experience and institutional racism.',
+    implicitReferences: [
+      'post-reunification Berlin\'s abandoned buildings becoming techno clubs as cultural rebirth',
+      'Turkish-German identity tension in Deutschrap reflecting immigration politics',
+      'Heimat concept carrying post-WWII complexity — nostalgia complicated by history',
+      'East German (Ostalgie) nostalgia in post-reunification music',
+      'anti-fascist stance as baseline expectation in German punk and hip-hop',
+    ],
+  },
+
+  intertextualityAndSampling: {
+    overview: 'German music\'s intertextual web stretches from Kraftwerk\'s foundational electronic legacy through Krautrock\'s cosmic explorations to Rammstein\'s theatrical provocation and Deutschrap\'s street poetry.',
+    canonKnowledge: 'Kraftwerk is ground zero — their influence on global electronic music is canonical knowledge. Can and Neu! are essential Krautrock references. Rammstein defines NDH. Nena\'s "99 Luftballons" is Germany\'s most internationally known pop song.',
+    samplingTradition: 'Techno producers sample and reinterpret extensively. Hip-hop sampling follows American conventions. Kraftwerk\'s sounds have been sampled globally (notably by Afrika Bambaataa, establishing the hip-hop-electronic connection).',
+    quotationPractice: 'Krautrock\'s motorik beat is quoted across genres as a cultural signifier. Schlager artists remake older Schlager hits for new generations. German literary quotation (Goethe, Brecht) appears in Liedermacher and hip-hop.',
+    expectedReferences: [
+      'Kraftwerk\'s "Autobahn" and "Trans-Europe Express" as electronic music origin points',
+      'Neu!\'s motorik beat as rhythmic DNA for post-punk and electronic music',
+      'Rammstein\'s "Du Hast" as the NDH reference point',
+      'Nena\'s "99 Luftballons" as Cold War-era German pop touchstone',
+      'Falco\'s "Rock Me Amadeus" as Austrian-German pop crossover landmark',
+    ],
+    lineageSignifiers: [
+      'the motorik beat pattern as Krautrock lineage marker',
+      'TR-909 kick drum as Berlin techno DNA',
+      'rolled German R consonants in vocal delivery as NDH signifier',
+      'accordion presence as Schlager/Volksmusik tradition marker',
+      'acoustic guitar-and-voice format as Liedermacher lineage',
+    ],
+  },
+
+  genderAndBodyConventions: {
+    overview: 'German music\'s gender conventions vary dramatically by sub-genre, from Schlager\'s traditional romance narratives to techno\'s relative gender neutrality to NDH\'s hypermasculine theatricality.',
+    vocalGenderCodes: 'Schlager features both warm male baritones and powerful female belters in traditional roles. NDH uses deep, operatic male vocals as the genre standard. Techno is largely post-vocal. Deutschrap is male-dominated with distinct female voices emerging.',
+    physicalityInPerformance: 'Rammstein\'s physicality is aggressively theatrical — fire, muscles, confrontation. Schlager performance is warm and inviting. Techno performance is minimal (the DJ disappears behind the decks). Punk is physically chaotic.',
+    genderNarratives: 'Schlager maintains traditional romantic narratives. NDH explores themes of power, desire, and transgression with theatrical intensity. Hip-hop navigates machismo alongside emerging feminist voices. Techno\'s instrumental nature largely sidesteps gendered narrative.',
+    subversionExamples: [
+      'NDW\'s gender-bending aesthetics in the 1980s (drawing from punk and new wave)',
+      'Ellen Allien and other female DJs leading Berlin\'s techno scene',
+      'Rammstein\'s theatrical performance incorporating homoeroticism as provocation',
+      'female Deutschrap artists (Shirin David, Juju, Kitty Kat) claiming space in male-dominated hip-hop',
+      'Conchita Wurst (Austrian) winning Eurovision as a bearded drag queen',
+    ],
+  },
+
+  tempoFeelVsNumber: {
+    overview: 'German music demonstrates extreme tempo-feel divergence — a 130 BPM Schlager track and a 130 BPM techno track inhabit entirely different perceptual worlds despite identical tempo.',
+    psychologicalTempo: 'Techno at 130 BPM feels hypnotic and trance-inducing — the relentless repetition creates a sense of timelessness. Schlager at 130 BPM feels bouncy and cheerful. NDH at 130 BPM feels crushingly heavy. The same number, three different temporal experiences.',
+    weightAndMomentum: 'Berlin techno carries immense physical weight through sub-bass despite minimal arrangement. Schlager is light and buoyant. Krautrock\'s motorik beat at 110-120 BPM creates relentless forward momentum. NDH is dense and massive.',
+    urgencyScale: 'Techno urgency builds over hours of set duration, not within individual tracks. Deutschpunk is maximally urgent at any tempo. Schlager has zero urgency — it is comfort music. NDH creates urgency through theatrical tension.',
+    comparisonToSameBPM: 'German techno at 130 BPM feels entirely different from American house at 130 BPM — German techno is darker, heavier, more industrial, and designed for longer listening arcs. The tempo is the same; the cultural weight is completely different.',
+  },
+
+  mistakeConventions: {
+    overview: 'German music\'s relationship with imperfection mirrors the cultural divide between engineering precision and artistic rebellion — techno demands perfection; punk celebrates chaos.',
+    toleratedImperfections: [
+      'Krautrock motorik beat human timing drift (part of the charm)',
+      'Liedermacher voice cracking with age and emotion',
+      'live techno set mixing imperfections (acceptable in the moment)',
+      'Volksmusik ensemble timing looseness (live communal feel)',
+    ],
+    celebratedFlaws: [
+      'Deutschpunk\'s deliberately sloppy playing as anti-establishment stance',
+      'Krautrock\'s tape-era recording artifacts as analog warmth',
+      'early NDW\'s lo-fi production as DIY authenticity',
+      'underground techno\'s raw, unmastered aesthetic',
+    ],
+    overproductionRisks: [
+      'polishing Krautrock\'s analog warmth into digital sterility',
+      'auto-tuning a Liedermacher\'s characterful voice',
+      'commercial Schlager production losing its naive charm',
+      'overcompressing techno and losing the sub-bass dynamics essential for club play',
+      'mainstream-ifying Deutschpunk with clean production',
+    ],
+    authenticRoughness: 'Essential in punk and underground scenes. Tolerated in Krautrock and Liedermacher. Unacceptable in Schlager and commercial pop. Techno exists in a unique space where production must be precise but not necessarily "clean" — analog warmth and hardware character are valued.',
+  },
+
+  sunoPromptGuide: {
+    essentialKeywords: [
+      'German', 'Deutsch', 'Berlin',
+      'Schlager', 'techno', 'Kraftwerk',
+      'industrial', 'motorik',
+    ],
+    avoidKeywords: [
+      'Latin', 'reggaeton', 'country',
+      'Bollywood', 'K-Pop', 'bossa nova',
+    ],
+    promptTemplate: '[sub-genre] German music, [BPM] BPM, [mood], [key instruments], German vocals, [era/scene reference]',
+    tips: [
+      'Specify sub-genre precisely — Schlager and techno are opposite sonic worlds.',
+      'For techno: "TR-909", "minimal", "Berlin", "dark", "hypnotic".',
+      'For Schlager: "cheerful", "accordion", "brass", "sing-along chorus".',
+      'For NDH: "Rammstein style", "industrial guitar", "operatic German vocals".',
+    ],
+  },
+};

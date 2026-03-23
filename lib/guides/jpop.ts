@@ -1,0 +1,483 @@
+import type { GenreGuide } from './types';
+
+export const JPOP_GUIDE: GenreGuide = {
+  id: 'jpop',
+  name: 'J-Pop',
+  language: 'Japanese',
+
+  sonicPalette: {
+    overview: 'Bright, meticulously produced, and emotionally vivid. J-Pop balances Western pop structures with distinctly Japanese melodic sensibility — complex chord voicings, rapid modulations, and a preference for bittersweet tonality.',
+    timbre: [
+      'crisp clean electric guitar with chorus effect',
+      'warm analog and digital synth pads',
+      'bright piano and electric piano',
+      'punchy programmed drums blended with live kit',
+      'orchestral strings for emotional peaks',
+      'acoustic guitar fingerpicking',
+    ],
+    texture: 'Densely arranged and polished. Every frequency range is occupied with purpose. Verses are relatively sparse; choruses explode with layered instrumentation.',
+    tonality: 'Frequent use of major 7th and minor 7th chords. Rapid key changes between sections. Pentatonic melodies over jazz-influenced harmony create the signature J-Pop bittersweet quality.',
+    signatureSounds: [
+      'four-on-the-floor kick with syncopated synth bass',
+      'arpeggiated synth over driving drums',
+      'string section swells at chorus entry',
+      'vocoder and vocal processing layers',
+      'chiptune and 8-bit elements in playful tracks',
+    ],
+  },
+
+  rhythmAndGroove: {
+    overview: 'Rhythmically precise and often complex. J-Pop borrows from funk, rock, electronic, and R&B grooves, frequently shifting feel between sections within a single song.',
+    bpmRange: { min: 70, max: 180, sweet: 128 },
+    feel: 'Tight and metronomic in electronic styles; driving and energetic in rock-influenced tracks; gentle and swaying in ballads.',
+    swing: 'Generally straight-eighth feel. Shuffle appears in R&B-influenced tracks. City Pop uses a distinctive light swing.',
+    syncopation: 'Moderate. Bass lines and guitar parts often syncopate against a steady drum pattern. Vocal melodies flow independently of the rhythmic grid.',
+    grooveArchetype: 'Four-on-the-floor dance pop, power-ballad 6/8, funk-rock 16th-note groove, City Pop light shuffle.',
+    rhythmicSignatures: [
+      'driving eighth-note guitar strumming (J-Rock)',
+      'four-on-the-floor with off-beat synth stabs',
+      'half-time feel in ballad verses, full-time chorus',
+      'funk-derived 16th-note bass (City Pop)',
+    ],
+  },
+
+  harmonicLanguage: {
+    overview: 'Harmonically adventurous by pop standards. J-Pop composers freely use secondary dominants, borrowed chords, and dramatic key changes. The "royal road" progression (IV-V-iii-vi) is a defining harmonic fingerprint.',
+    scales: [
+      'major with chromatic passing tones',
+      'natural minor',
+      'pentatonic major and minor',
+      'Dorian and Mixolydian',
+      'whole-tone (for transitional passages)',
+    ],
+    chordProgressions: [
+      'IV – V – iii – vi (ōdō / royal road progression)',
+      'I – V – vi – IV (standard pop)',
+      'vi – IV – V – I (dramatic minor-to-major)',
+      'IVmaj7 – V7 – IIIm7 – vi (jazz-pop)',
+    ],
+    harmonyNotes: 'Key changes between verse and chorus are common and expected. Extended chords (7ths, 9ths, add9) are standard. Chromatic bass descents create emotional tension.',
+    modality: 'Freely modulating. Songs may visit three or four keys. The shift from minor verse to major chorus (or vice versa) is a J-Pop signature.',
+  },
+
+  songStructure: {
+    overview: 'J-Pop structure is elaborate and multi-sectioned. Songs frequently include A-melody, B-melody, and sabi (chorus) as distinct sections, plus instrumental breaks and key-change final choruses.',
+    form: 'A-melo – B-melo – Sabi (Chorus) – A-melo 2 – B-melo 2 – Sabi – C-melo (Bridge) – Final Sabi (often key-changed)',
+    sections: [
+      'Intro (instrumental hook or atmospheric setup)',
+      'A-melo (verse — establishes mood, lower energy)',
+      'B-melo (pre-chorus — builds tension)',
+      'Sabi (chorus — emotional and melodic peak)',
+      'C-melo (bridge — new melody, emotional shift)',
+      'Outro (instrumental fade or dramatic ending)',
+    ],
+    arrangement: 'Builds from sparse A-melo through increasingly dense B-melo to full-arrangement sabi. The final sabi often modulates up a half or whole step.',
+    introOutro: 'Intros often preview the sabi hook instrumentally. Outros may repeat the sabi with fade or end on a dramatic held chord.',
+    barLengths: 'A-melo: 8-16 bars. B-melo: 4-8 bars. Sabi: 8-16 bars. C-melo: 4-8 bars. Total: 4-5 minutes.',
+    hookPlacement: 'The sabi is the emotional core. It typically arrives after both A and B melodies, making its impact earned rather than immediate.',
+  },
+
+  vocalDelivery: {
+    overview: 'J-Pop vocals prioritize clarity, emotion, and a distinctive brightness. Vibrato is controlled and selective. The Japanese language\'s vowel-heavy syllable structure creates naturally melodic vocal lines.',
+    phrasing: 'Syllabic and precise — each mora of Japanese is given rhythmic weight. Phrases tend to be shorter and more frequent than Western pop.',
+    affect: 'Earnest emotion without ironic detachment. Sincerity is valued. Idol pop is bright and energetic; ballads are deeply heartfelt; rock-influenced delivery adds passionate intensity.',
+    techniques: [
+      'clear head voice with controlled vibrato',
+      'falsetto for emotional climaxes',
+      'whispered or spoken sections for intimacy',
+      'powerful belt at sabi peaks',
+    ],
+    adlibStyle: 'Restrained compared to Western pop. Short vocal ornaments, "ah" and "oh" between phrases. Harmonized backing vocals echo key phrases.',
+    harmony: 'Layered unison and octave doubling for choruses. Simple thirds and fifths in backing vocals. Dense vocal stacking in idol group music.',
+    grit: 'Minimal in mainstream J-Pop — clean bright vocals dominate. J-Rock adds rasp and edge. Visual Kei ranges from operatic clean to extreme growl.',
+  },
+
+  lyricalConventions: {
+    overview: 'J-Pop lyrics blend poetic Japanese imagery with emotional directness. Seasonal metaphors (cherry blossoms, summer fireworks, autumn leaves) are deeply rooted. English loan words and phrases are mixed in naturally.',
+    themes: [
+      'romantic love and confession (kokuhaku)',
+      'nostalgia and fleeting time (mono no aware)',
+      'cherry blossoms and seasonal change',
+      'friendship and bonds (kizuna)',
+      'self-discovery and determination (ganbaru)',
+      'bittersweet farewells (graduation, moving away)',
+    ],
+    perspective: 'First-person confession dominant. Second-person address to a love interest. "We" perspective in friendship and team-spirit songs.',
+    figurativeLanguage: 'Nature metaphors: cherry blossoms for transience, rain for sadness, sunlight for hope. Sky imagery (sora) for freedom and possibility. Colour symbolism. Seasonal references carry deep emotional coding.',
+    vocabulary: 'Standard Japanese with English loan words and phrases woven in. Casual speech registers for pop; more literary Japanese for ballads. Keigo (polite forms) rarely used in lyrics.',
+    storytellingApproach: 'Emotional snapshots rather than linear narrative. A single moment (standing at a train platform, watching fireworks) expanded into a full emotional landscape.',
+    cliches: [
+      'cherry blossoms falling as metaphor for endings',
+      '"kimi" (you) as every-song love interest',
+      'running toward something/someone',
+      'the unchanging sky above',
+    ],
+  },
+
+  productionFingerprint: {
+    overview: 'J-Pop production is notably polished and maximalist. Japanese studios are among the most technically advanced globally. Every element is precisely placed and EQ\'d.',
+    mixAesthetic: 'Bright and wide. Vocals centred and clear. Dense but not muddy — each instrument occupies its frequency space. Bass is tight and present without overwhelming.',
+    era: 'Current era blends streaming-optimized production with J-Pop\'s traditional maximalism. Anime tie-in singles drive major releases. City Pop revival influences contemporary sound.',
+    signalChain: 'Professional studios (Victor, Sony Music Japan). High-end vocal chains. Layered synth programming. Live session musicians for guitars and drums when needed.',
+    modernTrends: 'City Pop revival aesthetics. Anime soundtrack crossover. Vocaloid-influenced production techniques. Future bass and EDM elements. Lo-fi and bedroom pop emerging alongside mainstream maximalism.',
+  },
+
+  instrumentation: {
+    coreInstruments: [
+      'electric guitar (clean with chorus, or crunchy)',
+      'synthesizers (analog-style pads and digital leads)',
+      'piano and electric piano',
+      'programmed and live drum kit hybrid',
+      'electric bass (fingerstyle or synth)',
+      'orchestral strings (real or sampled)',
+    ],
+    signatureSounds: [
+      'chorus-effect clean electric guitar arpeggios',
+      'string section swell at sabi entry',
+      'synth brass stabs',
+      'chiptune/8-bit elements in playful tracks',
+    ],
+    layering: 'Dense and purposeful. Layers added section by section. Verses may be guitar and vocal only; sabi explodes with full band, strings, and synths.',
+    avoidInstruments: [
+      'heavy distorted sludge guitar',
+      'banjo or steel guitar',
+      'traditional gagaku instruments (unless fusion)',
+      'aggressive trap 808 bass',
+    ],
+  },
+
+  culturalContext: {
+    overview: 'J-Pop is the mainstream popular music of Japan, deeply integrated with anime, television dramas, idol culture, and the music industry infrastructure of major labels (Sony, Avex, Universal Japan).',
+    origin: 'Tokyo-centred but with significant Osaka and regional scenes. Evolved from kayōkyoku (Japanese popular song) through Western rock and pop influence in the 1960s-80s.',
+    identity: 'Japanese language is central. J-Pop represents a distinctly Japanese interpretation of Western pop forms — absorbing global influences while maintaining unmistakable Japanese character.',
+    community: 'Massive domestic market (second-largest music market globally). Fan culture is deeply organized — fan clubs, handshake events, physical CD purchases remain important.',
+    socialFunction: 'Anime theme songs introduce millions globally. Graduation ceremonies, seasonal changes, and life transitions are scored by J-Pop. Idol culture provides parasocial community.',
+    authenticityMarkers: [
+      'Japanese lyrics with natural English integration',
+      'complex harmonic language (not simplistic chord loops)',
+      'precise and polished production quality',
+      'emotional sincerity over ironic detachment',
+      'tie-in with anime, drama, or cultural events',
+    ],
+  },
+
+  historicalLineage: {
+    overview: 'From pre-war ryūkōka through kayōkyoku\'s golden age to the J-Pop explosion of the 1990s and the current streaming/anime-driven era.',
+    roots: [
+      'kayōkyoku (Japanese popular song, 1950s-80s)',
+      'Group Sounds (Japanese beat bands, 1960s)',
+      'New Music movement (singer-songwriters, 1970s)',
+      'City Pop (urban sophisticated pop, late 1970s-80s)',
+      'Western rock, soul, and disco influence',
+    ],
+    evolution: 'Kayōkyoku (1950s-70s) → New Music/City Pop (1970s-80s) → J-Pop term coined, Komuro era (1990s) → Utada/Hamasaki peak (late 1990s-2000s) → AKB48 idol dominance (2010s) → anime/streaming era (2020s).',
+    keyEras: [
+      '1970s-80s: City Pop golden age',
+      '1990s: J-Pop boom (Komuro, globe, TRF)',
+      'Late 1990s-2000s: Peak era (Utada Hikaru, Hamasaki Ayumi)',
+      '2010s: Idol era (AKB48, Perfume)',
+      '2020s: Anime-driven global reach (YOASOBI, Ado)',
+    ],
+    influencedBy: [
+      'American pop, rock, and R&B',
+      'British new wave and synth-pop',
+      'European electronic music',
+      'Brazilian bossa nova (City Pop)',
+    ],
+    influenced: [
+      'K-Pop production and structure',
+      'anime music globally',
+      'City Pop revival worldwide',
+      'Vocaloid and virtual artist culture',
+    ],
+  },
+
+  subGenres: [
+    {
+      name: 'City Pop',
+      description: 'Sophisticated urban pop-funk of late 1970s-80s Tokyo — lush production, jazzy chords, and a sun-drenched, cosmopolitan vibe. Currently experiencing massive global revival.',
+      distinguishingFeatures: ['jazz-funk chord voicings', 'lush production with live musicians', 'light swing feel', 'warm analog synths'],
+      bpmRange: { min: 90, max: 125 },
+      keyArtists: ['Tatsuro Yamashita', 'Mariya Takeuchi', 'Toshiki Kadomatsu', 'Taeko Onuki'],
+      productionNotes: 'Warm analog production. Live session musicians essential. Fender Rhodes, slap bass, chorus guitar. Sophisticated arrangements.',
+      lyricNotes: 'Urban romance, nightlife, driving, summer. Aspirational cosmopolitan lifestyle. Some English phrases.',
+      sunoPromptKeywords: ['city pop', 'Japanese city pop', '80s Japanese funk', 'Tokyo nightlife', 'Tatsuro Yamashita style'],
+    },
+    {
+      name: 'Visual Kei',
+      description: 'Theatrical Japanese rock with elaborate costumes and makeup. Ranges from glam rock to symphonic metal, united by dramatic visual and sonic aesthetics.',
+      distinguishingFeatures: ['dramatic visual aesthetics', 'genre-spanning rock foundation', 'theatrical vocal delivery', 'orchestral and gothic elements'],
+      bpmRange: { min: 80, max: 200 },
+      keyArtists: ['X Japan', 'L\'Arc-en-Ciel', 'Dir En Grey', 'the GazettE'],
+      productionNotes: 'High-gain guitars with orchestral backing. Dramatic dynamic range. Power ballads and aggressive rock in equal measure.',
+      lyricNotes: 'Dark romance, existential themes, beauty and pain. Poetic and dramatic Japanese.',
+      sunoPromptKeywords: ['visual kei', 'Japanese rock', 'X Japan style', 'dramatic J-rock', 'gothic Japanese'],
+    },
+    {
+      name: 'Shibuya-kei',
+      description: 'Eclectic, retro-referencing Tokyo pop of the 1990s — sampling bossa nova, French pop, lounge, and exotica through an indie-pop lens.',
+      distinguishingFeatures: ['eclectic genre sampling', 'retro lounge aesthetics', 'French pop and bossa nova influence', 'indie sensibility'],
+      bpmRange: { min: 90, max: 130 },
+      keyArtists: ['Pizzicato Five', 'Cornelius', 'Flipper\'s Guitar', 'Kahimi Karie'],
+      productionNotes: 'Collage-style production. Vintage samples, bossa nova rhythms, lounge-pop arrangements. Deliberately retro mixing.',
+      lyricNotes: 'Playful, ironic, cosmopolitan. French and English phrases mixed with Japanese. Pop culture references.',
+      sunoPromptKeywords: ['Shibuya-kei', 'Japanese indie pop', 'retro Japanese', 'bossa nova Japanese', 'Pizzicato Five style'],
+    },
+    {
+      name: 'Anime/Anison',
+      description: 'Songs written as anime opening and ending themes — the primary vehicle for J-Pop global reach. Energetic, hook-driven, and emotionally intense.',
+      distinguishingFeatures: ['high-energy hooks', 'dramatic key changes', 'tie-in with anime narrative', 'fast tempos common'],
+      bpmRange: { min: 140, max: 200 },
+      keyArtists: ['LiSA', 'Aimer', 'YOASOBI', 'Ado', 'Mrs. GREEN APPLE'],
+      productionNotes: 'Maximalist production. Driving guitars, dense synths, orchestral hits. Must grab attention in first seconds.',
+      lyricNotes: 'Themes mirror anime narrative — determination, battle, love, sacrifice. Intense emotional register.',
+      sunoPromptKeywords: ['anison', 'anime opening', 'Japanese anime rock', 'YOASOBI style', 'anime pop'],
+    },
+    {
+      name: 'Idol Pop',
+      description: 'Manufactured group pop built around fan engagement — choreography, handshake events, and parasocial connection. Music ranges from bubblegum to surprisingly sophisticated.',
+      distinguishingFeatures: ['group vocal format', 'choreography-driven', 'fan engagement ecosystem', 'bright energetic production'],
+      bpmRange: { min: 120, max: 160 },
+      keyArtists: ['AKB48', 'Nogizaka46', 'Morning Musume', 'Perfume'],
+      productionNotes: 'Bright, compressed, loud. Synth-heavy with programmed drums. Vocal processing to blend group vocals. Catchy above all.',
+      lyricNotes: 'Friendship, youth, love confession, encouragement. Bright and positive. Simple vocabulary.',
+      sunoPromptKeywords: ['J-idol pop', 'AKB48 style', 'Japanese idol', 'kawaii pop', 'genki Japanese pop'],
+    },
+    {
+      name: 'J-Rock',
+      description: 'Japanese rock spanning power pop to post-hardcore. Guitar-driven with melodic sensibility inherited from J-Pop tradition.',
+      distinguishingFeatures: ['guitar-driven arrangements', 'J-Pop melodic sensibility', 'emotional intensity', 'anime tie-in crossover'],
+      bpmRange: { min: 120, max: 180 },
+      keyArtists: ['BUMP OF CHICKEN', 'RADWIMPS', 'ONE OK ROCK', 'Asian Kung-Fu Generation'],
+      productionNotes: 'Crunchy but clear guitars. Tight rhythm section. Vocals forward. Balance rock energy with melodic clarity.',
+      lyricNotes: 'Introspective, emotional, poetic. Personal growth and relationships. Literary Japanese.',
+      sunoPromptKeywords: ['J-rock', 'Japanese rock', 'RADWIMPS style', 'anime rock', 'emotional Japanese rock'],
+    },
+    {
+      name: 'Kayōkyoku',
+      description: 'Pre-J-Pop Japanese popular song (1950s-80s) — the traditional foundation. Enka-influenced melodies, orchestral arrangements, and formal vocal delivery.',
+      distinguishingFeatures: ['orchestral arrangements', 'enka melodic influence', 'formal vocal delivery', 'pentatonic melodies'],
+      bpmRange: { min: 60, max: 120 },
+      keyArtists: ['Hibari Misora', 'Momoe Yamaguchi', 'Seiko Matsuda', 'Akina Nakamori'],
+      productionNotes: 'Full orchestral production. Warm analog recording aesthetic. Vocals centred and prominent.',
+      lyricNotes: 'Romantic love, seasonal imagery, nostalgic longing. Formal but emotionally direct Japanese.',
+      sunoPromptKeywords: ['kayōkyoku', 'Japanese oldies', 'retro Japanese pop', 'Showa era pop', '1970s Japanese'],
+    },
+    {
+      name: 'Future Bass J-Pop',
+      description: 'Contemporary electronic J-Pop fusing future bass, EDM drops, and kawaii aesthetics. Driven by Vocaloid producer culture crossing into mainstream.',
+      distinguishingFeatures: ['future bass synth design', 'EDM-influenced drops', 'Vocaloid production roots', 'bright kawaii aesthetics'],
+      bpmRange: { min: 130, max: 170 },
+      keyArtists: ['Kyary Pamyu Pamyu', 'Yasutaka Nakata', 'Perfume', 'Kizuna AI'],
+      productionNotes: 'Bright supersaws, pitched vocal chops, heavy sidechain. Kawaii aesthetics in sound design. Drops and builds.',
+      lyricNotes: 'Playful, surreal, colourful. Onomatopoeia and nonsense syllables. Fun over depth.',
+      sunoPromptKeywords: ['future bass J-pop', 'kawaii EDM', 'Yasutaka Nakata style', 'Japanese electronic pop'],
+    },
+    {
+      name: 'J-R&B',
+      description: 'Japanese R&B blending American neo-soul and R&B with Japanese language and melodic sensibility. Smooth, sophisticated, and urban.',
+      distinguishingFeatures: ['neo-soul influenced production', 'smooth vocal delivery', 'jazz-influenced harmony', 'urban sophistication'],
+      bpmRange: { min: 70, max: 100 },
+      keyArtists: ['Utada Hikaru', 'MISIA', 'Crystal Kay', 'Juju'],
+      productionNotes: 'Warm pads, programmed drums with live feel, Rhodes piano. Vocal production smooth and intimate.',
+      lyricNotes: 'Romantic love, urban life, self-reflection. Sophisticated Japanese with English phrases.',
+      sunoPromptKeywords: ['J-R&B', 'Japanese R&B', 'Utada Hikaru style', 'Japanese neo-soul', 'urban Japanese'],
+    },
+    {
+      name: 'Vocaloid',
+      description: 'Music created using vocal synthesis software (Hatsune Miku, etc.) — a uniquely Japanese phenomenon that birthed an entire creative ecosystem of amateur producers (bocaP).',
+      distinguishingFeatures: ['synthesized vocal character', 'producer-driven (bocaP)', 'internet-native distribution', 'complex rhythmic and harmonic writing'],
+      bpmRange: { min: 120, max: 240 },
+      keyArtists: ['Hachi/Kenshi Yonezu', 'DECO*27', 'wowaka', 'ryo (supercell)'],
+      productionNotes: 'Dense, fast, technically complex. Vocaloid voice as instrument. Rock and electronic hybrid production. High tempo common.',
+      lyricNotes: 'Abstract, surreal, emotionally intense. Internet culture references. Complex wordplay and rapid-fire syllables.',
+      sunoPromptKeywords: ['Vocaloid', 'Hatsune Miku style', 'Japanese Vocaloid rock', 'bocaP', 'fast Japanese electronic'],
+    },
+  ],
+
+  sceneAndAudienceCodes: {
+    overview: 'J-Pop audiences are deeply engaged, technically knowledgeable, and organized through fan clubs, physical media purchases, and live events. The domestic market is largely self-sustaining.',
+    fanExpectations: [
+      'high production quality',
+      'complex song structures and harmonic interest',
+      'emotional sincerity',
+      'visual and aesthetic coherence',
+      'Japanese lyrics as primary language',
+    ],
+    gatekeeping: 'Moderate. Authenticity is tied to quality and sincerity rather than street credibility. Idol fans have intense loyalty systems. Anime fans evaluate songs in relation to the source material.',
+    livePerformance: 'Concerts are theatrical events with audience participation rituals (light sticks, call-and-response chants). Idol handshake events create intimate fan connection. Festival culture is growing.',
+    fashionAndAesthetic: 'Highly stylized and sub-genre specific. Visual Kei: dramatic makeup and costumes. Idol: coordinated cute outfits. City Pop revival: retro 80s fashion. Anime: character-inspired aesthetics.',
+    crossoverPotential: 'Growing via anime globally. City Pop revival reached Western audiences through YouTube algorithms. YOASOBI and Ado achieve international chart success. Language remains the primary barrier.',
+  },
+
+  // ── Relational & Embodied Dimensions ──────────────────────────────
+
+  microTimingAndFeel: {
+    overview: 'J-Pop production is among the most precisely quantized in global pop. Grid-locked timing is not a limitation but an aesthetic choice — mechanical perfection serves the music\'s crystalline clarity and enables seamless integration of live and programmed elements.',
+    quantizationDeviation: 'Extremely low. Programmed elements are locked to grid; live instruments are edited or replaced to match. City Pop is a notable exception, retaining organic swing from live session musicians.',
+    aheadBehindBeat: 'Vocals tend to sit precisely on the grid or fractionally ahead for energetic tracks. Ballad vocals may pull slightly behind for emotional weight. Bass is grid-locked.',
+    humanizationMarkers: [
+      'City Pop live session feel with natural timing drift',
+      'subtle guitar strum timing variation in acoustic passages',
+      'deliberate rubato in ballad vocal delivery at sabi peaks',
+      'live drum fills with microsecond-level natural variation',
+      'acoustic piano passages retaining pianist\'s touch dynamics',
+    ],
+    genreSpecificFeel: 'The "J-Pop feel" is paradoxically both mechanical and deeply emotional — the precision of the production amplifies the emotional content of the melody and vocal rather than sterilizing it.',
+  },
+
+  silenceAndSpace: {
+    overview: 'J-Pop uses silence architecturally — the contrast between sparse A-melo and explosive sabi is a defining structural device. Space is earned and then filled.',
+    negativeSpaceRole: 'A-melo sections use restraint to make the sabi impact devastating. The gap before the sabi hits — often a beat of near-silence — is one of J-Pop\'s most powerful moments.',
+    breathingPatterns: 'Vocal breaths are carefully managed and often removed in production. Instrumental breathing between sections is precise — clean cuts rather than organic decay.',
+    dynamicContrast: 'Extreme between sections. A-melo can be nearly whispered over sparse guitar; the sabi detonates with full orchestration, layered synths, and vocal power. This contrast ratio is wider than most Western pop.',
+    whatIsDeliberatelyAbsent: [
+      'sub-bass rumble in ballad verses — bass enters at chorus',
+      'drum fills between sections — clean section boundaries preferred',
+      'reverb tails across section transitions — abrupt shifts are valued',
+      'background vocal layers in A-melo — voice often stands alone',
+      'synth pads in acoustic passages — textural purity maintained',
+    ],
+  },
+
+  callAndResponse: {
+    overview: 'Call-and-response is deeply embedded in J-Pop through idol culture\'s fan interaction rituals and Visual Kei\'s audience participation traditions. It serves a communal bonding function.',
+    vocalInstrumentalDialogue: 'Instrumental hooks often echo or answer vocal phrases — string lines mirror the sabi melody, guitar riffs respond to vocal cadences. The B-melo builds tension through instrumental-vocal interplay.',
+    sectionInternal: 'Within the sabi, lead vocal lines are frequently echoed by backing vocals or doubled by instruments. Call-and-response between verse lines builds narrative momentum.',
+    audienceParticipation: 'Highly structured. Idol concerts have choreographed fan chants (mix calls) timed to specific song moments. Wotagei light stick routines are synchronized response patterns. "Hai! Hai!" audience calls are pre-planned.',
+    patterns: [
+      'idol call-and-response chants at designated song breaks',
+      'wotagei light stick colour changes synchronized to song sections',
+      'audience singing the sabi melody back to the performer',
+      'group member vocal relay — one member calls, another responds',
+      'fan chant books distributed before concerts with exact timing',
+    ],
+  },
+
+  regionalDialectSpecificity: {
+    overview: 'Standard Japanese (hyōjungo) dominates J-Pop lyrics, but regional identity surfaces in specific sub-genres and as artistic texture. Osaka-ben and other dialects carry distinct emotional connotations.',
+    phoneticMarkers: [
+      'standard Tokyo Japanese vowel clarity and pitch accent',
+      'Osaka-ben warmth and comedic connotation when used',
+      'elongated vowels in emotional delivery (characteristic of sung Japanese)',
+      'crisp consonant articulation — each mora given equal rhythmic weight',
+      'English loan word pronunciation following Japanese phonotactics',
+    ],
+    accentInfluence: 'Tokyo standard pitch accent governs melodic writing — good J-Pop melodies align with natural speech intonation. Kansai dialect melodies have different pitch patterns that sound distinctly regional.',
+    dialectVocabulary: [
+      '"boku" vs "ore" vs "watashi" (first-person pronoun register)',
+      '"kimi" vs "anata" vs "omae" (second-person register choices)',
+      'Osaka-ben particles: "ya" instead of "da", "nen" for emphasis',
+      'Okinawan vocabulary in Okinawan pop (shima-uta tradition)',
+    ],
+    regionWithinCulture: 'Tokyo is the undisputed industry centre. Osaka has a distinct comedy-inflected music culture. Okinawa has its own island pop tradition. Nagoya and Fukuoka have emerging indie scenes. Regional identity is secondary to genre identity.',
+  },
+
+  performancePractice: {
+    overview: 'J-Pop performance practice is defined by the idol system\'s rigorous training, anime live events, and Visual Kei\'s theatrical tradition. Choreography, fan service, and the relationship between performer and audience are highly codified.',
+    improvisationConventions: 'Almost none in idol pop — performances are precisely rehearsed. Band-format J-Rock allows some live variation. Visual Kei permits theatrical improvisation. City Pop live shows allow instrumental solos.',
+    crowdInteraction: 'Extremely structured. MC talk segments (MC kōna) between songs follow established patterns. Fan chants are rehearsed. Encore rituals are formalized. Audience throws flowers or light sticks at designated moments.',
+    stagePresence: 'Idol: coordinated choreography, matching outfits, specific formation changes. Visual Kei: theatrical costumes, dramatic movement, gothic staging. J-Rock: band-natural stage movement with emotional intensity.',
+    livVsRecordedDifferences: 'Idol live performances are remarkably close to recordings — lip-syncing is common and accepted. J-Rock bands play live with more energy and rawness. Visual Kei may dramatically alter arrangements live.',
+    whatMakesAGoodShow: 'Emotional connection with the audience through MC segments. Flawless choreography. Proper fan service (responding to individual fans). The encore ritual performed authentically. Seasonal or tour-specific arrangements.',
+  },
+
+  socioeconomicSubtext: {
+    overview: 'J-Pop reflects Japan\'s post-bubble economic reality, urban-rural divide, and the pressures of contemporary Japanese life. Idol culture emerged partly from economic precarity, offering parasocial connection in an increasingly atomized society.',
+    materialConditions: 'Physical CD sales remain important due to handshake-event bundling — purchasing is an act of fan devotion. The idol economy depends on fans spending significantly on merchandise, events, and multiple CD copies.',
+    classIdentity: 'J-Pop generally avoids explicit class commentary. Idol pop presents aspirational but accessible personas. City Pop evokes bubble-era affluence and cosmopolitan leisure. Underground scenes reflect economic precarity.',
+    politicalUndercurrent: 'Minimal overt politics. J-Pop operates within a cultural expectation of political neutrality. Social themes (loneliness, overwork, conformity pressure) appear obliquely through personal narrative.',
+    implicitReferences: [
+      'the salaryman grind referenced through themes of exhaustion and escape',
+      'declining birth rate anxiety reflected in nostalgia for youth and school',
+      'post-earthquake resilience themes (especially post-2011)',
+      'rural depopulation in songs about hometowns left behind',
+      'parasocial connection filling gaps left by social atomization',
+    ],
+  },
+
+  intertextualityAndSampling: {
+    overview: 'J-Pop\'s intertextual web is uniquely tied to anime, games, and visual media. Songs are composed as tie-ins, and canonical anime themes become inseparable from their source material.',
+    canonKnowledge: 'Essential references include anime landmark themes (Evangelion\'s "Cruel Angel\'s Thesis", Sailor Moon\'s opening), City Pop classics (Mariya Takeuchi\'s "Plastic Love"), and golden-age kayōkyoku.',
+    samplingTradition: 'Direct sampling is rare in J-Pop compared to hip-hop. Interpolation, melodic quotation, and stylistic homage are preferred. City Pop samples have been heavily used by Western vaporwave and future funk.',
+    quotationPractice: 'Cover culture is strong — established songs are re-recorded by new artists as tribute. Anime songs are covered at events. Musical quotation of classic melodies in new arrangements signals lineage.',
+    expectedReferences: [
+      'classic anime theme melodies as cultural touchstones',
+      'City Pop chord voicings and production textures as nostalgia triggers',
+      'Utada Hikaru\'s "First Love" as the modern ballad benchmark',
+      'Visual Kei theatrical conventions in rock-adjacent work',
+      'Vocaloid-era production techniques in contemporary electronic pop',
+    ],
+    lineageSignifiers: [
+      'ōdō (royal road) chord progression as J-Pop DNA marker',
+      'key change at final sabi as structural inheritance from kayōkyoku',
+      'anime tie-in release strategy as industry lineage',
+      'idol graduation ceremony as cultural ritual continuity',
+      'City Pop warm analog synth textures as era-specific signifier',
+    ],
+  },
+
+  genderAndBodyConventions: {
+    overview: 'J-Pop has highly codified gender presentation systems, particularly within idol culture, while also hosting spaces like Visual Kei where gender fluidity is an established tradition.',
+    vocalGenderCodes: 'Female idol vocals emphasize brightness, clarity, and a high register often described as "kawaii" (cute). Male idol vocals range from bright and youthful to mature baritone. Visual Kei vocalists frequently employ androgynous vocal qualities across the full register.',
+    physicalityInPerformance: 'Idol choreography follows gender-specific movement vocabularies — female idols typically use precise, compact gestures while male idols incorporate broader, more dynamic movement. Visual Kei uses theatrical, gender-fluid physicality.',
+    genderNarratives: 'Female-perspective songs often center on waiting, emotional vulnerability, and confession. Male-perspective songs include determination, protection, and pursuit. These conventions are longstanding but increasingly varied in contemporary J-Pop.',
+    subversionExamples: [
+      'Visual Kei\'s androgynous aesthetic challenging binary gender presentation since the 1980s',
+      'Perfume\'s robotic performance persona questioning the "cute idol" expectation',
+      'Ado\'s aggressive vocal delivery breaking female vocal softness conventions',
+      'Hikaru Utada\'s non-binary identity influencing lyrical perspective',
+      'oshi culture allowing fans of any gender to support performers of any gender',
+    ],
+  },
+
+  tempoFeelVsNumber: {
+    overview: 'J-Pop tempo numbers can be deceptive — a 128 BPM J-Pop track feels entirely different from a 128 BPM EDM track due to arrangement density, section contrast, and the emotional weight placed on melody over groove.',
+    psychologicalTempo: 'The perceived tempo shifts dramatically between sections. An A-melo at 128 BPM can feel slow and spacious due to sparse arrangement, while the sabi at the same tempo feels urgent and propulsive. The BPM is constant; the energy is not.',
+    weightAndMomentum: 'J-Pop tends to feel lighter than its tempo suggests. Bright timbres, high-register melodies, and crisp production reduce perceived heaviness. City Pop at 100 BPM feels breezy; NDH at the same tempo feels crushing.',
+    urgencyScale: 'Low in ballads regardless of tempo. Moderate in standard pop. High in anison and J-Rock where driving guitars and dense arrangements create forward momentum. Extreme in Vocaloid at 200+ BPM.',
+    comparisonToSameBPM: 'J-Pop at 128 BPM prioritizes melodic and harmonic complexity over groove power. Where Western EDM at 128 would be body-moving, J-Pop at 128 is head-and-heart-moving — the engagement is emotional and intellectual rather than purely physical.',
+  },
+
+  mistakeConventions: {
+    overview: 'Mainstream J-Pop has very low tolerance for audible imperfection — polished production is an industry standard and cultural expectation. Deliberate roughness is reserved for specific sub-genres.',
+    toleratedImperfections: [
+      'slight vocal pitch variation in live recordings (adds "liveness")',
+      'natural timing drift in City Pop session recordings',
+      'guitar string noise in acoustic passages (signals authenticity)',
+      'breath sounds in intimate ballad vocal takes',
+    ],
+    celebratedFlaws: [
+      'Visual Kei\'s deliberately unhinged live vocal delivery',
+      'Vocaloid\'s robotic vocal artifacts as aesthetic feature',
+      'lo-fi bedroom producers\' tape hiss and noise',
+      'punk-adjacent J-Rock\'s raw recording quality',
+    ],
+    overproductionRisks: [
+      'auto-tune on a voice known for natural purity (seen as disrespectful)',
+      'excessive compression flattening the dynamic contrast between sections',
+      'Western-style vocal processing obscuring Japanese syllabic clarity',
+      'electronic replacement of live instruments in contexts where musicianship is valued',
+    ],
+    authenticRoughness: 'Permitted in J-Rock, Visual Kei, and underground/indie scenes. The mainstream idol and pop market demands pristine production — roughness reads as unprofessional rather than authentic.',
+  },
+
+  sunoPromptGuide: {
+    essentialKeywords: [
+      'J-Pop', 'Japanese pop', 'anime style',
+      'city pop', 'bright synths', 'emotional Japanese',
+      'sabi chorus', 'Tokyo pop',
+    ],
+    avoidKeywords: [
+      'country', 'bluegrass', 'reggaeton',
+      'heavy trap bass', 'drill', 'gospel choir',
+    ],
+    promptTemplate: '[sub-genre] J-Pop, [BPM] BPM, [mood], [key instruments], Japanese vocals, [era reference]',
+    tips: [
+      'Specify sub-genre: City Pop, anison, J-Rock, idol pop all sound very different.',
+      'Reference anime or City Pop aesthetics for global recognition.',
+      'Include "key change" or "modulation" to encourage J-Pop\'s signature harmonic movement.',
+      'For City Pop, specify "1980s", "funk guitar", and "warm analog synths".',
+    ],
+  },
+};

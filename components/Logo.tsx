@@ -6,7 +6,7 @@ export const Logo: React.FC<{ size?: number; className?: string }> = ({ size = 1
     <img 
       src="/brand/songghost-logo.png"
       alt="Song Ghost logo" 
-      className="w-full h-full object-contain drop-shadow-[0_0_25px_rgba(167,139,250,0.25)]"
+      className="w-full h-full object-contain drop-shadow-[0_0_25px_rgba(249,115,22,0.30)]"
     />
   </div>
 );

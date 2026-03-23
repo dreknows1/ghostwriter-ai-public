@@ -1,0 +1,943 @@
+import type { GenreGuide } from './types';
+
+export const ITALIAN_GUIDE: GenreGuide = {
+  id: 'italian',
+  name: 'Italian Music',
+  language: 'Italian',
+
+  sonicPalette: {
+    overview:
+      'Italian music spans a vast sonic territory, from the lush orchestral arrangements of traditional canzone to the synthetic pulses of Italo Disco and the gritty urban textures of Italian hip-hop. A unifying thread is melodic primacy — the voice and melody always sit at the center of the mix, supported by harmonic richness and emotional dynamics. Warmth, romanticism, and theatrical flair color even the most modern productions.',
+    timbre: [
+      'Warm analog synthesizers with bright, shimmering pads',
+      'Rich baritone and tenor vocal timbres with natural vibrato',
+      'Nylon-string and steel-string acoustic guitar with intimate close-mic warmth',
+      'Mandolin tremolo creating signature Mediterranean shimmer',
+      'Orchestral strings ranging from lush legato pads to pizzicato accents',
+      'Hammond organ and electric piano providing soulful harmonic beds',
+      'Punchy electronic drum machines with prominent kick and snare',
+      'Accordion and fisarmonica adding folk authenticity',
+      'Bright brass sections with trumpet and flugelhorn leads',
+      'Distorted electric guitar tones ranging from crunch to heavy saturation',
+    ],
+    texture:
+      'Italian music tends toward layered, emotionally dense textures. Traditional forms build from sparse verse arrangements to full orchestral climaxes. Pop and disco favor polished, bright mixes with prominent vocal presence. Hip-hop employs contrast between minimal, bass-heavy beats and melodic, sung hooks. Across genres, there is a fondness for dynamic contrast — quiet intimacy building to passionate, soaring crescendos.',
+    tonality:
+      'Predominantly major keys for celebratory and romantic material, with frequent use of minor keys for dramatic, melancholic, or introspective pieces. Modal interchange is common, borrowing chords from parallel minor or major to create emotional ambiguity. Neapolitan and augmented sixth chords appear frequently, reflecting classical Italian harmonic traditions. Mediterranean modes — Phrygian dominant, harmonic minor — flavor folk-influenced material.',
+    signatureSounds: [
+      'Mandolin tremolo arpeggios',
+      'Operatic vocal melisma and portamento',
+      'Italo Disco sequencer basslines with analog filter sweeps',
+      'Accordion drone with ornamental runs',
+      'Orchestral string swells at emotional climaxes',
+      'Hand claps and tambourine on upbeats',
+      'Delayed electric guitar arpeggios in rock ballads',
+      'Vocoder and talkbox effects in electronic productions',
+      'Tarantella-style rhythmic tambourine patterns',
+      'Cathedral-reverb vocal treatments on ballads',
+    ],
+  },
+
+  rhythmAndGroove: {
+    overview:
+      'Italian music encompasses a wide rhythmic spectrum. Traditional forms draw on waltz time, tarantella 6/8, and relaxed 4/4 ballad feels. Pop and Sanremo material tends toward steady, mid-tempo grooves that support vocal melody. Italo Disco introduced propulsive four-on-the-floor patterns with syncopated basslines. Hip-hop brings trap and boom-bap influences filtered through Mediterranean melodic sensibility. The common thread is that rhythm serves melody — groove supports the song rather than dominating it.',
+    bpmRange: { min: 70, max: 140, sweet: 110 },
+    feel: 'Generally smooth and melodically driven, with rhythmic precision in electronic genres and more rubato, emotionally flexible timing in singer-songwriter and classical-influenced material. Even uptempo dance tracks maintain a certain elegance and flow rather than raw aggression.',
+    swing:
+      'Light swing in jazz-influenced cantautorato and Neapolitan song. Straight feel dominates pop, rock, and electronic genres. Trap-influenced hip-hop uses triplet subdivisions for rhythmic complexity.',
+    syncopation:
+      'Moderate syncopation in pop and rock, with bass and keyboard parts providing rhythmic interest against straight drum patterns. Italo Disco features heavily syncopated sequencer basslines. Hip-hop employs hi-hat syncopation and offbeat vocal delivery. Traditional forms use relatively little syncopation, favoring strong downbeat emphasis.',
+    grooveArchetype:
+      'Melody-first groove where rhythmic elements cradle and support the vocal line, building from sparse verse patterns to fuller, more driving chorus rhythms. The Italian groove prioritizes emotional arc over dancefloor utility, though Italo Disco is a notable exception.',
+    rhythmicSignatures: [
+      'Four-on-the-floor kick with syncopated sequencer bass (Italo Disco)',
+      '6/8 tarantella pattern with tambourine accent on beats 1 and 4',
+      'Waltz-time 3/4 in traditional canzone and romantic ballads',
+      'Boom-bap with melodic sample loops (Italian hip-hop old school)',
+      'Trap hi-hat rolls with 808 sub-bass (modern Italian rap)',
+      'Gentle bossa nova-influenced patterns in cantautorato',
+      'March-like 4/4 with strong downbeats in patriotic and festival songs',
+      'Shuffle feel in blues-influenced Italian rock',
+    ],
+  },
+
+  harmonicLanguage: {
+    overview:
+      "Italian harmonic language is among the richest in popular music, drawing directly from centuries of operatic and classical tradition. Even simple pop songs frequently employ sophisticated chord movement — secondary dominants, Neapolitan chords, augmented sixths, and chromatic mediants appear naturally rather than as affectations. Minor keys are treated with particular nuance, often borrowing from harmonic and melodic minor scales. Modal interchange between parallel major and minor is a defining characteristic, creating the bittersweet emotional palette that defines much Italian music.",
+    scales: [
+      'Natural minor (Aeolian) — foundation of dramatic and melancholic material',
+      'Harmonic minor — providing the raised 7th for strong V-i cadences',
+      'Melodic minor — used in vocal lines for smooth ascending passages',
+      'Major (Ionian) — celebratory pop and love songs',
+      'Mixolydian — folk-influenced and Southern Italian material',
+      'Phrygian dominant — Mediterranean and Arabic-influenced passages',
+      'Dorian — jazz-influenced cantautorato',
+      'Neapolitan minor — classical-influenced dramatic passages',
+      'Whole tone — impressionistic passages in art-pop',
+    ],
+    chordProgressions: [
+      'i - bVI - bVII - i (minor epic progression, ubiquitous in Italian pop and rock)',
+      'I - vi - IV - V (classic canzone progression)',
+      'i - iv - V - i (traditional minor cadential movement)',
+      'I - V - vi - IV (modern pop standard, Italian interpretation)',
+      'i - bVI - bIII - bVII (Andalusian-adjacent, Mediterranean flavor)',
+      'I - IV - V - I (simple folk and festival songs)',
+      'ii - V - I (jazz-influenced cantautorato)',
+      'i - bII - V - i (Neapolitan sixth usage, highly characteristic)',
+      'I - iii - vi - IV (romantic ballad progression)',
+      'i - v - bVI - IV (dramatic minor with Picardy-adjacent brightness)',
+    ],
+    harmonyNotes:
+      "Italian songwriters frequently modulate up by a half or whole step for final choruses, a technique inherited from operatic tradition. Pedal tones in the bass under changing harmonies create tension and release. Parallel thirds and sixths in vocal harmonies reflect the bel canto tradition. Diminished seventh chords serve as dramatic pivot points. The Neapolitan chord (bII) is so characteristic of Italian harmony that it bears the country's name in music theory.",
+    modality:
+      'Fluid movement between major and minor modality is a hallmark. Songs frequently begin in minor and resolve to the parallel major, or vice versa. The raised 7th degree in minor keys is almost always present for dominant function, making harmonic minor the de facto minor mode. Mixolydian and Dorian inflections appear in folk-derived material. Phrygian dominant colors Southern Italian and Sicilian-influenced passages.',
+  },
+
+  songStructure: {
+    overview:
+      'Italian song structure balances classical formal awareness with pop accessibility. Traditional canzone form features a verse-refrain structure with a distinctive bridge or contrasting middle section. Modern Italian pop follows international verse-chorus conventions but often includes longer instrumental introductions, extended bridges, and dramatic final sections. The climactic arc — building from intimate opening to passionate conclusion — is deeply ingrained across all Italian genres.',
+    form: 'Verse-Chorus with Bridge, often featuring an extended or modulated final chorus. Traditional canzone may use AABA or strophic forms. Italo Disco employs extended intro-verse-chorus-breakdown structures for DJ mixing.',
+    sections: [
+      'Intro — often melodic and substantial, establishing mood with instrumental theme (8-16 bars)',
+      'Strofa (Verse) — typically two verses before first chorus, intimate and narrative',
+      'Pre-ritornello (Pre-Chorus) — building section with rising harmonic tension',
+      'Ritornello (Chorus) — the emotional and melodic peak, singable and memorable',
+      'Ponte (Bridge) — contrasting section, often with key change or new melodic material',
+      'Stacco strumentale (Instrumental Break) — guitar solo, synth solo, or orchestral interlude',
+      'Ritornello finale (Final Chorus) — often modulated up, with fuller arrangement and ad-libs',
+      'Coda/Outro — may reprise intro theme or fade on repeated chorus',
+    ],
+    arrangement:
+      'Arrangements tend toward the orchestral and layered, even in ostensibly simple pop songs. Verses are kept relatively sparse to showcase the vocal, with instruments added progressively. Choruses feature full instrumentation, often including strings or synth pads. A key modulation before the final chorus is extremely common and almost expected. Dynamic contrast between sections is pronounced.',
+    introOutro:
+      'Introductions are given significant attention — a memorable instrumental hook or atmospheric passage sets the emotional tone. Outros frequently reprise the chorus with vocal ad-libs or fade on an instrumental theme. In Italo Disco, intros and outros are extended for DJ mixing purposes (16-32 bars).',
+    barLengths:
+      'Verses typically 8-16 bars, choruses 8-16 bars, bridges 4-8 bars. Italian songs tend to be slightly longer than Anglo-American pop, averaging 3:30-4:30, with ballads sometimes exceeding 5 minutes.',
+    hookPlacement:
+      "The primary hook sits in the chorus melody, almost always featuring the song title. Secondary hooks appear in instrumental introductions (riffs, synth lines) and pre-chorus vocal phrases. Italian songs often have an identifiable melodic hook that precedes the lyrics — a whistleable theme that serves as the song's calling card.",
+  },
+
+  vocalDelivery: {
+    overview:
+      'The Italian vocal tradition is perhaps the most developed in Western music, rooted in centuries of operatic bel canto technique. Even pop and rock singers exhibit greater dynamic range, more pronounced vibrato, and more theatrical delivery than their Anglo-American counterparts. The voice is treated as the primary instrument, with arrangements built around its capabilities. Emotional authenticity and passionate expression are valued above technical perfection, though Italian singers tend to possess both.',
+    phrasing:
+      "Legato phrasing dominates, with long, connected melodic lines that exploit the natural vowel-rich flow of the Italian language. Rubato is common in ballads, with singers stretching and compressing time for emotional effect. Consonants are articulated clearly but never interrupt melodic flow. Breath control and sustained notes are hallmarks of the tradition.",
+    affect:
+      'Passionate, emotionally transparent, and theatrical. Italian vocal delivery ranges from tender intimacy in verses to full-throated, powerful choruses. Vulnerability and strength coexist — singers are expected to convey genuine emotional depth. There is less ironic distance than in Anglo-American pop; sincerity is the default mode.',
+    techniques: [
+      'Bel canto-influenced placement with forward, resonant tone',
+      'Natural vibrato ranging from subtle to pronounced',
+      'Portamento — smooth gliding between notes',
+      'Melismatic passages, especially at emotional climaxes',
+      'Falsetto and head voice for tender or ethereal passages',
+      'Chest voice belting for powerful, dramatic moments',
+      'Parlato — spoken or half-spoken delivery in narrative passages',
+      'Grido — passionate shouting or crying quality at peak moments',
+      'Messa di voce — crescendo and decrescendo on sustained notes',
+      'Appoggiatura — grace notes approaching target pitches from above or below',
+      'Rap flow with melodic cadence in hip-hop genres',
+      'Auto-tune as stylistic choice in modern trap-influenced material',
+    ],
+    adlibStyle:
+      "Ad-libs tend toward melodic embellishment rather than rhythmic interjection. Final choruses feature improvised melismatic variations on the main melody. Exclamations like 'dai!', 'sì!', 'oh!', and 'ah!' punctuate emotional peaks. In hip-hop, ad-libs follow international trends but with Italian exclamations: 'fra!', 'zio!', 'bella!'.",
+    harmony:
+      'Vocal harmonies favor parallel thirds and sixths, reflecting the bel canto tradition. Two-part harmony is most common, with three-part harmony reserved for choruses and climactic moments. Unison singing with octave doubling creates power in rock and pop. Call-and-response between lead and backing vocals appears in folk-influenced material.',
+    grit: 'Grit and rawness vary by genre. Cantautorato and rock embrace vocal imperfection as emotional honesty. Pop and Sanremo material favors cleaner, more polished delivery. Hip-hop ranges from melodic singing to aggressive, raspy delivery. Neapolitan song allows for raw, street-level vocal grit that would be unusual in northern Italian pop.',
+  },
+
+  lyricalConventions: {
+    overview:
+      "Italian lyrics draw on one of the world's great literary traditions, from Dante and Petrarch through to contemporary poetry. The language's inherent musicality — open vowels, natural rhythmic stress patterns, and rich rhyming possibilities — makes it exceptionally well-suited to song. Lyrics tend toward the poetic and emotionally direct, with love as the dominant theme but treated with sophistication and variety. Italian songwriters favor metaphor and imagery over literal statement, and the best lyrics achieve a literary quality rarely matched in other pop traditions.",
+    themes: [
+      'Amore (Love) — romantic love in all its phases: passion, longing, loss, reunion',
+      'Nostalgia — longing for places, times, and people lost',
+      'Mare e sole (Sea and sun) — Mediterranean landscape as emotional metaphor',
+      'Vita quotidiana (Daily life) — observations on ordinary existence elevated through poetry',
+      'Protesta sociale (Social protest) — political engagement, especially in cantautorato',
+      'Famiglia (Family) — bonds, conflicts, and generational dynamics',
+      'Strada (The street) — urban life, struggle, and identity in hip-hop',
+      'Viaggio (Journey) — physical and metaphorical travel as self-discovery',
+      'Malinconia (Melancholy) — bittersweet sadness as an aesthetic state',
+      'Festa (Celebration) — joy, dancing, summer, and communal pleasure',
+      'Identità (Identity) — regional pride, cultural belonging, personal growth',
+      'Tempo (Time) — the passage of time, memory, and impermanence',
+    ],
+    perspective:
+      "First person singular dominates, with the singer as emotional protagonist. Second person address to a lover or absent figure is extremely common ('tu' — the informal you). Third-person narrative is less frequent but appears in cantautorato storytelling. The 'noi' (we) perspective surfaces in social commentary and anthemic festival songs. Italian lyrics frequently shift perspective within a song, moving from personal reflection to direct address.",
+    figurativeLanguage:
+      "Metaphor is the primary figurative device, with natural imagery (sea, sky, sun, rain, wind, stars) serving as emotional correlatives. Personification of abstract concepts (love, time, fate) is common. Synesthesia — mixing sensory descriptions — appears in sophisticated lyrics. Hyperbole is embraced rather than avoided, reflecting the culture's comfort with grand emotional expression. Classical and literary allusions enrich cantautorato lyrics.",
+    vocabulary:
+      'Italian lyrics employ a broad vocabulary ranging from elevated literary language to street slang, depending on genre. Traditional canzone and cantautorato use a rich, sometimes archaic poetic vocabulary. Pop simplifies for accessibility while maintaining elegance. Hip-hop mixes Italian with regional dialects (romano, napoletano, milanese), English loanwords, and street argot. Diminutives and augmentatives add emotional color. The formal/informal pronoun distinction (Lei/tu) carries social and emotional weight.',
+    storytellingApproach:
+      "Italian lyrics favor emotional narrative over plot-driven storytelling. A scene is set, an emotional state is explored, and the chorus crystallizes the feeling into a memorable declaration. Cantautorato may employ more linear narrative, telling stories of characters or social situations. Hip-hop follows international storytelling conventions but with distinctly Italian cultural references. Circularity — returning to the opening image or phrase with new meaning — is a common structural device.",
+    cliches: [
+      "'Il mio cuore' (my heart) as the seat of all emotion",
+      "'I tuoi occhi' (your eyes) as synecdoche for the beloved",
+      "Sea/ocean as metaphor for love's depth or life's journey",
+      "'Sotto questo cielo' (under this sky) establishing romantic setting",
+      "'Per sempre' (forever) as declaration of eternal love",
+      'Rain as tears or sadness, sun as happiness and hope',
+      "'Questa notte' (tonight) as the moment of romantic possibility",
+      'Flying as metaphor for freedom or transcendent love',
+      "'Non ti scordar di me' (don't forget me) as farewell motif",
+      "'Che ne sai' (what do you know) as rhetorical challenge",
+    ],
+  },
+
+  productionFingerprint: {
+    overview:
+      'Italian music production has evolved from the lush orchestral arrangements of the 1960s-70s Sanremo era through the synthetic innovations of Italo Disco to contemporary productions that blend international trends with distinctly Mediterranean sensibility. Italian producers tend to prioritize warmth, melodic clarity, and vocal presence over aggressive compression or lo-fi aesthetics. There is a long tradition of high-quality studio craftsmanship, with Italian recording studios and engineers earning international respect.',
+    mixAesthetic:
+      'Vocals are mixed prominently, typically 2-3 dB louder in the mix than Anglo-American conventions. Reverb is used generously, especially on vocals and strings, creating a sense of space and grandeur. Low end is warm but controlled — Italian mixes rarely feature the sub-bass heaviness of American hip-hop, though modern trap-influenced productions are changing this. Stereo imaging tends to be wide, with instruments panned to create an orchestral panorama. Brightness and clarity in the upper midrange ensure vocal intelligibility.',
+    era: 'The current Italian production landscape (2020s) blends Latin music influences, trap production techniques, and traditional melodic songwriting. Autotune is standard in rap and increasingly in pop. Analog synth revival colors electronic and pop productions. Live instrumentation is making a comeback after a period of primarily digital production.',
+    signalChain:
+      'Neumann U87 or similar large-diaphragm condenser for vocals, often through tube preamps for warmth. Italian studios historically favored European gear — Neve consoles, AMS reverbs, Eventide harmonizers. Modern productions use DAW-based workflows (Logic Pro and Ableton dominate) with hardware synths for Italo Disco revival. Guitar tones shaped by Vox and Fender amplifiers. String sections recorded in acoustically treated live rooms when budget allows, otherwise high-quality sample libraries (Spitfire, EastWest).',
+    modernTrends:
+      'Trap and reggaeton production techniques have become dominant in Italian hip-hop and are influencing mainstream pop. Latin music crossover is strong, with Italian producers incorporating dembow rhythms and Latin percussion. Bedroom pop aesthetics are emerging in indie scenes. Nostalgic Italo Disco revival productions use vintage analog synthesizers and drum machines. Streaming-era loudness optimization is standard. Bilingual Italian-English and Italian-Spanish songs are increasingly common.',
+  },
+
+  instrumentation: {
+    coreInstruments: [
+      'Voice — the undisputed primary instrument across all Italian genres',
+      'Acoustic guitar — nylon-string classical and steel-string folk styles',
+      'Electric guitar — from clean arpeggios to overdriven rock tones',
+      'Piano — grand piano for ballads, electric piano for funk and jazz influences',
+      'Bass guitar — providing harmonic foundation with melodic movement',
+      'Synthesizers — analog and digital, from pads to sequenced basslines',
+      'Drum kit — acoustic or electronic depending on genre and era',
+      'Drum machine — Roland TR-808, TR-909, LinnDrum for electronic genres',
+      'Strings — orchestral section or string quartet for arrangements',
+      'Accordion/Fisarmonica — folk and traditional contexts',
+    ],
+    signatureSounds: [
+      'Mandolin — tremolo picking creating characteristic Mediterranean shimmer',
+      'Tamburello — frame drum essential to Southern Italian folk rhythms',
+      'Organetto — diatonic button accordion for folk traditions',
+      'Roland Jupiter-8 and Juno-106 — defining Italo Disco synthesizer tones',
+      'Classical guitar — fingerpicked nylon-string for intimate cantautorato',
+      'Trumpet and flugelhorn — melodic brass leads in arrangements',
+      'Cello — solo instrument for emotional countermelodies',
+      'Castanets and hand percussion — Mediterranean rhythmic color',
+      'Hammond B3 organ — rock and progressive influences',
+      'Mellotron — atmospheric textures in art-rock and progressive contexts',
+    ],
+    layering:
+      'Italian arrangements are characteristically layered, building from sparse foundations to rich, full textures. A typical build might start with solo voice and acoustic guitar, add bass and light percussion, introduce strings or synth pads at the pre-chorus, and arrive at full instrumentation for the chorus. Orchestral thinking influences even electronic productions, with attention to frequency-range distribution and timbral variety across the arrangement.',
+    avoidInstruments: [
+      'Banjo — associated with American country, rarely fits Italian aesthetic',
+      'Sitar — unless specifically pursuing East-West fusion',
+      'Bagpipes — associated with Celtic/Scottish traditions (Italian zampogna is the regional equivalent)',
+      'Didgeridoo — no cultural connection',
+      'Steel drums — Caribbean association clashes with Mediterranean identity',
+      'Heavy distorted drop-tuned guitars — unless specifically in metal subgenre',
+    ],
+  },
+
+  culturalContext: {
+    overview:
+      'Italian music is inseparable from Italian culture — it functions as a primary vehicle for emotional expression, social commentary, and national identity. Music permeates daily life, from the Festival di Sanremo (a national television event watched by millions) to street musicians in Naples to club culture in Milan and Rimini. Regional diversity is profound: Northern Italian pop sophistication differs markedly from Southern Italian folk intensity, and local dialects create distinct musical micro-cultures. The Italian music industry, while smaller than Anglo-American markets, is fiercely independent and maintains strong domestic artist development.',
+    origin:
+      'Italy\'s musical heritage extends back millennia, from Gregorian chant through Renaissance polyphony, Baroque opera, and bel canto. Modern Italian popular music emerged in the late 19th century with Neapolitan song and developed through the Sanremo Festival era (1951-present), the cantautorato movement (1960s-70s), Italo Disco (1980s), and contemporary pop-rap fusion. Each era built on previous traditions while absorbing international influences and transforming them into something distinctly Italian.',
+    identity:
+      'Music serves as a powerful marker of Italian identity at multiple levels — national, regional, and generational. The Festival di Sanremo functions as an annual ritual of national cultural cohesion. Regional musical traditions reinforce local identity: Neapolitan song for Campania, Alpine folk for Trentino, tarantella for Puglia. Generationally, Italian hip-hop and trap have become the primary musical expression for youth culture since the 2010s, creating tension with older listeners who value melodic tradition.',
+    community:
+      'Musical communities in Italy often organize around regional scenes — the Milan rap scene, the Roman indie scene, the Neapolitan neo-melodica community, the Bologna underground electronic scene. The Sanremo Festival creates a temporary national community of shared musical experience. Live music venues (locali) serve as community gathering points, especially in smaller cities. Social media and streaming have created new virtual communities that transcend regional boundaries.',
+    socialFunction:
+      'Italian music serves multiple social functions: romantic courtship and expression, political protest and social commentary, regional and national identity reinforcement, communal celebration at festivals and holidays, and intergenerational cultural transmission. Specific genres serve specific functions — Sanremo pop for mainstream entertainment, cantautorato for intellectual engagement, hip-hop for youth identity, folk music for cultural preservation, and dance music for nightlife.',
+    authenticityMarkers: [
+      'Genuine emotional delivery without ironic distance',
+      'Command of Italian vocal tradition — breath control, vibrato, dynamics',
+      'Lyrical sophistication appropriate to genre — poetic in cantautorato, street-authentic in hip-hop',
+      'Regional dialect use when appropriate to genre and artist origin',
+      'Awareness of and respect for musical predecessors and traditions',
+      'Sanremo participation or acknowledgment as career milestone',
+      'Live performance capability — Italian audiences expect vocal prowess',
+      'Authentic regional identity rather than generic pan-Italian persona',
+      'Musical literacy and arrangement awareness',
+      'Balance of tradition and innovation appropriate to genre context',
+    ],
+  },
+
+  historicalLineage: {
+    overview:
+      'Italian popular music represents one of the longest continuous musical traditions in the Western world. From the troubadours of medieval Italy through Renaissance madrigals, Baroque and Romantic opera, Neapolitan song, and into modern pop, rock, electronic, and hip-hop forms, each era has built upon and transformed its predecessors. The through-line is melody — Italian music has always prioritized memorable, emotionally expressive melodic writing, regardless of genre or era.',
+    roots: [
+      'Opera and bel canto vocal tradition (17th-19th century)',
+      "Neapolitan song (late 19th century — 'O Sole Mio, Funiculì Funiculà)",
+      'Italian folk traditions — tarantella, stornello, villotta',
+      'French chanson influence on songwriting sophistication',
+      'American jazz, rock and roll, and R&B imported post-WWII',
+      'European electronic music and synth-pop (Kraftwerk, Giorgio Moroder connection)',
+    ],
+    evolution:
+      "Italian popular music evolved from operatic and folk roots into the Sanremo Festival era (1950s-60s), which established the canzone italiana format. The cantautorato movement (late 1960s-70s) introduced singer-songwriter artistry influenced by French chanson and American folk. Italo Disco (early-mid 1980s) pioneered electronic dance music with global impact. Italian rock developed its own identity through progressive rock (1970s) and alternative rock (1990s). Hip-hop arrived in the late 1980s and has become the dominant youth genre since the 2010s. Contemporary Italian music synthesizes all these traditions with global influences.",
+    keyEras: [
+      '1950s-60s: Golden age of Sanremo and canzone italiana — Domenico Modugno, Mina, Adriano Celentano',
+      'Late 1960s-70s: Cantautorato movement — Fabrizio De André, Lucio Battisti, Francesco De Gregori, Lucio Dalla',
+      '1970s: Progressive rock — PFM, Banco del Mutuo Soccorso, Area',
+      '1980s: Italo Disco explosion — Gazebo, Den Harrow, Ryan Paris, Sabrina Salerno',
+      '1990s: Italian rock and indie emergence — Ligabue, Litfiba, CCCP/CSI',
+      '2000s: Pop renaissance and neo-cantautorato — Tiziano Ferro, Elisa, Negramaro',
+      '2010s-present: Hip-hop and trap dominance — Sfera Ebbasta, Ghali, Mahmood, Madame',
+    ],
+    influencedBy: [
+      'Opera and classical music (harmonic sophistication, vocal technique)',
+      'French chanson (lyrical depth, poetic songwriting)',
+      'American rock and roll (energy, electric instrumentation)',
+      'British progressive rock (compositional ambition)',
+      'German electronic music (synthesizer technology, sequencing)',
+      'American hip-hop and R&B (rhythmic patterns, production techniques)',
+      'Latin American music (reggaeton, cumbia — recent crossover)',
+      'African and Middle Eastern music (Mediterranean connections)',
+    ],
+    influenced: [
+      'Italo Disco influenced global dance music, house, and techno',
+      'Italian opera shaped vocal technique worldwide',
+      'Giorgio Moroder (Italian-born) essentially invented modern electronic dance music',
+      'Mediterranean pop as a pan-European style',
+      'Latin pop borrowed from Italian melodic sensibility',
+      'Euro Disco and Hi-NRG drew directly from Italo Disco',
+      'Film scoring tradition (Ennio Morricone) influenced global soundtrack composition',
+      'Europop melody and arrangement conventions',
+    ],
+  },
+
+  subGenres: [
+    {
+      name: 'Canzone Italiana',
+      description:
+        'The classic Italian song form, rooted in the Sanremo Festival tradition of the 1950s-60s. Canzone italiana emphasizes strong melody, orchestral arrangement, and emotionally direct vocal delivery. It represents the mainstream of Italian popular music and the template from which other genres diverge.',
+      distinguishingFeatures: [
+        'Lush orchestral arrangements with strings, horns, and full rhythm section',
+        'Strong, singable melodies with wide vocal range',
+        'Formal verse-chorus structure with dramatic builds',
+        'Key modulations for emotional emphasis, especially before final chorus',
+        'Romantic and sentimental lyrical themes',
+        'Polished, studio-perfected production aesthetic',
+      ],
+      bpmRange: { min: 72, max: 126 },
+      keyArtists: [
+        'Domenico Modugno',
+        'Mina',
+        'Claudio Villa',
+        'Gianni Morandi',
+        'Ornella Vanoni',
+        'Iva Zanicchi',
+      ],
+      productionNotes:
+        'Full orchestral arrangements are traditional, with strings, woodwinds, and brass supporting the vocal. Modern reinterpretations may use sample libraries but should maintain the warm, spacious mix aesthetic. Vocal reverb is generous — plate or hall. The voice must sit clearly above the arrangement.',
+      lyricNotes:
+        "Lyrics are poetic but accessible, often employing nature metaphors and direct emotional declarations. Rhyme schemes are important and typically follow ABAB or AABB patterns. The Italian language's natural musicality — open vowels ending most words — is fully exploited for melodic flow.",
+      sunoPromptKeywords: [
+        'canzone italiana',
+        'Italian classic song',
+        'orchestral Italian ballad',
+        'Sanremo style',
+        'lush strings',
+        'romantic Italian vocal',
+        'dramatic melody',
+        'bel canto pop',
+      ],
+    },
+    {
+      name: 'Italo Disco',
+      description:
+        'A distinctive electronic dance music genre that emerged in Italy in the early 1980s, characterized by synthesizer-driven arrangements, catchy melodies, and often English-language vocals with Italian accents. Italo Disco was a pioneering force in electronic dance music, influencing house, techno, and Eurodance.',
+      distinguishingFeatures: [
+        'Analog synthesizer-dominated sound palette (Jupiter-8, Juno-106, Prophet-5)',
+        'Sequenced basslines with filter modulation and syncopation',
+        'Four-on-the-floor drum machine patterns (TR-808, LinnDrum)',
+        'Catchy, simple vocal melodies often sung in English with Italian accent',
+        'Extended intros and outros for DJ mixing (16-32 bars)',
+        'Bright, shimmering synth pads and arpeggiated sequences',
+        'Gated reverb on snare drums',
+        'Futuristic, romantic, or escapist lyrical themes',
+      ],
+      bpmRange: { min: 115, max: 140 },
+      keyArtists: [
+        'Gazebo',
+        'Ryan Paris',
+        'Den Harrow',
+        'Sabrina Salerno',
+        'P. Lion',
+        'Baltimora',
+        'RAF',
+        'Sandy Marton',
+      ],
+      productionNotes:
+        'Authentic Italo Disco production uses analog synthesizers, drum machines, and hardware sequencers. The bassline is typically a monophonic synth with filter sweeps and resonance. Drums are punchy and dry, with gated reverb on snare. Synth pads provide harmonic foundation in the mid-to-upper register. Vocal processing includes chorus, delay, and moderate reverb. Modern revival productions can use soft synths emulating vintage hardware but should maintain the warm analog character.',
+      lyricNotes:
+        "Many Italo Disco songs were sung in English by Italian artists, resulting in distinctive pronunciation and sometimes unconventional phrasing that became part of the genre's charm. Lyrics tend toward romantic, escapist, or party themes.",
+      sunoPromptKeywords: [
+        'Italo Disco',
+        '1980s Italian electronic',
+        'synth-driven dance',
+        'analog synthesizer disco',
+        'four-on-the-floor synth pop',
+        'retro Italian dance',
+        'Italo Disco revival',
+        'sequencer bassline',
+        'Euro disco Italian',
+      ],
+    },
+    {
+      name: 'Cantautorato',
+      description:
+        'The Italian singer-songwriter tradition, paralleling French chanson and American folk. Cantautorato emerged in the 1960s as artists began writing their own material with literary ambition, social consciousness, and personal expression. It represents the intellectual and artistic pinnacle of Italian popular music.',
+      distinguishingFeatures: [
+        'Literary, poetically sophisticated lyrics with social and philosophical depth',
+        'Intimate, often sparse arrangements centered on voice and acoustic instrument',
+        'Personal, confessional vocal delivery prioritizing textual clarity',
+        'Complex harmonic language drawing on jazz, classical, and folk sources',
+        'Narrative storytelling with character development and social observation',
+        'Musical experimentation within accessible song forms',
+        'Intellectual and political engagement without sacrificing emotional resonance',
+      ],
+      bpmRange: { min: 60, max: 120 },
+      keyArtists: [
+        'Fabrizio De André',
+        'Lucio Battisti',
+        'Francesco De Gregori',
+        'Lucio Dalla',
+        'Francesco Guccini',
+        'Ivano Fossati',
+        'Paolo Conte',
+        'Franco Battiato',
+        'Vinicio Capossela',
+        'Brunori Sas',
+      ],
+      productionNotes:
+        "Production serves the song's emotional and lyrical content rather than pursuing sonic spectacle. Acoustic guitar or piano provides the harmonic foundation. Arrangements may be minimal or gradually build to include strings, woodwinds, and full band. Recording aesthetic favors warmth and intimacy.",
+      lyricNotes:
+        'Lyrics are the defining element. They aspire to literary quality, employing sophisticated metaphor, narrative technique, and philosophical reflection. Themes include social injustice, existential questioning, historical events, character portraits of marginalized figures, and love treated with psychological depth.',
+      sunoPromptKeywords: [
+        'cantautorato',
+        'Italian singer-songwriter',
+        'cantautore',
+        'Italian folk ballad',
+        'poetic Italian song',
+        'intimate acoustic Italian',
+        'literary Italian music',
+        'Italian chanson',
+        'thoughtful Italian vocal',
+      ],
+    },
+    {
+      name: 'Italian Hip-Hop',
+      description:
+        'Italian hip-hop emerged in the late 1980s and has evolved from underground boom-bap to become the dominant commercial genre in Italy since the mid-2010s. Contemporary Italian rap blends trap production, melodic singing, and aggressive flow with distinctly Italian lyrical concerns.',
+      distinguishingFeatures: [
+        'Trap-influenced production with 808 sub-bass and hi-hat rolls',
+        'Melodic vocal delivery blending rapping and singing (often with Auto-Tune)',
+        'Lyrics mixing standard Italian with regional dialects and street slang',
+        'Regional scene identity (Milan, Rome, Naples, Turin, Bologna)',
+        'Dark, atmospheric beats with minor-key melodies',
+        'Mediterranean melodic sensibility even in hard-hitting tracks',
+        'Cultural references specific to Italian urban life',
+      ],
+      bpmRange: { min: 70, max: 160 },
+      keyArtists: [
+        'Sfera Ebbasta',
+        'Ghali',
+        'Mahmood',
+        'Madame',
+        'Marracash',
+        'Guè',
+        'Tedua',
+        'Capo Plaza',
+        'Rkomi',
+        'Lazza',
+      ],
+      productionNotes:
+        'Modern Italian hip-hop follows international trap conventions — 808 kick drums, rapid hi-hat patterns, dark synth melodies — but often incorporates Mediterranean harmonic touches: minor keys with Neapolitan chords, Arabic-scale melodies, piano and string samples.',
+      lyricNotes:
+        "Italian rap lyrics combine street narratives with emotional introspection. Code-switching between standard Italian and regional dialects marks authentic identity. Wordplay exploits Italian's rich morphology — double meanings, rhyme schemes using verb conjugations.",
+      sunoPromptKeywords: [
+        'Italian hip-hop',
+        'Italian trap',
+        'rap italiano',
+        'Mediterranean trap',
+        'Italian urban',
+        '808 Italian rap',
+        'dark melodic Italian trap',
+        'Auto-Tune Italian vocals',
+        'Italian drill',
+      ],
+    },
+    {
+      name: 'Neapolitan Song',
+      description:
+        'The rich musical tradition of Naples and the Campania region, one of the oldest continuous popular music traditions in Europe. Characterized by passionate, operatic vocal delivery, lush melodies, and themes of love, nostalgia, and the beauty of Naples.',
+      distinguishingFeatures: [
+        'Sung in Neapolitan language with its distinctive vowel sounds and cadence',
+        'Highly emotional, operatic vocal delivery with wide dynamic range',
+        'Rich, flowing melodies with large intervallic leaps',
+        'Romantic and nostalgic lyrical themes centered on love and Naples',
+        'Traditional accompaniment of mandolin, guitar, and strings',
+        'Bel canto vocal techniques applied to popular song',
+        'Modern neo-melodica variant with electronic keyboards and drum machines',
+        'Strong connection to live performance and serenata tradition',
+      ],
+      bpmRange: { min: 60, max: 120 },
+      keyArtists: [
+        'Enrico Caruso (historical)',
+        'Roberto Murolo',
+        'Sergio Bruni',
+        'Renato Carosone',
+        'Pino Daniele',
+        "Gigi D'Alessio",
+        'Andrea Bocelli (popularizer)',
+        'Liberato',
+        'Geolier',
+      ],
+      productionNotes:
+        'Traditional Neapolitan song features mandolin tremolo, classical guitar, string quartet, and sometimes accordion. The voice must be mixed prominently with generous reverb. Modern Neapolitan artists blend traditional melodic sensibility with electronic, trap, and dance production.',
+      lyricNotes:
+        "Lyrics must be in Neapolitan language (napoletano), not standard Italian. Themes center on love, the beauty of Naples and its gulf, nostalgia for homeland, and the joy and sorrow of daily life. The language's musicality is integral to the genre's sound.",
+      sunoPromptKeywords: [
+        'Neapolitan song',
+        'canzone napoletana',
+        'Naples traditional',
+        'mandolin serenade',
+        'operatic Italian folk',
+        'neo-melodica',
+        'passionate Neapolitan vocal',
+        'Mediterranean serenade',
+        'Neapolitan dialect music',
+      ],
+    },
+    {
+      name: 'Italian Rock',
+      description:
+        'Italian rock encompasses progressive rock of the 1970s through punk, new wave, and alternative rock to contemporary indie rock. Distinguished from Anglo-American rock through greater melodic emphasis, more sophisticated harmonic language, literary lyrical ambitions, and a willingness to incorporate orchestral and Mediterranean elements.',
+      distinguishingFeatures: [
+        'Strong melodic content even in harder rock styles',
+        'Electric guitar as primary instrument but not necessarily dominant over voice',
+        'Literary and poetic lyrics that exceed typical rock convention',
+        'Willingness to incorporate classical, folk, and Mediterranean elements',
+        'Progressive rock heritage influencing arrangement complexity',
+        'Powerful live performance tradition with passionate audiences',
+        'Emotional intensity ranging from intimate to anthemic',
+      ],
+      bpmRange: { min: 80, max: 140 },
+      keyArtists: [
+        'Vasco Rossi',
+        'Ligabue',
+        'Litfiba',
+        'CCCP/CSI',
+        'Marlene Kuntz',
+        'Afterhours',
+        'Måneskin',
+        'PFM (progressive)',
+        'Le Vibrazioni',
+        'Subsonica',
+      ],
+      productionNotes:
+        'Italian rock production balances raw energy with melodic clarity. Guitar tones range from clean arpeggios to heavy distortion but typically maintain more midrange presence than American rock. Drums are natural and dynamic. Bass guitar is melodically active. Vocal production preserves the singer\'s natural tone and dynamics.',
+      lyricNotes:
+        "Italian rock lyrics carry the cantautorato tradition's literary ambition into a harder musical context. Themes include existential angst, social rebellion, romantic passion, urban life, and generational identity. Regional identity matters — Florentine rock differs from Milanese and Emilian.",
+      sunoPromptKeywords: [
+        'Italian rock',
+        'rock italiano',
+        'Mediterranean rock',
+        'Italian alternative rock',
+        'Italian indie rock',
+        'progressive Italian rock',
+        'anthemic Italian rock',
+        'Italian guitar-driven',
+        'Italian rock ballad',
+      ],
+    },
+    {
+      name: 'Italian Electronic',
+      description:
+        'Italy has been a significant contributor to electronic music since Giorgio Moroder pioneered electronic disco in the 1970s. The contemporary Italian electronic scene blends international production standards with Mediterranean melodic sensibility.',
+      distinguishingFeatures: [
+        'Melodic emphasis unusual in electronic music — singable synth themes',
+        'Warm, analog-leaning sound palettes even in digital productions',
+        'Italian house tradition with piano riffs and soulful vocals',
+        'Ambient and downtempo with Mediterranean atmospheric quality',
+        'Integration of acoustic instruments with electronic production',
+        'Club-focused productions with attention to dancefloor dynamics',
+        'Soundtrack and cinematic electronic influences',
+      ],
+      bpmRange: { min: 90, max: 140 },
+      keyArtists: [
+        'Giorgio Moroder',
+        'Benny Benassi',
+        'Gabry Ponte',
+        'Tale of Us',
+        'Mind Against',
+        'Agents of Time',
+        'Donato Dozzy',
+        'Dardust',
+        'Populous',
+      ],
+      productionNotes:
+        'Italian electronic production values warmth and musicality over sterile precision. Analog synthesizers or convincing emulations are preferred. Italian house features sampled or live piano riffs with deep basslines. Techno productions tend toward the melodic end. Atmospheric pads and evolving textures reflect the cinematic tradition.',
+      lyricNotes:
+        'When vocals are present, they may be in Italian or English and tend toward emotional, atmospheric singing. Vocal samples and processed fragments create textural interest. Lyrics are typically minimal and evocative. Instrumental tracks are equally valued.',
+      sunoPromptKeywords: [
+        'Italian electronic',
+        'Italian house',
+        'melodic techno Italian',
+        'Mediterranean electronic',
+        'Italian ambient',
+        'warm analog electronic',
+        'Italian club music',
+        'cinematic electronic Italian',
+        'Italian deep house',
+      ],
+    },
+    {
+      name: 'Sanremo Pop',
+      description:
+        'Music specifically crafted for or associated with the Festival della Canzone Italiana di Sanremo, the most important annual music event in Italy. Sanremo pop represents a specific aesthetic — polished, emotionally resonant, broadly appealing songs designed to connect with the widest possible Italian audience.',
+      distinguishingFeatures: [
+        'Meticulously crafted melodies designed for maximum memorability',
+        'Polished, full-spectrum production suitable for television broadcast',
+        'Emotionally dramatic vocal performances with dynamic range',
+        'Lyrics that balance poetic quality with mainstream accessibility',
+        'Arrangements that build to a climactic chorus or final section',
+        'Tendency toward mid-tempo with occasional uptempo entries',
+        'Annual reflection of current Italian musical trends filtered through mainstream sensibility',
+      ],
+      bpmRange: { min: 75, max: 130 },
+      keyArtists: [
+        'Mahmood',
+        'Marco Mengoni',
+        'Diodato',
+        'Ultimo',
+        'Annalisa',
+        'Angelina Mango',
+        'Geolier',
+        'Blanco',
+        'Arisa',
+        'Emma Marrone',
+      ],
+      productionNotes:
+        'Sanremo productions must sound excellent on television broadcast. Mixes are full-range and polished with careful attention to vocal clarity. Contemporary entries increasingly incorporate trap beats, electronic production, and international pop elements while maintaining the vocal-forward Italian aesthetic.',
+      lyricNotes:
+        'Sanremo lyrics must work on multiple levels — emotionally immediate for casual listeners, lyrically rewarding for attentive ones. Love and personal emotional themes dominate but social commentary appears in winning entries. The song title must be memorable and typically appears in the chorus.',
+      sunoPromptKeywords: [
+        'Sanremo pop',
+        'Italian festival song',
+        'dramatic Italian pop',
+        'Eurovision Italian style',
+        'Italian ballad dramatic',
+        'contemporary canzone',
+        'Italian pop anthem',
+        'festival della canzone',
+        'Italian pop vocal showcase',
+      ],
+    },
+    {
+      name: 'Tarantella Pop',
+      description:
+        'Modern pop music incorporating the rhythmic energy and melodic character of the tarantella, the iconic folk dance of Southern Italy. Tarantella pop fuses traditional 6/8 rhythms, tambourine patterns, and Mediterranean modes with contemporary pop production.',
+      distinguishingFeatures: [
+        '6/8 or 12/8 time signatures with driving rhythmic energy',
+        'Tambourine (tamburello) as essential rhythmic instrument',
+        'Mediterranean modal melodies with Phrygian and harmonic minor inflections',
+        'Circular, hypnotic rhythmic patterns evoking the original dance',
+        'Accordion and mandolin alongside modern instruments',
+        'Southern Italian dialect lyrics or standard Italian with Southern inflection',
+        'Festive, celebratory energy suitable for weddings and community gatherings',
+      ],
+      bpmRange: { min: 100, max: 140 },
+      keyArtists: [
+        'Eugenio Bennato',
+        'Vinicio Capossela',
+        'Sud Sound System',
+        'Officina Zoè',
+        'Canzoniere Grecanico Salentino',
+        'Ferruccio Ferrante',
+      ],
+      productionNotes:
+        'Blend acoustic folk instruments with modern production. The tamburello pattern must be prominent and authentic. Accordion and mandolin provide melodic color. Bass can be electric but should follow traditional harmonic patterns. Drums can be programmed but should respect the 6/8 feel. The energy should be infectious and danceable.',
+      lyricNotes:
+        'Lyrics in Southern Italian dialects (salentino, calabrese, siciliano) or standard Italian. Themes of love, celebration, community, and the South. Traditional tarantella lyrics reference the mythical spider bite and healing dance. Modern interpretations address identity, emigration, and Southern Italian pride.',
+      sunoPromptKeywords: [
+        'tarantella',
+        'Italian folk dance',
+        'Southern Italian folk',
+        'Mediterranean folk pop',
+        'tamburello rhythm',
+        'Italian world music',
+        'Puglia folk',
+        'pizzica',
+        'Italian folk fusion',
+      ],
+    },
+    {
+      name: 'Italian Trap',
+      description:
+        'The dominant youth music genre in Italy since the mid-2010s. Italian trap adapts American trap production (808s, hi-hat rolls, dark synths) with distinctly Italian melodic sensibility, Auto-Tuned vocal delivery, and lyrics addressing Italian urban life, materialism, and emotional vulnerability.',
+      distinguishingFeatures: [
+        'Heavy 808 sub-bass with characteristic slides and pitch bends',
+        'Rapid hi-hat rolls and sparse, hard-hitting drum patterns',
+        'Auto-Tuned melodic vocals blending singing and rapping',
+        'Dark, atmospheric synth pads and minor-key melodies',
+        'Lyrics in Italian with street slang, regional dialect, and English phrases',
+        'Mediterranean melodic hooks within trap production framework',
+        'Visual aesthetic blending international streetwear with Italian luxury fashion',
+      ],
+      bpmRange: { min: 130, max: 160 },
+      keyArtists: [
+        'Sfera Ebbasta',
+        'Dark Polo Gang',
+        'Capo Plaza',
+        'Tha Supreme (producer)',
+        'Shiva',
+        'Baby Gang',
+        'Rondodasosa',
+        'Geolier',
+        'Tony Effe',
+        'Anna',
+      ],
+      productionNotes:
+        'Follow international trap production conventions but add Mediterranean melodic elements. 808 bass should be prominent with sub-bass emphasis. Hi-hat patterns can be complex with triplet rolls. Synth melodies in minor keys with Neapolitan or harmonic minor inflections. Auto-Tune on vocals is standard. Dark, spacious mixes with prominent vocal presence.',
+      lyricNotes:
+        'Lyrics blend street narratives, materialistic boasting, emotional vulnerability, and romantic themes. Heavy use of Italian slang and regional dialects. English phrases are integrated naturally. The melodic quality of Italian language is exploited even in rapid-fire delivery. Emotional honesty distinguishes Italian trap from purely bravado-driven American counterparts.',
+      sunoPromptKeywords: [
+        'Italian trap',
+        'trap italiano',
+        'dark Italian trap',
+        'Mediterranean trap',
+        '808 Italian',
+        'Auto-Tune Italian rap',
+        'Italian drill',
+        'Italian urban trap',
+        'melodic Italian trap',
+      ],
+    },
+  ],
+
+  sceneAndAudienceCodes: {
+    overview:
+      'The Italian music scene is characterized by strong regional identities, generational divides, and the outsized cultural role of the Sanremo Festival. Audiences are passionate, knowledgeable, and deeply invested in musical authenticity. The market is primarily domestic — Italian artists mainly serve Italian-speaking audiences, though international breakthroughs are celebrated. Streaming has transformed consumption patterns, with Italian trap and pop dominating platforms, while live performance remains culturally central.',
+    fanExpectations: [
+      'Vocal excellence — Italian audiences have high standards for singing ability',
+      'Emotional authenticity and genuine passion in performance',
+      'Lyrical quality appropriate to genre — poetry in cantautorato, clever wordplay in rap',
+      'Live performance capability — lip-syncing is poorly regarded',
+      'Respect for predecessors and awareness of Italian musical heritage',
+      'Regional authenticity — artists should represent their origins genuinely',
+      'Sanremo participation as a career milestone and sign of mainstream legitimacy',
+      'Album-level artistry, not just singles — Italian audiences value cohesive album projects',
+    ],
+    gatekeeping:
+      'Italian music gatekeeping operates on multiple levels. Older audiences guard the cantautorato and canzone traditions, dismissing trap and Auto-Tune as inauthentic. Hip-hop communities police regional authenticity and street credibility. Sanremo participation generates debate — purists resist genre-mixing entries while progressives welcome evolution. Dialect use in music is both celebrated and criticized. The tension between tradition and innovation is the central dynamic of Italian music discourse.',
+    livePerformance:
+      "Live performance is central to Italian music culture. Summer arena tours and festival circuits draw enormous audiences. Italian audiences sing along passionately and expect artists to deliver vocally without significant backing-track support. The Sanremo Festival's live performance format remains the ultimate test. Club culture thrives in Milan, Rome, and Rimini. Intimate venue concerts serve indie and cantautorato audiences. Street performance remains an honored tradition, especially in Naples.",
+    fashionAndAesthetic:
+      "Italian music fashion reflects the country's broader fashion leadership. Pop and Sanremo artists favor designer Italian fashion (Gucci, Prada, Versace). Hip-hop artists blend international streetwear with Italian luxury brands. Måneskin's androgynous glam-rock style became a global reference. Visual presentation in music videos emphasizes Italian locations — coastal landscapes, historic city centers, sun-drenched piazzas.",
+    crossoverPotential:
+      "Italian music has significant crossover potential in several directions: Mediterranean pop crosses into Latin music markets; Italian rock has broken through globally via Måneskin and Eurovision; Italian electronic artists operate in the global club scene; Italo Disco has achieved cult international status. The main barrier remains language, though the global success of non-English music has opened new possibilities. Eurovision has become an important international showcase.",
+  },
+
+  // ── Relational & Embodied Dimensions ──────────────────────────────
+
+  microTimingAndFeel: {
+    overview: 'Italian pop and canzone carry a theatrical, rubato-influenced feel inherited from opera — singers stretch phrases for emotional gravity, and the band breathes with them rather than holding rigid time.',
+    quantizationDeviation: 'High in ballads and cantautorato where rubato is expected; moderate in pop; low in Italo Disco and trap where machine-quantized precision is the point.',
+    aheadBehindBeat: 'Vocalists tend to sit slightly behind the beat in ballads, pulling time for dramatic effect. In Italo Disco the sequencer is metronomic but the vocal floats above. Trap vocals ride ahead with urgency.',
+    humanizationMarkers: [
+      'slight ritardando before final chorus key change',
+      'rubato on sustained vowels in ballad verses',
+      'conductor-like tempo fluctuations in orchestral arrangements',
+      'deliberate vocal delay against the click in cantautorato',
+      'breath-driven phrasing that bends bar lines',
+    ],
+    genreSpecificFeel: 'The Sanremo tradition rewards dramatic tempo manipulation — a singer who rushes or drags for emotional effect is praised, not corrected. Tarantella has its own circular acceleration where the groove speeds up as energy builds.',
+  },
+
+  silenceAndSpace: {
+    overview: 'Italian music uses silence as theatrical punctuation — the fermata before a climactic note, the breath before the key change. Space is dramatic rather than ambient.',
+    negativeSpaceRole: 'Silence functions like a dramatic pause in opera — it heightens anticipation. The gap before a modulated final chorus is sacred territory.',
+    breathingPatterns: 'Audible breath before high notes is considered expressive, not a flaw. The intake of air signals emotional commitment to the coming phrase.',
+    dynamicContrast: 'Extreme. Italian songs regularly move from whispered intimacy to full orchestral fortissimo within a single song. The contrast IS the emotional architecture.',
+    whatIsDeliberatelyAbsent: [
+      'percussion in verse openings to expose the naked voice',
+      'harmony instruments during solo vocal passages for dramatic exposure',
+      'bass during pre-chorus builds to create tension before the drop',
+      'all instruments for a beat before the final chorus modulation',
+      'backing vocals in first verse to make their later entrance impactful',
+    ],
+  },
+
+  callAndResponse: {
+    overview: 'Call-and-response in Italian music draws from operatic tradition — the soloist declares, the chorus affirms — and from Southern folk where communal singing is embedded in celebration.',
+    vocalInstrumentalDialogue: 'The voice states the melodic theme; strings or brass answer with a counter-phrase. In cantautorato, guitar and voice trade melodic ideas like a conversation between friends.',
+    sectionInternal: 'Verse phrases often end with an instrumental "answer" — a mandolin fill, a string swell, a piano figure that completes the thought the singer began.',
+    audienceParticipation: 'Italian audiences sing entire songs back. At Sanremo, the audience chorus on the ritornello is expected. Stadium rock shows become mass singalongs where the crowd carries the melody.',
+    patterns: [
+      'lead vocal states chorus melody, crowd repeats it',
+      'brass section answers vocal phrases in canzone arrangements',
+      'tarantella circle singing with alternating solo and group',
+      'hip-hop call-out to city or neighborhood with crowd response',
+      'operatic duet tradition carried into pop collaborations',
+    ],
+  },
+
+  regionalDialectSpecificity: {
+    overview: 'Italy has extreme dialect diversity — Neapolitan, Sicilian, Milanese, Roman, Sardinian, and dozens more are mutually unintelligible languages, not mere accents. Each carries its own musical tradition and emotional register.',
+    phoneticMarkers: [
+      'Neapolitan open vowels and softened consonants (e.g., "comme" for "come")',
+      'Roman rhotacism and dropped final vowels in casual speech',
+      'Milanese clipped consonants and French-influenced nasality',
+      'Sicilian Arabic-influenced phonemes and vowel shifts',
+      'Sardinian archaic Latin vowel preservation',
+    ],
+    accentInfluence: 'Neapolitan dialect lends itself to melismatic, emotionally open singing. Roman dialect gives rap a gritty, percussive edge. Milanese Italian sounds polished and cosmopolitan. Each dialect shapes melodic contour and rhythmic phrasing differently.',
+    dialectVocabulary: [
+      'Neapolitan: "guagliò" (boy), "ammore" (love), "core" (heart)',
+      'Roman: "daje" (come on), "bella" (cool), "stacce" (stay)',
+      'Milanese: "pirla" (fool), "ciula" (take), "minga" (not)',
+      'Sicilian: "picciotto" (young man), "minchia" (exclamation), "talìa" (look)',
+    ],
+    regionWithinCulture: 'Canzone napoletana is the oldest and most prestigious regional tradition. Roman rap dominates street credibility. Milanese trap leads commercial innovation. Sicilian and Sardinian artists bring exotic otherness within Italian culture.',
+  },
+
+  performancePractice: {
+    overview: 'The Sanremo festival tradition shapes everything in Italian performance — artists are judged on live vocal delivery, emotional truth, and stage command. Lip-syncing is career-damaging.',
+    improvisationConventions: 'Final chorus vocal ad-libs and melismatic variations are expected. Cantautori may reinterpret their own songs live with altered phrasing. Jazz-influenced artists improvise freely. Trap artists freestyle between written verses.',
+    crowdInteraction: 'Italian audiences are vocal and participatory — they sing every word, wave phone lights for ballads, and create choreographed responses. Artists are expected to acknowledge and feed off crowd energy.',
+    stagePresence: 'Theatrical and physically expressive. Italian performers gesture broadly, make eye contact, and embody the emotion of each lyric. Standing still and delivering is acceptable only for the most commanding vocalists.',
+    livVsRecordedDifferences: 'Live versions are expected to exceed studio recordings in emotional intensity. Key changes may be altered, tempos stretched, and vocal embellishments added. A faithful reproduction of the studio version would feel flat.',
+    whatMakesAGoodShow: 'Vocal power that fills the venue without strain, visible emotional investment that makes the audience feel the singer means every word, dynamic contrast between intimate and explosive moments, and genuine connection with the crowd.',
+  },
+
+  socioeconomicSubtext: {
+    overview: 'Italian music reflects the country\'s deep economic and cultural North-South divide. Canzone napoletana and neo-melodica emerge from working-class Naples; Milanese trap from immigrant-rich urban peripheries; cantautorato from educated middle-class intellectual culture.',
+    materialConditions: 'Neo-melodica thrives in Neapolitan quartieri popolari where live performance at weddings and communal events is both artistic expression and economic survival. Trap artists from Milan\'s periferia reference public housing and immigrant experience.',
+    classIdentity: 'Cantautorato carries middle-class intellectual identity. Sanremo pop is aspirational mainstream. Hip-hop and trap articulate working-class and immigrant experience. Folk music preserves rural and agricultural identity.',
+    politicalUndercurrent: 'Cantautorato was explicitly political — De André wrote about anarchism, Guccini about resistance. Contemporary rap addresses immigration policy, racism, and economic precarity. Even pop carries undercurrents through Sanremo\'s role as national conversation.',
+    implicitReferences: [
+      'the periferia (urban periphery) as marker of marginalized identity',
+      'designer brands as escape from economic precarity in trap',
+      'southern emigration and the "questione meridionale" in folk and canzone',
+      'the "posto fisso" (stable job) as fading dream in contemporary lyrics',
+      'generational precariato (precarious employment) as backdrop to youth music',
+    ],
+  },
+
+  intertextualityAndSampling: {
+    overview: 'Italian music has a deep referential tradition — every cantautore is in dialogue with predecessors, and quoting or reimagining classic songs is a sign of cultural literacy, not laziness.',
+    canonKnowledge: 'Knowledge of the Sanremo archive, the cantautorato canon (De André, Battisti, Dalla, De Gregori), and Neapolitan song tradition is expected. Artists who reference these demonstrate legitimacy.',
+    samplingTradition: 'Italian hip-hop frequently samples classic Italian songs — a Battisti melody under a trap beat signals cultural belonging. Italo Disco is heavily sampled in international house and nu-disco.',
+    quotationPractice: 'Lyrical quotation of famous Italian songs is common and recognized by audiences. Melodic allusion to canzone classics in new compositions is celebrated as homage.',
+    expectedReferences: [
+      'Battisti\'s melodic language as foundational pop vocabulary',
+      'De André\'s narrative approach and social conscience',
+      'Modugno\'s "Volare" as the ur-text of Italian pop',
+      'Mina\'s vocal power as the female benchmark',
+      'Morricone\'s cinematic soundscapes as atmospheric reference',
+    ],
+    lineageSignifiers: [
+      'Sanremo participation connecting to 70+ years of festival history',
+      'covering a De André song as artistic credential',
+      'using Neapolitan dialect connecting to centuries of song tradition',
+      'analog synth sounds referencing the Italo Disco era',
+      'orchestral arrangements invoking the golden age of RAI television',
+      'bel canto vocal technique linking pop to operatic heritage',
+    ],
+  },
+
+  genderAndBodyConventions: {
+    overview: 'Italian music has strong gendered vocal traditions rooted in opera — the male cantautore as intellectual poet-singer, the female belter as vocal powerhouse. These conventions are being actively renegotiated by younger artists.',
+    vocalGenderCodes: 'Male singers in the cantautore tradition favor a warm, conversational baritone or tenor that prioritizes textual clarity. Female singers have historically been expected to demonstrate extraordinary vocal range and power — the "Mina standard" of technically stunning delivery.',
+    physicalityInPerformance: 'Male performers range from the stationary intensity of the cantautore to the physical swagger of rock and rap. Female performers navigate between elegant Sanremo poise and increasingly bold physical expression. Måneskin disrupted gendered performance conventions with androgynous staging.',
+    genderNarratives: 'Traditional canzone casts men as romantic pursuers and women as objects of devotion. Cantautorato gave men the poet-philosopher role. Female artists from Mina onward have claimed vocal and emotional authority. Contemporary artists like Madame and Elodie assert female narrative agency.',
+    subversionExamples: [
+      'Mahmood blending Arabic heritage with Italian pop masculinity',
+      'Måneskin\'s gender-fluid visual and musical presentation',
+      'Madame\'s unapologetic female authorship in rap',
+      'Achille Lauro\'s theatrical gender performance at Sanremo',
+      'Liberato\'s anonymous identity removing gender from persona entirely',
+    ],
+  },
+
+  tempoFeelVsNumber: {
+    overview: 'Italian music frequently feels slower or faster than its actual BPM due to rubato, orchestral dynamics, and the weight of melodic phrasing. A 120 BPM Italian ballad can feel more spacious than a 90 BPM American pop song.',
+    psychologicalTempo: 'Ballads feel unhurried regardless of metronome marking because the vocal phrasing stretches time. Italo Disco at 120 BPM feels propulsive because the sequencer bass creates relentless forward motion. Tarantella at 130 BPM feels frantic due to the circular acceleration.',
+    weightAndMomentum: 'Italian pop carries emotional weight that slows perceived tempo — lush orchestration and sustained vocal notes create gravitational pull. Trap production at the same BPM feels lighter and faster due to sparse textures.',
+    urgencyScale: 'Low urgency in cantautorato (contemplative), moderate in Sanremo pop (emotionally building), high in tarantella and Italo Disco (physically driving), extreme in Italian drill (aggressive forward momentum).',
+    comparisonToSameBPM: 'An Italian ballad at 80 BPM feels more expansive than an American R&B track at the same tempo because the vocal rubato and orchestral swells stretch perceived time. Italian trap at 140 BPM feels heavier than American trap because Mediterranean melodic hooks add emotional density.',
+  },
+
+  mistakeConventions: {
+    overview: 'Italian music values polished craft but prizes emotional truth above technical perfection. A voice that cracks at the climax of a ballad is moving, not embarrassing — it proves the singer is feeling it.',
+    toleratedImperfections: [
+      'vocal strain or cracking at emotional peaks as proof of genuine feeling',
+      'slight pitch variation on sustained notes when compensated by emotional delivery',
+      'audible breath and room sound in intimate recordings',
+      'rhythmic looseness in live cantautorato performance',
+      'imperfect dialect pronunciation signaling authentic regional identity',
+    ],
+    celebratedFlaws: [
+      'Vasco Rossi\'s raspy, imperfect voice as icon of authentic rock expression',
+      'Paolo Conte\'s gravelly, jazz-smoked delivery as sophisticated cool',
+      'live vocal improvisation that departs from the studio version',
+      'De André\'s understated, almost flat delivery as rejection of vocal showmanship',
+    ],
+    overproductionRisks: [
+      'Auto-Tune that erases vocal character in genres that demand rawness',
+      'drum quantization that kills the rubato feel of a ballad',
+      'excessive compression that flattens the dynamic range Italian music depends on',
+      'sample-library strings that lack the imperfections of live orchestral recording',
+      'pitch correction that removes the expressive microtonality of Neapolitan singing',
+    ],
+    authenticRoughness: 'The most authentic Italian music sounds like a human being feeling something deeply and expressing it through their voice and instrument, not like a machine producing perfect sound. The grain of the voice — its individual texture and imperfections — is the soul of the performance.',
+  },
+
+  sunoPromptGuide: {
+    essentialKeywords: [
+      'Italian',
+      'Italian vocals',
+      'melodic',
+      'passionate vocal',
+      'Mediterranean',
+      'romantic',
+      'dramatic',
+      'bel canto',
+      'Italian pop',
+      'canzone',
+      'emotional Italian',
+      'warm production',
+      'orchestral arrangement',
+      'Italian language',
+    ],
+    avoidKeywords: [
+      'country twang',
+      'Nashville',
+      'bluegrass',
+      'J-pop',
+      'K-pop',
+      'Bollywood',
+      'Celtic',
+      'bagpipe',
+      'yodeling',
+      'screamo',
+      'death metal growl',
+      'Appalachian',
+      'polka',
+    ],
+    promptTemplate:
+      '{subgenre} song in Italian, {tempo} tempo, {mood} mood, featuring {key instruments}, with {vocal style} vocals, {production style} production, {lyrical theme} theme',
+    tips: [
+      "Always specify 'Italian' or 'Italian language' to ensure Italian-language vocals rather than defaulting to English",
+      'Reference specific sub-genres (Italo Disco, cantautorato, Sanremo pop) for more accurate style targeting',
+      "Include 'melodic' as a keyword — it reinforces the Italian musical priority of melody",
+      "Specify vocal quality: 'passionate tenor', 'warm baritone', 'powerful female vocal' to invoke Italian vocal tradition",
+      "For Italo Disco, include 'analog synthesizer', 'sequencer bassline', and '1980s' to capture the authentic sound",
+      "For cantautorato, emphasize 'intimate', 'acoustic', 'poetic', and 'singer-songwriter'",
+      "Use 'Mediterranean' as a modifier to invoke the warm, sun-drenched sonic palette",
+      "For hip-hop, specify 'Italian trap' or 'Italian rap' to distinguish from American hip-hop",
+      "Include instrument specifications — 'mandolin' and 'accordion' evoke folk tradition, 'synthesizer' and 'drum machine' evoke electronic genres",
+      "Combine era references with genre for precision: '1980s Italo Disco', '1970s cantautorato', '2020s Italian trap'",
+      "For Neapolitan song, specify 'Neapolitan dialect' or 'napoletano' to distinguish from standard Italian",
+      "Adding 'Sanremo style' or 'festival' suggests polished, broadly appealing Italian pop",
+    ],
+  },
+};
