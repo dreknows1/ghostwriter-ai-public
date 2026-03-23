@@ -2,9 +2,9 @@
 // LyricsDisplay.tsx - Optimized for precision editing and professional songwriting
 import React, { useMemo, useState, useRef, useEffect, useCallback } from 'react';
 import { CopyIcon, CheckIcon, SaveIcon, MinimizeIcon, MaximizeIcon, ImageIcon, SocialIcon, TranslateIcon, LoadingSpinner, MagicWandIcon, EditIcon, DownloadIcon } from './icons';
-import { CulturalAudit, SocialPack, SongInputs } from '../types';
+import { SocialPack, SongInputs } from '../types';
 import MetaTagLibrary from './MetaTagLibrary';
-import { polishSong, editSong, getLastCulturalAudit } from '../services/geminiService';
+import { polishSong, editSong } from '../services/geminiService';
 import { hasEnoughCredits, deductCredits, COSTS } from '../services/creditService';
 
 interface LyricsDisplayProps {
@@ -24,7 +24,6 @@ interface LyricsDisplayProps {
   isResizing: boolean;
   email: string;
   currentInputs?: SongInputs;
-  initialAudit?: CulturalAudit | null;
 }
 
 const LyricsDisplay: React.FC<LyricsDisplayProps> = ({ 
@@ -40,7 +39,6 @@ const LyricsDisplay: React.FC<LyricsDisplayProps> = ({
     refreshCredits,
     email,
     currentInputs,
-    initialAudit
 }) => {
   const questionnaireItems = useMemo(() => {
     const inputs = currentInputs || {};
@@ -80,8 +78,6 @@ const LyricsDisplay: React.FC<LyricsDisplayProps> = ({
   const [artAspect, setArtAspect] = useState<"9:16" | "1:1" | "16:9">("9:16");
   const [copiedPrompt, setCopiedPrompt] = useState(false);
   const [copiedLyrics, setCopiedLyrics] = useState(false);
-  const [localAudit, setLocalAudit] = useState<CulturalAudit | null>(initialAudit || null);
-
   const textareaRef = useRef<HTMLTextAreaElement>(null);
   const backdropRef = useRef<HTMLDivElement>(null);
 
@@ -163,7 +159,6 @@ const LyricsDisplay: React.FC<LyricsDisplayProps> = ({
       let res = ''; for await (const chunk of generator) { res = chunk; }
       if (res) { 
           addToHistory(res); 
-          setLocalAudit(getLastCulturalAudit());
           setQuickEditInput(''); 
           await deductCredits(email, COSTS.EDIT_SONG, "song_edit");
           if (refreshCredits) await refreshCredits();
@@ -198,8 +193,6 @@ const LyricsDisplay: React.FC<LyricsDisplayProps> = ({
   };
 
   useEffect(() => { handleScroll(); }, [currentFullSong]);
-  useEffect(() => { setLocalAudit(initialAudit || null); }, [initialAudit]);
-
   return (
     <div className="w-full max-w-7xl animate-fade-in flex flex-col items-center px-2 md:px-4">
       <div className="w-full mb-8 flex items-center">
@@ -280,23 +273,6 @@ const LyricsDisplay: React.FC<LyricsDisplayProps> = ({
                   <h3 className="text-cyan-400 text-base md:text-lg font-black uppercase tracking-[0.14em] md:tracking-[0.3em] mb-4 flex items-center gap-3">
                     <MagicWandIcon /> STUDIO REVISION
                   </h3>
-                  {localAudit && (
-                    <div className="mb-6 rounded-2xl border border-cyan-900/40 bg-[#140e28] p-4">
-                      <div className="flex items-center justify-between mb-2">
-                        <span className="text-[11px] font-black uppercase tracking-[0.15em] text-cyan-300">Cultural Audit</span>
-                        <span className="text-sm font-black text-cyan-200 tabular-nums">{localAudit.overallScore}/100</span>
-                      </div>
-                      <p className="text-xs text-slate-300 mb-3">{localAudit.summary}</p>
-                      <div className="space-y-1.5">
-                        {localAudit.checklist.slice(0, 4).map((item) => (
-                          <div key={item.dimension} className="flex items-start justify-between gap-3 text-[11px]">
-                            <span className="text-slate-400">{item.dimension}</span>
-                            <span className="text-slate-200 font-black tabular-nums">{item.score}</span>
-                          </div>
-                        ))}
-                      </div>
-                    </div>
-                  )}
                   {questionnaireItems.length > 0 && (
                     <div className="mb-6 rounded-2xl border border-indigo-900/40 bg-[#161030] p-4">
                       <div className="flex items-center justify-between mb-2">

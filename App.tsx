@@ -1,7 +1,7 @@
 
 import React, { useState, useEffect, useCallback, useMemo } from 'react';
-import { AppStep, AppView, SongInputs, SavedSong, UserProfile, CulturalAudit } from './types';
-import { generateSong, generateAlbumArt, generateSocialPack, translateLyrics, editSong, generateDynamicOptions, structureImportedSong, getLastCulturalAudit, getLastQualityGateReport, promptToSetGeminiApiKey } from './services/geminiService';
+import { AppStep, AppView, SongInputs, SavedSong, UserProfile } from './types';
+import { generateSong, generateAlbumArt, generateSocialPack, translateLyrics, editSong, generateDynamicOptions, structureImportedSong, promptToSetGeminiApiKey } from './services/geminiService';
 import { saveSong } from './services/songService';
 import { getUserProfile } from './services/userService';
 import { getSession, signOut, signIn, signUp, signInWithOAuthEmail, startProviderSignIn } from './services/authService';
@@ -475,7 +475,6 @@ export const App: React.FC = () => {
   const [dynamicOptions, setDynamicOptions] = useState<string[]>([]);
   const [isLoadingOptions, setIsLoadingOptions] = useState(false);
   const [generatedSong, setGeneratedSong] = useState('');
-  const [culturalAudit, setCulturalAudit] = useState<CulturalAudit | null>(null);
   const [albumArt, setAlbumArt] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(false);
   const [loadingMessage, setLoadingMessage] = useState('');
@@ -736,21 +735,6 @@ export const App: React.FC = () => {
               setGeneratedSong(chunk);
               fullText = chunk;
           }
-          setCulturalAudit(getLastCulturalAudit());
-          const quality = getLastQualityGateReport();
-          if (quality) {
-            quality.passes.forEach((pass) => {
-              updateGenerationTelemetry(
-                `Quality Pass ${pass.pass}: score ${pass.score} -> ${pass.action === 'rewrite' ? 'rewrite triggered' : 'accepted'}`
-              );
-            });
-            if (quality.rewritesTriggered > 0) {
-              updateGenerationTelemetry(`Quality gate passed after ${quality.rewritesTriggered} rewrite ${quality.rewritesTriggered === 1 ? 'pass' : 'passes'} (final score ${quality.finalScore}).`);
-            } else {
-              updateGenerationTelemetry(`Quality gate accepted on first pass (score ${quality.finalScore}).`);
-            }
-          }
-          
           await deductCredits(session.user.email || '', COSTS.GENERATE_SONG, "song_generation");
           setStep(AppStep.SONG_DISPLAYED);
       } catch (err: any) {
@@ -768,7 +752,7 @@ export const App: React.FC = () => {
   const handleStartOver = () => {
       setInputs(DEFAULT_INPUTS);
       setGeneratedSong('');
-      setCulturalAudit(null);
+
       setAlbumArt(null);
       setLoadedSongId(null);
       setStep(AppStep.AWAITING_LANGUAGE);
@@ -890,8 +874,6 @@ export const App: React.FC = () => {
               setGeneratedSong(chunk);
               fullText = chunk;
           }
-          setCulturalAudit(getLastCulturalAudit());
-          
           // Deduct credits for the AI service
           await deductCredits(session.user.email || '', COSTS.GENERATE_SONG, "song_generation");
           setCredits(prev => Math.max(0, prev - COSTS.GENERATE_SONG));
@@ -1153,7 +1135,7 @@ export const App: React.FC = () => {
           <ProfileView email={session.user.email} onLoadSong={(s) => {
             setInputs({ ...DEFAULT_INPUTS, genre: 'Loaded Song' }); 
             setGeneratedSong(`Title: ${s.title || 'Untitled'}\n\n### SUNO Prompt\n${s.suno_prompt || ''}\n\n### Lyrics\n${s.lyrics || ''}`);
-            setCulturalAudit(null);
+      
             setAlbumArt(s.album_art || null);
             setLoadedSongId(s.id);
             setView(AppView.STUDIO);
@@ -1469,7 +1451,6 @@ export const App: React.FC = () => {
                 isResizing={false}
                 email={session?.user?.email || ''}
                 currentInputs={inputs}
-                initialAudit={culturalAudit}
               />
           ) : step === AppStep.GENERATING ? (
               <div className="w-full max-w-3xl mx-auto flex flex-col gap-6">

@@ -79,31 +79,6 @@ export interface SocialPack {
   cta: string;
 }
 
-export interface CulturalAuditItem {
-  dimension: string;
-  score: number;
-  notes: string;
-}
-
-export interface CulturalAudit {
-  overallScore: number;
-  summary: string;
-  checklist: CulturalAuditItem[];
-}
-
-export interface QualityGatePass {
-  pass: number;
-  score: number;
-  action: 'accepted' | 'rewrite';
-}
-
-export interface QualityGateReport {
-  minScore: number;
-  finalScore: number;
-  rewritesTriggered: number;
-  passes: QualityGatePass[];
-}
-
 export interface SavedSong {
   id: string;
   user_email: string;

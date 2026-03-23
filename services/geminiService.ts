@@ -1,4 +1,4 @@
-import { CulturalAudit, QualityGateReport, SongInputs, SocialPack, UserProfile } from "../types";
+import { SongInputs, SocialPack, UserProfile } from "../types";
 import { sanitizeEmail, sanitizeUnknown } from "../lib/sanitizeInput";
 
 type AIAction =
@@ -11,23 +11,7 @@ type AIAction =
   | "translateLyrics"
   | "askAndre";
 
-let lastCulturalAudit: CulturalAudit | null = null;
-let lastQualityGateReport: QualityGateReport | null = null;
 const GEMINI_KEY_STORAGE = "songghost_gemini_api_key";
-
-function setLastCulturalAudit(audit?: CulturalAudit | null) {
-  if (!audit) return;
-  if (typeof audit.overallScore !== "number" || !Array.isArray(audit.checklist)) return;
-  lastCulturalAudit = audit;
-}
-
-export function getLastCulturalAudit(): CulturalAudit | null {
-  return lastCulturalAudit;
-}
-
-export function getLastQualityGateReport(): QualityGateReport | null {
-  return lastQualityGateReport;
-}
 
 function sleep(ms: number): Promise<void> {
   return new Promise((resolve) => setTimeout(resolve, ms));
@@ -109,13 +93,12 @@ export async function* generateSong(
   email: string,
   userProfile?: UserProfile | null
 ): AsyncGenerator<string> {
-  const pending = callAI<{ text: string; audit?: CulturalAudit; qualityGate?: QualityGateReport }>("generateSong", email, { inputs, userProfile });
+  const pending = callAI<{ text: string }>("generateSong", email, { inputs, userProfile });
   const statusMessages = [
     "Song Ghost is listening...",
     "Drafting lyrics and structure...",
     "Applying genre/subgenre agent rules...",
-    "Running cultural authenticity score...",
-    "If score is under 85, rewrite pass starts automatically...",
+    "Applying genre authenticity fingerprint...",
     "Finalizing SUNO prompt + dynamic tag orchestration...",
   ];
   let statusIndex = 0;
@@ -132,8 +115,6 @@ export async function* generateSong(
   }
 
   const result = await pending;
-  setLastCulturalAudit(result.audit || null);
-  lastQualityGateReport = result.qualityGate || null;
   yield* singleYield(result.text || "");
 }
 
@@ -155,13 +136,12 @@ export async function* editSong(
   inputs?: SongInputs,
   userProfile?: UserProfile | null
 ): AsyncGenerator<string> {
-  const result = await callAI<{ text: string; audit?: CulturalAudit }>("editSong", email, {
+  const result = await callAI<{ text: string }>("editSong", email, {
     originalSong,
     editInstruction,
     inputs,
     userProfile,
   });
-  setLastCulturalAudit(result.audit || null);
   yield* singleYield(result.text || "");
 }
 
@@ -171,12 +151,11 @@ export async function* structureImportedSong(
   inputs?: SongInputs,
   userProfile?: UserProfile | null
 ): AsyncGenerator<string> {
-  const result = await callAI<{ text: string; audit?: CulturalAudit }>("structureImportedSong", email, {
+  const result = await callAI<{ text: string }>("structureImportedSong", email, {
     rawText,
     inputs,
     userProfile,
   });
-  setLastCulturalAudit(result.audit || null);
   yield* singleYield(result.text || "");
 }
 
@@ -215,11 +194,10 @@ export async function askAndre(question: string, email: string, history: Array<{
 }
 
 export async function* polishSong(currentLyrics: string, genre: string, email: string): AsyncGenerator<string> {
-  const result = await callAI<{ text: string; audit?: CulturalAudit }>("editSong", email, {
+  const result = await callAI<{ text: string }>("editSong", email, {
     originalSong: `Title: Draft\n### SUNO Prompt\n${genre}\n### Lyrics\n${currentLyrics}`,
     editInstruction: `Polish for ${genre}. Keep structure and improve performance cues.`,
     inputs: { genre },
   });
-  setLastCulturalAudit(result.audit || null);
   yield* singleYield(result.text || "");
 }
