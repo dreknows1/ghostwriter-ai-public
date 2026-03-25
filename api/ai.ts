@@ -828,7 +828,7 @@ function getDraftLLM(): "openai" | "claude" | "gemini" {
 }
 
 function getOpenAIModel(): string {
-  return process.env.OPENAI_TEXT_MODEL || "gpt-4o-mini";
+  return process.env.OPENAI_TEXT_MODEL || "gpt-4o";
 }
 
 /**
