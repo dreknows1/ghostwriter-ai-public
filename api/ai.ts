@@ -3,6 +3,7 @@ import { ConvexHttpClient } from "convex/browser";
 import { makeFunctionReference } from "convex/server";
 import { GoogleGenAI } from "@google/genai";
 import Anthropic from "@anthropic-ai/sdk";
+import OpenAI from "openai";
 
 const ASK_ANDRE_AUDIT_CONTEXT = `
 You are "Ask Andre" inside SongGhost.
@@ -820,12 +821,48 @@ function getClaudeModel(): string {
 
 /**
  * Which LLM to use for the creative draft step.
- * "claude" = Anthropic Claude (better lyric quality)
+ * "openai" = OpenAI GPT (cost-effective creative drafts)
+ * "claude" = Anthropic Claude (best lyric quality)
  * "gemini" = Google Gemini (default, backward-compatible)
  */
-function getDraftLLM(): "claude" | "gemini" {
+function getDraftLLM(): "openai" | "claude" | "gemini" {
   const val = (process.env.SONG_DRAFT_LLM || "gemini").toLowerCase();
-  return val === "claude" ? "claude" : "gemini";
+  if (val === "openai") return "openai";
+  if (val === "claude") return "claude";
+  return "gemini";
+}
+
+function getOpenAIModel(): string {
+  return process.env.OPENAI_TEXT_MODEL || "gpt-4o-mini";
+}
+
+/**
+ * Generate text using OpenAI.
+ * Used for the creative draft step — cost-effective with solid lyric quality.
+ */
+async function openaiGenerate(prompt: string): Promise<string> {
+  const client = new OpenAI({ apiKey: getOpenAIApiKey() });
+  const response = await client.chat.completions.create({
+    model: getOpenAIModel(),
+    max_tokens: 4096,
+    temperature: 1.0,
+    messages: [
+      {
+        role: "system",
+        content: "You are a world-class professional songwriter with deep knowledge of genre conventions, cultural authenticity, and lyrical craft across every musical tradition. Write vivid, emotionally resonant lyrics with strong narrative continuity. Follow all formatting, structural, and meta-tag instructions exactly. Never sanitize, moralize, or soften the emotional truth of a genre.",
+      },
+      { role: "user", content: prompt },
+    ],
+  });
+
+  const text = response.choices?.[0]?.message?.content?.trim() || "";
+  if (!text) {
+    throw Object.assign(new Error("OpenAI text generation returned no text."), {
+      status: 502,
+      code: "openai_no_text",
+    });
+  }
+  return text;
 }
 
 /**
@@ -858,24 +895,42 @@ async function claudeGenerate(prompt: string): Promise<string> {
 }
 
 /**
- * Smart draft generator: uses Claude or Gemini based on SONG_DRAFT_LLM env var.
- * Falls back to Gemini if Claude call fails.
+ * Smart draft generator: uses OpenAI, Claude, or Gemini based on SONG_DRAFT_LLM env var.
+ * Falls back to Gemini if the selected LLM fails.
  */
 async function generateDraft(prompt: string): Promise<string> {
-  if (getDraftLLM() === "claude") {
+  const llm = getDraftLLM();
+
+  if (llm === "openai") {
     try {
-      const claudeResult = await Promise.race([
+      const result = await Promise.race([
+        openaiGenerate(prompt),
+        new Promise<never>((_, reject) =>
+          setTimeout(() => reject(new Error("OpenAI draft timed out after 45s")), 45000)
+        ),
+      ]);
+      return result;
+    } catch (err: any) {
+      console.error("OpenAI draft failed, falling back to Gemini:", err?.message);
+      return await openAIResponses(prompt);
+    }
+  }
+
+  if (llm === "claude") {
+    try {
+      const result = await Promise.race([
         claudeGenerate(prompt),
         new Promise<never>((_, reject) =>
           setTimeout(() => reject(new Error("Claude draft timed out after 45s")), 45000)
         ),
       ]);
-      return claudeResult;
+      return result;
     } catch (err: any) {
       console.error("Claude draft failed, falling back to Gemini:", err?.message);
       return await openAIResponses(prompt);
     }
   }
+
   return await openAIResponses(prompt);
 }
 
