@@ -335,7 +335,7 @@ function fallbackStrictMetaTagSpec(inputs: any): string {
   const plan = fallbackMetaTagPlan(inputs);
   return `
 Strict meta-tag orchestration plan:
-- Section order to follow: ${plan.structureTags.join(" -> ")}
+- Default section order (override if user requests a different structure): ${plan.structureTags.join(" -> ")}
 - Required vocal identity tag: ${plan.vocalTypeTag}
 - Mood/energy tags to include across song: ${plan.moodEnergyTags.join(", ")}
 - Genre/subgenre accent tags to include naturally: ${plan.genreAccentTags.join(", ")}
@@ -351,26 +351,21 @@ Strict meta-tag orchestration plan:
 }
 
 async function getMetaTagPackage(inputs: any): Promise<MetaTagPackage> {
-  const instructionText = `${inputs?.additionalInfo || ""} ${inputs?.awkwardMoment || ""}`;
   const mod = await loadMetaTagModule();
   if (mod?.buildMetaTagGuidance && typeof mod.buildMetaTagGuidance === "function") {
     const guidance = mod.buildMetaTagGuidance(inputs || {});
-    const rawPlan =
+    const plan =
       typeof mod.buildMetaTagPlan === "function"
         ? mod.buildMetaTagPlan(inputs || {})
         : fallbackMetaTagPlan(inputs || {});
-    const plan = applyStructureOverrideToPlan(rawPlan, instructionText);
-    const strictSpec =
-      typeof mod.buildStrictMetaTagSpec === "function"
-        ? mod.buildStrictMetaTagSpec(inputs || {})
-        : fallbackStrictMetaTagSpec(inputs || {});
+    const strictSpec = buildStrictSpecFromPlan(plan);
     return { guidance, strictSpec, plan };
   }
-  const fallbackPlan = applyStructureOverrideToPlan(fallbackMetaTagPlan(inputs || {}), instructionText);
+  const plan = fallbackMetaTagPlan(inputs || {});
   return {
     guidance: fallbackMetaTagGuidance(inputs || {}),
-    strictSpec: fallbackStrictMetaTagSpec(inputs || {}),
-    plan: fallbackPlan,
+    strictSpec: buildStrictSpecFromPlan(plan),
+    plan,
   };
 }
 
@@ -1067,24 +1062,13 @@ function normalizeForComparison(text: string): string {
     .trim();
 }
 
-function looksLikeChorusFirstRequest(text: string): boolean {
-  const value = (text || "").toLowerCase();
-  return (
-    /start with (the )?chorus/.test(value) ||
-    /begin with (the )?chorus/.test(value) ||
-    /open with (the )?chorus/.test(value) ||
-    /chorus first/.test(value) ||
-    /put (the )?chorus first/.test(value)
-  );
-}
 
 function getInstructionResponsivenessDirective(instructionText: string): string {
-  const mustStartWithChorus = looksLikeChorusFirstRequest(instructionText);
   const adlibLanguage = inferRequestedAdlibLanguage(instructionText);
   return `
-- Instruction compliance is mandatory: if the user requests any structural or lyrical change, apply it explicitly.
-- Non-compliance with user edit requests is a hard failure.
-${mustStartWithChorus ? "- Required structure override: Lyrics must start with [Chorus]." : ""}
+- Instruction compliance is mandatory: if the user requests any structural, format, or lyrical change, apply it explicitly. This includes section order, starting section, song length, and any other structural preference.
+- The user's prompt always overrides default structure. If they ask the song to start with a chorus, bridge, or any section — do it.
+- Non-compliance with user requests is a hard failure.
 ${adlibLanguage ? `- Required ad-lib language override: include ad-libs in ${adlibLanguage}.` : ""}
   `.trim();
 }
@@ -1150,26 +1134,25 @@ ${songText}
   }
 }
 
-function applyStructureOverrideToPlan(plan: MetaTagPlan, instructionText: string): MetaTagPlan {
-  if (!looksLikeChorusFirstRequest(instructionText)) return plan;
-  return {
-    ...plan,
-    structureTags: ["[Chorus]", "[Verse]", "[Chorus]", "[Verse]", "[Bridge]", "[Chorus]", "[Outro]"],
-  };
+function buildStrictSpecFromPlan(plan: MetaTagPlan): string {
+  return `
+Strict meta-tag orchestration plan:
+- Default section order (override if user requests a different structure): ${plan.structureTags.join(" -> ")}
+- Required vocal identity tag: ${plan.vocalTypeTag}
+- Mood/energy tags to include across song: ${plan.moodEnergyTags.join(", ")}
+- Genre/subgenre accent tags to include naturally: ${plan.genreAccentTags.join(", ")}
+- Minimum bracket tags in Lyrics body: ${plan.minTagCount}
+- Minimum adlibs in parentheses: ${plan.minAdlibCount}
+- Minimum genre-accent tag hits: ${plan.requiredAccentHits}
+- Minimum mood/energy tag hits: ${plan.requiredMoodHits}
+- Required vocal identity tag must appear in Lyrics: ${plan.requireVocalTypeTag ? "yes" : "no"}
+- Adlib policy: ${plan.adlibPolicy}
+- Inline rule: core sections should carry line-level cueing (target ~40% of lines with inline tag/adlib direction).
+- Tag logic: opening sections establish mood + voice; mid-song sections escalate arrangement tags; final sections resolve with refrain/outro tags.
+  `.trim();
 }
 
-function lyricsStartWithChorus(songText: string): boolean {
-  const lyrics = extractLyricsBody(songText || "");
-  const firstTag = (lyrics.match(/^\s*(\[[^\]\n]{2,80}\])/m) || [])[1] || "";
-  return /^\[chorus(\s*\d+)?\]$/i.test(firstTag.trim());
-}
-
-function isInstructionApplied(originalSong: string, revisedSong: string, instructionText: string): boolean {
-  const instruction = (instructionText || "").trim();
-  if (!instruction) return true;
-  if (looksLikeChorusFirstRequest(instruction) && !lyricsStartWithChorus(revisedSong)) {
-    return false;
-  }
+function isInstructionApplied(originalSong: string, revisedSong: string, _instructionText: string): boolean {
   const before = normalizeForComparison(originalSong || "");
   const after = normalizeForComparison(revisedSong || "");
   if (before && after && before === after) return false;
@@ -1895,7 +1878,7 @@ async function enforceSongDepthAndTexture(songText: string, inputs: any, userPro
       : "- Improve texture and specificity.";
     const prompt = `
 You are a top-tier songwriter and lyric doctor.
-Rewrite this song to increase texture, originality, and performance depth while preserving core story and emotional intent.
+Rewrite this song to increase texture, originality, and performance depth while preserving core story, emotional intent, and the existing section order/structure.
 
 Return ONLY this exact format:
 Title: ...
@@ -2162,11 +2145,10 @@ Current quality deficits:
 
 Constraints:
 - Keep language, genre, and story intent unchanged.
-- Keep section order logical and musically performable.
+- PRESERVE the existing section order — do NOT rearrange sections. Only add/improve tags within the existing structure.
 - Place tags where they drive arrangement and vocal delivery (not random).
 - Prefer line-level performance direction over header-only tagging.
 - Ensure adlibs are natural and rhythmic, not spammed.
-- Maintain coherent progression from intro to outro.
 
 Song to rewrite:
 ${bestText}
@@ -2491,6 +2473,11 @@ Title: ...
 ### Lyrics
 ...
 
+USER PROMPT (THIS IS THE HIGHEST PRIORITY — everything below serves this):
+${inputs?.additionalInfo || inputs?.awkwardMoment || "(no specific instructions)"}
+
+Any specific requests in the user prompt above — structure, instrumentation, cadence, lyrics, meta tags, style, format, section order, or anything else — MUST be followed exactly. All genre guides, defaults, and system directives below are secondary to the user's prompt. If anything below conflicts with what the user asked for, the user wins.
+
 Context:
 - Language: ${inputs?.language || "English"}
 - Genre: ${inputs?.genre || "Pop"}
@@ -2501,10 +2488,9 @@ Context:
 - Audio: ${inputs?.audioEnv || "Studio (Clean)"}
 - Vocals: ${inputs?.vocals || "Female Solo"} ${inputs?.duetType ? `(Duet: ${inputs.duetType})` : ""}
 - Extra details: ${inputs?.mundaneObjects || ""} ${inputs?.awkwardMoment || ""}
-- User core prompt (highest priority): ${inputs?.additionalInfo || inputs?.awkwardMoment || ""}
 - Artist persona: ${userProfile?.display_name || "N/A"} | vibe: ${userProfile?.preferred_vibe || "N/A"}
 
-Non-negotiable writing directives:
+Writing directives (apply unless user prompt overrides):
 - The song must sound native to the selected language/region and faithful to the selected subgenre's writing traditions.
 - Avoid generic AI patterns, filler hooks, and repetitive cliche imagery.
 - Ensure each verse has narrative continuity (linked lines that advance the same lived-in scene).
@@ -2517,7 +2503,6 @@ Non-negotiable writing directives:
 - Only user-provided mundane objects may be inserted as explicit concrete lyric details.
 - Maintain clear rhyme discipline appropriate to genre/subgenre (not mostly unrhymed lines).
 - Respect genre-standard length and keep song concise.
-- If any instruction conflicts, prioritize the user's core prompt.
 
 ${craftDirectives}
 ${culturalContext}
@@ -2531,6 +2516,8 @@ ${metaTagPackage.strictSpec}
 ${agentDirectives.lyricDirectives}
 ${referenceBlueprint.promptBlock}
 ${referenceFeatureBlock}
+
+FINAL REMINDER: Re-read the USER PROMPT at the top. Every specific request there takes absolute priority over any defaults, guides, or directives above.
   `.trim();
 
   const draft = await generateDraft(prompt);
@@ -2661,24 +2648,6 @@ ${getInstructionResponsivenessDirective(rawText || "")}
   finalText = await enforceSongDepthAndTexture(finalText, inputs || {}, userProfile || {});
   finalText = await enforceSunoPromptDriver(finalText, inputs || {}, userProfile || {});
   finalText = await enforceRequestedAdlibLanguage(finalText, rawText || "");
-  if (looksLikeChorusFirstRequest(rawText || "") && !lyricsStartWithChorus(finalText)) {
-    const compliancePrompt = `
-Restructure this song so lyrics start with [Chorus] exactly.
-${getInstructionResponsivenessDirective(rawText || "")}
-Return only:
-Title: ...
-### SUNO Prompt
-...
-### Lyrics
-...
-
-Current draft:
-${finalText}
-    `.trim();
-    const complianceDraft = await openAIResponses(compliancePrompt);
-    finalText = await enforceSunoPromptDriver(complianceDraft, inputs || {}, userProfile || {});
-    finalText = await enforceRequestedAdlibLanguage(finalText, rawText || "");
-  }
 
   return { text: finalText };
 }
