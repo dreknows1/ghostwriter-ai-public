@@ -335,7 +335,7 @@ function fallbackStrictMetaTagSpec(inputs: any): string {
   const plan = fallbackMetaTagPlan(inputs);
   return `
 Strict meta-tag orchestration plan:
-- Default section order (override if user requests a different structure): ${plan.structureTags.join(" -> ")}
+- Default section order (adjust if user requests a different structure): ${plan.structureTags.join(" -> ")}
 - Required vocal identity tag: ${plan.vocalTypeTag}
 - Mood/energy tags to include across song: ${plan.moodEnergyTags.join(", ")}
 - Genre/subgenre accent tags to include naturally: ${plan.genreAccentTags.join(", ")}
@@ -1066,10 +1066,9 @@ function normalizeForComparison(text: string): string {
 function getInstructionResponsivenessDirective(instructionText: string): string {
   const adlibLanguage = inferRequestedAdlibLanguage(instructionText);
   return `
-- Instruction compliance is mandatory: if the user requests any structural, format, or lyrical change, apply it explicitly. This includes section order, starting section, song length, and any other structural preference.
-- The user's prompt always overrides default structure. If they ask the song to start with a chorus, bridge, or any section — do it.
-- Non-compliance with user requests is a hard failure.
-${adlibLanguage ? `- Required ad-lib language override: include ad-libs in ${adlibLanguage}.` : ""}
+- Honor the user's creative direction: if they request specific structure, cadence, instrumentation, lyrics, meta tags, or style, incorporate it into the song alongside the genre conventions.
+- When the user's requests and genre defaults conflict, prioritize the user's direction.
+${adlibLanguage ? `- Include ad-libs in ${adlibLanguage} as requested.` : ""}
   `.trim();
 }
 
@@ -1137,7 +1136,7 @@ ${songText}
 function buildStrictSpecFromPlan(plan: MetaTagPlan): string {
   return `
 Strict meta-tag orchestration plan:
-- Default section order (override if user requests a different structure): ${plan.structureTags.join(" -> ")}
+- Default section order (adjust if user requests a different structure): ${plan.structureTags.join(" -> ")}
 - Required vocal identity tag: ${plan.vocalTypeTag}
 - Mood/energy tags to include across song: ${plan.moodEnergyTags.join(", ")}
 - Genre/subgenre accent tags to include naturally: ${plan.genreAccentTags.join(", ")}
@@ -2473,11 +2472,6 @@ Title: ...
 ### Lyrics
 ...
 
-USER PROMPT (THIS IS THE HIGHEST PRIORITY — everything below serves this):
-${inputs?.additionalInfo || inputs?.awkwardMoment || "(no specific instructions)"}
-
-Any specific requests in the user prompt above — structure, instrumentation, cadence, lyrics, meta tags, style, format, section order, or anything else — MUST be followed exactly. All genre guides, defaults, and system directives below are secondary to the user's prompt. If anything below conflicts with what the user asked for, the user wins.
-
 Context:
 - Language: ${inputs?.language || "English"}
 - Genre: ${inputs?.genre || "Pop"}
@@ -2490,7 +2484,10 @@ Context:
 - Extra details: ${inputs?.mundaneObjects || ""} ${inputs?.awkwardMoment || ""}
 - Artist persona: ${userProfile?.display_name || "N/A"} | vibe: ${userProfile?.preferred_vibe || "N/A"}
 
-Writing directives (apply unless user prompt overrides):
+User's creative direction (prioritize — incorporate these requests while honoring the genre/selections above):
+${inputs?.additionalInfo || inputs?.awkwardMoment || "(none)"}
+
+Writing directives:
 - The song must sound native to the selected language/region and faithful to the selected subgenre's writing traditions.
 - Avoid generic AI patterns, filler hooks, and repetitive cliche imagery.
 - Ensure each verse has narrative continuity (linked lines that advance the same lived-in scene).
@@ -2503,6 +2500,7 @@ Writing directives (apply unless user prompt overrides):
 - Only user-provided mundane objects may be inserted as explicit concrete lyric details.
 - Maintain clear rhyme discipline appropriate to genre/subgenre (not mostly unrhymed lines).
 - Respect genre-standard length and keep song concise.
+- The user's creative direction should be honored — if they request specific structure, instrumentation, cadence, lyrics, or style, incorporate it. When their requests conflict with defaults, prioritize the user's direction.
 
 ${craftDirectives}
 ${culturalContext}
@@ -2516,8 +2514,6 @@ ${metaTagPackage.strictSpec}
 ${agentDirectives.lyricDirectives}
 ${referenceBlueprint.promptBlock}
 ${referenceFeatureBlock}
-
-FINAL REMINDER: Re-read the USER PROMPT at the top. Every specific request there takes absolute priority over any defaults, guides, or directives above.
   `.trim();
 
   const draft = await generateDraft(prompt);
