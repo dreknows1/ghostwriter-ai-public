@@ -12,6 +12,7 @@
     "test:webhook": "node ./scripts/test-webhook.mjs"
   },
   "dependencies": {
+    "@anthropic-ai/sdk": "^0.80.0",
     "@google/genai": "*",
     "@stripe/stripe-js": "^3.0.0",
     "buffer": "^6.0.3",

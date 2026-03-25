@@ -2,6 +2,7 @@ import type { VercelRequest, VercelResponse } from "@vercel/node";
 import { ConvexHttpClient } from "convex/browser";
 import { makeFunctionReference } from "convex/server";
 import { GoogleGenAI } from "@google/genai";
+import Anthropic from "@anthropic-ai/sdk";
 
 const ASK_ANDRE_AUDIT_CONTEXT = `
 You are "Ask Andre" inside SongGhost.
@@ -805,6 +806,77 @@ function getGeminiImageModel(): string {
 
 function getGeminiVisionModel(): string {
   return process.env.GEMINI_VISION_MODEL || "gemini-2.5-flash";
+}
+
+function getAnthropicApiKey(): string {
+  const key = process.env.ANTHROPIC_API_KEY;
+  if (!key) throw new Error("Missing ANTHROPIC_API_KEY in environment");
+  return key;
+}
+
+function getClaudeModel(): string {
+  return process.env.CLAUDE_TEXT_MODEL || "claude-sonnet-4-20250514";
+}
+
+/**
+ * Which LLM to use for the creative draft step.
+ * "claude" = Anthropic Claude (better lyric quality)
+ * "gemini" = Google Gemini (default, backward-compatible)
+ */
+function getDraftLLM(): "claude" | "gemini" {
+  const val = (process.env.SONG_DRAFT_LLM || "gemini").toLowerCase();
+  return val === "claude" ? "claude" : "gemini";
+}
+
+/**
+ * Generate text using Claude (Anthropic).
+ * Used for the creative draft step where lyric quality matters most.
+ */
+async function claudeGenerate(prompt: string): Promise<string> {
+  const client = new Anthropic({ apiKey: getAnthropicApiKey() });
+  const response = await client.messages.create({
+    model: getClaudeModel(),
+    max_tokens: 4096,
+    temperature: 1.0,
+    system: "You are a world-class professional songwriter with deep knowledge of genre conventions, cultural authenticity, and lyrical craft across every musical tradition. Write vivid, emotionally resonant lyrics with strong narrative continuity. Follow all formatting, structural, and meta-tag instructions exactly. Never sanitize, moralize, or soften the emotional truth of a genre.",
+    messages: [{ role: "user", content: prompt }],
+  });
+
+  const text = response.content
+    .filter((block): block is Anthropic.TextBlock => block.type === "text")
+    .map((block) => block.text)
+    .join("\n")
+    .trim();
+
+  if (!text) {
+    throw Object.assign(new Error("Claude text generation returned no text."), {
+      status: 502,
+      code: "claude_no_text",
+    });
+  }
+  return text;
+}
+
+/**
+ * Smart draft generator: uses Claude or Gemini based on SONG_DRAFT_LLM env var.
+ * Falls back to Gemini if Claude call fails.
+ */
+async function generateDraft(prompt: string): Promise<string> {
+  if (getDraftLLM() === "claude") {
+    try {
+      const claudeResult = await Promise.race([
+        claudeGenerate(prompt),
+        new Promise<never>((_, reject) =>
+          setTimeout(() => reject(new Error("Claude draft timed out after 45s")), 45000)
+        ),
+      ]);
+      return claudeResult;
+    } catch (err: any) {
+      console.error("Claude draft failed, falling back to Gemini:", err?.message);
+      return await openAIResponses(prompt);
+    }
+  }
+  return await openAIResponses(prompt);
 }
 
 function getPipelineBudgetMs(): number {
@@ -2406,7 +2478,7 @@ ${referenceBlueprint.promptBlock}
 ${referenceFeatureBlock}
   `.trim();
 
-  const draft = await openAIResponses(prompt);
+  const draft = await generateDraft(prompt);
   let finalText = draft;
 
   // Guide compliance check — fix hard violations in one pass
@@ -2467,7 +2539,7 @@ Original song:
 ${originalSong || ""}
   `.trim();
 
-  const draft = await openAIResponses(prompt);
+  const draft = await generateDraft(prompt);
   let finalText = draft;
 
   finalText = await enforceMetaTagOrchestration(finalText, inputs || {});
@@ -2527,7 +2599,7 @@ ${rawText || ""}
 ${getInstructionResponsivenessDirective(rawText || "")}
   `.trim();
 
-  const draft = await openAIResponses(prompt);
+  const draft = await generateDraft(prompt);
   let finalText = draft;
 
   finalText = await enforceMetaTagOrchestration(finalText, inputs || {});
