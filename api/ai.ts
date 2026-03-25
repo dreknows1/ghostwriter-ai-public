@@ -1434,72 +1434,134 @@ function alignVocalIdentityInLyrics(lyrics: string, vocals: string | undefined):
 }
 
 async function buildSunoPromptDriver(inputs: any, userProfile: any): Promise<string> {
-  const logic = await loadCulturalLogicModule();
-  const agentDirectives = await getGenreAgentDirectives(inputs || {});
+  const guide = await resolveGuide(inputs || {});
   const guideKeywords = await getGenreGuideSunoKeywords(inputs || {});
 
   const language = inputs?.language || "English";
   const genre = inputs?.genre || "Pop";
-  const subGenre = inputs?.subGenre || "Modern";
-  const instrumentation = inputs?.instrumentation || "genre-appropriate instrumentation";
+  const subGenre = inputs?.subGenre || "";
+  const instrumentation = inputs?.instrumentation || "";
   const audioEnv = inputs?.audioEnv || "studio-clean mix";
-  const scene = inputs?.scene || "intimate urban night setting";
   const emotion = inputs?.emotion || "euphoric";
   const vocals = inputs?.vocals || "Female Solo";
-  const duetType = inputs?.duetType ? `, ${inputs.duetType}` : "";
-  const vibe = userProfile?.preferred_vibe || "emotionally honest";
+  const duetType = inputs?.duetType || "";
   const referenceArtist = (inputs?.referenceArtist || "").trim();
+  const maxLen = Number(process.env.AI_SUNO_PROMPT_MAX_LEN || 600);
 
-  const writingProfile =
-    logic?.inferWritingProfile?.({
-      language,
-      genre,
-      subGenre,
-      register: detectRegisterHint(inputs),
-      allowCodeSwitch: false,
-    }) || DEFAULT_WRITING_PROFILE;
+  // ── Build from guide data when available ──
+  if (guide) {
+    const parts: string[] = [];
 
+    // 1. Genre + subgenre identity (most important for SUNO)
+    const subMatch = subGenre
+      ? guide.subGenres.find(s => s.name.toLowerCase() === subGenre.toLowerCase())
+      : null;
+    const genreTag = subMatch
+      ? `${subMatch.name} ${genre}`
+      : `${subGenre || ""} ${genre}`.trim();
+    parts.push(genreTag);
+
+    // 2. BPM from subgenre or guide
+    const guideBpm = guide.rhythmAndGroove.bpmRange;
+    const bpmVal = subMatch?.bpmRange
+      ? Math.round((subMatch.bpmRange.min + subMatch.bpmRange.max) / 2)
+      : guideBpm.sweet;
+    parts.push(`${bpmVal} BPM`);
+
+    // 3. Groove and feel from guide (not inferred)
+    parts.push(guide.rhythmAndGroove.grooveArchetype);
+    if (guide.rhythmAndGroove.feel) {
+      // Extract the relevant sub-genre feel if present
+      const feelParts = guide.rhythmAndGroove.feel.split(/\.\s*/);
+      const relevantFeel = subGenre
+        ? feelParts.find(f => f.toLowerCase().includes(subGenre.toLowerCase())) || feelParts[0]
+        : feelParts[0];
+      if (relevantFeel) parts.push(relevantFeel.trim());
+    }
+
+    // 4. Mood/emotion
+    parts.push(`${emotion} mood`);
+
+    // 5. Vocal approach from guide
+    const vocalTag = duetType
+      ? `${vocals} (${duetType}), ${guide.vocalDelivery.phrasing}`
+      : `${vocals}, ${guide.vocalDelivery.phrasing}`;
+    parts.push(vocalTag);
+    if (guide.vocalDelivery.grit) parts.push(guide.vocalDelivery.grit);
+
+    // 6. Instrumentation — user choice first, then guide signature sounds
+    if (instrumentation) {
+      parts.push(instrumentation);
+    }
+    const sigSounds = guide.instrumentation.signatureSounds.slice(0, 3);
+    if (sigSounds.length > 0) parts.push(sigSounds.join(", "));
+
+    // 7. Production fingerprint from guide
+    if (guide.productionFingerprint.mixAesthetic) {
+      // Take first sentence of mix aesthetic
+      const mixFirst = guide.productionFingerprint.mixAesthetic.split(/\.\s*/)[0];
+      parts.push(mixFirst);
+    }
+
+    // 8. Sonic texture from guide
+    const textures = guide.sonicPalette.timbre.slice(0, 2);
+    if (textures.length > 0) parts.push(textures.join(", "));
+
+    // 9. Subgenre-specific production notes
+    if (subMatch?.productionNotes) {
+      const prodFirst = subMatch.productionNotes.split(/\.\s*/)[0];
+      parts.push(prodFirst);
+    }
+
+    // 10. Audio environment
+    parts.push(audioEnv);
+
+    // 11. Tempo feel from embodied dimensions (if available)
+    if (guide.tempoFeelVsNumber?.psychologicalTempo) {
+      parts.push(guide.tempoFeelVsNumber.psychologicalTempo.split(/\.\s*/)[0]);
+    }
+
+    // 12. Reference artist
+    if (referenceArtist) parts.push(`reference: ${referenceArtist}`);
+
+    // 13. Language (for non-English)
+    if (language.toLowerCase() !== "english") {
+      parts.push(`${language} vocals`);
+    }
+
+    // 14. SUNO essential keywords not already covered
+    const promptSoFar = parts.join(", ").toLowerCase();
+    const missingKeywords = guideKeywords.keywords.filter(k => !promptSoFar.includes(k.toLowerCase()));
+    if (missingKeywords.length > 0) {
+      parts.push(missingKeywords.slice(0, 4).join(", "));
+    }
+
+    // 15. Avoid keywords
+    if (guideKeywords.avoid.length > 0) {
+      parts.push(`avoid: ${guideKeywords.avoid.slice(0, 3).join(", ")}`);
+    }
+
+    return clampPromptLength(parts.filter(Boolean).join(", "), maxLen);
+  }
+
+  // ── Fallback: no guide available ──
+  const logic = await loadCulturalLogicModule();
   const subProfile = logic?.getSubgenreSonicProfile?.(subGenre) || DEFAULT_SUBGENRE_PROFILE;
-  const genreProfile = logic?.getGenreProfile?.(genre) || DEFAULT_GENRE_PROFILE;
-  const maxLen = Number(process.env.AI_SUNO_PROMPT_MAX_LEN || 320);
-
-  const styleDescriptor = inferStyleDescriptor(genre, subGenre, subProfile.productionStyle);
-  const moodEnergyDirection = inferMoodEnergyDirection(emotion);
   const vocalApproach = inferVocalApproach(vocals, genre, emotion, duetType);
-  const arrangementDynamics = inferArrangementDynamics(
-    genreProfile.defaultStructure,
-    subProfile.arrangement,
-    subProfile.groove
-  );
   const instrumentFocus = inferInstrumentFocus(instrumentation, genre);
 
-  const guideKeywordClause = guideKeywords.keywords.length > 0
-    ? `; genre-essential: ${guideKeywords.keywords.slice(0, 6).join(", ")}`
-    : "";
-  const guideAvoidClause = guideKeywords.avoid.length > 0
-    ? `; avoid: ${guideKeywords.avoid.slice(0, 4).join(", ")}`
-    : "";
+  const fallback = [
+    `${subGenre} ${genre}`,
+    `${emotion} mood`,
+    vocalApproach,
+    instrumentFocus,
+    `${subProfile.bpmRange}, ${audioEnv}`,
+    referenceArtist ? `reference: ${referenceArtist}` : "",
+    guideKeywords.keywords.length > 0 ? guideKeywords.keywords.slice(0, 6).join(", ") : "",
+    guideKeywords.avoid.length > 0 ? `avoid: ${guideKeywords.avoid.slice(0, 4).join(", ")}` : "",
+  ].filter(Boolean).join(", ");
 
-  const referenceClause = referenceArtist ? `; reference feel: ${referenceArtist}` : "";
-  const fallbackPrompt = `
-Style: ${styleDescriptor}.
-Mood/Energy: ${moodEnergyDirection}.
-Vocals: ${vocalApproach}.
-Arrangement/Dynamics: ${arrangementDynamics}.
-Instrument focus: ${instrumentFocus}.
-Production context: ${subProfile.bpmRange}, ${audioEnv}, ${scene}; vibe ${vibe}${referenceClause}${guideKeywordClause}${guideAvoidClause}.
-Language/culture: ${language} (${writingProfile.languageVariant}, ${writingProfile.cultureRegion}); avoid cliche writing.
-  `.trim();
-
-  const prompt = agentDirectives.hasAgent
-    ? `
-${agentDirectives.sunoPromptDirectives}
-Production context: ${subProfile.bpmRange}, ${audioEnv}, ${scene}; vibe ${vibe}${referenceClause}${guideKeywordClause}${guideAvoidClause}.
-Language/culture: ${language} (${writingProfile.languageVariant}, ${writingProfile.cultureRegion}); avoid cliche writing.
-      `.trim()
-    : fallbackPrompt;
-
-  return clampPromptLength(prompt, maxLen);
+  return clampPromptLength(fallback, maxLen);
 }
 
 async function enforceSunoPromptDriver(songText: string, inputs: any, userProfile: any): Promise<string> {
