@@ -278,7 +278,7 @@ export function buildStrictMetaTagSpec(inputs: {
   const plan = buildMetaTagPlan(inputs);
   return `
 Strict meta-tag orchestration plan:
-- Default section order (override if user requests a different structure): ${plan.structureTags.join(" -> ")}
+- Default section order (adjust if user requests a different structure): ${plan.structureTags.join(" -> ")}
 - Required vocal identity tag: ${plan.vocalTypeTag}
 - Mood/energy tags to include across song: ${plan.moodEnergyTags.join(", ")}
 - Genre/subgenre accent tags to include naturally: ${plan.genreAccentTags.join(", ")}
