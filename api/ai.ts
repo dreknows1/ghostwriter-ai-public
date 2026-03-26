@@ -1931,15 +1931,13 @@ async function enforceSongDepthAndTexture(songText: string, inputs: any, userPro
   let currentMetrics = getSongDepthMetrics(currentSong);
   if (currentMetrics.strong) return currentSong;
 
-  const bannedPhraseList = SONG_CLICHE_PATTERNS.map((pattern) => pattern.source.replace(/\\b/g, "")).slice(0, 8).join(", ");
-
   for (let attempt = 0; attempt < 2; attempt += 1) {
     const issueList = currentMetrics.issues.length
       ? currentMetrics.issues.map((issue) => `- ${issue}`).join("\n")
       : "- Improve texture and specificity.";
     const prompt = `
 You are a top-tier songwriter and lyric doctor.
-Rewrite this song to increase texture, originality, and performance depth while preserving core story, emotional intent, and the existing section order/structure.
+Rewrite this song to fix the specific issues listed below. Preserve the core story, emotional intent, and section order.
 
 Return ONLY this exact format:
 Title: ...
@@ -1948,30 +1946,17 @@ Title: ...
 ### Lyrics
 ...
 
-Hard constraints:
-- Keep language and genre/subgenre intent intact.
-- Make narrator identity consistent with vocalist tags.
-- Replace hallmark/generic wording with concrete, specific imagery.
-- Maintain narrative continuity: verses should feel like unfolding scenes, not disconnected aphorisms.
-- Reuse thematic anchors across sections so the story feels coherent.
-- Add arrangement-driving performance tags (at least 4 non-section tags such as [Whisper], [Falsetto], [Harmony Stack], [Drop], [Half-Time], [Belt], [Call-and-Response]).
-- Distribute performance tags/adlibs within section lines (word/phrase/line cues), not only at section starts/ends.
-- Ensure each repeated chorus evolves meaningfully (at least 2 changed lines while preserving hook identity).
-- Establish dynamic contour across sections (soft/low moments and high/intense moments).
-- Keep adlibs musical, intentional, and style-aware (target range: 3 to 18 total).
-
-Detected issues to fix:
+Issues to fix:
 ${issueList}
 
-Avoid these phrase patterns:
-${bannedPhraseList}
+Constraints:
+- Keep language and genre/subgenre intent intact.
+- Replace generic wording with concrete, specific imagery — name real places, objects, sensations.
+- Verses should feel like unfolding scenes with narrative continuity.
+- Ensure dynamic contour: soft moments and intense moments.
+- Keep adlibs musical and style-aware (3-18 total).
 
-Session context:
-- Genre: ${inputs?.genre || "Pop"}
-- Subgenre: ${inputs?.subGenre || "Modern"}
-- Language: ${inputs?.language || "English"}
-- Emotion: ${inputs?.emotion || "Euphoric"}
-- Artist persona: ${userProfile?.display_name || "N/A"} | vibe: ${userProfile?.preferred_vibe || "N/A"}
+Context: ${inputs?.genre || "Pop"} / ${inputs?.subGenre || "Modern"} in ${inputs?.language || "English"}, ${inputs?.emotion || "Euphoric"} mood.
 
 Song:
 ${currentSong}
@@ -2515,73 +2500,149 @@ Return ONLY this exact bullet template:
   return text;
 }
 
+/**
+ * Build a genre truth paragraph — readable prose from guide data, not imperative lists.
+ * Reads like music criticism, not a checklist.
+ */
+async function getGenreTruthParagraph(inputs: any): Promise<string> {
+  const guide = await resolveGuide(inputs || {});
+  if (!guide) return "";
+
+  const subGenreName = inputs?.subGenre || "";
+  const matchedSub = subGenreName
+    ? guide.subGenres.find(s => s.name.toLowerCase() === subGenreName.toLowerCase())
+    : null;
+
+  const parts: string[] = [];
+
+  // Cultural identity
+  const culturalCore = guide.culturalContext.overview.split(".")[0];
+  parts.push(`${guide.name} at its core is ${culturalCore}.`);
+
+  // Groove and timing feel
+  parts.push(`The groove lives in ${guide.rhythmAndGroove.grooveArchetype} — ${guide.microTimingAndFeel?.genreSpecificFeel || guide.rhythmAndGroove.feel.split(".")[0]}.`);
+
+  // Lyrical tradition
+  parts.push(`Lyrically, the tradition demands ${guide.lyricalConventions.storytellingApproach}.`);
+
+  // Vocal character
+  parts.push(`The voice carries ${guide.vocalDelivery.affect}.`);
+
+  // What separates authentic from tourist
+  if (guide.mistakeConventions?.authenticRoughness) {
+    parts.push(`What separates authentic from tourist: ${guide.mistakeConventions.authenticRoughness}.`);
+  }
+
+  // Silence and space
+  if (guide.silenceAndSpace?.negativeSpaceRole) {
+    parts.push(`Space matters: ${guide.silenceAndSpace.negativeSpaceRole.split(".")[0]}.`);
+  }
+
+  // Sub-genre specifics as creative constraints (not checkbox items)
+  if (matchedSub) {
+    parts.push(`${matchedSub.name} specifically: ${matchedSub.description}`);
+    if (matchedSub.productionNotes) {
+      parts.push(`The production: ${matchedSub.productionNotes.split(".")[0]}.`);
+    }
+  }
+
+  return parts.join(" ");
+}
+
+/**
+ * Build specificity anchors — "here's how to write well" instead of "don't use these clichés".
+ * Teaches the model what good writing feels like for this genre.
+ */
+async function getSpecificityAnchors(inputs: any): Promise<string> {
+  const guide = await resolveGuide(inputs || {});
+  if (!guide) return "Write with concrete, specific imagery. Name real places, objects, sensations.";
+
+  const anchors: string[] = [];
+
+  // Themes → specificity direction
+  const themes = guide.lyricalConventions.themes.slice(0, 3);
+  if (themes.length > 0) {
+    anchors.push(`Core themes for this genre: ${themes.join(", ")}. Ground these in specific details — name actual places, objects, and sensations rather than abstract concepts.`);
+  }
+
+  // Figurative language style
+  if (guide.lyricalConventions.figurativeLanguage) {
+    anchors.push(`Figurative language: ${guide.lyricalConventions.figurativeLanguage}`);
+  }
+
+  // Vocabulary register
+  if (guide.lyricalConventions.vocabulary) {
+    anchors.push(`Vocabulary: ${guide.lyricalConventions.vocabulary}`);
+  }
+
+  // What to avoid — framed as "instead, do this"
+  const cliches = guide.lyricalConventions.cliches || [];
+  if (cliches.length > 0) {
+    anchors.push(`Instead of worn-out phrases like "${cliches[0]}", show the same emotion through a specific lived-in moment.`);
+  }
+
+  return anchors.join("\n");
+}
+
 async function generateSong(payload: any) {
   const { inputs, userProfile } = payload || {};
   const startMs = Date.now();
-  const generationSeed = `gen-${Date.now().toString(36)}-${Math.random().toString(36).slice(2, 10)}`;
-  const culturalContext = await buildCulturalPromptContext(inputs || {});
+
+  const genreTruth = await getGenreTruthParagraph(inputs || {});
+  const specificityAnchors = await getSpecificityAnchors(inputs || {});
   const metaTagPackage = await getMetaTagPackage(inputs || {});
-  const agentDirectives = await getGenreAgentDirectives(inputs || {});
-  const referenceBlueprint = await getGenreReferenceBlueprint(inputs || {});
-  const referenceFeatureBlock = await getReferenceFeatureBlock(inputs || {});
-  const craftDirectives = await compileGuideToDirectives(inputs || {}, "full");
+  const vocalDirective = getVocalAndClicheHardDirective(inputs);
+
+  const userDirection = inputs?.additionalInfo || inputs?.awkwardMoment || "";
+  const hasUserDirection = userDirection.trim().length > 0;
+
   const prompt = `
-You are a professional songwriter.
+You are a professional songwriter who has lived and breathed ${inputs?.subGenre || ""} ${inputs?.genre || "Pop"} for 20 years.
+
 Return only:
 Title: ...
 ### SUNO Prompt
-...
+[production direction, 60-80 words]
 ### Lyrics
-...
+[full lyrics with section tags and adlibs]
 
-Context:
+CONTEXT:
 - Language: ${inputs?.language || "English"}
-- Genre: ${inputs?.genre || "Pop"}
-- Subgenre: ${inputs?.subGenre || "Modern"}
-- Instrumentation: ${inputs?.instrumentation || "Piano"}
+- Genre: ${inputs?.genre || "Pop"} / ${inputs?.subGenre || "Modern"}
+- Instrumentation: ${inputs?.instrumentation || "genre-appropriate"}
 - Mood: ${inputs?.emotion || "Euphoric"}
-- Scene: ${inputs?.scene || "Studio"}
-- Audio: ${inputs?.audioEnv || "Studio (Clean)"}
-- Vocals: ${inputs?.vocals || "Female Solo"} ${inputs?.duetType ? `(Duet: ${inputs.duetType})` : ""}
-- Extra details: ${inputs?.mundaneObjects || ""} ${inputs?.awkwardMoment || ""}
-- Artist persona: ${userProfile?.display_name || "N/A"} | vibe: ${userProfile?.preferred_vibe || "N/A"}
+- Scene: ${inputs?.scene || "Studio"} | Audio: ${inputs?.audioEnv || "Studio (Clean)"}
+- Vocals: ${inputs?.vocals || "Female Solo"}${inputs?.duetType ? ` (${inputs.duetType})` : ""}
+- Concrete details to weave in: ${inputs?.mundaneObjects || "(none)"}
 
-User's creative direction (prioritize — incorporate these requests while honoring the genre/selections above):
-${inputs?.additionalInfo || inputs?.awkwardMoment || "(none)"}
+${hasUserDirection ? `USER'S CREATIVE DIRECTION (highest priority — honor this alongside genre conventions):
+${userDirection}` : ""}
 
-Writing directives:
-- The song must sound native to the selected language/region and faithful to the selected subgenre's writing traditions.
-- Avoid generic AI patterns, filler hooks, and repetitive cliche imagery.
-- Ensure each verse has narrative continuity (linked lines that advance the same lived-in scene).
-- Distinguish verse cadence vs hook cadence clearly.
-- Make the SUNO prompt production-ready and specific to the same cultural/genre profile.
-- In Lyrics, use section meta tags from the library style (e.g., [Verse], [Chorus], [Bridge], [Ad-Lib Section]).
-- Add musically appropriate adlibs in parentheses where helpful, not on every line.
-- Internally draft and compare at least 2 candidate versions, then output only the strongest one.
-- Treat genre/subgenre/instrumentation/scene/audio selections as creative direction only, not literal lyric topics.
-- Only user-provided mundane objects may be inserted as explicit concrete lyric details.
-- Maintain clear rhyme discipline appropriate to genre/subgenre (not mostly unrhymed lines).
-- Respect genre-standard length and keep song concise.
-- The user's creative direction should be honored — if they request specific structure, instrumentation, cadence, lyrics, or style, incorporate it. When their requests conflict with defaults, prioritize the user's direction.
+GENRE TRUTH:
+${genreTruth || `Write authentically for ${inputs?.subGenre || ""} ${inputs?.genre || "Pop"}.`}
 
-${craftDirectives}
-${culturalContext}
-${getGenreLengthDirective(inputs?.genre, inputs?.subGenre)}
-${getTaxonomyGuardrailDirective(inputs)}
-${getVocalAndClicheHardDirective(inputs)}
-${getInstructionResponsivenessDirective(inputs?.additionalInfo || inputs?.awkwardMoment || "")}
-${getFreshRenditionDirective(generationSeed)}
-${metaTagPackage.guidance}
+SPECIFICITY:
+${specificityAnchors}
+
+CRAFT:
+- Each verse must advance a continuous scene — linked lines, not disconnected aphorisms.
+- Verse cadence and hook cadence should feel clearly different.
+- Rhyme discipline appropriate to genre (not mostly unrhymed).
+- Use section meta tags: [Verse], [Chorus], [Bridge], [Outro], etc.
+- Add tasteful adlibs in parentheses where musically natural.
+- ${vocalDirective}
+- ${getGenreLengthDirective(inputs?.genre, inputs?.subGenre)}
+- Genre/subgenre/instrumentation selections are creative direction, not literal lyric topics.
 ${metaTagPackage.strictSpec}
-${agentDirectives.lyricDirectives}
-${referenceBlueprint.promptBlock}
-${referenceFeatureBlock}
+${getInstructionResponsivenessDirective(userDirection)}
+
+Write with confidence. Take creative risks. Make it feel lived-in, not assembled.
   `.trim();
 
   const draft = await generateDraft(prompt);
   let finalText = draft;
 
-  // Guide compliance check — fix hard violations in one pass
+  // Guide compliance check — fix hard violations in one targeted pass
   if (hasTimeBudget(startMs, 11000)) {
     const compliance = await checkGuideCompliance(finalText, inputs || {});
     if (!compliance.passed) {
@@ -2592,30 +2653,31 @@ ${referenceFeatureBlock}
     }
   }
 
+  // Meta-tag orchestration — ensure tags are present
   if (hasTimeBudget(startMs, 9000)) {
     finalText = await enforceMetaTagOrchestration(finalText, inputs || {});
   }
-  if (hasTimeBudget(startMs, 7000)) {
-    finalText = await enforceSongDepthAndTexture(finalText, inputs || {}, userProfile || {});
-  }
+
+  // Skip depth/texture enforcement on initial generation — let the draft breathe.
+  // Depth enforcement only runs on edits to avoid regression-to-mean smoothing.
+
+  // SUNO prompt driver — ensure production prompt matches guide data
   if (hasTimeBudget(startMs, 5000)) {
     finalText = await enforceSunoPromptDriver(finalText, inputs || {}, userProfile || {});
   }
-  finalText = await enforceRequestedAdlibLanguage(finalText, inputs?.additionalInfo || inputs?.awkwardMoment || "");
+
+  finalText = await enforceRequestedAdlibLanguage(finalText, userDirection);
 
   return { text: finalText };
 }
 
 async function editSong(payload: any) {
   const { originalSong, editInstruction, inputs, userProfile } = payload || {};
-  const culturalContext = await buildCulturalPromptContext(inputs || {});
+  const genreTruth = await getGenreTruthParagraph(inputs || {});
   const metaTagPackage = await getMetaTagPackage(inputs || {});
-  const agentDirectives = await getGenreAgentDirectives(inputs || {});
-  const referenceBlueprint = await getGenreReferenceBlueprint(inputs || {});
-  const referenceFeatureBlock = await getReferenceFeatureBlock(inputs || {});
-  const craftDirectives = await compileGuideToDirectives(inputs || {}, "full");
+
   const prompt = `
-Revise the song per instruction.
+Revise this song per the user's instruction. The instruction is highest priority.
 Return only full song in this exact format:
 Title: ...
 ### SUNO Prompt
@@ -2623,17 +2685,13 @@ Title: ...
 ### Lyrics
 ...
 
-Instruction: ${editInstruction || ""}
-${craftDirectives}
-Cultural context requirements:
-${culturalContext}
-${getInstructionResponsivenessDirective(editInstruction || "")}
-Meta tag and adlib requirements:
-${metaTagPackage.guidance}
+INSTRUCTION: ${editInstruction || ""}
+
+GENRE TRUTH:
+${genreTruth || `${inputs?.genre || "Pop"} / ${inputs?.subGenre || "Modern"}`}
+
 ${metaTagPackage.strictSpec}
-${agentDirectives.lyricDirectives}
-${referenceBlueprint.promptBlock}
-${referenceFeatureBlock}
+${getInstructionResponsivenessDirective(editInstruction || "")}
 
 Original song:
 ${originalSong || ""}
@@ -2643,6 +2701,7 @@ ${originalSong || ""}
   let finalText = draft;
 
   finalText = await enforceMetaTagOrchestration(finalText, inputs || {});
+  // Depth enforcement runs on edits — targeted fixes for specific issues
   finalText = await enforceSongDepthAndTexture(finalText, inputs || {}, userProfile || {});
   finalText = await enforceSunoPromptDriver(finalText, inputs || {}, userProfile || {});
   finalText = await enforceRequestedAdlibLanguage(finalText, editInstruction || "");
@@ -2671,11 +2730,9 @@ ${finalText}
 
 async function structureImportedSong(payload: any) {
   const { rawText, inputs, userProfile } = payload || {};
-  const culturalContext = await buildCulturalPromptContext(inputs || {});
+  const genreTruth = await getGenreTruthParagraph(inputs || {});
   const metaTagPackage = await getMetaTagPackage(inputs || {});
-  const agentDirectives = await getGenreAgentDirectives(inputs || {});
-  const referenceBlueprint = await getGenreReferenceBlueprint(inputs || {});
-  const craftDirectives = await compileGuideToDirectives(inputs || {}, "structure");
+
   const prompt = `
 Turn the input into a full structured song.
 Output format:
@@ -2685,25 +2742,20 @@ Title: ...
 ### Lyrics
 ...
 
-${craftDirectives}
-Cultural context requirements:
-${culturalContext}
-Meta tag and adlib requirements:
-${metaTagPackage.guidance}
+GENRE TRUTH:
+${genreTruth || `${inputs?.genre || "Pop"} / ${inputs?.subGenre || "Modern"}`}
+
 ${metaTagPackage.strictSpec}
-${agentDirectives.lyricDirectives}
-${referenceBlueprint.promptBlock}
+${getInstructionResponsivenessDirective(rawText || "")}
 
 Input:
 ${rawText || ""}
-${getInstructionResponsivenessDirective(rawText || "")}
   `.trim();
 
   const draft = await generateDraft(prompt);
   let finalText = draft;
 
   finalText = await enforceMetaTagOrchestration(finalText, inputs || {});
-  finalText = await enforceSongDepthAndTexture(finalText, inputs || {}, userProfile || {});
   finalText = await enforceSunoPromptDriver(finalText, inputs || {}, userProfile || {});
   finalText = await enforceRequestedAdlibLanguage(finalText, rawText || "");
 
