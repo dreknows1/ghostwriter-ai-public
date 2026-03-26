@@ -430,16 +430,16 @@ export const AFROBEATS_GUIDE: GenreGuide = {
   mistakeConventions: {
     overview: 'Afrobeats production values are high and polished — the genre\'s global ambitions demand radio-ready finish. But the groove must feel human, and overly clinical production strips the dance energy from the music.',
     toleratedImperfections: [
-      'Slight vocal pitch variations that convey emotion over mechanical perfection',
-      'Percussion timing that follows the polyrhythmic feel rather than a click track',
-      'Guitar strums with organic dynamic variation — not every hit perfectly equal',
-      'Background vocal chants slightly out of unison, creating communal warmth',
-      'Ad-libs that are slightly off-mic or rough in texture, adding authenticity',
+      'Yoruba tonal inflections bending pitch away from Western intervals — the melody follows speech, not the scale',
+      'Percussion timing that follows the polyrhythmic feel rather than a click track — log drum slightly off-grid is the bounce',
+      'Palm-muted guitar strums with uneven attack from right-hand dampening — the inconsistency drives the groove',
+      'Background vocal chants slightly out of unison, creating the communal warmth of a Lagos street chorus',
+      'Ad-libs ("omo!", "e choke!") that are slightly off-mic or rough in texture, adding street authenticity',
     ],
     celebratedFlaws: [
       'Wizkid\'s breathy, sometimes pitchy vocal delivery that prioritizes vibe over technique',
       'Lo-fi production on early Afrobeats hits that defined the genre\'s raw energy',
-      'Fela Kuti\'s deliberately rough, extended recordings that prioritized feel over polish',
+      'Fela Kuti\'s deliberately rough Afrobeat (the ancestor genre) recordings whose raw energy became a production reference for modern Afrobeats',
       'Live percussion recordings with room bleed that ground the electronic production',
       'Vocal takes where emotion overtakes technical control, adding urgency',
     ],

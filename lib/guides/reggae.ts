@@ -437,7 +437,7 @@ export const REGGAE_GUIDE: GenreGuide = {
       'Bass notes with slightly uneven sustain and finger noise — the physical instrument is audible',
       'Guitar skank with variable muting pressure — each strum is unique',
       'Drum fills that disrupt the one-drop pocket momentarily before settling back',
-      'Vocal harmonies slightly out of tune — human warmth over mechanical precision',
+      'Vocal trio harmonies slightly out of tune — the Wailers, Mighty Diamonds, and Culture traditions where human warmth outweighs mechanical precision',
       'Tape hiss and analog noise on classic recordings — accepted as part of the sonic texture',
     ],
     celebratedFlaws: [

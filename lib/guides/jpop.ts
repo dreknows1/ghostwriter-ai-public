@@ -369,6 +369,7 @@ export const JPOP_GUIDE: GenreGuide = {
       '"kimi" vs "anata" vs "omae" (second-person register choices)',
       'Osaka-ben particles: "ya" instead of "da", "nen" for emphasis',
       'Okinawan vocabulary in Okinawan pop (shima-uta tradition)',
+      'anime/otaku vocabulary ("sugoi", "kawaii", "maji") crossing into mainstream J-Pop lyrics',
     ],
     regionWithinCulture: 'Tokyo is the undisputed industry centre. Osaka has a distinct comedy-inflected music culture. Okinawa has its own island pop tradition. Nagoya and Fukuoka have emerging indie scenes. Regional identity is secondary to genre identity.',
   },
@@ -434,7 +435,7 @@ export const JPOP_GUIDE: GenreGuide = {
   tempoFeelVsNumber: {
     overview: 'J-Pop tempo numbers can be deceptive — a 128 BPM J-Pop track feels entirely different from a 128 BPM EDM track due to arrangement density, section contrast, and the emotional weight placed on melody over groove.',
     psychologicalTempo: 'The perceived tempo shifts dramatically between sections. An A-melo at 128 BPM can feel slow and spacious due to sparse arrangement, while the sabi at the same tempo feels urgent and propulsive. The BPM is constant; the energy is not.',
-    weightAndMomentum: 'J-Pop tends to feel lighter than its tempo suggests. Bright timbres, high-register melodies, and crisp production reduce perceived heaviness. City Pop at 100 BPM feels breezy; NDH at the same tempo feels crushing.',
+    weightAndMomentum: 'J-Pop tends to feel lighter than its tempo suggests. Bright timbres, high-register melodies, and crisp production reduce perceived heaviness. City Pop at 100 BPM feels breezy; Visual Kei heavy rock at the same tempo feels crushing.',
     urgencyScale: 'Low in ballads regardless of tempo. Moderate in standard pop. High in anison and J-Rock where driving guitars and dense arrangements create forward momentum. Extreme in Vocaloid at 200+ BPM.',
     comparisonToSameBPM: 'J-Pop at 128 BPM prioritizes melodic and harmonic complexity over groove power. Where Western EDM at 128 would be body-moving, J-Pop at 128 is head-and-heart-moving — the engagement is emotional and intellectual rather than purely physical.',
   },

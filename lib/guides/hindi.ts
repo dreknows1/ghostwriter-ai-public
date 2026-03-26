@@ -428,7 +428,7 @@ export const HINDI_GUIDE: GenreGuide = {
     genderNarratives: 'The heroine song (expressing longing, devotion, or joy) and the hero song (expressing determination, romantic pursuit, or heartbreak) are established categories. Item numbers are high-energy performance pieces historically centered on a female dancer. Male romantic ballads express devotion and loss.',
     subversionExamples: [
       'Asha Bhosle\'s sensual vocal delivery challenging Lata Mangeshkar\'s pure-voice standard',
-      'female rappers in Hindi hip-hop (Raja Kumari, IKKA) entering male-dominated space',
+      'female rappers in Hindi hip-hop (Raja Kumari, Dee MC, Hard Kaur) entering male-dominated space',
       'A.R. Rahman\'s compositions giving female characters complex emotional arcs beyond romance',
       'indie Hindi music moving beyond Bollywood\'s gender-typed song categories',
       'male playback singers expressing vulnerability and emotional fragility in contemporary ballads',
