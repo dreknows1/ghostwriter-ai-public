@@ -408,7 +408,7 @@ export const ARABIC_GUIDE: GenreGuide = {
       'Fairuz\'s "Li Beirut" as Lebanese cultural anthem',
       'Abdel Halim Hafez\'s romantic film songs as Egyptian pop touchstone',
       'Abdel Wahab\'s compositional innovations as modernization reference',
-      'Nusrat Fateh Ali Khan (Sufi qawwali) as spiritual music crossover point',
+      'Sheikh Imam\'s protest songs as political music touchstone',
     ],
     lineageSignifiers: [
       'specific maqam modulation patterns traced to golden-age compositions',
@@ -437,7 +437,7 @@ export const ARABIC_GUIDE: GenreGuide = {
   tempoFeelVsNumber: {
     overview: 'Arabic music often operates outside fixed tempo — tarab performances accelerate and decelerate based on emotional intensity. Even when a tempo is established, the ornamental nature of the music makes BPM a poor descriptor of the felt experience.',
     psychologicalTempo: 'A tarab performance at 80 BPM can feel timeless — the long vocal phrases and ornamental passages create a sense of suspended time. Dabke at 140 BPM feels faster than Western pop at the same tempo due to the stomping physicality. Mahraganat at 120 BPM feels frenetic due to dense percussion.',
-    weightAndMomentum: 'The emotional weight of Arabic music exceeds what its tempo suggests. A slow mawwal carries enormous gravity. The acceleration pattern in qawwali and Sufi music creates momentum that transcends tempo — the music feels like it is pulling the listener forward.',
+    weightAndMomentum: 'The emotional weight of Arabic music exceeds what its tempo suggests. A slow mawwal carries enormous gravity. The acceleration pattern in Sufi dhikr and hadra creates momentum that transcends tempo — the music feels like it is pulling the listener forward.',
     urgencyScale: 'Tarab creates urgency through emotional intensification, not tempo increase. Dabke is physically urgent. Mahraganat is energetically chaotic. Arabic ballads can create more urgency at 70 BPM than many genres achieve at 140.',
     comparisonToSameBPM: 'Arabic music at any given BPM feels entirely different from Western music at the same tempo because the ornamental timing, maqam-based melodic framework, and heterophonic texture create a temporal experience that the BPM number cannot capture.',
   },

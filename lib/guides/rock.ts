@@ -196,6 +196,29 @@ export const ROCK_GUIDE: GenreGuide = {
       productionNotes: 'Big, room-filling guitar tones. Live, dynamic drums with room sound. Warm analog production. Let the instruments breathe. Guitar solos are essential.',
       lyricNotes: 'Love, freedom, rock lifestyle, road stories. Blues-influenced themes. Mythological and mystical references. Anthemic choruses.',
       sunoPromptKeywords: ['classic rock', '70s rock', 'blues rock', 'guitar solo', 'arena rock', 'stadium rock', 'riff-driven'],
+      embodiedDelta: {
+        microTimingAndFeel: {
+          aheadBehindBeat: 'Behind the beat — the groove has a lazy, confident swagger inherited from blues; rushing feels amateur',
+          genreSpecificFeel: 'Bonham-style pocket — massive weight on the backbeat with swing in the hi-hat; the groove breathes and sways rather than drives',
+        },
+        callAndResponse: {
+          vocalInstrumentalDialogue: 'Blues-rooted vocal-guitar conversation — the lead guitar literally answers the singer phrase by phrase, trading lines like two voices in dialogue',
+          audienceParticipation: 'Arena singalongs are foundational — the crowd becomes a choir on anthemic choruses; lighters (now phones) raised during ballads',
+        },
+        performancePractice: {
+          improvisationConventions: 'Extended guitar solos are expected and celebrated — solos stretch from 2 minutes to 20 in concert; the solo IS the show',
+          livVsRecordedDifferences: 'Live versions are often definitive — extended jams, heavier arrangements, and crowd energy make the studio version a sketch',
+          whatMakesAGoodShow: 'Guitar hero spectacle — the solo, the power stance, the wall of Marshalls; showmanship and virtuosity displayed without irony',
+        },
+        tempoFeelVsNumber: {
+          weightAndMomentum: 'Heavy groove weight from blues lineage — notes have sustain and thickness; the bass and kick land like a slow hammer rather than a rapid pulse',
+          psychologicalTempo: 'Feels slower than the BPM suggests due to swing, sustain, and spacious arrangements; 130 BPM classic rock grooves like a 110 BPM pocket',
+        },
+        intertextualityAndSampling: {
+          canonKnowledge: 'Blues canon is required vocabulary — knowing Muddy Waters, Robert Johnson, and Howlin\' Wolf is expected; the I-IV-V is sacred text',
+          lineageSignifiers: ['Les Paul through Marshall tone', '12-bar blues form adapted to rock', 'Pentatonic minor soloing vocabulary', 'Hammond organ as tonal anchor'],
+        },
+      },
     },
     {
       name: 'Alternative Rock',
@@ -234,6 +257,15 @@ export const ROCK_GUIDE: GenreGuide = {
           canonKnowledge: 'Deep referential canon — Velvet Underground, Pavement, Guided by Voices, Pixies; knowing obscure bands signals credibility',
           lineageSignifiers: ['Velvet Underground drone', 'Pavement slackness', 'Pixies quiet-loud (without grunge heaviness)', 'Wire economy'],
         },
+        socioeconomicSubtext: {
+          classIdentity: 'Educated middle-class with working-class sympathies — the audience has college degrees but cultivates anti-careerist values; downward mobility as lifestyle choice',
+          materialConditions: 'Gentrifying neighborhoods, coffee shops, and bookstores — the music lives in urban spaces being transformed by its own audience\'s economic presence',
+        },
+        performancePractice: {
+          stagePresence: 'Studied anti-charisma — musicians look disinterested, avoid rock-star moves; trying too hard is the worst sin',
+          crowdInteraction: 'Polite appreciation — head nodding and swaying replaces moshing; talking between songs is conversational, not performative',
+          whatMakesAGoodShow: 'Intimate connection over spectacle — small venues, eye-level stages, and the feeling that the band is playing for you specifically',
+        },
       },
     },
     {
@@ -264,6 +296,19 @@ export const ROCK_GUIDE: GenreGuide = {
         performancePractice: {
           improvisationConventions: 'Zero — play the song fast, play it loud, get off stage; the setlist is sacred',
           crowdInteraction: 'Physical chaos — moshing, stage diving, crowd surfing are expected; the barrier between band and audience collapses',
+        },
+        socioeconomicSubtext: {
+          classIdentity: 'Explicitly working-class and anti-bourgeois — punk rejects virtuosity and expensive gear as class markers; a cheap guitar is ideological',
+          politicalUndercurrent: 'Direct political confrontation — not subtext but text; anti-government, anti-corporate, anti-authority lyrics are the norm, not the exception',
+        },
+        tempoFeelVsNumber: {
+          urgencyScale: 'Permanently 9-10 — punk has one gear: frantic. Even "slow" punk songs feel urgent compared to other rock sub-genres',
+          weightAndMomentum: 'All momentum, no weight — thin guitar tones and relentless strumming create breathless forward motion without the heaviness of rock or metal',
+        },
+        vocalDelivery: {
+          phrasing: 'Shouted in rapid-fire bursts — lyrics are compressed into short, punchy phrases that land like jabs; no melisma, no sustain',
+          grit: 'Maximum — vocal cords are expendable; screaming until hoarse is a badge of honor, not a technique failure',
+          affect: 'Rage, contempt, and sardonic humor delivered without vocal nuance — the emotion is in the intensity, not the inflection',
         },
       },
     },
@@ -347,6 +392,15 @@ export const ROCK_GUIDE: GenreGuide = {
           canonKnowledge: 'Classical and jazz canon expected — quoting Stravinsky or Coltrane signals compositional ambition',
           lineageSignifiers: ['Classical orchestration references', 'Jazz harmony borrowings', 'Electronic experimentation (Tangerine Dream, Kraftwerk)'],
         },
+        callAndResponse: {
+          vocalInstrumentalDialogue: 'Composed counterpoint replaces blues call-and-response — instruments converse in written parts, not improvised fills',
+          sectionInternal: 'Theme and development — a melodic idea introduced in one section returns transformed in another, creating a narrative arc across 10-20 minutes',
+        },
+        songStructure: {
+          form: 'Multi-movement suites — A-B-C-D-E rather than verse-chorus; sections may never repeat, functioning more like classical movements than pop structure',
+          arrangement: 'Orchestral layering — keyboards, mellotron, and multiple guitar tones create a timbral palette that shifts across movements; density is compositional, not just dynamic',
+          barLengths: 'Irregular and asymmetric — 7-bar phrases, 5/4 sections, and metric modulations are standard; the listener cannot predict where the downbeat lands',
+        },
       },
     },
     {
@@ -377,6 +431,19 @@ export const ROCK_GUIDE: GenreGuide = {
           authenticRoughness: 'Anti-80s reaction — roughness is a political statement against hair-metal polish and corporate rock production',
           overproductionRisks: ['Slick guitar tones', 'Visible studio polish', 'Backing vocals that sound "arranged"', 'Any hint of 80s production sheen'],
           celebratedFlaws: ['Feedback between songs', 'Vocal strain to the point of cracking', 'Bass distortion bleeding into everything'],
+        },
+        socioeconomicSubtext: {
+          classIdentity: 'Suburban disillusionment — kids who expected middle-class comfort and found spiritual emptiness; the anger is existential, not political',
+          materialConditions: 'Post-industrial Pacific Northwest — logging towns in decline, constant rain, geographic isolation feeding introspection and despair',
+        },
+        tempoFeelVsNumber: {
+          weightAndMomentum: 'Maximum weight, moderate momentum — sludgy downtuned guitars and booming bass create a physical heaviness that anchors even mid-tempo songs',
+          urgencyScale: 'Split personality — verses at 3-4 (mumbled, restrained) erupting to 8-9 (screamed, full-band assault); the contrast IS the urgency',
+        },
+        vocalDelivery: {
+          phrasing: 'Mumbled verses that build to screamed choruses — the vocal arc within each song mirrors the quiet-loud dynamic of the arrangement',
+          affect: 'Self-loathing and exhaustion — the voice sounds tired of its own pain; anger without hope, delivered as confession rather than confrontation',
+          grit: 'Extreme — raw vocal cord strain is the emotional proof; Cobain, Staley, and Cornell all sang like the song was destroying them',
         },
       },
     },
@@ -459,11 +526,11 @@ export const ROCK_GUIDE: GenreGuide = {
     quantizationDeviation: 'Moderate to significant — rock is played by humans, and the deviations from the grid give it life. Punk pushes hard ahead of the beat. Blues-rock drags behind. The drummer and bass player lock together, but the guitar often floats slightly ahead or behind.',
     aheadBehindBeat: 'Punk sits aggressively ahead — the snare rushes, the guitars push. Blues-rock and classic rock lay behind — the groove has a lazy confidence. Indie rock varies by intent. The relationship between drummer and guitarist defines the sub-genre feel more than tempo.',
     humanizationMarkers: [
-      'Slight flamming between kick drum and bass guitar attacks',
-      'Guitar strumming that drifts ahead of the click on choruses',
-      'Fill-ins where the drummer briefly rushes then settles back',
-      'Vocal entries that land just after the downbeat for drama',
-      'Hi-hat velocity inconsistencies that breathe with the song',
+      'Kick-and-bass flam where the bass guitar attack lags the kick by a few ms, creating the "thick" low-end rock bands chase',
+      'Power-chord strumming that pushes ahead of the click during chorus builds, pulling the energy forward',
+      'Tom fills that rush slightly across the bar line before the drummer lands hard on the downbeat crash',
+      'Vocal entries that land just behind the distorted guitar riff, letting the riff announce the section first',
+      'Hi-hat opening unevenly on backbeats during ride-cymbal-driven sections, giving the groove a raw, physical breath',
     ],
     genreSpecificFeel: 'The "Bonham feel" — slightly behind the beat with massive weight. The "Ramones rush" — everything pushing forward urgently. The "Keith Moon chaos" — fills that disrupt the grid and create controlled turbulence. Each sub-genre has a distinct timing signature that fans recognize instinctively.',
   },
@@ -585,11 +652,11 @@ export const ROCK_GUIDE: GenreGuide = {
   mistakeConventions: {
     overview: 'Rock celebrates imperfection — a cracked vocal, a slightly out-of-tune guitar bend, a drum fill that almost falls apart. These "mistakes" are markers of authenticity and emotional commitment. Punk elevated the mistake to an ideology: if you can play too well, you\'re not punk.',
     toleratedImperfections: [
-      'Slightly out-of-tune guitar bends that add emotional urgency',
-      'Vocal pitch wobble during emotionally intense passages',
-      'Drums speeding up during exciting sections (natural adrenaline)',
-      'Feedback and amp noise between songs',
-      'Visible effort in vocal delivery — strain as evidence of commitment',
+      'Guitar bends that overshoot pitch on pentatonic-minor solos, adding urgency to blues-rooted phrasing',
+      'Vocal pitch cracking on belted chorus notes where the singer pushes past their comfortable range',
+      'Drummer speeding up 2-3 BPM during the loud chorus after a quiet verse build — the adrenaline of the dynamic shift',
+      'Tube amp feedback and hum ringing between songs as the guitarist changes pedal settings',
+      'Doubled rhythm guitars slightly out of phase with each other, thickening the wall-of-sound stereo field',
     ],
     celebratedFlaws: [
       'Punk\'s deliberate amateurism — three chords and the truth',

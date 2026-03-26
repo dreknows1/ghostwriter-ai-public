@@ -336,6 +336,7 @@ export const KPOP_GUIDE: GenreGuide = {
       'natural room reverb — spaces are synthetic and precisely controlled',
       'organic instrument decay — sounds are gated and sculpted',
       'unprogrammed silence — even the quiet moments are deliberately placed',
+      'raw, unprocessed vocal takes — every vocal is pitch-corrected, compressed, and layered',
     ],
   },
 
@@ -365,9 +366,10 @@ export const KPOP_GUIDE: GenreGuide = {
     accentInfluence: 'Seoul standard dominates. Members from other regions may use their native dialect in variety shows but rarely in songs. English pronunciation follows American patterns due to training.',
     dialectVocabulary: [
       'English loan words and code-switching as K-Pop "dialect" ("let\'s go", "oh my god")',
-      'Korean internet slang and neologisms entering lyrics',
-      'aegyo vocabulary for cute concepts',
-      'satoori phrases for comedic contrast in songs',
+      'Korean internet slang and neologisms entering lyrics ("daebak", "hwaiting")',
+      'aegyo vocabulary for cute concepts ("oppa", "unnie", "aigoo")',
+      'satoori phrases for comedic contrast in songs (Busan "mwo hano?" vs Seoul "mwo hae?")',
+      'fan culture vocabulary crossing into lyrics ("bias", "comeback", "fighting")',
     ],
     regionWithinCulture: 'Seoul is the absolute centre — all major labels (SM, YG, JYP, HYBE) are Seoul-based. Regional identity is subordinate to label and group identity. The K-Pop industry is one of the most geographically centralized in global music.',
   },

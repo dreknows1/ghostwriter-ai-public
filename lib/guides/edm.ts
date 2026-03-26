@@ -253,6 +253,28 @@ export const EDM_GUIDE: GenreGuide = {
       productionNotes: 'Euphoric supersaw melodies. Long builds to emotional drops. Lush reverb pads. Arpeggiated sequences. Emotional breakdowns with piano or vocal.',
       lyricNotes: 'Emotional, uplifting, transcendent. Love, unity, hope. Simple but powerful emotional messages.',
       sunoPromptKeywords: ['trance', 'uplifting trance', 'euphoric', 'melodic trance', 'epic', 'emotional EDM', 'anthem'],
+      embodiedDelta: {
+        microTimingAndFeel: {
+          genreSpecificFeel: 'Metronomic precision as hypnotic tool — the unwavering grid induces trance states; subtle pitch modulation on leads provides movement, not timing variation',
+          quantizationDeviation: 'Near zero — absolute rhythmic consistency is required for the hypnotic effect; any timing drift breaks the spell',
+        },
+        silenceAndSpace: {
+          negativeSpaceRole: 'The breakdown is sacred — stripping to a lone piano or vocal for 16-32 bars creates the emotional void that the supersaw return fills with euphoria',
+          dynamicContrast: 'Among the most extreme in EDM — whisper-quiet breakdowns to wall-of-sound drops; the emotional arc depends on this contrast',
+        },
+        tempoFeelVsNumber: {
+          psychologicalTempo: '138 BPM feels like sustained flight — the tempo is fast enough to energize but steady enough to sustain for hours; urgency resolves into euphoria rather than exhaustion',
+          weightAndMomentum: 'Maximum momentum, moderate weight — the relentless four-on-the-floor propels forward while supersaw pads float above; the feeling is of being carried upward',
+        },
+        callAndResponse: {
+          vocalInstrumentalDialogue: 'Vocal breakdown calls out emotionally, supersaw drop responds with sonic catharsis — the voice asks a human question, the synths answer with transcendence',
+          audienceParticipation: 'Arms-raised collective euphoria — trance crowds sing along to melodic hooks and raise hands in synchronized waves during builds; ASOT (A State of Trance) ritual unity',
+        },
+        performancePractice: {
+          crowdInteraction: 'Spiritual collective experience — the DJ guides a journey from darkness to light over 2+ hours; the crowd surrenders to the arc',
+          whatMakesAGoodShow: 'The "hands in the air" moment when breakdown resolves to drop and the entire crowd lifts together — this is the genre\'s raison d\'etre',
+        },
+      },
     },
     {
       name: 'Dubstep',
@@ -410,8 +432,8 @@ export const EDM_GUIDE: GenreGuide = {
     aheadBehindBeat: 'EDM does not sit ahead or behind — it IS the beat. The quantized grid defines the beat, and everything is placed relative to it with sample-level precision. When swing is applied (house, garage), it is a mathematical ratio (e.g., 54% swing), not a human feel. The machine IS the musician.',
     humanizationMarkers: [
       'Swing percentage applied to hi-hats (house, garage — typically 54-58%)',
-      'Velocity variation programmed into percussion for groove',
-      'Subtle timing offsets on claps/snares to create "width"',
+      'Velocity variation programmed into hi-hats and percussion (Roland TR-909 pattern emulation with accent steps)',
+      'Subtle timing offsets on layered claps/snares (±5-10ms between layers) to create stereo width on festival systems',
       'Micro-pitch drift on analog synth emulations for warmth',
       'Ghost notes programmed with lower velocity to add texture between main hits',
     ],

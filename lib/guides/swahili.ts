@@ -371,6 +371,7 @@ export const SWAHILI_GUIDE: GenreGuide = {
       'Arabic-Swahili vocabulary ("habibi", "mashallah") in coastal music',
       'Tanzanian slang ("bongo", "mchizi", "fundi") in Bongo Flava',
       'Lingala vocabulary crossing into Congolese Swahili music',
+      'Zanzibari archaic Swahili ("harusi", "tafrija") in taarab preserving historical vocabulary',
     ],
     regionWithinCulture: 'Dar es Salaam is the Bongo Flava centre and the commercial heart of Swahili music. Nairobi is the gengetone and Kenyan pop hub. Zanzibar and Mombasa are the taarab heartlands. Kampala contributes to the broader East African pop ecosystem. Each city has a distinct musical identity.',
   },

@@ -218,6 +218,14 @@ export const JAZZ_GUIDE: GenreGuide = {
           psychologicalTempo: 'Controlled freefall — extreme BPM feels exhilarating rather than frantic when played with authority',
           urgencyScale: '9/10 — maximum forward drive, every beat propels',
         },
+        performancePractice: {
+          improvisationConventions: 'Extended virtuosic solos through rapid chord changes — soloist must demonstrate complete harmonic mastery at speed',
+          crowdInteraction: 'Listening music, not dancing — the audience sits and absorbs; bebop deliberately moved jazz off the dance floor',
+        },
+        harmonicLanguage: {
+          chordProgressions: ['Rapid ii-V chains through distant keys', 'Contrafacts over rhythm changes and blues', 'Chromatic approach patterns over every chord'],
+          harmonyNotes: 'Chord changes fly by at one or two per beat — soloists must navigate complex substitutions at breakneck speed with no harmonic ambiguity',
+        },
       },
     },
     {
@@ -280,6 +288,14 @@ export const JAZZ_GUIDE: GenreGuide = {
           improvisationConventions: 'Total freedom — no predetermined harmony, melody, rhythm, or form; collective risk is the goal',
           crowdInteraction: 'Audience confrontation rather than entertainment — demanding active listening or accepting walkouts',
         },
+        harmonicLanguage: {
+          harmonyNotes: 'Tonality is abandoned — atonality, microtonality, and noise are equal to conventional pitch; harmonic "correctness" is irrelevant',
+          modality: 'Post-tonal — no key centers, no functional harmony; sound itself replaces harmonic motion as the organizing principle',
+        },
+        tempoFeelVsNumber: {
+          psychologicalTempo: 'Tempo is fluid or absent — pulse may emerge and dissolve; clock time is replaced by event-driven time',
+          weightAndMomentum: 'Variable between weightless suspension and crushing density — momentum comes from collective energy, not rhythmic regularity',
+        },
       },
     },
     {
@@ -308,6 +324,15 @@ export const JAZZ_GUIDE: GenreGuide = {
         tempoFeelVsNumber: {
           psychologicalTempo: 'Rock/funk weight — same BPM feels heavier and more grounded than swing jazz due to straight-eighth grid',
           weightAndMomentum: 'Heavy and propulsive — electric instruments add physical weight that acoustic jazz lacks',
+        },
+        instrumentation: {
+          coreInstruments: ['Electric guitar (with effects)', 'Electric bass', 'Synthesizers and electric piano (Rhodes, Clavinet)', 'Drum kit with rock/funk patterns'],
+          signatureSounds: ['Distorted guitar through wah pedal', 'Rhodes electric piano with phaser', 'Moog synthesizer leads', 'Slap bass'],
+          avoidInstruments: ['Upright bass (replaced by electric)', 'Brushes on drums (replaced by sticks and power)'],
+        },
+        intertextualityAndSampling: {
+          canonKnowledge: 'Must know both jazz and rock/funk canons — Miles\'s electric period, Hendrix, James Brown, and Stevie Wonder are all reference points',
+          expectedReferences: ['Miles Davis electric era (Bitches Brew, On the Corner)', 'Herbie Hancock\'s Head Hunters', 'Weather Report\'s Birdland', 'Mahavishnu Orchestra intensity'],
         },
       },
     },
@@ -338,6 +363,14 @@ export const JAZZ_GUIDE: GenreGuide = {
         socioeconomicSubtext: {
           classIdentity: 'Aspirational upper-middle-class — wine bars, luxury hotels, adult contemporary radio',
           materialConditions: 'Commercial viability prioritized; jazz credibility consciously traded for accessibility',
+        },
+        harmonicLanguage: {
+          harmonyNotes: 'Dramatically simplified — major 7ths and minor 7ths without altered tensions; functional pop harmony with a jazz veneer',
+          modality: 'Diatonic and consonant — avoids chromaticism, tritone subs, and dissonance; stays in comfortable harmonic territory',
+        },
+        instrumentation: {
+          coreInstruments: ['Soprano or alto saxophone (clean, processed tone)', 'Electric bass', 'Drum machine or programmed drums', 'Synthesizer pads and electric piano'],
+          avoidInstruments: ['Upright bass (too raw)', 'Acoustic drums with brushes (too organic)', 'Muted trumpet (too edgy)'],
         },
       },
     },
@@ -430,6 +463,30 @@ export const JAZZ_GUIDE: GenreGuide = {
       productionNotes: 'Full big band sound. Section balancing is critical. Powerful brass. Swinging rhythm section. Dynamic range from quiet to explosive.',
       lyricNotes: 'When vocal: swing-era lyrics, romantic, fun, witty. Dance and celebration themes.',
       sunoPromptKeywords: ['big band', 'swing', 'jazz orchestra', 'brass section', 'swing era', 'dance band', 'arrangement'],
+      embodiedDelta: {
+        microTimingAndFeel: {
+          genreSpecificFeel: 'Heavy, emphatic swing with the whole band locking into a unified groove — section rhythms are tighter and more regimented than small-combo jazz',
+          aheadBehindBeat: 'On top of the beat — the brass section drives forward while the rhythm section anchors, creating a buoyant, danceable lift',
+        },
+        callAndResponse: {
+          vocalInstrumentalDialogue: 'Arranged call-and-response between brass and reed sections replaces spontaneous conversational interplay',
+          patterns: ['Brass shout chorus answered by reed section', 'Soloist over background riffs from ensemble', 'Rhythm section hits punctuating horn figures'],
+          audienceParticipation: 'Dance floor is the primary audience response — the music succeeds when bodies move; applause for soloists is secondary to the collective groove',
+        },
+        performancePractice: {
+          improvisationConventions: 'Arranged frameworks with designated solo windows — improvisation happens within composed structures, not as the primary activity',
+          stagePresence: 'Bandleader as showman (Basie\'s understated cool, Ellington\'s elegance, Goodman\'s precision) — the ensemble is a visual spectacle of coordinated musicians',
+          crowdInteraction: 'Entertainment-forward — dancers on the floor, emcee announcements, the band as social event rather than listening experience',
+        },
+        tempoFeelVsNumber: {
+          weightAndMomentum: 'Massive ensemble weight — 15+ musicians create a wall of swing that small combos cannot replicate; momentum is orchestral rather than conversational',
+          urgencyScale: '7/10 — propulsive and joyful rather than frantic; the groove invites movement, not cerebral attention',
+        },
+        socioeconomicSubtext: {
+          classIdentity: 'Populist entertainment — swing was America\'s pop music before rock and roll; dance halls and ballrooms were cross-class social spaces',
+          politicalUndercurrent: 'Integration through the dance floor — Benny Goodman\'s integrated bands and the shared dance space quietly challenged segregation norms',
+        },
+      },
     },
   ],
 

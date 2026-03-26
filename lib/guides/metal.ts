@@ -345,7 +345,7 @@ export const METAL_GUIDE: GenreGuide = {
   silenceAndSpace: {
     overview: 'Metal is wall-of-sound — but the breakdown uses silence as a weapon. The moment before a breakdown hits, when everything stops and a single palm-muted chug rings out, is one of the most powerful uses of silence in any genre. Metal earns its density by deploying absence at strategic moments.',
     negativeSpaceRole: 'Devastating when used — metal\'s density makes silence feel like a vacuum. A full stop before a riff re-entry creates physical anticipation. The breakdown relies on space between chugs for its crushing impact. Doom metal uses extended space between riffs to let the heaviness resonate.',
-    breathingPatterns: 'Verses may strip back to single guitar and vocal. Pre-chorus builds add layers. Chorus/drop hits with full density. Clean sections provide essential contrast — without them, the heavy sections lose meaning. The architecture of density and space defines song impact.',
+    breathingPatterns: 'Clean arpeggiated interludes or atmospheric passages provide the only genuine breathing room — the contrast makes the return to distortion devastating. Pre-chorus builds stack palm-muted chugs and double bass into the full-band assault. Breakdowns strip to staccato single-note chugs with silence between each hit, using rhythmic breathing rather than dynamic breathing. Without these clean or breakdown contrasts, the wall of distortion becomes fatiguing instead of powerful.',
     dynamicContrast: 'Extreme when done well — clean arpeggios to full distortion, whispered vocals to death growl, single note to wall of guitars. The contrast ratio in metal is among the highest in any genre. The quiet moment exists solely to make the heavy moment heavier.',
     whatIsDeliberatelyAbsent: [
       'Everything stopping before a breakdown — the crowd holds its breath',
@@ -358,7 +358,7 @@ export const METAL_GUIDE: GenreGuide = {
 
   callAndResponse: {
     overview: 'Metal call-and-response is physical and ritualistic — the band issues commands through riffs and the audience responds with mosh pits, headbanging, and crowd chants. Live metal is a feedback loop between stage aggression and pit energy.',
-    vocalInstrumentalDialogue: 'The riff calls, the vocal responds — or vice versa. In many metal songs, the guitar riff sets up a rhythmic phrase and the vocal fills the gaps. During solos, the lead guitar takes over the vocal\'s melodic role while rhythm guitar and bass maintain the foundation.',
+    vocalInstrumentalDialogue: 'Vocal and riff interlock rhythmically rather than conversing freely — the growl or scream punches through gaps in the palm-muted chug pattern, creating a composed interlocking texture rather than blues-style call-and-response. During guitar solos, harmonized lead lines (Iron Maiden tradition) or shred passages take over the melodic narrative while rhythm guitars and bass maintain the riff foundation beneath.',
     sectionInternal: 'Breakdown call-and-response: the band hits a chug, pauses, hits again. This stuttering pattern is designed for crowd participation — each pause is filled with the audience\'s physical response. Verse-to-chorus is escalation rather than conversation.',
     audienceParticipation: 'Extremely physical — mosh pits, circle pits, wall of death, crowd surfing, headbanging in unison. The band initiates, the crowd responds with movement. Scream-along sections. The relationship between band and audience is physically intense and mutually dependent.',
     patterns: [
@@ -460,11 +460,11 @@ export const METAL_GUIDE: GenreGuide = {
   mistakeConventions: {
     overview: 'Metal has low tolerance for mistakes — the genre\'s emphasis on technical precision means sloppy playing is not charming, it is disqualifying. However, certain types of rawness are valued, particularly in black metal and early thrash, where lo-fi production and rough performance signify authenticity.',
     toleratedImperfections: [
-      'Slight tempo drift in live performance that adds human energy',
-      'Guitar feedback between songs as part of the sonic landscape',
-      'Vocal strain during extreme passages showing physical effort',
-      'Pick scrapes and string noise as part of the aggressive aesthetic',
-      'Drum fills that push the tempo slightly (excitement, not sloppiness)',
+      'Double bass drum patterns that drift slightly from metronomic lockstep during live blast-beat passages',
+      'Palm-muted chugs with uneven pick attack adding percussive aggression to breakdown riffs',
+      'Vocal strain and cord shredding during sustained death growls or black metal shrieks showing physical extremity',
+      'Pick scrapes, string noise, and pinch harmonic squeals bleeding between riff sections',
+      'Snare hits that flam slightly against the kick during high-speed thrash passages, adding urgency',
     ],
     celebratedFlaws: [
       'Black metal\'s deliberately lo-fi production: Darkthrone\'s "Transilvanian Hunger" sounds like it was recorded in a cave — this is the point',

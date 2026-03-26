@@ -200,6 +200,27 @@ export const MANDOPOP_GUIDE: GenreGuide = {
       productionNotes: 'Piano foundation, strings build through song. Vocal pristine and forward. Dynamic arc from intimate verse to powerful final chorus.',
       lyricNotes: 'Romantic love, heartbreak, nostalgia. Poetic Mandarin. Fang Wenshan-style cinematic imagery as gold standard.',
       sunoPromptKeywords: ['Mandopop ballad', 'Chinese ballad', 'C-Pop emotional', 'Jay Chou style ballad', 'KTV song'],
+      embodiedDelta: {
+        microTimingAndFeel: {
+          genreSpecificFeel: 'Vocal rubato is the defining timing characteristic — the singer stretches and compresses phrases for emotional effect while the piano/strings hold steady time underneath',
+          aheadBehindBeat: 'Vocals sit distinctly behind the beat, more so than any other Mandopop sub-genre — this lag conveys emotional weight and longing',
+        },
+        silenceAndSpace: {
+          negativeSpaceRole: 'The sparse piano intro and stripped verse exist to make the final chorus explosion cathartic — space is emotional architecture',
+          dynamicContrast: 'The widest in all Mandopop — from near-whisper verse to full-orchestra key-changed final chorus; this arc is the genre\'s structural identity',
+        },
+        tempoFeelVsNumber: {
+          psychologicalTempo: '70 BPM feels almost motionless — time suspends around the vocal; the listener exists in emotional space, not rhythmic time',
+          weightAndMomentum: 'Maximum emotional weight, near-zero rhythmic momentum — the song floats rather than propels; momentum comes from the narrative arc, not the groove',
+        },
+        performancePractice: {
+          crowdInteraction: 'KTV sing-along is the primary design function — the chorus must be singable by non-professionals; concert audiences sing the entire final chorus while the artist harmonizes above',
+          whatMakesAGoodShow: 'The moment the singer holds a long note at the climax and the crowd falls silent in awe — then erupts; raw vocal power without backing track is the ultimate proof',
+        },
+        genderAndBodyConventions: {
+          vocalGenderCodes: 'Male balladeers use controlled falsetto for vulnerability; female balladeers use chest-voice power at the climax — both converge on earnest emotional directness',
+        },
+      },
     },
     {
       name: 'Chinese R&B',
@@ -416,7 +437,7 @@ export const MANDOPOP_GUIDE: GenreGuide = {
 
   callAndResponse: {
     overview: 'Call-and-response in Mandopop manifests through the KTV (karaoke) sing-along tradition, duet culture, and the antiphonal relationship between vocal and instrumental sections.',
-    vocalInstrumentalDialogue: 'Erhu or string lines frequently mirror the vocal melody — the instrument "sings back" to the vocalist. Piano interludes respond to vocal phrases. Interlude solos answer the mukhda hook.',
+    vocalInstrumentalDialogue: 'Erhu or string lines frequently mirror the vocal melody — the instrument "sings back" to the vocalist. Piano interludes respond to vocal phrases. Interlude solos answer the vocal hook.',
     sectionInternal: 'Duets are a major Mandopop tradition — male-female vocal exchanges create natural call-and-response. Within solo songs, the verse poses an emotional question the chorus answers.',
     audienceParticipation: 'KTV culture is the ultimate call-and-response — audiences sing along in real-time at concerts and in karaoke rooms. Concert audiences routinely sing entire choruses. This sing-along function is a primary design requirement.',
     patterns: [

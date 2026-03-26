@@ -436,13 +436,13 @@ export const POP_GUIDE: GenreGuide = {
       'Vocal breath sounds (now considered intimate rather than flawed)',
       'Slight pitch imperfection in emotional delivery (adds "realness")',
       'Lo-fi recording texture in indie/bedroom pop (aesthetic choice)',
-      'Minor rhythmic looseness in acoustic/stripped versions',
+      'Minor rhythmic looseness in acoustic/stripped versions (Clairo, Mac DeMarco bedroom-pop aesthetic)',
     ],
     celebratedFlaws: [
-      'Vocal cracks on emotional notes (shows genuine feeling)',
-      'Audible room tone in bedroom pop (authenticity signifier)',
-      'Analog warmth and subtle distortion (vintage character)',
-      'Unpolished demo quality that "captured the magic"',
+      'Vocal cracks on emotional notes — Olivia Rodrigo\'s "drivers license" quaver became a defining moment',
+      'Audible room tone in bedroom pop (Billie Eilish\'s debut recorded in a small bedroom, and that intimacy sold the emotion)',
+      'Analog warmth and subtle distortion recalling 80s synth-pop tape saturation (The Weeknd\'s "Blinding Lights" aesthetic)',
+      'Unpolished demo quality that "captured the magic" — Robyn\'s "Dancing On My Own" kept the original vocal energy over technical perfection',
     ],
     overproductionRisks: [
       'Over-tuning vocals until they sound robotic and lifeless',

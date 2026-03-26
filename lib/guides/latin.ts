@@ -228,6 +228,24 @@ export const LATIN_GUIDE: GenreGuide = {
           psychologicalTempo: '88-95 BPM feels heavier and slower than anything else at that tempo — 808 sub-bass weight and asymmetric dembow create gravitational drag',
           weightAndMomentum: 'Maximum weight, moderate momentum — the music thuds rather than drives',
         },
+        performancePractice: {
+          crowdInteraction: 'DJ/MC commands the crowd with call-outs — "¡Dale!" and beat drops replace bandleader cues; perreo on the floor is the primary audience response',
+          livVsRecordedDifferences: 'Live shows stay close to studio arrangements but DJ extends transitions and drops beats for crowd energy; no extended improvisation',
+          stagePresence: 'Swagger and controlled movement — the MC commands through vocal authority and minimal choreography, not instrumental virtuosity',
+        },
+        socioeconomicSubtext: {
+          materialConditions: 'Born in Puerto Rican caseríos (housing projects) where sound systems and MCs created entertainment from nothing',
+          classIdentity: 'Moved from marginal to mainstream without fully abandoning street credibility — caserio origin story remains central to authenticity',
+        },
+        intertextualityAndSampling: {
+          canonKnowledge: 'Daddy Yankee\'s "Gasolina" as the big bang; Tego Calderón\'s underground roots; Jamaican dancehall riddims as direct ancestors',
+          samplingTradition: 'Frequently samples classic salsa and Latin pop — Bad Bunny sampling Héctor Lavoe bridges generations and claims cultural legitimacy',
+          lineageSignifiers: ['Jamaican dancehall riddim echoes', 'Dem Bow riddim by Shabba Ranks as literal origin', 'DJ Playero and DJ Nelson underground mixtapes'],
+        },
+        mistakeConventions: {
+          overproductionRisks: ['Over-polishing removes street energy', 'Too many melodic layers burying the dembow', 'Excessive pitch correction killing vocal character'],
+          authenticRoughness: 'Early underground reggaeton was deliberately lo-fi — some grit and imperfection signals street authenticity over commercial polish',
+        },
       },
     },
     {
@@ -260,6 +278,21 @@ export const LATIN_GUIDE: GenreGuide = {
           celebratedFlaws: ['Héctor Lavoe\'s vocal cracks as emotional peaks', 'Slightly out-of-tune brass as rawness', 'Crowd noise bleeding into recording'],
           authenticRoughness: 'Salsa should sound like it was recorded in a sweaty club, not a sterile studio',
         },
+        tempoFeelVsNumber: {
+          psychologicalTempo: '160-220 BPM feels exhilarating rather than frantic — the clave provides organizational framework that makes high tempo feel structured and joyful, not chaotic',
+          weightAndMomentum: 'Light on its feet despite speed — the interlocking percussion creates buoyancy; momentum is circular rather than linear',
+          urgencyScale: 'Extreme energy channeled through organized complexity — salsa dura at full tempo is transcendent, not anxious',
+        },
+        intertextualityAndSampling: {
+          canonKnowledge: 'Fania Records catalog is sacred — Héctor Lavoe, Willie Colón, Rubén Blades are the holy trinity; quoting their songs signals deep cultural literacy',
+          expectedReferences: ['Héctor Lavoe\'s tragic genius', 'Celia Cruz\'s "¡Azúcar!"', 'Rubén Blades\' "Pedro Navaja" as narrative pinnacle'],
+          lineageSignifiers: ['Son Cubano rhythmic DNA', 'Fania All-Stars live energy as gold standard', 'New York barrio as spiritual homeland'],
+        },
+        socioeconomicSubtext: {
+          materialConditions: 'Born from Afro-Caribbean working-class immigrant communities in 1970s New York — the sound of diaspora pride',
+          classIdentity: 'The barrio is home, not shame — salsa carries Nuyorican and Afro-Caribbean working-class identity without apology',
+          politicalUndercurrent: 'Rubén Blades made salsa explicitly political; the genre has always carried immigrant solidarity and Afro-Latin pride',
+        },
       },
     },
     {
@@ -289,6 +322,19 @@ export const LATIN_GUIDE: GenreGuide = {
         genderAndBodyConventions: {
           physicalityInPerformance: 'Intimate partner dance — bodies close, hips locked, the music demands physical closeness',
           genderNarratives: 'Male vulnerability as strength — the bachatero cries openly about love; machismo is suspended',
+        },
+        tempoFeelVsNumber: {
+          psychologicalTempo: '100-130 BPM feels slower and more sensual than pop at the same tempo — the behind-beat guitar drag and vocal languor create a time-suspended quality',
+          weightAndMomentum: 'Moderate weight carried low in the hips — momentum is a slow pull rather than a push; the music invites you inward',
+        },
+        silenceAndSpace: {
+          negativeSpaceRole: 'Solo requinto guitar intro with bare space around it is the genre\'s calling card — vulnerability exposed before the band enters',
+          breathingPatterns: 'Audible vocal breath between phrases signals intimate vulnerability — the singer lets you hear the cost of heartbreak',
+        },
+        mistakeConventions: {
+          celebratedFlaws: ['Vocal strain at emotional peaks as proof of genuine feeling', 'Humble, almost amateur recording quality of early bachata as authenticity marker'],
+          overproductionRisks: ['Auto-Tune removing the grain from heartbreak delivery', 'Polished pop production erasing the barrio intimacy', 'Electronic drums replacing the organic bongo feel'],
+          authenticRoughness: 'Bachata should sound close and human — the singer in the room with you, not processed through a studio wall',
         },
       },
     },
@@ -322,6 +368,20 @@ export const LATIN_GUIDE: GenreGuide = {
         socioeconomicSubtext: {
           classIdentity: 'Working-class across all variants — cumbia has never been gentrified; it remains the music of the pueblo',
           materialConditions: 'Carnival, street party, and dance hall origins; the sound of communal joy without pretension',
+        },
+        performancePractice: {
+          crowdInteraction: 'Communal and circular — cumbia is danced in groups and circles, not as isolated couples; the entire gathering moves as one',
+          whatMakesAGoodShow: 'When the entire crowd sways together in the same behind-beat groove — unity of movement over individual virtuosity',
+          livVsRecordedDifferences: 'Live cumbia extends songs through repeated instrumental cycles; the groove is a trance state meant to be sustained, not resolved',
+        },
+        mistakeConventions: {
+          toleratedImperfections: ['Slightly out-of-tune accordion as folk warmth', 'Imprecise ensemble timing that preserves the lazy groove'],
+          overproductionRisks: ['Beat-correcting the behind-beat groove into rigid time', 'Digital accordion samples replacing the breathy analog original', 'Adding drops or builds that violate cumbia\'s steady-state philosophy'],
+          authenticRoughness: 'Cumbia should sound like a street party, not a studio session — the rough edges ARE the charm',
+        },
+        genderAndBodyConventions: {
+          physicalityInPerformance: 'Hip-centered swaying rather than athletic movement — cumbia dance is accessible to all ages and body types, democratic in its physicality',
+          genderNarratives: 'Less gendered than reggaeton or bachata — cumbia celebrates communal joy over romantic pursuit; couples dance but the group energy dominates',
         },
       },
     },
