@@ -56,7 +56,7 @@ const LyricsDisplay: React.FC<LyricsDisplayProps> = ({
       { label: "Reference Artist", value: String(inputs.referenceArtist || "") },
       { label: "Additional Direction", value: String(inputs.additionalInfo || "") },
       { label: "Mundane Objects", value: String(inputs.mundaneObjects || "") },
-      { label: "Awkward Moment", value: String(inputs.awkwardMoment || "") },
+      { label: "Creative Direction", value: String(inputs.creativeDirection || (inputs as any).awkwardMoment || "") },
     ];
     return rows.filter((row) => row.value.trim().length > 0);
   }, [currentInputs]);

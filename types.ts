@@ -11,7 +11,7 @@ export enum AppStep {
   AWAITING_DUET_CONFIG,
   AWAITING_PERFORMER,
   AWAITING_SPECIFICS,
-  AWAITING_ADDITIONAL_INFO,
+  AWAITING_CREATIVE_DIRECTION,
   GENERATING,
   SONG_DISPLAYED,
   EDITING_SONG,
@@ -45,7 +45,7 @@ export interface SongInputs {
   referenceArtist?: string;
   additionalInfo?: string;
   mundaneObjects?: string;
-  awkwardMoment?: string;
+  creativeDirection?: string;
 }
 
 export interface UserProfile {
