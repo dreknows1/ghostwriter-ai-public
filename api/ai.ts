@@ -2793,14 +2793,9 @@ Write with confidence. Take creative risks. Make it feel lived-in, not assembled
 
   finalText = await enforceRequestedAdlibLanguage(finalText, userDirection);
 
-  // Always fix vocalist gender tags — runs even if enforceSunoPromptDriver was skipped
-  const parsed = parseStructuredSong(finalText);
-  const alignedLyrics = alignVocalIdentityInLyrics(parsed.lyrics, inputs?.vocals);
-  if (alignedLyrics !== parsed.lyrics) {
-    finalText = parsed.sunoPrompt
-      ? `Title: ${parsed.title}\n### SUNO Prompt\n${parsed.sunoPrompt}\n### Lyrics\n${alignedLyrics}`.trim()
-      : `Title: ${parsed.title}\n### Lyrics\n${alignedLyrics}`.trim();
-  }
+  // Always fix vocalist gender tags — runs on the full text so stray tags
+  // outside the ### Lyrics section (e.g. preamble) are also corrected
+  finalText = alignVocalIdentityInLyrics(finalText, inputs?.vocals);
 
   // Final safety net: if the output is still a creative refusal, surface an error
   if (isCreativeRefusal(finalText)) {
