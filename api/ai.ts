@@ -1516,6 +1516,8 @@ function alignVocalIdentityInLyrics(lyrics: string, vocals: string | undefined):
   if (!expected || !lyrics?.trim()) return lyrics;
 
   let next = lyrics;
+
+  // Replace wrong-gender vocalist tags everywhere
   if (expected === "female") {
     next = next
       .replace(/\[vocalist:\s*male\]/gi, "[Vocalist: Female]")
@@ -1530,9 +1532,14 @@ function alignVocalIdentityInLyrics(lyrics: string, vocals: string | undefined):
       .replace(/\[(male|female)\s+vocal\]/gi, "[Duet]");
   }
 
+  // Remove redundant standalone vocalist tag if the first section tag already declares it
+  // e.g. "[Vocalist: Female]\n[Verse: Saige - Female Vocalist]" → just the verse tag
+  next = next.replace(/^\[Vocalist:\s*(Male|Female|Duet)\]\s*\n(\[(?:Verse|Intro|Chorus).*(?:Male|Female|Vocalist).*\])/im, "$2");
+
   const hasVocalTag =
     /\[vocalist:\s*(male|female|duet|group)\]/i.test(next) ||
-    /\[(male vocal|female vocal|duet|choir)\]/i.test(next);
+    /\[(male vocal|female vocal|duet|choir)\]/i.test(next) ||
+    /\[(?:Verse|Intro|Chorus)[^\]]*(?:Female|Male)\s+Vocal/i.test(next);
   if (!hasVocalTag) {
     const injected =
       expected === "female"
@@ -2760,8 +2767,9 @@ CRAFT:
 - ${vocalDirective}
 - ${getGenreLengthDirective(inputs?.genre, inputs?.subGenre)}
 - Genre/subgenre/instrumentation selections are creative direction, not literal lyric topics.
-- NEVER use meta-language about your own writing in the lyrics. Do not say "my metaphors", "my flow", "my cadence", "my wordplay", "my vocabulary", "my bars", "my rhyme schemes", "my pen game" or similar self-referential craft commentary. A great rapper doesn't announce they're being clever — the cleverness speaks for itself.
-- Write lyrics that a real artist in this genre would actually perform. Study the difference between amateur and professional — amateurs describe what they're doing, professionals just do it.
+- NEVER use meta-language about your own writing in the lyrics. Banned phrases include (but are not limited to): "my metaphors", "my flow", "my cadence", "my wordplay", "my vocabulary", "my bars", "my rhyme schemes", "my pen game", "words weave", "words like daggers", "syllables spray", "verses I'm spitting", "rhyme schemes so tight", "shifting like tectonics", "words sharp as", "each line a [noun]", and any line that describes the act of rapping rather than actually rapping.
+- A great rapper doesn't announce they're being clever — the cleverness speaks for itself. Lil Wayne doesn't say "my metaphors are fire" — he says "real G's move in silence like lasagna." That's the standard.
+- Write lyrics that a real artist in this genre would actually perform. Amateurs describe what they're doing, professionals just do it.
 ${metaTagPackage.strictSpec}
 ${getInstructionResponsivenessDirective(userDirection)}
 
