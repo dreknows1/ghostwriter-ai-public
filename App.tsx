@@ -112,7 +112,7 @@ const STEP_ORDER = [
   AppStep.AWAITING_DUET_CONFIG,
   AppStep.AWAITING_PERFORMER,
   AppStep.AWAITING_SPECIFICS,
-  AppStep.AWAITING_ADDITIONAL_INFO
+  AppStep.AWAITING_CREATIVE_DIRECTION
 ];
 
 // --- CULTURAL LOGIC DATA ---
@@ -294,7 +294,7 @@ const DEFAULT_INPUTS: SongInputs = {
   performerType: 'Solo Artist',
   referenceArtist: '',
   mundaneObjects: '',
-  awkwardMoment: '',
+  creativeDirection: '',
   additionalInfo: ''
 };
 
@@ -447,9 +447,9 @@ const CreationWizard: React.FC<{
           </div>
         )}
 
-        {step === AppStep.AWAITING_ADDITIONAL_INFO && (
+        {step === AppStep.AWAITING_CREATIVE_DIRECTION && (
           <div className="text-center space-y-6 max-w-2xl mx-auto mt-12">
-            <textarea autoFocus placeholder="e.g. A conversation at a train station in the rain..." className="w-full bg-slate-800 border border-slate-700 p-8 rounded-[2rem] text-white outline-none focus:border-orange-400 min-h-[250px] text-lg leading-relaxed" value={inputs.awkwardMoment || ''} onChange={(e) => onUpdate('awkwardMoment', e.target.value)} />
+            <textarea autoFocus placeholder="e.g. A conversation at a train station in the rain..." className="w-full bg-slate-800 border border-slate-700 p-8 rounded-[2rem] text-white outline-none focus:border-orange-400 min-h-[250px] text-lg leading-relaxed" value={inputs.creativeDirection || ''} onChange={(e) => onUpdate('creativeDirection', e.target.value)} />
             <button onClick={onGenerate} className="w-full bg-gradient-to-r from-orange-500 via-amber-500 to-cyan-500 py-6 md:py-8 rounded-[2rem] text-base md:text-xl font-black uppercase tracking-[0.16em] md:tracking-[0.5em] text-white shadow-xl transition-all hover:scale-[1.02]">MASTER THE RECORD</button>
             <p className="text-sm text-slate-500 uppercase tracking-widest mt-4">COST: {COSTS.GENERATE_SONG} CREDITS</p>
           </div>
@@ -743,7 +743,7 @@ export const App: React.FC = () => {
           // Revert credits if failed?
           // For simplicity we just reload actual from DB in case of error
           loadCredits();
-          setStep(AppStep.AWAITING_ADDITIONAL_INFO);
+          setStep(AppStep.AWAITING_CREATIVE_DIRECTION);
       } finally {
           setIsLoading(false);
       }

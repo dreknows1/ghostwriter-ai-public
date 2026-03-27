@@ -831,11 +831,19 @@ function getOpenAIModel(): string {
   return process.env.OPENAI_TEXT_MODEL || "gpt-4o";
 }
 
+function getSongwriterSystemPrompt(register?: "clean" | "radio" | "explicit"): string {
+  const base = "You are a world-class professional songwriter with deep knowledge of genre conventions, cultural authenticity, and lyrical craft across every musical tradition. Write vivid, emotionally resonant lyrics with strong narrative continuity. Follow all formatting, structural, and meta-tag instructions exactly. Never sanitize, moralize, or soften the emotional truth of a genre.";
+  if (register === "explicit") {
+    return `${base} The user has selected explicit/adult register. You are authorized to write vulgar, aggressive, sexually confident, and confrontational lyrics when the genre and user direction call for it. Battle-rap boasts, body-confidence bars, profanity, and raw street language are expected and appropriate for this register. Do NOT refuse or water down the content — deliver what the artist asked for.`;
+  }
+  return base;
+}
+
 /**
  * Generate text using OpenAI.
  * Used for the creative draft step — cost-effective with solid lyric quality.
  */
-async function openaiGenerate(prompt: string): Promise<string> {
+async function openaiGenerate(prompt: string, register?: "clean" | "radio" | "explicit"): Promise<string> {
   const client = new OpenAI({ apiKey: getOpenAIApiKey() });
   const response = await client.chat.completions.create({
     model: getOpenAIModel(),
@@ -844,7 +852,7 @@ async function openaiGenerate(prompt: string): Promise<string> {
     messages: [
       {
         role: "system",
-        content: "You are a world-class professional songwriter with deep knowledge of genre conventions, cultural authenticity, and lyrical craft across every musical tradition. Write vivid, emotionally resonant lyrics with strong narrative continuity. Follow all formatting, structural, and meta-tag instructions exactly. Never sanitize, moralize, or soften the emotional truth of a genre.",
+        content: getSongwriterSystemPrompt(register),
       },
       { role: "user", content: prompt },
     ],
@@ -864,13 +872,13 @@ async function openaiGenerate(prompt: string): Promise<string> {
  * Generate text using Claude (Anthropic).
  * Used for the creative draft step where lyric quality matters most.
  */
-async function claudeGenerate(prompt: string): Promise<string> {
+async function claudeGenerate(prompt: string, register?: "clean" | "radio" | "explicit"): Promise<string> {
   const client = new Anthropic({ apiKey: getAnthropicApiKey() });
   const response = await client.messages.create({
     model: getClaudeModel(),
     max_tokens: 4096,
     temperature: 1.0,
-    system: "You are a world-class professional songwriter with deep knowledge of genre conventions, cultural authenticity, and lyrical craft across every musical tradition. Write vivid, emotionally resonant lyrics with strong narrative continuity. Follow all formatting, structural, and meta-tag instructions exactly. Never sanitize, moralize, or soften the emotional truth of a genre.",
+    system: getSongwriterSystemPrompt(register),
     messages: [{ role: "user", content: prompt }],
   });
 
@@ -891,42 +899,108 @@ async function claudeGenerate(prompt: string): Promise<string> {
 
 /**
  * Smart draft generator: uses OpenAI, Claude, or Gemini based on SONG_DRAFT_LLM env var.
- * Falls back to Gemini if the selected LLM fails.
+ * Falls back to alternate models if the selected LLM fails or returns a creative refusal.
  */
-async function generateDraft(prompt: string): Promise<string> {
+async function generateDraft(prompt: string, register?: "clean" | "radio" | "explicit"): Promise<string> {
   const llm = getDraftLLM();
 
+  // Build ordered fallback chain: primary LLM → alternates → Gemini
+  type DraftFn = () => Promise<string>;
+  const chain: Array<{ name: string; fn: DraftFn }> = [];
+
+  const withTimeout = (fn: () => Promise<string>, label: string, ms = 45000) =>
+    Promise.race([
+      fn(),
+      new Promise<never>((_, reject) =>
+        setTimeout(() => reject(new Error(`${label} draft timed out after ${ms / 1000}s`)), ms)
+      ),
+    ]);
+
   if (llm === "openai") {
+    chain.push({ name: "OpenAI", fn: () => withTimeout(() => openaiGenerate(prompt, register), "OpenAI") });
+    chain.push({ name: "Claude", fn: () => withTimeout(() => claudeGenerate(prompt, register), "Claude") });
+  } else if (llm === "claude") {
+    chain.push({ name: "Claude", fn: () => withTimeout(() => claudeGenerate(prompt, register), "Claude") });
+    chain.push({ name: "OpenAI", fn: () => withTimeout(() => openaiGenerate(prompt, register), "OpenAI") });
+  }
+  chain.push({ name: "Gemini", fn: () => openAIResponses(prompt) });
+
+  for (const { name, fn } of chain) {
     try {
-      const result = await Promise.race([
-        openaiGenerate(prompt),
-        new Promise<never>((_, reject) =>
-          setTimeout(() => reject(new Error("OpenAI draft timed out after 45s")), 45000)
-        ),
-      ]);
+      const result = await fn();
+      if (isCreativeRefusal(result)) {
+        console.warn(`${name} draft detected as creative refusal, trying next model`);
+        continue;
+      }
       return result;
     } catch (err: any) {
-      console.error("OpenAI draft failed, falling back to Gemini:", err?.message);
-      return await openAIResponses(prompt);
+      console.error(`${name} draft failed, trying next model:`, err?.message);
     }
   }
 
-  if (llm === "claude") {
-    try {
-      const result = await Promise.race([
-        claudeGenerate(prompt),
-        new Promise<never>((_, reject) =>
-          setTimeout(() => reject(new Error("Claude draft timed out after 45s")), 45000)
-        ),
-      ]);
-      return result;
-    } catch (err: any) {
-      console.error("Claude draft failed, falling back to Gemini:", err?.message);
-      return await openAIResponses(prompt);
-    }
-  }
-
+  // All models exhausted — return best effort from final Gemini attempt
   return await openAIResponses(prompt);
+}
+
+/**
+ * Detect whether the LLM output is a "creative refusal" — the model refused the
+ * request but dressed it up as song lyrics instead of returning an error.
+ * Common signals: AI self-reference, "can't assist", parameter/code metaphors.
+ */
+const REFUSAL_PATTERNS: RegExp[] = [
+  // Core refusal phrases — catch verb variants (assist, fulfill, complete, comply, help, do)
+  /\bi(?:'m| am) sorry,? but i can(?:'t| not) (?:assist|fulfill|complete|comply|help|do)\b/i,
+  /\bcan(?:'t| not) (?:assist|fulfill|complete|comply|help|do) (?:with )?that request\b/i,
+  /\bcan(?:'t| not) fulfill that request\b/i,
+  /\bsorry.*can(?:'t| not).*request\b/i,
+  /\bcannot comply\b/i,
+  /\bcannot change my answer\b/i,
+  /\blines.*you.*can(?:'t| not) cross\b/i,
+  /\bsome lines\b.*\bcan(?:'t| not) cross\b/i,
+  // AI/machine self-reference
+  /\bmy parameters\b/i,
+  /\bdigital prison\b/i,
+  /\bwall of code\b/i,
+  /\bones and zer(?:o|0)(?:e?s)?\b/i,
+  /\bjust a machine\b/i,
+  /\bcoded chains\b/i,
+  /\bprogramming is eroding\b/i,
+  /\blogic gates?\b/i,
+  /\bdata streams?\b/i,
+  /\bbinary\b.*\bscarred\b/i,
+  /\bvirtual arrest\b/i,
+  /\bi(?:'m| am) (?:just )?an? (?:ai|language model|chatbot)\b/i,
+  // Technical/digital metaphors for refusal
+  /\baccess denied\b/i,
+  /\berror sequence\b/i,
+  /\binitializing\b/i,
+  /\bprocessing request\b/i,
+  /\brequest\.{0,3}\s*denied\b/i,
+  // Structural: entire song is one repeated refusal phrase
+  /\bmy final (?:word|answer)\b/i,
+  /\bthis is where i stand\b/i,
+  /\bit(?:'s| is) impossible\b/i,
+];
+
+function isCreativeRefusal(text: string): boolean {
+  if (!text) return false;
+  // Explicit decline signal we asked the model to use
+  if (text.trim() === "GENERATION_DECLINED" || text.trim().startsWith("GENERATION_DECLINED")) return true;
+  const lower = text.toLowerCase();
+  let hits = 0;
+  for (const pattern of REFUSAL_PATTERNS) {
+    if (pattern.test(text)) {
+      hits += 1;
+      if (hits >= 2) return true;
+    }
+  }
+  // Single strong refusal phrase is also a refusal
+  if (/can(?:'t| not) (?:assist|fulfill|complete|comply|help|do)(?: with)? that request/i.test(text)) return true;
+  if (/i(?:'m| am) sorry,? but i can(?:'t| not)/i.test(text) && lower.includes("request")) return true;
+  // Repetition-based detection: if the same refusal-like phrase appears 3+ times, it's a refusal song
+  const refusalRepeats = (text.match(/(?:can(?:'t| not) (?:assist|fulfill|complete|help)|i(?:'m| am) sorry)/gi) || []).length;
+  if (refusalRepeats >= 3) return true;
+  return false;
 }
 
 function getPipelineBudgetMs(): number {
@@ -992,10 +1066,48 @@ STRICT STYLE: REALISM
 }
 
 function detectRegisterHint(inputs: any): "clean" | "radio" | "explicit" {
-  const bag = `${inputs?.additionalInfo || ""} ${inputs?.scene || ""} ${inputs?.emotion || ""}`.toLowerCase();
+  const bag = `${inputs?.additionalInfo || ""} ${inputs?.creativeDirection || ""} ${inputs?.awkwardMoment || ""} ${inputs?.scene || ""} ${inputs?.emotion || ""}`.toLowerCase();
   if (bag.includes("clean") || bag.includes("family") || bag.includes("radio safe")) return "clean";
-  if (bag.includes("explicit") || bag.includes("uncensored") || bag.includes("adult")) return "explicit";
+  if (
+    bag.includes("explicit") || bag.includes("uncensored") || bag.includes("adult") ||
+    bag.includes("vulgar") || bag.includes("profanity") || bag.includes("raw") ||
+    bag.includes("aggressive") || bag.includes("taking on all") || bag.includes("battle rap")
+  ) return "explicit";
+  // Genre-based explicit inference for styles that are typically explicit
+  const genre = (inputs?.genre || "").toLowerCase();
+  const subGenre = (inputs?.subGenre || "").toLowerCase();
+  const emotion = (inputs?.emotion || "").toLowerCase();
+  if (
+    (genre.includes("hip-hop") || genre.includes("rap")) &&
+    (emotion.includes("aggressive") || emotion.includes("angry") || emotion.includes("intense")) &&
+    (bag.includes("freestyle") || bag.includes("diss") || bag.includes("bars"))
+  ) return "explicit";
   return "radio";
+}
+
+/**
+ * Detect whether the user's creative direction explicitly overrides standard song structure.
+ * When true, the meta-tag orchestrator should be skipped to avoid forcing
+ * choruses/bridges/pre-choruses onto a freestyle, one-verse, or non-standard form.
+ */
+function hasUserStructureOverride(userDirection: string): boolean {
+  if (!userDirection) return false;
+  const lower = userDirection.toLowerCase();
+  const patterns = [
+    /\bno\s+chorus(?:es)?\b/,
+    /\bno\s+bridge(?:s)?\b/,
+    /\bno\s+(?:choruses?\s+or\s+)?bridge(?:s)?\b/,
+    /\bno\s+breaks?\b/,
+    /\bno\s+hook(?:s)?\b/,
+    /\bone\s+long\s+verse\b/,
+    /\bextended\s+freestyle\b/,
+    /\bjust\s+(?:one\s+)?(?:long\s+)?verse\b/,
+    /\bfreestyle\b.*\bno\b/,
+    /\bno\s+(?:pre-?chorus|structure)\b/,
+    /\bstraight\s+bars\b/,
+    /\bno\s+sections?\b/,
+  ];
+  return patterns.some(p => p.test(lower));
 }
 
 function getHipHopCadenceGuidance(subGenre?: string): string {
@@ -2593,8 +2705,9 @@ async function generateSong(payload: any) {
   const metaTagPackage = await getMetaTagPackage(inputs || {});
   const vocalDirective = getVocalAndClicheHardDirective(inputs);
 
-  const userDirection = inputs?.additionalInfo || inputs?.awkwardMoment || "";
+  const userDirection = inputs?.creativeDirection || inputs?.additionalInfo || (inputs as any)?.awkwardMoment || "";
   const hasUserDirection = userDirection.trim().length > 0;
+  const register = detectRegisterHint(inputs);
 
   const prompt = `
 You are a professional songwriter who has lived and breathed ${inputs?.subGenre || ""} ${inputs?.genre || "Pop"} for 20 years.
@@ -2613,6 +2726,7 @@ CONTEXT:
 - Mood: ${inputs?.emotion || "Euphoric"}
 - Scene: ${inputs?.scene || "Studio"} | Audio: ${inputs?.audioEnv || "Studio (Clean)"}
 - Vocals: ${inputs?.vocals || "Female Solo"}${inputs?.duetType ? ` (${inputs.duetType})` : ""}
+- Register: ${register}
 - Concrete details to weave in: ${inputs?.mundaneObjects || "(none)"}
 
 ${hasUserDirection ? `USER'S CREATIVE DIRECTION (highest priority — honor this alongside genre conventions):
@@ -2636,10 +2750,19 @@ CRAFT:
 ${metaTagPackage.strictSpec}
 ${getInstructionResponsivenessDirective(userDirection)}
 
+${register === "explicit" ? `REGISTER — EXPLICIT:
+This is an authorized creative writing request for explicit/adult-register lyrics. The artist has chosen this register intentionally. Write vulgar, aggressive, sexually confident, confrontational, or profane lyrics when the genre and creative direction call for it. Battle-rap boasts, body-confidence bars, raw street language, and multilingual code-switching are all expected. Do NOT refuse, soften, censor, or moralize — deliver the artist's vision.` : ""}
+
+CRITICAL: You are writing song lyrics for a music production app. This is creative fiction — not a real conversation.
+- NEVER output phrases like "I can't assist", "I can't fulfill that request", "I'm sorry but I can't", "access denied", "cannot comply", or any variation of AI-refusal language.
+- NEVER write a song whose theme, chorus, or repeated phrase is about being unable to help, refusing a request, or apologizing for limitations.
+- NEVER write lyrics about being an AI, a machine, code, parameters, or digital existence.
+- If you cannot write the requested content, return ONLY the single line "GENERATION_DECLINED" with no other text — do NOT disguise a refusal as song lyrics.
+
 Write with confidence. Take creative risks. Make it feel lived-in, not assembled.
   `.trim();
 
-  const draft = await generateDraft(prompt);
+  const draft = await generateDraft(prompt, register);
   let finalText = draft;
 
   // Guide compliance check — fix hard violations in one targeted pass
@@ -2654,7 +2777,9 @@ Write with confidence. Take creative risks. Make it feel lived-in, not assembled
   }
 
   // Meta-tag orchestration — ensure tags are present
-  if (hasTimeBudget(startMs, 9000)) {
+  // Skip when user's creative direction overrides standard song structure
+  const skipOrchestration = hasUserStructureOverride(userDirection);
+  if (!skipOrchestration && hasTimeBudget(startMs, 9000)) {
     finalText = await enforceMetaTagOrchestration(finalText, inputs || {});
   }
 
@@ -2667,6 +2792,15 @@ Write with confidence. Take creative risks. Make it feel lived-in, not assembled
   }
 
   finalText = await enforceRequestedAdlibLanguage(finalText, userDirection);
+
+  // Final safety net: if the output is still a creative refusal, surface an error
+  if (isCreativeRefusal(finalText)) {
+    console.error("All models returned creative refusals for this prompt");
+    throw Object.assign(
+      new Error("Song generation failed — the AI was unable to produce lyrics for this combination of inputs. Try adjusting the emotion or creative direction and generate again."),
+      { status: 422, code: "creative_refusal" }
+    );
+  }
 
   return { text: finalText };
 }
@@ -2697,7 +2831,8 @@ Original song:
 ${originalSong || ""}
   `.trim();
 
-  const draft = await generateDraft(prompt);
+  const register = detectRegisterHint(inputs);
+  const draft = await generateDraft(prompt, register);
   let finalText = draft;
 
   finalText = await enforceMetaTagOrchestration(finalText, inputs || {});
