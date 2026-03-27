@@ -2730,7 +2730,20 @@ CONTEXT:
 - Concrete details to weave in: ${inputs?.mundaneObjects || "(none)"}
 
 ${hasUserDirection ? `USER'S CREATIVE DIRECTION (highest priority — honor this alongside genre conventions):
-${userDirection}` : ""}
+${userDirection}
+
+INTERPRETING THE DIRECTION:
+The user's creative direction contains two types of information — treat them differently:
+1. SUBJECT MATTER (what to write about): character details, themes, narrative scenarios, relationships, conflicts. Weave these into the lyrics as vivid imagery and storytelling.
+2. CRAFT TECHNIQUES (how to write it): mentions of metaphors, double/triple entendres, cadence changes, wordplay, flow switches, vocabulary range, etc. These are INSTRUCTIONS for how you should write — DEMONSTRATE these techniques, do NOT name them in the lyrics.
+
+SHOW, DON'T TELL — this is non-negotiable:
+- If the direction says "double entendres" → write lines with actual double meanings. NEVER write "my double entendres hit different."
+- If it says "metaphors" → write vivid metaphors. NEVER write "I weave metaphors like a maestro."
+- If it says "cadence changes" → actually shift your rhythmic pattern between sections. NEVER write "my cadence shifts."
+- If it says "hourglass figure" → describe the body through imagery (waist cinched like a corset, hips that own the room). NEVER just write "hourglass figure" or "hourglass divine."
+- If it says "expansive vocabulary" → USE rare/elevated words naturally. NEVER announce that you have a big vocabulary.
+- Physical descriptions should land through sensory detail, comparison, and implication — not blunt statement.` : ""}
 
 GENRE TRUTH:
 ${genreTruth || `Write authentically for ${inputs?.subGenre || ""} ${inputs?.genre || "Pop"}.`}
@@ -2747,6 +2760,8 @@ CRAFT:
 - ${vocalDirective}
 - ${getGenreLengthDirective(inputs?.genre, inputs?.subGenre)}
 - Genre/subgenre/instrumentation selections are creative direction, not literal lyric topics.
+- NEVER use meta-language about your own writing in the lyrics. Do not say "my metaphors", "my flow", "my cadence", "my wordplay", "my vocabulary", "my bars", "my rhyme schemes", "my pen game" or similar self-referential craft commentary. A great rapper doesn't announce they're being clever — the cleverness speaks for itself.
+- Write lyrics that a real artist in this genre would actually perform. Study the difference between amateur and professional — amateurs describe what they're doing, professionals just do it.
 ${metaTagPackage.strictSpec}
 ${getInstructionResponsivenessDirective(userDirection)}
 
