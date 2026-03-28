@@ -224,6 +224,20 @@ export interface MistakeConventions {
   authenticRoughness: string;
 }
 
+// ── Reference Tracks (structural models) ─────────────────────────
+
+export interface ReferenceTrack {
+  title: string;
+  artist: string;
+  year: number;
+  /** Why this song is a structural/lyrical model for the genre */
+  whyExemplary: string;
+  /** Structural breakdown: sections, bar counts, hook placement */
+  structuralNotes: string;
+  /** Key lyrical or production technique this track demonstrates */
+  craftHighlight: string;
+}
+
 // ── Main Guide Interface ──────────────────────────────────────────
 
 export interface GenreGuide {
@@ -256,6 +270,9 @@ export interface GenreGuide {
   genderAndBodyConventions: GenderAndBodyConventions;
   tempoFeelVsNumber: TempoFeelVsNumber;
   mistakeConventions: MistakeConventions;
+
+  /** 20 highly regarded songs (last 5 years) as structural/lyrical models */
+  referenceTracks: ReferenceTrack[];
 
   sunoPromptGuide: {
     essentialKeywords: string[];

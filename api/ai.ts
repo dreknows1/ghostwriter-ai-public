@@ -616,6 +616,114 @@ async function compileGuideToDirectives(inputs: any, mode: DirectiveMode): Promi
   return sections.join("\n\n");
 }
 
+/**
+ * Compile reference tracks into craft teaching directives.
+ * Teaches the model HOW to write (narrative, imagery, cadence, style)
+ * and WHAT to write (vocab, idioms, phrases) by example.
+ */
+async function compileReferenceTrackTeaching(inputs: any): Promise<string> {
+  const guide = await resolveGuide(inputs || {});
+  if (!guide || !guide.referenceTracks || guide.referenceTracks.length === 0) return "";
+
+  const subGenreName = (inputs?.subGenre || "").toLowerCase();
+  const tracks = guide.referenceTracks;
+
+  // Select 6 tracks — prioritize sub-genre relevance if possible
+  let selected = tracks;
+  if (subGenreName) {
+    // Sort tracks where structuralNotes or craftHighlight mention sub-genre concepts closer to the top
+    const subTerms = subGenreName.split(/[\s/]+/).filter((t: string) => t.length > 2);
+    selected = [...tracks].sort((a, b) => {
+      const aRelevance = subTerms.reduce((n: number, term: string) =>
+        n + ((`${a.whyExemplary} ${a.structuralNotes} ${a.craftHighlight}`).toLowerCase().includes(term) ? 1 : 0), 0);
+      const bRelevance = subTerms.reduce((n: number, term: string) =>
+        n + ((`${b.whyExemplary} ${b.structuralNotes} ${b.craftHighlight}`).toLowerCase().includes(term) ? 1 : 0), 0);
+      return bRelevance - aRelevance;
+    });
+  }
+  const picks = selected.slice(0, 6);
+
+  // Extract teachings organized by what they teach
+  const narrativeLessons: string[] = [];
+  const imageryLessons: string[] = [];
+  const cadenceLessons: string[] = [];
+  const structureLessons: string[] = [];
+  const styleLessons: string[] = [];
+
+  for (const track of picks) {
+    const ref = `(${track.artist} — "${track.title}")`;
+    const craft = track.craftHighlight.toLowerCase();
+    const structural = track.structuralNotes.toLowerCase();
+
+    // Categorize by what the lesson teaches
+    if (craft.includes("narrative") || craft.includes("storytell") || craft.includes("lyric") ||
+        craft.includes("metaphor") || craft.includes("conceit") || craft.includes("persona") ||
+        craft.includes("confess") || craft.includes("perspective")) {
+      narrativeLessons.push(`- ${track.craftHighlight} ${ref}`);
+    } else if (craft.includes("imagery") || craft.includes("sensory") || craft.includes("vocab") ||
+               craft.includes("language") || craft.includes("dialect") || craft.includes("slang") ||
+               craft.includes("word") || craft.includes("phrase") || craft.includes("idiom")) {
+      imageryLessons.push(`- ${track.craftHighlight} ${ref}`);
+    } else if (craft.includes("flow") || craft.includes("cadence") || craft.includes("rhythm") ||
+               craft.includes("delivery") || craft.includes("phrasing") || craft.includes("tempo") ||
+               craft.includes("swing") || craft.includes("syncopat")) {
+      cadenceLessons.push(`- ${track.craftHighlight} ${ref}`);
+    } else if (structural.includes("verse") || structural.includes("chorus") || structural.includes("bridge") ||
+               craft.includes("structure") || craft.includes("dynamic") || craft.includes("build") ||
+               craft.includes("contrast") || craft.includes("section")) {
+      structureLessons.push(`- ${track.craftHighlight} ${ref}`);
+    } else {
+      styleLessons.push(`- ${track.craftHighlight} ${ref}`);
+    }
+
+    // Structural notes always contribute to structure lessons
+    if (track.structuralNotes && structureLessons.length < 3) {
+      structureLessons.push(`- Structure model: ${track.structuralNotes} ${ref}`);
+    }
+  }
+
+  const sections: string[] = [];
+  sections.push(`REFERENCE CRAFT — Learn from the best recent ${guide.name} writing:`);
+
+  if (narrativeLessons.length > 0) {
+    sections.push(`HOW TO TELL THE STORY:\n${narrativeLessons.slice(0, 2).join("\n")}`);
+  }
+  if (imageryLessons.length > 0) {
+    sections.push(`WORDS, IMAGERY & VOCABULARY TO STUDY:\n${imageryLessons.slice(0, 2).join("\n")}`);
+  }
+  if (cadenceLessons.length > 0) {
+    sections.push(`CADENCE & FLOW MODELS:\n${cadenceLessons.slice(0, 2).join("\n")}`);
+  }
+  if (structureLessons.length > 0) {
+    sections.push(`STRUCTURAL BLUEPRINTS:\n${structureLessons.slice(0, 2).join("\n")}`);
+  }
+  if (styleLessons.length > 0) {
+    sections.push(`STYLE & ATTITUDE:\n${styleLessons.slice(0, 2).join("\n")}`);
+  }
+
+  // If we have sparse categorization, add uncategorized craft highlights
+  if (sections.length < 4) {
+    const extras = picks
+      .filter(t => !narrativeLessons.some(l => l.includes(t.title)) &&
+                   !imageryLessons.some(l => l.includes(t.title)) &&
+                   !cadenceLessons.some(l => l.includes(t.title)))
+      .slice(0, 3)
+      .map(t => `- ${t.craftHighlight} (${t.artist} — "${t.title}")`);
+    if (extras.length > 0) {
+      sections.push(`CRAFT TECHNIQUES TO ABSORB:\n${extras.join("\n")}`);
+    }
+  }
+
+  sections.push(
+    `IMPORTANT: These references teach you the STANDARD of craft for this genre. ` +
+    `Study their techniques — narrative approaches, imagery density, vocabulary choices, ` +
+    `rhythmic patterns, structural decisions — and write at that level. ` +
+    `Do NOT name these songs or artists in your lyrics. Absorb and demonstrate, don't reference.`
+  );
+
+  return sections.join("\n\n");
+}
+
 async function getGenreGuideSunoKeywords(inputs: any): Promise<{ keywords: string[]; avoid: string[]; tips: string[] }> {
   const mod = await loadGenreGuideModule();
   if (!mod) return { keywords: [], avoid: [], tips: [] };
@@ -2709,6 +2817,7 @@ async function generateSong(payload: any) {
 
   const genreTruth = await getGenreTruthParagraph(inputs || {});
   const specificityAnchors = await getSpecificityAnchors(inputs || {});
+  const referenceTeaching = await compileReferenceTrackTeaching(inputs || {});
   const metaTagPackage = await getMetaTagPackage(inputs || {});
   const vocalDirective = getVocalAndClicheHardDirective(inputs);
 
@@ -2757,6 +2866,8 @@ ${genreTruth || `Write authentically for ${inputs?.subGenre || ""} ${inputs?.gen
 
 SPECIFICITY:
 ${specificityAnchors}
+
+${referenceTeaching ? `${referenceTeaching}` : ""}
 
 CRAFT:
 - Each verse must advance a continuous scene — linked lines, not disconnected aphorisms.
@@ -2835,6 +2946,7 @@ Write with confidence. Take creative risks. Make it feel lived-in, not assembled
 async function editSong(payload: any) {
   const { originalSong, editInstruction, inputs, userProfile } = payload || {};
   const genreTruth = await getGenreTruthParagraph(inputs || {});
+  const referenceTeaching = await compileReferenceTrackTeaching(inputs || {});
   const metaTagPackage = await getMetaTagPackage(inputs || {});
 
   const prompt = `
@@ -2850,6 +2962,8 @@ INSTRUCTION: ${editInstruction || ""}
 
 GENRE TRUTH:
 ${genreTruth || `${inputs?.genre || "Pop"} / ${inputs?.subGenre || "Modern"}`}
+
+${referenceTeaching ? `${referenceTeaching}` : ""}
 
 ${metaTagPackage.strictSpec}
 ${getInstructionResponsivenessDirective(editInstruction || "")}
