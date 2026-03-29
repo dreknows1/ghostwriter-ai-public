@@ -232,15 +232,14 @@ export function buildMetaTagGuidance(inputs: {
 Meta Tag Library directives (use these tags exactly):
 - Preferred section flow: ${structure}
 - Required vocal type tag: ${vocalType}
-- Mood/energy guidance tags: ${moodEnergy}
 - Genre accent tags: ${genreTags}
 - Include occasional adlibs in parentheses, example format: (yeah), (uh), (come on), (let it ride)
 - Adlib policy: ${adlibPolicy}
-- Distribute tags across the whole song arc; avoid concentrating them in only one section.
-- Every [Chorus] should include at least one musical tag or adlib for performance lift.
-- Use inline performance cues across lines (not only section starts/ends). Cues can sit before a line, mid-line, or after key words.
-- Apply line-level dynamics in [Intro], [Verse], [Pre-Chorus], [Chorus], and [Bridge] so delivery evolves bar-to-bar.
-- Keep tags musically meaningful; avoid tag spam.
+- Distribute adlibs across the whole song arc; avoid concentrating them in only one section.
+- Bracket tags go on their OWN line as section headers ONLY. NEVER place bracket tags inline within a lyric line — Suno ignores them there.
+- NEVER invent performance-direction tags like [Vocals: Confident], [Energy: High], [Harmonies swell], [Drums hit harder]. These are not valid Suno tags.
+- Valid bracket tags: section headers ([Intro], [Verse], [Pre-Chorus], [Chorus], [Bridge], [Outro], [Build Up]), vocal identity ([Vocalist: Male/Female/Duet/Group]), and choir cues ([Choir enters]).
+- Adlibs in parentheses may appear inline where musically natural. Keep them sparse — max 30% of lines.
 - Keep tag syntax exact with brackets/parentheses.
 `.trim();
 }
@@ -258,7 +257,7 @@ export function buildMetaTagPlan(inputs: {
   return {
     structureTags,
     vocalTypeTag: inferVocalTypeTag(inputs.vocals),
-    moodEnergyTags: inferEnergyMoodTags(inputs.emotion),
+    moodEnergyTags: [],
     genreAccentTags: inferGenreAccentTags(inputs.genre, inputs.subGenre),
     adlibPolicy: inferAdlibPolicy(inputs.genre),
     minTagCount,
@@ -280,18 +279,14 @@ export function buildStrictMetaTagSpec(inputs: {
 Strict meta-tag orchestration plan:
 - Default section order (adjust if user requests a different structure): ${plan.structureTags.join(" -> ")}
 - Required vocal identity tag: ${plan.vocalTypeTag}
-- Mood/energy tags to include across song: ${plan.moodEnergyTags.join(", ")}
 - Genre/subgenre accent tags to include naturally: ${plan.genreAccentTags.join(", ")}
-- Minimum bracket tags in Lyrics body: ${plan.minTagCount}
+- Minimum section-level bracket tags in Lyrics body: ${plan.minTagCount}
 - Minimum adlibs in parentheses: ${plan.minAdlibCount}
-- Minimum genre-accent tag hits: ${plan.requiredAccentHits}
-- Minimum mood/energy tag hits: ${plan.requiredMoodHits}
 - Required vocal identity tag must appear in Lyrics: ${plan.requireVocalTypeTag ? "yes" : "no"}
 - Adlib policy: ${plan.adlibPolicy}
-- Coverage rule: every core section ([Intro]/[Verse]/[Pre-Chorus]/[Chorus]/[Bridge]/[Outro]) should include at least one non-structural tag or adlib.
-- Coverage rule: every [Chorus] must include at least one performance tag or adlib.
-- Inline rule: add performance cues throughout section bodies (not just at headers/section boundaries).
-- Inline rule: in core sections, target at least ~40% of lyric lines containing an inline tag/adlib cue.
-- Tag logic: opening sections establish mood + voice; mid-song sections escalate arrangement tags; final sections resolve with refrain/outro tags.
+- Tag placement: bracket tags go on their OWN line as section headers ONLY (e.g. [Verse 1], [Chorus], [Bridge], [Build Up]). NEVER place bracket tags inline within a lyric line — Suno ignores them there.
+- Adlibs in parentheses may appear inline within lyric lines where musically natural. Keep them sparse — max 30% of lines.
+- NEVER invent performance-direction tags like [Vocals: Confident], [Energy: High], [Harmonies swell], [Drums hit harder], [Mood: Intense]. These are not valid Suno tags.
+- Valid bracket tags are ONLY: section headers ([Intro], [Verse], [Verse 2], [Pre-Chorus], [Chorus], [Bridge], [Outro], [Build Up]), vocal identity ([Vocalist: Male/Female/Duet/Group]), and choir cues ([Choir enters]). Nothing else.
 `.trim();
 }
