@@ -1922,6 +1922,35 @@ const SONG_CLICHE_PATTERNS: RegExp[] = [
   /\bstars all over\b/i,
   /\bwrite (?:your|my) (?:own )?destiny\b/i,
   /\bmasterpiece\b/i,
+  // Additional empowerment cliché variants
+  /\blighthouse\b/i,
+  /\bbeacon\b/i,
+  /\bradiant queen\b/i,
+  /\bradiant king\b/i,
+  /\bcanvas to paint\b/i,
+  /\bgarden of life\b/i,
+  /\bnever faint\b/i,
+  /\btime to shine\b/i,
+  /\bkeep on shining\b/i,
+  /\bspirit alive\b/i,
+  /\bcrown of (?:\w+)\b/i,
+  /\bforce of nature\b/i,
+  /\byou(?:'re| are) (?:a )?force\b/i,
+  /\byou(?:'re| are) enough\b/i,
+  /\byou belong\b/i,
+  /\bhold (?:your|my|her) head (?:up )?high\b/i,
+  /\bdim (?:her|his|their) lights?\b/i,
+  /\bbelieve in yourself\b/i,
+  /\banything is possible\b/i,
+  /\bdreams? (?:stand |grow )?tall\b/i,
+  /\byou(?:'re| are) (?:the |a )?sun\b/i,
+  /\bring of fire\b/i,
+  /\bwings (?:of|to) fly\b/i,
+  /\bdon't (?:you )?(?:ever )?give up\b/i,
+  /\bnever give up\b/i,
+  /\byou got this\b/i,
+  /\byou(?:'re| are) (?:a )?star\b/i,
+  /\bborn to (?:shine|fly|lead|win|rise)\b/i,
 ];
 
 const PERFORMANCE_TAG_HINTS: RegExp[] = [
@@ -3001,8 +3030,41 @@ Write with confidence. Take creative risks. Make it feel lived-in, not assembled
     finalText = await enforceMetaTagOrchestration(finalText, inputs || {});
   }
 
-  // Skip depth/texture enforcement on initial generation — let the draft breathe.
-  // Depth enforcement only runs on edits to avoid regression-to-mean smoothing.
+  // Targeted cliché scrub on initial generation (full depth enforcement only runs on edits)
+  if (hasTimeBudget(startMs, 8000)) {
+    const clicheCount = countClicheHits(finalText);
+    if (clicheCount >= 2) {
+      const clicheScrubPrompt = `
+You are a lyric editor. The song below contains ${clicheCount} cliché phrases that must be replaced.
+
+RULES:
+- Replace EVERY generic/motivational-poster phrase with a CONCRETE, SPECIFIC image or scene.
+- Banned phrases and their variants: "lighthouse", "beacon", "canvas to paint", "stand tall", "shine bright", "radiant queen", "spread your wings", "hold your head high", "unstoppable", "unbreakable", "find your voice", "dreams come true", "garden of life", "you belong", "you're enough", "never faint", "time to shine", "spirit alive", "crown of [anything]", "force of nature"
+- Replace each cliché line with something a REAL songwriter would write — a specific sensory moment, a named object, a physical action. NOT another abstraction.
+- Keep the rhyme scheme, section structure, and overall story intact.
+- Do NOT add new clichés to replace the old ones.
+
+Return ONLY this format:
+Title: ...
+### SUNO Prompt
+...
+### Lyrics
+...
+
+Song:
+${finalText}
+      `.trim();
+      try {
+        const scrubbed = await openAIResponses(clicheScrubPrompt);
+        const newClicheCount = countClicheHits(scrubbed);
+        if (newClicheCount < clicheCount) {
+          finalText = scrubbed;
+        }
+      } catch {
+        // If scrub fails, continue with original
+      }
+    }
+  }
 
   // SUNO prompt driver — always run; replaces LLM prose with guide-driven technical prompt
   finalText = await enforceSunoPromptDriver(finalText, inputs || {}, userProfile || {});
