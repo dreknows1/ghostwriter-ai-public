@@ -1484,22 +1484,29 @@ function clampPromptLength(text: string, maxLength = 260): string {
   return `${clean.slice(0, maxLength - 1).trim()}.`;
 }
 
+/** Combine sub-genre + genre without doubling (e.g. "Conscious Hip-Hop" + "Hip-Hop" → "Conscious Hip-Hop") */
+function combineGenreTag(subGenre: string, genre: string): string {
+  if (!subGenre) return genre;
+  if (subGenre.toLowerCase().includes(genre.toLowerCase())) return subGenre;
+  return `${subGenre} ${genre}`;
+}
+
 function inferStyleDescriptor(genre: string, subGenre: string, productionStyle: string): string {
   const g = genre.toLowerCase();
-  const sg = subGenre.toLowerCase();
+  const tag = combineGenreTag(subGenre, genre);
   if (g.includes("r&b") || g.includes("soul")) {
-    return `modern ${subGenre} ${genre} with rich harmony and groove-forward phrasing (${productionStyle})`;
+    return `modern ${tag} with rich harmony and groove-forward phrasing (${productionStyle})`;
   }
   if (g.includes("hip-hop") || g.includes("rap") || g.includes("trap")) {
-    return `${subGenre} ${genre} with rhythm-led delivery, punchy pockets, and hard drum presence (${productionStyle})`;
+    return `${tag} with rhythm-led delivery, punchy pockets, and hard drum presence (${productionStyle})`;
   }
   if (g.includes("pop")) {
-    return `${subGenre} pop with melodic hook-first writing and polished radio-ready production (${productionStyle})`;
+    return `${combineGenreTag(subGenre, "pop")} with melodic hook-first writing and polished radio-ready production (${productionStyle})`;
   }
   if (g.includes("rock") || g.includes("metal")) {
-    return `${subGenre} ${genre} with live-band intensity, dynamic builds, and strong section contrast (${productionStyle})`;
+    return `${tag} with live-band intensity, dynamic builds, and strong section contrast (${productionStyle})`;
   }
-  return `${subGenre} ${genre} with culturally grounded writing and contemporary production (${productionStyle})`;
+  return `${tag} with culturally grounded writing and contemporary production (${productionStyle})`;
 }
 
 function inferMoodEnergyDirection(emotion: string): string {
@@ -1539,8 +1546,8 @@ function inferVocalApproach(vocals: string, genre: string, emotion: string, duet
   if (v.includes("duet")) {
     return `duet interplay (${duetType || "complementary call-and-response"}), ${texture}, ${emotionalColor}`;
   }
-  if (v.includes("male")) return `male lead, ${texture}, ${emotionalColor}`;
   if (v.includes("female")) return `female lead, ${texture}, ${emotionalColor}`;
+  if (v.includes("male")) return `male lead, ${texture}, ${emotionalColor}`;
   return `${vocals || "lead vocal"}, ${texture}, ${emotionalColor}`;
 }
 
@@ -1819,7 +1826,7 @@ async function buildSunoPromptDriver(inputs: any, userProfile: any): Promise<str
   const instrumentFocus = inferInstrumentFocus(instrumentation, genre);
 
   const fallback = [
-    `${subGenre} ${genre}`,
+    combineGenreTag(subGenre, genre),
     `${emotion} mood`,
     vocalApproach,
     instrumentFocus,
