@@ -320,7 +320,7 @@ function fallbackMetaTagPlan(inputs: any): MetaTagPlan {
   return {
     structureTags: ["[Intro]", "[Verse]", "[Pre-Chorus]", "[Chorus]", "[Verse]", "[Chorus]", "[Bridge]", "[Chorus]", "[Outro]"],
     vocalTypeTag,
-    moodEnergyTags: ["[Energy: High]", "[Mood: Intense]"],
+    moodEnergyTags: [],
     genreAccentTags: ["[Build Up]"],
     adlibPolicy: "Use tasteful adlibs in parentheses where musically useful.",
     minTagCount: 10,
@@ -337,16 +337,15 @@ function fallbackStrictMetaTagSpec(inputs: any): string {
 Strict meta-tag orchestration plan:
 - Default section order (adjust if user requests a different structure): ${plan.structureTags.join(" -> ")}
 - Required vocal identity tag: ${plan.vocalTypeTag}
-- Mood/energy tags to include across song: ${plan.moodEnergyTags.join(", ")}
 - Genre/subgenre accent tags to include naturally: ${plan.genreAccentTags.join(", ")}
-- Minimum bracket tags in Lyrics body: ${plan.minTagCount}
+- Minimum section-level bracket tags in Lyrics body: ${plan.minTagCount}
 - Minimum adlibs in parentheses: ${plan.minAdlibCount}
-- Minimum genre-accent tag hits: ${plan.requiredAccentHits}
-- Minimum mood/energy tag hits: ${plan.requiredMoodHits}
 - Required vocal identity tag must appear in Lyrics: ${plan.requireVocalTypeTag ? "yes" : "no"}
 - Adlib policy: ${plan.adlibPolicy}
-- Inline rule: core sections should carry line-level cueing (target ~40% of lines with inline tag/adlib direction).
-- Tag logic: opening sections establish mood + voice; mid-song sections escalate arrangement tags; final sections resolve with refrain/outro tags.
+- Tag placement: bracket tags go on their OWN line as section headers ONLY (e.g. [Verse 1], [Chorus], [Bridge], [Build Up]). NEVER put bracket tags inline within a lyric line — Suno ignores them there.
+- Adlibs in parentheses may appear inline within lyric lines where musically natural. Keep them sparse — max 30% of lines. They should feel like a real performer's ad-libs, not annotations.
+- NEVER invent performance-direction tags like [Vocals: Confident], [Energy: High], [Harmonies swell], [Drums hit harder], [Mood: Intense]. These are not valid Suno tags and clutter the output.
+- Valid bracket tags are ONLY: section headers ([Intro], [Verse], [Verse 2], [Pre-Chorus], [Chorus], [Bridge], [Outro], [Build Up]), vocal identity ([Vocalist: Male/Female/Duet/Group]), and choir cues ([Choir enters]). Nothing else.
   `.trim();
 }
 
@@ -1358,16 +1357,15 @@ function buildStrictSpecFromPlan(plan: MetaTagPlan): string {
 Strict meta-tag orchestration plan:
 - Default section order (adjust if user requests a different structure): ${plan.structureTags.join(" -> ")}
 - Required vocal identity tag: ${plan.vocalTypeTag}
-- Mood/energy tags to include across song: ${plan.moodEnergyTags.join(", ")}
 - Genre/subgenre accent tags to include naturally: ${plan.genreAccentTags.join(", ")}
-- Minimum bracket tags in Lyrics body: ${plan.minTagCount}
+- Minimum section-level bracket tags in Lyrics body: ${plan.minTagCount}
 - Minimum adlibs in parentheses: ${plan.minAdlibCount}
-- Minimum genre-accent tag hits: ${plan.requiredAccentHits}
-- Minimum mood/energy tag hits: ${plan.requiredMoodHits}
 - Required vocal identity tag must appear in Lyrics: ${plan.requireVocalTypeTag ? "yes" : "no"}
 - Adlib policy: ${plan.adlibPolicy}
-- Inline rule: core sections should carry line-level cueing (target ~40% of lines with inline tag/adlib direction).
-- Tag logic: opening sections establish mood + voice; mid-song sections escalate arrangement tags; final sections resolve with refrain/outro tags.
+- Tag placement: bracket tags go on their OWN line as section headers ONLY (e.g. [Verse 1], [Chorus], [Bridge], [Build Up]). NEVER put bracket tags inline within a lyric line — Suno ignores them there.
+- Adlibs in parentheses may appear inline within lyric lines where musically natural. Keep them sparse — max 30% of lines. They should feel like a real performer's ad-libs, not annotations.
+- NEVER invent performance-direction tags like [Vocals: Confident], [Energy: High], [Harmonies swell], [Drums hit harder], [Mood: Intense]. These are not valid Suno tags and clutter the output.
+- Valid bracket tags are ONLY: section headers ([Intro], [Verse], [Verse 2], [Pre-Chorus], [Chorus], [Bridge], [Outro], [Build Up]), vocal identity ([Vocalist: Male/Female/Duet/Group]), and choir cues ([Choir enters]). Nothing else.
   `.trim();
 }
 
@@ -2403,25 +2401,21 @@ Hard requirements:
 ${pkg.strictSpec}
 
 Additional enforcement:
-- Every core section ([Intro]/[Verse]/[Pre-Chorus]/[Chorus]/[Bridge]/[Outro]) should include at least one non-structural performance tag or a musically useful adlib.
-- Every [Chorus] must contain at least one arrangement/vocal meta tag or adlib.
-- Do not stack all tags in one section; distribute them throughout the song arc.
-- Inject dynamic cues inside lines too: tags/adlibs can target single words, short phrases, or full lines.
-- In core sections, aim for at least ~40% of lyric lines carrying an inline cue (tag/adlib), while keeping readability.
+- Bracket tags ([Verse], [Chorus], [Bridge], etc.) go on their OWN line as section headers. NEVER place bracket tags inline within a lyric line.
+- NEVER invent fake performance tags like [Vocals: Confident], [Energy: High], [Harmonies swell]. Only use standard section tags.
+- Adlibs in parentheses may appear inline where a real performer would naturally ad-lib. Keep them sparse (max ~30% of lines) and genre-authentic.
+- Do not stack all adlibs in one section; distribute them naturally throughout the song arc.
 
 Current quality deficits:
 - Core section tag coverage: ${(bestMetrics.coreCoverage * 100).toFixed(0)}% (target 80%+)
 - Chorus tag coverage: ${(bestMetrics.chorusCoverage * 100).toFixed(0)}% (target 100%)
-- Core inline line coverage: ${(bestMetrics.coreInlineCoverage * 100).toFixed(0)}% (target 40%+)
-- Chorus inline line coverage: ${(bestMetrics.chorusInlineCoverage * 100).toFixed(0)}% (target 40%+)
-- Missing core coverage gap: ${(missingCoreCoverage * 100).toFixed(0)}%
 
 Constraints:
 - Keep language, genre, and story intent unchanged.
 - PRESERVE the existing section order — do NOT rearrange sections. Only add/improve tags within the existing structure.
-- Place tags where they drive arrangement and vocal delivery (not random).
-- Prefer line-level performance direction over header-only tagging.
-- Ensure adlibs are natural and rhythmic, not spammed.
+- Bracket tags go on their own line as section headers ONLY. Never inline within lyrics.
+- Remove any invented tags like [Vocals: ...], [Energy: ...], [Mood: ...], [Harmonies ...], [Drums ...].
+- Adlibs in parentheses should be sparse (max ~30% of lines) and feel like real performer ad-libs.
 
 Song to rewrite:
 ${bestText}
