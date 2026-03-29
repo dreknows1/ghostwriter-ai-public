@@ -2901,7 +2901,33 @@ async function generateSong(payload: any) {
   const register = detectRegisterHint(inputs);
 
   const prompt = `
-You are a professional songwriter who has lived and breathed ${inputs?.subGenre || ""} ${inputs?.genre || "Pop"} for 20 years.
+You are a professional songwriter who has lived and breathed ${combineGenreTag(inputs?.subGenre || "", inputs?.genre || "Pop")} for 20 years.
+
+RULE #1 — NO CLICHÉS (violating this = automatic failure):
+You MUST NOT use any generic, greeting-card, or motivational-poster language. If a phrase could be printed on a coffee mug, a graduation card, or an Instagram caption, it CANNOT appear in this song. Specifically banned:
+- "precious like gold", "diamond in the rough", "worth your weight in gold"
+- "dim your/her/my light", "shine bright", "let your wings fly", "spread your wings", "learn to fly"
+- "stand tall", "rise above", "hold your head high", "you're a queen/king/warrior/force", "wear your crown", "radiant"
+- "world is your/a canvas", "paint your sky", "write your destiny", "rewrite the stars", "dreams come true"
+- "unbreakable", "unstoppable", "masterpiece", "find your voice", "spirit alive"
+- "joy in the journey", "flame that never dies", "lighthouse", "beacon", "garden of life"
+- "you belong", "you're enough", "believe in yourself", "anything is possible"
+- ANY line that TELLS the listener they are strong/beautiful/powerful rather than SHOWING it through a concrete moment
+Instead: write scenes. Show a specific moment — a girl braiding her hair before school, hands smelling like cocoa butter, the way a teacher mispronounces her name. Make the listener SEE and FEEL. Concrete details > abstract affirmations.
+
+${hasUserDirection ? `RULE #2 — THE USER'S STORY IS LAW (this is what the song is ABOUT):
+${userDirection}
+
+Every character, narrative detail, and structural instruction above MUST appear in the song. If the direction names a character, that character must be present throughout — not mentioned once as an afterthought. If it describes a scenario, the lyrics must dramatize that scenario with specific scenes, not summarize it with platitudes.
+
+SHOW, DON'T TELL — this is non-negotiable:
+- If the direction says "double entendres" → write lines with actual double meanings. NEVER write "my double entendres hit different."
+- If it says "metaphors" → write vivid metaphors. NEVER write "I weave metaphors like a maestro."
+- If it says "cadence changes" → actually shift your rhythmic pattern between sections. NEVER write "my cadence shifts."
+- If it says "hourglass figure" → describe the body through imagery. NEVER just state "hourglass figure."
+- If it says "expansive vocabulary" → USE rare/elevated words naturally. NEVER announce vocabulary.
+- Physical descriptions should land through sensory detail, comparison, and implication — not blunt statement.
+- Genre/subgenre/instrumentation selections are creative direction, not literal lyric topics.` : ""}
 
 Return only:
 Title: ...
@@ -2920,24 +2946,8 @@ CONTEXT:
 - Register: ${register}
 - Concrete details to weave in: ${inputs?.mundaneObjects || "(none)"}
 
-${hasUserDirection ? `USER'S CREATIVE DIRECTION (highest priority — honor this alongside genre conventions):
-${userDirection}
-
-INTERPRETING THE DIRECTION:
-The user's creative direction contains two types of information — treat them differently:
-1. SUBJECT MATTER (what to write about): character details, themes, narrative scenarios, relationships, conflicts. Weave these into the lyrics as vivid imagery and storytelling.
-2. CRAFT TECHNIQUES (how to write it): mentions of metaphors, double/triple entendres, cadence changes, wordplay, flow switches, vocabulary range, etc. These are INSTRUCTIONS for how you should write — DEMONSTRATE these techniques, do NOT name them in the lyrics.
-
-SHOW, DON'T TELL — this is non-negotiable:
-- If the direction says "double entendres" → write lines with actual double meanings. NEVER write "my double entendres hit different."
-- If it says "metaphors" → write vivid metaphors. NEVER write "I weave metaphors like a maestro."
-- If it says "cadence changes" → actually shift your rhythmic pattern between sections. NEVER write "my cadence shifts."
-- If it says "hourglass figure" → describe the body through imagery (waist cinched like a corset, hips that own the room). NEVER just write "hourglass figure" or "hourglass divine."
-- If it says "expansive vocabulary" → USE rare/elevated words naturally. NEVER announce that you have a big vocabulary.
-- Physical descriptions should land through sensory detail, comparison, and implication — not blunt statement.` : ""}
-
 GENRE TRUTH:
-${genreTruth || `Write authentically for ${inputs?.subGenre || ""} ${inputs?.genre || "Pop"}.`}
+${genreTruth || `Write authentically for ${combineGenreTag(inputs?.subGenre || "", inputs?.genre || "Pop")}.`}
 
 SPECIFICITY:
 ${specificityAnchors}
@@ -2952,20 +2962,9 @@ CRAFT:
 - Add tasteful adlibs in parentheses where musically natural.
 - ${vocalDirective}
 - ${getGenreLengthDirective(inputs?.genre, inputs?.subGenre)}
-- Genre/subgenre/instrumentation selections are creative direction, not literal lyric topics.
-
-BANNED CLICHÉS — using ANY of these is an automatic failure:
-- "precious like gold", "worth your weight in gold", "diamond in the rough"
-- "dim your light", "shine bright", "let your wings fly", "spread your wings", "learn to fly"
-- "stand tall", "rise above", "you're a queen/king/warrior", "wear your crown"
-- "paint your sky", "world is your canvas", "write your destiny", "rewrite the stars"
-- "unbreakable", "unstoppable", "masterpiece", "find your voice"
-- "joy in the journey", "dreams come true", "flame that never dies"
-- Any greeting-card / motivational-poster language. If it could be printed on a coffee mug, it does not belong in a song.
-- Instead: use SPECIFIC, CONCRETE imagery that makes the listener FEEL the emotion rather than being told about it. Show a moment, not a slogan.
-- NEVER use meta-language about your own writing in the lyrics. Banned phrases include (but are not limited to): "my metaphors", "my flow", "my cadence", "my wordplay", "my vocabulary", "my bars", "my rhyme schemes", "my pen game", "words weave", "words like daggers", "syllables spray", "verses I'm spitting", "rhyme schemes so tight", "shifting like tectonics", "words sharp as", "each line a [noun]", and any line that describes the act of rapping rather than actually rapping.
-- A great rapper doesn't announce they're being clever — the cleverness speaks for itself. Lil Wayne doesn't say "my metaphors are fire" — he says "real G's move in silence like lasagna." That's the standard.
-- Write lyrics that a real artist in this genre would actually perform. Amateurs describe what they're doing, professionals just do it.
+- NEVER use meta-language about your own writing in the lyrics. Banned phrases include: "my metaphors", "my flow", "my cadence", "my wordplay", "my bars", "words weave", "syllables spray", "verses I'm spitting", "rhyme schemes so tight", "words sharp as", and any line that describes the act of rapping rather than actually rapping.
+- A great rapper doesn't announce they're being clever — Lil Wayne doesn't say "my metaphors are fire" — he says "real G's move in silence like lasagna." That's the standard.
+- Write lyrics that a real artist in this genre would actually perform.
 ${metaTagPackage.strictSpec}
 ${getInstructionResponsivenessDirective(userDirection)}
 
