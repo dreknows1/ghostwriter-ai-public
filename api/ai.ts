@@ -2920,10 +2920,8 @@ Write with confidence. Take creative risks. Make it feel lived-in, not assembled
   // Skip depth/texture enforcement on initial generation — let the draft breathe.
   // Depth enforcement only runs on edits to avoid regression-to-mean smoothing.
 
-  // SUNO prompt driver — ensure production prompt matches guide data
-  if (hasTimeBudget(startMs, 5000)) {
-    finalText = await enforceSunoPromptDriver(finalText, inputs || {}, userProfile || {});
-  }
+  // SUNO prompt driver — always run; replaces LLM prose with guide-driven technical prompt
+  finalText = await enforceSunoPromptDriver(finalText, inputs || {}, userProfile || {});
 
   finalText = await enforceRequestedAdlibLanguage(finalText, userDirection);
 
