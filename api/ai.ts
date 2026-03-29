@@ -1714,9 +1714,11 @@ async function buildSunoPromptDriver(inputs: any, userProfile: any): Promise<str
     const subMatch = subGenre
       ? guide.subGenres.find(s => s.name.toLowerCase() === subGenre.toLowerCase())
       : null;
+    // Avoid doubled genre names like "Conscious Hip-Hop Hip-Hop"
+    const genreLower = genre.toLowerCase();
     const genreTag = subMatch
-      ? `${subMatch.name} ${genre}`
-      : `${subGenre || ""} ${genre}`.trim();
+      ? (subMatch.name.toLowerCase().includes(genreLower) ? subMatch.name : `${subMatch.name} ${genre}`)
+      : (subGenre && subGenre.toLowerCase().includes(genreLower) ? subGenre : `${subGenre || ""} ${genre}`.trim());
     parts.push(genreTag);
 
     // 2. BPM from subgenre or guide
@@ -1740,12 +1742,11 @@ async function buildSunoPromptDriver(inputs: any, userProfile: any): Promise<str
     // 4. Mood/emotion
     parts.push(`${emotion} mood`);
 
-    // 5. Vocal approach from guide
-    const vocalTag = duetType
-      ? `${vocals} (${duetType}), ${guide.vocalDelivery.phrasing}`
-      : `${vocals}, ${guide.vocalDelivery.phrasing}`;
-    parts.push(vocalTag);
-    if (guide.vocalDelivery.grit) parts.push(guide.vocalDelivery.grit);
+    // 5. Vocal approach — concise tag, not full paragraph
+    const vocalLabel = duetType ? `${vocals} (${duetType})` : vocals;
+    // Extract just the first clause of phrasing for Suno (keep it short)
+    const phrasingShort = (guide.vocalDelivery.phrasing || "").split(/[—.;]/)[0].trim();
+    parts.push(phrasingShort ? `${vocalLabel}, ${phrasingShort}` : vocalLabel);
 
     // 6. Instrumentation — user choice first, then guide signature sounds
     if (instrumentation) {
@@ -1774,9 +1775,10 @@ async function buildSunoPromptDriver(inputs: any, userProfile: any): Promise<str
     // 10. Audio environment
     parts.push(audioEnv);
 
-    // 11. Tempo feel from embodied dimensions (if available)
-    if (guide.tempoFeelVsNumber?.psychologicalTempo) {
-      parts.push(guide.tempoFeelVsNumber.psychologicalTempo.split(/\.\s*/)[0]);
+    // 11. Tempo feel — use sub-genre specific if available, otherwise skip
+    //     (top-level psychologicalTempo is often too long for Suno)
+    if (subMatch && (subMatch as any).psychologicalTempo) {
+      parts.push((subMatch as any).psychologicalTempo.split(/[—.;]/)[0].trim());
     }
 
     // 12. Reference artist
@@ -1869,10 +1871,12 @@ function clamp01(v: number): number {
 }
 
 const SONG_CLICHE_PATTERNS: RegExp[] = [
+  // Window pane variants
   /\bsunrise paints? (the )?window pane\b/i,
   /\bstreetlights? paints? (the )?window pane\b/i,
   /\bsunrise paints? (my|your|the) window pain\b/i,
   /\bstreetlights? paints? (my|your|the) window pain\b/i,
+  // Generic emotional clichés
   /\brain on the glass\b/i,
   /\bgrew on trees\b/i,
   /\bborrow my light\b/i,
@@ -1883,6 +1887,34 @@ const SONG_CLICHE_PATTERNS: RegExp[] = [
   /\bbroken heart\b/i,
   /\btears? (in|on) (my|your) (eyes?|face)\b/i,
   /\blove (that|it) hurts\b/i,
+  // Empowerment clichés
+  /\bprecious like gold\b/i,
+  /\bworth (?:your|my|their) weight in gold\b/i,
+  /\bdim (?:your|my|the) light\b/i,
+  /\blet (?:your|my) wings fly\b/i,
+  /\blearn to fly\b/i,
+  /\bspread (?:your|my) wings\b/i,
+  /\bstand tall\b/i,
+  /\brise above\b/i,
+  /\bshine bright\b/i,
+  /\byou(?:'re| are) (?:a )?diamond\b/i,
+  /\byou(?:'re| are) (?:a )?queen\b/i,
+  /\byou(?:'re| are) (?:a )?king\b/i,
+  /\byou(?:'re| are) (?:a )?warrior\b/i,
+  /\bdreams? (?:come|came) true\b/i,
+  /\brewrite the stars\b/i,
+  /\bpaint (?:your|my) (?:own )?sky\b/i,
+  /\bworld(?:'s| is) (?:a |your )?canvas\b/i,
+  /\bflame? (?:that |which )?never dies?\b/i,
+  /\bunbreakable\b/i,
+  /\bunstoppable\b/i,
+  /\bwear (?:your|my) crown\b/i,
+  /\bfind (?:your|my) voice\b/i,
+  /\bjourney,? not (?:the )?destination\b/i,
+  /\bjoy in the journey\b/i,
+  /\bstars all over\b/i,
+  /\bwrite (?:your|my) (?:own )?destiny\b/i,
+  /\bmasterpiece\b/i,
 ];
 
 const PERFORMANCE_TAG_HINTS: RegExp[] = [
@@ -2914,6 +2946,16 @@ CRAFT:
 - ${vocalDirective}
 - ${getGenreLengthDirective(inputs?.genre, inputs?.subGenre)}
 - Genre/subgenre/instrumentation selections are creative direction, not literal lyric topics.
+
+BANNED CLICHÉS — using ANY of these is an automatic failure:
+- "precious like gold", "worth your weight in gold", "diamond in the rough"
+- "dim your light", "shine bright", "let your wings fly", "spread your wings", "learn to fly"
+- "stand tall", "rise above", "you're a queen/king/warrior", "wear your crown"
+- "paint your sky", "world is your canvas", "write your destiny", "rewrite the stars"
+- "unbreakable", "unstoppable", "masterpiece", "find your voice"
+- "joy in the journey", "dreams come true", "flame that never dies"
+- Any greeting-card / motivational-poster language. If it could be printed on a coffee mug, it does not belong in a song.
+- Instead: use SPECIFIC, CONCRETE imagery that makes the listener FEEL the emotion rather than being told about it. Show a moment, not a slogan.
 - NEVER use meta-language about your own writing in the lyrics. Banned phrases include (but are not limited to): "my metaphors", "my flow", "my cadence", "my wordplay", "my vocabulary", "my bars", "my rhyme schemes", "my pen game", "words weave", "words like daggers", "syllables spray", "verses I'm spitting", "rhyme schemes so tight", "shifting like tectonics", "words sharp as", "each line a [noun]", and any line that describes the act of rapping rather than actually rapping.
 - A great rapper doesn't announce they're being clever — the cleverness speaks for itself. Lil Wayne doesn't say "my metaphors are fire" — he says "real G's move in silence like lasagna." That's the standard.
 - Write lyrics that a real artist in this genre would actually perform. Amateurs describe what they're doing, professionals just do it.
