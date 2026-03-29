@@ -1612,8 +1612,8 @@ function inferExpectedVocalIdentity(vocals: string | undefined): "male" | "femal
   if (!value) return null;
   if (value.includes("duet") || value.includes("duo")) return "duet";
   if (value.includes("group") || value.includes("choir")) return "group";
-  if (value.includes("male")) return "male";
   if (value.includes("female")) return "female";
+  if (value.includes("male")) return "male";
   return null;
 }
 
@@ -1658,6 +1658,81 @@ function alignVocalIdentityInLyrics(lyrics: string, vocals: string | undefined):
   return next;
 }
 
+/**
+ * Extract production-relevant cues from the user's creative direction.
+ * These are sound/arrangement keywords that Suno needs to hear — choir, strings,
+ * acoustic guitar, distortion, etc. — as opposed to narrative/story content.
+ */
+function extractProductionCues(direction: string): string[] {
+  if (!direction) return [];
+  const lower = direction.toLowerCase();
+  const cues: string[] = [];
+
+  // Vocal arrangement cues
+  const vocalPatterns: [RegExp, string][] = [
+    [/\bchoir\b/i, "gospel choir"],
+    [/\bgospel choir\b/i, "gospel choir"],
+    [/\bbackground vocals?\b/i, "background vocals"],
+    [/\bback(?:ing)? vocals?\b/i, "backing vocals"],
+    [/\bharmony\b|\bharmonies\b/i, "vocal harmonies"],
+    [/\ba\s*cappella\b/i, "a cappella"],
+    [/\bcall\s*(?:and|&)\s*response\b/i, "call and response"],
+  ];
+
+  // Instrument cues
+  const instrumentPatterns: [RegExp, string][] = [
+    [/\bacoustic guitar\b/i, "acoustic guitar"],
+    [/\belectric guitar\b/i, "electric guitar"],
+    [/\borgan\b/i, "organ"],
+    [/\bpiano\b/i, "piano"],
+    [/\bstrings?\b/i, "strings"],
+    [/\borchestra\b/i, "orchestral"],
+    [/\bhorns?\b/i, "horns"],
+    [/\bbrass\b/i, "brass"],
+    [/\bsynth\b/i, "synth"],
+    [/\b808\b/i, "808"],
+    [/\bsub[\s-]?bass\b/i, "heavy sub-bass"],
+    [/\bflute\b/i, "flute"],
+    [/\bviolin\b/i, "violin"],
+    [/\bcello\b/i, "cello"],
+    [/\btrumpet\b/i, "trumpet"],
+    [/\bsaxophone\b|\bsax\b/i, "saxophone"],
+    [/\bbanjo\b/i, "banjo"],
+    [/\bmandolin\b/i, "mandolin"],
+    [/\bukulele\b/i, "ukulele"],
+    [/\bharp\b/i, "harp"],
+    [/\bmarimba\b/i, "marimba"],
+    [/\bsteel\s*drum\b/i, "steel drum"],
+    [/\btabla\b/i, "tabla"],
+    [/\bsitar\b/i, "sitar"],
+  ];
+
+  // Production / texture cues
+  const productionPatterns: [RegExp, string][] = [
+    [/\bdistort(?:ed|ion)\b/i, "distorted"],
+    [/\breverb\b/i, "reverb-heavy"],
+    [/\blo[\s-]?fi\b/i, "lo-fi"],
+    [/\bminimal(?:ist)?\b/i, "minimalist"],
+    [/\blush\b/i, "lush"],
+    [/\bepic\b/i, "epic"],
+    [/\bintimate\b/i, "intimate"],
+    [/\braw\b/i, "raw"],
+    [/\bstrip(?:ped)?[\s-]?(?:back|down)\b/i, "stripped-back"],
+    [/\bunplugged\b/i, "unplugged acoustic"],
+  ];
+
+  const allPatterns = [...vocalPatterns, ...instrumentPatterns, ...productionPatterns];
+  const seen = new Set<string>();
+  for (const [pattern, cue] of allPatterns) {
+    if (pattern.test(direction) && !seen.has(cue)) {
+      seen.add(cue);
+      cues.push(cue);
+    }
+  }
+
+  return cues.slice(0, 5);
+}
+
 async function buildSunoPromptDriver(inputs: any, userProfile: any): Promise<string> {
   const guide = await resolveGuide(inputs || {});
   const guideKeywords = await getGenreGuideSunoKeywords(inputs || {});
@@ -1671,6 +1746,7 @@ async function buildSunoPromptDriver(inputs: any, userProfile: any): Promise<str
   const vocals = inputs?.vocals || "Female Solo";
   const duetType = inputs?.duetType || "";
   const referenceArtist = (inputs?.referenceArtist || "").trim();
+  const creativeDirection = (inputs?.creativeDirection || inputs?.additionalInfo || "").trim();
   const maxLen = Number(process.env.AI_SUNO_PROMPT_MAX_LEN || 600);
 
   // ── Build from guide data when available ──
@@ -1754,7 +1830,15 @@ async function buildSunoPromptDriver(inputs: any, userProfile: any): Promise<str
       parts.push(`${language} vocals`);
     }
 
-    // 14. SUNO essential keywords not already covered
+    // 14. Extract production-relevant cues from creative direction
+    if (creativeDirection) {
+      const productionCues = extractProductionCues(creativeDirection);
+      if (productionCues.length > 0) {
+        parts.push(productionCues.join(", "));
+      }
+    }
+
+    // 15. SUNO essential keywords not already covered (renumbered)
     const promptSoFar = parts.join(", ").toLowerCase();
     const missingKeywords = guideKeywords.keywords.filter(k => !promptSoFar.includes(k.toLowerCase()));
     if (missingKeywords.length > 0) {
@@ -1782,6 +1866,7 @@ async function buildSunoPromptDriver(inputs: any, userProfile: any): Promise<str
     instrumentFocus,
     `${subProfile.bpmRange}, ${audioEnv}`,
     referenceArtist ? `reference: ${referenceArtist}` : "",
+    creativeDirection ? extractProductionCues(creativeDirection).join(", ") : "",
     guideKeywords.keywords.length > 0 ? guideKeywords.keywords.slice(0, 6).join(", ") : "",
     guideKeywords.avoid.length > 0 ? `avoid: ${guideKeywords.avoid.slice(0, 4).join(", ")}` : "",
   ].filter(Boolean).join(", ");
