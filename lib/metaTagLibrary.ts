@@ -122,8 +122,8 @@ function inferPrimaryStructureTags(genre?: string): string[] {
 function inferVocalTypeTag(vocals?: string): string {
   const v = (vocals || "").toLowerCase();
   if (v.includes("duet") || v.includes("duo") || v.includes("group")) return "[Duet]";
-  if (v.includes("male")) return "[Male Vocal]";
   if (v.includes("female")) return "[Female Vocal]";
+  if (v.includes("male")) return "[Male Vocal]";
   if (v.includes("choir")) return "[Choir]";
   return "[Vocalist: Male]";
 }
