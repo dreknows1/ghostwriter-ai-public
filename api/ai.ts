@@ -642,85 +642,42 @@ async function compileReferenceTrackTeaching(inputs: any): Promise<string> {
   }
   const picks = selected.slice(0, 6);
 
-  // Extract teachings organized by what they teach
-  const narrativeLessons: string[] = [];
-  const imageryLessons: string[] = [];
-  const cadenceLessons: string[] = [];
-  const structureLessons: string[] = [];
-  const styleLessons: string[] = [];
+  // Build imperative craft directives from each track
+  const directives: string[] = [];
 
   for (const track of picks) {
-    const ref = `(${track.artist} — "${track.title}")`;
-    const craft = track.craftHighlight.toLowerCase();
-    const structural = track.structuralNotes.toLowerCase();
+    // Convert descriptive craftHighlight into an imperative "DO THIS" directive
+    const craft = track.craftHighlight;
+    const structural = track.structuralNotes;
 
-    // Categorize by what the lesson teaches
-    if (craft.includes("narrative") || craft.includes("storytell") || craft.includes("lyric") ||
-        craft.includes("metaphor") || craft.includes("conceit") || craft.includes("persona") ||
-        craft.includes("confess") || craft.includes("perspective")) {
-      narrativeLessons.push(`- ${track.craftHighlight} ${ref}`);
-    } else if (craft.includes("imagery") || craft.includes("sensory") || craft.includes("vocab") ||
-               craft.includes("language") || craft.includes("dialect") || craft.includes("slang") ||
-               craft.includes("word") || craft.includes("phrase") || craft.includes("idiom")) {
-      imageryLessons.push(`- ${track.craftHighlight} ${ref}`);
-    } else if (craft.includes("flow") || craft.includes("cadence") || craft.includes("rhythm") ||
-               craft.includes("delivery") || craft.includes("phrasing") || craft.includes("tempo") ||
-               craft.includes("swing") || craft.includes("syncopat")) {
-      cadenceLessons.push(`- ${track.craftHighlight} ${ref}`);
-    } else if (structural.includes("verse") || structural.includes("chorus") || structural.includes("bridge") ||
-               craft.includes("structure") || craft.includes("dynamic") || craft.includes("build") ||
-               craft.includes("contrast") || craft.includes("section")) {
-      structureLessons.push(`- ${track.craftHighlight} ${ref}`);
-    } else {
-      styleLessons.push(`- ${track.craftHighlight} ${ref}`);
-    }
+    // Turn the craft observation into a command
+    directives.push(`DO THIS: ${craft}`);
 
-    // Structural notes always contribute to structure lessons
-    if (track.structuralNotes && structureLessons.length < 3) {
-      structureLessons.push(`- Structure model: ${track.structuralNotes} ${ref}`);
+    // Turn structural notes into a structure directive
+    if (structural) {
+      directives.push(`STRUCTURE: ${structural}`);
     }
   }
 
   const sections: string[] = [];
-  sections.push(`REFERENCE CRAFT — Learn from the best recent ${guide.name} writing:`);
+  sections.push(
+    `CRAFT DIRECTIVES — These are non-negotiable writing techniques for this ${guide.name} song. ` +
+    `Execute every one of them in your lyrics:`
+  );
 
-  if (narrativeLessons.length > 0) {
-    sections.push(`HOW TO TELL THE STORY:\n${narrativeLessons.slice(0, 2).join("\n")}`);
-  }
-  if (imageryLessons.length > 0) {
-    sections.push(`WORDS, IMAGERY & VOCABULARY TO STUDY:\n${imageryLessons.slice(0, 2).join("\n")}`);
-  }
-  if (cadenceLessons.length > 0) {
-    sections.push(`CADENCE & FLOW MODELS:\n${cadenceLessons.slice(0, 2).join("\n")}`);
-  }
-  if (structureLessons.length > 0) {
-    sections.push(`STRUCTURAL BLUEPRINTS:\n${structureLessons.slice(0, 2).join("\n")}`);
-  }
-  if (styleLessons.length > 0) {
-    sections.push(`STYLE & ATTITUDE:\n${styleLessons.slice(0, 2).join("\n")}`);
-  }
-
-  // If we have sparse categorization, add uncategorized craft highlights
-  if (sections.length < 4) {
-    const extras = picks
-      .filter(t => !narrativeLessons.some(l => l.includes(t.title)) &&
-                   !imageryLessons.some(l => l.includes(t.title)) &&
-                   !cadenceLessons.some(l => l.includes(t.title)))
-      .slice(0, 3)
-      .map(t => `- ${t.craftHighlight} (${t.artist} — "${t.title}")`);
-    if (extras.length > 0) {
-      sections.push(`CRAFT TECHNIQUES TO ABSORB:\n${extras.join("\n")}`);
-    }
+  // Output all directives as hard requirements
+  for (const d of directives) {
+    sections.push(`- ${d}`);
   }
 
   sections.push(
-    `IMPORTANT: These references teach you the STANDARD of craft for this genre. ` +
-    `Study their techniques — narrative approaches, imagery density, vocabulary choices, ` +
-    `rhythmic patterns, structural decisions — and write at that level. ` +
-    `Do NOT name these songs or artists in your lyrics. Absorb and demonstrate, don't reference.`
+    `\nThese directives define the MINIMUM craft bar. ` +
+    `If your lyrics lack multi-level wordplay, internal rhyme density, structural contrast, ` +
+    `and genre-authentic vocabulary, you have failed the task. ` +
+    `Do NOT name any reference artists or songs in your lyrics.`
   );
 
-  return sections.join("\n\n");
+  return sections.join("\n");
 }
 
 async function getGenreGuideSunoKeywords(inputs: any): Promise<{ keywords: string[]; avoid: string[]; tips: string[] }> {
