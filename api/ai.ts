@@ -1951,6 +1951,15 @@ const SONG_CLICHE_PATTERNS: RegExp[] = [
   /\byou got this\b/i,
   /\byou(?:'re| are) (?:a )?star\b/i,
   /\bborn to (?:shine|fly|lead|win|rise)\b/i,
+  /\bset (?:your|my|her|his) spirit free\b/i,
+  /\bpaint (?:your|my|her) truth\b/i,
+  /\bthe world is (?:yours|mine|hers)\b/i,
+  /\bstrength inside\b/i,
+  /\bpower in (?:your|my|her) heart\b/i,
+  /\btruth within\b/i,
+  /\blight within\b/i,
+  /\bfire inside\b/i,
+  /\bfire within\b/i,
 ];
 
 const PERFORMANCE_TAG_HINTS: RegExp[] = [
@@ -2915,6 +2924,57 @@ async function getSpecificityAnchors(inputs: any): Promise<string> {
   return anchors.join("\n");
 }
 
+/**
+ * Extract character names and structural instructions from creative direction
+ * and format them as hard requirements the LLM cannot ignore.
+ */
+function extractCharacterRequirements(direction: string): string {
+  if (!direction) return "";
+  const requirements: string[] = [];
+
+  // Extract character names — look for "[Name] will be" / "[Name] is" / "[Name] should" patterns
+  const namePatterns = [
+    /\b([A-Z][a-z]{2,})\s+(?:will be|is|should|can|must|needs to)\s+(?:rapping|singing|performing|the|a)\b/gi,
+    /\b([A-Z][a-z]{2,})\s+(?:raps?|sings?|performs?|leads?|starts?)\b/gi,
+    /\b([A-Z][a-z]{2,})(?:'s)?\s+(?:verse|chorus|part|section|voice)\b/gi,
+  ];
+
+  const names = new Set<string>();
+  // Common words to exclude
+  const excludeWords = new Set(["the", "this", "that", "make", "sure", "every", "when", "with", "from", "about", "their", "they", "will", "should", "could", "would", "have", "been", "being", "were", "into", "also", "very", "just", "like", "more", "some", "song", "music", "genre", "style", "verse", "chorus", "bridge", "outro", "intro"]);
+
+  for (const pattern of namePatterns) {
+    let match;
+    while ((match = pattern.exec(direction)) !== null) {
+      const name = match[1];
+      if (!excludeWords.has(name.toLowerCase()) && name.length >= 3) {
+        names.add(name);
+      }
+    }
+  }
+
+  if (names.size > 0) {
+    const nameList = Array.from(names);
+    requirements.push(`\nCHARACTER REQUIREMENTS (non-negotiable):`);
+    for (const name of nameList) {
+      requirements.push(`- "${name}" MUST appear BY NAME in the lyrics at least 3 times across different sections. This is a real person's name — use it directly in the lyrics as address or reference.`);
+    }
+  }
+
+  // Extract structural instructions — "choir", "rapping the verses", "singing the chorus"
+  if (/choir/i.test(direction)) {
+    requirements.push(`- A choir MUST be featured prominently — use [Choir enters] tag and write choir-appropriate lines.`);
+  }
+  if (/rap(?:ping|s)?\s+(?:the\s+)?verse/i.test(direction)) {
+    requirements.push(`- Verses MUST be written in a rap cadence — rhythmic, rhyme-dense, with flow.`);
+  }
+  if (/sing(?:ing|s)?\s+(?:the\s+)?chorus/i.test(direction)) {
+    requirements.push(`- Chorus MUST be melodic and singable — not rapped.`);
+  }
+
+  return requirements.join("\n");
+}
+
 async function generateSong(payload: any) {
   const { inputs, userProfile } = payload || {};
   const startMs = Date.now();
@@ -2938,15 +2998,19 @@ You MUST NOT use any generic, greeting-card, or motivational-poster language. If
 - "dim your/her/my light", "shine bright", "let your wings fly", "spread your wings", "learn to fly"
 - "stand tall", "rise above", "hold your head high", "you're a queen/king/warrior/force", "wear your crown", "radiant"
 - "world is your/a canvas", "paint your sky", "write your destiny", "rewrite the stars", "dreams come true"
-- "unbreakable", "unstoppable", "masterpiece", "find your voice", "spirit alive"
+- "unbreakable", "unstoppable", "masterpiece", "find your voice", "spirit alive", "set your spirit free"
 - "joy in the journey", "flame that never dies", "lighthouse", "beacon", "garden of life"
 - "you belong", "you're enough", "believe in yourself", "anything is possible"
+- "you're the sun", "you're a star", "born to shine/fly/rise", "wear your crown", "paint your truth"
+- "never give up", "don't give up", "you got this", "the world is yours"
 - ANY line that TELLS the listener they are strong/beautiful/powerful rather than SHOWING it through a concrete moment
-Instead: write scenes. Show a specific moment — a girl braiding her hair before school, hands smelling like cocoa butter, the way a teacher mispronounces her name. Make the listener SEE and FEEL. Concrete details > abstract affirmations.
+- ANY abstract noun phrase like "crown of [noun]", "force of nature", "river of [noun]", "armor of [noun]" — these are dressed-up clichés
+The test: read each line aloud. If it sounds like something a motivational speaker would say, DELETE IT and write a scene instead.
+Instead: write scenes. Show a specific moment — a girl braiding her hair before school, hands smelling like cocoa butter, the way a teacher mispronounces her name, the sound of abuela's voice through a screen door. Make the listener SEE and FEEL. Concrete details > abstract affirmations. Every line should contain at least one tangible noun (a real object, place, texture, sound, smell) — not just emotions and abstractions.
 
 ${hasUserDirection ? `RULE #2 — THE USER'S STORY IS LAW (this is what the song is ABOUT):
 ${userDirection}
-
+${extractCharacterRequirements(userDirection)}
 Every character, narrative detail, and structural instruction above MUST appear in the song. If the direction names a character, that character must be present throughout — not mentioned once as an afterthought. If it describes a scenario, the lyrics must dramatize that scenario with specific scenes, not summarize it with platitudes.
 
 SHOW, DON'T TELL — this is non-negotiable:
@@ -3037,12 +3101,15 @@ Write with confidence. Take creative risks. Make it feel lived-in, not assembled
       const clicheScrubPrompt = `
 You are a lyric editor. The song below contains ${clicheCount} cliché phrases that must be replaced.
 
-RULES:
-- Replace EVERY generic/motivational-poster phrase with a CONCRETE, SPECIFIC image or scene.
-- Banned phrases and their variants: "lighthouse", "beacon", "canvas to paint", "stand tall", "shine bright", "radiant queen", "spread your wings", "hold your head high", "unstoppable", "unbreakable", "find your voice", "dreams come true", "garden of life", "you belong", "you're enough", "never faint", "time to shine", "spirit alive", "crown of [anything]", "force of nature"
-- Replace each cliché line with something a REAL songwriter would write — a specific sensory moment, a named object, a physical action. NOT another abstraction.
-- Keep the rhyme scheme, section structure, and overall story intact.
-- Do NOT add new clichés to replace the old ones.
+FIND AND REPLACE every line containing ANY of these (and variants):
+"lighthouse", "beacon", "canvas to paint", "paint your truth", "stand tall", "shine bright", "radiant", "spread your wings", "hold your head high", "unstoppable", "unbreakable", "find your voice", "dreams come true", "garden of life", "you belong", "you're enough", "never faint", "time to shine", "spirit alive", "set your spirit free", "crown of [anything]", "force of nature", "you're the sun", "you're a star", "wear your crown", "born to shine/rise/fly", "the world is yours", "you got this", "never give up", "don't give up", "believe in yourself"
+
+REPLACEMENT RULES:
+- Each replacement MUST contain a tangible noun: a real object, texture, sound, smell, or place.
+- Good: "chapstick melting in her back pocket" / "screen door slapping shut at dusk" / "chalk dust on her fingertips"
+- Bad: "strength inside her soul" / "power in her heart" / "truth within her eyes" — these are just repackaged clichés.
+- Keep the rhyme scheme, section structure, and story intact.
+- The replacement must fit the rhythm and syllable count of the original line.
 
 Return ONLY this format:
 Title: ...
