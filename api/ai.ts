@@ -1843,9 +1843,49 @@ async function buildSunoPromptDriver(inputs: any, userProfile: any): Promise<str
 async function enforceSunoPromptDriver(songText: string, inputs: any, userProfile: any): Promise<string> {
   if (!songText?.trim()) return songText;
   const parsed = parseStructuredSong(songText);
-  const driverPrompt = await buildSunoPromptDriver(inputs || {}, userProfile || {});
   const alignedLyrics = alignVocalIdentityInLyrics(parsed.lyrics, inputs?.vocals);
-  return `Title: ${parsed.title}\n### SUNO Prompt\n${driverPrompt}\n### Lyrics\n${alignedLyrics}`.trim();
+
+  // If the LLM wrote a decent atmospheric Suno prompt, enhance it rather than replacing.
+  // Only fall back to guide-driven prompt if the LLM wrote nothing or wrote obvious garbage.
+  let sunoPrompt = (parsed.sunoPrompt || "").trim();
+  const isTooShort = sunoPrompt.length < 20;
+  const isSpecSheet = /^\s*[A-Z][\w\s/-]+,\s*[A-Z][\w\s/-]+,\s*[A-Z]/m.test(sunoPrompt) && sunoPrompt.split(",").length > 6;
+  const isNarrative = sunoPrompt.length > 30 && /\b(with|featuring|driven|glide|surges|builds|opens|enters|blends|layers)\b/i.test(sunoPrompt);
+
+  if (isTooShort || (isSpecSheet && !isNarrative)) {
+    // LLM wrote a bad prompt — fall back to guide-driven
+    sunoPrompt = await buildSunoPromptDriver(inputs || {}, userProfile || {});
+  } else {
+    // LLM wrote a decent atmospheric prompt — just ensure critical elements are present
+    const genre = inputs?.genre || "Pop";
+    const subGenre = inputs?.subGenre || "";
+    const vocals = inputs?.vocals || "Female Solo";
+    const genreTag = combineGenreTag(subGenre, genre);
+
+    // Ensure genre is mentioned
+    if (!sunoPrompt.toLowerCase().includes(genre.toLowerCase())) {
+      sunoPrompt = `${genreTag} track. ${sunoPrompt}`;
+    }
+
+    // Ensure vocal identity matches selection
+    const vocalLower = vocals.toLowerCase();
+    const hasFemale = /\bfemale\b/i.test(sunoPrompt);
+    const hasMale = /\bmale\b/i.test(sunoPrompt) && !/\bfemale\b/i.test(sunoPrompt);
+    if (vocalLower.includes("female") && !hasFemale) {
+      sunoPrompt = sunoPrompt.replace(/\b(vocals?|lead|singer|voice)\b/i, "female $1");
+      if (!/female/i.test(sunoPrompt)) sunoPrompt += ", female vocals";
+    } else if (vocalLower.includes("male") && !hasMale) {
+      sunoPrompt = sunoPrompt.replace(/\bfemale\s*/gi, "male ");
+    }
+
+    // Clamp length
+    const maxLen = Number(process.env.AI_SUNO_PROMPT_MAX_LEN || 600);
+    if (sunoPrompt.length > maxLen) {
+      sunoPrompt = sunoPrompt.slice(0, maxLen).replace(/[,\s]+$/, "");
+    }
+  }
+
+  return `Title: ${parsed.title}\n### SUNO Prompt\n${sunoPrompt}\n### Lyrics\n${alignedLyrics}`.trim();
 }
 
 function countBracketTags(lyrics: string): number {
@@ -3025,7 +3065,12 @@ SHOW, DON'T TELL — this is non-negotiable:
 Return only:
 Title: ...
 ### SUNO Prompt
-[production direction, 60-80 words]
+[Write 40-80 words of ATMOSPHERIC production direction — NOT a comma-separated spec sheet.
+Paint the sonic VIBE as a flowing description. Examples of great Suno prompts:
+- "A gritty, raw Soul track with a heart-wrenching vibe about betrayal. Features a powerful, aggressive female lead vocal that strains with emotion. Driven by a slow, melancholic electric piano, a deep pulsing bassline, and a tight swung drum groove with heavy backbeats."
+- "Soulful R&B female vocals glide atop piano, nylon guitar, and laid-back congas for an intimate groove. Dynamics breathe with strategic silences. The breakdown surges with dembow pulses and intertwining Spanish guitar."
+Do NOT write: "Genre, BPM, mood, vocal type, instrument1, instrument2" — that sounds robotic.
+DO write: what the track FEELS like, what instruments DO, how the energy MOVES.]
 ### Lyrics
 [full lyrics with section tags and adlibs]
 
