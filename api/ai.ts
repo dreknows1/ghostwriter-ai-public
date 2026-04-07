@@ -885,14 +885,14 @@ function getClaudeModel(): string {
  * "gemini" = Google Gemini (default, backward-compatible)
  */
 function getDraftLLM(): "openai" | "claude" | "gemini" {
-  const val = (process.env.SONG_DRAFT_LLM || "gemini").toLowerCase();
+  const val = (process.env.SONG_DRAFT_LLM || "openai").toLowerCase();
   if (val === "openai") return "openai";
   if (val === "claude") return "claude";
   return "gemini";
 }
 
 function getOpenAIModel(): string {
-  return process.env.OPENAI_TEXT_MODEL || "gpt-4o";
+  return process.env.OPENAI_TEXT_MODEL || "gpt-4.1-nano";
 }
 
 function getSongwriterSystemPrompt(register?: "clean" | "radio" | "explicit"): string {
@@ -2619,12 +2619,38 @@ function parseLooseJson(text: string): any | null {
 
 const getUserProfileByEmailRef = makeFunctionReference<"query">("app:getUserProfileByEmail");
 
-async function openAIResponses(prompt: string, model = getTextModel()): Promise<string> {
+async function openAIResponses(prompt: string, model?: string): Promise<string> {
+  // Route through OpenAI when it's the configured LLM (default)
+  const useOpenAI = getDraftLLM() === "openai";
+  if (useOpenAI) {
+    try {
+      const client = new OpenAI({ apiKey: getOpenAIApiKey() });
+      const response = await client.chat.completions.create({
+        model: model || getOpenAIModel(),
+        max_tokens: 4096,
+        messages: [{ role: "user", content: prompt }],
+      });
+      const text = response.choices?.[0]?.message?.content?.trim() || "";
+      if (!text) {
+        throw Object.assign(new Error("OpenAI text generation returned no text."), {
+          status: 502,
+          code: "openai_no_text",
+        });
+      }
+      return text;
+    } catch (error: any) {
+      // Fall through to Gemini as backup
+      console.error("OpenAI mechanical pass failed, falling back to Gemini:", error?.message);
+    }
+  }
+
+  // Gemini path (fallback or when configured as primary)
+  const geminiModel = model || getTextModel();
   const apiKey = getRequestGeminiTextApiKey();
   const ai = new GoogleGenAI({ apiKey });
   try {
     const response: any = await ai.models.generateContent({
-      model,
+      model: geminiModel,
       contents: [{ text: prompt }],
     });
     const text =
