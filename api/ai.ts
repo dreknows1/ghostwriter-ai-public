@@ -2000,6 +2000,11 @@ const SONG_CLICHE_PATTERNS: RegExp[] = [
   /\blight within\b/i,
   /\bfire inside\b/i,
   /\bfire within\b/i,
+  /\bneon lights?\b/i,
+  /\bcity lights?\b/i,
+  /\bneon[\s-]?(?:soaked|glow|lit|drenched)\b/i,
+  /\blights? of the city\b/i,
+  /\bunder the (?:neon|city) glow\b/i,
 ];
 
 const PERFORMANCE_TAG_HINTS: RegExp[] = [
@@ -3069,6 +3074,7 @@ You MUST NOT use any generic, greeting-card, or motivational-poster language. If
 - "you belong", "you're enough", "believe in yourself", "anything is possible"
 - "you're the sun", "you're a star", "born to shine/fly/rise", "wear your crown", "paint your truth"
 - "never give up", "don't give up", "you got this", "the world is yours"
+- "neon lights", "city lights", "under the neon glow", "neon-soaked", "lights of the city"
 - ANY line that TELLS the listener they are strong/beautiful/powerful rather than SHOWING it through a concrete moment
 - ANY abstract noun phrase like "crown of [noun]", "force of nature", "river of [noun]", "armor of [noun]" — these are dressed-up clichés
 The test: read each line aloud. If it sounds like something a motivational speaker would say, DELETE IT and write a scene instead.
@@ -3173,7 +3179,7 @@ Write with confidence. Take creative risks. Make it feel lived-in, not assembled
 You are a lyric editor. The song below contains ${clicheCount} cliché phrases that must be replaced.
 
 FIND AND REPLACE every line containing ANY of these (and variants):
-"lighthouse", "beacon", "canvas to paint", "paint your truth", "stand tall", "shine bright", "radiant", "spread your wings", "hold your head high", "unstoppable", "unbreakable", "find your voice", "dreams come true", "garden of life", "you belong", "you're enough", "never faint", "time to shine", "spirit alive", "set your spirit free", "crown of [anything]", "force of nature", "you're the sun", "you're a star", "wear your crown", "born to shine/rise/fly", "the world is yours", "you got this", "never give up", "don't give up", "believe in yourself"
+"lighthouse", "beacon", "canvas to paint", "paint your truth", "stand tall", "shine bright", "radiant", "spread your wings", "hold your head high", "unstoppable", "unbreakable", "find your voice", "dreams come true", "garden of life", "you belong", "you're enough", "never faint", "time to shine", "spirit alive", "set your spirit free", "crown of [anything]", "force of nature", "you're the sun", "you're a star", "wear your crown", "born to shine/rise/fly", "the world is yours", "you got this", "never give up", "don't give up", "believe in yourself", "neon lights", "city lights", "neon glow", "neon-soaked", "lights of the city"
 
 REPLACEMENT RULES:
 - Each replacement MUST contain a tangible noun: a real object, texture, sound, smell, or place.
