@@ -1271,6 +1271,15 @@ export const App: React.FC = () => {
                      >
                        Set AI Key
                      </button>
+                     <button
+                       onClick={() => {
+                         window.open('https://blog.songghost.com', '_blank', 'noopener,noreferrer');
+                         setIsMenuOpen(false);
+                       }}
+                       className="w-full text-left px-4 py-3 rounded-xl text-slate-200 text-[2.05rem] sm:text-[2.2rem] font-medium leading-none hover:bg-slate-700/40 hover:text-white"
+                     >
+                       Blog
+                     </button>
                      {[
                        ['Invite Friends', 'invite'],
                        ['Earn Credits', 'earn'],
@@ -1380,6 +1389,15 @@ export const App: React.FC = () => {
           />
           <div className="fixed right-3 top-16 bottom-3 z-[70] w-[19rem] rounded-[1.1rem] border border-slate-700/70 bg-[#1a1530] shadow-2xl flex flex-col overflow-hidden">
             <div className="p-3 overflow-y-auto">
+              <button
+                onClick={() => {
+                  window.open('https://blog.songghost.com', '_blank', 'noopener,noreferrer');
+                  setIsMenuOpen(false);
+                }}
+                className="w-full text-left px-4 py-3 rounded-xl text-slate-200 text-[2.05rem] sm:text-[2.2rem] font-medium leading-none hover:bg-slate-700/40 hover:text-white"
+              >
+                Blog
+              </button>
               {[
                 ['Invite Friends', 'invite'],
                 ['Earn Credits', 'earn'],
