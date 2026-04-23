@@ -1273,7 +1273,7 @@ export const App: React.FC = () => {
                      </button>
                      <button
                        onClick={() => {
-                         window.open('https://blog.songghost.com', '_blank', 'noopener,noreferrer');
+                         window.open('https://blog.songghost.com/home', '_blank', 'noopener,noreferrer');
                          setIsMenuOpen(false);
                        }}
                        className="w-full text-left px-4 py-3 rounded-xl text-slate-200 text-[2.05rem] sm:text-[2.2rem] font-medium leading-none hover:bg-slate-700/40 hover:text-white"
@@ -1391,7 +1391,7 @@ export const App: React.FC = () => {
             <div className="p-3 overflow-y-auto">
               <button
                 onClick={() => {
-                  window.open('https://blog.songghost.com', '_blank', 'noopener,noreferrer');
+                  window.open('https://blog.songghost.com/home', '_blank', 'noopener,noreferrer');
                   setIsMenuOpen(false);
                 }}
                 className="w-full text-left px-4 py-3 rounded-xl text-slate-200 text-[2.05rem] sm:text-[2.2rem] font-medium leading-none hover:bg-slate-700/40 hover:text-white"
