@@ -1,5 +1,5 @@
 
-import React, { useState, useEffect, useCallback, useMemo } from 'react';
+import React, { useState, useEffect, useCallback, useMemo, useRef } from 'react';
 import { AppStep, AppView, SongInputs, SavedSong, UserProfile } from './types';
 import { generateSong, generateAlbumArt, generateSocialPack, translateLyrics, editSong, generateDynamicOptions, structureImportedSong, promptToSetGeminiApiKey } from './services/geminiService';
 import { saveSong } from './services/songService';
@@ -303,11 +303,12 @@ const CreationWizard: React.FC<{
   inputs: SongInputs;
   dynamicOptions: string[];
   isLoadingOptions: boolean;
+  isGenerating: boolean;
   onUpdate: (key: keyof SongInputs, val: string) => void;
   onNext: (customVal?: string) => void;
   onPrev: () => void;
   onGenerate: () => void;
-}> = ({ step, inputs, dynamicOptions, isLoadingOptions, onUpdate, onNext, onPrev, onGenerate }) => {
+}> = ({ step, inputs, dynamicOptions, isLoadingOptions, isGenerating, onUpdate, onNext, onPrev, onGenerate }) => {
   const [isOther, setIsOther] = useState(false);
   const [otherText, setOtherText] = useState('');
 
@@ -450,7 +451,7 @@ const CreationWizard: React.FC<{
         {step === AppStep.AWAITING_CREATIVE_DIRECTION && (
           <div className="text-center space-y-6 max-w-2xl mx-auto mt-12">
             <textarea autoFocus placeholder="e.g. A conversation at a train station in the rain..." className="w-full bg-slate-800 border border-slate-700 p-8 rounded-[2rem] text-white outline-none focus:border-orange-400 min-h-[250px] text-lg leading-relaxed" value={inputs.creativeDirection || ''} onChange={(e) => onUpdate('creativeDirection', e.target.value)} />
-            <button onClick={onGenerate} className="w-full bg-gradient-to-r from-orange-500 via-amber-500 to-cyan-500 py-6 md:py-8 rounded-[2rem] text-base md:text-xl font-black uppercase tracking-[0.16em] md:tracking-[0.5em] text-white shadow-xl transition-all hover:scale-[1.02]">MASTER THE RECORD</button>
+            <button onClick={onGenerate} disabled={isGenerating} className="w-full bg-gradient-to-r from-orange-500 via-amber-500 to-cyan-500 py-6 md:py-8 rounded-[2rem] text-base md:text-xl font-black uppercase tracking-[0.16em] md:tracking-[0.5em] text-white shadow-xl transition-all hover:scale-[1.02] disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100">{isGenerating ? 'GENERATING…' : 'MASTER THE RECORD'}</button>
             <p className="text-sm text-slate-500 uppercase tracking-widest mt-4">COST: {COSTS.GENERATE_SONG} CREDITS</p>
           </div>
         )}
@@ -477,6 +478,7 @@ export const App: React.FC = () => {
   const [generatedSong, setGeneratedSong] = useState('');
   const [albumArt, setAlbumArt] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(false);
+  const generationInFlightRef = useRef(false);
   const [loadingMessage, setLoadingMessage] = useState('');
   const [generationStageIndex, setGenerationStageIndex] = useState(0);
   const [generationLog, setGenerationLog] = useState<string[]>([]);
@@ -706,9 +708,12 @@ export const App: React.FC = () => {
 
   const handleGenerate = async () => {
       if (!session) return;
+      if (generationInFlightRef.current) return;
+      generationInFlightRef.current = true;
       const cleanedInputs = sanitizeUnknown(inputs);
       const canAfford = await hasEnoughCredits(session.user.email || '', COSTS.GENERATE_SONG);
       if (!canAfford) {
+          generationInFlightRef.current = false;
           setView(AppView.PRICING);
           return;
       }
@@ -746,6 +751,7 @@ export const App: React.FC = () => {
           setStep(AppStep.AWAITING_CREATIVE_DIRECTION);
       } finally {
           setIsLoading(false);
+          generationInFlightRef.current = false;
       }
   };
 
@@ -846,11 +852,14 @@ export const App: React.FC = () => {
       if (!cleanPasteContent.trim()) return;
 
       if (!session) return;
+      if (generationInFlightRef.current) return;
+      generationInFlightRef.current = true;
       const cleanedInputs = sanitizeUnknown(inputs);
-      
+
       // Cost of "Structuring" is treated as a FULL GENERATION (5 credits) as it builds the song.
       const canAfford = await hasEnoughCredits(session.user.email || '', COSTS.GENERATE_SONG);
       if (!canAfford) {
+          generationInFlightRef.current = false;
           setView(AppView.PRICING);
           return;
       }
@@ -890,6 +899,7 @@ export const App: React.FC = () => {
       } finally {
           setIsLoading(false);
           setPasteContent('');
+          generationInFlightRef.current = false;
       }
   };
 
@@ -1166,8 +1176,8 @@ export const App: React.FC = () => {
                      />
                      
                      <div className="flex flex-col sm:flex-row gap-3 sm:gap-4">
-                         <button onClick={handlePasteImport} className="cta-primary flex-1 py-4 rounded-2xl font-black uppercase tracking-widest transition-all">
-                             Structure Song ({COSTS.GENERATE_SONG} Credits)
+                         <button onClick={handlePasteImport} disabled={isLoading} className="cta-primary flex-1 py-4 rounded-2xl font-black uppercase tracking-widest transition-all disabled:opacity-50 disabled:cursor-not-allowed">
+                             {isLoading ? 'Structuring…' : `Structure Song (${COSTS.GENERATE_SONG} Credits)`}
                          </button>
                          <button onClick={() => { setIsPasteMode(false); setPasteContent(''); }} className="cta-secondary flex-1 py-4 rounded-2xl text-slate-300 font-black uppercase tracking-widest transition-all">
                              Cancel
@@ -1526,11 +1536,12 @@ export const App: React.FC = () => {
                   </div>
               </div>
           ) : (
-              <CreationWizard 
+              <CreationWizard
                 step={step}
                 inputs={inputs}
                 dynamicOptions={dynamicOptions}
                 isLoadingOptions={isLoadingOptions}
+                isGenerating={isLoading}
                 onUpdate={handleUpdate}
                 onNext={handleNext}
                 onPrev={handlePrev}
