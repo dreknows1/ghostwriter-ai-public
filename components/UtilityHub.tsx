@@ -6,10 +6,13 @@ export type UtilitySection =
   | "earn"
   | "whatsnew"
   | "help"
+  | "support"
   | "feedback"
   | "terms"
   | "privacy"
   | "about";
+
+const SUPPORT_EMAIL = "support@songghost.com";
 
 interface UtilityHubProps {
   email: string;
@@ -96,12 +99,31 @@ const UtilityHub: React.FC<UtilityHubProps> = ({ email, section, onBack, onOpenT
       {section === "help" && (
         <div className="glass-panel rounded-3xl p-6 md:p-8 space-y-4">
           <h2 className="text-3xl font-black text-white">Help</h2>
-          <p className="text-slate-400">Need support? Start with these quick answers:</p>
+          <p className="text-slate-400">Quick answers:</p>
           <ul className="space-y-2 text-slate-300">
             <li>Credits are required for lyric and image generation actions.</li>
             <li>Referral rewards are granted after the invitee completes a qualified action.</li>
             <li>Use Profile and Billing to review transactions and credit activity.</li>
           </ul>
+          <p className="text-slate-400 pt-2">Need a human? Tap Contact Support in the menu.</p>
+        </div>
+      )}
+
+      {section === "support" && (
+        <div className="glass-panel rounded-3xl p-6 md:p-8 space-y-5">
+          <h2 className="text-3xl font-black text-white">Contact Support</h2>
+          <p className="text-slate-400">Reach our team directly. Replies typically within 1 business day.</p>
+          <div className="bg-[#161030] border border-slate-800 rounded-2xl p-4 break-all text-cyan-400 font-mono">{SUPPORT_EMAIL}</div>
+          <div className="flex flex-col sm:flex-row gap-3">
+            <button onClick={() => copy(SUPPORT_EMAIL)} className="bg-white text-black px-6 py-3 rounded-xl font-black">Copy Email</button>
+            <a
+              href={`mailto:${SUPPORT_EMAIL}?subject=${encodeURIComponent("Song Ghost Support")}`}
+              className="bg-cyan-500 text-slate-950 px-6 py-3 rounded-xl font-black text-center"
+            >
+              Open Mail App
+            </a>
+          </div>
+          <p className="text-slate-500 text-xs">If your device has no mail app configured, copy the address and email us from the web.</p>
         </div>
       )}
 
