@@ -640,4 +640,64 @@ export const BLUES_GUIDE: GenreGuide = {
       'Describe the arrangement: solo guitar, full band, harmonica',
     ],
   },
+
+  authenticityKit: {
+    "writingEthos": "Testify from the bottom of your own life through one hard object and let the hurt rise off it — never name the feeling, plant the thing that proves it.",
+    "exemplars": [
+      {
+        "line": "Landlord nailed the notice to my door, so I read it by the light of a match",
+        "craftNote": "poverty and powerlessness shown through an eviction slip and a burned-out house, no adjectives for the emotion"
+      },
+      {
+        "line": "She left her wedding shoes on the porch and took the grocery money and the dog",
+        "craftNote": "betrayal ranked by what she chose to carry — the concrete inventory does the grieving"
+      },
+      {
+        "line": "I keep a High John root and two dimes tied up in a red flannel bag",
+        "craftNote": "hoodoo detail — the mojo hand named by its exact contents instead of invoking generic magic"
+      },
+      {
+        "line": "Bossman paid me in a paper sack, and the store already had it marked in his book",
+        "craftNote": "debt peonage shown through the commissary ledger — the wage was owed to the plantation store before it was ever earned, no emotion named"
+      },
+      {
+        "line": "The northbound come through at midnight and I've got my one good shirt already folded in a flour sack",
+        "craftNote": "Great Migration restlessness through a bag that has stayed packed too long — a real object doing the waiting instead of a figure of speech"
+      }
+    ],
+    "sensoryLexicon": {
+      "objectsAndPlaces": [
+        "juke joint",
+        "National steel guitar",
+        "mojo bag",
+        "cotton row",
+        "front porch",
+        "levee",
+        "gravel road",
+        "pawnshop counter",
+        "Greyhound station",
+        "kitchen table",
+        "whiskey bottle",
+        "screen-wire door"
+      ],
+      "texturesAndSounds": [
+        "bottleneck slide moaning up a string",
+        "harmonica bent flat and crying",
+        "boot heel keeping time on a wood floor",
+        "rain on a tin roof",
+        "gravel crunching under a slow-walking man",
+        "boxcar wheels clacking a shuffle",
+        "a screen door slapping its frame"
+      ],
+      "dialectAndIdiom": [
+        "dust my broom (pack up and leave)",
+        "mojo working (charm or luck taking hold)",
+        "goin' up the country (heading North for work)",
+        "worried down to the ground (worn out by hard times)",
+        "cut heads (out-play a rival in a contest)",
+        "black cat bone (hoodoo charm for power)",
+        "catch the next thing smokin' (grab the first train out)"
+      ]
+    }
+  },
 };

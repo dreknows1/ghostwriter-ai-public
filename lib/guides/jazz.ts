@@ -839,4 +839,60 @@ export const JAZZ_GUIDE: GenreGuide = {
       'Describe the harmonic complexity: simple, complex, modal, chromatic',
     ],
   },
+
+  authenticityKit: {
+    "writingEthos": "Let a world-weary scene carry the ache — a ringed glass by the turntable, a pawned horn, a closing-time club — and let the phrasing swing behind the beat; never announce the heartbreak, set the table where it happened.",
+    "exemplars": [
+      {
+        "line": "Your ring's still cold in the ashtray by the turntable — I won't lift the needle till Tuesday",
+        "craftNote": "longing shown through a refused chore and a physical trace on a concrete, music-anchored object, in the intimate Songbook first person"
+      },
+      {
+        "line": "He hocked the tenor sax on Monday, kept the mouthpiece in his coat like a tooth",
+        "craftNote": "economic precarity and clung-to identity told through a pawned instrument and one salvaged, bodily detail — no adjectives for the ache"
+      },
+      {
+        "line": "Last set at the Hi-Hat, the barback's stacking chairs before I finish the bridge",
+        "craftNote": "the sting of a fading gig rendered through an unbranded club and a mundane closing-time gesture cutting the song short"
+      },
+      {
+        "line": "She takes her coffee at the counter where the ashtray never cooled from '58",
+        "craftNote": "nostalgia and a frozen decade shown through a named year and a worn diner object, world-weary and specific"
+      },
+      {
+        "line": "Cab fare in my shoe, a matchbook with your Harlem exchange rubbed halfway gone",
+        "craftNote": "faded romance and hustle geography carried by concrete pocket contents and a half-erased phone number — status and story, not sentiment"
+      }
+    ],
+    "sensoryLexicon": {
+      "objectsAndPlaces": [
+        "lipstick-ringed highball glass",
+        "pawnshop ticket for a tenor sax",
+        "Harmon mute in an open trumpet case",
+        "walk-up over a shuttered rehearsal hall",
+        "matchbook with a smudged phone exchange",
+        "back booth of an after-hours club",
+        "worn felt of a piano bench",
+        "streetcar rail in the New Orleans rain",
+        "coat-check ticket curling in a pocket"
+      ],
+      "texturesAndSounds": [
+        "brush hiss circling the snare",
+        "ice cracking in a slow-melting drink",
+        "reed squeak on the first cold note",
+        "needle static before the downbeat",
+        "walking bass thudding through the floorboards",
+        "cymbal wash decaying into the room",
+        "the felt-soft thud of a closing club door"
+      ],
+      "dialectAndIdiom": [
+        "woodshedding the changes till dawn",
+        "blowing hot behind the beat",
+        "cat could really play",
+        "cutting the last set short",
+        "trading fours till the tune falls apart",
+        "hip to the tune before the head comes back"
+      ]
+    }
+  },
 };

@@ -633,4 +633,63 @@ export const GOSPEL_GUIDE: GenreGuide = {
       'Describe the energy: building to praise break, meditative worship, joyful celebration',
     ],
   },
+
+  authenticityKit: {
+    "writingEthos": "Prove the presence of God through one worn church object or a specific hour of trouble — the offering envelope, the folding chair, the 3 a.m. kitchen. Never name the blessing; let the deliverance sit in the physical detail and make the reader feel it.",
+    "exemplars": [
+      {
+        "line": "Mother Ellis still keeps her tambourine on the nightstand where the phone used to ring",
+        "craftNote": "faith and grief carried by one relocated object — the tambourine replaces the vigil the phone once held"
+      },
+      {
+        "line": "I signed the last name on the building-fund envelope with a pen that was almost out of ink",
+        "craftNote": "communal sacrifice and near-empty resources shown through a failing pen, not stated as struggle"
+      },
+      {
+        "line": "The organ never got tuned but it found me anyway, third pew, coat still on",
+        "craftNote": "grace shown reaching an unready visitor through an imperfect instrument — the coat still on proves he never meant to stay"
+      },
+      {
+        "line": "Deacon righted the folding chairs, the two by the amen corner still warm and knocked crooked",
+        "craftNote": "the aftermath of the praise break told through overturned furniture — worship proven by its wreckage, the emotion inferred from the tilt, never named"
+      },
+      {
+        "line": "At three in the morning I found the page in my grandmother's Bible her thumb had worn clean through the gilt",
+        "craftNote": "inherited faith and a specific hour of trouble anchored in a concrete defect — the worn-through gilt does the work a simile can't"
+      }
+    ],
+    "sensoryLexicon": {
+      "objectsAndPlaces": [
+        "the third pew",
+        "Hammond B3 and its Leslie cabinet",
+        "offering plate and building-fund envelope",
+        "choir robes on the vestry hooks",
+        "tambourine and usher's white gloves",
+        "grandmother's thumbed-soft Bible",
+        "folding chairs in the fellowship hall",
+        "altar rail and the mourner's bench",
+        "handkerchief waved from the amen corner",
+        "out-of-tune upright by the choir stand"
+      ],
+      "texturesAndSounds": [
+        "organ swell rising up under the preacher's cadence",
+        "handclaps landing on two and four",
+        "the whole church rising to its feet at once",
+        "the lead throwing a line and the congregation throwing it back",
+        "tambourine rattle against a stomping heel",
+        "the hum before the choir comes in",
+        "hard soles running the aisle in holy dance"
+      ],
+      "dialectAndIdiom": [
+        "take it to church",
+        "the Spirit fell / caught up",
+        "tarry at the altar",
+        "won't be long now",
+        "have your way, Lord",
+        "the anointing was heavy in there",
+        "God's been good",
+        "give Him the glory"
+      ]
+    }
+  },
 };
