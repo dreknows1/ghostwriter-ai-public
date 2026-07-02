@@ -12,6 +12,7 @@ import PricingView from './components/PricingView';
 import TermsAndPrivacy from './components/TermsAndPrivacy';
 import UtilityHub, { UtilitySection } from './components/UtilityHub';
 import ApiKeyModal from './components/ApiKeyModal';
+import { toast } from './components/Feedback';
 import AskAndreWidget from './components/AskAndreWidget';
 import { Logo } from './components/Logo';
 import IntroAnimation from './components/IntroAnimation';
@@ -711,11 +712,11 @@ export const App: React.FC = () => {
             }
             const c = await getUserCredits(sess.user.email || '');
             setCredits(c);
-            alert('Payment successful. Credits posted to your account.');
+            toast('Payment successful — credits posted to your account.', 'success');
           } catch {
             const c = await getUserCredits(sess.user.email || '');
             setCredits(c);
-            alert('Payment received. Credits are being finalized now. Please refresh in a moment.');
+            toast('Payment received. Credits are being finalized — refresh in a moment.', 'info');
           } finally {
             window.history.replaceState({}, '', '/');
           }
@@ -832,9 +833,8 @@ export const App: React.FC = () => {
           setStep(AppStep.SONG_DISPLAYED);
       } catch (err: any) {
           console.error(err);
-          alert("Generation failed: " + err.message);
-          // Revert credits if failed?
-          // For simplicity we just reload actual from DB in case of error
+          toast(`Generation failed: ${err.message} You weren't charged.`, { kind: 'error', actionLabel: 'Retry', onAction: () => handleGenerate() });
+          // Reload the true balance — the optimistic deduction above is reverted server-side
           loadCredits();
           setStep(AppStep.AWAITING_CREATIVE_DIRECTION);
       } finally {
@@ -904,17 +904,16 @@ export const App: React.FC = () => {
       /STORAGE LIMIT REACHED/i.test(String(err?.message || ''));
 
   const handleSave = async (title: string, prompt: string, lyrics: string, art?: string, social?: any) => {
-      if (!session) { alert('Please sign in to save your session.'); return; }
+      if (!session) { toast('Please sign in to save your session.', 'error'); return; }
       try {
           await persistSong(title, prompt, lyrics, art, social);
-          alert('Session saved to library!');
+          toast('Session saved to library!', 'success');
       } catch (err: any) {
           if (isStorageLimitError(err)) {
-              // 25-song cap: tell them plainly and take them to the library to free a slot.
-              alert(err.message);
-              setView(AppView.PROFILE);
+              // 25-song cap: tell them plainly with a direct path to free a slot.
+              toast(err.message, { kind: 'error', actionLabel: 'Open library', onAction: () => setView(AppView.PROFILE) });
           } else {
-              alert('Could not save your session: ' + String(err?.message || 'please try again.'));
+              toast('Could not save your session: ' + String(err?.message || 'please try again.'), 'error');
           }
       }
   };
@@ -928,8 +927,7 @@ export const App: React.FC = () => {
           // isn't actually saved), but stay quiet on transient errors — the explicit
           // Save button will report those.
           if (isStorageLimitError(err)) {
-              alert(err.message + '\n\nYour artwork was generated but not saved yet.');
-              setView(AppView.PROFILE);
+              toast(`${err.message} Your artwork was generated but not saved yet.`, { kind: 'error', actionLabel: 'Open library', onAction: () => setView(AppView.PROFILE) });
           } else {
               console.error('Auto-save failed:', err?.message || err);
           }
@@ -1037,7 +1035,7 @@ export const App: React.FC = () => {
           setStep(AppStep.SONG_DISPLAYED);
       } catch (e: any) {
           console.error(e);
-          alert("Import failed: " + e.message);
+          toast('Import failed: ' + e.message, 'error');
           setStep(AppStep.AWAITING_LANGUAGE); // Fallback
           setView(AppView.LANDING);
       } finally {

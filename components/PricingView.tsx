@@ -1,6 +1,7 @@
 
 import React, { useState, useEffect } from 'react';
 import { LoadingSpinner } from './icons';
+import { toast } from './Feedback';
 
 interface PricingViewProps {
     email: string;
@@ -64,12 +65,12 @@ const PricingView: React.FC<PricingViewProps> = ({ email, onClose }) => {
             if (data.url) {
                 window.location.href = data.url;
             } else {
-                alert("Payment system error. No redirect URL.");
+                toast('Payment system error — no redirect URL. Please try again.', 'error');
                 setProcessingId(null);
             }
         } catch (e: any) {
             console.error("Purchase Flow Error:", e);
-            alert(`Payment initialization failed: ${e.message}`);
+            toast(`Payment initialization failed: ${e.message}`, 'error');
             setProcessingId(null);
         }
     };

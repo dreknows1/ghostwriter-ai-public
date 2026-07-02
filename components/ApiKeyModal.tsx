@@ -1,4 +1,5 @@
 import React, { useEffect, useMemo, useRef, useState } from "react";
+import { confirmDialog, toast } from "./Feedback";
 
 const STORAGE_KEY = "songghost_gemini_api_key";
 
@@ -123,11 +124,18 @@ export default function ApiKeyModal({ isOpen, onClose, onSaved, required }: ApiK
     onClose();
   };
 
-  const handleClear = () => {
-    if (!window.confirm("Remove your saved Gemini API key from this browser?")) return;
+  const handleClear = async () => {
+    const ok = await confirmDialog({
+      title: "Remove saved key",
+      message: "Remove your saved Gemini API key from this browser?",
+      confirmLabel: "Remove",
+      danger: true,
+    });
+    if (!ok) return;
     window.localStorage.removeItem(STORAGE_KEY);
     setValue("");
     setStatus({ kind: "idle" });
+    toast("Saved key removed from this browser.", "success");
   };
 
   return (

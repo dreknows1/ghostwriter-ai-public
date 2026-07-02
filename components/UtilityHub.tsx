@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { getOrCreateReferralCode, getReferralSummary } from "../services/userService";
+import { toast } from "./Feedback";
 
 export type UtilitySection =
   | "invite"
@@ -43,7 +44,7 @@ const UtilityHub: React.FC<UtilityHubProps> = ({ email, section, onBack, onOpenT
   const copy = async (value: string) => {
     if (!value) return;
     await navigator.clipboard.writeText(value);
-    alert("Copied.");
+    toast('Copied to clipboard.', 'success');
   };
 
   return (

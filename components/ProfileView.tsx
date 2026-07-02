@@ -4,6 +4,7 @@ import { UserProfile, SavedSong, Transaction } from '../types';
 import { getUserProfile, upsertUserProfile, deleteUserProfile, getUserTransactions } from '../services/userService';
 import { getSavedSongs, deleteSong, deleteAllUserSongs } from '../services/songService';
 import { COSTS, deductCredits, hasEnoughCredits } from '../services/creditService';
+import { toast, confirmDialog } from './Feedback';
 import { 
     LoadingSpinner, ProfileIcon, TrashIcon, EditIcon, ImageIcon, 
     HomeIcon, WalletIcon, ClockIcon, LogoutIcon 
@@ -119,10 +120,10 @@ const ProfileView: React.FC<ProfileViewProps> = ({ email, onLoadSong, onBack, on
 
       setProfile(finalUpdated);
       if (onProfileUpdate) onProfileUpdate(finalUpdated);
-      alert("Profile updated successfully.");
+      toast('Profile updated successfully.', 'success');
     } catch (err) {
       console.error("Save error:", err);
-      alert("Failed to save profile.");
+      toast('Failed to save profile.', 'error');
     } finally {
       setIsSavingProfile(false);
     }
@@ -163,15 +164,14 @@ const ProfileView: React.FC<ProfileViewProps> = ({ email, onLoadSong, onBack, on
                     if (!isMember && !alreadyHasAvatar) {
                         const canAfford = await hasEnoughCredits(email, COSTS.CREATE_AVATAR);
                         if (!canAfford) {
-                            alert(`Insufficient credits. Creating an avatar costs ${COSTS.CREATE_AVATAR} credits.`);
-                            onBuyCredits();
+                            toast(`Insufficient credits — creating an avatar costs ${COSTS.CREATE_AVATAR} credits.`, { kind: 'error', actionLabel: 'Buy credits', onAction: onBuyCredits });
                             return;
                         }
                         await deductCredits(email, COSTS.CREATE_AVATAR, "avatar_creation");
                     }
                     setEditData(prev => ({...prev, avatar_url: dataUrl}));
                     const msg = isMember ? 'Avatar updated. Free for members.' : alreadyHasAvatar ? 'Avatar updated.' : `Avatar created. ${COSTS.CREATE_AVATAR} credits used.`;
-                    alert(msg);
+                    toast(msg, 'success');
                 }
             }
             img.src = readerEvent.target?.result as string;
@@ -181,20 +181,28 @@ const ProfileView: React.FC<ProfileViewProps> = ({ email, onLoadSong, onBack, on
   };
 
   const handleDeleteSong = async (id: string) => {
-    if (confirm("Permanently delete this song record?")) {
+    const ok = await confirmDialog({ title: 'Delete song', message: 'Permanently delete this song record?', confirmLabel: 'Delete', danger: true });
+    if (ok) {
       await deleteSong(id, email);
       setSongs(prev => prev.filter(s => s.id !== id));
+      toast('Song deleted.', 'success');
     }
   };
 
   const handleDeleteAccount = async () => {
-      if(confirm("WARNING: This will permanently delete your account, credits, and all songs. This action cannot be undone.")) {
+      const ok = await confirmDialog({
+          title: 'Delete account',
+          message: 'This will permanently delete your account, credits, and all songs. This action cannot be undone.',
+          confirmLabel: 'Delete everything',
+          danger: true,
+      });
+      if (ok) {
           try {
               await deleteAllUserSongs(email);
               await deleteUserProfile(email);
               onSignOut();
           } catch(e) {
-              alert("Error deleting account.");
+              toast('Error deleting account.', 'error');
           }
       }
   };

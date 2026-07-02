@@ -1,6 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import { App } from './App';
+import FeedbackHost from './components/Feedback';
 import './app/theme.css';
 
 const rootElement = document.getElementById('root');
@@ -12,5 +13,6 @@ const root = ReactDOM.createRoot(rootElement);
 root.render(
   <React.StrictMode>
     <App />
+    <FeedbackHost />
   </React.StrictMode>
 );
