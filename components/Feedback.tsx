@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 
 /**
  * App-wide feedback layer: branded toasts + confirm/prompt modals replacing the

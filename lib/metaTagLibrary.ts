@@ -128,18 +128,6 @@ function inferVocalTypeTag(vocals?: string): string {
   return "[Vocalist: Male]";
 }
 
-function inferEnergyMoodTags(emotion?: string): string[] {
-  const e = (emotion || "").toLowerCase();
-  if (!e) return ["[Energy: High]", "[Mood: Intense]"];
-  if (e.includes("chill")) return ["[Energy: Low]", "[Mood: Chill]"];
-  if (e.includes("melanch") || e.includes("sad") || e.includes("heartbroken")) return ["[Energy: Low]", "[Mood: Sad]"];
-  if (e.includes("nostalg")) return ["[Energy: Low]", "[Mood: Melancholic]"];
-  if (e.includes("euphor") || e.includes("joy") || e.includes("happy")) return ["[Energy: High]", "[Mood: Joyful]"];
-  if (e.includes("hope")) return ["[Energy: High]", "[Mood: Uplifting]"];
-  if (e.includes("aggress") || e.includes("intense") || e.includes("empower")) return ["[Energy: High]", "[Mood: Intense]"];
-  return ["[Energy: High]", "[Mood: Intense]"];
-}
-
 function inferGenreAccentTags(genre?: string, subGenre?: string): string[] {
   const g = `${genre || ""} ${subGenre || ""}`.toLowerCase();
   if (g.includes("hip-hop") || g.includes("rap")) return ["[Rap Verse]", "[Heavy 808s]", "[Build Up]"];
@@ -224,7 +212,6 @@ export function buildMetaTagGuidance(inputs: {
 }): string {
   const structure = inferPrimaryStructureTags(inputs.genre).join(" -> ");
   const vocalType = inferVocalTypeTag(inputs.vocals);
-  const moodEnergy = inferEnergyMoodTags(inputs.emotion).join(", ");
   const genreTags = inferGenreAccentTags(inputs.genre, inputs.subGenre).join(", ");
   const adlibPolicy = inferAdlibPolicy(inputs.genre);
 

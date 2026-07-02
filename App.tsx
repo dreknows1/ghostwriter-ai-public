@@ -1,7 +1,7 @@
 
-import React, { useState, useEffect, useCallback, useMemo, useRef } from 'react';
+import React, { useState, useEffect, useCallback, useRef } from 'react';
 import { AppStep, AppView, SongInputs, UserProfile } from './types';
-import { generateSong, generateAlbumArt, generateSocialPack, translateLyrics, generateDynamicOptions, structureImportedSong } from './services/geminiService';
+import { generateSong, generateAlbumArt, generateSocialPack, translateLyrics, structureImportedSong } from './services/geminiService';
 import { saveSong } from './services/songService';
 import { getUserProfile } from './services/userService';
 import { getSession, signOut, signIn, signUp, signInWithOAuthEmail, startProviderSignIn } from './services/authService';
@@ -17,7 +17,7 @@ import { toast } from './components/Feedback';
 import AskAndreWidget from './components/AskAndreWidget';
 import { Logo } from './components/Logo';
 import IntroAnimation from './components/IntroAnimation';
-import { LoadingSpinner, ProfileIcon, WalletIcon, MagicWandIcon, EditIcon, ClockIcon } from './components/icons';
+import { LoadingSpinner, ProfileIcon, WalletIcon, EditIcon, ClockIcon } from './components/icons';
 
 const AuthAppleIcon = () => (
   <svg viewBox="0 0 24 24" className="w-5 h-5" fill="currentColor" aria-hidden="true">
@@ -51,13 +51,12 @@ const AuthDiscordIcon = () => (
     <path d="M20 5.4A16 16 0 0016.1 4l-.2.4a11 11 0 00-4-.1l-.2-.4A16 16 0 007.8 5.4C5 9.6 4.2 13.7 4.4 17.7A16.5 16.5 0 009 20l.8-1.2a10.4 10.4 0 01-1.6-.8l.4-.3c3.2 1.5 6.7 1.5 9.8 0l.4.3c-.5.3-1 .5-1.6.8L18 20a16.5 16.5 0 004.6-2.3c.3-4.6-.6-8.6-2.6-12.3zM9.8 14.8c-.9 0-1.6-.8-1.6-1.8s.7-1.8 1.6-1.8 1.6.8 1.6 1.8-.7 1.8-1.6 1.8zm4.4 0c-.9 0-1.6-.8-1.6-1.8s.7-1.8 1.6-1.8 1.6.8 1.6 1.8-.7 1.8-1.6 1.8z" />
   </svg>
 );
-import {
-  LANGUAGES,
-  GENRES_BY_LANG,
-  SUBGENRES,
-  getBaseCulture,
-  getBaseEnv
-} from './lib/culturalLogic';
+// English-only genre list (founder-set priorities first). The old multi-language
+// option machinery is deleted; genre is a label the user picks, nothing more.
+const ENGLISH_GENRES = [
+  'R&B', 'Hip-Hop', 'Gospel', 'Reggae', 'Afrobeats', 'Pop',
+  'Country', 'Rock', 'Soul', 'Blues', 'Jazz', 'Folk', 'EDM', 'Metal',
+];
 import { sanitizeEmail, sanitizeText, sanitizeUnknown } from './lib/sanitizeInput';
 
 
@@ -70,199 +69,6 @@ const GENERATION_STAGES = [
   { label: 'Finalize Output', keywords: ['finalizing', 'suno prompt'] },
 ] as const;
 
-// Wizard steps whose options get AI-tailored to the session's genre (guide-grounded
-// server-side). Maps each step to the SongInputs field it fills. Static option maps
-// always render instantly as fallback; AI options swap in when they arrive.
-const DYNAMIC_OPTION_STEPS: Partial<Record<AppStep, keyof SongInputs>> = {
-  [AppStep.AWAITING_SUBGENRE]: 'subGenre',
-  [AppStep.AWAITING_INSTRUMENTATION]: 'instrumentation',
-  [AppStep.AWAITING_AUDIO_ENV]: 'audioEnv',
-  [AppStep.AWAITING_SCENE]: 'scene',
-  [AppStep.AWAITING_EMOTION]: 'emotion',
-};
-
-const STEP_ORDER = [
-  AppStep.AWAITING_LANGUAGE,
-  AppStep.AWAITING_GENRE,
-  AppStep.AWAITING_SUBGENRE,
-  AppStep.AWAITING_INSTRUMENTATION,
-  AppStep.AWAITING_AUDIO_ENV,
-  AppStep.AWAITING_SCENE,
-  AppStep.AWAITING_EMOTION,
-  AppStep.AWAITING_VOCALS,
-  AppStep.AWAITING_DUET_CONFIG,
-  AppStep.AWAITING_PERFORMER,
-  AppStep.AWAITING_SPECIFICS,
-  AppStep.AWAITING_CREATIVE_DIRECTION
-];
-
-// --- CULTURAL LOGIC DATA ---
-
-const INSTRUMENTS_BY_GENRE: Record<string, string[]> = {
-  'Regional Mexican': ['Guitarrón', 'Trumpets', 'Accordion', 'Bajo Sexto', 'Tuba', 'Vihuela', 'Violin'],
-  'Chinese': ['Guzheng', 'Erhu', 'Pipa', 'Dizi Flute', 'Traditional Bells', 'Modern Sub-Bass', 'Sheng', 'Yangqin'],
-  'Swahili': ['Marimba', 'Zeze', 'Talking Drums', 'Electric Bass', 'Synthesizer Lead', 'Percussion Loops', 'Mbira', 'Kanun'],
-  'Arabic': ['Oud', 'Darbuka', 'Qanun', 'Ney Flute', 'Riqq', 'Violin Ensemble', 'Quarter-tone Synth', 'Bendir'],
-  'Italian': ['Mandolin', 'Orchestral Strings', 'Operatic Piano', 'Vintage Synths', 'Accordion', 'Classical Guitar'],
-  'Trot': ['Haegeum', 'Gayageum', 'Accordion', 'Synthesizer', 'Brass Section', 'Trot Beats'],
-  'Japanese': ['Koto', 'Shamisen', 'Taiko Drums', 'DX7 Keys', 'Electric Guitar (High Gain)', 'Shakuhachi Flute', 'Hichiriki', 'Virtual Synths'],
-  'French': ['Accordion', 'Rhodes Piano', 'Saxophone', '808s', 'Upright Bass', 'Synthesizers', 'Nylon Guitar', 'Cora (West Africa)'],
-  'Spanish': ['Requinto Guitar', 'Bongo & Güira', 'Classical Guitar', 'Accordion', 'Cajón', 'Castanets', 'Piano Montuno'],
-  'Hindi': ['Tabla', 'Sitar', 'Harmonium', 'Dholak', 'Sarangi', 'Bansuri Flute', 'Modern Beats', 'Santoor'],
-  'Pop': ['Synth Lead', 'Synth Bass', 'Electronic Drums', 'Clean Electric Guitar', 'Acoustic Piano', 'Vocoder', 'Layered Harmonies'],
-  'Hip-Hop': ['808 Sub-Bass', 'Punchy Kick', 'Snare/Clap', 'Hi-Hat Rolls', 'Sample Loop', 'MPC Chops', 'Dark Bell Synth'],
-  'Metal': ['High-Gain Rhythm Guitar', 'Lead Guitar', 'Distorted Bass', 'Double-Kick Drums', 'Breakdown Snare', 'Orchestral Layers'],
-  'Rock': ['Electric Guitar Riffs', 'Bass Guitar', 'Drum Kit', 'Overdrive Guitar', 'Acoustic Guitar', 'Hammond Organ'],
-  'Electronic/EDM': ['Kick + Sub-Bass', 'Synth Plucks', 'Supersaw Leads', 'Drum Machines', 'FX Risers', 'Vocal Chops'],
-  'Country': ['Acoustic Guitar', 'Pedal Steel', 'Fiddle', 'Banjo', 'Mandolin', 'Upright Bass', 'Honky-Tonk Piano'],
-  'R&B': ['Electric Piano', 'Rhodes', 'Warm Bass', 'Tight Drum Machine', 'Pad Synths', 'Vocal Harmony Stacks'],
-  'Soul': ['Rhodes/Piano', 'Electric Bass', 'Live Drums', 'Brass Section', 'String Section', 'Tambourine'],
-  'Blues': ['Electric Guitar', 'Acoustic Guitar', 'Slide Guitar', 'Harmonica', 'Upright/Electric Bass', 'Shuffle Drums', 'Piano'],
-  'Jazz': ['Piano', 'Double Bass', 'Ride Cymbal Drums', 'Saxophone', 'Trumpet', 'Guitar Comping', 'Vibraphone'],
-  'Folk': ['Acoustic Guitar', 'Fingerpicked Guitar', 'Banjo', 'Fiddle', 'Mandolin', 'Upright Bass', 'Light Percussion'],
-  'Gospel': ['Hammond Organ', 'Piano', 'Choir Vocals', 'Handclaps', 'Bass Guitar', 'Live Drums', 'Tambourine'],
-  'Afrobeats': ['Log Drum', 'Shakers', 'Talking Drum', 'Syncopated Percussion', 'Synth Bass', 'Guitar Plucks', 'Vocal Chants'],
-  'Reggae': ['Bass Guitar', 'Skank Guitar', 'Organ Bubble', 'One-Drop Drums', 'Melodica', 'Bongos/Congas', 'Brass Stabs'],
-  'General': ['Piano', 'Acoustic Guitar', 'Drums', 'Strings', 'Synthesizer', 'Electric Guitar']
-};
-
-const INSTRUMENTS_BY_SUBGENRE: Record<string, string[]> = {
-  'Boom Bap': ['Dusty Sample Loop', 'Punchy Kick', 'Crack Snare', 'Upright-Style Bassline', 'DJ Scratches'],
-  Trap: ['808 Sub-Bass', 'Trap Hats', 'Snare/Clap', 'Dark Bell', 'Sparse Pad'],
-  Drill: ['Sliding 808', 'Fast Hats', 'Menacing Bell', 'Punchy Snare'],
-  'Conscious Hip-Hop': ['Warm Keys', 'Sample Chops', 'Round Bass', 'Boom Bap Drums'],
-  'G-Funk': ['Whiny Lead Synth', 'Deep Bass', 'Laid-Back Drums', 'Talkbox Layer'],
-  'Emo Rap': ['Minimal Guitar Loop', 'Sub-Bass', 'Sparse Drums', 'Atmospheric Pad'],
-  'Jazz Rap': ['Jazz Chords', 'Brush Drums', 'Upright Bass', 'Horn Samples'],
-  'Gangsta Rap': ['Heavy Bass', 'Hard Kick', 'Dark Synth', 'Aggressive Snare'],
-  'Neo-Soul': ['Rhodes', 'Live Bass', 'Pocket Drums', 'Warm Guitar Comping'],
-  'Alternative R&B': ['Airy Pads', 'Minimal Drums', 'Subtle Bass', 'Textural FX'],
-  'New Jack Swing': ['Swing Drum Machine', 'Synth Brass', 'Punchy Bass', 'Bright Keys'],
-  'Bedroom R&B': ['Soft Pads', 'Low-Transient Drums', 'Sub Bass', 'Intimate Vocal Doubles'],
-  'Hard Bop': ['Tenor Sax', 'Trumpet', 'Piano Comping', 'Walking Bass', 'Ride Cymbal'],
-  'Modal Jazz': ['Piano Drones', 'Double Bass', 'Sparse Drums', 'Exploratory Horn Lead'],
-  'Latin Jazz': ['Congas', 'Timbales', 'Piano Montuno', 'Bass Tumbao', 'Brass'],
-  'Delta Blues': ['Slide Acoustic Guitar', 'Foot Stomp', 'Raw Vocal', 'Harmonica'],
-  'Chicago Blues': ['Electric Guitar', 'Harmonica', 'Shuffle Drums', 'Piano'],
-  'Piedmont Blues': ['Fingerpicked Acoustic', 'Thumb Bass Pattern', 'Light Percussion'],
-  'Jump Blues': ['Horn Section', 'Boogie Piano', 'Walking Bass', 'Swing Drums'],
-  'Traditional Gospel': ['Choir', 'Piano', 'Hammond Organ', 'Handclaps', 'Tambourine'],
-  'Pentecostal Gospel': ['Live Organ', 'Call-and-Response Choir', 'Energetic Drums', 'Bass Guitar'],
-  'Praise & Worship': ['Acoustic Guitar', 'Pad Synth', 'Piano', 'Steady Drums'],
-  Ska: ['Walking Bass', 'Offbeat Guitar', 'Punchy Horns', 'Fast Drums'],
-  Rocksteady: ['Bassline Lead', 'Soft Skank Guitar', 'Organ'],
-  Dub: ['Sub Bass', 'One-Drop Drums', 'Echo FX', 'Delay Throws'],
-  Dancehall: ['Digital Riddim Drums', 'Sub Bass', 'Percussive Synth Stabs'],
-  Amapiano: ['Log Drum', 'Airy Keys', 'Shakers', 'Deep Bass'],
-  'Afro-House': ['Four-on-Floor Kick', 'African Percussion', 'Sub Bass', 'Vocal Chant'],
-  Alté: ['Sparse Drums', 'Ambient Pads', 'Detached Bass Groove'],
-  Bluegrass: ['Banjo Rolls', 'Fiddle Lead', 'Mandolin Chop', 'Upright Bass'],
-  'Western Swing': ['Swing Fiddle', 'Steel Guitar', 'Jazz Piano', 'Brush Drums'],
-  'Country Rock': ['Overdriven Guitar', 'Live Drums', 'Bass Guitar', 'Pedal Steel'],
-  'Neo-Traditional': ['Pedal Steel', 'Fiddle', 'Honky-Tonk Piano', 'Two-Step Rhythm'],
-  'Future Bass': ['Detuned Supersaw Chords', 'Vocal Chops', 'Punchy Snare', 'Sub Bass'],
-  'Drum & Bass': ['Breakbeat Kit', 'Reese Bass', 'Atmospheric Pads', 'Rapid Percussion'],
-  'UK Garage': ['Shuffled Drums', 'Warm Sub Bass', 'Chopped Vocal', 'Rhodes Chords'],
-  Synthwave: ['Analog Bass', 'Gated Snare', 'Arpeggiated Synth', 'Retro Pad'],
-  Metalcore: ['Chug Guitars', 'Breakdown Drums', 'Tight Bass', 'Clean Chorus Layer'],
-  Deathcore: ['Downtuned Guitars', 'Blast Drums', 'Sub Drop', 'Growl Layers'],
-  Symphonic: ['Orchestral Strings', 'Choir Pad', 'Heavy Guitar Wall', 'Double-Kick Drums'],
-  Gothic: ['Dark Pads', 'Baritone Lead', 'Heavy Guitars', 'Atmospheric Drums'],
-};
-
-const SCENES_BY_GENRE: Record<string, string[]> = {
-  'Regional Mexican': ['Jalisco Agave Fields', 'Traditional Mexican Plaza', 'Rancho Fiesta', 'Border Cantina', 'Zócalo Celebration'],
-  'Enka': ['Kyoto Temple Garden', 'Shinto Shrine', 'Traditional Tea House', 'Mountain Onsen', 'Fishing Village'],
-  'Portuguese': ['Coimbra Fado House', 'Lisbon Alfama', 'Rio Carnival', 'Ipanema Beach', 'Douro Valley Vineyard'],
-  'Zouk': ['Martinique Cafe', 'Caribbean Beach', 'Antilles Nightclub', 'Guadeloupe Sunset'],
-  'Afro-Trap': ['Abidjan Market', 'Parisian Banlieue', 'West African Block Party', 'Lagos Street Night'],
-  'Swahili': ['Dar es Salaam Waterfront', 'Zanzibar Stone Town', 'Nairobi Skyline', 'Mount Kilimanjaro View', 'Mombasa Beach Party', 'Serengeti Sunset'],
-  'Chinese': ['Shanghai Bund Night', 'Forbidden City Courtyard', 'Chengdu Tea House', 'Cyberpunk Chongqing', 'Bamboo Forest', 'Ancient Jiangnan Town'],
-  'Japanese': ['Shibuya Crossing', 'Kyoto Temple Garden', 'Shinjuku Golden Gai', 'Harajuku Pink Cafe', 'Snowy Hokkaido Lodge'],
-  'Spanish': ['Old San Juan Street', 'Medellín Night Club', 'Miami Beach Drive', 'Andalucian Courtyard', 'Mexico City Night'],
-  'French': ['Montmartre Rainy Cafe', 'Paris Underground Club', 'Côte d’Azur Sunset', 'Lyon Jazz Bar'],
-  'Italian': ['Venice Canals', 'Rome Colosseum Night', 'Naples Coastal View', 'Milan Fashion District', 'Sicilian Lemon Grove'],
-  'Arabic': ['Dubai Skyline Rooftop', 'Cairo Old Market (Khan el-Khalili)', 'Beirut Mediterranean Coast', 'Sahara Desert Camp', 'Casablanca Courtyard'],
-  'Hindi': ['Mumbai Monsoon Street', 'Himalayan Foothills', 'Jaipur Palace', 'Varanasi Ghats', 'Bollywood Soundstage'],
-  'Pop': ['Modern Studio', 'Stadium Stage', 'Music Video Set', 'High-End Penthouse', 'Fashion Runway', 'Hollywood Hills'],
-  'Hip-Hop': ['Underground Club', 'New York Rooftop', 'Recording Studio (Booth)', 'Luxury Car Interior', 'Graffiti Alley', 'Project Courtyard'],
-  'Rock': ['Garage Session', 'Music Festival Mainstage', 'Grungy Dive Bar', 'Desert Road Trip', 'Warehouse Rehearsal'],
-  'Country': ['Nashville Honky Tonk', 'Back Porch at Sunset', 'Empty Wheat Field', 'Small Town Diner', 'Pickup Truck Tailgate'],
-  'Electronic/EDM': ['Laser-Lit Rave', 'Neon-Drenched Penthouse', 'Techno Bunker', 'Pool Party', 'Outer Space Station'],
-  'R&B': ['Rainy City Penthouse', 'Intimate Jazz Lounge', 'Lush Garden at Night', 'Private Candlelit Studio'],
-  'Afrobeats': ['Lagos Beach Party', 'Vibrant Street Market', 'Tropical Island Resort', 'Gold-Drenched Mansion'],
-  'Reggae': ['Jamaican Beach Shack', 'Misty Mountain Top', 'Sound System Lawn', 'Kingston Street Corner'],
-  'Metal': ['Industrial Forge', 'Dungeon Hall', 'Stormy Moor', 'Pyrotechnic Stage'],
-  'Jazz': ['Smoky Underground Club', 'New Orleans Street Corner', 'Upscale Lounge', 'Outdoor Jazz Festival', 'Late Night Piano Bar'],
-  'Folk': ['Campfire in Woods', 'Rustic Cabin Porch', 'Open Prairie', 'Coffee Shop Stage', 'Mountain Trail'],
-  'Gospel': ['Historic Church Hall', 'Sunday Morning Service', 'Revival Tent', 'Community Center', 'Cathedral Sanctuary'],
-  'General': ['Recording Studio', 'Live Concert Stage', 'Intimate Bedroom Studio', 'Cinematic Landscape']
-};
-
-const SCENES_BY_SUBGENRE: Record<string, string[]> = {
-  'Boom Bap': ['Crate-Digging Studio', 'Subway Platform Cypher', '90s Brick Rooftop'],
-  Trap: ['Nighttime Warehouse', 'Neon Alley', 'Luxury Loft'],
-  Drill: ['Foggy City Block', 'Underground Parking Structure', 'Concrete Stairwell'],
-  'Neo-Soul': ['Candlelit Live Room', 'Vintage Studio Lounge', 'Late-Night Apartment Session'],
-  'Alternative R&B': ['Minimalist Art Loft', 'Rain-Soaked Window Room', 'Neon-Shadow Bedroom'],
-  'Hard Bop': ['1950s Jazz Club', 'Smoky Quintet Stage', 'Midnight Blue Room'],
-  'Modal Jazz': ['Minimal Stage Blackbox', 'Abstract Gallery Hall', 'Open Loft Session'],
-  'Delta Blues': ['Front Porch at Dusk', 'Crossroads Dirt Road', 'Juke Joint Corner'],
-  'Chicago Blues': ['South Side Blues Club', 'Amplified Bar Stage', 'Back Alley Club Entrance'],
-  'Traditional Gospel': ['Historic Church Sanctuary', 'Sunday Morning Revival', 'Choir Loft'],
-  'Praise & Worship': ['Modern Worship Stage', 'Arena Church Hall', 'Intimate Prayer Room'],
-  Ska: ['Kingston Dance Hall', 'Street Brass Parade', 'Summer Block Party'],
-  Dub: ['Sound System Yard', 'Studio Dub Booth', 'Late-Night Selector Room'],
-  Amapiano: ['Johannesburg Lounge', 'Sunset Rooftop Set', 'Private Groove Session'],
-  Bluegrass: ['Appalachian Barn', 'Front Porch Jam', 'County Fair Stage'],
-  'Western Swing': ['Texas Dance Hall', 'Honky-Tonk Dance Floor', 'Neon Ballroom'],
-  'Future Bass': ['LED Festival Stage', 'Cloudy Dreamscape', 'Neon Skyline Rooftop'],
-  'Drum & Bass': ['Underground Rave Tunnel', 'Industrial Club', 'Rainy Neon Underpass'],
-  Synthwave: ['Retro Arcade', '80s Neon Highway', 'Sunset Boulevard Drive'],
-  Metalcore: ['Abandoned Warehouse Stage', 'Mosh Pit Arena', 'Concrete Rehearsal Hall'],
-};
-
-const AUDIO_ENV_BY_GENRE: Record<string, string[]> = {
-  'Traditional': ['Natural Reverb', 'Outdoor Space', 'Vintage Tape', 'Acoustic Room', 'Temple Hall', 'Palace Courtyard'],
-  'Urban': ['Studio (Heavy Sub)', 'Club PA System', 'Street Recording', 'Radio Edit', 'Warehouse Reverb', 'Ghetto PA System'],
-  'Pop': ['Modern Polished Studio', 'Radio Ready', 'Stadium Echo', 'Bedroom Demo', 'Vocal Booth'],
-  'R&B': ['Studio (Warm + Intimate)', 'Late-Night Dry Room', 'Lo-Fi Silk', 'Live Lounge'],
-  'Hip-Hop': ['Studio (Heavy Sub)', 'Dry Vocal Booth', 'Club PA', 'Street Tape'],
-  'Rock': ['Live Room', 'Amp Room', 'Arena Reverb', 'Garage Room'],
-  'Metal': ['Tight Modern Metal Mix', 'Rehearsal Hall', 'Large Hall Reverb', 'Raw Demo Room'],
-  'Electronic/EDM': ['Festival PA', 'Club System', 'Wide Stereo Studio', 'Headphone Mix'],
-  'Country': ['Dry Nashville Booth', 'Warm Analog Room', 'Live Bar Stage'],
-  'Jazz': ['Small Club Room', 'Live Studio A', 'Vintage Ribbon Room'],
-  'Blues': ['Juke Joint Room', 'Raw Live Room', 'Tube Amp Space'],
-  'Gospel': ['Church Hall Reverb', 'Live Sanctuary', 'Modern Worship Stage'],
-  'Reggae': ['Dub Chamber', 'Yard Sound System', 'Warm Tape Room'],
-  'Afrobeats': ['Lagos Club PA', 'Polished Afro Studio', 'Open-Air Party'],
-  'Soul': ['Vintage Analog Room', 'Large Live Room', 'Motown-Style Chamber'],
-  'Folk': ['Cabin Room', 'Natural Outdoor Ambience', 'Close-Mic Acoustic Room'],
-  'General': ['Studio (Clean)', 'Live Performance', 'Lo-Fi Tape', 'Acoustic Hall', 'Vintage Vinyl', 'Radio Edit']
-};
-
-const AUDIO_ENV_BY_SUBGENRE: Record<string, string[]> = {
-  'Neo-Soul': ['Warm Analog Room', 'Tape-Saturated Studio', 'Live Lounge'],
-  'Alternative R&B': ['Dark Minimal Room', 'Airy Stereo Space', 'Textured Lo-Fi Room'],
-  'Hard Bop': ['Vintage Club Room', 'Live Quintet Room'],
-  'Modal Jazz': ['Wide Dry Room', 'Minimal Hall Space'],
-  'Delta Blues': ['Dry Porch Mic', 'Mono Tape Room'],
-  'Chicago Blues': ['Live Club Room', 'Amp-Forward Studio'],
-  Dub: ['Deep Echo Chamber', 'Space Delay Room', 'Sub-Heavy Sound System'],
-  Amapiano: ['Deep Club PA', 'Polished Dance Studio'],
-  Bluegrass: ['Dry Acoustic Hall', 'Live Barn Room'],
-  Synthwave: ['Retro Tape Studio', 'Wide Neon Stereo'],
-  Metalcore: ['Tight Modern Mix Room', 'Large Impact Hall'],
-};
-
-const EMOTIONS_BY_GENRE: Record<string, string[]> = {
-  'Latin': ['Passionate', 'Heartbroken (Amargura)', 'Festive', 'Sensual', 'Nostalgic', 'Resilient'],
-  'Asian': ['Poetic', 'Yearning', 'Joyful', 'Melancholic', 'Zen-like', 'Honor-bound'],
-  'African': ['Joyful', 'Resilient', 'Spiritual', 'Celebratory', 'Vibrant', 'Ancestral Pride'],
-  'European': ['Sophisticated', 'Romantic', 'Melancholic', 'Euphoric', 'Angst-ridden', 'Ironical'],
-  'General': ['Euphoric', 'Melancholic', 'Aggressive', 'Hopeful', 'Heartbroken', 'Chilled', 'Nostalgic', 'Romantic', 'Empowered', 'Anxious']
-};
 
 const DEFAULT_INPUTS: SongInputs = {
   language: 'English',
@@ -279,181 +85,6 @@ const DEFAULT_INPUTS: SongInputs = {
   additionalInfo: ''
 };
 
-const CreationWizard: React.FC<{
-  step: AppStep;
-  inputs: SongInputs;
-  dynamicOptions: string[];
-  isLoadingOptions: boolean;
-  isGenerating: boolean;
-  onUpdate: (key: keyof SongInputs, val: string) => void;
-  onNext: (customVal?: string) => void;
-  onPrev: () => void;
-  onGenerate: () => void;
-  onJumpTo: (step: AppStep) => void;
-}> = ({ step, inputs, dynamicOptions, isLoadingOptions, isGenerating, onUpdate, onNext, onPrev, onGenerate, onJumpTo }) => {
-  const [isOther, setIsOther] = useState(false);
-  const [otherText, setOtherText] = useState('');
-
-  useEffect(() => { setIsOther(false); setOtherText(''); }, [step]);
-
-  const handleOtherSubmit = (field: keyof SongInputs) => {
-    if (otherText.trim()) { 
-      onUpdate(field, otherText.trim()); 
-      onNext(otherText.trim()); 
-    }
-  };
-
-  const getOptionsForStep = () => {
-    // If we have AI generated dynamic options, prioritize them
-    if (dynamicOptions && dynamicOptions.length > 0) return dynamicOptions;
-
-    const lang = (inputs.language || 'English') as keyof typeof GENRES_BY_LANG;
-    const genre = inputs.genre || 'General';
-    const subGenre = inputs.subGenre || '';
-    
-    const baseCulture = getBaseCulture(lang);
-    const baseEnv = getBaseEnv(genre);
-
-    switch (step) {
-      case AppStep.AWAITING_LANGUAGE: return LANGUAGES;
-      case AppStep.AWAITING_GENRE: return GENRES_BY_LANG[lang] || GENRES_BY_LANG.English;
-      case AppStep.AWAITING_SUBGENRE: return SUBGENRES[genre] || ['Alternative', 'Mainstream', 'Underground', 'Experimental', 'Classic', 'Modern', 'Fusion'];
-      case AppStep.AWAITING_INSTRUMENTATION:
-        return INSTRUMENTS_BY_SUBGENRE[subGenre] || INSTRUMENTS_BY_GENRE[genre] || INSTRUMENTS_BY_GENRE[lang] || INSTRUMENTS_BY_GENRE['General'];
-      case AppStep.AWAITING_AUDIO_ENV:
-        return AUDIO_ENV_BY_SUBGENRE[subGenre] || AUDIO_ENV_BY_GENRE[genre] || AUDIO_ENV_BY_GENRE[baseEnv] || AUDIO_ENV_BY_GENRE['General'];
-      case AppStep.AWAITING_SCENE:
-        return SCENES_BY_SUBGENRE[subGenre] || SCENES_BY_GENRE[genre] || SCENES_BY_GENRE[lang] || SCENES_BY_GENRE['Pop'] || SCENES_BY_GENRE['General'];
-      case AppStep.AWAITING_EMOTION: return EMOTIONS_BY_GENRE[baseCulture] || EMOTIONS_BY_GENRE['General'];
-      case AppStep.AWAITING_VOCALS: return ['Female Solo', 'Male Solo', 'Duo/Group', 'Duet (Mixed)', 'Whisper', 'Soulful', 'Choir', 'Auto-Tuned', 'Spoken Word', 'Screaming', 'Growling'];
-      case AppStep.AWAITING_DUET_CONFIG: return ['Male & Female', 'Female Duo', 'Male Duo', 'Artist & AI Feature', 'Rapper & Singer', 'Choir & Lead', 'Call & Response', 'Harmonized'];
-      case AppStep.AWAITING_PERFORMER: return ['Solo Artist', 'Featured Collaboration', 'Indie Band', 'Underground Artist', 'Supergroup', 'Orchestral Ensemble', 'Acoustic Trio', 'Vocal Harmony Group', 'DJ/Producer'];
-      default: return [];
-    }
-  };
-
-  const renderOptions = (field: keyof SongInputs) => {
-    const options = getOptionsForStep();
-    return (
-      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 sm:gap-4 mt-6 sm:mt-8">
-        {isLoadingOptions && options.length === 0 ? (
-          <div className="col-span-full py-12 flex flex-col items-center gap-4 animate-pulse">
-            <LoadingSpinner />
-            <span className="text-slate-500 font-black uppercase tracking-[0.14em] md:tracking-[0.3em] text-xs text-center">Loading genre options...</span>
-          </div>
-        ) : (
-          <>
-            {isLoadingOptions && (
-              <div className="col-span-full flex items-center justify-center gap-2 text-cyan-400/80 text-[11px] font-black uppercase tracking-widest animate-pulse">
-                ✦ Tailoring options to your {inputs.genre || 'session'}…
-              </div>
-            )}
-            {options.map((opt: string) => (
-              <button
-                key={opt}
-                onClick={() => { onUpdate(field, opt); onNext(); }}
-                className={`w-full p-4 sm:p-5 lg:p-6 rounded-3xl border transition-all text-sm sm:text-base leading-tight font-black uppercase tracking-[0.08em] sm:tracking-widest min-h-[56px] flex items-center justify-center text-center break-words ${
-                  inputs[field] === opt 
-                  ? 'bg-orange-500 border-orange-400 text-white shadow-lg z-10' 
-                  : 'bg-slate-700 border-slate-600 text-slate-200 hover:bg-slate-600 hover:border-slate-500 hover:text-white'
-                }`}
-              >
-                {opt}
-              </button>
-            ))}
-            {!isOther ? (
-              <button onClick={() => setIsOther(true)} className="w-full p-4 sm:p-5 lg:p-6 rounded-3xl border bg-slate-800 border-slate-700 text-cyan-400 hover:bg-slate-700 hover:border-cyan-400 hover:text-white transition-all text-sm sm:text-base leading-tight font-black uppercase tracking-[0.08em] sm:tracking-widest min-h-[56px] flex items-center justify-center">CUSTOM</button>
-            ) : (
-              <div className="col-span-full flex flex-col sm:flex-row gap-4 animate-fade-in">
-                <input autoFocus type="text" placeholder={`Enter custom ${field}...`} className="flex-grow bg-slate-800 border border-cyan-500/50 p-4 md:p-6 rounded-3xl text-white outline-none text-base font-black uppercase tracking-wide md:tracking-widest" value={otherText} onChange={(e) => setOtherText(e.target.value)} onKeyDown={(e) => e.key === 'Enter' && handleOtherSubmit(field)} />
-                <div className="flex gap-2">
-                  <button onClick={() => handleOtherSubmit(field)} className="flex-grow sm:flex-none px-6 md:px-10 bg-cyan-600 rounded-3xl text-sm font-black uppercase tracking-wide md:tracking-widest text-white py-4">Confirm</button>
-                  <button onClick={() => setIsOther(false)} className="flex-grow sm:flex-none px-6 md:px-10 bg-slate-800 rounded-3xl text-sm font-black uppercase tracking-wide md:tracking-widest text-slate-500 py-4">Cancel</button>
-                </div>
-              </div>
-            )}
-          </>
-        )}
-      </div>
-    );
-  };
-
-  const stepTitle = useMemo(() => {
-    switch(step) {
-      case AppStep.AWAITING_LANGUAGE: return "Language Basis";
-      case AppStep.AWAITING_GENRE: return "Cultural Genre";
-      case AppStep.AWAITING_SUBGENRE: return "Subgenre Style";
-      case AppStep.AWAITING_INSTRUMENTATION: return "Core Instrumentation";
-      case AppStep.AWAITING_AUDIO_ENV: return "Sonic Space";
-      case AppStep.AWAITING_SCENE: return "The Visual Scene";
-      case AppStep.AWAITING_EMOTION: return "Lyrical Frequency";
-      case AppStep.AWAITING_VOCALS: return "Vocal Texture";
-      case AppStep.AWAITING_DUET_CONFIG: return "Collaboration Pairing";
-      case AppStep.AWAITING_PERFORMER: return "Artist Persona";
-      default: return "Studio Configuration";
-    }
-  }, [step]);
-
-  return (
-    <div className="max-w-6xl mx-auto py-6 md:py-12 px-3 sm:px-4 animate-fade-in overflow-x-hidden">
-      <div className="flex justify-between items-center mb-8 md:mb-16 gap-2">
-        <button onClick={onPrev} className="text-slate-500 hover:text-white text-xs sm:text-sm font-black uppercase tracking-[0.08em] sm:tracking-widest flex items-center gap-2">← Back</button>
-        <div className="flex flex-col items-center gap-2">
-            <div className="flex gap-2">
-            {STEP_ORDER.filter(s => {
-                if (s === AppStep.AWAITING_DUET_CONFIG && (inputs.vocals !== 'Duo/Group' && inputs.vocals !== 'Duet (Mixed)')) return false;
-                return true;
-            }).map((s, i) => (
-                <div key={i} className={`h-1.5 w-5 sm:w-8 rounded-full transition-all duration-500 ${STEP_ORDER.indexOf(step) >= STEP_ORDER.indexOf(s) ? 'bg-orange-500 shadow-[0_0_10px_rgba(249,115,22,0.5)]' : 'bg-slate-800'}`}></div>
-            ))}
-            </div>
-            <span className="text-[10px] md:text-xs font-black text-slate-600 uppercase tracking-wide md:tracking-widest text-center">Studio Progress: {Math.round((STEP_ORDER.indexOf(step) / STEP_ORDER.length) * 100)}%</span>
-        </div>
-        <div className="w-6 sm:w-10 md:w-20"></div>
-      </div>
-
-      <div className="text-center">
-        <h2 className="text-[2.2rem] sm:text-5xl md:text-7xl leading-[0.95] font-black text-white mb-3 sm:mb-4 tracking-tight break-words">{stepTitle}</h2>
-        <p className="text-slate-500 font-black uppercase tracking-[0.08em] sm:tracking-[0.12em] md:tracking-[0.4em] text-[10px] sm:text-xs md:text-sm mb-6 sm:mb-8 md:mb-12 break-words px-1">Building authenticity for the {inputs.genre || 'Universal'} session</p>
-        
-        {step === AppStep.AWAITING_LANGUAGE && renderOptions('language')}
-        {step === AppStep.AWAITING_GENRE && renderOptions('genre')}
-        {step === AppStep.AWAITING_SUBGENRE && renderOptions('subGenre')}
-        {step === AppStep.AWAITING_INSTRUMENTATION && renderOptions('instrumentation')}
-        {step === AppStep.AWAITING_AUDIO_ENV && renderOptions('audioEnv')}
-        {step === AppStep.AWAITING_SCENE && renderOptions('scene')}
-        {step === AppStep.AWAITING_EMOTION && renderOptions('emotion')}
-        {step === AppStep.AWAITING_VOCALS && renderOptions('vocals')}
-        {step === AppStep.AWAITING_DUET_CONFIG && renderOptions('duetType')}
-        {step === AppStep.AWAITING_PERFORMER && renderOptions('performerType')}
-
-        {step === AppStep.AWAITING_SPECIFICS && (
-          <div className="text-center space-y-6 max-w-2xl mx-auto mt-12">
-            <input type="text" placeholder="Reference Artist (e.g. Bad Bunny, Utada Hikaru)" className="w-full bg-slate-800 border border-slate-700 p-8 rounded-[2rem] text-white outline-none focus:border-orange-400 text-lg transition-all" value={inputs.referenceArtist || ''} onChange={(e) => onUpdate('referenceArtist', e.target.value)} />
-            <input type="text" placeholder="Mundane Objects (e.g. cold coffee, cracked phone)" className="w-full bg-slate-800 border border-slate-700 p-8 rounded-[2rem] text-white outline-none focus:border-orange-400 text-lg transition-all" value={inputs.mundaneObjects || ''} onChange={(e) => onUpdate('mundaneObjects', e.target.value)} />
-            <button onClick={() => onNext()} className="w-full bg-orange-500 py-6 md:py-8 rounded-[2rem] text-sm md:text-base font-black uppercase tracking-[0.16em] md:tracking-[0.4em] text-white hover:bg-orange-400 transition-all">Next Module</button>
-          </div>
-        )}
-
-        {step === AppStep.AWAITING_CREATIVE_DIRECTION && (
-          <div className="text-center space-y-6 max-w-2xl mx-auto mt-12">
-            <textarea autoFocus placeholder="e.g. A conversation at a train station in the rain..." className="w-full bg-slate-800 border border-slate-700 p-8 rounded-[2rem] text-white outline-none focus:border-orange-400 min-h-[250px] text-lg leading-relaxed" value={inputs.creativeDirection || ''} onChange={(e) => onUpdate('creativeDirection', e.target.value)} />
-            <button onClick={onGenerate} disabled={isGenerating} className="w-full bg-gradient-to-r from-orange-500 via-amber-500 to-cyan-500 py-6 md:py-8 rounded-[2rem] text-base md:text-xl font-black uppercase tracking-[0.16em] md:tracking-[0.5em] text-white shadow-xl transition-all hover:scale-[1.02] disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100">{isGenerating ? 'GENERATING…' : 'MASTER THE RECORD'}</button>
-            <p className="text-sm text-slate-500 uppercase tracking-widest mt-4">COST: {COSTS.GENERATE_SONG} CREDITS</p>
-          </div>
-        )}
-      </div>
-
-      {/* Song DNA chips — tap one to jump back and change that decision. */}
-      <div className="mt-20 flex flex-wrap justify-center gap-4">
-          <button type="button" onClick={() => onJumpTo(AppStep.AWAITING_LANGUAGE)} title="Tap to change language" className="px-4 py-2 bg-slate-900 border border-slate-800 rounded-full text-xs font-black uppercase tracking-widest text-slate-500 hover:border-slate-500 hover:text-slate-300 transition-colors cursor-pointer">DNA: {inputs.language || '???'}</button>
-          {inputs.genre && <button type="button" onClick={() => onJumpTo(AppStep.AWAITING_GENRE)} title="Tap to change genre" className="px-4 py-2 bg-orange-900/20 border border-orange-500/30 rounded-full text-xs font-black uppercase tracking-widest text-orange-400 hover:border-orange-400 hover:text-orange-300 transition-colors cursor-pointer">GENRE: {inputs.genre}</button>}
-          {inputs.instrumentation && <button type="button" onClick={() => onJumpTo(AppStep.AWAITING_INSTRUMENTATION)} title="Tap to change instrumentation" className="px-4 py-2 bg-cyan-900/20 border border-cyan-500/30 rounded-full text-xs font-black uppercase tracking-widest text-cyan-400 hover:border-cyan-300 hover:text-cyan-200 transition-colors cursor-pointer">CORE: {inputs.instrumentation}</button>}
-      </div>
-    </div>
-  );
-}
-
 /**
  * Fast Track — the 3-decision lane: pick a genre, describe the vibe, generate.
  * Everything else gets smart defaults; the genre guide fills in the craft.
@@ -462,12 +93,11 @@ const CreationWizard: React.FC<{
 const FastTrack: React.FC<{
   isGenerating: boolean;
   onGenerate: (fastInputs: SongInputs) => void;
-  onDeepStudio: (fastInputs: SongInputs) => void;
-}> = ({ isGenerating, onGenerate, onDeepStudio }) => {
+}> = ({ isGenerating, onGenerate }) => {
   const [genre, setGenre] = useState('');
   const [vibe, setVibe] = useState('');
   const [vocals, setVocals] = useState('Female Solo');
-  const genres: string[] = (GENRES_BY_LANG as any).English || [];
+  const genres: string[] = ENGLISH_GENRES;
 
   const buildInputs = (): SongInputs => ({
     ...DEFAULT_INPUTS,
@@ -543,14 +173,6 @@ const FastTrack: React.FC<{
           >
             {isGenerating ? 'GENERATING…' : `MASTER THE RECORD (${COSTS.GENERATE_SONG} CREDITS)`}
           </button>
-
-          <button
-            type="button"
-            onClick={() => onDeepStudio(buildInputs())}
-            className="mx-auto text-xs font-black uppercase tracking-widest text-slate-500 hover:text-cyan-300 transition-colors"
-          >
-            Need more control? Open Deep Studio →
-          </button>
         </div>
       )}
     </div>
@@ -567,11 +189,8 @@ export const App: React.FC = () => {
   const [session, setSession] = useState<any>(null);
   const [headerAvatarUrl, setHeaderAvatarUrl] = useState<string | null>(null);
   const [view, setView] = useState<AppView>(AppView.AUTH);
-  const [step, setStep] = useState<AppStep>(AppStep.AWAITING_LANGUAGE);
+  const [step, setStep] = useState<AppStep>(AppStep.FAST_TRACK);
   const [inputs, setInputs] = useState<SongInputs>(DEFAULT_INPUTS);
-  const [dynamicOptions, setDynamicOptions] = useState<string[]>([]);
-  const [isLoadingOptions, setIsLoadingOptions] = useState(false);
-  const dynamicOptionsCache = useRef<Record<string, string[]>>({});
   const [generatedSong, setGeneratedSong] = useState('');
   const [albumArt, setAlbumArt] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(false);
@@ -682,35 +301,7 @@ export const App: React.FC = () => {
     return () => window.removeEventListener('songghost:openApiKeyModal', handler);
   }, []);
 
-  // AI-tailored wizard options: on entering a tailorable step, fetch options informed
-  // by the genre guide. Static options render instantly; AI options swap in when ready.
-  // Cached per (step, language, genre, subGenre) so back/forward navigation is free.
-  useEffect(() => {
-    // Never leak the previous step's AI options into this step.
-    setDynamicOptions([]);
-    setIsLoadingOptions(false);
-    const field = DYNAMIC_OPTION_STEPS[step];
-    if (!field || view !== AppView.STUDIO || !session) return;
-    if (!inputs.genre) return; // nothing to tailor to yet
 
-    const cacheKey = `${step}|${inputs.language || ''}|${inputs.genre}|${inputs.subGenre || ''}`;
-    const cached = dynamicOptionsCache.current[cacheKey];
-    if (cached) { setDynamicOptions(cached); return; }
-
-    let cancelled = false;
-    setIsLoadingOptions(true);
-    generateDynamicOptions(field, inputs)
-      .then((options) => {
-        if (cancelled) return;
-        if (Array.isArray(options) && options.length >= 4) {
-          dynamicOptionsCache.current[cacheKey] = options;
-          setDynamicOptions(options);
-        }
-      })
-      .catch(() => { /* static options remain — never block the wizard on this */ })
-      .finally(() => { if (!cancelled) setIsLoadingOptions(false); });
-    return () => { cancelled = true; };
-  }, [step, view]);
 
   useEffect(() => {
     const bootstrap = async () => {
@@ -801,50 +392,7 @@ export const App: React.FC = () => {
     bootstrap();
   }, []);
 
-  const handleUpdate = (key: keyof SongInputs, val: string) => {
-    setInputs(prev => ({ ...prev, [key]: val }));
-  };
 
-  const handleNext = (customVal?: string) => {
-    // Check if we need to skip DUET config
-    const currentIdx = STEP_ORDER.indexOf(step);
-    if (currentIdx === -1) return;
-
-    let nextStep = STEP_ORDER[currentIdx + 1];
-    
-    // Logic to skip DUET if not a duo/group/duet
-    if (step === AppStep.AWAITING_VOCALS) {
-        const vocalVal = customVal || inputs.vocals;
-        const isDuet = vocalVal?.includes('Duet') || vocalVal?.includes('Duo') || vocalVal?.includes('Group');
-        if (!isDuet) {
-             // Skip AWAITING_DUET_CONFIG
-             const duetIdx = STEP_ORDER.indexOf(AppStep.AWAITING_DUET_CONFIG);
-             if (currentIdx + 1 === duetIdx) {
-                 nextStep = STEP_ORDER[duetIdx + 1];
-             }
-        }
-    }
-
-    if (nextStep) setStep(nextStep);
-  };
-
-  const handlePrev = () => {
-    const currentIdx = STEP_ORDER.indexOf(step);
-    if (currentIdx > 0) {
-        let prevStep = STEP_ORDER[currentIdx - 1];
-        // Logic to skip DUET if coming back
-        if (prevStep === AppStep.AWAITING_DUET_CONFIG) {
-            const isDuet = inputs.vocals?.includes('Duet') || inputs.vocals?.includes('Duo') || inputs.vocals?.includes('Group');
-            if (!isDuet) {
-                 prevStep = STEP_ORDER[currentIdx - 2];
-            }
-        }
-        setStep(prevStep);
-    } else {
-        // If at start of wizard, return to Dashboard
-        setView(AppView.LANDING);
-    }
-  };
 
   const handleGenerate = async (overrideInputs?: SongInputs) => {
       if (!session) return;
@@ -856,7 +404,7 @@ export const App: React.FC = () => {
       if (overrides) setInputs(overrides);
       const sourceInputs = overrides || inputs;
       // Where to land if generation fails — back to the lane the user came from.
-      const returnStep = step === AppStep.FAST_TRACK ? AppStep.FAST_TRACK : AppStep.AWAITING_CREATIVE_DIRECTION;
+      const returnStep = AppStep.FAST_TRACK;
       const cleanedInputs = sanitizeUnknown(sourceInputs);
 
       // Fetch the profile once, up front: it's the authoritative source for tier and is
@@ -940,7 +488,7 @@ export const App: React.FC = () => {
 
       setAlbumArt(null);
       setLoadedSongId(null);
-      setStep(AppStep.AWAITING_LANGUAGE);
+      setStep(AppStep.FAST_TRACK);
       setView(AppView.STUDIO);
   };
 
@@ -1111,7 +659,7 @@ export const App: React.FC = () => {
       } catch (e: any) {
           console.error(e);
           toast('Import failed: ' + e.message, 'error');
-          setStep(AppStep.AWAITING_LANGUAGE); // Fallback
+          setStep(AppStep.FAST_TRACK); // Fallback
           setView(AppView.LANDING);
       } finally {
           setIsLoading(false);
@@ -1432,7 +980,7 @@ export const App: React.FC = () => {
                         <p className="mt-3 px-4 py-1.5 rounded-full bg-emerald-500/10 border border-emerald-400/30 text-emerald-300 text-[11px] font-black uppercase tracking-widest">Your first songs are on us — no setup, no API keys</p>
                      </div>
 
-                     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                     <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
 
                          {/* Option 0: Quick Song — the 3-decision fast lane (AMBER) */}
                          <button
@@ -1444,23 +992,8 @@ export const App: React.FC = () => {
                                  ⚡
                              </div>
                              <div className="relative z-10">
-                                 <h3 className="text-xl font-black text-white uppercase tracking-wider mb-2 group-hover:text-amber-300 transition-colors">Quick Song</h3>
-                                 <p className="text-xs text-slate-500 font-bold uppercase tracking-widest">Genre + vibe. Done.</p>
-                             </div>
-                         </button>
-
-                         {/* Option 1: New Session (BLUE) */}
-                         <button
-                            onClick={() => { setView(AppView.STUDIO); setStep(AppStep.AWAITING_LANGUAGE); setInputs(DEFAULT_INPUTS); }}
-                            className="group glass-panel bg-[#140e28]/65 hover:border-orange-400 p-8 rounded-[2rem] md:rounded-[2.5rem] flex flex-col items-center gap-6 transition-all hover:-translate-y-1 hover:shadow-2xl hover:shadow-orange-500/30 relative overflow-hidden"
-                         >
-                             <div className="absolute inset-0 bg-orange-500/5 opacity-0 group-hover:opacity-100 transition-opacity"></div>
-                             <div className="w-20 h-20 rounded-full bg-orange-500/20 text-orange-300 flex items-center justify-center group-hover:bg-orange-500 group-hover:text-white group-hover:shadow-[0_0_30px_rgba(249,115,22,0.5)] transition-all relative z-10">
-                                 <MagicWandIcon />
-                             </div>
-                             <div className="relative z-10">
-                                 <h3 className="text-xl font-black text-white uppercase tracking-wider mb-2 group-hover:text-orange-300 transition-colors">New Session</h3>
-                                 <p className="text-xs text-slate-500 font-bold uppercase tracking-widest">Start from scratch</p>
+                                 <h3 className="text-xl font-black text-white uppercase tracking-wider mb-2 group-hover:text-amber-300 transition-colors">New Song</h3>
+                                 <p className="text-xs text-slate-500 font-bold uppercase tracking-widest">Genre + your story. Done.</p>
                              </div>
                          </button>
 
@@ -1669,24 +1202,10 @@ export const App: React.FC = () => {
                     </div>
                   )}
               </div>
-          ) : step === AppStep.FAST_TRACK ? (
+          ) : (
               <FastTrack
                 isGenerating={isLoading}
                 onGenerate={(fastInputs) => handleGenerate(fastInputs)}
-                onDeepStudio={(fastInputs) => { setInputs(fastInputs); setStep(AppStep.AWAITING_SUBGENRE); }}
-              />
-          ) : (
-              <CreationWizard
-                step={step}
-                inputs={inputs}
-                dynamicOptions={dynamicOptions}
-                isLoadingOptions={isLoadingOptions}
-                isGenerating={isLoading}
-                onUpdate={handleUpdate}
-                onNext={handleNext}
-                onPrev={handlePrev}
-                onGenerate={handleGenerate}
-                onJumpTo={(s) => setStep(s)}
               />
           )}
       </div>
