@@ -1,7 +1,7 @@
 
 import React, { useState, useEffect, useCallback, useMemo, useRef } from 'react';
 import { AppStep, AppView, SongInputs, SavedSong, UserProfile } from './types';
-import { generateSong, generateAlbumArt, generateSocialPack, translateLyrics, editSong, generateDynamicOptions, structureImportedSong, promptToSetGeminiApiKey } from './services/geminiService';
+import { generateSong, generateAlbumArt, generateSocialPack, translateLyrics, editSong, generateDynamicOptions, structureImportedSong } from './services/geminiService';
 import { saveSong } from './services/songService';
 import { getUserProfile } from './services/userService';
 import { getSession, signOut, signIn, signUp, signInWithOAuthEmail, startProviderSignIn } from './services/authService';
@@ -11,6 +11,7 @@ import ProfileView from './components/ProfileView';
 import PricingView from './components/PricingView';
 import TermsAndPrivacy from './components/TermsAndPrivacy';
 import UtilityHub, { UtilitySection } from './components/UtilityHub';
+import ApiKeyModal from './components/ApiKeyModal';
 import AskAndreWidget from './components/AskAndreWidget';
 import { Logo } from './components/Logo';
 import IntroAnimation from './components/IntroAnimation';
@@ -467,7 +468,12 @@ const CreationWizard: React.FC<{
 }
 
 export const App: React.FC = () => {
-  const [introComplete, setIntroComplete] = useState(false);
+  // Show the brand intro once per browser session — refreshes skip it, a fresh visit
+  // still gets the moment. Previously it replayed on every page load.
+  const [introComplete, setIntroComplete] = useState<boolean>(() => {
+    try { return typeof window !== 'undefined' && window.sessionStorage.getItem('sg_intro_seen') === '1'; }
+    catch { return false; }
+  });
   const [session, setSession] = useState<any>(null);
   const [headerAvatarUrl, setHeaderAvatarUrl] = useState<string | null>(null);
   const [view, setView] = useState<AppView>(AppView.AUTH);
@@ -479,6 +485,8 @@ export const App: React.FC = () => {
   const [albumArt, setAlbumArt] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(false);
   const generationInFlightRef = useRef(false);
+  // When the key modal is opened by the Generate gate, this resumes generation after save.
+  const pendingGenerateAfterKeyRef = useRef(false);
   const [loadingMessage, setLoadingMessage] = useState('');
   const [generationStageIndex, setGenerationStageIndex] = useState(0);
   const [generationLog, setGenerationLog] = useState<string[]>([]);
@@ -496,6 +504,7 @@ export const App: React.FC = () => {
   const [loadedSongId, setLoadedSongId] = useState<string | null>(null);
   const [credits, setCredits] = useState<number>(0);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [isApiKeyModalOpen, setIsApiKeyModalOpen] = useState(false);
   const [utilitySection, setUtilitySection] = useState<UtilitySection>('invite');
   const [utilityReturnView, setUtilityReturnView] = useState<AppView>(AppView.LANDING);
   const [termsReturnView, setTermsReturnView] = useState<AppView>(AppView.AUTH);
@@ -550,26 +559,36 @@ export const App: React.FC = () => {
     }
   };
 
-  const promptForGeminiApiKeyIfMissing = useCallback(() => {
+  const hasGeminiKey = () =>
+    typeof window !== 'undefined' &&
+    !!(window.localStorage.getItem('songghost_gemini_api_key') || '').trim();
+
+  // Soft first-run nudge. Only skool-tier (community) members must bring their own
+  // Gemini key — public users use the app's key, so we don't nag them.
+  const promptForGeminiApiKeyIfMissing = useCallback(async (email?: string) => {
     if (typeof window === 'undefined') return;
-    const existing = (window.localStorage.getItem('songghost_gemini_api_key') || '').trim();
-    if (existing) return;
-
-    const wantsHelp = window.confirm(
-      'Song Ghost now uses your Gemini API key for text generation. Click OK for setup/help link, or Cancel to enter your key now.'
-    );
-    if (wantsHelp) {
-      window.open('https://aistudio.google.com/app/apikey', '_blank', 'noopener,noreferrer');
+    if (hasGeminiKey()) return;
+    try {
+      if (email) {
+        const profile = await getUserProfile(email);
+        if (String(profile?.tier || '').toLowerCase() !== 'skool') return;
+      }
+    } catch {
+      // If we can't determine tier, fall through and nudge (safe default).
     }
-
-    const entered = window.prompt('Paste your Gemini API key (you can add it now or later):');
-    if (entered && entered.trim()) {
-      window.localStorage.setItem('songghost_gemini_api_key', entered.trim());
-    }
+    setIsApiKeyModalOpen(true);
   }, []);
 
   const handleManageGeminiApiKey = useCallback(() => {
-    promptToSetGeminiApiKey();
+    setIsApiKeyModalOpen(true);
+  }, []);
+
+  // Listen for service-layer requests to open the API key modal
+  // (e.g. when a Gemini-backed call fails with an auth error mid-flight).
+  useEffect(() => {
+    const handler = () => setIsApiKeyModalOpen(true);
+    window.addEventListener('songghost:openApiKeyModal', handler);
+    return () => window.removeEventListener('songghost:openApiKeyModal', handler);
   }, []);
 
   useEffect(() => {
@@ -608,7 +627,7 @@ export const App: React.FC = () => {
             const c = await getUserCredits(data.session.user.email || '');
             setCredits(c);
             await loadHeaderAvatar(data.session.user.email || '');
-            promptForGeminiApiKeyIfMissing();
+            promptForGeminiApiKeyIfMissing(data.session.user.email || '');
           }
         } catch (e: any) {
           setAuthError(e?.message || 'OAuth sign in failed');
@@ -628,7 +647,7 @@ export const App: React.FC = () => {
         setView(AppView.LANDING); // Default to Landing Dashboard
         getUserCredits(sess.user.email || '').then(c => setCredits(c));
         loadHeaderAvatar(sess.user.email || '');
-        promptForGeminiApiKeyIfMissing();
+        promptForGeminiApiKeyIfMissing(sess.user.email || '');
 
         const status = search.get('status');
         const sessionId = search.get('session_id');
@@ -711,6 +730,27 @@ export const App: React.FC = () => {
       if (generationInFlightRef.current) return;
       generationInFlightRef.current = true;
       const cleanedInputs = sanitizeUnknown(inputs);
+
+      // Fetch the profile once, up front: it's the authoritative source for tier and is
+      // reused by generateSong below (no extra fetch).
+      let profile: UserProfile | null = null;
+      try {
+          profile = await getUserProfile(session.user.email || '');
+      } catch {
+          // Non-fatal — public users can still generate with the app's key.
+      }
+
+      // Gate: skool-tier (community) members must supply their own Gemini key or the
+      // generation pipeline fails server-side. Block BEFORE spending any credits, prompt
+      // for the key, and auto-resume generation once they save it.
+      const isSkool = String(profile?.tier || '').toLowerCase() === 'skool';
+      if (isSkool && !hasGeminiKey()) {
+          generationInFlightRef.current = false;
+          pendingGenerateAfterKeyRef.current = true;
+          setIsApiKeyModalOpen(true);
+          return;
+      }
+
       const canAfford = await hasEnoughCredits(session.user.email || '', COSTS.GENERATE_SONG);
       if (!canAfford) {
           generationInFlightRef.current = false;
@@ -728,7 +768,6 @@ export const App: React.FC = () => {
       setAlbumArt(null);
 
       try {
-          const profile = await getUserProfile(session.user.email || '');
           const generator = generateSong(cleanedInputs, session.user.email || '', profile);
           
           let fullText = '';
@@ -752,6 +791,20 @@ export const App: React.FC = () => {
       } finally {
           setIsLoading(false);
           generationInFlightRef.current = false;
+      }
+  };
+
+  // Closing the key modal clears any pending auto-resume so a later unrelated save
+  // can't spuriously kick off a generation.
+  const closeApiKeyModal = () => {
+      setIsApiKeyModalOpen(false);
+      pendingGenerateAfterKeyRef.current = false;
+  };
+  // If the modal was opened by the Generate gate, resume generation once a key is saved.
+  const onApiKeySaved = () => {
+      if (pendingGenerateAfterKeyRef.current) {
+          pendingGenerateAfterKeyRef.current = false;
+          handleGenerate();
       }
   };
 
@@ -798,13 +851,40 @@ export const App: React.FC = () => {
     return persistedId;
   };
 
+  const isStorageLimitError = (err: any) =>
+      /STORAGE LIMIT REACHED/i.test(String(err?.message || ''));
+
   const handleSave = async (title: string, prompt: string, lyrics: string, art?: string, social?: any) => {
-      await persistSong(title, prompt, lyrics, art, social);
-      alert('Session saved to library!');
+      if (!session) { alert('Please sign in to save your session.'); return; }
+      try {
+          await persistSong(title, prompt, lyrics, art, social);
+          alert('Session saved to library!');
+      } catch (err: any) {
+          if (isStorageLimitError(err)) {
+              // 25-song cap: tell them plainly and take them to the library to free a slot.
+              alert(err.message);
+              setView(AppView.PROFILE);
+          } else {
+              alert('Could not save your session: ' + String(err?.message || 'please try again.'));
+          }
+      }
   };
 
   const handleAutoSaveArt = async (title: string, prompt: string, lyrics: string, art?: string) => {
-      await persistSong(title, prompt, lyrics, art, undefined);
+      if (!session) return;
+      try {
+          await persistSong(title, prompt, lyrics, art, undefined);
+      } catch (err: any) {
+          // Auto-save must never crash the art flow. Surface the cap (the user's work
+          // isn't actually saved), but stay quiet on transient errors — the explicit
+          // Save button will report those.
+          if (isStorageLimitError(err)) {
+              alert(err.message + '\n\nYour artwork was generated but not saved yet.');
+              setView(AppView.PROFILE);
+          } else {
+              console.error('Auto-save failed:', err?.message || err);
+          }
+      }
   };
 
   const handleAuth = async (e: React.FormEvent) => {
@@ -837,7 +917,7 @@ export const App: React.FC = () => {
             setView(AppView.LANDING);
             const c = await getUserCredits(data.session.user.email || '');
             setCredits(c);
-            promptForGeminiApiKeyIfMissing();
+            promptForGeminiApiKeyIfMissing(data.session.user.email || '');
           }
       } catch (e: any) {
           setAuthError(e?.message || 'Authentication failed');
@@ -856,6 +936,22 @@ export const App: React.FC = () => {
       generationInFlightRef.current = true;
       const cleanedInputs = sanitizeUnknown(inputs);
 
+      // Fetch profile up front (authoritative tier + reused below).
+      let profile: UserProfile | null = null;
+      try {
+          profile = await getUserProfile(session.user.email || '');
+      } catch {
+          // Non-fatal for public users.
+      }
+
+      // Same key gate as Generate: skool members must supply their own Gemini key.
+      const isSkool = String(profile?.tier || '').toLowerCase() === 'skool';
+      if (isSkool && !hasGeminiKey()) {
+          generationInFlightRef.current = false;
+          setIsApiKeyModalOpen(true);
+          return;
+      }
+
       // Cost of "Structuring" is treated as a FULL GENERATION (5 credits) as it builds the song.
       const canAfford = await hasEnoughCredits(session.user.email || '', COSTS.GENERATE_SONG);
       if (!canAfford) {
@@ -871,7 +967,6 @@ export const App: React.FC = () => {
       setView(AppView.STUDIO); // Switch context to studio
 
       try {
-          const profile = await getUserProfile(session.user.email || '');
           const generator = structureImportedSong(cleanPasteContent, session.user.email || '', cleanedInputs, profile);
           
           let fullText = '';
@@ -904,7 +999,10 @@ export const App: React.FC = () => {
   };
 
   if (!introComplete) {
-    return <IntroAnimation onComplete={() => setIntroComplete(true)} />;
+    return <IntroAnimation onComplete={() => {
+      try { window.sessionStorage.setItem('sg_intro_seen', '1'); } catch {}
+      setIntroComplete(true);
+    }} />;
   }
 
   if (!session || view === AppView.AUTH) {
@@ -1098,6 +1196,7 @@ export const App: React.FC = () => {
           </div>
         </div>
         <AskAndreWidget email={session?.user?.email || ''} />
+    <ApiKeyModal isOpen={isApiKeyModalOpen} onClose={closeApiKeyModal} onSaved={onApiKeySaved} />
       </>
     );
   }
@@ -1107,6 +1206,7 @@ export const App: React.FC = () => {
         <>
           <TermsAndPrivacy onBack={() => setView(termsReturnView)} />
           <AskAndreWidget email={session?.user?.email || ''} />
+    <ApiKeyModal isOpen={isApiKeyModalOpen} onClose={closeApiKeyModal} onSaved={onApiKeySaved} />
         </>
       );
   }
@@ -1126,6 +1226,7 @@ export const App: React.FC = () => {
             />
           </div>
           <AskAndreWidget email={session?.user?.email || ''} />
+    <ApiKeyModal isOpen={isApiKeyModalOpen} onClose={closeApiKeyModal} onSaved={onApiKeySaved} />
         </>
       );
   }
@@ -1135,6 +1236,7 @@ export const App: React.FC = () => {
         <>
           <PricingView email={session.user.email} onClose={() => setView(AppView.LANDING)} onPurchaseComplete={() => {}} />
           <AskAndreWidget email={session?.user?.email || ''} />
+    <ApiKeyModal isOpen={isApiKeyModalOpen} onClose={closeApiKeyModal} onSaved={onApiKeySaved} />
         </>
       );
   }
@@ -1152,6 +1254,7 @@ export const App: React.FC = () => {
             setStep(AppStep.SONG_DISPLAYED);
           }} onBack={() => setView(AppView.LANDING)} onSignOut={() => signOut().then(() => { setSession(null); setView(AppView.AUTH); setHeaderAvatarUrl(null); })} onProfileUpdate={(updated) => setHeaderAvatarUrl(updated?.avatar_url || null)} onBuyCredits={() => setView(AppView.PRICING)} />
           <AskAndreWidget email={session?.user?.email || ''} />
+    <ApiKeyModal isOpen={isApiKeyModalOpen} onClose={closeApiKeyModal} onSaved={onApiKeySaved} />
         </>
       );
   }
@@ -1310,32 +1413,43 @@ export const App: React.FC = () => {
                        </button>
                      ))}
                    </div>
-                   <div className="border-t border-slate-600/50 p-3">
-                     <div className="flex items-center justify-around text-slate-300">
-                       {[
-                         { name: "X", icon: <SocialXIcon /> },
-                         { name: "Instagram", icon: <SocialInstagramIcon /> },
-                         { name: "YouTube", icon: <SocialYouTubeIcon /> },
-                         { name: "TikTok", icon: <SocialTikTokIcon /> },
-                         { name: "Discord", icon: <SocialDiscordIcon /> },
-                       ].map((social) => (
-                         <button
-                           key={social.name}
-                           className="w-9 h-9 rounded-full border border-slate-600/70 flex items-center justify-center hover:bg-slate-700/50"
-                           aria-label={social.name}
-                           title={social.name}
-                           type="button"
-                         >
-                           {social.icon}
-                         </button>
-                       ))}
-                     </div>
-                   </div>
+                   {/* Social links. Add real profile URLs to show a button — entries with an
+                       empty url are hidden so users never click a dead button. */}
+                   {(() => {
+                     const socials = [
+                       { name: "X", icon: <SocialXIcon />, url: "" },
+                       { name: "Instagram", icon: <SocialInstagramIcon />, url: "" },
+                       { name: "YouTube", icon: <SocialYouTubeIcon />, url: "" },
+                       { name: "TikTok", icon: <SocialTikTokIcon />, url: "" },
+                       { name: "Discord", icon: <SocialDiscordIcon />, url: "" },
+                     ].filter((s) => s.url);
+                     if (socials.length === 0) return null;
+                     return (
+                       <div className="border-t border-slate-600/50 p-3">
+                         <div className="flex items-center justify-around text-slate-300">
+                           {socials.map((social) => (
+                             <a
+                               key={social.name}
+                               href={social.url}
+                               target="_blank"
+                               rel="noopener noreferrer"
+                               className="w-9 h-9 rounded-full border border-slate-600/70 flex items-center justify-center hover:bg-slate-700/50"
+                               aria-label={social.name}
+                               title={social.name}
+                             >
+                               {social.icon}
+                             </a>
+                           ))}
+                         </div>
+                       </div>
+                     );
+                   })()}
                  </div>
                </>
              )}
         </div>
         <AskAndreWidget email={session?.user?.email || ''} />
+    <ApiKeyModal isOpen={isApiKeyModalOpen} onClose={closeApiKeyModal} onSaved={onApiKeySaved} />
         </>
       );
   }
@@ -1553,6 +1667,7 @@ export const App: React.FC = () => {
       </div>
     </div>
     <AskAndreWidget email={session?.user?.email || ''} />
+    <ApiKeyModal isOpen={isApiKeyModalOpen} onClose={closeApiKeyModal} onSaved={onApiKeySaved} />
     </>
   );
 };
