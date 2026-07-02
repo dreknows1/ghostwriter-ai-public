@@ -22,17 +22,20 @@ How that works mechanically (so it can't silently break like everything else has
 - The live site reports a **curriculum fingerprint** on its health check, and an automated
   smoke test confirms a known sentence from your curriculum is actually inside the deployed
   writer's instructions. If your words aren't in the machine, alarms ring — no more silent rot.
-- **Size budget:** the compiled writing instructions are capped (~2,000 tokens per song —
-  see "Per-song slice" below for how that splits). New rules must refine or replace old
-  ones, not pile on — with a standing rule-pruning test (drop a rule, run the batch; if
-  quality doesn't drop, the rule dies). This is the guard against rebuilding the
-  5,000-word rule wall one reasonable note at a time.
+- **Size budget:** the compiled writing instructions are capped at **~2,800 tokens per
+  song** (measured against the real approved curriculum: core ~1,200 + genre profile
+  ~800 + largest room card ~750, with ~50 headroom — the build fails the moment content
+  exceeds it). New rules must refine or replace old ones, not pile on — with a standing
+  rule-pruning test (drop a rule, run the batch; if quality doesn't drop, the rule dies).
+  This is the guard against rebuilding the 5,000-word rule wall one reasonable note at a time.
 - **Per-song slice:** the writer never sees the whole curriculum. Compilation selects the
   universal core + the active genre's profile + the ONE active sub-genre page — nothing
   else. The sub-genre pages in SONGWRITING_SUBGENRES.md are teaching text; each compiles
-  down to a compact writer card (~600 tokens of dials + spec defaults), and the whole
-  per-song slice is capped at **~2,000 tokens** (the size budget above). Same pruning law
-  applies to cards as to rules.
+  down to a compact writer card (~650-800 tokens of dials + spec defaults; the
+  stories-it-serves notes stay behind for landing and never reach the writer), and the
+  whole per-song slice is capped at **~2,800 tokens** (the size budget above). The
+  composing-process layer also stays out of the slice — the engine's own steps enact it.
+  Same pruning law applies to cards as to rules.
 
 ## 2. How composing works — now with the beat in the room
 
@@ -195,7 +198,8 @@ pass 7" idea was noise (a coin-flip engine passes it 1 time in 6). The honest ve
 
 ## Sign-off
 
-- [ ] Founder approves this plan (or marks it up)
-- [ ] Founder approves the sub-genre rules + R&B's sub-genre pages (SONGWRITING_SUBGENRES.md — Parts 1–4 and the R&B section)
-- [ ] Founder approves the R&B Composer Profile (next document)
-- [ ] Phase 1 build begins only after all boxes are checked
+- [x] Founder approves this plan — approved 2026-07-02 ("lets go")
+- [x] Founder approves the sub-genre rules + R&B's sub-genre pages (SONGWRITING_SUBGENRES.md — Parts 1–4 and the R&B section) — approved 2026-07-02 ("lets go")
+- [ ] Founder approves the R&B Composer Profile (SONGWRITING_PROFILE_RNB.md — being drafted)
+- Phase 1 build is underway behind a founder-only switch. Nothing reaches users until
+  the profile box is checked AND the 20-song gate passes.

@@ -4,6 +4,15 @@ import { makeFunctionReference } from "convex/server";
 import { GoogleGenAI } from "@google/genai";
 import Anthropic from "@anthropic-ai/sdk";
 import OpenAI from "openai";
+import { CURRICULUM } from "./engine/curriculum.generated";
+import {
+  ENGINE_MODEL,
+  ENGINE_VERSION,
+  EngineNotAvailable,
+  resolveGenre,
+  runEngine,
+  type EngineGenerate,
+} from "./engine/pipeline";
 
 
 const ASK_ANDRE_AUDIT_CONTEXT = `
@@ -901,7 +910,91 @@ ${String(pastedContent || "").trim()}`;
   return { text };
 }
 
+// ═══════════════════ CURRICULUM ENGINE (Phase 1 — R&B, founder-gated) ═══════════════════
+// Built beside the interim path per SONGWRITING_ENGINE_PLAN.md §7. Only emails on the
+// allowlist reach it; everyone else stays on the interim generator until the founder's
+// 20-song gate passes. Rollback = remove the email from SONG_ENGINE_V3_EMAILS.
+
+function engineAllowed(email?: string): boolean {
+  const list = (process.env.SONG_ENGINE_V3_EMAILS || "dreknows@gmail.com")
+    .split(",")
+    .map((e) => e.trim().toLowerCase())
+    .filter(Boolean);
+  return list.includes(String(email || "").trim().toLowerCase());
+}
+
+const engineGenerate: EngineGenerate = async (prompt, kind) => {
+  if (kind === "plan") {
+    const client = new OpenAI({ apiKey: getOpenAIApiKey() });
+    const response = await client.chat.completions.create({
+      model: ENGINE_MODEL,
+      max_tokens: 2048,
+      temperature: 0.2, // planning wants precision, not creativity
+      messages: [
+        {
+          role: "system",
+          content: "You are a precise song-planning assistant. Return ONLY valid JSON — no prose, no markdown fences.",
+        },
+        { role: "user", content: prompt },
+      ],
+    });
+    return response.choices?.[0]?.message?.content?.trim() || "";
+  }
+  return generateDraft(prompt);
+};
+
+// ONE canonical story field (plan Step 0). Legacy client field names are accepted at
+// this boundary only and become the single story the engine sees — nothing else reads them.
+function engineStory(inputs: any): string {
+  return String(inputs?.story || inputs?.creativeDirection || inputs?.additionalInfo || "").trim();
+}
+
+function engineInputs(payload: any) {
+  const inputs = payload?.inputs || {};
+  return {
+    genre: String(inputs.genre || ""),
+    story: engineStory(inputs),
+    vocals: inputs.vocals ? String(inputs.vocals) : undefined,
+    subGenre: inputs.subGenre ? String(inputs.subGenre) : undefined,
+  };
+}
+
+async function generateSongV3(payload: any) {
+  const result = await runEngine(CURRICULUM, engineInputs(payload), engineGenerate);
+  return { text: result.text, meta: result.meta };
+}
+
+async function streamSongV3(payload: any, res: VercelResponse) {
+  res.writeHead(200, {
+    "Content-Type": "text/event-stream; charset=utf-8",
+    "Cache-Control": "no-cache, no-transform",
+    Connection: "keep-alive",
+  });
+  const send = (obj: any) => { res.write(`data: ${JSON.stringify(obj)}\n\n`); (res as any).flush?.(); };
+  try {
+    const result = await runEngine(CURRICULUM, engineInputs(payload), engineGenerate, (label) =>
+      send({ type: "stage", label })
+    );
+    send({ type: "d", t: result.text });
+    send({ type: "done", text: result.text, meta: result.meta });
+  } catch (error: any) {
+    send({ type: "error", error: error?.message || "Song generation failed." });
+  } finally {
+    res.end();
+  }
+}
+
 export default async function handler(req: VercelRequest, res: VercelResponse) {
+  if (req.method === "GET") {
+    // Deployment canary (plan §1): proves the curriculum is inside the deployed bundle.
+    return res.status(200).json({
+      ok: true,
+      engineVersion: ENGINE_VERSION,
+      curriculumHash: CURRICULUM.hash,
+      model: ENGINE_MODEL,
+      genres: Object.keys(CURRICULUM.genres),
+    });
+  }
   if (req.method !== "POST") {
     res.setHeader("Allow", "POST");
     return res.status(405).json({ error: "Method Not Allowed" });
@@ -923,9 +1016,22 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
         .trim() || null;
 
     switch (action) {
-      case "generateSong":
+      case "generateSong": {
+        const wantsV3 =
+          engineAllowed(email) &&
+          payload?.engine !== "interim" &&
+          resolveGenre(CURRICULUM, String(payload?.inputs?.genre || "")) !== null;
+        if (wantsV3) {
+          if (payload?.stream) return await streamSongV3(payload, res);
+          try {
+            return res.status(200).json(await generateSongV3(payload));
+          } catch (e: any) {
+            if (!(e instanceof EngineNotAvailable)) throw e; // EngineFailure → 422 via catch-all
+          }
+        }
         if (payload?.stream) return await streamSongInterim(payload, res);
         return res.status(200).json(await generateSongInterim(payload));
+      }
       case "editSong":
         return res.status(200).json(await editSongInterim(payload));
       case "structureImportedSong":

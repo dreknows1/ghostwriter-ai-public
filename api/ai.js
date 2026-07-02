@@ -4,6 +4,1576 @@ import { makeFunctionReference } from "convex/server";
 import { GoogleGenAI } from "@google/genai";
 import Anthropic from "@anthropic-ai/sdk";
 import OpenAI from "openai";
+
+// server/engine/curriculum.generated.ts
+var CURRICULUM = {
+  "core": `What a song IS, and the job of every section
+
+A song is a felt emotion delivered through structure, repetition, and melody over time.
+Sections are not labels; they are jobs:
+
+- **Intro** \u2014 sets the world in seconds; earns the first verse.
+- **Verse** \u2014 advances the story. Each verse must add new information; verse 2 is never verse 1 reworded.
+- **Pre-Chorus** \u2014 builds tension; the ramp that makes the chorus feel inevitable.
+- **Chorus** \u2014 the emotional thesis. It must LIFT (energy, melody, simplicity). It repeats because it's true every time.
+- **Bridge** \u2014 the turn: a new angle, a confession, a decision. The song must be different after it.
+- **Outro** \u2014 lands the plane; the emotional residue the listener leaves with.
+
+(Genre note: repetition-driven traditions bend these jobs on purpose \u2014 praise & worship,
+Afrobeats, and some soul and pop rooms may replace "verse 2 adds new information" with
+deepened repetition, and "the chorus lifts" with accumulation \u2014 the same words returning
+hotter each time. As with point of view, the genre's tradition wins over the default rule,
+and each sub-genre page says when that bend applies.)
+
+Creative writing craft
+
+- **Song purpose** \u2014 every song exists FOR something: to make people dance, testify, cry, feel seen,
+  ride with the windows down, worship, flirt. The purpose shapes every choice (tempo of the words,
+  subject, how personal it gets). The app must know a song's purpose before writing line one.
+- **Point of view** \u2014 who is speaking, to whom, and why now. First person confessing? Second person
+  confronting ("you did this")? Third person telling someone's story? Pick one and make the addressee
+  real \u2014 a song to a specific person beats a song to the air. (Genre note: some traditions pivot POV
+  on purpose \u2014 gospel moves from testimony "I" in the verse to congregational "we/You" in the chorus.
+  The genre's tradition wins over the consistency rule.)
+- **Creative writing devices \u2014 used with skill:**
+  - Metaphors and similes that are fresh and physically true (never decoration for its own sake)
+  - Entendres and **double entendres** \u2014 lines that mean two things at once, both intended
+    (a hallmark of great R&B and hip-hop writing; must land naturally, never announced)
+  - Wordplay, flips, and reversals \u2014 saying the expected thing the unexpected way
+  - Personification, allusion \u2014 sparingly, where the genre welcomes them
+- Voice: a real person is speaking; one point of view with an attitude.
+- Show and tell in balance: images earn feelings; plain spoken lines make them land. Neither alone.
+- **Originality** \u2014 the non-negotiable: no house formulas of ANY kind (no greeting-card affirmations,
+  no "inventory of objects the ex left behind" template, no borrowed hooks from famous songs).
+  If two users with different stories could receive the same song, the writing has failed.
+- Emotional truth: write the specific feeling, not the category ("the ache of hearing they moved on
+  from a mutual friend" \u2014 not "sadness").
+
+Musical craft (the founder's list; each becomes concrete rules)
+
+- **Writing for melody** \u2014 open vowels (ah/oh/ay) on notes that hold or peak; avoid consonant pileups where the voice needs to move; end key lines on singable syllables. **Chorus lines must be metrically parallel** \u2014 matching syllable counts and stress patterns across the repeated lines \u2014 this one rule does more for melody than any other.
+- **Syncopation** \u2014 leave rhythmic room; lyrics should invite pushing/pulling against the beat, especially in R&B/hip-hop phrasing.
+- **Rhythm** \u2014 the words carry their own drum pattern; scan lines aloud; stressed syllables should land where the beat wants them.
+- **Dynamics** \u2014 write sections at different intensities: conversational verse, building pre, wide-open chorus, intimate bridge.
+- **Cadence** \u2014 control where phrases resolve vs hang; use hanging lines to pull the listener forward, resolving lines to close thoughts.
+- **Musicality** \u2014 the sum test: read it aloud \u2014 does it already want to be sung?
+- **Word choice** \u2014 words have sound-color; match the mouth-feel to the feeling (percussive words for anger, humming/open words for longing); prefer words a singer can act.
+- **Hook** \u2014 short, rhythmic, emotionally loaded, placed at the lift; the title lives here; a listener can sing it after one listen. In R&B and hip-hop, the hook is where the double entendre or flipped phrase pays rent \u2014 a hook that means two things beats a sincere flat one.
+- **Rhyme** \u2014 a choice, not a duty: perfect rhyme closes a thought, slant rhyme keeps it moving, internal rhyme builds momentum (rap's engine), and NO rhyme is a legitimate choice when the honest line matters more. Rhyme density is a genre decision, never a fixed rule.
+- **Emotion** \u2014 every craft decision above serves ONE core feeling with an arc (where it starts \u2192 where it turns \u2192 where it lands).`,
+  "genres": {
+    "rnb": {
+      "id": "rnb",
+      "name": "R&B",
+      "aliases": [
+        "r&b",
+        "rnb",
+        "r and b",
+        "randb",
+        "rhythm and blues"
+      ],
+      "profileText": "An R&B writer starts with who the song is spoken to. R&B is intimate by trade: the song is almost always aimed at one real person \u2014 a lover, an ex, a spouse, sometimes the narrator's own self \u2014 and every line should survive being said to that person's face. First person is the home position: one voice, one person, right now. Some rooms bend the tense or widen the address \u2014 to family, to spirit, to everybody listening \u2014 but somebody real is always on the receiving end.\n\nPhrasing works the way people talk when they finally say the true thing: conversational sentences, not slogans. The genre's most important habit is leaving room \u2014 the voice is the lead instrument, and the words must get out of its way. Key lines like to end on open vowels the voice can hold and bend. Where the space goes is the room's call: some rooms stop lines early for runs, some leave long instrumental pockets, some leave one beat for an echoed word. A lyric that leaves no space anywhere \u2014 no line end, no bar, no section \u2014 has already failed as R&B.\n\nRhyme runs on a spectrum. In some rooms, slant rhymes \u2014 words that almost rhyme \u2014 and vowel echoes are the everyday tools, and a too-perfect rhyme reads as fake; in others, clean simple rhyme is the tradition and reads as timeless. The room sets that dial. The genre-wide law is smaller and firmer: the honest word outranks the rhyming word, every time.\n\nThis genre is the home of the double entendre \u2014 one line that means two things at once, both meanings intended, neither announced. When the user's story offers a true second meaning, use it; where it lands \u2014 the hook, an opening line, or an image carried across the song \u2014 is the room's and the story's call. A fully sincere song with no second meaning is just as much R&B. Flips \u2014 the expected phrase said the unexpected way \u2014 are welcome anywhere. Metaphors must be physically true and built from the user's own details, never decoration. Sensuality and vulnerability are the genre's twin subjects, and both work the same way: say the specific true thing plainly, and never announce that a moment is sexy or sad.\n\nVerses talk and choruses lift \u2014 or, in some rooms, circle and deepen \u2014 and the lift is melodic and emotional, not automatically loud. Plan ad-lib room \u2014 answers, echoes, hums \u2014 and let the room say where it sits. Many rooms end on a vamp: a short section, usually the chorus, repeating while the lead sings freely over it. Whether a song vamps is the room's call; when it does, the chorus words must be simple and true enough to survive the repeats. The bridge is where the song changes \u2014 in many rooms the guard drops there, in others it is the turn in the story; the room decides.\n\nRendering, in any room, protects three things. Space: instruments leave air; a wall of sound kills intimacy. The voice up front: lead vocal close and human, background vocals treated as their own instrument \u2014 stacks, answers, echoes \u2014 with ad-libs written as sounds and delivery notes (hums, calls, breath), never slang. The pocket: a warm low end and a groove the phrasing was written to sit on. Every dial above bends to the user's story; none of it may ever change what the song is about.",
+      "defaultRoomId": "contemporary-rnb",
+      "rooms": [
+        {
+          "id": "contemporary-rnb",
+          "name": "Contemporary R&B",
+          "oneLine": "Today's mainstream R&B \u2014 diary-honest, melodic, streaming-era songs that feel like a late-night text thread set to music.",
+          "tempoGroove": "65\u2013105 BPM. Ballads sit 65\u201380 with half-time drums; mid-tempos ride 90\u2013105 with a light bounce. Word density is moderate and conversational \u2014 phrases the length of spoken sentences with natural pauses, never packed bars.",
+          "writingDials": [
+            "Phrasing runs conversational and uneven on purpose \u2014 a line can spill past the bar like real speech, then the next one stops short; too-perfect symmetry reads as fake in this style.",
+            "Rhyme stays loose: slant rhyme and vowel echoes over perfect rhyme; a perfectly rhymed four-line block sounds like a greeting card here, where it would sound right in Classic Soul.",
+            "Vulnerability is the default register \u2014 flaws, jealousy, and mixed feelings get said plainly; sensuality shows up as honesty about wanting someone, not as seduction talk.",
+            "Write what the user would text: specific, present-tense, small details pulled from their actual story (the place, the time of night, the exact habit) beat poetic images every time.",
+            "Leave ad-lib space at line ends and behind the hook \u2014 keep the main line short enough that an answer vocal can echo or comment underneath it.",
+            "The double entendre lives in the hook and plays it casual \u2014 one phrase that reads as love and self-worth at once, dropped without being announced.",
+            "POV: present tense \u2014 the song sounds like it is being said tonight, not remembered from years away.",
+            "Choruses lift melodically but stay low-key \u2014 a raised refrain, not a belted anthem; the bridge often drops to near-spoken honesty, the most naked moment of the song."
+          ],
+          "rendering": "Warm sparse keys or a clean electric guitar loop over sub-heavy 808 bass, with soft half-time snares and plenty of air between elements. Lead vocal close-miked and intimate, stacked harmonies arriving on the hook, answer ad-libs tucked behind the lead. Modern polish with light vocal effects \u2014 a 2010s-to-now sheen, never busy.",
+          "storyFit": "Best for real, messy, current relationship stories \u2014 situationships, self-worth after a breakup, healing, wanting someone you shouldn't, complicated love told honestly. Serves badly: formal tributes, whole-life story songs, weddings that want grandeur, or anything needing big-band ceremony.",
+          "parodyTraps": "Over-singing every line instead of talking some of them; pet-name filler and stock compliments instead of the user's actual details; tidy nursery rhymes; announcing the sexy or sad part instead of just saying the true thing; filling the space that should stay empty for ad-libs."
+        },
+        {
+          "id": "90s-rnb",
+          "name": "90s R&B",
+          "oneLine": "The golden-era sound \u2014 big stacked harmonies, hip-hop drums under grown love songs, and choruses built to be belted by a group.",
+          "tempoGroove": "Ballads 60\u201376 BPM with heavy swung sixteenth-notes (the fast notes lean long-short instead of even); hip-hop-soul mid-tempos high-80s to mid-100s over a boom-bap backbeat (the snare cracking on beats 2 and 4 \u2014 classic head-nod hip-hop drums); new-jack-swing uptempos (the late-80s style that put hip-hop drums under R&B songs) roughly 104\u2013116 with a hard bounce. Word density low-to-moderate in verses; choruses are short and endlessly repeatable.",
+          "writingDials": [
+            "The chorus is an anthem: short, declarative, metrically parallel lines (matching syllable counts and stresses) built for group harmony \u2014 this is the one sibling where the chorus must survive four voices belting it at once.",
+            "Verses are pleading and direct \u2014 full sentences of devotion, apology, or desire aimed straight at the person; less irony and more open commitment than any other R&B sub-genre.",
+            "Run-room is a writing job: end key lines on open vowels and leave the last beat or two of the bar empty so the lead can run; a syllable-packed line ending kills the style. This is the firewall against Classic Soul: 90s verses are full conversational sentences that stop early to leave room for runs, where Classic Soul verses are short stress-locked lines punched right on the beat.",
+            "Rhyme lands tidier than modern R&B \u2014 end rhymes hit more reliably \u2014 but the honest word still outranks the rhyming one.",
+            "Sensuality is confident and stated (grown and unashamed) while vulnerability's natural home is the bridge \u2014 the begging, the confession, the admission of fault usually lands there; but if the user's story IS the confession, the story wins and the whole song can carry it.",
+            "Call-and-response is structural, not decoration: write lead lines that a background stack can answer, and plan a repeated end-vamp (the chorus loops while the lead sings freely over it).",
+            "Double entendres go bolder here \u2014 the slow-jam tradition lets one physical image carry the song's second meaning, planted in verse one and paid off in the hook.",
+            "POV: full sincerity, no detached narration \u2014 and the address stays locked on that one person to the last note; it never widens to the room the way Classic Soul does."
+          ],
+          "rendering": "Boom-bap or live-feel drums under lush keys (Rhodes warmth, bell-tone synths), real moving bass lines, and big stacked background harmonies treated as their own instrument. Gospel-trained lead vocal upfront with runs at phrase ends, church-flavored chord changes, and an extended outro vamp \u2014 a late-80s-through-90s radio warmth throughout (the new-jack-swing option sits at the earlier end of that window).",
+          "storyFit": "Best for devotion, weddings, apologies, winning somebody back, grown committed romance, and friend-group anthems that want harmony and lift. Serves badly: detached or ironic stories, guarded narrators, and minimal lo-fi moods \u2014 this style cannot keep its heart hidden.",
+          "parodyTraps": "Cramming in dated pet names and 90s slang the user never wrote (the era lives in the chords and harmonies, not the vocabulary); turning every single line into a run cue; choruses that are paragraphs instead of chants; wearing the decade as a costume instead of writing sincere devotion."
+        },
+        {
+          "id": "2000s-rnb",
+          "name": "2000s R&B",
+          "oneLine": "The turn-of-the-millennium sound \u2014 glossy production and dramatic story-songs where one star voice narrates the night everything changed.",
+          "tempoGroove": "Ballads 60\u201380 BPM with big dramatic peaks; mid-tempos 88\u2013105 over crisp programmed drums with a smooth head-nod bounce; club-leaning uptempos up to about 115. Word density moderate-to-high in verses \u2014 full narrative sentences that fill the bar \u2014 then choruses tighten into short, clean, resolving lines.",
+          "writingDials": [
+            "Verses tell a story in order \u2014 set the scene, then the event, then the fallout; verse two advances the plot like a second act. No sibling narrates like this: Contemporary confesses present-tense feelings, 90s pleads straight at the person.",
+            "The chorus is one clean, complete statement of the situation, sung by a single star voice \u2014 tidier than Contemporary's loose refrain, but never built for the four-voice group belt of 90s R&B.",
+            "Drama is allowed to peak theatrically \u2014 the ultimatum, the discovery, the confession said out loud \u2014 where Contemporary would underplay it and Quiet Storm would forbid it.",
+            "Run-room serves one show-off voice: leave open line-endings at the emotional peaks for a solo run; background vocals echo the lead's words instead of answering them \u2014 the opposite of 90s call-and-response.",
+            "Rhyme resolves at line ends more reliably than Contemporary because the narrative wants closure, but stays looser than Classic Soul's clean perfect rhymes.",
+            "The bridge is the plot twist: the reveal, the decision, the thing the listener didn't know yet \u2014 not just a deeper feeling.",
+            "POV: often starts in past tense telling what happened, then flips to present at the hook where the feeling lands now \u2014 the only sibling where past-tense storytelling is the default."
+          ],
+          "rendering": "Glossy programmed drums with crisp snares, plush keys or plucked string-like synth lines, deep polished bass, dramatic string or choir pads at the peaks. One star lead vocal front and center with confident runs and doubled hooks, background vocals echoing the lead rather than answering it \u2014 an early-2000s radio shine, glossier than 90s warmth, fuller than trap-soul's empty space.",
+          "storyFit": "Best for stories with a plot: a confession, a confrontation, a dramatic apology, the night everything changed, a breakup with actual events in it. Serves badly: quiet contentment, meditative growth stories, and whisper-close intimacy \u2014 this style needs something to happen.",
+          "parodyTraps": "Era props (flip phones, club scenes, the other woman) the user never gave; melodrama with no real event underneath it; over-running every line instead of saving runs for the peaks; letting the era's stock plots swallow the user's actual story."
+        },
+        {
+          "id": "neo-soul",
+          "name": "Neo-Soul",
+          "oneLine": "Loose, live, poetic soul \u2014 jazz chords, behind-the-beat grooves, and lyrics that read like spoken poetry about love and self.",
+          "tempoGroove": "60\u201395 BPM with a heavily behind-the-beat, slightly drunken swing \u2014 the drums drag on purpose and the voice floats over the bar line. Word density is flexible: lines can be talky and dense or stretch one thought across four bars; either way the phrasing never sits squarely on the grid.",
+          "writingDials": [
+            "Phrasing is elastic: start lines late, let them cross bar lines, resolve where natural speech would resolve \u2014 write for a singer who treats the beat as a suggestion, the opposite of Classic Soul's on-the-beat punch.",
+            "Imagery does the heavy lifting \u2014 abstract feelings must become physical pictures (a place, a body, a meal, weather from the user's world) \u2014 but every image must be built from the user's own story details, never pulled from the genre's stock shelf; this is the most metaphor-rich of all the siblings.",
+            "The subject widens past romance: self-knowledge, spirit, community, growth \u2014 a neo-soul love song is always also about who the narrator is becoming.",
+            "Rhyme is optional and mostly internal \u2014 vowel sounds inside the lines carry the musicality; forced end-rhyme flattens the poetry and marks the writer as an outsider.",
+            "Sensuality is slow-burn and adult, carried through metaphor rather than statement; vulnerability sounds like meditation, not confession or begging.",
+            "Repetition works as mantra: a phrase returns with small changes until it deepens \u2014 choruses are allowed to circle rather than lift, unlike every other sibling.",
+            "Write fewer words than feel necessary and leave long instrumental pockets \u2014 the band, the hum, and the silence are co-writers.",
+            "The double entendre is a spirit/body twin \u2014 one image that means both the lover and the higher thing, sustained rather than punchlined."
+          ],
+          "rendering": "Fender Rhodes with extended jazz chords, warm live bass, dusty in-the-pocket drums that drag a hair behind, muted guitar licks, optional horns. Vocals layered loose and human \u2014 hummed ad-libs, spoken asides, minimal pitch correction \u2014 with a late-90s/early-2000s organic, analog warmth and room to breathe.",
+          "storyFit": "Best for reflective stories \u2014 personal growth, self-love, gratitude, long-term love seen from altitude, roots and family lineage, spiritual searching. Serves badly: urgent drama, petty conflict, club energy, or any story that needs to move fast and hit hard on the beat.",
+          "parodyTraps": "Fake-deep word salad with no concrete story underneath; mystical props stacked up as decoration; imitating vocal scatting or filler syllables on the page; poeticness with zero specific detail from the user's actual life \u2014 the poetry must be built FROM their story, not draped over it."
+        },
+        {
+          "id": "trap-soul",
+          "name": "Trap-Soul / Alt-R&B",
+          "oneLine": "Moody late-night R&B over trap drums \u2014 short melodic phrases, blunt honesty, atmosphere over polish.",
+          "tempoGroove": "Felt tempo 60\u201380 BPM in half-time (often written 120\u2013160 with rolling hi-hats doubling and tripling above the slow snare). Word density is the lowest-per-bar of the modern siblings: short clipped phrases with real dead air between them, and heavy repetition doing melodic work.",
+          "writingDials": [
+            "Phrases run short and clipped \u2014 roughly three to seven words, dropped like texts, each followed by space; long flowing sentences break the style instantly.",
+            "Repetition IS the hook: one blunt phrase repeated with small melodic variation beats a clever constructed chorus \u2014 write the one line that can loop and mean more each pass.",
+            "The register is numb-honest: desire, guilt, distrust, and pride sit side by side without apology; vulnerability gets admitted flatly, never dramatized \u2014 the coolness of delivery is itself the feeling.",
+            "Verses slide between singing and rhythmic talk \u2014 write lines that work equally well spoken and sung, because the performer will blur the two.",
+            "Rhyme leans rap-adjacent: internal rhyme, repeated end-words, and identical-word line endings are idiomatic here, not lazy \u2014 where 90s R&B would call that a miss.",
+            "Double entendres are street-smart and casual \u2014 money/love flips, city/person flips \u2014 dropped in passing, often in an opening line rather than saved for the hook, and never explained.",
+            "POV: guard up \u2014 the narrator states how things are more than how they hurt; the address is direct but keeps emotional distance.",
+            "Ad-libs are punctuation, not runs: plan single echo words and short tags after lines; long vocal runs are rare, and tone carries what runs would carry elsewhere.",
+            "Cross-genre firewall: hip-hop's Melodic Rap and gospel's urban/trap room run the same drums and tempo as this one \u2014 the dial that makes it Trap-Soul is the guard staying up, feelings admitted flatly instead of sung as an open ache or told as a testimony."
+          ],
+          "rendering": "Dark ambient pads and detuned keys over a booming 808 sub, crisp trap hi-hats rolling in double and triple time, half-time snare. Vocals sit in reverb and delay with a subtle Auto-Tune color, doubled hooks, and murmured background ad-libs \u2014 a 2015-to-now nocturnal palette, minimal and spacious.",
+          "storyFit": "Best for situationships, late-night regret, mixed feelings, ambition tangled with love, guarded hearts, and stories the user tells in blunt fragments. Serves badly: weddings, tributes to parents, joyful celebration, wholesome family stories, or any narrator who wants to sound fully open-hearted.",
+          "parodyTraps": "Forcing designer brands, substances, or city clich\xE9s the user never gave; over-singing \u2014 this style murmurs, it does not run; rhyming too neatly; letting the narrator gush emotionally when the style's whole identity is the guard staying up; cramming words into space that must stay empty."
+        },
+        {
+          "id": "quiet-storm",
+          "name": "Quiet Storm / Slow Jam",
+          "oneLine": "The grown-and-slow late-night ballad \u2014 candlelight tempo, patient phrasing, romance treated like fine dining.",
+          "tempoGroove": "Felt tempo roughly 50\u201380 BPM, straight or gently swung, sometimes in 6/8 (a rolling, waltz-like sway); some grooves are written faster but sway in half-time. Word density is the lowest of all siblings \u2014 every line gets room to bloom, and the words move at speaking-to-one-person pace.",
+          "writingDials": [
+            "Patience is the craft: one idea per section, unhurried \u2014 a verse may spend four lines setting a single scene; rushing the words is the cardinal sin of this style.",
+            "Address is intimate second person at whisper distance \u2014 the song is written for an audience of one, in the room, tonight, and every line should survive being said that close.",
+            "Sensuality is adult and elegant \u2014 suggestion over statement; the double entendre here is velvet: one ordinary domestic or natural image that turns romantic on the second listen and sustains across the whole song.",
+            "Every style wants singable vowels, but none holds notes as long as this one \u2014 so word choice is stricter here than in any sibling: long open vowels on the held notes, soft consonants throughout, lines that stay beautiful at half volume.",
+            "Vulnerability is devotional \u2014 gratitude, promise, cherishing \u2014 not wound-airing; if conflict appears at all, it resolves inside the song.",
+            "The climax is a vamp (the chorus loops while the lead climbs freely over it), not a bigger chorus: plan a final stretch where the chorus repeats and the lead ascends \u2014 so the chorus words must be simple enough to survive twenty repeats.",
+            "Rhyme lands soft and optional; a gently placed slant rhyme suits the mood better than the snap of a perfect one.",
+            "No hype interjections or energy filler anywhere \u2014 elegance is the register from first line to last, which no other sibling demands this strictly."
+          ],
+          "rendering": "Silky electric piano with soft strings or warm synth pads, gentle drums with a rimshot snare (brushed or softly programmed), round smooth bass, optional saxophone or muted guitar. Lead vocal velvet and close-miked, restraint throughout, with the tasteful runs saved for the final vamp \u2014 mid-70s-through-90s adult late-night radio warmth.",
+          "storyFit": "Best for anniversaries, long marriages, proposals, devoted grown romance, and songs sung to a spouse or lifelong partner. Serves badly: breakups in progress, anger, casual flings, group anthems, or stories that need modern slang energy and pace.",
+          "parodyTraps": "Running the seduction-clich\xE9 checklist (wine, fireplace, silk) instead of using the couple's real details; breathy overacting; letting the words rush ahead of the tempo; getting explicit \u2014 this style seduces by implication only; treating the genre as a wink or a skit instead of full sincerity."
+        },
+        {
+          "id": "classic-soul",
+          "name": "Classic Soul / Motown",
+          "oneLine": "The 60s-70s foundation \u2014 church-born voices, live bands, and plainspoken songs that hit like testimony.",
+          "tempoGroove": "Uptempo Motown-style grooves roughly 100\u2013130 BPM with a driving backbeat and tambourine; southern-soul ballads 55\u201380, often in a slow 6/8 sway. Words sit ON the beat more than any sibling \u2014 punchy, symmetrical phrases whose stressed syllables lock to the backbeat; density moderate and even.",
+          "writingDials": [
+            "Plain words, big feelings: the vocabulary stays simple and universal; the craft lives in stress placement and escalating repetition, not in clever wordplay \u2014 the opposite bet from Neo-Soul.",
+            "Lines land on the beat \u2014 write tight, symmetrical phrases whose stressed syllables hit where the snare hits, short enough for a horn section to punch between them; where 90s R&B writes longer conversational sentences that stop early to leave run-room, Classic Soul locks the words to the beat itself.",
+            "Call-and-response with the background voices is written into the lyric: plan short answer phrases and echo hooks for the backing trio in both verse and chorus.",
+            "The register is testimony \u2014 love sworn, lost, or begged for at full voice and full sincerity; irony, guardedness, and cool detachment do not exist in this style.",
+            "Repetition escalates: the same chorus words return hotter each time, and the outro repeats the hook while the lead preaches and improvises over it.",
+            "The double entendre is the church/love twin \u2014 the beloved described in near-worship language so one lyric serves both the altar and the bedroom, a tradition carried straight from gospel roots. This is also what separates the room from gospel's quartet lane: Classic Soul is secular love and celebration that borrows worship language, where Quartet-Style's engine is God's act inside a narrated story \u2014 scenes, a drive, an anchor phrase.",
+            "Rhyme is clean and confident \u2014 simple perfect rhymes are idiomatic here and read as timeless, where the same rhymes would read as childish in Contemporary R&B.",
+            "POV: full voice, testimony register \u2014 and unlike 90s R&B, the address is allowed to widen from one person to everybody listening by the final chorus, testimony becoming celebration."
+          ],
+          "rendering": "A live rhythm section \u2014 real drums, electric bass, chanking rhythm guitar (short choppy strums right on the beat), piano or organ \u2014 with horn stabs and string sweetening; tambourine on the backbeat for uptempo numbers. Raw, gospel-fired lead vocal with a background trio answering; 1960s-70s analog warmth, real room sound, no modern vocal effects.",
+          "storyFit": "Best for tributes, milestone celebrations, songs for parents and grandparents, timeless full-hearted declarations of love, and joyful dance-along family songs. Serves badly: modern situationship nuance, guarded or ironic narrators, minimal lo-fi moods, and stories that hinge on texting-era details.",
+          "parodyTraps": "Fake-vintage slang and era name-dropping \u2014 the period lives in the band, the chords, and the phrasing, never in the vocabulary; over-sweetening into jingle territory; wordy verses a horn section cannot punch around; imitation-oldies pastiche instead of sincere testimony built from the user's story."
+        }
+      ],
+      "cues": [
+        {
+          "cue": "situationship",
+          "strength": "weak",
+          "roomId": "contemporary-rnb"
+        },
+        {
+          "cue": "messy",
+          "strength": "weak",
+          "roomId": "contemporary-rnb"
+        },
+        {
+          "cue": "jealous",
+          "strength": "weak",
+          "roomId": "contemporary-rnb"
+        },
+        {
+          "cue": "healing",
+          "strength": "weak",
+          "roomId": "contemporary-rnb"
+        },
+        {
+          "cue": "self-worth",
+          "strength": "weak",
+          "roomId": "contemporary-rnb"
+        },
+        {
+          "cue": "not official",
+          "strength": "weak",
+          "roomId": "contemporary-rnb"
+        },
+        {
+          "cue": "wedding",
+          "strength": "weak",
+          "roomId": "90s-rnb"
+        },
+        {
+          "cue": "win her back",
+          "strength": "strong",
+          "roomId": "90s-rnb"
+        },
+        {
+          "cue": "win him back",
+          "strength": "strong",
+          "roomId": "90s-rnb"
+        },
+        {
+          "cue": "win them back",
+          "strength": "strong",
+          "roomId": "90s-rnb"
+        },
+        {
+          "cue": "apology",
+          "strength": "weak",
+          "roomId": "90s-rnb"
+        },
+        {
+          "cue": "90s",
+          "strength": "strong",
+          "roomId": "90s-rnb"
+        },
+        {
+          "cue": "new jack swing",
+          "strength": "strong",
+          "roomId": "90s-rnb"
+        },
+        {
+          "cue": "sing along",
+          "strength": "weak",
+          "roomId": "90s-rnb"
+        },
+        {
+          "cue": "harmony",
+          "strength": "weak",
+          "roomId": "90s-rnb"
+        },
+        {
+          "cue": "harmonies",
+          "strength": "weak",
+          "roomId": "90s-rnb"
+        },
+        {
+          "cue": "2000s",
+          "strength": "strong",
+          "roomId": "2000s-rnb"
+        },
+        {
+          "cue": "cheated",
+          "strength": "weak",
+          "roomId": "2000s-rnb"
+        },
+        {
+          "cue": "cheating",
+          "strength": "weak",
+          "roomId": "2000s-rnb"
+        },
+        {
+          "cue": "confrontation",
+          "strength": "weak",
+          "roomId": "2000s-rnb"
+        },
+        {
+          "cue": "confession",
+          "strength": "weak",
+          "roomId": "2000s-rnb"
+        },
+        {
+          "cue": "found out",
+          "strength": "weak",
+          "roomId": "2000s-rnb"
+        },
+        {
+          "cue": "caught him",
+          "strength": "weak",
+          "roomId": "2000s-rnb"
+        },
+        {
+          "cue": "caught her",
+          "strength": "weak",
+          "roomId": "2000s-rnb"
+        },
+        {
+          "cue": "caught them",
+          "strength": "weak",
+          "roomId": "2000s-rnb"
+        },
+        {
+          "cue": "self-discovery",
+          "strength": "weak",
+          "roomId": "neo-soul"
+        },
+        {
+          "cue": "who i'm becoming",
+          "strength": "strong",
+          "roomId": "neo-soul"
+        },
+        {
+          "cue": "who i am becoming",
+          "strength": "strong",
+          "roomId": "neo-soul"
+        },
+        {
+          "cue": "finding myself",
+          "strength": "weak",
+          "roomId": "neo-soul"
+        },
+        {
+          "cue": "growth",
+          "strength": "weak",
+          "roomId": "neo-soul"
+        },
+        {
+          "cue": "spirit",
+          "strength": "weak",
+          "roomId": "neo-soul"
+        },
+        {
+          "cue": "grateful",
+          "strength": "weak",
+          "roomId": "neo-soul"
+        },
+        {
+          "cue": "gratitude",
+          "strength": "weak",
+          "roomId": "neo-soul"
+        },
+        {
+          "cue": "guard up",
+          "strength": "strong",
+          "roomId": "trap-soul"
+        },
+        {
+          "cue": "guarded",
+          "strength": "weak",
+          "roomId": "trap-soul"
+        },
+        {
+          "cue": "late night",
+          "strength": "weak",
+          "roomId": "trap-soul"
+        },
+        {
+          "cue": "regret",
+          "strength": "weak",
+          "roomId": "trap-soul"
+        },
+        {
+          "cue": "ambition",
+          "strength": "weak",
+          "roomId": "trap-soul"
+        },
+        {
+          "cue": "pride",
+          "strength": "weak",
+          "roomId": "trap-soul"
+        },
+        {
+          "cue": "anniversary",
+          "strength": "strong",
+          "roomId": "quiet-storm"
+        },
+        {
+          "cue": "propose",
+          "strength": "strong",
+          "roomId": "quiet-storm"
+        },
+        {
+          "cue": "proposal",
+          "strength": "strong",
+          "roomId": "quiet-storm"
+        },
+        {
+          "cue": "slow jam",
+          "strength": "strong",
+          "roomId": "quiet-storm"
+        },
+        {
+          "cue": "my wife",
+          "strength": "weak",
+          "roomId": "quiet-storm"
+        },
+        {
+          "cue": "my husband",
+          "strength": "weak",
+          "roomId": "quiet-storm"
+        },
+        {
+          "cue": "spouse",
+          "strength": "weak",
+          "roomId": "quiet-storm"
+        },
+        {
+          "cue": "years together",
+          "strength": "weak",
+          "roomId": "quiet-storm"
+        },
+        {
+          "cue": "motown",
+          "strength": "strong",
+          "roomId": "classic-soul"
+        },
+        {
+          "cue": "old school",
+          "strength": "weak",
+          "roomId": "classic-soul"
+        },
+        {
+          "cue": "tribute",
+          "strength": "weak",
+          "roomId": "classic-soul"
+        },
+        {
+          "cue": "throwback",
+          "strength": "weak",
+          "roomId": "classic-soul"
+        },
+        {
+          "cue": "milestone",
+          "strength": "weak",
+          "roomId": "classic-soul"
+        },
+        {
+          "cue": "grandparents",
+          "strength": "weak",
+          "roomId": "classic-soul"
+        },
+        {
+          "cue": "grandma",
+          "strength": "weak",
+          "roomId": "classic-soul"
+        },
+        {
+          "cue": "grandpa",
+          "strength": "weak",
+          "roomId": "classic-soul"
+        },
+        {
+          "cue": "grandfather",
+          "strength": "weak",
+          "roomId": "classic-soul"
+        },
+        {
+          "cue": "for my parents",
+          "strength": "weak",
+          "roomId": "classic-soul"
+        },
+        {
+          "cue": "mom and dad",
+          "strength": "weak",
+          "roomId": "classic-soul"
+        },
+        {
+          "cue": "80s",
+          "strength": "weak",
+          "roomId": "classic-soul"
+        }
+      ]
+    }
+  },
+  "hash": "314364581034",
+  "approxTokens": {
+    "core": 1218,
+    "largestSlice": 2750
+  }
+};
+
+// server/engine/landing.ts
+function squash(text) {
+  return text.toLowerCase().replace(/[^a-z0-9]+/g, "");
+}
+function scanNorm(text) {
+  return text.toLowerCase().replace(/[^a-z0-9]+/g, " ").trim();
+}
+function containsPhrase(haystackScan, phraseScan) {
+  if (!phraseScan) return false;
+  return (" " + haystackScan + " ").includes(" " + phraseScan + " ");
+}
+var AMBIGUOUS_SINGLE_WORDS = /* @__PURE__ */ new Set([
+  "alt",
+  "alternative",
+  "classic",
+  "contemporary",
+  "modern",
+  "new",
+  "old",
+  "school",
+  "soul",
+  "quiet",
+  "storm",
+  "smooth",
+  "deep",
+  "dirty",
+  "hard",
+  "soft",
+  "southern",
+  "northern",
+  "western",
+  "eastern",
+  "coast",
+  "country",
+  "house",
+  "roots",
+  "golden",
+  "future",
+  "traditional",
+  "pop",
+  "wave",
+  "urban",
+  "indie",
+  "neo",
+  "progressive",
+  "experimental"
+]);
+var DECADE_WORDS = {
+  "20s": "twenties",
+  "30s": "thirties",
+  "40s": "forties",
+  "50s": "fifties",
+  "60s": "sixties",
+  "70s": "seventies",
+  "80s": "eighties",
+  "90s": "nineties"
+};
+function decadeWord(token) {
+  const match = /^(?:19|20)?([2-9]0)s$/.exec(token);
+  return match ? DECADE_WORDS[match[1] + "s"] : void 0;
+}
+function spellingVariants(text) {
+  const variants = /* @__PURE__ */ new Set();
+  variants.add(scanNorm(text));
+  if (text.includes("&")) {
+    variants.add(scanNorm(text.replace(/&/g, "n")));
+    variants.add(scanNorm(text.replace(/&/g, " and ")));
+  }
+  for (const v of [...variants]) {
+    const words = v.split(" ");
+    const respelled = words.map((w) => decadeWord(w) ?? w).join(" ");
+    if (respelled !== v) variants.add(respelled);
+    if (containsPhrase(v, "classic")) {
+      variants.add((" " + v + " ").split(" classic ").join(" old school ").trim());
+    }
+  }
+  variants.delete("");
+  return [...variants];
+}
+function isSafeInStory(scan) {
+  return scan.includes(" ") || !AMBIGUOUS_SINGLE_WORDS.has(scan);
+}
+function aliasesForRoom(room, genreForms) {
+  const bases = /* @__PURE__ */ new Set();
+  bases.add(room.id.replace(/-/g, " "));
+  bases.add(room.name);
+  for (const segment of room.name.split("/")) bases.add(segment);
+  const scans = /* @__PURE__ */ new Set();
+  for (const base of bases) {
+    for (const variant of spellingVariants(base)) {
+      scans.add(variant);
+      for (const genreForm of genreForms) {
+        if (variant !== genreForm && containsPhrase(variant, genreForm)) {
+          const short = scanNorm(
+            (" " + variant + " ").split(" " + genreForm + " ").join(" ")
+          );
+          if (short) scans.add(short);
+        }
+      }
+    }
+  }
+  const aliases = [];
+  for (const scan of scans) {
+    aliases.push({ roomId: room.id, scan, key: squash(scan), safeInStory: isSafeInStory(scan) });
+    const joined = squash(scan);
+    if (scan.includes(" ") && joined && !scans.has(joined)) {
+      aliases.push({ roomId: room.id, scan: joined, key: joined, safeInStory: true });
+    }
+  }
+  return aliases;
+}
+function buildAliases(pack) {
+  const genreForms = /* @__PURE__ */ new Set();
+  for (const form of [pack.name, ...pack.aliases]) {
+    for (const variant of spellingVariants(form)) genreForms.add(variant);
+  }
+  const aliases = [];
+  for (const room of pack.rooms) {
+    aliases.push(...aliasesForRoom(room, [...genreForms]));
+  }
+  return aliases;
+}
+function landRoom(pack, story, explicitPick) {
+  const aliases = buildAliases(pack);
+  const pick = (explicitPick ?? "").trim();
+  if (pick) {
+    const pickKey = squash(pick);
+    const exact = aliases.find((a) => a.key === pickKey);
+    if (exact) {
+      return { roomId: exact.roomId, rule: "picked", firedCues: [], notYetDeep: false };
+    }
+    const pickScan = scanNorm(pick);
+    const inside = aliases.filter((a) => containsPhrase(pickScan, a.scan));
+    if (inside.length > 0) {
+      const roomsNamed = new Set(inside.map((a) => a.roomId));
+      const longest = [...inside].sort(
+        (a, b) => b.scan.length - a.scan.length || a.roomId.localeCompare(b.roomId)
+      )[0];
+      return {
+        roomId: longest.roomId,
+        rule: "picked",
+        firedCues: [],
+        // a fusion pick has no page under its own name -> not-yet-deep
+        notYetDeep: roomsNamed.size > 1
+      };
+    }
+    return { roomId: pack.defaultRoomId, rule: "picked", firedCues: [], notYetDeep: true };
+  }
+  const storyScan = scanNorm(story);
+  const named = aliases.filter((a) => a.safeInStory && containsPhrase(storyScan, a.scan));
+  if (named.length > 0) {
+    const sorted = [...named].sort((a, b) => b.scan.length - a.scan.length);
+    const top = sorted[0];
+    const rival = sorted.find(
+      (a) => a.roomId !== top.roomId && a.scan.length === top.scan.length
+    );
+    if (!rival) {
+      return { roomId: top.roomId, rule: "picked", firedCues: [], notYetDeep: false };
+    }
+  }
+  const hitsByRoom = /* @__PURE__ */ new Map();
+  for (const mark of pack.cues) {
+    if (!containsPhrase(storyScan, scanNorm(mark.cue))) continue;
+    const entry = hitsByRoom.get(mark.roomId) ?? { strong: [], weak: [] };
+    const bucket = entry[mark.strength];
+    if (!bucket.includes(mark.cue)) bucket.push(mark.cue);
+    hitsByRoom.set(mark.roomId, entry);
+  }
+  const qualifying = [...hitsByRoom.entries()].filter(
+    ([, hits]) => hits.strong.length >= 1 || hits.weak.length >= 2
+  );
+  if (qualifying.length > 0) {
+    qualifying.sort(
+      ([, a], [, b]) => b.strong.length - a.strong.length || b.weak.length - a.weak.length
+    );
+    const [topRoomId, topHits] = qualifying[0];
+    const contested = qualifying.some(
+      ([roomId, hits]) => roomId !== topRoomId && hits.strong.length === topHits.strong.length && hits.weak.length === topHits.weak.length
+    );
+    if (!contested) {
+      return {
+        roomId: topRoomId,
+        rule: "inferred",
+        firedCues: [...topHits.strong, ...topHits.weak],
+        notYetDeep: false
+      };
+    }
+  }
+  return { roomId: pack.defaultRoomId, rule: "defaulted", firedCues: [], notYetDeep: false };
+}
+function describeLanding(landing, pack) {
+  const room = pack.rooms.find((r) => r.id === landing.roomId);
+  const roomName = room ? room.name : landing.roomId;
+  let sentence;
+  if (landing.rule === "picked") {
+    sentence = landing.notYetDeep ? `Your pick landed in ${roomName}.` : `You chose ${roomName}.`;
+  } else if (landing.rule === "inferred") {
+    sentence = `Your story sounded like ${roomName} (because you mentioned: ${landing.firedCues.join(", ")}).`;
+  } else {
+    sentence = `We used ${pack.name}'s home base: ${roomName}.`;
+  }
+  if (landing.notYetDeep) {
+    sentence += " We don't have a deep page for that exact pick yet, so we used the closest room we know well.";
+  }
+  return sentence;
+}
+
+// server/engine/checks.ts
+function tokenize(text) {
+  const matches = text.toLowerCase().match(/[a-z']+/g);
+  if (!matches) return [];
+  const words = [];
+  for (const raw of matches) {
+    const word = raw.replace(/'/g, "");
+    if (word.length > 0) words.push(word);
+  }
+  return words;
+}
+function distinctTokens(text) {
+  return new Set(tokenize(text));
+}
+function overlapRatio(a, b) {
+  const larger = Math.max(a.size, b.size);
+  if (larger === 0) return 1;
+  let shared = 0;
+  for (const token of a) if (b.has(token)) shared++;
+  return shared / larger;
+}
+function estimateSyllables(line) {
+  let total = 0;
+  for (const word of tokenize(line)) total += syllablesInWord(word);
+  return total;
+}
+function syllablesInWord(raw) {
+  const cleaned = raw.toLowerCase().replace(/[^a-z]/g, "");
+  if (cleaned.length === 0) return 0;
+  if (cleaned.length <= 3) return 1;
+  let w = cleaned;
+  if (/[^aeiouytd]ed$/.test(w)) {
+    w = w.slice(0, -2);
+  } else if (/[^aeiouysxz]es$/.test(w) && !/[cs]hes$/.test(w)) {
+    w = w.slice(0, -2);
+  } else if (/[^aeiouy]e$/.test(w) && !/[^aeiouy]le$/.test(w)) {
+    w = w.slice(0, -1);
+  }
+  const groups = w.replace(/^y/, "").match(/[aeiouy]+/g);
+  return Math.max(1, groups ? groups.length : 0);
+}
+var TAG_LINE = /^\s*\[([^\]]+)\]/;
+function parseDraft(draft) {
+  const lines = draft.split(/\r?\n/);
+  let title = null;
+  let sunoStart = -1;
+  let lyricsStart = -1;
+  for (let i = 0; i < lines.length; i++) {
+    const line = lines[i].trim();
+    if (title === null) {
+      const m = line.match(/^title\s*:\s*(.*)$/i);
+      if (m && m[1].trim().length > 0) title = m[1].trim();
+    }
+    if (sunoStart === -1 && /^###\s*suno\s+prompt\s*$/i.test(line)) sunoStart = i;
+    if (lyricsStart === -1 && /^###\s*lyrics\s*$/i.test(line)) lyricsStart = i;
+  }
+  let sunoPrompt = null;
+  if (sunoStart !== -1) {
+    const collected = [];
+    for (let i = sunoStart + 1; i < lines.length; i++) {
+      if (lines[i].trim().startsWith("###")) break;
+      collected.push(lines[i]);
+    }
+    sunoPrompt = collected.join("\n").trim();
+  }
+  let lyricsBody = null;
+  const sections = [];
+  const lyricLines = [];
+  if (lyricsStart !== -1) {
+    const bodyLines = lines.slice(lyricsStart + 1);
+    lyricsBody = bodyLines.join("\n");
+    let current = null;
+    for (const rawLine of bodyLines) {
+      const line = rawLine.trim();
+      if (line.length === 0) continue;
+      const tag = line.match(TAG_LINE);
+      if (tag) {
+        current = { tag: tag[1].trim().toLowerCase(), lines: [] };
+        sections.push(current);
+        continue;
+      }
+      lyricLines.push(line);
+      if (current) current.lines.push(line);
+    }
+  }
+  return { title, sunoPrompt, lyricsBody, sections, lyricLines };
+}
+var FUNCTION_WORDS = /* @__PURE__ */ new Set([
+  "a",
+  "am",
+  "an",
+  "and",
+  "are",
+  "as",
+  "at",
+  "be",
+  "been",
+  "being",
+  "but",
+  "by",
+  "did",
+  "do",
+  "does",
+  "dont",
+  "for",
+  "from",
+  "he",
+  "her",
+  "hers",
+  "him",
+  "his",
+  "how",
+  "i",
+  "if",
+  "im",
+  "in",
+  "is",
+  "it",
+  "its",
+  "me",
+  "mine",
+  "my",
+  "na",
+  "no",
+  "nor",
+  "not",
+  "of",
+  "off",
+  "oh",
+  "on",
+  "ooh",
+  "or",
+  "our",
+  "ours",
+  "out",
+  "over",
+  "she",
+  "so",
+  "than",
+  "that",
+  "the",
+  "their",
+  "them",
+  "then",
+  "these",
+  "they",
+  "this",
+  "those",
+  "to",
+  "under",
+  "up",
+  "us",
+  "was",
+  "we",
+  "were",
+  "what",
+  "when",
+  "where",
+  "who",
+  "whom",
+  "why",
+  "with",
+  "yeah",
+  "yet",
+  "you",
+  "your",
+  "yours"
+]);
+var STORY_STOPWORDS = /* @__PURE__ */ new Set([
+  "about",
+  "above",
+  "after",
+  "again",
+  "against",
+  "almost",
+  "along",
+  "already",
+  "although",
+  "always",
+  "among",
+  "another",
+  "anybody",
+  "anything",
+  "anyway",
+  "around",
+  "because",
+  "become",
+  "before",
+  "behind",
+  "being",
+  "below",
+  "beneath",
+  "beside",
+  "besides",
+  "between",
+  "beyond",
+  "cannot",
+  "could",
+  "couldnt",
+  "didnt",
+  "doesnt",
+  "doing",
+  "during",
+  "either",
+  "enough",
+  "every",
+  "everybody",
+  "everyone",
+  "everything",
+  "getting",
+  "going",
+  "gonna",
+  "gotta",
+  "having",
+  "herself",
+  "himself",
+  "itself",
+  "maybe",
+  "might",
+  "myself",
+  "neither",
+  "never",
+  "nobody",
+  "nothing",
+  "often",
+  "other",
+  "others",
+  "ought",
+  "ourselves",
+  "quite",
+  "rather",
+  "really",
+  "shall",
+  "should",
+  "shouldnt",
+  "since",
+  "somebody",
+  "someone",
+  "something",
+  "sometimes",
+  "still",
+  "their",
+  "theirs",
+  "themselves",
+  "there",
+  "theres",
+  "these",
+  "theyll",
+  "theyre",
+  "thing",
+  "things",
+  "those",
+  "though",
+  "through",
+  "throughout",
+  "toward",
+  "towards",
+  "under",
+  "underneath",
+  "until",
+  "wanna",
+  "wasnt",
+  "werent",
+  "whatever",
+  "whenever",
+  "where",
+  "whether",
+  "which",
+  "while",
+  "whose",
+  "within",
+  "without",
+  "would",
+  "wouldnt",
+  "youll",
+  "youre",
+  "yourself",
+  "yourselves"
+]);
+var GENERIC_SONG_WORDS = /* @__PURE__ */ new Set([
+  "love",
+  "loves",
+  "loved",
+  "loving",
+  "heart",
+  "hearts",
+  "night",
+  "nights",
+  "tonight",
+  "time",
+  "times",
+  "feel",
+  "feels",
+  "feeling",
+  "feelings",
+  "felt",
+  "baby",
+  "world",
+  "dream",
+  "dreams",
+  "dreaming",
+  "forever",
+  "alone",
+  "light",
+  "lights",
+  "shine",
+  "shining",
+  "fire",
+  "rain",
+  "tears",
+  "eyes",
+  "soul",
+  "souls",
+  "music",
+  "dance",
+  "dancing",
+  "song",
+  "songs",
+  "smile",
+  "touch"
+]);
+var LEAK_TOKENS = [
+  "coreemotion",
+  "worddensity",
+  "writingdials",
+  "roomid",
+  "step 1",
+  "the brief"
+];
+function contentWords(text) {
+  const seen = /* @__PURE__ */ new Set();
+  for (const word of tokenize(text)) {
+    if (!FUNCTION_WORDS.has(word)) seen.add(word);
+  }
+  return [...seen];
+}
+function distinctiveStoryTokens(story) {
+  const seen = /* @__PURE__ */ new Set();
+  for (const word of tokenize(story)) {
+    if (word.length <= 4) continue;
+    if (STORY_STOPWORDS.has(word) || GENERIC_SONG_WORDS.has(word)) continue;
+    seen.add(word);
+  }
+  return [...seen];
+}
+function rhymeKey(line) {
+  const wordsInLine = tokenize(line);
+  if (wordsInLine.length === 0) return null;
+  let last = wordsInLine[wordsInLine.length - 1];
+  if (last.length > 3 && /[^aeiouy]e$/.test(last) && !/[^aeiouy]le$/.test(last)) {
+    last = last.slice(0, -1);
+  }
+  const m = last.match(/[aeiouy]+[^aeiouy]*$/);
+  return m ? m[0] : null;
+}
+function runChecks(draft, opts) {
+  const parsed = parseDraft(draft);
+  const body = parsed.lyricsBody ?? "";
+  const checks = [];
+  {
+    const problems = [];
+    if (!parsed.title) problems.push("missing or empty Title line");
+    if (parsed.sunoPrompt === null) {
+      problems.push('missing "### SUNO Prompt" section');
+    } else {
+      const promptWords = parsed.sunoPrompt.split(/\s+/).filter((w) => w.length > 0).length;
+      if (promptWords < 25 || promptWords > 120) {
+        problems.push(`SUNO prompt is ${promptWords} words (need 25-120)`);
+      }
+    }
+    if (parsed.lyricsBody === null) {
+      problems.push('missing "### Lyrics" section');
+    } else {
+      if (!parsed.sections.some((s) => s.tag.startsWith("verse"))) problems.push("no [Verse] tag in lyrics");
+      if (!parsed.sections.some((s) => s.tag.startsWith("chorus"))) problems.push("no [Chorus] tag in lyrics");
+    }
+    checks.push({
+      id: "format",
+      severity: "fail",
+      ok: problems.length === 0,
+      detail: problems.length > 0 ? problems.join("; ") : void 0
+    });
+  }
+  {
+    const lowered = body.toLowerCase();
+    const leaks = [];
+    for (const token of LEAK_TOKENS) {
+      if (lowered.includes(token)) leaks.push(`"${token}"`);
+    }
+    if (body.includes("GENERATION_DECLINED")) leaks.push("GENERATION_DECLINED");
+    if (/\{[\s\S]{18,}?\}/.test(body)) leaks.push("curly-brace block");
+    if (body.split(/\r?\n/).some((line) => line.trim().startsWith("#"))) {
+      leaks.push("markdown header in lyrics");
+    }
+    checks.push({
+      id: "leaked-labels",
+      severity: "fail",
+      ok: leaks.length === 0,
+      detail: leaks.length > 0 ? `leaked: ${leaks.join(", ")}` : void 0
+    });
+  }
+  {
+    const storyTokens2 = distinctiveStoryTokens(opts.story);
+    if (storyTokens2.length < 2) {
+      checks.push({ id: "story-fidelity", severity: "fail", ok: true, detail: "story too short to verify" });
+    } else {
+      const lyricStems = new Set(tokenize(body).map((w) => w.slice(0, 5)));
+      const matched = storyTokens2.filter((t) => lyricStems.has(t.slice(0, 5)));
+      checks.push({
+        id: "story-fidelity",
+        severity: "fail",
+        ok: matched.length >= 2,
+        detail: matched.length >= 2 ? `story tokens in lyrics: ${matched.slice(0, 6).join(", ")}` : `only ${matched.length} of ${storyTokens2.length} distinctive story tokens reached the lyrics`
+      });
+    }
+  }
+  {
+    const hookContent = contentWords(opts.hook);
+    const firstChorus = parsed.sections.find((s) => s.tag.startsWith("chorus"));
+    if (!firstChorus) {
+      checks.push({ id: "hook-placement", severity: "fail", ok: false, detail: "no [Chorus] block to place the hook in" });
+    } else if (hookContent.length === 0) {
+      checks.push({ id: "hook-placement", severity: "fail", ok: true, detail: "hook has no content words to place" });
+    } else {
+      const chorusTokens = distinctTokens(firstChorus.lines.join("\n"));
+      const found = hookContent.filter((w) => chorusTokens.has(w));
+      checks.push({
+        id: "hook-placement",
+        severity: "fail",
+        ok: found.length / hookContent.length >= 0.6,
+        detail: `${found.length}/${hookContent.length} hook words in first chorus`
+      });
+    }
+  }
+  {
+    const hookContent = new Set(contentWords(opts.hook));
+    const shared = contentWords(parsed.title ?? "").filter((w) => hookContent.has(w));
+    checks.push({
+      id: "title-hook",
+      severity: "warn",
+      ok: shared.length >= 1,
+      detail: shared.length > 0 ? `shared: ${shared.join(", ")}` : "title shares no content word with the hook"
+    });
+  }
+  {
+    const chorusSections = parsed.sections.filter((s) => s.tag.startsWith("chorus"));
+    if (chorusSections.length < 2) {
+      checks.push({ id: "chorus-consistency", severity: "fail", ok: true, detail: "fewer than two chorus blocks" });
+    } else {
+      const tokenSets = chorusSections.map((s) => distinctTokens(s.lines.join("\n")));
+      let worst = 1;
+      for (let i = 0; i < tokenSets.length; i++) {
+        for (let j = i + 1; j < tokenSets.length; j++) {
+          worst = Math.min(worst, overlapRatio(tokenSets[i], tokenSets[j]));
+        }
+      }
+      checks.push({
+        id: "chorus-consistency",
+        severity: "fail",
+        ok: worst >= 0.7,
+        detail: `worst chorus-pair overlap ${Math.round(worst * 100)}%`
+      });
+    }
+  }
+  {
+    const offenders = [];
+    for (const section of parsed.sections) {
+      if (!section.tag.startsWith("chorus") || section.lines.length < 2) continue;
+      const counts = section.lines.map(estimateSyllables);
+      const spread = Math.max(...counts) - Math.min(...counts);
+      if (spread > 3) offenders.push(`[${section.tag}] syllable spread ${spread} (max 3)`);
+    }
+    checks.push({
+      id: "metric-parallel",
+      severity: "warn",
+      ok: offenders.length === 0,
+      detail: offenders.length > 0 ? offenders.join("; ") : void 0
+    });
+  }
+  {
+    const counts = parsed.lyricLines.map(estimateSyllables);
+    const keys = parsed.lyricLines.map(rhymeKey);
+    let flaggedAt = -1;
+    for (let i = 0; i + 6 <= parsed.lyricLines.length && flaggedAt === -1; i++) {
+      const window = counts.slice(i, i + 6);
+      if (Math.max(...window) - Math.min(...window) > 1) continue;
+      let rhymed = true;
+      for (let p = 0; p < 6 && rhymed; p += 2) {
+        const a = keys[i + p];
+        const b = keys[i + p + 1];
+        rhymed = a !== null && b !== null && a === b;
+      }
+      if (rhymed) flaggedAt = i;
+    }
+    checks.push({
+      id: "nursery-rhyme",
+      severity: "warn",
+      ok: flaggedAt === -1,
+      detail: flaggedAt === -1 ? void 0 : `sing-song wall starting at lyric line ${flaggedAt + 1}`
+    });
+  }
+  {
+    const densityText = opts.spec.wordDensity.toLowerCase();
+    let band = null;
+    if (densityText.includes("low")) band = [3, 7];
+    else if (densityText.includes("moderate")) band = [5, 10];
+    else if (densityText.includes("high") || densityText.includes("dense")) band = [8, 14];
+    if (band === null || parsed.lyricLines.length === 0) {
+      checks.push({
+        id: "word-density",
+        severity: "warn",
+        ok: true,
+        detail: band === null ? "no recognized density band in spec" : "no lyric lines to measure"
+      });
+    } else {
+      const totalWords = parsed.lyricLines.reduce((sum, line) => sum + tokenize(line).length, 0);
+      const avg = totalWords / parsed.lyricLines.length;
+      checks.push({
+        id: "word-density",
+        severity: "warn",
+        ok: avg >= band[0] && avg <= band[1],
+        detail: `avg ${avg.toFixed(1)} words/line vs band ${band[0]}-${band[1]}`
+      });
+    }
+  }
+  {
+    const verses = parsed.sections.filter((s) => s.tag.startsWith("verse"));
+    if (verses.length < 2) {
+      checks.push({ id: "verse-advance", severity: "warn", ok: true, detail: "fewer than two verse blocks" });
+    } else {
+      const v1 = distinctTokens(verses[0].lines.join("\n"));
+      const v2 = distinctTokens(verses[1].lines.join("\n"));
+      let shared = 0;
+      for (const token of v2) if (v1.has(token)) shared++;
+      const share = v2.size === 0 ? 1 : shared / v2.size;
+      checks.push({
+        id: "verse-advance",
+        severity: "warn",
+        ok: share < 0.6,
+        detail: `${Math.round(share * 100)}% of verse-2 tokens already in verse 1`
+      });
+    }
+  }
+  let failCount = 0;
+  let warnCount = 0;
+  for (const check of checks) {
+    if (check.ok) continue;
+    if (check.severity === "fail") failCount++;
+    else warnCount++;
+  }
+  return { checks, failCount, warnCount };
+}
+
+// server/engine/pipeline.ts
+var ENGINE_VERSION = "v3.0-rnb";
+var ENGINE_MODEL = "gpt-4.1";
+var EngineNotAvailable = class extends Error {
+  code = "engine_not_available";
+};
+var EngineFailure = class extends Error {
+  code = "engine_all_drafts_failed";
+  status = 422;
+  reasons;
+  constructor(reasons) {
+    super("The writing didn't meet the bar this time. Let's try again \u2014 you were not charged.");
+    this.reasons = reasons;
+  }
+};
+function resolveGenre(curriculum, genre) {
+  const norm = String(genre || "").toLowerCase().replace(/[^a-z0-9&]/g, "");
+  for (const pack of Object.values(curriculum.genres)) {
+    const candidates = [pack.id, pack.name.toLowerCase(), ...pack.aliases].map(
+      (a) => a.toLowerCase().replace(/[^a-z0-9&]/g, "")
+    );
+    if (candidates.includes(norm)) return pack;
+  }
+  return null;
+}
+function voiceLine(vocals) {
+  const v = String(vocals || "Female Solo");
+  if (/duet|group/i.test(v)) return "duet vocals";
+  if (/male/i.test(v) && !/female/i.test(v)) return "male vocal";
+  return "female vocal";
+}
+function parseFirstJson(text) {
+  const start = text.search(/[{[]/);
+  if (start === -1) throw new Error("no JSON found");
+  const open = text[start];
+  const close = open === "{" ? "}" : "]";
+  let depth = 0;
+  let inString = false;
+  let escaped = false;
+  for (let i = start; i < text.length; i++) {
+    const ch = text[i];
+    if (inString) {
+      if (escaped) escaped = false;
+      else if (ch === "\\") escaped = true;
+      else if (ch === '"') inString = false;
+      continue;
+    }
+    if (ch === '"') inString = true;
+    else if (ch === open) depth++;
+    else if (ch === close) {
+      depth--;
+      if (depth === 0) return JSON.parse(text.slice(start, i + 1));
+    }
+  }
+  throw new Error("unbalanced JSON");
+}
+async function planJson(generate, prompt) {
+  try {
+    return parseFirstJson(await generate(prompt, "plan"));
+  } catch {
+    return parseFirstJson(await generate(`${prompt}
+
+Return ONLY the JSON. No prose, no markdown fences.`, "plan"));
+  }
+}
+var STOPWORDS = new Set(
+  "the a an and or but so of to in on at for with from by is are was were be been am i you he she it we they me him her them my your his its our their this that these those as if then than when where what who how not no yes do does did done have has had will would could should can just really very about into over under again there here all any some one two also".split(" ")
+);
+function storyTokens(story) {
+  const seen = /* @__PURE__ */ new Set();
+  for (const raw of String(story).toLowerCase().split(/[^a-z']+/)) {
+    const w = raw.replace(/'/g, "");
+    if (w.length > 4 && !STOPWORDS.has(w)) seen.add(w);
+  }
+  return [...seen];
+}
+var OPEN_VOWEL_END = /[aeiou]y?$|[aeiou]h?$|ow$|ay$|igh$/i;
+function scoreHook(hook, tokens) {
+  const words = hook.trim().split(/\s+/).filter(Boolean);
+  let score = 0;
+  if (words.length >= 2 && words.length <= 6) score += 2;
+  if (words.length === 7) score += 1;
+  const lower = hook.toLowerCase();
+  if (tokens.some((t) => lower.includes(t.slice(0, 5)))) score += 2;
+  const last = words[words.length - 1] || "";
+  if (OPEN_VOWEL_END.test(last)) score += 1;
+  if (/["“”:;]/.test(hook)) score -= 1;
+  return score;
+}
+function briefPrompt(story, card) {
+  return `You are planning a song. Do not write any lyrics. Read the story and return ONLY a JSON object.
+
+THE ROOM this song lives in: ${card.name} \u2014 ${card.oneLine}
+Its tempo & groove: ${card.tempoGroove}
+
+THE STORY (the user's own words):
+${story}
+
+Return JSON with exactly these string fields:
+{
+  "coreEmotion": "the ONE specific feeling (not a category \u2014 'the ache of hearing they moved on' not 'sadness')",
+  "purpose": "what this song is FOR (dance, testify, feel seen, flirt, grieve...)",
+  "pov": "who is speaking, to whom, and why now",
+  "turn": "what changes inside this song \u2014 where it starts, where it turns, where it lands",
+  "spec": {
+    "tempo": "a BPM range for THIS song, inside the room's range",
+    "groove": "straight / swung / half-time \u2014 the feel for THIS song",
+    "barsPerSection": "bars for verse / chorus / bridge, e.g. 'verse 8, chorus 8, bridge 4'",
+    "wordDensity": "low / moderate / high \u2014 how densely words sit on this tempo"
+  }
+}`;
+}
+function validateBrief(raw, card, landing) {
+  const s = (v, fallback) => {
+    const t = typeof v === "string" ? v.trim() : "";
+    return t || fallback;
+  };
+  const spec = {
+    tempo: s(raw?.spec?.tempo, card.tempoGroove),
+    groove: s(raw?.spec?.groove, "straight"),
+    barsPerSection: s(raw?.spec?.barsPerSection, "verse 8, chorus 8, bridge 4"),
+    wordDensity: s(raw?.spec?.wordDensity, "moderate")
+  };
+  const brief = {
+    coreEmotion: s(raw?.coreEmotion, ""),
+    purpose: s(raw?.purpose, ""),
+    pov: s(raw?.pov, ""),
+    turn: s(raw?.turn, ""),
+    spec,
+    landing
+  };
+  if (!brief.coreEmotion || !brief.purpose || !brief.pov || !brief.turn) {
+    throw new Error("brief incomplete");
+  }
+  return brief;
+}
+function hooksPrompt(story, brief, card) {
+  return `You are naming a song, the way real writers sing twenty and keep one. Return ONLY a JSON array of 12 strings.
+
+Each string is a hook/title candidate: short (2-6 words), rhythmic, emotionally loaded, built from THIS story's actual details \u2014 never a generic phrase that could belong to anyone's song. In this room (${card.name}), a hook that means two things at once beats a sincere flat one \u2014 but it must land naturally, never announced.
+
+Core emotion: ${brief.coreEmotion}
+The turn: ${brief.turn}
+
+THE STORY:
+${story}`;
+}
+function sectionsPrompt(brief, hook, card) {
+  return `Plan the sections for one song. No lyrics. Return ONLY a JSON array of 4-8 objects like {"tag":"[Verse]","job":"..."}.
+
+Allowed tags: [Intro] [Verse] [Pre-Chorus] [Chorus] [Bridge] [Outro] (repeat [Verse]/[Chorus] as needed).
+Every job is one sentence saying what THAT section must do for THIS song (what verse 1 establishes, what the bridge reveals). The chorus builds around the hook "${hook}".
+Room conventions: ${card.name} \u2014 ${card.oneLine}
+Bars: ${brief.spec.barsPerSection}. The song's turn: ${brief.turn}`;
+}
+function validateSections(raw) {
+  if (!Array.isArray(raw) || raw.length < 4 || raw.length > 10) throw new Error("bad section plan");
+  const plan = raw.map((s) => ({
+    tag: String(s?.tag || "").trim(),
+    job: String(s?.job || "").trim()
+  }));
+  const tags = plan.map((p) => p.tag);
+  if (!tags.some((t) => t.startsWith("[Verse")) || !tags.some((t) => t.startsWith("[Chorus"))) {
+    throw new Error("section plan missing verse or chorus");
+  }
+  if (plan.some((p) => !p.tag.startsWith("[") || !p.job)) throw new Error("malformed section");
+  return plan;
+}
+function writerPrompt(args) {
+  const { core, pack, card, brief, hook, sections, story, vocals, variant, guidance } = args;
+  const sectionLines = sections.map((s) => `${s.tag} \u2014 ${s.job}`).join("\n");
+  const approach = variant === "hook-first" ? "Approach: get the chorus singing first in your head, then build every verse toward it. Output in normal top-to-bottom order." : "Approach: write the song straight through, top to bottom, one voice, one sitting.";
+  return `You are writing one real song for one specific person. Their story is the only source of truth \u2014 use their real details; never invent replacements for them.
+
+=== THE CRAFT (applies to every song) ===
+${core}
+
+=== HOW AN R&B WRITER THINKS ===
+${pack.profileText}
+
+=== THE ROOM: ${card.name} ===
+${card.oneLine}
+Tempo & groove: ${card.tempoGroove}
+How the writing changes in this room:
+${card.writingDials.map((d) => `- ${d}`).join("\n")}
+What makes it a parody (avoid every one of these): ${card.parodyTraps}
+
+=== THIS SONG'S BRIEF ===
+Core emotion: ${brief.coreEmotion}
+Purpose: ${brief.purpose}
+Point of view: ${brief.pov}
+The turn: ${brief.turn}
+Musical spec: tempo ${brief.spec.tempo}; groove ${brief.spec.groove}; ${brief.spec.barsPerSection}; word density ${brief.spec.wordDensity}.
+The hook (and title): ${hook}
+Section plan:
+${sectionLines}
+
+=== THE STORY (the user's own words) ===
+${story}
+
+${approach}${guidance ? `
+
+One more thing from the last attempt: ${guidance}` : ""}
+
+Vocal: ${voiceLine(vocals)}.
+
+Return exactly this format:
+Title: ${hook}
+### SUNO Prompt
+One 40-70 word production prompt for this exact song. Ground it in this room's sound: ${card.rendering}
+### Lyrics
+The song, with section tags in brackets.
+
+This is creative fiction for a music app. If you cannot write it, return ONLY the line "GENERATION_DECLINED".`;
+}
+var GUIDANCE = {
+  "story-fidelity": "use the real details from the story \u2014 name the actual places, objects, and moments the writer gave you",
+  "hook-placement": "the chorus must be built around the hook \u2014 the hook line leads it",
+  "chorus-consistency": "the chorus is the same words every time it returns",
+  format: "keep the exact Title / SUNO Prompt / Lyrics format with bracketed section tags",
+  "leaked-labels": "the lyrics must contain only the song itself \u2014 no notes, no labels, no planning talk"
+};
+function guidanceFor(reports) {
+  const failed = /* @__PURE__ */ new Set();
+  for (const r of reports) for (const c of r.checks) if (!c.ok && c.severity === "fail") failed.add(c.id);
+  const lines = [...failed].map((id) => GUIDANCE[id]).filter(Boolean);
+  return lines.join("; ");
+}
+async function runEngine(curriculum, inputs, generate, stage = () => {
+}) {
+  const pack = resolveGenre(curriculum, inputs.genre);
+  if (!pack) throw new EngineNotAvailable(`no curriculum for genre "${inputs.genre}"`);
+  const story = String(inputs.story || "").trim();
+  if (story.length < 10) {
+    throw Object.assign(new Error("Tell us the story first \u2014 a few sentences in your own words."), {
+      status: 400,
+      code: "story_required"
+    });
+  }
+  stage("Reading your story...");
+  const landing = landRoom(pack, story, inputs.subGenre);
+  const card = pack.rooms.find((r) => r.id === landing.roomId);
+  if (!card) throw new EngineNotAvailable(`room "${landing.roomId}" missing from pack`);
+  const landingNote = describeLanding(landing, pack);
+  stage(`Room: ${card.name} \u2014 ${landingNote}`);
+  const brief = validateBrief(await planJson(generate, briefPrompt(story, card)), card, landing);
+  stage("Writing hooks...");
+  const hooksRaw = await planJson(generate, hooksPrompt(story, brief, card));
+  const hooks = (Array.isArray(hooksRaw) ? hooksRaw : []).map((h) => String(h || "").trim()).filter((h) => h.length > 0 && h.length < 60);
+  if (hooks.length < 5) throw new EngineFailure(["hook step returned too few candidates"]);
+  const tokens = storyTokens(story);
+  const hook = hooks.map((h, i) => ({ h, score: scoreHook(h, tokens), i })).sort((a, b) => b.score - a.score || a.i - b.i)[0].h;
+  stage("Planning sections...");
+  const sections = validateSections(await planJson(generate, sectionsPrompt(brief, hook, card)));
+  const writeRound = async (guidance) => {
+    const variants = ["straight", "hook-first"];
+    const drafts = await Promise.all(
+      variants.map(
+        (variant) => generate(
+          writerPrompt({ core: curriculum.core, pack, card, brief, hook, sections, story, vocals: inputs.vocals, variant, guidance }),
+          "write"
+        ).catch(() => "")
+      )
+    );
+    return drafts.filter((d) => d && !d.includes("GENERATION_DECLINED")).map((d) => ({ draft: d, report: runChecks(d, { story, card, spec: brief.spec, hook }) }));
+  };
+  stage("Writing drafts...");
+  let attempts = await writeRound();
+  let draftsTried = attempts.length;
+  stage("Checking the writing...");
+  let passing = attempts.filter((a) => a.report.failCount === 0);
+  if (passing.length === 0) {
+    stage("Not good enough yet \u2014 one more pass...");
+    const retry = await writeRound(guidanceFor(attempts.map((a) => a.report)) || void 0);
+    draftsTried += retry.length;
+    passing = retry.filter((a) => a.report.failCount === 0);
+    if (passing.length === 0) {
+      const reasons = [...new Set([...attempts, ...retry].flatMap((a) => a.report.checks.filter((c) => !c.ok && c.severity === "fail").map((c) => c.id)))];
+      throw new EngineFailure(reasons);
+    }
+  }
+  passing.sort((a, b) => a.report.warnCount - b.report.warnCount);
+  const winner = passing[0];
+  return {
+    text: winner.draft.trim(),
+    meta: {
+      engineVersion: ENGINE_VERSION,
+      curriculumHash: curriculum.hash,
+      landing,
+      landingNote,
+      hook,
+      brief,
+      draftsTried,
+      winnerWarnings: winner.report.warnCount
+    }
+  };
+}
+
+// server/ai.ts
 var ASK_ANDRE_AUDIT_CONTEXT = `
 You are "Ask Andre" inside SongGhost.
 App mission: help users write culturally authentic, genre-accurate songs with guided prompts and revisions.
@@ -747,7 +2317,83 @@ ${String(pastedContent || "").trim()}`;
   }
   return { text };
 }
+function engineAllowed(email) {
+  const list = (process.env.SONG_ENGINE_V3_EMAILS || "dreknows@gmail.com").split(",").map((e) => e.trim().toLowerCase()).filter(Boolean);
+  return list.includes(String(email || "").trim().toLowerCase());
+}
+var engineGenerate = async (prompt, kind) => {
+  if (kind === "plan") {
+    const client = new OpenAI({ apiKey: getOpenAIApiKey() });
+    const response = await client.chat.completions.create({
+      model: ENGINE_MODEL,
+      max_tokens: 2048,
+      temperature: 0.2,
+      // planning wants precision, not creativity
+      messages: [
+        {
+          role: "system",
+          content: "You are a precise song-planning assistant. Return ONLY valid JSON \u2014 no prose, no markdown fences."
+        },
+        { role: "user", content: prompt }
+      ]
+    });
+    return response.choices?.[0]?.message?.content?.trim() || "";
+  }
+  return generateDraft(prompt);
+};
+function engineStory(inputs) {
+  return String(inputs?.story || inputs?.creativeDirection || inputs?.additionalInfo || "").trim();
+}
+function engineInputs(payload) {
+  const inputs = payload?.inputs || {};
+  return {
+    genre: String(inputs.genre || ""),
+    story: engineStory(inputs),
+    vocals: inputs.vocals ? String(inputs.vocals) : void 0,
+    subGenre: inputs.subGenre ? String(inputs.subGenre) : void 0
+  };
+}
+async function generateSongV3(payload) {
+  const result = await runEngine(CURRICULUM, engineInputs(payload), engineGenerate);
+  return { text: result.text, meta: result.meta };
+}
+async function streamSongV3(payload, res) {
+  res.writeHead(200, {
+    "Content-Type": "text/event-stream; charset=utf-8",
+    "Cache-Control": "no-cache, no-transform",
+    Connection: "keep-alive"
+  });
+  const send = (obj) => {
+    res.write(`data: ${JSON.stringify(obj)}
+
+`);
+    res.flush?.();
+  };
+  try {
+    const result = await runEngine(
+      CURRICULUM,
+      engineInputs(payload),
+      engineGenerate,
+      (label) => send({ type: "stage", label })
+    );
+    send({ type: "d", t: result.text });
+    send({ type: "done", text: result.text, meta: result.meta });
+  } catch (error) {
+    send({ type: "error", error: error?.message || "Song generation failed." });
+  } finally {
+    res.end();
+  }
+}
 async function handler(req, res) {
+  if (req.method === "GET") {
+    return res.status(200).json({
+      ok: true,
+      engineVersion: ENGINE_VERSION,
+      curriculumHash: CURRICULUM.hash,
+      model: ENGINE_MODEL,
+      genres: Object.keys(CURRICULUM.genres)
+    });
+  }
   if (req.method !== "POST") {
     res.setHeader("Allow", "POST");
     return res.status(405).json({ error: "Method Not Allowed" });
@@ -759,9 +2405,19 @@ async function handler(req, res) {
     requestRequiresUserGeminiKey = action === "askAndre" ? false : await shouldRequireUserGeminiKey(String(email || ""));
     requestGeminiTextApiKey = String(payload?.userGeminiApiKey || req.headers["x-gemini-api-key"] || "").trim() || null;
     switch (action) {
-      case "generateSong":
+      case "generateSong": {
+        const wantsV3 = engineAllowed(email) && payload?.engine !== "interim" && resolveGenre(CURRICULUM, String(payload?.inputs?.genre || "")) !== null;
+        if (wantsV3) {
+          if (payload?.stream) return await streamSongV3(payload, res);
+          try {
+            return res.status(200).json(await generateSongV3(payload));
+          } catch (e) {
+            if (!(e instanceof EngineNotAvailable)) throw e;
+          }
+        }
         if (payload?.stream) return await streamSongInterim(payload, res);
         return res.status(200).json(await generateSongInterim(payload));
+      }
       case "editSong":
         return res.status(200).json(await editSongInterim(payload));
       case "structureImportedSong":

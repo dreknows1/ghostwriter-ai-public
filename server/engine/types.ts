@@ -1,0 +1,95 @@
+// Shared types for the curriculum engine (Phase 1 — R&B).
+// The curriculum documents are the source of truth; scripts/compile-curriculum.mjs
+// turns them into server/engine/curriculum.generated.ts at build time.
+// SONGWRITING_ENGINE_PLAN.md governs everything here.
+
+/** One sub-genre page ("room") compiled from SONGWRITING_SUBGENRES.md. */
+export type RoomCard = {
+  /** stable kebab-case id, e.g. "contemporary-rnb" */
+  id: string;
+  name: string;
+  /** the italic picker one-liner */
+  oneLine: string;
+  /** tempo range + groove feel + word density, verbatim from the page */
+  tempoGroove: string;
+  /** the "How the writing changes" bullets, verbatim */
+  writingDials: string[];
+  /** the Suno production-prompt paragraph */
+  rendering: string;
+  storyFit: string;
+  parodyTraps: string;
+};
+
+/** A landing cue from the Composer Profile, marked strong or weak. */
+export type CueMark = {
+  /** lowercase match phrase or short pattern, e.g. "situationship" */
+  cue: string;
+  strength: "strong" | "weak";
+  roomId: string;
+};
+
+/** Everything the engine knows about one genre. */
+export type GenrePack = {
+  /** stable id, e.g. "rnb" */
+  id: string;
+  /** display name + aliases users might type, lowercase, e.g. ["r&b", "rnb", "r and b"] */
+  name: string;
+  aliases: string[];
+  /** genre-level writing profile text (from SONGWRITING_PROFILE_RNB.md) */
+  profileText: string;
+  defaultRoomId: string;
+  rooms: RoomCard[];
+  cues: CueMark[];
+};
+
+export type CompiledCurriculum = {
+  /** universal writer core compiled from SONGWRITING_BRAIN.md */
+  core: string;
+  genres: Record<string, GenrePack>;
+  /** sha256 of all source docs — reported on /api/health as curriculumHash */
+  hash: string;
+  /** rough size accounting (chars/4) so the budget check is visible */
+  approxTokens: { core: number; largestSlice: number };
+};
+
+/** How the engine landed on a room (plan Step 1a — always logged, always shown). */
+export type Landing = {
+  roomId: string;
+  rule: "picked" | "inferred" | "defaulted";
+  /** the cues that fired, empty for picked/defaulted */
+  firedCues: string[];
+  /** true when the pick had no page and fell to a parent */
+  notYetDeep: boolean;
+};
+
+/** Per-song musical spec (defaults come from the room card). */
+export type MusicalSpec = {
+  tempo: string;
+  groove: string;
+  barsPerSection?: string;
+  wordDensity: string;
+};
+
+/** The Step-1 brief — structured data, never prose. Every field code-checked. */
+export type Brief = {
+  coreEmotion: string;
+  purpose: string;
+  pov: string;
+  turn: string;
+  spec: MusicalSpec;
+  landing: Landing;
+};
+
+export type CheckResult = {
+  id: string;
+  ok: boolean;
+  /** "fail" blocks shipping a draft; "warn" only ranks passing drafts */
+  severity: "fail" | "warn";
+  detail?: string;
+};
+
+export type DraftReport = {
+  checks: CheckResult[];
+  failCount: number;
+  warnCount: number;
+};
