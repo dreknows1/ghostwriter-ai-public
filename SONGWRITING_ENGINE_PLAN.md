@@ -22,10 +22,17 @@ How that works mechanically (so it can't silently break like everything else has
 - The live site reports a **curriculum fingerprint** on its health check, and an automated
   smoke test confirms a known sentence from your curriculum is actually inside the deployed
   writer's instructions. If your words aren't in the machine, alarms ring — no more silent rot.
-- **Size budget:** the compiled writing instructions are capped (~1,200 tokens). New rules
-  must refine or replace old ones, not pile on — with a standing rule-pruning test (drop a
-  rule, run the batch; if quality doesn't drop, the rule dies). This is the guard against
-  rebuilding the 5,000-word rule wall one reasonable note at a time.
+- **Size budget:** the compiled writing instructions are capped (~2,000 tokens per song —
+  see "Per-song slice" below for how that splits). New rules must refine or replace old
+  ones, not pile on — with a standing rule-pruning test (drop a rule, run the batch; if
+  quality doesn't drop, the rule dies). This is the guard against rebuilding the
+  5,000-word rule wall one reasonable note at a time.
+- **Per-song slice:** the writer never sees the whole curriculum. Compilation selects the
+  universal core + the active genre's profile + the ONE active sub-genre page — nothing
+  else. The sub-genre pages in SONGWRITING_SUBGENRES.md are teaching text; each compiles
+  down to a compact writer card (~600 tokens of dials + spec defaults), and the whole
+  per-song slice is capped at **~2,000 tokens** (the size budget above). Same pruning law
+  applies to cards as to rules.
 
 ## 2. How composing works — now with the beat in the room
 
@@ -43,6 +50,17 @@ for THIS song: tempo range, groove feel (straight/swung/half-time), bars per sec
 how dense the words should sit on that tempo.** A hip-hop 16 at 140 half-time is a different
 writing job than 90 BPM boom-bap; the brief says which one this is. Every field is checked
 by code. Nothing free-text flows downstream (this is what makes another "Catchy" impossible).
+
+**Step 1a — The room (sub-genre).** The brief carries exactly ONE sub-genre, landed by
+the rules in SONGWRITING_SUBGENRES.md: the user's explicit pick wins; otherwise code
+counts strong/weak story cues from the sub-genre pages; when cues are weak or split, the
+genre's declared safe default. The chosen room fills in the musical-spec DEFAULTS above
+and the writing dials the drafts are judged against. The decision (picked / inferred /
+defaulted, plus which cues fired) is logged on the song record and SHOWN to the user —
+never a silent swap. Fusions and era requests ("trap soul", "90s R&B") resolve to a named
+page if one exists; otherwise nearest parent page, stamped "not-yet-deep". The brief
+schema gains these as real code-checked fields: the sub-genre, the landing rule that
+fired with its triggering cues, and the depth stamp — validated like every other field.
 
 **Step 2 — Hooks, plural.** The app writes **10–15 hook/title candidates** and picks the
 strongest by code-checkable criteria (length, meter, plainness, story fit) — the way real
@@ -65,10 +83,13 @@ with better branding (engineer's words). Instead: **code checks every draft, and
 passing draft ships.** If a trim pass exists at all, it may only DELETE lines — enforced in
 code (every surviving line must exist in the original draft) — never rewrite or add.
 
-**Step 6 — Code checks (no AI) — now including the musical ones:**
+**Step 6 — Code checks (no AI) — now including the musical ones.** The checks are
+parameterized by the chosen sub-genre page's dials — a check runs only where the room
+turns it on (some rooms forbid perfect symmetry; drill forbids a lifted singable chorus):
 - story-fidelity (the song references the user's actual specifics)
 - hook placement, chorus consistency, **chorus lines metrically parallel** (matching
-  syllable counts/stress — the single biggest "writing for melody" rule)
+  syllable counts/stress — the single biggest "writing for melody" rule, where the room
+  wants it)
 - line lengths vs THIS song's musical spec (per-song math, not uniform math)
 - singable line endings (open vowels where lines hold)
 - nursery-rhyme detector (flags six consecutive same-length end-stopped lines)
@@ -87,7 +108,9 @@ sneaking back in through the side door.
 
 ## 3. Composer Profiles — how a writer thinks per genre, AND how it renders
 
-One page per priority genre — **R&B, Hip-Hop, Gospel, Reggae/Afrobeats, Pop** — covering:
+One page per priority genre — **R&B, Hip-Hop, Gospel, Reggae, Afrobeats, Pop** (the
+"Reggae / Afrobeats" priority slot is TWO genres and gets two profiles, each with its own
+declared safe default) — covering:
 - how phrasing, line length, and rhyme expectations change (hip-hop's profile defines
   flow in bars and stress patterns — a **flow plan** is part of its brief)
 - where the devices live (entendres in R&B/hip-hop; scripture allusion in gospel)
@@ -100,6 +123,12 @@ One page per priority genre — **R&B, Hip-Hop, Gospel, Reggae/Afrobeats, Pop** 
   instrumental space. The renderer is the singer, band, and arranger — writing for it is
   part of the craft, not an afterthought.
 - what disqualifies a song in that genre
+- **the genre's sub-genre pages** (from SONGWRITING_SUBGENRES.md), each with fixed slots:
+  musical-spec defaults, writing dials, render vocabulary (sounds and delivery notes,
+  never slang), a story-cue list with every cue marked strong or weak, era mappings, and
+  what disqualifies a song in that room — plus the profile's ONE declared safe default.
+  Adding a room later (bachata under Latin, say) is a new curriculum page held to the same
+  standard, never new engineering.
 
 **Dialect rule (hard):** patois/pidgin appears ONLY if the user wrote it in their story.
 Otherwise the genre's rhythm and phrasing carry the identity in standard English — an AI
@@ -122,8 +151,9 @@ pass 7" idea was noise (a coin-flip engine passes it 1 time in 6). The honest ve
    and keeps the test honest in both directions).
 3. **Pass bar: 14 of 20 of the new engine's songs**, judged blind.
 4. Each fail gets **one reason tag** (hook / flow / generic / story-mismatch / genre-false /
-   other) — so your feedback compounds into targeted fixes instead of "everything is bad"
-   with nothing to steer by.
+   **wrong-room** (the sub-genre landing failed — fix the cue list) / **wrong-writing-in-
+   the-right-room** (the sub-genre page failed — fix its dials) / other) — so your feedback
+   compounds into targeted fixes instead of "everything is bad" with nothing to steer by.
 5. Grade on your schedule — the batch waits; nothing ships meanwhile.
 6. Your notes become **candidate** rules, tested before they become law (see the size
    budget in §1) — never auto-appended.
@@ -155,8 +185,10 @@ pass 7" idea was noise (a coin-flip engine passes it 1 time in 6). The honest ve
 
 - The live site keeps working untouched while Phase 1 is built beside it (per-engine
   rollback flag from day one).
-- Input stays: genre + story + voice. English-only buildout per your direction (patois/
-  pidgin handled inside their genre profiles, under the dialect rule).
+- Input stays: genre + story + voice, plus an OPTIONAL sub-genre pick (each room shown
+  with its one-line description; "let the app decide" is the default and uses the landing
+  rules). English-only buildout per your direction (patois/pidgin handled inside their
+  genre profiles, under the dialect rule).
 - The wizard/UI debate rides later; this plan changes the brain first.
 
 ---
@@ -164,5 +196,6 @@ pass 7" idea was noise (a coin-flip engine passes it 1 time in 6). The honest ve
 ## Sign-off
 
 - [ ] Founder approves this plan (or marks it up)
+- [ ] Founder approves the sub-genre rules + R&B's sub-genre pages (SONGWRITING_SUBGENRES.md — Parts 1–4 and the R&B section)
 - [ ] Founder approves the R&B Composer Profile (next document)
-- [ ] Phase 1 build begins only after both boxes are checked
+- [ ] Phase 1 build begins only after all boxes are checked

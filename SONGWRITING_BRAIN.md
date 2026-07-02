@@ -18,6 +18,12 @@ Sections are not labels; they are jobs:
 - **Bridge** — the turn: a new angle, a confession, a decision. The song must be different after it.
 - **Outro** — lands the plane; the emotional residue the listener leaves with.
 
+(Genre note: repetition-driven traditions bend these jobs on purpose — praise & worship,
+Afrobeats, and some soul and pop rooms may replace "verse 2 adds new information" with
+deepened repetition, and "the chorus lifts" with accumulation — the same words returning
+hotter each time. As with point of view, the genre's tradition wins over the default rule,
+and each sub-genre page says when that bend applies.)
+
 ## Layer 2 — Creative writing craft
 
 - **Song purpose** — every song exists FOR something: to make people dance, testify, cry, feel seen,
@@ -68,6 +74,46 @@ Sections are not labels; they are jobs:
 5. **Pop** — the hook is king; economy of words; universal feeling through one specific story; polish without losing pulse
 
 All other genres remain available but are held to the standard AFTER these five are proven.
+
+### Sub-genres — same genre, different rooms
+
+A sub-genre is the same genre in a different room. A bachata love song and a reggaeton
+love song are both Latin, but the rooms are different: bachata leaves long gaps so the
+voice can ache and the guitar can answer; reggaeton packs short punchy phrases tight onto
+the drum, built for a club. The love story is still 100% the user's — the sub-genre only
+decides the room it's told in: how long the sentences breathe, how many words sit on the
+beat, and where the emotion is allowed to get loud. If two rooms would produce the same
+lyric sheet from the same story, one of them isn't a real room yet.
+
+How the brain lands on ONE room per song (full rules in SONGWRITING_SUBGENRES.md):
+1. **The user's pick always wins** — named sub-genre or era ("90s R&B") in the picker or
+   in their own words. No page for it yet? Use the nearest parent page and label the song
+   "not-yet-deep" — never pretend depth we haven't built.
+2. **Otherwise infer from strong story cues, inside the chosen genre only** — each room's
+   cues get marked strong (fires alone) or weak (needs a partner) when the curriculum is
+   compiled, and the founder approves the marks. Code counts marks; nothing guesses.
+3. **When cues are weak or split, land on the genre's declared safe default** — the broad
+   mainstream center. The brain may never guess its way to a rare, niche room.
+4. **Exactly one room per song**, even for fusions — the room that sets tempo and groove
+   wins the spec; the other survives only as a flavor note.
+5. **The story outranks the room, always.** Conventions bend to the story; the story is
+   never trimmed, brightened, or reshaped to fit conventions.
+6. **The decision is recorded and SHOWN to the user** — never a silent swap. Someone who
+   asked for bachata sees what room they actually got.
+7. **No room may ever introduce dialect the user didn't write**, quoted example lines, or
+   a house formula. These laws sit above everything.
+
+What the chosen room sets: the musical-spec DEFAULTS for the brief (tempo range, groove
+feel, bars per section, word density) plus the writing dials (phrasing length, rhyme
+density, which devices are at home, vocal space, section conventions) and the render
+vocabulary for the production prompt. What it may NEVER touch: the user's specifics, core
+emotion, and the turn — sub-genre decides HOW the writing thinks, never WHAT the song is about.
+
+Note: "Reggae / Afrobeats" is one priority slot but TWO genres — each gets its own
+Composer Profile and its own declared default.
+
+The full room-by-room pages for all five priority genres live in **SONGWRITING_SUBGENRES.md**
+(founder review pending; R&B's pages are what Phase 1 needs approved).
 
 ## Layer 5 — The composing PROCESS (the app must compose like a writer, not fill a template)
 
