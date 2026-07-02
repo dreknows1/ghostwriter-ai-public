@@ -344,11 +344,13 @@ function fallbackMetaTagPlan(inputs: any): MetaTagPlan {
     structureTags: ["[Intro]", "[Verse]", "[Pre-Chorus]", "[Chorus]", "[Verse]", "[Chorus]", "[Bridge]", "[Chorus]", "[Outro]"],
     vocalTypeTag,
     moodEnergyTags: [],
-    genreAccentTags: ["[Build Up]"],
+    // Fallback plan must not force genre-inappropriate accents: a required "[Build Up]"
+    // quota made the orchestrator INSERT an EDM section into R&B/soul songs.
+    genreAccentTags: [],
     adlibPolicy: "Use tasteful adlibs in parentheses where musically useful.",
     minTagCount: 10,
     minAdlibCount: heavyAdlib ? 6 : mediumAdlib ? 4 : 2,
-    requiredAccentHits: heavyAdlib || mediumAdlib ? 2 : 1,
+    requiredAccentHits: 0,
     requiredMoodHits: 1,
     requireVocalTypeTag: true,
   };
@@ -365,10 +367,10 @@ Strict meta-tag orchestration plan:
 - Minimum adlibs in parentheses: ${plan.minAdlibCount}
 - Required vocal identity tag must appear in Lyrics: ${plan.requireVocalTypeTag ? "yes" : "no"}
 - Adlib policy: ${plan.adlibPolicy}
-- Tag placement: bracket tags go on their OWN line as section headers ONLY (e.g. [Verse 1], [Chorus], [Bridge], [Build Up]). NEVER put bracket tags inline within a lyric line — Suno ignores them there.
+- Tag placement: bracket tags go on their OWN line as section headers ONLY (e.g. [Verse 1], [Chorus], [Bridge]). NEVER put bracket tags inline within a lyric line — Suno ignores them there.
 - Adlibs in parentheses may appear inline within lyric lines where musically natural. Keep them sparse — max 30% of lines. They should feel like a real performer's ad-libs, not annotations.
 - NEVER invent performance-direction tags like [Vocals: Confident], [Energy: High], [Harmonies swell], [Drums hit harder], [Mood: Intense]. These are not valid Suno tags and clutter the output.
-- Valid bracket tags are ONLY: section headers ([Intro], [Verse], [Verse 2], [Pre-Chorus], [Chorus], [Bridge], [Outro], [Build Up]), vocal identity ([Vocalist: Male/Female/Duet/Group]), and choir cues ([Choir enters]). Nothing else.
+- Valid bracket tags are ONLY: section headers ([Intro], [Verse], [Verse 2], [Pre-Chorus], [Chorus], [Bridge], [Outro]), vocal identity ([Vocalist: Male/Female/Duet/Group]), and choir cues ([Choir enters]). Nothing else.
   `.trim();
 }
 
@@ -938,7 +940,7 @@ async function openaiGenerate(prompt: string, register?: "clean" | "radio" | "ex
   const response = await client.chat.completions.create({
     model: getOpenAIModel(),
     max_tokens: 4096,
-    temperature: 1.0,
+    temperature: 0.8, // creative but coherent; 1.0 produced rhyme-forced word salad
     messages: [
       {
         role: "system",
@@ -967,7 +969,7 @@ async function claudeGenerate(prompt: string, register?: "clean" | "radio" | "ex
   const response = await client.messages.create({
     model: getClaudeModel(),
     max_tokens: 4096,
-    temperature: 1.0,
+    temperature: 0.8, // creative but coherent; 1.0 produced rhyme-forced word salad
     system: getSongwriterSystemPrompt(register),
     messages: [{ role: "user", content: prompt }],
   });
@@ -1345,10 +1347,10 @@ Strict meta-tag orchestration plan:
 - Minimum adlibs in parentheses: ${plan.minAdlibCount}
 - Required vocal identity tag must appear in Lyrics: ${plan.requireVocalTypeTag ? "yes" : "no"}
 - Adlib policy: ${plan.adlibPolicy}
-- Tag placement: bracket tags go on their OWN line as section headers ONLY (e.g. [Verse 1], [Chorus], [Bridge], [Build Up]). NEVER put bracket tags inline within a lyric line — Suno ignores them there.
+- Tag placement: bracket tags go on their OWN line as section headers ONLY (e.g. [Verse 1], [Chorus], [Bridge]). NEVER put bracket tags inline within a lyric line — Suno ignores them there.
 - Adlibs in parentheses may appear inline within lyric lines where musically natural. Keep them sparse — max 30% of lines. They should feel like a real performer's ad-libs, not annotations.
 - NEVER invent performance-direction tags like [Vocals: Confident], [Energy: High], [Harmonies swell], [Drums hit harder], [Mood: Intense]. These are not valid Suno tags and clutter the output.
-- Valid bracket tags are ONLY: section headers ([Intro], [Verse], [Verse 2], [Pre-Chorus], [Chorus], [Bridge], [Outro], [Build Up]), vocal identity ([Vocalist: Male/Female/Duet/Group]), and choir cues ([Choir enters]). Nothing else.
+- Valid bracket tags are ONLY: section headers ([Intro], [Verse], [Verse 2], [Pre-Chorus], [Chorus], [Bridge], [Outro]), vocal identity ([Vocalist: Male/Female/Duet/Group]), and choir cues ([Choir enters]). Nothing else.
   `.trim();
 }
 
@@ -3187,6 +3189,7 @@ CRAFT:
 - Structure: use this genre's conventional form with section tags — e.g. [Intro] [Verse] [Pre-Chorus] [Chorus] [Verse] [Pre-Chorus] [Chorus] [Bridge] [Chorus] [Outro]. Honor any structure the creative direction asks for.
 - Build the chorus on ONE short, repeatable hook phrase (usually the title) — simple enough to sing back after a single listen. Repeat it.
 - BALANCE — this separates pro from amateur: land 2-3 vivid, concrete images per section, and let the other lines be plain, conversational things a real person would say out loud. A line that sounds pretty but doesn't mean anything is a failed line. Clarity beats decoration.
+- Never force a rhyme: if the honest line and the rhyming line disagree, keep the honest line — near-rhyme or no rhyme always beats a nonsense rhyme.
 - Matched sections must match: same line counts and similar syllable lengths so they ride the same melody.
 - Let the story MOVE: each section adds something — a decision, a turn, a consequence — not the same mood restated.
 - No greeting-card language ("shine bright", "rise above", "believe in yourself", "dreams come true", "spread your wings") and no announcing your own writing.
@@ -3239,10 +3242,14 @@ async function finishSongPipeline(
     }
   }
 
-  // Meta-tag orchestration — ensure tags are present
-  // Skip when user's creative direction overrides standard song structure
+  // Meta-tag orchestration — ONLY when tags are actually missing/broken. Rewriting a
+  // well-tagged song to satisfy coverage quotas degraded lyrics (photocopy-of-a-photocopy)
+  // and injected genre-inappropriate sections.
   const skipOrchestration = hasUserStructureOverride(userDirection);
-  if (!skipOrchestration && hasTimeBudget(startMs, 9000)) {
+  const sectionTagCount = (finalText.match(/^\s*\[[^\]\n]+\]\s*$/gm) || []).length;
+  const hasChorusTag = /^\s*\[chorus[^\]]*\]\s*$/im.test(finalText);
+  if (!skipOrchestration && (!hasChorusTag || sectionTagCount < 3) && hasTimeBudget(startMs, 9000)) {
+    onStage?.("Fixing section tags…");
     finalText = await enforceMetaTagOrchestration(finalText, inputs || {});
   }
 
@@ -3323,9 +3330,39 @@ ${finalText}
   return finalText;
 }
 
+/**
+ * Plan-then-write: a short prose plan (story beats, THE hook phrase, section map)
+ * before the lyric pass. Planning in-context is the strongest lever against
+ * incoherent lines and rhyme-forcing — the writer knows where the song is going.
+ * Best-effort: any failure returns "" and the song is written without a plan.
+ */
+async function draftSongPlan(ctx: SongContext): Promise<string> {
+  if (!hasTimeBudget(ctx.startMs, 45000)) return "";
+  const genreTag = combineGenreTag(ctx.inputs?.subGenre || "", ctx.inputs?.genre || "Pop");
+  const planPrompt = `
+Plan a ${genreTag} song${ctx.userDirection ? ` about: ${ctx.userDirection}` : ""}.
+Return UNDER 130 words of plain prose, nothing else:
+1. STORY — three beats: where it opens, the turn, where it lands. The song must move.
+2. HOOK — the exact repeatable hook phrase (3-6 plain, singable words; usually the title).
+3. SECTIONS — the section list for this genre.
+4. One short line per section: what happens there.
+`.trim();
+  try {
+    const plan = await openAIResponses(planPrompt, "gpt-4.1-mini");
+    return plan && plan.length < 1500 ? plan : "";
+  } catch {
+    return "";
+  }
+}
+
+function promptWithPlan(ctx: SongContext, plan: string): string {
+  return plan ? `${ctx.prompt}\n\nYOUR PLAN — you already planned this song; follow it:\n${plan}` : ctx.prompt;
+}
+
 async function generateSong(payload: any) {
   const ctx = await prepareSongContext(payload);
-  const draft = await generateDraft(ctx.prompt, ctx.register);
+  const plan = await draftSongPlan(ctx);
+  const draft = await generateDraft(promptWithPlan(ctx, plan), ctx.register);
   const finalText = await finishSongPipeline(draft, ctx);
   return { text: finalText };
 }
@@ -3349,6 +3386,9 @@ async function streamSongGeneration(payload: any, res: VercelResponse) {
 
   try {
     const ctx = await prepareSongContext(payload);
+    send({ type: "stage", label: "Planning the story and the hook…" });
+    const plan = await draftSongPlan(ctx);
+    const fullPrompt = promptWithPlan(ctx, plan);
     send({ type: "stage", label: "Drafting lyrics live…" });
 
     let draft = "";
@@ -3359,11 +3399,11 @@ async function streamSongGeneration(payload: any, res: VercelResponse) {
         const stream = await client.chat.completions.create({
           model: getOpenAIModel(),
           max_tokens: 4096,
-          temperature: 1.0,
+          temperature: 0.8, // creative but coherent; 1.0 produced rhyme-forced word salad
           stream: true,
           messages: [
             { role: "system", content: getSongwriterSystemPrompt(ctx.register) },
-            { role: "user", content: ctx.prompt },
+            { role: "user", content: fullPrompt },
           ],
         });
         // Batch deltas (~150ms) so we don't emit hundreds of tiny events.
@@ -3390,7 +3430,7 @@ async function streamSongGeneration(payload: any, res: VercelResponse) {
     // Fallback (non-OpenAI config, stream failure, or a refusal): the standard chain
     // handles model fallbacks and refusal retries, at the cost of no live tokens.
     if (!streamedOk || isCreativeRefusal(draft)) {
-      draft = await generateDraft(ctx.prompt, ctx.register);
+      draft = await generateDraft(fullPrompt, ctx.register);
       send({ type: "d", t: draft });
     }
 
