@@ -59,10 +59,9 @@ async function callAI<T>(action: AIAction, email: string, payload: Record<string
       (parsedCode === "gemini_text_auth" || parsedCode === "missing_user_gemini_api_key");
     if (canRetryKey) {
       window.localStorage.removeItem(GEMINI_KEY_STORAGE);
-      const entered = window.prompt("Members must use their own Gemini API key. Paste a valid Gemini API key:");
-      if (entered && entered.trim()) {
-        userGeminiApiKey = entered.trim();
-        window.localStorage.setItem(GEMINI_KEY_STORAGE, userGeminiApiKey);
+      const newKey = await requestKeyViaModal();
+      if (newKey) {
+        userGeminiApiKey = newKey;
         response = await sendRequest(userGeminiApiKey);
         if (response.ok) return response.json();
       }
@@ -75,13 +74,40 @@ async function callAI<T>(action: AIAction, email: string, payload: Record<string
 
 export function promptToSetGeminiApiKey(): void {
   if (typeof window === "undefined") return;
-  const entered = window.prompt(
-    "Paste your Gemini API key (get one at https://aistudio.google.com/app/apikey):",
-    window.localStorage.getItem(GEMINI_KEY_STORAGE) || ""
-  );
-  if (entered && entered.trim()) {
-    window.localStorage.setItem(GEMINI_KEY_STORAGE, entered.trim());
-  }
+  window.dispatchEvent(new CustomEvent("songghost:openApiKeyModal"));
+}
+
+/**
+ * Opens the API key modal and resolves with the saved key (or null if the user
+ * dismisses it). Used by the AI request retry path when a saved key is rejected.
+ */
+function requestKeyViaModal(): Promise<string | null> {
+  if (typeof window === "undefined") return Promise.resolve(null);
+  return new Promise((resolve) => {
+    let settled = false;
+    const cleanup = () => {
+      window.removeEventListener("storage", onStorage);
+      window.removeEventListener("songghost:apiKeyModalClosed", onClosed);
+    };
+    const settle = (value: string | null) => {
+      if (settled) return;
+      settled = true;
+      cleanup();
+      resolve(value);
+    };
+    const onStorage = (e: StorageEvent) => {
+      // Modal saves via localStorage.setItem — but storage events don't fire
+      // in the same window. We poll instead below as a backup.
+      if (e.key === GEMINI_KEY_STORAGE && e.newValue) settle(e.newValue.trim());
+    };
+    const onClosed = () => {
+      const saved = window.localStorage.getItem(GEMINI_KEY_STORAGE) || "";
+      settle(saved.trim() || null);
+    };
+    window.addEventListener("storage", onStorage);
+    window.addEventListener("songghost:apiKeyModalClosed", onClosed);
+    window.dispatchEvent(new CustomEvent("songghost:openApiKeyModal"));
+  });
 }
 
 async function* singleYield(text: string): AsyncGenerator<string> {

@@ -892,7 +892,10 @@ function getDraftLLM(): "openai" | "claude" | "gemini" {
 }
 
 function getOpenAIModel(): string {
-  return process.env.OPENAI_TEXT_MODEL || "gpt-4.1-nano";
+  // Creative draft model. Default to a strong model — never silently fall back to
+  // a nano tier, which produces thin, cliché lyrics unbecoming of a paid product.
+  // Override via OPENAI_TEXT_MODEL (e.g. "gpt-4.1-mini" to trade quality for cost).
+  return process.env.OPENAI_TEXT_MODEL || "gpt-4.1";
 }
 
 function getSongwriterSystemPrompt(register?: "clean" | "radio" | "explicit"): string {
@@ -3052,6 +3055,11 @@ async function generateSong(payload: any) {
 
   const genreTruth = await getGenreTruthParagraph(inputs || {});
   const specificityAnchors = await getSpecificityAnchors(inputs || {});
+  // Genre-specific craft directives compiled from the genre guide (perspective, real
+  // per-genre clichés to avoid, dialect vocabulary, phrasing/affect). Previously this
+  // rich guide knowledge was never injected into the prompt — the model only saw a thin
+  // "genre truth" paragraph. "lyrics" mode keeps it focused on writing, not production.
+  const genreCraftBlueprint = await compileGuideToDirectives(inputs || {}, "lyrics");
   const referenceTeaching = await compileReferenceTrackTeaching(inputs || {});
   const metaTagPackage = await getMetaTagPackage(inputs || {});
   const vocalDirective = getVocalAndClicheHardDirective(inputs);
@@ -3118,7 +3126,7 @@ CONTEXT:
 
 GENRE TRUTH:
 ${genreTruth || `Write authentically for ${combineGenreTag(inputs?.subGenre || "", inputs?.genre || "Pop")}.`}
-
+${genreCraftBlueprint ? `\nGENRE CRAFT BLUEPRINT (write to these genre-specific conventions — they come from a deep guide for this exact genre/subgenre):\n${genreCraftBlueprint}\n` : ""}
 SPECIFICITY:
 ${specificityAnchors}
 
