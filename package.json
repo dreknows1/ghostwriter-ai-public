@@ -5,14 +5,15 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "tsc && vite build",
+    "build": "tsc && vite build && npm run build:api",
     "preview": "vite preview",
     "setup:convex": "./scripts/setup-convex.sh",
     "check:health": "./scripts/check-health.sh",
     "test:webhook": "node ./scripts/test-webhook.mjs",
     "test": "vitest run",
     "test:watch": "vitest",
-    "check:unused": "tsc --noEmit -p tsconfig.lint.json"
+    "check:unused": "tsc --noEmit -p tsconfig.lint.json",
+    "build:api": "esbuild server/ai.ts --bundle --platform=node --format=esm --packages=external --outfile=api/ai.js"
   },
   "dependencies": {
     "@anthropic-ai/sdk": "^0.80.0",
@@ -32,6 +33,7 @@
     "@types/react-dom": "^18.2.22",
     "@vercel/node": "^3.0.0",
     "@vitejs/plugin-react": "^4.2.1",
+    "esbuild": "^0.28.1",
     "typescript": "^5.2.2",
     "vite": "^5.2.0",
     "vitest": "^2.1.9"
