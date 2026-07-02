@@ -132,11 +132,99 @@ async function* singleYield(text: string): AsyncGenerator<string> {
   yield text;
 }
 
+/**
+ * Live streaming path: reads the server's SSE events so lyrics appear as they're
+ * written and pipeline stages report real progress. Throws if the stream can't
+ * start (caller falls back to the classic request) or dies midway (caller must
+ * NOT silently regenerate — that would double-charge).
+ */
+async function* streamSongEvents(
+  inputs: unknown,
+  email: string,
+  userProfile: unknown,
+  userGeminiApiKey: string
+): AsyncGenerator<string> {
+  const resp = await fetch("/api/ai", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({
+      action: "generateSong",
+      email,
+      payload: { inputs, userProfile, userGeminiApiKey, stream: true },
+    }),
+  });
+  if (!resp.ok || !resp.body) {
+    throw new Error(`stream unavailable (${resp.status})`);
+  }
+  const contentType = resp.headers.get("content-type") || "";
+  if (!contentType.includes("text/event-stream")) {
+    // Older server build ignored the stream flag and returned plain JSON.
+    const json = await resp.json();
+    yield json?.text || "";
+    return;
+  }
+
+  const reader = resp.body.getReader();
+  const decoder = new TextDecoder();
+  let buffer = "";
+  let draft = "";
+  let finished = false;
+
+  while (true) {
+    const { value, done } = await reader.read();
+    if (done) break;
+    buffer += decoder.decode(value, { stream: true });
+    const events = buffer.split("\n\n");
+    buffer = events.pop() || "";
+    for (const evt of events) {
+      const dataLine = evt.split("\n").find((l) => l.startsWith("data: "));
+      if (!dataLine) continue;
+      let obj: any;
+      try { obj = JSON.parse(dataLine.slice(6)); } catch { continue; }
+      if (obj.type === "stage") {
+        yield `__STATUS__:${obj.label}`;
+      } else if (obj.type === "d") {
+        draft += obj.t || "";
+        yield draft;
+      } else if (obj.type === "done") {
+        yield obj.text || draft;
+        finished = true;
+      } else if (obj.type === "error") {
+        throw new Error(obj.error || "Song generation failed.");
+      }
+    }
+  }
+  if (!finished) throw new Error("Generation stream ended early. Please try again — you were not charged.");
+}
+
 export async function* generateSong(
   inputs: SongInputs,
   email: string,
   userProfile?: UserProfile | null
 ): AsyncGenerator<string> {
+  const safeEmail = sanitizeEmail(email || "");
+  const safeInputs = sanitizeUnknown(inputs || {});
+  const safeProfile = sanitizeUnknown(userProfile || {});
+  const storedKey =
+    typeof window !== "undefined" ? (window.localStorage.getItem(GEMINI_KEY_STORAGE) || "") : "";
+
+  // Prefer the live stream: lyrics appear as they're written, stages are real.
+  let yieldedLyrics = false;
+  try {
+    for await (const chunk of streamSongEvents(safeInputs, safeEmail, safeProfile, storedKey)) {
+      if (typeof chunk === "string" && !chunk.startsWith("__STATUS__:") && chunk.trim()) {
+        yieldedLyrics = true;
+      }
+      yield chunk;
+    }
+    return;
+  } catch (err) {
+    // If lyrics already streamed, a silent re-request would generate (and pay for)
+    // the song twice — surface the error instead.
+    if (yieldedLyrics) throw err;
+    // Stream never got going (older deploy, proxy buffering, network) — classic path.
+  }
+
   const pending = callAI<{ text: string }>("generateSong", email, { inputs, userProfile });
   const statusMessages = [
     "Song Ghost is listening...",
