@@ -5,7 +5,7 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "tsc && vite build && npm run build:api",
+    "build": "npm run compile:curriculum && tsc && vite build && npm run build:api",
     "preview": "vite preview",
     "setup:convex": "./scripts/setup-convex.sh",
     "check:health": "./scripts/check-health.sh",
@@ -13,7 +13,8 @@
     "test": "vitest run",
     "test:watch": "vitest",
     "check:unused": "tsc --noEmit -p tsconfig.lint.json",
-    "build:api": "esbuild server/ai.ts --bundle --platform=node --format=esm --packages=external --outfile=api/ai.js"
+    "build:api": "esbuild server/ai.ts --bundle --platform=node --format=esm --packages=external --outfile=api/ai.js",
+    "compile:curriculum": "node scripts/compile-curriculum.mjs"
   },
   "dependencies": {
     "@anthropic-ai/sdk": "^0.80.0",
