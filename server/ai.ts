@@ -214,11 +214,6 @@ const DEFAULT_SUBGENRE_PROFILE: SubgenreSonicProfile = {
   arrangement: "Strong verse/chorus contrast",
 };
 
-let culturalLogicPromise: Promise<CulturalLogicModule | null> | null = null;
-let metaTagModulePromise: Promise<MetaTagModule | null> | null = null;
-let genreAgentModulePromise: Promise<GenreAgentModule | null> | null = null;
-let referenceFeaturesModulePromise: Promise<ReferenceFeaturesModule | null> | null = null;
-let genreGuideModulePromise: Promise<GenreGuideModule | null> | null = null;
 
 async function loadCulturalLogicModule(): Promise<CulturalLogicModule | null> {
   return culturalLogicStatic as unknown as CulturalLogicModule;
@@ -237,7 +232,6 @@ async function loadReferenceFeaturesModule(): Promise<ReferenceFeaturesModule | 
 }
 
 type LyricJudgeModule = typeof import("../lib/lyricJudge");
-let lyricJudgeModulePromise: Promise<LyricJudgeModule | null> | null = null;
 async function loadLyricJudgeModule(): Promise<LyricJudgeModule | null> {
   return lyricJudgeStatic as LyricJudgeModule;
 }
