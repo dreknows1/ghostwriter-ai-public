@@ -757,4 +757,58 @@ export const EDM_GUIDE: GenreGuide = {
       'Include BPM for precision — it matters in EDM more than any other genre',
     ],
   },
+
+  authenticityKit: {
+    "writingEthos": "EDM shows-not-tells by naming one concrete, sweaty, physical thing on or around the dancefloor — a wristband, a cracked screen, a ringing ear — and letting the drop carry the feeling the words refuse to explain. Pick one dialect and stay in it: warehouse/UK grit or festival/US kandi, not both at once.",
+    "exemplars": [
+      {
+        "line": "Cloakroom ticket, number ninety-four / lost it in the smoke, don't need it anymore",
+        "craftNote": "Concrete-object synecdoche: a real club cloakroom stub (and the choice to abandon your coat) stands in for 'letting go' without ever saying it — the tossed ticket does the emotional work the cliché would state outright."
+      },
+      {
+        "line": "Silicone plug, one ear humming low / phone at four percent, I'm not going home",
+        "craftNote": "Sensory specificity of the modern raver: musician's earplugs and a dying battery are true, unglamorous details that signal 'all night, all in' more honestly than 'never stop dancing.'"
+      },
+      {
+        "line": "Warm-up's done, the whole floor leans in / kick cuts out and I hold it in",
+        "craftNote": "Structural literalism grounded in bodies: 'warm-up done' names the DJ-set arc and 'floor leans in' renders the collective crowd as one mass; 'kick cuts out' (tighter than 'drops out,' which risks colliding with 'the drop') opens the sacred silence, and the held breath makes the vacuum — not the payoff — carry the euphoria."
+      },
+      {
+        "line": "Somebody's voice note, half a laugh caught in / loop the room noise, let the tape wear thin",
+        "craftNote": "Sample-diary intimacy: a chopped, imperfect voice memo with its room noise left in becomes the hook, so the feeling lives in a real recorded person rather than an abstract 'we are one.' 'Let the tape wear thin' images the loved-to-death repeat without leaning on any one named producer's signature."
+      },
+      {
+        "line": "Sun through the fire door at half past six / floor still shaking, stamp still on my wrist",
+        "craftNote": "Dawn-detail closer: the after-hours fire-door daylight and the leftover door-entry hand stamp mark the end of the night through warehouse texture, not sentiment — the outro's gradual removal made physical, and grittier than festival glitter."
+      }
+    ],
+    "sensoryLexicon": {
+      "objectsAndPlaces": [
+        "cloakroom ticket / coat check stub",
+        "silicone musician's earplugs",
+        "the door-entry hand stamp (and kandi/glitter for the festival lane)",
+        "the smoking area and the fire-door daylight at closing",
+        "CDJs and the crossfader behind the booth",
+        "a phone at four percent under the strobe",
+        "the sub bins / the bass rig you feel in your chest",
+        "the after-hours warehouse floor still sticky at 6am"
+      ],
+      "texturesAndSounds": [
+        "the kick dropping out to nothing before the drop",
+        "the white-noise riser and the snare roll climbing",
+        "sub-bass you feel in your sternum, not your ears",
+        "ringing tinnitus hum on the night bus home",
+        "the sidechain pump breathing under the pads",
+        "a chopped voice memo looping with its room noise left in"
+      ],
+      "dialectAndIdiom": [
+        "peak time / warm-up / closing set",
+        "banger, tune (riddim only if you're actually in the dubstep lane)",
+        "filthy / heavy / disgusting (as compliments)",
+        "rewind / reload, one more time",
+        "the drop, the build, the breakdown",
+        "all-nighter, back-to-back (b2b) — PLUR reads US-festival and a touch dated, use with intent"
+      ]
+    }
+  },
 };

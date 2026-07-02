@@ -1103,4 +1103,59 @@ export const ITALIAN_GUIDE: GenreGuide = {
       "Adding 'Sanremo style' or 'festival' suggests polished, broadly appealing Italian pop",
     ],
   },
+
+  authenticityKit: {
+    "writingEthos": "The cantautore's core move is to let a single ordinary household object carry the whole weight of a feeling — you never name the emotion, you name the moka gone cold on the stove and let the listener do the crying.",
+    "exemplars": [
+      {
+        "line": "La moka sul fornello per due, ma verso una tazza sola",
+        "craftNote": "Metonymy of daily ritual for abandonment — 'The moka set for two on the burner, but I pour just one cup.' The stovetop coffee pot sized for two people, now serving one, tells the whole story of a person left without stating loss. Avoids 'cuore'/'per sempre'; grounds grief in a real Italian kitchen object."
+      },
+      {
+        "line": "Le tapparelle giù alle tre del pomeriggio, agosto in via Padova",
+        "craftNote": "Sensory synecdoche for depression and the emptied-out city — 'Roller shutters down at three in the afternoon, August on Via Padova.' Lowered tapparelle in a real Milan immigrant street during the deserted-city heat of Ferragosto signals someone shut in, no vacation, isolated. Concrete street + hour does the emotional work."
+      },
+      {
+        "line": "Il tuo nome ancora sul citofono, terzo tasto dal basso",
+        "craftNote": "Object-as-residue-of-a-person — 'Your name still on the intercom, third button from the bottom.' The buzzer panel of an Italian palazzo, the specific button, holds the presence of someone gone. Replaces the cliché 'i tuoi occhi' with a precise domestic marker of who someone was and where they lived."
+      },
+      {
+        "line": "Ci siamo detti addio in un Autogrill sulla A14, caffè e un cornetto diviso a metà",
+        "craftNote": "Anti-romantic setting grounds a breakup in mundane reality — 'We said goodbye at an Autogrill on the A14, a coffee and a cornetto split in half.' The Adriatic-coast motorway service station and a shared pastry deflate melodrama into recognizable Italian life; 'diviso a metà' makes the shared cornetto quietly mark tenderness surviving the parting."
+      },
+      {
+        "line": "Papà conta le bollette al tavolo di formica, la partita muta in tv",
+        "craftNote": "Class-and-worry subtext via a still-life scene — 'Dad counts the utility bills at the Formica table, the match muted on TV.' The dated Formica kitchen table, the stack of bollette, and a football match watched with the sound off render economic precarity and a father's silent strain without abstraction — the socioeconomic undercurrent the guide names as authentic."
+      }
+    ],
+    "sensoryLexicon": {
+      "objectsAndPlaces": [
+        "la moka / la caffettiera sul fornello (stovetop espresso pot)",
+        "il citofono e le targhette dei cognomi (palazzo intercom with surname labels)",
+        "le tapparelle e le persiane (roller shutters and slatted blinds)",
+        "il tavolo di formica in cucina (Formica kitchen table)",
+        "l'Autogrill e la stazione di servizio in autostrada (A1, A14)",
+        "il pianerottolo e la tromba delle scale (landing and stairwell)",
+        "le bollette di luce e gas sul tavolo (utility bills)",
+        "la Panda parcheggiata in doppia fila con le doppie frecce (double-parked Fiat Panda, hazards blinking)",
+        "il traghetto e l'aliscafo per le isole (ferry / hydrofoil to the islands)",
+        "il bar sotto casa e lo scontrino della Coop (corner bar, supermarket receipt)"
+      ],
+      "texturesAndSounds": [
+        "il gorgoglio della moka che sale (the gurgle of the coffee pot rising)",
+        "il cigolio delle tapparelle tirate su la mattina (the creak of shutters rolled up at dawn)",
+        "le campane della parrocchia a mezzogiorno (parish bells at noon)",
+        "il ronzio del frigorifero nel silenzio (the fridge's hum in the silence)",
+        "il rumore del motorino che non parte al freddo (the scooter that won't start in the cold)",
+        "la partita a volume basso, il vociare del telecronista (the muted match, the commentator's murmur)",
+        "lo sferragliare del tram numero 14 (the clatter of the number 14 tram)"
+      ],
+      "dialectAndIdiom": [
+        "napoletano: 'guagliò' (kid/boy), 'ammore', 'jamme jà' (come on, let's go)",
+        "romanesco: 'daje', 'ao', 'a fàmo 'sta cosa' (come on / hey / let's just do it)",
+        "milanese: 'pirla', 'te se scemo?' (you fool / are you dumb?)",
+        "standard idioms: 'campa cavallo (che l'erba cresce)' (fat chance), 'fare le cose di fino' (do things properly), 'stare sul pianerottolo a fumare' (loiter on the landing smoking), 'piangere sul latte versato' (cry over spilt milk)"
+      ]
+    }
+  },
 };

@@ -648,4 +648,56 @@ export const BRAZILIAN_GUIDE: GenreGuide = {
       'For funk carioca: "tamborzão beat", "heavy bass", "MC vocals", "baile funk".',
     ],
   },
+
+  authenticityKit: {
+    "writingEthos": "Let saudade live inside a small, ordinary, unmistakably Brazilian object or gesture — a cooling cafezinho, a chair left on the calçada, the last bus of the night — so the feeling is inferred from the scene and never announced.",
+    "exemplars": [
+      {
+        "line": "O cafezinho esfriou na xícara de ágata, ninguém desligou o ventilador da sala",
+        "craftNote": "Domestic still-life standing in for absence: 'the little coffee went cold in the agate cup, nobody turned off the living-room fan.' The agate enamel cup (xícara de ágata) is a specific working-class Brazilian kitchen object; the running fan and cold coffee imply someone left mid-routine — grief shown, never named. Avoids the sea/saudade clichés entirely."
+      },
+      {
+        "line": "Deixei a cadeira de fio na calçada, mas você não desce mais pra ver a rua",
+        "craftNote": "Neighborhood ritual as loss: 'I left the plastic-cord chair out on the sidewalk, but you don't come down anymore to watch the street.' The cadeira de fio (woven-nylon chair) set on the calçada at dusk is a real Brazilian evening ritual, common in the interior and periferia; its emptiness carries the longing. Conversational register, concrete not abstract."
+      },
+      {
+        "line": "No último trem da Central a plataforma esvaziou e eu fiquei contando os azulejos quebrados",
+        "craftNote": "Urban specificity holds the emotion: 'on the last train from Central the platform emptied out and I stayed counting the broken tiles.' The Estação Central do Brasil is a genuine working-class Rio icon with real old tilework — place-true and earned, not a tourist postcard. Counting broken tiles on an emptied platform shows abandonment through idle gesture rather than declaring loneliness. (Fixes the original's false 'terminal da Lapa + azulejos' geography, which stitched together tourist landmarks a local would never conflate.)"
+      },
+      {
+        "line": "A mangueira do quintal deu manga demais esse ano e não tem pra quem mandar sacola",
+        "craftNote": "Abundance as ache — a quiet MPB inversion: 'the backyard mango tree gave too many mangoes this year and there's no one left to send a bag to.' The quintal mango tree and the neighborly ritual of sending a sacola of fruit are deeply Brazilian; the surplus with no recipient makes emptiness tangible. Nature-as-self in the Caetano/Gil lineage without exoticizing."
+      },
+      {
+        "line": "Minha mãe ainda põe dois pratos na mesa de fórmica, o azulzinho já descascando na quina",
+        "craftNote": "Weathered object carries unspoken mourning: 'my mother still sets two plates on the Formica table, its little blue already peeling at the corner.' The mesa de fórmica (Formica table) with chipping laminate is a precise working-class Brazilian interior; the extra plate and the peeling edge do all the emotional work. Present tense, no metaphor, pure scene. The diminutive 'azulzinho' adds native warmth."
+      }
+    ],
+    "sensoryLexicon": {
+      "objectsAndPlaces": [
+        "xícara de ágata (enamel agate coffee cup)",
+        "cadeira de fio / cadeira de plástico na calçada (nylon-cord chair on the sidewalk)",
+        "mesa de fórmica com a beirada descascando (Formica table, peeling edge)",
+        "laje com roupa no varal e caixa d'água (rooftop slab with laundry line and water tank)",
+        "botequim de esquina, mesa de bar com o pano de chão (corner bar with its floor-rag on the table)",
+        "mangueira e pé de acerola no quintal (mango and acerola tree in the backyard)",
+        "Estação Central do Brasil, trem de subúrbio, VLT, busão, terminal rodoviário de bairro (Central station, suburban train, light rail, bus, neighborhood bus terminal)",
+        "varanda mineira com a jarra de café e a cadeira de balanço (Minas veranda with coffee pitcher and rocking chair)"
+      ],
+      "texturesAndSounds": [
+        "o chiado do ventilador de teto girando devagar (whir of the slow ceiling fan)",
+        "gelo estalando no copo de requeijão reaproveitado (ice cracking in a reused cheese-spread glass)",
+        "o cavaquinho respondendo entre um verso e outro na roda (cavaquinho answering between verses in the circle)",
+        "sandália de dedo arrastando no piso frio de granilite (flip-flop dragging on cold terrazzo)",
+        "cheiro de café coado no pano e alho refogando na cozinha (smell of cloth-filtered coffee and garlic frying)",
+        "a chuva batendo na telha de amianto da laje (rain drumming on the asbestos-tile roof)"
+      ],
+      "dialectAndIdiom": [
+        "Carioca: 'busão' (bus), 'da hora', palatalized ti→tchi / di→dji, 'sinistro' (intense/awesome)",
+        "Nordestino: 'oxente', 'vixe', 'arretado', 'cabra da peste', open drawn-out vowels",
+        "Mineiro: 'uai', 'trem' (thing, not train), swallowed syllables — 'cê' for 'você', 'sô'",
+        "Everyday affection via diminutives: 'cafezinho', 'saudadinha', 'devagarinho', 'quintalzinho'"
+      ]
+    }
+  },
 };
