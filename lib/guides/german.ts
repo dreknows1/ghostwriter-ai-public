@@ -644,4 +644,58 @@ export const GERMAN_GUIDE: GenreGuide = {
       'For NDH: "Rammstein style", "industrial guitar", "operatic German vocals".',
     ],
   },
+
+  authenticityKit: {
+    "writingEthos": "Show don't tell by naming one exact, unglamorous everyday German object or civic ritual and letting the feeling arrive as a dry aside — the tenderness lives in the deadpan, not in stated emotion. Reach past the tourist-icon (Currywurst, Gartenzwerg, 'reden von Berlin') for the object only a local would notice.",
+    "exemplars": [
+      {
+        "line": "Du schreibst mir »alles gut« um kurz vor halb drei, / der Späti macht gleich zu, ich geh da eh nicht hin.",
+        "craftNote": "Deflection-via-object: the flat text 'alles gut' lands as its opposite because the Späti (Berlin corner kiosk) is still open — I just have no reason to go. Fixed the original's logic slip (a Späti isn't a surprise when 'already shut'). 'You text me all good just before half two, the Späti's closing soon, I'm not going anyway.'"
+      },
+      {
+        "line": "Wir teilen uns 'ne Tüte Pommes rot-weiß am Stehtisch, / du redest von Kanada, ich zähl die Möwen überm Gleis.",
+        "craftNote": "Two concrete Alltag anchors (shared chips with ketchup-and-mayo at a standing table) stage distance without naming it — she dreams of somewhere far, he counts gulls over the tracks. Swapped the tourist-brochure Currywurst-at-the-Bahnhof for the plainer Pommes rot-weiß, and 'Berlin' (itself a cliché escape) for anywhere-far. Ironic concreteness in the Hamburger-Schule vein."
+      },
+      {
+        "line": "Der Pfandbon klebt seit Wochen überm Küchentisch, / ich lös ihn nicht mehr ein — dann wär's ja endgültig.",
+        "craftNote": "Object-as-grief: a deposit slip (Pfandbon) taped above the kitchen table becomes a refusal to move on — cashing it in would make it final ('endgültig' lands harder than 'zu Ende'). Dropped the redundant brand name so it reads as lived detail, not product placement. The kit's mundane-monument move without brand-glamour."
+      },
+      {
+        "line": "Im Hausflur riecht's nach Putzmittel und fremdem Abendessen, / dein Name steht noch am Klingelschild, hat keiner überklebt.",
+        "craftNote": "Sensory specificity of the German Hausflur (stairwell smelling of cleaning-product and someone else's supper) plus the un-covered name on the buzzer panel — absence made physical. Replaced the grandmother-era 'Bohnerwachs' with contemporary 'Putzmittel' and the wrong 'abgekratzt' (you scratch engraved plates) with 'überklebt' (you tape over a paper label). 'Nobody's taped over your name.'"
+      },
+      {
+        "line": "Wir warten auf die S-Bahn, die laut Anzeige nie mehr kommt, / du grinst und sagst »wenigstens zusammen«, und irgendwie stimmt das.",
+        "craftNote": "Ironic-resigned register built on the very German ritual of a vanished S-Bahn on the departure board; the shrug is the affection. Fixed the original's broken logic — 'na immerhin' needs an upside to point at, and a never-coming train offers none. Now the consolation ('at least, together') gives 'and somehow that's true' something to confirm. Deadpan warmth pulled from a commuter annoyance."
+      }
+    ],
+    "sensoryLexicon": {
+      "objectsAndPlaces": [
+        "Späti (late-night corner kiosk, esp. Berlin)",
+        "Pfandbon / Pfandflaschen (deposit slip and returnable bottles)",
+        "Stehtisch an der Imbissbude / Pommesbude (standing table at the snack stand)",
+        "Hausflur mit Klingelschildern (stairwell with name labels on the buzzer panel)",
+        "S-Bahn-Anzeigetafel und der Bahnsteig (departure board and platform)",
+        "Balkon im Plattenbau mit Wäscheständer (prefab-block balcony with drying rack)",
+        "Dönerladen um drei Uhr nachts (kebab shop at three a.m.)",
+        "Schrebergarten mit Hecke und Thermoskanne (allotment garden with hedge and thermos — no gnome)"
+      ],
+      "texturesAndSounds": [
+        "das Zischen der aufgehenden Bierflasche / Pfandflasche",
+        "Putzmittel und kalter Zigarettenrauch im Treppenhaus",
+        "das Klackern der Anzeigetafel und die Ansage »Zurückbleiben, bitte!«",
+        "Regen auf Kopfsteinpflaster und quietschende Straßenbahnschienen",
+        "das Brummen des Kühlregals im menschenleeren Supermarkt",
+        "das dumpfe Wummern aus dem Nachbarclub durch die Wohnungswand"
+      ],
+      "dialectAndIdiom": [
+        "»passt schon« / »alles gut« (it's fine — used to wave off what isn't)",
+        "»ach komm« / »ist doch egal« (oh come on / doesn't matter anyway)",
+        "»halb so wild« (half as bad — playing down real hurt)",
+        "»wat willste machen« (Berlinerisch/Ruhrpott shrug — what're you gonna do)",
+        "»na super« / »typisch« (dry resignation at a real letdown, e.g. a cancelled train)",
+        "»digga« / »ey« (Kiezdeutsch address markers — pick one register per song; don't mix with older colloquialisms)"
+      ]
+    }
+  },
 };

@@ -629,4 +629,58 @@ export const AFROBEATS_GUIDE: GenreGuide = {
       'Describe the energy: party, romantic, chill, high-energy',
     ],
   },
+
+  authenticityKit: {
+    "writingEthos": "Carry the whole feeling through one specific Lagos object, transaction, or street ritual — let the pidgin naming of a real thing (a POS machine, a jerry can of fuel, a danfo conductor's shout) do the emotional work instead of stating the emotion.",
+    "exemplars": [
+      {
+        "line": "POS decline three times, network no gree, but I go still find your soup money",
+        "craftNote": "Financial-tenderness through the POS transfer ritual: love shown by pushing through repeated failed transfers ('decline three times') at a roadside kiosk; 'soup money' is the real housekeeping cash a man sends his woman for cooking — devotion measured in bank-network frustration, not romance abstraction. ('Okra money' was invented; 'soup money'/'feeding money' is the actual idiom.)"
+      },
+      {
+        "line": "Na Second Rainbow we branch, jerry can dey back seat, gen go hum tonight sha",
+        "craftNote": "Grounds the scene in a named Lagos landmark (Second Rainbow bus stop) and a jerry can of fuel in the back seat; 'gen go hum tonight' encodes making it home safe with the house powered — self-reliance and small victory said entirely through infrastructure. ('Jerry can' is the natural word for petrol/diesel; 'keg' is for palm wine or water.)"
+      },
+      {
+        "line": "Conductor dey shout 'Obalende Obalende!' — I dey chase your smile pass BRT",
+        "craftNote": "Uses the danfo conductor's real rapid-fire destination chant (the route name repeated, not tidied with 'straight') and the BRT as a speed yardstick; pursuit of affection is 'faster than the BRT lane' — desire measured against a specific commuter reality."
+      },
+      {
+        "line": "You block me for Whot but I still buy your suya, tell am add yaji well well",
+        "craftNote": "Domestic quarrel rendered through the Whot 'block' card (an insider game detail) and a suya order; forgiveness is buying her roadside suya and telling the mai-suya to load the 'yaji' spice — reconciliation shown as a specific food gesture, not a stated apology."
+      },
+      {
+        "line": "From Sapa to soft life, Palmpay alert land, mama don off the I-pass-my-neighbour",
+        "craftNote": "The come-up arc in money slang: 'Sapa' (brokeness) to 'soft life' (comfort/making it — the true opposite, unlike 'sabi' which only means skill), a Palmpay credit alert, and mama finally switching off the small 'I-pass-my-neighbour' generator — success proven by the appliance she no longer needs. ('Soft life' and 'japa' are current but heavily used; don't lean on them as the clever moment.)"
+      }
+    ],
+    "sensoryLexicon": {
+      "objectsAndPlaces": [
+        "POS kiosk with the umbrella and 'CASH & TRANSFER' cardboard sign",
+        "danfo (yellow bus) and the conductor hanging off the door",
+        "jerry can of petrol/diesel for the generator ('I-pass-my-neighbour')",
+        "Palmpay / Opay alert and a bank debit-alert SMS",
+        "Second Rainbow bus stop, Obalende, Oshodi under-bridge, Balogun market",
+        "suya spot with the mai-suya, yaji spice, and old newspaper wrap",
+        "sachet water ('pure water') and a bottle of Chapman with the straw",
+        "Whot cards, ludo board, and a plastic Mr. Biggs takeaway pack"
+      ],
+      "texturesAndSounds": [
+        "the low hum and diesel smell of a neighbourhood generator at night",
+        "'network no dey' — the POS timing out on a failed transfer retry",
+        "conductor's hoarse rapid-fire chant of the route and the horn of NURTW touts",
+        "log-drum bounce leaking from a phone speaker on the danfo",
+        "shekere and the mai-suya's knife scraping the grill grate",
+        "the double-buzz of a Palmpay credit alert on a cracked screen"
+      ],
+      "dialectAndIdiom": [
+        "'Sapa' (brokeness) vs 'soft life' / 'e don better' / 'we don blow' (made it)",
+        "'sha' (anyway/regardless), 'abeg' (please), 'na so e be' (that's how it is)",
+        "'gbam' / 'e make sense' (it's on point), 'sabi' (to know/be skilled)",
+        "'wetin dey sup', 'my guy', 'omo' (exclamation), 'wahala' used sparingly",
+        "'soup money' / 'feeding money' (housekeeping cash), 'to japa' (to emigrate)",
+        "'e choke' (impressive/overwhelming) as an ad-lib — usable but past its peak"
+      ]
+    }
+  },
 };

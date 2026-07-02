@@ -700,4 +700,58 @@ export const FRENCH_GUIDE: GenreGuide = {
       'Request "poetic French lyrics" to encourage literary quality over generic pop phrasing.',
     ],
   },
+
+  authenticityKit: {
+    "writingEthos": "Chanson lets a single ordinary object or gesture carry the whole emotional weight — the feeling stays offstage while a concrete detail (a transit pass, a lukewarm drink, a name written in fog) does the confessing.",
+    "exemplars": [
+      {
+        "line": "T'as laissé ton Navigo dans la poche de mon manteau",
+        "craftNote": "Metonymy through a mundane object — the Paris transit pass (Navigo, which you 'pass' at the turnstile, never a 'badge') left in a coat pocket stands in for a person gone but not yet erased. 'You left your Navigo in the pocket of my coat.' Everyday commuter detail, no postcard Paris."
+      },
+      {
+        "line": "On refait le monde au Franprix de nuit, moi les yaourts périmés, toi les grands discours",
+        "craftNote": "Ironic juxtaposition ('refaire le monde' = solve the world's problems) grounded in the fluorescent aisle of a late-night Franprix supermarket; her expired yogurts against his big speeches gently deflate the romance. 'We fix the world in the all-night Franprix — me with expired yogurts, you with grand speeches.'"
+      },
+      {
+        "line": "Le périph' à sept heures du mat', j'écris ton prénom sur la buée pour l'effacer après",
+        "craftNote": "Concrete gesture holding ambivalence — writing then erasing a name in windshield fog on the périphérique (Paris ring road) at morning rush shows grief as a private ritual, not a declaration. Note: 'j'écris ton prénom' (I write your name), never 'je t'écris ton prénom' which wrongly means 'I write it TO you.' 'The ring road at seven a.m. — I write your name on the fog just to wipe it off.'"
+      },
+      {
+        "line": "Ta mère m'appelle encore pour Noël, elle sait pas qu'on s'est quittés en mars",
+        "craftNote": "Narrative reveal via a small social fact — the ex's mother still phoning for Christmas, unaware of a March breakup, tells the whole story of a quiet, un-announced ending. Dropped 'ne' ('elle sait pas') is correct spoken register. 'Your mother still calls me at Christmas — she doesn't know we split in March.'"
+      },
+      {
+        "line": "Tu fumais des roulées sur le balcon du F2, la Seine trop loin pour qu'on la regarde",
+        "craftNote": "Class and place rendered specific — hand-rolled cigarettes ('des roulées') on the balcony of a cramped two-room flat (F2, classified-ad French), the river too far to be part of the view, refuses the tourist Paris for lived, modest geography. 'You rolled your own on the balcony of the two-room — the Seine too far off to bother looking at.'"
+      }
+    ],
+    "sensoryLexicon": {
+      "objectsAndPlaces": [
+        "le pass Navigo / le portique du métro (transit pass, station turnstile)",
+        "le Franprix / le Monoprix de quartier (neighbourhood supermarket)",
+        "le zinc du café PMU (the tin bar counter of a betting-café)",
+        "un F2 / un studio sous les toits (two-room flat / garret studio)",
+        "le périphérique et les bretelles d'autoroute (ring road and slip roads)",
+        "le TER de province, le quai numéroté (regional train, numbered platform)",
+        "la cour d'immeuble haussmannien, le digicode (courtyard, entry keypad)",
+        "un demi tiède, un ballon de rouge (a lukewarm half-pint, a glass of red)"
+      ],
+      "texturesAndSounds": [
+        "le grésillement du néon d'une cage d'escalier (buzz of a stairwell strip-light)",
+        "la buée sur la vitre du bus de nuit (condensation on the night-bus window)",
+        "le crissement des roulettes d'une valise sur les pavés (suitcase wheels on cobbles)",
+        "le bip du portique qui refuse la carte (turnstile beeping a rejected card)",
+        "la sonnerie étouffée d'un téléphone dans un manteau (muffled phone ringing in a coat)",
+        "le raclement de la chaise sur le carrelage du bistrot (chair scraping bistro tiles)"
+      ],
+      "dialectAndIdiom": [
+        "'on refait le monde' — to sit up talking / fixing the world's problems",
+        "'c'est chelou' / 'un truc de ouf' (verlan: it's weird / a crazy thing — younger register)",
+        "'j'te capte pas' / 'laisse tomber' (I don't get you / never mind, drop it)",
+        "'être à la ramasse', 'avoir le seum' (to be worn out/behind; to be bitter, gutted — younger register)",
+        "'du coup', 'genre', 'en vrai' (filler ligaments of real spoken French)",
+        "'se prendre un râteau', 'poser un lapin' (to get shot down; to stand someone up)"
+      ]
+    }
+  },
 };

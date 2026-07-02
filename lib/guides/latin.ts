@@ -847,4 +847,57 @@ export const LATIN_GUIDE: GenreGuide = {
       'BPM precision: Bachata 110-120, Reggaeton 88-95, Merengue 130-155, Bolero 65-80, Salsa 160-210.',
     ],
   },
+
+  authenticityKit: {
+    "writingEthos": "Reggaetón shows feeling by naming the exact caserío object, brand, and street ritual around the body — desire is proven by what's in the marquesina, not by declaring it.",
+    "exemplars": [
+      {
+        "line": "Me escribes a las tres, la Medalla ya caliente en el balcón / bajo en chancleta', el ascensor del residencial no sirve otra vez",
+        "craftNote": "Concrete-detail-as-longing: a warm Medalla (Puerto Rico's beer) left on the balcony and the broken elevator of the residencial (housing project) carry the ache of a late-night booty call without ever naming emotion. Gloss: 'You text me at three, the Medalla's already warm on the balcony / I go down in flip-flops, the project's elevator's out again.'"
+      },
+      {
+        "line": "Perreo en la marquesina, cuerda de extensión pa'l parlante / el vecino apagó la luz pero dejó abierta la reja",
+        "craftNote": "Ritual-object specificity: the marquesina (carport) party, an extension cord run out to the speaker, and the neighbor who kills his light but leaves the reja (security gate) open — a whole block's tolerance and complicity shown through hardware. Gloss: 'Perreo in the carport, extension cord out to the speaker / the neighbor cut his light but left the gate open.'"
+      },
+      {
+        "line": "Tú en el asiento e' la Yaris con el aire a to' lo que da / y yo bajándote el volumen pa' escuchar lo que no dices",
+        "craftNote": "Class-real setting over glamour: a Toyota Yaris with the A/C maxed (not a luxury car) becomes the intimate room; lowering the volume to hear what she won't say does the emotional work. Gloss: 'You in the Yaris seat, A/C blasting full / me turning it down to hear what you're not saying.'"
+      },
+      {
+        "line": "Dejaste el gloss marcao en el vaso plástico del colmado / y el pana del mostrador to'avía se acuerda cómo pediste el jugo",
+        "craftNote": "Trace-as-presence: lip gloss printed on a colmado (corner store) plastic cup and the counter guy remembering how she ordered her juice — absence rendered through a smudge and a witness, no metaphor of fire or heaven. Boricua-consistent: swapped the Dominican word 'tíguere' for 'el pana del mostrador' to keep the kit Puerto Rican. Gloss: 'You left the gloss printed on the colmado's plastic cup / and the counter guy still remembers how you asked for the juice.'"
+      },
+      {
+        "line": "Nos vimos en Piñones un lunes que no había na' / tú con la alcapurria en la mano, yo fingiendo que miraba el mar",
+        "craftNote": "Anti-postcard beach: Piñones on a dead Monday, an alcapurria (fried fritter) in her hand, him pretending to watch the sea instead of her — the coast is a working-class food stand, not exotic scenery, and the feeling is in the pretending. Note: Piñones takes no article ('en Piñones', never 'en la Piñones'). Gloss: 'We ran into each other in Piñones, a Monday with nothing going on / you with the alcapurria in hand, me pretending I was looking at the sea.'"
+      }
+    ],
+    "sensoryLexicon": {
+      "objectsAndPlaces": [
+        "la marquesina (the carport where the block party actually happens)",
+        "el residencial / caserío (public housing project) and its broken elevator",
+        "el colmado (corner store) with the plastic cups and single-serve juices",
+        "Medalla (the local beer) and the Coors Light lata sweating on the ledge",
+        "la Yaris / el Corolla con el aire dañado (working-class car, busted A/C)",
+        "Piñones — the kioskos, alcapurrias, bacalaítos on the coastal strip east of San Juan",
+        "la reja (metal security gate) left cracked open, the extension cord run to the parlante",
+        "Río Piedras, la Placita de Santurce, la gasolinera Puma abierta 24 horas"
+      ],
+      "texturesAndSounds": [
+        "el dembow retumbando por la escalera de cemento del edificio",
+        "chancletas arrastrándose sobre el piso mojado del balcón",
+        "la lata destapándose (psst) y el hielo sonando en el vaso plástico",
+        "el bajo del carro haciendo vibrar los cristales del semáforo",
+        "la güira / el raspar metálico y el 'plap' del kick del dembow contra el bloque",
+        "grillos y el zumbido del abanico de pedestal a las tres de la mañana"
+      ],
+      "dialectAndIdiom": [
+        "perreo, janguear, bellaquera, gufeo, revolú",
+        "cangri, bichote, corillo, el pana, el after / la actividad",
+        "aspirated/dropped 's' and velar 'r': 'pa' lo' nene', 'toa la noche', 'mi'jo'",
+        "'¿qué es la que hay?', 'brutal', 'al garete', 'chévere', 'wepa'",
+        "code-switch: 'link', 'party hard', 'baby' dropped mid-Spanish line"
+      ]
+    }
+  },
 };
