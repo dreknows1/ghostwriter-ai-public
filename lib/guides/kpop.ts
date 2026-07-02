@@ -645,4 +645,58 @@ export const KPOP_GUIDE: GenreGuide = {
       'For K-R&B, specify "intimate", "neo-soul", and "lo-fi drums" to distinguish from idol pop.',
     ],
   },
+
+  authenticityKit: {
+    "writingEthos": "K-pop shows feeling by pinning an emotion to a hyper-specific, disposable modern object or micro-ritual of Seoul youth life (a convenience-store receipt, a read-but-unanswered KakaoTalk, a subway transfer alarm) so the polish never floats into abstraction — the concrete detail carries the ache, and an English hook lands the release.",
+    "exemplars": [
+      {
+        "line": "안읽씹 1, 오후 두 시 사십 분 / 화면 위에 네 이름만 dimming out",
+        "craftNote": "Metonymy via smartphone UI: the '1' is KakaoTalk's unread badge still hanging on your message (안읽씹 = left unread), a precise timestamp, and the screen auto-dimming stand in for being ignored — heartbreak told entirely through a phone lock screen, no 'sad' stated. English 'dimming out' lands the fade as the hook. (Fixed the original's UI logic error: '읽씹' means already-read, so no unread '1' would remain.)"
+      },
+      {
+        "line": "삼각김밥 데워 줄까 묻던 편의점 알바 / 그 말이 왜 이렇게 오래 남지, stay",
+        "craftNote": "Ordinary-object tenderness: a convenience-store part-timer offering to microwave a triangle gimbap (삼각김밥) becomes the whole memory of small kindness after a breakup — Seoul loneliness lives in a 24-hour GS25, not moonlight. Single English 'stay' as the fan-chantable hook."
+      },
+      {
+        "line": "2호선 갈아타는 곳에서 손 놓쳤어 / 스크린도어 닫히고 넌 저쪽, I let you go",
+        "craftNote": "Geographic precision as emotion: Line 2 (the green loop line) transfer crush and the platform screen doors sliding shut physicalize a relationship ending — a moment every Seoul commuter knows. The English tag reframes losing as a choice. (Note: the closing-doors conceit is the most conventional of the set; swap in a named transfer station like 신도림/사당 if a fresher image is wanted.)"
+      },
+      {
+        "line": "다이소 삼천 원짜리 무드등 하나 켜고 / 반지하 천장에 별 대신 곰팡이 세, still I glow",
+        "craftNote": "Anti-glamour worldbuilding: a 3,000-won Daiso mood lamp and counting mold spots (곰팡이) on a semi-basement (반지하) ceiling instead of stars — youth economic reality rewritten as self-empowerment, written from the inside rather than as poverty-tourism. Subverts the genre's clean 'star' imagery; 'still I glow' is the defiant chorus."
+      },
+      {
+        "line": "한강 치맥 다 식고 돗자리만 남았는데 / 네가 구기던 비닐봉지 소리, that's my replay",
+        "craftNote": "Sensory synecdoche: cold Han River chi-maek (delivery fried chicken + beer picnic), a leftover picnic mat, and the crinkle of the plastic delivery bag you used to crumple — a specific after-date sound loops as grief. 'That's my replay' turns a texture into the hook. (Fixed the original's 은박지/aluminum-foil detail, which doesn't match Han River delivery packaging; the real sound is a 비닐봉지 crinkle.)"
+      }
+    ],
+    "sensoryLexicon": {
+      "objectsAndPlaces": [
+        "편의점 삼각김밥 / GS25·CU 24시 (convenience-store triangle gimbap, all-night store)",
+        "2호선 순환선, 환승역 스크린도어 (Line 2 loop, transfer-station platform screen doors)",
+        "한강 공원 돗자리와 배달 치맥 (Han River park picnic mat + delivery chicken-and-beer)",
+        "다이소 삼천 원 소품 / 무드등 (Daiso 3,000-won goods, mood lamp)",
+        "반지하·옥탑방 자취방 (semi-basement / rooftop studio room)",
+        "코인노래방, 인생네컷 (coin karaoke booth, four-cut photo booth)",
+        "성수동·을지로 골목 카페, 아아 한 잔 (Seongsu / Euljiro alley cafe, an iced americano)",
+        "카카오톡 안읽씹, 프로필 뮤직 (KakaoTalk left-unread badge, profile song)"
+      ],
+      "texturesAndSounds": [
+        "비닐봉지·과자봉지 바스락 소리 (crinkle of a plastic bag / snack wrapper)",
+        "지하철 환승 알림음 '이번 역은…' (subway transfer chime and announcement)",
+        "편의점 문 열릴 때 딩동 (convenience-store door ding-dong)",
+        "빗소리에 젖는 러닝화, 물웅덩이 (rain soaking sneakers, puddles)",
+        "형광등 깜빡임과 웅- 하는 저주파 (flickering fluorescent light and its low hum)",
+        "폰 진동 두 번 뒤 오는 정적 (two buzzes then silence)"
+      ],
+      "dialectAndIdiom": [
+        "읽씹 (read-and-ignored a text) / 안읽씹 (left unread, badge still showing)",
+        "존버·현타 (grind-it-out endurance / sudden reality-check emptiness)",
+        "아아 (iced americano) / 국룰 (the unspoken standard rule)",
+        "TMI / 갑분싸 (oversharing / air-suddenly-cold) — note: '어쩔티비' dropped as already dated for a mature concept",
+        "let's go, stay, one more time (genre-standard English hook fragments)",
+        "오빠·언니 없이 (deliberately avoiding aegyo address for a mature concept)"
+      ]
+    }
+  },
 };

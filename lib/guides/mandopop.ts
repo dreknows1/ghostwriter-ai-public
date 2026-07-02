@@ -742,4 +742,59 @@ export const MANDOPOP_GUIDE: GenreGuide = {
       'Jay Chou is the universal reference point — specify "Jay Chou style" for R&B-guofeng fusion.',
     ],
   },
+
+  authenticityKit: {
+    "writingEthos": "Mandopop carries restrained longing by naming one small, ordinary object left behind by a person and letting the physical residue of them do all the emotional talking, so the feeling is never stated, only inhabited. (This kit skews specifically Taiwan-Mandopop; the Hokkien-inflected idiom below fits island writing more than mainland or Malaysian mandopop.)",
+    "exemplars": [
+      {
+        "line": "你走後 冰箱那盒豆漿 過期了三天 我還沒丟",
+        "craftNote": "Single-object residue: 'After you left, that carton of soy milk in the fridge has been expired three days and I still haven't thrown it out.' Uses everyday 豆漿 (a breakfast staple) and the failure to discard it—not tears—to carry grief.量詞 corrected to 盒 (fridge soy milk comes boxed/盒裝, never 罐/canned). Avoids moon and rain clichés; 過期了 sits naturally on a descending melodic line."
+      },
+      {
+        "line": "手機還亮著 你傳的那張貼圖 我沒點開 也就一直沒讀",
+        "craftNote": "Contemporary digital ritual: the phone lights with a sticker they sent; refusing to tap it open is the whole ache, because tapping is what triggers 已讀 (the read-receipt). Rewritten from an earlier 捨不得已讀, which was non-idiomatic (已讀 is a state, not an action you can 捨不得); restraint now lives in the physical gesture 沒點開. LINE 貼圖 texture is daily life for young islanders."
+      },
+      {
+        "line": "夜市收攤那盞燈 照著你沒吃完的那半碗麵",
+        "craftNote": "Concrete place + leftover: 'The stall's last light as the night market packs up, shining on the half bowl of noodles you didn't finish.' Grounds longing in 夜市 (night market) and a specific abandoned 半碗麵—the unfinished meal as the person's absence. A working vendor's shutdown lamp, not exoticized 'lantern' imagery. Correct 量詞 throughout (盞燈, 碗麵)."
+      },
+      {
+        "line": "捷運到站的廣播 念著你家那一站 我又坐過了站",
+        "craftNote": "Urban transit as involuntary habit: 'The MRT announcement calls out the stop near your place—and again I ride past mine.' Uses 捷運 (Taipei metro) and the muscle-memory of an old commute; 坐過站 is exactly the right idiom for overshooting. Tightened 坐過了頭→又坐過了站 so the 又 (again) carries the repetition of the habit. Speech-rhythm phrasing in four-plus-character units."
+      },
+      {
+        "line": "陽台曬的那件襯衫 你忘了拿 我讓它淋了整個梅雨",
+        "craftNote": "Weather made specific and lived-in: 'The shirt drying on the balcony—you forgot it—I let it soak through the whole plum-rain season.' 梅雨 (梅雨季, the plum-rain / East Asian monsoon) is a real seasonal marker, not decorative 'rain'; the forgotten 襯衫 left out to ruin is devotion and self-punishment at once, feeling shown through neglect."
+      }
+    ],
+    "sensoryLexicon": {
+      "objectsAndPlaces": [
+        "夜市 (night market) and its 收攤 (stall-closing) hour",
+        "捷運 / 地鐵 (MRT / subway) platform and station announcements",
+        "便利商店 (7-Eleven / 全家 convenience store) at 2am, 關東煮 steaming",
+        "陽台 (balcony) with laundry drying on 曬衣架",
+        "手搖飲 (bubble-tea shop) plastic cup with a chewed straw",
+        "頂樓加蓋 / 老公寓 (rooftop add-on room, old walk-up apartment)",
+        "KTV 包廂 (private karaoke room) with the mic on standby",
+        "機車 (scooter) parked in the rain, helmet on the seat"
+      ],
+      "texturesAndSounds": [
+        "已讀不回 (the silence of a read-but-unanswered message)",
+        "梅雨 (plum-rain season) drizzle against the window glass",
+        "電風扇 (electric fan) whirring in a humid room",
+        "冰塊在杯裡融化的聲音 (ice melting and shifting in a cup)",
+        "捷運進站的到站廣播 (the metro's arrival announcement chime and voice)",
+        "鐵捲門拉下 (a shopfront's metal roller shutter clattering down)",
+        "貼圖傳來的提示音 (the notification blip of an incoming sticker)"
+      ],
+      "dialectAndIdiom": [
+        "捨不得 (can't bear to / too attached to let go)",
+        "坐過站 / 坐過頭 (rode past the stop, overshot)",
+        "拍謝 (Taiwanese Hokkien-inflected 'sorry / excuse me', softens speech — strongly Taiwan-specific)",
+        "還好啦 (deflecting 'I'm fine, it's nothing' understatement)",
+        "凍未條 (Hokkien 'can't stand it / can't hold back', common in Taiwan Mandarin — Taiwan-specific)",
+        "習慣 (habit — used for love that lingers as involuntary routine)"
+      ]
+    }
+  },
 };

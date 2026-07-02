@@ -644,4 +644,58 @@ export const JPOP_GUIDE: GenreGuide = {
       'For City Pop, specify "1980s", "funk guitar", and "warm analog synths".',
     ],
   },
+
+  authenticityKit: {
+    "writingEthos": "J-pop shows-not-tells by fixing a single, mundane, mappable moment — a specific object at a specific hour — and letting the unspoken feeling leak out of what's left unsaid around it, so restraint itself carries the emotion. The craft lives in technically true, physically real detail (how an IC gate actually beeps, how a disposable handwarmer actually warms), never in decorative imagery.",
+    "exemplars": [
+      {
+        "line": "改札で二回鳴った　Suicaの残高、見られたくなかった",
+        "craftNote": "Displacement of embarrassment onto an object: 'The gate beeped twice / I didn't want my Suica balance seen.' The double error-beep (二回鳴った) is a tiny public fumble; the shame is located in not wanting the low balance figure on the reader to be witnessed, never in a stated feeling. Contemporary Tokyo specific, avoids all clichés. Native fix: dropped the slightly translated personification 残高が笑う in favor of the more natural, more restrained 見られたくなかった."
+      },
+      {
+        "line": "コンビニの前で　肉まん半分こにした冬　開けたばかりのカイロはまだ冷たい",
+        "craftNote": "Object-as-timestamp for a lost intimacy: 'The winter we split a nikuman in front of the konbini / the handwarmer I just opened is still cold.' The shared steamed bun (halved — 半分こ, childish-warm word) marks past closeness; the just-opened disposable kairo that hasn't heated yet is present loneliness. Native fix: 開けたばかり (just opened) replaces the illogical 二個目 — a fresh kairo genuinely takes minutes to warm, so the detail is physically true and the ache stays entirely in the cold object, never named."
+      },
+      {
+        "line": "終電の窓に　返してない既読がふたつ　多摩川を渡るまで返さない",
+        "craftNote": "Digital-age silence as feeling: 'On the last-train window, two messages I've left on read / I won't reply until we cross the Tama River.' The LINE 既読スルー (leaving messages read-but-unanswered) is the wound; the geographic beat (crossing the Tama River, leaving Tokyo for Kanagawa) gives the withheld reply real duration and distance. Native fix: 既読 marks cannot be 消し忘れる (un-set/erased) by the reader, so the original was technically wrong; 返してない既読 (read-but-not-replied-to) is how the mechanic actually works and keeps restraint as an active choice."
+      },
+      {
+        "line": "自販機の下で光ってる　誰かの百円　拾わないまま夏が始まる",
+        "craftNote": "Inaction as characterization: 'Somebody's hundred-yen coin glinting under the vending machine / summer begins with me still not picking it up.' The 100-yen coin (a real amount, exactly one drink) under a jihanki is a threshold the narrator can't cross — passivity, the paralysis before change. Summer 'beginning' anyway shows time moving past the frozen self. Seasonal marker without festival/fireworks cliché. Native verdict: fully natural, idiomatic, insider — kept as written."
+      },
+      {
+        "line": "君じゃなくて　あなたって打った下書き　三ヶ月　送れないまま眠ってる",
+        "craftNote": "Register-shift inside the language as the whole drama: 'A draft where I typed not kimi but anata / for three months it sleeps, still unsent.' Weaponizes the second-person pronoun choice — switching to the more distant, formal あなた signals the relationship cooled — and 下書き (unsent phone draft) makes it concrete. Native fix: 打った (typed) is more natural than 書いた for a phone draft, and 送れないまま (still unable to send) carries the ache better than the forced IME-flavored 変換したまま. Peak restraint: the feeling is a message never sent."
+      }
+    ],
+    "sensoryLexicon": {
+      "objectsAndPlaces": [
+        "改札 (kaisatsu, the ticket gate) / Suica・PASMO (IC transit cards)",
+        "コンビニ (konbini) — specifically 肉まん (nikuman steamed bun) and おでん by the register in winter",
+        "自販機 (jihanki, vending machine) and the ¥100–¥160 canned drink",
+        "終電 (shūden, the last train) and named rivers it crosses — 多摩川, 荒川",
+        "カイロ (kairo, disposable pocket handwarmer)",
+        "屋上フェンス (rooftop fence) of a school / apartment 団地 (danchi) stairwell landing",
+        "ガードレール (guardrail) along a 国道 and the 踏切 (fumikiri, railway crossing) bell",
+        "LINE の既読 (read-receipt) and the phone 下書き (unsent draft)"
+      ],
+      "texturesAndSounds": [
+        "改札のピッ／エラーの二度鳴り (the IC-gate 'pi' and the double error-beep)",
+        "踏切の警報音 (the two-tone crossing bell) and the 電車 rattling over 継ぎ目 (rail joints)",
+        "自販機の低いモーター音 (the low hum of a vending machine at night)",
+        "缶を開けるプシュッ (the psshht of a pull-tab) and コンビニの入店チャイム (the store's entry chime)",
+        "セミの声 (cicada drone) at the start of summer, and 夕立 (sudden evening rain) on a コンビニの庇",
+        "衣擦れ (kinuzure, the whisper of fabric) — silence held between two people"
+      ],
+      "dialectAndIdiom": [
+        "半分こ (hanbunko) — the warm, slightly childish 'let's split it in half'",
+        "既読スルー (kidoku-surū) — leaving a message 'read' but unanswered, a modern relational verb",
+        "なんとなく (nantonaku) — 'for no particular reason,' the quintessential J-pop hedge that leaves feeling unstated",
+        "第二/第三ボタン (dai-ni/dai-san botan) — the graduation ritual of giving away a uniform button",
+        "エモい (emoi) — Gen-Z coinage for a nostalgic, wordless ache; and そっか (sokka), the resigned soft 'I see'",
+        "pronoun register as emotional code: 僕/俺/私 (boku/ore/watashi) and 君/あなた (kimi/anata) chosen to signal distance"
+      ]
+    }
+  },
 };

@@ -657,4 +657,62 @@ export const SWAHILI_GUIDE: GenreGuide = {
       'For singeli, specify 180-200 BPM and describe as "frenetic" and "hyperfast".',
     ],
   },
+
+  authenticityKit: {
+    "writingEthos": "Show devotion and hardship through the concrete texture of coastal-urban daily life — a specific bus terminal, an expired airtime scratch-card, a shared plate of street food — letting ordinary objects and errands carry the emotion the way taarab's coded wedding laments and Bongo Flava's storytelling verses do, rather than naming the feeling outright. Stay grounded in Tanzanian/Dar-coastal register; do not borrow Kenyan Sheng.",
+    "exemplars": [
+      {
+        "line": "Nakungoja kwenye stendi ya Ubungo, daladala ya mwisho imeshapita",
+        "craftNote": "Concrete place + missed-transport image for abandonment: 'I wait for you at Ubungo bus stand, the last daladala minibus has already passed.' 'Nakungoja' is more idiomatic than the slightly formal 'nakusubiri'; the specific Dar terminal and the last commuter minibus carry the loneliness without stating it."
+      },
+      {
+        "line": "Umeniacha kama vocha ya salio iliyokwisha muda, sipati mtandao wa moyo wako",
+        "craftNote": "Everyday telecom object as heartbreak metaphor: 'You left me like an expired airtime scratch-card, I get no network to your heart.' Uses the Swahilized 'vocha' (not English 'voucher') and the physical airtime-scratch-card culture instead of clichéd star/ocean comparisons; the mobile-carrier name is dropped since brands merge/rebrand and the scratch-card itself is the sticky cultural object."
+      },
+      {
+        "line": "Mama anachemsha uji wa ulezi, mimi natafuta nauli ya kuja kwako Kariakoo",
+        "craftNote": "Domestic scene + hustle detail conveying longing across poverty: 'Mother is boiling finger-millet porridge, I'm scraping together bus fare to reach you at Kariakoo.' Grounds mapenzi in maisha magumu with a real Dar market district and a regional porridge — fully idiomatic, no translationese."
+      },
+      {
+        "line": "Harusi yako imeshaandaliwa, vitenge vimeshanunuliwa, na jina langu halimo kwenye kadi ya mwaliko",
+        "craftNote": "Taarab-style coded wedding lament: 'Your wedding is prepared, the vitenge cloths have been bought, and my name is not on the invitation card.' 'Vitenge' (wedding cloths) is more specific than everyday 'kanga'; the parallel '-sha-' perfectives and 'kadi ya mwaliko' deliver the sting of losing a beloved to another, oblique in the taarab tradition."
+      },
+      {
+        "line": "Kwenye kibanda cha Mama Ntilie tuligawana chipsi mayai, leo nakula peke yangu Msimbazi",
+        "craftNote": "Shared-food memory turned to solitude: 'At Mama Ntilie's food stall we split a chips-and-egg omelette, today I eat alone in Msimbazi.' Uses the ubiquitous woman-vendor archetype 'Mama Ntilie' and the beloved Tanzanian dish 'chipsi mayai' plus a real Dar neighbourhood to mark before/after — insider texture, not tourist gaze."
+      }
+    ],
+    "sensoryLexicon": {
+      "objectsAndPlaces": [
+        "stendi ya Ubungo (Ubungo daladala terminal, Dar es Salaam)",
+        "daladala (commuter minibus) and its konda (fare conductor)",
+        "Kariakoo na Msimbazi (dense Dar market and residential districts)",
+        "kibanda cha Mama Ntilie (roadside street-food stall run by a woman vendor)",
+        "chipsi mayai na mishikaki (chips-omelette and grilled meat skewers)",
+        "kanga na vitenge (printed wrap cloths with Swahili proverbs on the hem; vitenge for weddings)",
+        "vocha ya salio na M-Pesa/Tigo Pesa (airtime scratch-cards and mobile-money transfers)",
+        "bodaboda (motorcycle taxi) weaving through Ilala traffic",
+        "uji wa ulezi na chai ya tangawizi (finger-millet porridge and ginger tea)",
+        "feri ya Kigamboni na bandari ya Dar (Kigamboni ferry and Dar harbour)"
+      ],
+      "texturesAndSounds": [
+        "mlio wa adhana kutoka msikitini alfajiri (the dawn call to prayer from the mosque)",
+        "kelele za konda akiita 'Posta! Posta!' (conductor shouting destinations)",
+        "oud na violin ya taarab ikilia harusini (oud and taarab violin weeping at a wedding)",
+        "vigelegele vya wanawake (women's ululation of celebration)",
+        "ngoma ya kidumbak na makofi ya chakacha (kidumbak drum and hand-claps of the swaying chakacha dance)",
+        "mngurumo wa 808 na hi-hat za singeli Manzese (booming 808 and frenetic singeli hi-hats from Manzese)",
+        "sauti ya mvua ikigonga bati la nyumba (rain drumming on a corrugated-iron roof)"
+      ],
+      "dialectAndIdiom": [
+        "'mchizi wangu' (my close friend / my person — Tanzanian slang)",
+        "'poa', 'freshi', 'safi kabisa' (cool / fresh / all good — Dar street register)",
+        "'mambo vipi', 'mzuka', 'mtoto wa geti' (what's up / good vibe / a smart streetwise girl — Dar youth register, replacing the mistaken Kenyan Sheng item)",
+        "'shukrani kwa Mola' na 'inshallah' (gratitude to God / God-willing — coastal Islamic register)",
+        "'kumekucha' (dawn has broken — high literary/taarab register)",
+        "'mtaani' / 'dume la mtaa' (the neighbourhood / a respected local man — belonging idiom)",
+        "methali: 'penye nia pana njia' (where there's a will there's a way — proverb signalling lyrical intelligence)"
+      ]
+    }
+  },
 };
