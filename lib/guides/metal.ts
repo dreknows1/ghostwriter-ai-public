@@ -660,4 +660,65 @@ export const METAL_GUIDE: GenreGuide = {
       'Include atmosphere: dark, epic, atmospheric, raw, cinematic',
     ],
   },
+
+  authenticityKit: {
+    "writingEthos": "Let a real object or physical wound carry the dread and defiance — a rusted machine, a scarred knuckle, a chained gate, a battle vest gone thin at the seams. Never announce the darkness or the rage; stage the concrete moment — and where you can, let the sound world (feedback, a chugging amp, the pit) or the tribe's iconography sit in frame so the line could only be metal.",
+    "exemplars": [
+      {
+        "line": "Dad's timecard still punched at 6 a.m. the morning the foundry chained its gates",
+        "craftNote": "industrial decline and inherited despair shown through one clocked timecard and a padlocked gate, no editorializing"
+      },
+      {
+        "line": "I carved the corpse-paint sign beside her name while the amp still fed back in the van outside",
+        "craftNote": "grief anchored to a headstone but pulled unmistakably into metal — black-metal iconography and a live-gig object do the emotional and genre work at once"
+      },
+      {
+        "line": "Grandfather's patch — bleach-stiff denim, threads where the band's name used to be",
+        "craftNote": "status and lineage in the metal tribe told through a worn battle vest, an object that carries a whole history"
+      },
+      {
+        "line": "Split knuckles healed crooked from hauling the dropped kid up off the pit floor before the boots came down",
+        "craftNote": "community and physical sacrifice shown through scar tissue and the crowd's ritual plus the concrete threat of the boots — no portentous 'fallen one', no stated brotherhood"
+      },
+      {
+        "line": "Kept his chewed-down 1.5 mm picks in the pill bottle beside the bed they found him cold in",
+        "craftNote": "loss shown through a guitarist's worn plectrums stored in a dead man's medicine bottle — the object holds the absence, register kept blunt"
+      }
+    ],
+    "sensoryLexicon": {
+      "objectsAndPlaces": [
+        "foundry floor",
+        "battle vest (denim with sewn patches)",
+        "padlocked factory gate",
+        "practice-space cinderblock walls",
+        "the pit / circle pit",
+        "drop-tuned seven-string",
+        "split-knuckle scar tissue",
+        "gravel car park behind the venue",
+        "chewed-down heavy-gauge plectrum",
+        "blown 4x12 cabinet",
+        "sweat-warped setlist taped to the monitor",
+        "chain-link fence rattling"
+      ],
+      "texturesAndSounds": [
+        "palm-muted chug rattling the floorboards",
+        "feedback howl left ringing after the last note",
+        "double-bass kick felt in the sternum",
+        "pinch-harmonic squeal",
+        "tremolo-picked wall of guitar like static",
+        "the dead silence right before the breakdown drops",
+        "boots stamping concrete in unison"
+      ],
+      "dialectAndIdiom": [
+        "open it up / circle pit",
+        "the wall of death",
+        "crank the gain / stack the gain",
+        "tighter than a triggered snare",
+        "brutal / crushing / heavy",
+        "true to the underground / no sellouts",
+        "kvlt",
+        "riff worship"
+      ]
+    }
+  },
 };

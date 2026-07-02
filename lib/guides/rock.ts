@@ -851,4 +851,63 @@ export const ROCK_GUIDE: GenreGuide = {
       'Include dynamic descriptors: quiet verse/loud chorus, building, explosive',
     ],
   },
+
+  authenticityKit: {
+    "writingEthos": "Bolt the feeling to gear, grime, and a dead-end address — an amp, a bus pass, a factory whistle — and let the object hold the rebellion or the ache so you never have to announce it.",
+    "exemplars": [
+      {
+        "line": "Still owe forty quid on the Marshall I smashed the night the venue closed for flats",
+        "craftNote": "class rage and gentrification told through gear debt and a specific number, never named as anger"
+      },
+      {
+        "line": "Clocked off nights, I pawn the ring to make rent on the lock-up where the amps live",
+        "craftNote": "the cost of artistic integrity shown as a literal trade-off, anchored to band gear and a rehearsal space so it reads rock, not folk"
+      },
+      {
+        "line": "Her name's still Tipp-Exed on my school bag under a bootleg tour patch gone grey",
+        "craftNote": "lost love and aging outsider identity carried by a faded, dated object, with the real-band name swapped for a generic bootleg patch to stay original and licence-clean"
+      },
+      {
+        "line": "Dad's redundancy letter's a bookmark in the manual for the amp he never let me touch",
+        "craftNote": "post-industrial decline and inheritance grief shown through one paper object doing double duty"
+      },
+      {
+        "line": "We soundcheck to an empty room and a fruit machine coughing up somebody else's change",
+        "craftNote": "the grind of DIY touring rendered through a concrete venue detail, status stated by absence not adjective"
+      }
+    ],
+    "sensoryLexicon": {
+      "objectsAndPlaces": [
+        "Marshall stack",
+        "practice room above the chippy",
+        "council estate stairwell",
+        "pawn shop counter",
+        "tour van with the sliding door that sticks",
+        "sticky-floored dive venue",
+        "fret-worn Telecaster",
+        "cracked distortion pedal",
+        "bus pass and a warm can",
+        "factory whistle at seven"
+      ],
+      "texturesAndSounds": [
+        "tube-amp hum before the first chord",
+        "feedback squeal cutting off a snapped string",
+        "palm-muted chug on the low E",
+        "crash cymbal bleeding into the room mics",
+        "the click track dying under the first downstroke",
+        "a snare that snaps like a slammed door",
+        "gaffer tape peeling off a mic stand"
+      ],
+      "dialectAndIdiom": [
+        "mate",
+        "graft",
+        "on the dole",
+        "sound (as in 'that's sound')",
+        "knackered",
+        "signing on",
+        "having it",
+        "the last bus home"
+      ]
+    }
+  },
 };

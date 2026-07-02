@@ -631,4 +631,68 @@ export const SOUL_GUIDE: GenreGuide = {
       'Use "warm," "organic," and "live" as key production descriptors',
     ],
   },
+
+  authenticityKit: {
+    "writingEthos": "Testify with the body and the room — let a worn object, a Sunday ritual, or a physical ache in the throat carry the feeling, so the church and the kitchen prove the emotion and you never have to name it.",
+    "exemplars": [
+      {
+        "line": "I still set two plates on the table Sundays, wipe the second one clean, put it back",
+        "craftNote": "grief and denial shown through a repeated household ritual — an unfinished chore that refuses the loss"
+      },
+      {
+        "line": "Your church shoes by the door, still shining, and nobody here left to shine 'em for",
+        "craftNote": "absence made physical through a polished object and its now-purposeless labor"
+      },
+      {
+        "line": "Third verse of your favorite hymn, and my voice cracked right where you used to come in",
+        "craftNote": "loss shown through a specific vocal failure — the missing duet entrance in a known hymn does the grieving, no emotion named"
+      },
+      {
+        "line": "Rent's late, radiator's cold, but I put on my good coat and walk out humming like I own the block",
+        "craftNote": "working-class dignity and defiance told through material hardship met with a chosen posture"
+      },
+      {
+        "line": "Mama's hands in the collard pot, gold hoops swinging, showing me low and slow with the back of a wooden spoon",
+        "craftNote": "love and inheritance shown through a kitchen scene and a domestic gesture — the lesson stays in the hands, never stated"
+      }
+    ],
+    "sensoryLexicon": {
+      "objectsAndPlaces": [
+        "church pew",
+        "collard pot",
+        "organ bench",
+        "chitlin' circuit stage",
+        "screen door on a Southside porch",
+        "gold hoops",
+        "Sunday-best coat",
+        "kitchen table with two chairs",
+        "juke joint back room",
+        "grandmother's Bible",
+        "stoop steps",
+        "record player needle"
+      ],
+      "texturesAndSounds": [
+        "a catch in the throat before the high note",
+        "tambourine rattle against a palm",
+        "Hammond organ swelling under a whisper",
+        "grease popping in a cast-iron skillet",
+        "handclaps on the two and the four",
+        "the scratch of a needle finding the groove",
+        "a screen door slapping shut",
+        "hoarse-voiced ad-libs at the end of a long night"
+      ],
+      "dialectAndIdiom": [
+        "testify",
+        "have mercy now",
+        "take it to church",
+        "in the pocket",
+        "carry on",
+        "that's the truth right there",
+        "hold on, hold on",
+        "won't He do it",
+        "sanctified",
+        "child, please"
+      ]
+    }
+  },
 };

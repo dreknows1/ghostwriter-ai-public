@@ -630,4 +630,61 @@ export const RNB_GUIDE: GenreGuide = {
       'Use "smooth" and "groove" as key descriptors',
     ],
   },
+
+  authenticityKit: {
+    "writingEthos": "Prove desire or heartbreak through the small evidence a lover leaves behind — a setting, a screen, a half-drunk cup — and let the room's intimacy do what naming the feeling never could.",
+    "exemplars": [
+      {
+        "line": "Your hoodie still on my passenger seat, seatbelt buckled around nobody",
+        "craftNote": "abandonment shown through a buckled seatbelt around an absence — a concrete object holding the shape of who's gone"
+      },
+      {
+        "line": "The porch light's still on your side of the timer, the app says your driver cancelled again",
+        "craftNote": "devotion and being stood up told through a shared-timer routine and a cancelled rideshare — modern R&B temporal specificity, the domestic detail implying the half-empty house"
+      },
+      {
+        "line": "Two mugs in the sink, yours gone cold with the teabag still in it",
+        "craftNote": "the ghost of a lover shown through an abandoned, still-steeping cup — grief via an unfinished chore, 'gone cold' carrying the emotional temperature without naming it"
+      },
+      {
+        "line": "Your read receipt lit up at 3 and you still let the message die",
+        "craftNote": "status and rejection carried by a phone's read receipt and a timestamp — Instagram-era relationship dynamics as concrete image, 'let the message die' making passive cruelty an active verb"
+      },
+      {
+        "line": "I keep the Rhodes on low so the neighbors think somebody's still home",
+        "craftNote": "loneliness performed through the genre's signature instrument left playing to an empty room — self-worth and pretense in one physical scene"
+      }
+    ],
+    "sensoryLexicon": {
+      "objectsAndPlaces": [
+        "passenger seat",
+        "porch light",
+        "kitchen sink",
+        "read receipt",
+        "hotel key card",
+        "rideshare backseat",
+        "Rhodes keys",
+        "half-drunk wine glass",
+        "walk-up apartment",
+        "record player needle"
+      ],
+      "texturesAndSounds": [
+        "tremolo shimmer of an electric piano",
+        "finger snaps on the two and four",
+        "vinyl crackle under the vocal",
+        "the hum of a fridge in a quiet kitchen",
+        "a breath caught before the belt",
+        "808 sub trembling the floor",
+        "hi-hat swing dragging behind the beat"
+      ],
+      "dialectAndIdiom": [
+        "come through, take it slow",
+        "we ain't gotta rush this",
+        "you know how we do when it's late",
+        "you had me waiting on your timing",
+        "quit playing with my patience",
+        "you don't call, you just appear"
+      ]
+    }
+  },
 };

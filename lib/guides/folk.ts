@@ -638,4 +638,63 @@ export const FOLK_GUIDE: GenreGuide = {
       'Describe the vocal style: natural, harmonized, narrative',
     ],
   },
+
+  authenticityKit: {
+    "writingEthos": "Hand the whole feeling to one plain object from a working life — a wet field, a widow's chair, a stopped clock in the meeting hall — and let it testify; the folk singer never names the sorrow, they name the thing the sorrow lives in, and they trust the object enough to cut the simile that would explain it.",
+    "exemplars": [
+      {
+        "line": "They found his boots by the mineshaft, laces still double-knotted for the shift he never walked out of",
+        "craftNote": "a mining death told entirely through an unworn object and a knot, no grief-word spoken — socioeconomic subtext made physical"
+      },
+      {
+        "line": "Grandmother left the churn in the springhouse and the cream soured on the crock with no hand to raise the dash",
+        "craftNote": "death and an interrupted chore — the unfinished agricultural task carries the loss, using accurate process (a still dash, cream souring untended) and dialect vocabulary (springhouse, churn, dash)"
+      },
+      {
+        "line": "The bank nailed a paper to the barn door and by June the mule team pulled a stranger's plow",
+        "craftNote": "land dispossession shown through a foreclosure notice and a transfer of the animals' labor — ruin proven by a changed owner, no simile, no label"
+      },
+      {
+        "line": "She still sets his tin cup on the fence rail every morning, though the well's been dry three summers now",
+        "craftNote": "widowhood and stubborn hope through a repeated daily ritual and a dead well — the dry well rescues a heavily-traveled 'still sets his cup' gesture by making the offering physically impossible to pour"
+      },
+      {
+        "line": "The company cut the power to the union hall, so we passed the songbook toward the one lit stove and read the verses off each other's breath",
+        "craftNote": "labor solidarity and communal defiance carried by a power shutoff, a shared songbook, and a single wood stove — protest folk shown as a specific physical scene instead of the generic 'kept singing in the dark'"
+      }
+    ],
+    "sensoryLexicon": {
+      "objectsAndPlaces": [
+        "springhouse",
+        "the holler",
+        "mineshaft",
+        "fence rail",
+        "wood stove",
+        "the mill gate",
+        "coal tipple",
+        "plow and mule team",
+        "the union hall",
+        "a widow's rocking chair",
+        "the crossroads store",
+        "hayloft"
+      ],
+      "texturesAndSounds": [
+        "the creak of a rope pump handle",
+        "fiddle drone under a low ceiling",
+        "coal dust ground into a shirt collar",
+        "the wet slap of a fishing net on the gunwale",
+        "clawhammer banjo rolling like a wheel",
+        "wind whistling through a chinked cabin wall",
+        "boot heels on a pine board floor"
+      ],
+      "dialectAndIdiom": [
+        "yonder past the last field fence",
+        "a-going down to the meeting",
+        "hit ain't rained since the tobacco set",
+        "over the mountain to the county seat",
+        "reckon the frost'll take the last of it",
+        "brothers and sisters, hold the line"
+      ]
+    }
+  },
 };

@@ -630,4 +630,64 @@ export const POP_GUIDE: GenreGuide = {
       'Use "radio-ready" or "streaming-friendly" for mainstream polish',
     ],
   },
+
+  authenticityKit: {
+    "writingEthos": "Hide the ache inside a bright, everyday snapshot and let one specific ordinary detail betray the feeling you never name out loud.",
+    "exemplars": [
+      {
+        "line": "Your name still autocompletes when I go to text somebody else",
+        "craftNote": "heartbreak shown through a phone's muscle memory — a mundane digital detail proving he isn't gone, no emotion stated"
+      },
+      {
+        "line": "Dropped your books in the Little Free Library, kept the bookmark you dog-eared page thirty with",
+        "craftNote": "the contradiction between the public giving-away gesture and the one secret object kept back carries unresolved longing; swaps the over-used 'his hoodie' image for a fresher kept-object anchor"
+      },
+      {
+        "line": "Got the whole aisle at Trader Joe's laughing, then cried in the parking structure",
+        "craftNote": "the pop pivot from public brightness to private collapse, told through two exact places and a hard cut"
+      },
+      {
+        "line": "You look happy in her stories, I keep watching till the little bar runs out",
+        "craftNote": "jealousy and self-punishment rendered through the physical detail of a social-media story timer, radical particularity of modern ritual"
+      },
+      {
+        "line": "A ten out of ten in the front-facing light, then the flash finds every place I don't sleep",
+        "craftNote": "confidence flipped to insecurity through the concrete difference between two camera settings, paying the pivot off with a physical tell (insomnia shadows) instead of naming the feeling — playful, singable, self-deprecating"
+      }
+    ],
+    "sensoryLexicon": {
+      "objectsAndPlaces": [
+        "front-facing camera",
+        "passenger seat",
+        "gas station at 2 a.m.",
+        "parking structure",
+        "the Little Free Library on the corner",
+        "the group chat",
+        "a half-charged phone",
+        "the last text left on read",
+        "checkout line",
+        "hotel key card",
+        "a friend's rooftop",
+        "the airport pickup lane"
+      ],
+      "texturesAndSounds": [
+        "the buzz of a phone face-down on a nightstand",
+        "seatbelt chime left dinging in the driveway",
+        "double-tap of a like",
+        "ice melting in a plastic cup",
+        "the little whoosh of a sent message",
+        "hum of a fridge in an empty kitchen at 3 a.m.",
+        "the fizz going flat in a can I forgot to finish"
+      ],
+      "dialectAndIdiom": [
+        "left me on read",
+        "lowkey still into you",
+        "no because why did you",
+        "I said I was fine",
+        "you can keep the sweater",
+        "I'm good, I'm good",
+        "wasn't gonna text but"
+      ]
+    }
+  },
 };
