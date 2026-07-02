@@ -33,11 +33,29 @@ async function callAI<T>(action: AIAction, email: string, payload: Record<string
 
   const safeEmail = sanitizeEmail(email || "");
   const safePayload = sanitizeUnknown(payload || {});
-  const sendRequest = async (userGeminiApiKey: string) => fetch("/api/ai", {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ action, email: safeEmail, payload: { ...safePayload, userGeminiApiKey } }),
-  });
+  // Client-side safety timeout. The server pipeline budgets ~70s and hard-caps at 300s,
+  // so 120s covers any valid generation while preventing an indefinite "GENERATING" hang
+  // if the connection stalls. On timeout we throw before any credit is charged.
+  const REQUEST_TIMEOUT_MS = 120000;
+  const sendRequest = async (userGeminiApiKey: string) => {
+    const controller = new AbortController();
+    const timer = setTimeout(() => controller.abort(), REQUEST_TIMEOUT_MS);
+    try {
+      return await fetch("/api/ai", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ action, email: safeEmail, payload: { ...safePayload, userGeminiApiKey } }),
+        signal: controller.signal,
+      });
+    } catch (e: any) {
+      if (e?.name === "AbortError") {
+        throw new Error("This is taking longer than expected. Please try again — you were not charged.");
+      }
+      throw e;
+    } finally {
+      clearTimeout(timer);
+    }
+  };
 
   let userGeminiApiKey = getKeyFromUserIfNeeded();
   let response = await sendRequest(userGeminiApiKey);
@@ -123,15 +141,17 @@ export async function* generateSong(
   const statusMessages = [
     "Song Ghost is listening...",
     "Drafting lyrics and structure...",
-    "Applying genre/subgenre agent rules...",
-    "Applying genre authenticity fingerprint...",
-    "Finalizing SUNO prompt + dynamic tag orchestration...",
+    "Applying genre conventions...",
+    "Tightening lines and cutting clichés...",
+    "Finalizing your SUNO prompt and tags...",
   ];
   let statusIndex = 0;
   let settled = false;
+  // Mark settled on resolve OR reject (e.g. timeout) so the status loop stops. The real
+  // error is surfaced by `await pending` below; swallow here to avoid an unhandled rejection.
   pending.finally(() => {
     settled = true;
-  });
+  }).catch(() => {});
 
   while (!settled) {
     const msg = statusMessages[Math.min(statusIndex, statusMessages.length - 1)];

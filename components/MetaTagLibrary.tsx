@@ -4,9 +4,11 @@ import { META_TAG_CATEGORIES } from '../lib/metaTagLibrary';
 
 interface MetaTagLibraryProps {
     onDragStart: (e: React.DragEvent, tag: string) => void;
+    /** Insert the tag at the editor's cursor. Primary interaction (works on touch). */
+    onTagClick?: (tag: string) => void;
 }
 
-const MetaTagLibrary: React.FC<MetaTagLibraryProps> = ({ onDragStart }) => {
+const MetaTagLibrary: React.FC<MetaTagLibraryProps> = ({ onDragStart, onTagClick }) => {
     const [activeCategory, setActiveCategory] = useState("Structure");
 
     return (
@@ -16,7 +18,7 @@ const MetaTagLibrary: React.FC<MetaTagLibraryProps> = ({ onDragStart }) => {
                 <h3 className="text-white text-sm md:text-base font-black uppercase tracking-[0.12em] md:tracking-[0.2em] flex items-center gap-3">
                    Master Tag Library
                 </h3>
-                <span className="text-[10px] md:text-xs font-bold text-slate-500 uppercase tracking-[0.1em] md:tracking-widest">DRAG TO EDITOR</span>
+                <span className="text-[10px] md:text-xs font-bold text-slate-500 uppercase tracking-[0.1em] md:tracking-widest">TAP TO INSERT</span>
             </div>
             
             {/* Scrollable Content Pane */}
@@ -44,22 +46,25 @@ const MetaTagLibrary: React.FC<MetaTagLibraryProps> = ({ onDragStart }) => {
                 <div className="p-4 md:p-8 pt-4">
                     <div className="flex flex-wrap gap-3 content-start pb-10">
                         {(META_TAG_CATEGORIES as any)[activeCategory].map((tag: string) => (
-                            <div
+                            <button
                                 key={tag}
+                                type="button"
                                 draggable
                                 onDragStart={(e) => onDragStart(e, tag)}
+                                onClick={() => onTagClick?.(tag)}
+                                title="Tap to insert at cursor (or drag into the editor)"
                                 className={`
-                                    cursor-grab active:cursor-grabbing select-none
+                                    cursor-pointer select-none
                                     text-xs md:text-sm font-black py-3 md:py-4 px-4 md:px-6 rounded-2xl
                                     border transition-all active:scale-95 shadow-lg
-                                    ${tag.startsWith('(') 
-                                        ? 'bg-emerald-600 border-emerald-500 text-white hover:bg-emerald-500 shadow-emerald-900/40' 
+                                    ${tag.startsWith('(')
+                                        ? 'bg-emerald-600 border-emerald-500 text-white hover:bg-emerald-500 shadow-emerald-900/40'
                                         : 'bg-orange-500 border-orange-500 text-white hover:bg-orange-400 shadow-orange-900/40'
                                     }
                                 `}
                             >
                                 {tag}
-                            </div>
+                            </button>
                         ))}
                     </div>
                 </div>

@@ -65,11 +65,6 @@ const LyricsDisplay: React.FC<LyricsDisplayProps> = ({
   const [historyIndex, setHistoryIndex] = useState(0);
   const currentFullSong = history[historyIndex];
 
-  const [dragOverIndex, setDragOverIndex] = useState<number | null>(null);
-  const [activeDraggingTag, setActiveDraggingTag] = useState<string | null>(null);
-  const [isDragging, setIsDragging] = useState(false);
-  const dragCounter = useRef(0);
-
   const [isOptimizing, setIsOptimizing] = useState(false);
   const [isSaving, setIsSaving] = useState(false);
   const [quickEditInput, setQuickEditInput] = useState('');
@@ -123,6 +118,31 @@ const LyricsDisplay: React.FC<LyricsDisplayProps> = ({
   const handleManualLyricsChange = (newLyrics: string) => {
     const newSong = `Title: ${parsed.title}\n\n### SUNO Prompt\n${parsed.prompt}\n\n### Lyrics\n${newLyrics}`;
     addToHistory(newSong);
+  };
+
+  // Insert a meta tag at the lyrics cursor (works on touch — the old drag-only flow did not).
+  // Structure tags like [Verse] land on their own line; ad-libs like (yeah) insert inline.
+  const insertTagAtCursor = (tag: string) => {
+    const ta = textareaRef.current;
+    const lyrics = parsed.lyrics;
+    const isStructure = tag.startsWith('[');
+    const start = ta?.selectionStart ?? lyrics.length;
+    const end = ta?.selectionEnd ?? lyrics.length;
+    const before = lyrics.slice(0, start);
+    const after = lyrics.slice(end);
+    let insert = tag;
+    if (isStructure) {
+      const lead = before.length > 0 && !before.endsWith('\n') ? '\n' : '';
+      const trail = after.length > 0 && !after.startsWith('\n') ? '\n' : '';
+      insert = `${lead}${tag}${trail}`;
+    }
+    handleManualLyricsChange(before + insert + after);
+    const caret = start + insert.length;
+    requestAnimationFrame(() => {
+      if (!ta) return;
+      ta.focus();
+      try { ta.setSelectionRange(caret, caret); } catch { /* ignore */ }
+    });
   };
 
   const copyToClipboard = async (text: string, setFeedback: (v: boolean) => void) => {
@@ -301,14 +321,13 @@ const LyricsDisplay: React.FC<LyricsDisplayProps> = ({
                   </button>
               </div>
 
-              <MetaTagLibrary onDragStart={(e, tag) => { 
-                  e.dataTransfer.setData('text', tag); 
-                  setActiveDraggingTag(tag);
-                  setIsDragging(true);
-                  const img = new Image();
-                  img.src = 'data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7';
-                  e.dataTransfer.setDragImage(img, 0, 0);
-              }} />
+              <MetaTagLibrary
+                onTagClick={insertTagAtCursor}
+                onDragStart={(e, tag) => {
+                  // Desktop nicety: native drag drops the tag text into the textarea.
+                  e.dataTransfer.setData('text', tag);
+                }}
+              />
 
               <div className="bg-[#161030] border border-slate-800 p-6 md:p-10 rounded-[2rem] md:rounded-[3rem] shadow-xl">
                   <h3 className="text-white text-sm font-black uppercase tracking-widest mb-8 flex items-center gap-3"><ImageIcon /> Session Art</h3>
