@@ -486,6 +486,109 @@ const CreationWizard: React.FC<{
   );
 }
 
+/**
+ * Fast Track — the 3-decision lane: pick a genre, describe the vibe, generate.
+ * Everything else gets smart defaults; the genre guide fills in the craft.
+ * "Deep Studio" hands the picked genre + vibe off to the full wizard.
+ */
+const FastTrack: React.FC<{
+  isGenerating: boolean;
+  onGenerate: (fastInputs: SongInputs) => void;
+  onDeepStudio: (fastInputs: SongInputs) => void;
+}> = ({ isGenerating, onGenerate, onDeepStudio }) => {
+  const [genre, setGenre] = useState('');
+  const [vibe, setVibe] = useState('');
+  const [vocals, setVocals] = useState('Female Solo');
+  const genres: string[] = (GENRES_BY_LANG as any).English || [];
+
+  const buildInputs = (): SongInputs => ({
+    ...DEFAULT_INPUTS,
+    genre,
+    vocals,
+    // Don't let the default mood fight the user's story — the vibe is the law.
+    emotion: 'Match the creative direction',
+    creativeDirection: vibe.trim(),
+  });
+
+  return (
+    <div className="w-full max-w-4xl mx-auto px-4 pt-10 md:pt-16 pb-24 animate-fade-in">
+      <div className="text-center mb-10">
+        <h2 className="heading-display text-3xl md:text-5xl font-black text-white tracking-tighter mb-3">Quick Song</h2>
+        <p className="text-slate-500 font-black uppercase tracking-[0.14em] md:tracking-[0.28em] text-[10px] md:text-xs">
+          {genre ? 'Tell us the story — the genre guide handles the craft' : 'Pick a genre — we handle the rest'}
+        </p>
+      </div>
+
+      {!genre ? (
+        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3 sm:gap-4">
+          {genres.map((g) => (
+            <button
+              key={g}
+              onClick={() => setGenre(g)}
+              className="w-full p-4 sm:p-5 rounded-3xl border bg-slate-700 border-slate-600 text-slate-200 hover:bg-slate-600 hover:border-orange-400 hover:text-white transition-all text-sm sm:text-base leading-tight font-black uppercase tracking-[0.08em] min-h-[56px] flex items-center justify-center text-center break-words"
+            >
+              {g}
+            </button>
+          ))}
+        </div>
+      ) : (
+        <div className="flex flex-col gap-6">
+          <div className="flex justify-center">
+            <button
+              type="button"
+              onClick={() => setGenre('')}
+              title="Tap to change genre"
+              className="px-4 py-2 bg-orange-900/20 border border-orange-500/30 rounded-full text-xs font-black uppercase tracking-widest text-orange-400 hover:border-orange-400 hover:text-orange-300 transition-colors"
+            >
+              GENRE: {genre} ✕
+            </button>
+          </div>
+
+          <textarea
+            autoFocus
+            value={vibe}
+            onChange={(e) => setVibe(e.target.value)}
+            rows={6}
+            placeholder="What's this song about? The story, the feeling, a moment, a person — anything. The more specific, the better the song…"
+            className="w-full bg-slate-800/90 border-2 border-cyan-400/60 rounded-[1.5rem] md:rounded-[2rem] p-6 md:p-8 text-base md:text-lg leading-relaxed text-white placeholder:text-slate-500 focus:border-cyan-400 outline-none resize-none shadow-[0_0_40px_rgba(34,211,238,0.15)]"
+          />
+
+          <div className="flex justify-center gap-2">
+            {['Female Solo', 'Male Solo', 'Duo/Group'].map((v) => (
+              <button
+                key={v}
+                type="button"
+                onClick={() => setVocals(v)}
+                className={`px-4 py-2.5 rounded-xl text-[11px] font-black uppercase tracking-widest transition-all ${
+                  vocals === v ? 'bg-cyan-500 text-white shadow-lg' : 'bg-slate-800 text-slate-400 hover:bg-slate-700 hover:text-slate-200'
+                }`}
+              >
+                {v}
+              </button>
+            ))}
+          </div>
+
+          <button
+            onClick={() => onGenerate(buildInputs())}
+            disabled={isGenerating || !vibe.trim()}
+            className="w-full bg-gradient-to-r from-orange-500 via-amber-500 to-cyan-500 py-6 md:py-7 rounded-[2rem] text-base md:text-xl font-black uppercase tracking-[0.16em] md:tracking-[0.4em] text-white shadow-xl transition-all hover:scale-[1.02] disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100"
+          >
+            {isGenerating ? 'GENERATING…' : `MASTER THE RECORD (${COSTS.GENERATE_SONG} CREDITS)`}
+          </button>
+
+          <button
+            type="button"
+            onClick={() => onDeepStudio(buildInputs())}
+            className="mx-auto text-xs font-black uppercase tracking-widest text-slate-500 hover:text-cyan-300 transition-colors"
+          >
+            Need more control? Open Deep Studio →
+          </button>
+        </div>
+      )}
+    </div>
+  );
+};
+
 export const App: React.FC = () => {
   // Show the brand intro once per browser session — refreshes skip it, a fresh visit
   // still gets the moment. Previously it replayed on every page load.
@@ -775,11 +878,18 @@ export const App: React.FC = () => {
     }
   };
 
-  const handleGenerate = async () => {
+  const handleGenerate = async (overrideInputs?: SongInputs) => {
       if (!session) return;
       if (generationInFlightRef.current) return;
       generationInFlightRef.current = true;
-      const cleanedInputs = sanitizeUnknown(inputs);
+      // Guard: DOM event objects can arrive here via onClick={onGenerate}; only accept
+      // a real SongInputs override (Fast Track passes one explicitly).
+      const overrides = overrideInputs && typeof overrideInputs === 'object' && 'genre' in overrideInputs ? overrideInputs : undefined;
+      if (overrides) setInputs(overrides);
+      const sourceInputs = overrides || inputs;
+      // Where to land if generation fails — back to the lane the user came from.
+      const returnStep = step === AppStep.FAST_TRACK ? AppStep.FAST_TRACK : AppStep.AWAITING_CREATIVE_DIRECTION;
+      const cleanedInputs = sanitizeUnknown(sourceInputs);
 
       // Fetch the profile once, up front: it's the authoritative source for tier and is
       // reused by generateSong below (no extra fetch).
@@ -836,7 +946,7 @@ export const App: React.FC = () => {
           toast(`Generation failed: ${err.message} You weren't charged.`, { kind: 'error', actionLabel: 'Retry', onAction: () => handleGenerate() });
           // Reload the true balance — the optimistic deduction above is reverted server-side
           loadCredits();
-          setStep(AppStep.AWAITING_CREATIVE_DIRECTION);
+          setStep(returnStep);
       } finally {
           setIsLoading(false);
           generationInFlightRef.current = false;
@@ -1356,8 +1466,23 @@ export const App: React.FC = () => {
                         <p className="text-slate-500 font-black uppercase tracking-[0.14em] md:tracking-[0.28em] text-[10px] md:text-xs">Song Ghost helps you draft lyrics, polish structure, and generate cover art in a cohesive style.</p>
                      </div>
 
-                     <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                         
+                     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+
+                         {/* Option 0: Quick Song — the 3-decision fast lane (AMBER) */}
+                         <button
+                            onClick={() => { setView(AppView.STUDIO); setStep(AppStep.FAST_TRACK); setInputs(DEFAULT_INPUTS); }}
+                            className="group glass-panel bg-[#140e28]/65 hover:border-amber-300 p-8 rounded-[2rem] md:rounded-[2.5rem] flex flex-col items-center gap-6 transition-all hover:-translate-y-1 hover:shadow-2xl hover:shadow-amber-400/30 relative overflow-hidden"
+                         >
+                             <div className="absolute inset-0 bg-amber-400/5 opacity-0 group-hover:opacity-100 transition-opacity"></div>
+                             <div className="w-20 h-20 rounded-full bg-amber-400/20 text-amber-300 flex items-center justify-center text-3xl font-black group-hover:bg-amber-400 group-hover:text-white group-hover:shadow-[0_0_30px_rgba(251,191,36,0.5)] transition-all relative z-10">
+                                 ⚡
+                             </div>
+                             <div className="relative z-10">
+                                 <h3 className="text-xl font-black text-white uppercase tracking-wider mb-2 group-hover:text-amber-300 transition-colors">Quick Song</h3>
+                                 <p className="text-xs text-slate-500 font-bold uppercase tracking-widest">Genre + vibe. Done.</p>
+                             </div>
+                         </button>
+
                          {/* Option 1: New Session (BLUE) */}
                          <button
                             onClick={() => { setView(AppView.STUDIO); setStep(AppStep.AWAITING_LANGUAGE); setInputs(DEFAULT_INPUTS); }}
@@ -1698,6 +1823,12 @@ export const App: React.FC = () => {
                     </div>
                   </div>
               </div>
+          ) : step === AppStep.FAST_TRACK ? (
+              <FastTrack
+                isGenerating={isLoading}
+                onGenerate={(fastInputs) => handleGenerate(fastInputs)}
+                onDeepStudio={(fastInputs) => { setInputs(fastInputs); setStep(AppStep.AWAITING_SUBGENRE); }}
+              />
           ) : (
               <CreationWizard
                 step={step}

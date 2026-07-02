@@ -18,6 +18,8 @@ export enum AppStep {
   RESIZING_PROMPT,
   PROFILE,
   ERROR,
+  /** Quick 3-decision lane: genre → vibe → generate. Smart defaults for the rest. */
+  FAST_TRACK,
 }
 
 export enum AppView {
