@@ -723,4 +723,21 @@ export const COUNTRY_GUIDE: GenreGuide = {
       'Include tempo context: slow ballad, mid-tempo, uptempo two-step',
     ],
   },
+
+  authenticityKit: {
+    writingEthos:
+      "Let a real object carry the feeling — a truck, a ring, a screen door. Never state the emotion; show the moment that proves it.",
+    exemplars: [
+      { line: "She keeps his ring in the ashtray of a truck that won't turn over", craftNote: "loss and stubbornness told through one concrete object, no adjectives" },
+      { line: "Screen door still slaps the frame he never got around to fixin'", craftNote: "grief shown through an unfinished chore instead of stated" },
+      { line: "Gas-station coffee going cold in the cupholder, forty miles past the county line", craftNote: "leaving home rendered as a mundane, specific detail" },
+      { line: "Her name's still in my phone under 'Don't'", craftNote: "a modern, specific image that tells the whole relationship arc" },
+      { line: "Boots by the back door — one standing up, one kicked over", craftNote: "domestic tension shown through a small physical scene" },
+    ],
+    sensoryLexicon: {
+      objectsAndPlaces: ["tailgate", "gravel lot", "screen door", "county line", "deer stand", "church parking lot", "bait shop", "porch swing", "chain-link fence", "grain silo", "the back forty"],
+      texturesAndSounds: ["gravel crunch under tires", "screen-door slap", "transmission whine", "cicadas at dusk", "boots on hardwood", "rain on a tin roof"],
+      dialectAndIdiom: ["fixin' to", "reckon", "y'all", "a ways down the road", "hush now", "bless it", "the back forty"],
+    },
+  },
 };

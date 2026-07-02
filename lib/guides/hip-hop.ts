@@ -829,4 +829,21 @@ export const HIP_HOP_GUIDE: GenreGuide = {
       'For instrumental beats, specify "instrumental" and describe the sample type',
     ],
   },
+
+  authenticityKit: {
+    writingEthos:
+      "Flex, pain, and the come-up through specific detail — a place, a name, a number. Never label it ('rich', 'real', 'started from the bottom'); prove it with the scene.",
+    exemplars: [
+      { line: "Momma's stove clock still blinkin' twelve since the power got cut in '09", craftNote: "poverty and a frozen moment shown through a broken object and a year" },
+      { line: "Count it twice on the kitchen table, rubber-band snap keepin' the rhythm", craftNote: "money without ever saying rich — a sound and a gesture do the work" },
+      { line: "Same corner store, now they say my name like it's on a receipt", craftNote: "the come-up and new recognition through one specific place" },
+      { line: "Traded the bus pass for a key fob, still take the long way past the block", craftNote: "success and loyalty to roots in a single concrete before/after" },
+      { line: "Barbershop went quiet when I walked in — that's a different kind of loud", craftNote: "status shown through others' reaction, then flipped with wordplay" },
+    ],
+    sensoryLexicon: {
+      objectsAndPlaces: ["bodega", "stoop", "project hallway", "corner store", "barbershop", "subway platform", "the block", "kitchen table", "trap house", "courtside"],
+      texturesAndSounds: ["rubber-band snap", "bass rattling the trunk", "door buzzer", "ice clinking in a cup", "sneaker squeak on the court", "hallway echo"],
+      dialectAndIdiom: ["no cap", "finna", "on God", "dead-ass", "the block", "run it back", "word to"],
+    },
+  },
 };

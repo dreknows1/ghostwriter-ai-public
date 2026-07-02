@@ -76,6 +76,15 @@ describe("guide data integrity", () => {
         expect(guide.subGenres.length).toBeGreaterThan(0);
         expect(guide.subGenres.every((s) => !!s.name)).toBe(true);
       });
+
+      it("has a well-formed authenticityKit when present", () => {
+        const kit = guide.authenticityKit;
+        if (!kit) return; // optional — only authored genres have one
+        expect(kit.exemplars.length).toBeGreaterThan(0);
+        expect(kit.exemplars.every((e) => !!e.line && !!e.craftNote)).toBe(true);
+        expect(kit.sensoryLexicon.objectsAndPlaces.length).toBeGreaterThan(0);
+        expect(kit.writingEthos.length).toBeGreaterThan(0);
+      });
     });
   }
 });
