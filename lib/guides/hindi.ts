@@ -648,4 +648,61 @@ export const HINDI_GUIDE: GenreGuide = {
       'For qawwali: "Sufi", "group vocals", "harmonium", "accelerating rhythm".',
     ],
   },
+
+  authenticityKit: {
+    "writingEthos": "Let a small, unglamorous domestic object hold the whole ache — the emotion is never named, it's smuggled inside a cold cup of chai, a rattling ceiling fan, or a name still starred in a phone — so the listener feels the longing without the singer ever confessing it. Prefer the arithmetic of absence (one less cup, one uncounted whistle) over any 'dil / tere bina' abstraction.",
+    "exemplars": [
+      {
+        "line": "तेरे नाम के आगे अब भी वो पीला स्टार लगा है / मैंने डिलीट नहीं किया, बस म्यूट कर रखा है",
+        "craftNote": "Concrete-object surrogate from the phone: 'There's still that yellow star next to your name / I didn't delete it, I just kept it muted.' The Hinglish loanwords (डिलीट/म्यूट/स्टार) are authentic to how young Hindi speakers actually text and talk, not a translation slip. Longing carried entirely by the refusal to delete plus the mute — no abstract heartbreak word. Deliberately avoids 'dil/tere bina' clichés."
+      },
+      {
+        "line": "छत की टंकी से पानी अब भी उतना ही गरम आता है / जितना उस जून में, जब तू पहली बार यहाँ नहाई थी",
+        "craftNote": "Sensory time-anchor via mundane detail: 'The water from the rooftop tank still comes just as hot / as that June you bathed here the first time.' The sun-scalded overhead plastic/Sintex water tank (a universal North Indian loo-season reality) becomes the memory-vessel; heat = presence lingering. Replaces the banned monsoon-romance trope with brutal summer specificity no outsider would know. तू + feminine past keeps the intimate register."
+      },
+      {
+        "line": "प्रेशर कुकर की तीसरी सीटी पे तू चिल्लाती थी 'गैस बंद कर' / अब मैं गिनता हूँ सीटियाँ, कोई टोकता नहीं",
+        "craftNote": "Absence rendered through a household ritual: 'On the pressure cooker's third whistle you'd yell \"turn off the gas\" / now I count the whistles, no one stops me.' The whistle-count is a real unit of Indian home cooking; the kitchen call-and-response domesticizes grief, and 'कोई टोकता नहीं' (no one checks me now) is a lived understatement for loss. Conversational indie register, not filmi poetry."
+      },
+      {
+        "line": "ऑटो वाले ने वही पुराना गाना लगाया, मीटर गिरा के / मैं जाना कहीं और था, पर उतरा तेरे मोहल्ले में",
+        "craftNote": "Urban geography as emotional map: 'The auto driver played that same old song, dropped the meter / I meant to go somewhere else, but got off in your neighbourhood.' Getting off at the wrong (right) stop shows habit overriding reason. INSIDER CORRECTION: 'मीटर गिरा के / meter down' means the driver actually running the meter (the flag/lever is dropped to start it) — it is NOT the negotiated flat fare, which is when a driver refuses the meter. Earlier gloss reversed this."
+      },
+      {
+        "line": "सर्दी की धूप में माँ की रज़ाई छत पे सूख रही है / घर अब भी वैसा ही है, बस एक कप कम धुलता है",
+        "craftNote": "Domestic still-life with a devastating quantitative turn: 'In the winter sun mother's quilt is drying on the roof / the house is still the same, just one less cup gets washed.' The sunned razai (chasing winter sun to the terrace) and the arithmetic of dishwashing measure a person's absence in the most ordinary chore. 'तेरे बिना' was removed to honour the kit's own anti-cliché ethos — the missing cup already carries the missing person."
+      }
+    ],
+    "sensoryLexicon": {
+      "objectsAndPlaces": [
+        "छत की पानी की टंकी (rooftop plastic/Sintex water tank, sun-heated)",
+        "प्रेशर कुकर की सीटी (pressure-cooker whistle)",
+        "रज़ाई / गद्दा धूप में सूखता (quilt and mattress drying in the winter sun on the terrace)",
+        "स्टेनलेस स्टील का गिलास और थाली (steel tumbler and thali)",
+        "मोहल्ले का चाय का ठेला / कटिंग चाय (neighbourhood tea cart, a 'cutting' half-glass of chai)",
+        "ऑटो-रिक्शा का मीटर और उसका रेडियो (auto-rickshaw meter and its tinny radio)",
+        "इन्वर्टर की लाल-हरी बत्ती (the inverter's red/green charge light during a power cut)",
+        "छत पर टँगे कपड़े और टूटा हुआ क्लिप (clothes on the terrace line, a broken plastic clip)",
+        "गली के नुक्कड़ की किराने की दुकान (the corner kirana grocery shop)"
+      ],
+      "texturesAndSounds": [
+        "सीलिंग फैन की घरघराहट रात में (the ceiling fan's rattling drone at night)",
+        "प्रेशर कुकर की तीसरी सीटी (the sharp third whistle of the cooker)",
+        "बारिश से पहले की गर्म, धूल भरी हवा — मिट्टी की सोंधी महक (hot dusty pre-rain wind, the earthy smell of first rain — 'sondhi khushbu', the local phrasing over the loanword 'petrichor')",
+        "मंदिर के लाउडस्पीकर पे सुबह की आरती, दूर से (morning aarti from a temple loudspeaker, heard faintly across rooftops)",
+        "गीले फ़र्श पर पोंछे की महक और फिनाइल (the smell of phenyl and a wet-mopped floor)",
+        "स्कूटर की किक और उसका ठंडा-गरम स्टार्ट (the kick-start cough of an old scooter)",
+        "अगरबत्ती का धुआँ शाम को (evening incense smoke curling in still air)"
+      ],
+      "dialectAndIdiom": [
+        "'मीटर गिरा के' — the driver running the meter (lever dropped to start it); NOT the flat negotiated fare",
+        "'गैस बंद कर' — the everyday kitchen command, marker of domestic intimacy",
+        "'बस यूँ ही' — 'just like that / for no reason', the great Hindi understatement for suppressed feeling",
+        "'तू/तेरा' vs 'आप/आपका' — the tu/aap intimacy register; using 'tu/tera' signals closeness, not disrespect",
+        "'मन नहीं लग रहा' — 'the mind won't settle', idiom for restlessness/heartache without naming it",
+        "'चाय ठंडी हो गई' — 'the tea's gone cold', a lived shorthand for time slipping while lost in thought",
+        "'कोई टोकता नहीं' — 'no one checks/stops me now', understated marker of a missing person"
+      ]
+    }
+  },
 };

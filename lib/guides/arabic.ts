@@ -647,4 +647,59 @@ export const ARABIC_GUIDE: GenreGuide = {
       'For mahraganat: "electronic", "auto-tune", "Cairo street", "frenetic energy".',
     ],
   },
+
+  authenticityKit: {
+    "writingEthos": "The core show-don't-tell move is displacing longing onto a small domestic ritual or object the beloved once touched, so that absence is measured by a concrete change in the everyday (a cooling glass of tea, an unmoved coat, a stalled routine) rather than named as an emotion. The register is contemporary spoken Levantine — apartment blocks, service taxis, corner shops — not folkloric or 'oriental' set-dressing.",
+    "exemplars": [
+      {
+        "line": "نطرتك تا برد الشاي بالكاسة اللي كسرتها من زمان",
+        "craftNote": "Levantine (Lebanese/Syrian). Displacement of waiting onto a domestic object with an impossible detail — 'I waited for you until the tea went cold in the glass you broke ages ago.' The broken glass reveals the wait is now imaginary/perpetual; time has stalled around a cup that no longer exists. Note: tea is drunk in a كاسة (handleless glass), which correctly localizes to Bilad al-Sham rather than the Iraqi/Gulf استكانة. Spelling normalized: اللي, not إللي."
+      },
+      {
+        "line": "بلكون الطابق التالت لسا عم يطلّ عطريقك، بس أنا نشرت غسيلي وحجبتو",
+        "craftNote": "Levantine. Longing grounded in real urban geometry and a mundane act — 'The third-floor balcony still looks out over your road, but I hung my laundry and blocked it.' The narrator sabotages her own watching by covering the sightline with wet washing — surrender disguised as a chore. Grammar fix from source: the original بس فيّة نشرت غسيلي was ungrammatical (فيّة = 'in it', not 'across it'); عم يطلّ عطريقك ('looks out over your road') is the natural balcony verb, and وحجبتو ('and I blocked it') completes the sabotage cleanly."
+      },
+      {
+        "line": "خبّيت رقم تلفونك تحت اسم \"كهربجي البناية\" تا ما اتصل",
+        "craftNote": "Levantine. Self-deception rendered through a phone-contact edit — 'I saved your number under \"the building's electrician\" so I wouldn't call.' The absurd fake label (someone you'd never phone) shows how hard she's working to resist. Fully contemporary object (smartphone contacts) treated with tarab-level emotional stakes. Spelling normalized: اتصل, not إتصل."
+      },
+      {
+        "line": "سرفيس بيروت طرابلس فَلّ، وأنا وقفت عند عربّاية الكعك متل بلَّاطة",
+        "craftNote": "Levantine. The world's motion versus the narrator's paralysis, anchored in transit and street vendors — 'The Beirut–Tripoli service taxi took off, and I stood by the kaak cart like a paving stone.' فَلّ is the true Beiruti verb for a car pulling away (livelier than مشي). The kaak seller is a cart/عربّاية, not a محل (shop) — corrected to match the vendor reality. Being frozen متل بلّاطة is the concrete image of grief. No exotica — a missed ride and a snack cart."
+      },
+      {
+        "line": "كبّوتك لسا معلّق ورا الباب، وريحة السيجارة عم تدفّي الشتا",
+        "craftNote": "Levantine. Presence-in-absence through a garment and a lingering smell warming the season — 'Your overcoat's still hung behind the door, and the cigarette smell is keeping the winter warm.' The unmoved coat and stale smoke do the emotional work; the smell 'warming winter' inverts comfort into ache. كبّوت (spoken Levantine for overcoat) is warmer than the more neutral معطف; الشتا ('the winter') is cleaner than الشتوية, which leans toward 'a rainstorm.'"
+      }
+    ],
+    "sensoryLexicon": {
+      "objectsAndPlaces": [
+        "الكاسة (kaaseh — the small handleless glass used for tea/coffee, sweet and dark; NB Levantine, vs Iraqi/Gulf استكانة)",
+        "سرفيس (serviis — the shared-route service taxi between cities and neighborhoods)",
+        "عربّاية الكعك / بسطة الكعك (the sesame-bread-and-zaatar street cart — a vendor's cart, not a shop)",
+        "بلكون الطابق التالت (the third-floor balcony — apartment-block sightline over a street)",
+        "دكانة الحي (dukkaneh — the corner shop where everyone's على الدفتر / on tab)",
+        "درج البناية وصناديق بريد الجيران (the shared building stairwell and neighbors' mailboxes)",
+        "كبّوت الشتا معلّق ورا الباب (the winter overcoat left hanging behind the door)",
+        "فنجان القهوة المقلوب (the overturned coffee cup, read after Turkish coffee — real but the one image most prone to lazy 'mystical' use; deploy sparingly and unsentimentally)"
+      ],
+      "texturesAndSounds": [
+        "صرير درج البناية (the creak of the building's stairwell)",
+        "غليان الركوة عالغاز (the bubbling of the rakweh, the long-handled coffee pot, on the gas)",
+        "خشخشة كيس الكعك (the crackle of the paper kaak bag)",
+        "صوت الأذان بيتقاطع مع بوري السرفيس (the call to prayer overlapping the service-taxi horn — layered city sound, not folkloric)",
+        "طقطقة المطر عالزينكو (rain drumming on a corrugated-zinc roof)",
+        "حفيف الغسيل المبلول عالحبل (the wet laundry rustling on the line)"
+      ],
+      "dialectAndIdiom": [
+        "نطرتك (natartak — 'I waited for you,' Levantine for انتظرتك)",
+        "لسا (lissa — 'still / not yet,' the ache-word of the unresolved present)",
+        "تا (ta — 'until / so that,' Levantine ligature; نطرت تا برد = waited till it cooled)",
+        "فَلّ / راح (fall — 'took off / left,' the spoken verb for a car or person departing)",
+        "شو صار فيك (shu saar fiik — 'what became of you,' softer and more intimate than a demand)",
+        "بلَّاطة (ballaata — 'paving stone,' used for someone frozen/dumbstruck)",
+        "على الدفتر (aala d-daftar — 'on the tab,' the corner-shop credit ledger, a marker of neighborhood intimacy)"
+      ]
+    }
+  },
 };

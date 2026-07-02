@@ -633,4 +633,57 @@ export const REGGAE_GUIDE: GenreGuide = {
       'Describe the vocal approach: singing, toasting, chanting',
     ],
   },
+
+  authenticityKit: {
+    "writingEthos": "Let one heavy, specific Kingston object or ritual carry the whole weight of sufferation or upliftment, so the feeling lands in the body before the mind names it — never state the emotion, place it in the yard. Range beyond sufferation-and-sound-system: let romance, church, work, sea, and street politics live in the same concrete grammar.",
+    "exemplars": [
+      {
+        "line": "Mumma bwoil di same green banana three time dis week / an di kerosene bottle-lamp a dead before day clean",
+        "craftNote": "Sufferation shown through a specific poverty ritual, not declared. Green banana (unripe, cheapest starch, boiled as filler) reused three times and the bottle-lamp guttering out before dawn concretize hunger and scarcity in a downtown yard — no word like 'poor' appears; the food's repetition and the dying light do the telling. ('Run pon fumes' was cut as an imported American idiom.)"
+      },
+      {
+        "line": "Coronation Market before fus light, di higgler dem a bawl / mi trade one bag a callaloo fi bus fare go a town",
+        "craftNote": "Real Kingston economy rendered in place and barter. Coronation (Jubilee) Market, higgler (market vendors), pre-dawn hustle, and trading callaloo for bus fare show the sufferer's dignified survival — the whole class narrative sits in a single transaction, no abstraction."
+      },
+      {
+        "line": "Nanny pon di five hundred a fold up small inna mi back pocket / but di zinc fence still a lean like it tired fi stand",
+        "craftNote": "Sufferation through juxtaposed objects: the 500-dollar note (bearing national hero Nanny of the Maroons) nearly gone, while the rusted zinc fence 'tired fi stand' personifies the exhausted tenement yard. Currency and corrugated zinc are exact working-class Kingston markers. (Corrected from 'the fifty' — Nanny is on the 500 note; verify denomination before publishing.)"
+      },
+      {
+        "line": "Nyabinghi drum a talk from Bull Bay till day clean / an di groundation smoke rise slow like it know di answer",
+        "craftNote": "Upliftment via authentic Rasta ritual specifics instead of doctrine. Nyabinghi (the sacred hand-drum ceremony), Bull Bay (real coastal Rasta community east of Kingston), groundation (Rasta gathering), and 'day clean' (Patois for dawn) render spiritual reasoning as a felt, all-night event. Handle with care: keep the ceremony felt and human, not mystically exoticized."
+      },
+      {
+        "line": "String up di sound a Waltham Park, box speaker a sweat pon di wall / when di selector pull up, di whole lane forget wi hungry",
+        "craftNote": "Sound system culture shown as communal escape from hardship. Waltham Park (real Kingston road/area), stringing up the set, sweating box speakers, and the selector's 'pull up' (rewind) let the joy and the underlying hunger coexist — upliftment born directly from sufferation, physical and specific."
+      }
+    ],
+    "sensoryLexicon": {
+      "objectsAndPlaces": [
+        "zinc fence / rusty zinc (corrugated roofing sheets that wall the government yards)",
+        "Coronation (Jubilee) Market and the higglers' stalls",
+        "kerosene pan stove and the blue-flame bottle-lamp",
+        "green banana, callaloo, saltfish, hard-dough bread, cornmeal porridge",
+        "Trench Town culture yard, Bull Bay, Waltham Park Road, Papine, Cross Roads clock",
+        "box speaker / bass bin stacked to the ceiling at a lawn dance",
+        "Dragon Stout and white rum in a Wray & Nephew flask",
+        "the five-hundred (Nanny) and thousand dollar note, patty-and-cocobread from a cook shop"
+      ],
+      "texturesAndSounds": [
+        "the one-drop's empty beat one — the kick's silence you feel in the chest",
+        "box speaker crackle and the selector's 'pull up! / forward!' over the crowd",
+        "Nyabinghi hand-drums (bass, funde, repeater) rolling till day clean",
+        "guitar skank chopping staccato on the off-beat, spring-reverb snare",
+        "rain drumming on zinc roof, coal-stove crackle, corner-shop domino slam",
+        "tape-delay echo trailing a vocal into the dub, bass bin rattling window louvres"
+      ],
+      "dialectAndIdiom": [
+        "'day clean' (dawn), 'fus light' (first light), 'string up di sound' (set up the rig)",
+        "'higgler' (market vendor), 'cook shop' (small eatery), 'back a yard' (home/Jamaica)",
+        "'wi a suffer / sufferation', 'nuff' (plenty), 'bawl' (cry out / call), 'small up yuhself'",
+        "'I and I' (we/us), 'overstanding', 'groundation' (Rasta gathering), 'irie', 'seen'",
+        "'gwaan bad' (excel), 'link up', 'run go' (go quickly), 'lickle more' (see you later)"
+      ]
+    }
+  },
 };
