@@ -892,6 +892,7 @@ export const App: React.FC = () => {
       setIsLoading(true);
       resetGenerationTelemetry("Song Ghost is listening...");
       setStep(AppStep.GENERATING);
+      setGeneratedSong(''); // clear stale lyrics so the live-draft panel starts empty
       setLoadedSongId(null);
       setAlbumArt(null);
 
@@ -1428,6 +1429,7 @@ export const App: React.FC = () => {
                         )}
                         <h1 className="heading-display text-4xl md:text-5xl font-black text-white tracking-tighter mb-2">Write. Refine. Release.</h1>
                         <p className="text-slate-500 font-black uppercase tracking-[0.14em] md:tracking-[0.28em] text-[10px] md:text-xs">Song Ghost helps you draft lyrics, polish structure, and generate cover art in a cohesive style.</p>
+                        <p className="mt-3 px-4 py-1.5 rounded-full bg-emerald-500/10 border border-emerald-400/30 text-emerald-300 text-[11px] font-black uppercase tracking-widest">Your first songs are on us — no setup, no API keys</p>
                      </div>
 
                      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
@@ -1658,6 +1660,14 @@ export const App: React.FC = () => {
                       ))}
                     </div>
                   </div>
+
+                  {/* Live draft — the lyrics write themselves as the model streams. */}
+                  {generatedSong && !generatedSong.startsWith('__STATUS__') && (
+                    <div className="rounded-3xl border border-cyan-500/30 bg-slate-900/50 p-6">
+                      <p className="text-xs font-black uppercase tracking-widest text-cyan-400 mb-3">Live Draft</p>
+                      <pre className="whitespace-pre-wrap font-mono text-sm leading-relaxed text-slate-200 max-h-80 overflow-y-auto">{generatedSong}</pre>
+                    </div>
+                  )}
               </div>
           ) : step === AppStep.FAST_TRACK ? (
               <FastTrack

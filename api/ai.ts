@@ -15,6 +15,9 @@ Rules: keep answers short/direct, never reveal private data (API keys/tokens/pas
 export const config = {
   runtime: "nodejs",
   maxDuration: 300,
+  // Allows the generateSong SSE path to flush events as they happen. If the platform
+  // ignores this, events arrive buffered at completion — degraded, not broken.
+  supportsResponseStreaming: true,
 };
 
 type AIAction =
@@ -3133,7 +3136,11 @@ async function buildAuthenticityKitBlock(inputs: any): Promise<string> {
   ].join("\n");
 }
 
-async function generateSong(payload: any) {
+/**
+ * Assemble everything the draft model needs: the full genre-grounded prompt plus the
+ * context the post-draft pipeline reuses. Shared by the JSON and streaming paths.
+ */
+async function prepareSongContext(payload: any) {
   const { inputs, userProfile } = payload || {};
   const startMs = Date.now();
 
@@ -3243,10 +3250,26 @@ CRITICAL: You are writing song lyrics for a music production app. This is creati
 Write with confidence. Take creative risks. Make it feel lived-in, not assembled.
   `.trim();
 
-  const draft = await generateDraft(prompt, register);
+  return { prompt, register, inputs, userProfile, userDirection, startMs };
+}
+
+type SongContext = Awaited<ReturnType<typeof prepareSongContext>>;
+
+/**
+ * All post-draft passes (compliance fix, meta-tag orchestration, judge/scrub,
+ * SUNO driver, vocal alignment, refusal check). `onStage` lets the streaming
+ * path surface real progress; the JSON path passes nothing.
+ */
+async function finishSongPipeline(
+  draft: string,
+  ctx: SongContext,
+  onStage?: (label: string) => void
+): Promise<string> {
+  const { inputs, userProfile, userDirection, startMs } = ctx;
   let finalText = draft;
 
   // Guide compliance check — fix hard violations in one targeted pass
+  onStage?.("Checking guide compliance…");
   if (hasTimeBudget(startMs, 11000)) {
     const compliance = await checkGuideCompliance(finalText, inputs || {});
     if (!compliance.passed) {
@@ -3268,6 +3291,7 @@ Write with confidence. Take creative risks. Make it feel lived-in, not assembled
   // (guide clichés, kit ethos, language) and fixes weak lines. Works for all languages,
   // unlike the legacy English regex scrub below, which now only runs as fallback.
   // Kill switch: SONG_JUDGE_DISABLED=1.
+  onStage?.("Polishing — cutting clichés line by line…");
   let judgeRan = false;
   if (process.env.SONG_JUDGE_DISABLED !== "1" && hasTimeBudget(startMs, 14000)) {
     try {
@@ -3319,6 +3343,7 @@ ${finalText}
   }
 
   // SUNO prompt driver — always run; replaces LLM prose with guide-driven technical prompt
+  onStage?.("Finalizing SUNO prompt and tags…");
   finalText = await enforceSunoPromptDriver(finalText, inputs || {}, userProfile || {});
 
   finalText = await enforceRequestedAdlibLanguage(finalText, userDirection);
@@ -3336,7 +3361,87 @@ ${finalText}
     );
   }
 
+  return finalText;
+}
+
+async function generateSong(payload: any) {
+  const ctx = await prepareSongContext(payload);
+  const draft = await generateDraft(ctx.prompt, ctx.register);
+  const finalText = await finishSongPipeline(draft, ctx);
   return { text: finalText };
+}
+
+/**
+ * Streaming variant: emits Server-Sent Events so the client can watch the lyrics
+ * write themselves — draft tokens stream live, then each real pipeline pass reports
+ * as a stage. Falls back to the non-streamed draft chain if OpenAI streaming fails.
+ * Event shapes: {type:'stage',label} | {type:'d',t} (draft delta) | {type:'done',text} | {type:'error',error}
+ */
+async function streamSongGeneration(payload: any, res: VercelResponse) {
+  res.writeHead(200, {
+    "Content-Type": "text/event-stream; charset=utf-8",
+    "Cache-Control": "no-cache, no-transform",
+    Connection: "keep-alive",
+  });
+  const send = (obj: any) => {
+    res.write(`data: ${JSON.stringify(obj)}\n\n`);
+    (res as any).flush?.();
+  };
+
+  try {
+    const ctx = await prepareSongContext(payload);
+    send({ type: "stage", label: "Drafting lyrics live…" });
+
+    let draft = "";
+    let streamedOk = false;
+    if (getDraftLLM() === "openai") {
+      try {
+        const client = new OpenAI({ apiKey: getOpenAIApiKey() });
+        const stream = await client.chat.completions.create({
+          model: getOpenAIModel(),
+          max_tokens: 4096,
+          temperature: 1.0,
+          stream: true,
+          messages: [
+            { role: "system", content: getSongwriterSystemPrompt(ctx.register) },
+            { role: "user", content: ctx.prompt },
+          ],
+        });
+        // Batch deltas (~150ms) so we don't emit hundreds of tiny events.
+        let pending = "";
+        let lastFlush = Date.now();
+        for await (const chunk of stream) {
+          const delta = chunk.choices?.[0]?.delta?.content || "";
+          if (!delta) continue;
+          draft += delta;
+          pending += delta;
+          if (Date.now() - lastFlush > 150) {
+            send({ type: "d", t: pending });
+            pending = "";
+            lastFlush = Date.now();
+          }
+        }
+        if (pending) send({ type: "d", t: pending });
+        streamedOk = draft.trim().length > 0;
+      } catch (e: any) {
+        console.warn("Streaming draft failed, falling back to standard chain:", e?.message);
+      }
+    }
+
+    // Fallback (non-OpenAI config, stream failure, or a refusal): the standard chain
+    // handles model fallbacks and refusal retries, at the cost of no live tokens.
+    if (!streamedOk || isCreativeRefusal(draft)) {
+      draft = await generateDraft(ctx.prompt, ctx.register);
+      send({ type: "d", t: draft });
+    }
+
+    const finalText = await finishSongPipeline(draft, ctx, (label) => send({ type: "stage", label }));
+    send({ type: "done", text: finalText });
+  } catch (error: any) {
+    send({ type: "error", error: error?.message || "Song generation failed." });
+  } finally {
+    res.end();
+  }
 }
 
 async function editSong(payload: any) {
@@ -3683,6 +3788,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
 
     switch (action) {
       case "generateSong":
+        if (payload?.stream) return await streamSongGeneration(payload, res);
         return res.status(200).json(await generateSong(payload));
       case "editSong":
         return res.status(200).json(await editSong(payload));
