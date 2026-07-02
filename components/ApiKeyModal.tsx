@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { confirmDialog, toast } from "./Feedback";
 
 const STORAGE_KEY = "songghost_gemini_api_key";

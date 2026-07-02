@@ -6,7 +6,7 @@ import { getSavedSongs, deleteSong, deleteAllUserSongs } from '../services/songS
 import { COSTS, deductCredits, hasEnoughCredits } from '../services/creditService';
 import { toast, confirmDialog } from './Feedback';
 import { 
-    LoadingSpinner, ProfileIcon, TrashIcon, EditIcon, ImageIcon, 
+    LoadingSpinner, ProfileIcon, TrashIcon, ImageIcon, 
     HomeIcon, WalletIcon, ClockIcon, LogoutIcon 
 } from './icons';
 

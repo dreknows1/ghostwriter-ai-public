@@ -2,7 +2,6 @@ import { mutation, query } from "./_generated/server";
 import { v } from "convex/values";
 
 const CREDITS_PUBLIC = 25;
-const CREDITS_SKOOL = 100;
 
 export const getByUser = query({
   args: { userId: v.id("users") },

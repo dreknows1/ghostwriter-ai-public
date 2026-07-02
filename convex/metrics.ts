@@ -17,7 +17,6 @@ export const getKpis = internalQuery({
 
     // ── Fetch all data ──────────────────────────────────────────
     const allUsers = await ctx.db.query("users").collect();
-    const allProfiles = await ctx.db.query("profiles").collect();
     const allSongs = await ctx.db.query("savedSongs").collect();
     const allLedger = await ctx.db.query("creditLedger").collect();
     const allTransactions = await ctx.db.query("transactions").collect();

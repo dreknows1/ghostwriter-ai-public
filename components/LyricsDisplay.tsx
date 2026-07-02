@@ -1,11 +1,11 @@
 
 // LyricsDisplay.tsx - Optimized for precision editing and professional songwriting
 import React, { useMemo, useState, useRef, useEffect, useCallback } from 'react';
-import { CopyIcon, CheckIcon, SaveIcon, MinimizeIcon, MaximizeIcon, ImageIcon, SocialIcon, TranslateIcon, LoadingSpinner, MagicWandIcon, EditIcon, DownloadIcon } from './icons';
+import { CopyIcon, CheckIcon, ImageIcon, TranslateIcon, LoadingSpinner, MagicWandIcon, DownloadIcon } from './icons';
 import { SocialPack, SongInputs } from '../types';
+import { editSong } from '../services/geminiService';
 import MetaTagLibrary from './MetaTagLibrary';
 import { toast, promptDialog } from './Feedback';
-import { polishSong, editSong } from '../services/geminiService';
 import { hasEnoughCredits, deductCredits, COSTS } from '../services/creditService';
 
 interface LyricsDisplayProps {
@@ -65,8 +65,6 @@ const LyricsDisplay: React.FC<LyricsDisplayProps> = ({
   const [history, setHistory] = useState<string[]>([song]);
   const [historyIndex, setHistoryIndex] = useState(0);
   const currentFullSong = history[historyIndex];
-
-  const [isOptimizing, setIsOptimizing] = useState(false);
   const [isSaving, setIsSaving] = useState(false);
   const [quickEditInput, setQuickEditInput] = useState('');
   const [isQuickEditing, setIsQuickEditing] = useState(false);

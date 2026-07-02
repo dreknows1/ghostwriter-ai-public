@@ -5,7 +5,6 @@ type AIAction =
   | "generateSong"
   | "editSong"
   | "structureImportedSong"
-  | "generateDynamicOptions"
   | "generateAlbumArt"
   | "generateSocialPack"
   | "translateLyrics"
@@ -22,7 +21,6 @@ async function callAI<T>(action: AIAction, email: string, payload: Record<string
     "generateSong",
     "editSong",
     "structureImportedSong",
-    "generateDynamicOptions",
     "generateSocialPack",
     "translateLyrics",
   ]);
@@ -252,16 +250,6 @@ export async function* generateSong(
   yield* singleYield(result.text || "");
 }
 
-export async function generateDynamicOptions(
-  targetField: string,
-  currentInputs: SongInputs
-): Promise<string[]> {
-  const result = await callAI<{ options: string[] }>("generateDynamicOptions", "system@songghost.local", {
-    targetField,
-    currentInputs,
-  });
-  return Array.isArray(result.options) ? result.options : [];
-}
 
 export async function* editSong(
   originalSong: string,
