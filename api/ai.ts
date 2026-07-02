@@ -274,6 +274,26 @@ async function loadReferenceFeaturesModule(): Promise<ReferenceFeaturesModule | 
   return referenceFeaturesModulePromise;
 }
 
+type LyricJudgeModule = typeof import("../lib/lyricJudge");
+let lyricJudgeModulePromise: Promise<LyricJudgeModule | null> | null = null;
+async function loadLyricJudgeModule(): Promise<LyricJudgeModule | null> {
+  if (!lyricJudgeModulePromise) {
+    lyricJudgeModulePromise = (async () => {
+      try {
+        return await import("../lib/lyricJudge");
+      } catch (e1) {
+        try {
+          return await import("../lib/lyricJudge.ts");
+        } catch (e2) {
+          console.error("Failed to load lyric judge module:", e1, e2);
+          return null;
+        }
+      }
+    })();
+  }
+  return lyricJudgeModulePromise;
+}
+
 async function loadGenreGuideModule(): Promise<GenreGuideModule | null> {
   if (!genreGuideModulePromise) {
     genreGuideModulePromise = (async () => {
@@ -3050,6 +3070,46 @@ function extractCharacterRequirements(direction: string): string {
 }
 
 /**
+ * Genre-grounded lyric judge — one LLM pass that judges every lyric line against the
+ * genre's OWN standards (its cliché list, authenticity-kit ethos, language) and rewrites
+ * only the weak lines. Language-agnostic, unlike the legacy English regex scrub.
+ * Deterministic fallback: any validation failure keeps the original draft untouched.
+ */
+async function judgeAndRefineLyrics(
+  songText: string,
+  inputs: any
+): Promise<{ text: string; action: "pass" | "rewrote" | "kept-original" }> {
+  const judge = await loadLyricJudgeModule();
+  if (!judge) return { text: songText, action: "kept-original" };
+
+  const guide = await resolveGuide(inputs || {});
+  const kit = guide?.authenticityKit;
+  const grounding = {
+    genreName: guide?.name || inputs?.genre || "Pop",
+    subGenre: inputs?.subGenre || undefined,
+    language: inputs?.language || guide?.language || "English",
+    cliches: guide?.lyricalConventions?.cliches || [],
+    ethos: kit?.writingEthos,
+    lexiconSample: kit
+      ? [
+          ...kit.sensoryLexicon.objectsAndPlaces.slice(0, 6),
+          ...kit.sensoryLexicon.texturesAndSounds.slice(0, 4),
+        ]
+      : undefined,
+  };
+
+  const response = await openAIResponses(judge.buildJudgePrompt(songText, grounding));
+  if (judge.isJudgePass(response)) return { text: songText, action: "pass" };
+
+  const validation = judge.validateRewrite(songText, response);
+  if (!validation.ok) {
+    console.warn(`Lyric judge rewrite rejected (${validation.reason}); keeping draft`);
+    return { text: songText, action: "kept-original" };
+  }
+  return { text: response.trim(), action: "rewrote" };
+}
+
+/**
  * Build the few-shot "how this genre writes" block from a guide's authenticityKit.
  * Original example lines + a positive word-bank demonstrate the genre's concreteness so
  * the model imitates real craft instead of describing the genre abstractly. Empty string
@@ -3204,8 +3264,23 @@ Write with confidence. Take creative risks. Make it feel lived-in, not assembled
     finalText = await enforceMetaTagOrchestration(finalText, inputs || {});
   }
 
-  // Targeted cliché scrub on initial generation (full depth enforcement only runs on edits)
-  if (hasTimeBudget(startMs, 8000)) {
+  // Genre-grounded judge+rewrite — scores every line against THIS genre's own standards
+  // (guide clichés, kit ethos, language) and fixes weak lines. Works for all languages,
+  // unlike the legacy English regex scrub below, which now only runs as fallback.
+  // Kill switch: SONG_JUDGE_DISABLED=1.
+  let judgeRan = false;
+  if (process.env.SONG_JUDGE_DISABLED !== "1" && hasTimeBudget(startMs, 14000)) {
+    try {
+      const judged = await judgeAndRefineLyrics(finalText, inputs || {});
+      finalText = judged.text;
+      judgeRan = judged.action !== "kept-original";
+    } catch (e: any) {
+      console.warn("Lyric judge failed; falling back to legacy scrub:", e?.message);
+    }
+  }
+
+  // Legacy targeted cliché scrub (English-only) — fallback when the judge didn't run
+  if (!judgeRan && hasTimeBudget(startMs, 8000)) {
     const clicheCount = countClicheHits(finalText);
     if (clicheCount >= 2) {
       const clicheScrubPrompt = `
