@@ -5,6 +5,21 @@ import { GoogleGenAI } from "@google/genai";
 import Anthropic from "@anthropic-ai/sdk";
 import OpenAI from "openai";
 
+// Static lib imports — dynamic import("../lib/...") does NOT survive Vercel's
+// bundler (ERR_MODULE_NOT_FOUND at runtime). The old dynamic loaders failed
+// SILENTLY in production via their catch-null fallbacks, which meant guides,
+// kits, and cultural logic never loaded on the live site. Static imports are
+// bundled reliably.
+import * as culturalLogicStatic from "../lib/culturalLogic";
+import * as metaTagStatic from "../lib/metaTagLibrary";
+import * as genreAgentsStatic from "../lib/genreAgents";
+import * as referenceFeaturesStatic from "../lib/referenceFeatures";
+import * as lyricJudgeStatic from "../lib/lyricJudge";
+import * as guidesStatic from "../lib/guides";
+import * as lyricCheckerStatic from "../lib/lyricChecker";
+import * as bannedLexiconStatic from "../lib/bannedLexicon";
+import * as sunoStyleStatic from "../lib/sunoStyle";
+
 const ASK_ANDRE_AUDIT_CONTEXT = `
 You are "Ask Andre" inside SongGhost.
 App mission: help users write culturally authentic, genre-accurate songs with guided prompts and revisions.
@@ -206,113 +221,29 @@ let referenceFeaturesModulePromise: Promise<ReferenceFeaturesModule | null> | nu
 let genreGuideModulePromise: Promise<GenreGuideModule | null> | null = null;
 
 async function loadCulturalLogicModule(): Promise<CulturalLogicModule | null> {
-  if (!culturalLogicPromise) {
-    culturalLogicPromise = (async () => {
-      try {
-        return (await import("../lib/culturalLogic")) as unknown as CulturalLogicModule;
-      } catch (e1) {
-        try {
-          return (await import("../lib/culturalLogic.ts")) as unknown as CulturalLogicModule;
-        } catch (e2) {
-          console.error("Failed to load culturalLogic module:", e1, e2);
-          return null;
-        }
-      }
-    })();
-  }
-  return culturalLogicPromise;
+  return culturalLogicStatic as unknown as CulturalLogicModule;
 }
 
 async function loadMetaTagModule(): Promise<MetaTagModule | null> {
-  if (!metaTagModulePromise) {
-    metaTagModulePromise = (async () => {
-      try {
-        return (await import("../lib/metaTagLibrary")) as unknown as MetaTagModule;
-      } catch (e1) {
-        try {
-          return (await import("../lib/metaTagLibrary.ts")) as unknown as MetaTagModule;
-        } catch (e2) {
-          console.error("Failed to load metaTagLibrary module:", e1, e2);
-          return null;
-        }
-      }
-    })();
-  }
-  return metaTagModulePromise;
+  return metaTagStatic as unknown as MetaTagModule;
 }
 
 async function loadGenreAgentModule(): Promise<GenreAgentModule | null> {
-  if (!genreAgentModulePromise) {
-    genreAgentModulePromise = (async () => {
-      try {
-        return (await import("../lib/genreAgents")) as unknown as GenreAgentModule;
-      } catch (e1) {
-        try {
-          return (await import("../lib/genreAgents.ts")) as unknown as GenreAgentModule;
-        } catch (e2) {
-          console.error("Failed to load genreAgents module:", e1, e2);
-          return null;
-        }
-      }
-    })();
-  }
-  return genreAgentModulePromise;
+  return genreAgentsStatic as unknown as GenreAgentModule;
 }
 
 async function loadReferenceFeaturesModule(): Promise<ReferenceFeaturesModule | null> {
-  if (!referenceFeaturesModulePromise) {
-    referenceFeaturesModulePromise = (async () => {
-      try {
-        return (await import("../lib/referenceFeatures")) as unknown as ReferenceFeaturesModule;
-      } catch (e1) {
-        try {
-          return (await import("../lib/referenceFeatures.ts")) as unknown as ReferenceFeaturesModule;
-        } catch (e2) {
-          console.error("Failed to load referenceFeatures module:", e1, e2);
-          return null;
-        }
-      }
-    })();
-  }
-  return referenceFeaturesModulePromise;
+  return referenceFeaturesStatic as unknown as ReferenceFeaturesModule;
 }
 
 type LyricJudgeModule = typeof import("../lib/lyricJudge");
 let lyricJudgeModulePromise: Promise<LyricJudgeModule | null> | null = null;
 async function loadLyricJudgeModule(): Promise<LyricJudgeModule | null> {
-  if (!lyricJudgeModulePromise) {
-    lyricJudgeModulePromise = (async () => {
-      try {
-        return await import("../lib/lyricJudge");
-      } catch (e1) {
-        try {
-          return await import("../lib/lyricJudge.ts");
-        } catch (e2) {
-          console.error("Failed to load lyric judge module:", e1, e2);
-          return null;
-        }
-      }
-    })();
-  }
-  return lyricJudgeModulePromise;
+  return lyricJudgeStatic as LyricJudgeModule;
 }
 
 async function loadGenreGuideModule(): Promise<GenreGuideModule | null> {
-  if (!genreGuideModulePromise) {
-    genreGuideModulePromise = (async () => {
-      try {
-        return (await import("../lib/guides")) as unknown as GenreGuideModule;
-      } catch (e1) {
-        try {
-          return (await import("../lib/guides/index.ts")) as unknown as GenreGuideModule;
-        } catch (e2) {
-          console.error("Failed to load genre guides module:", e1, e2);
-          return null;
-        }
-      }
-    })();
-  }
-  return genreGuideModulePromise;
+  return guidesStatic as unknown as GenreGuideModule;
 }
 
 function fallbackMetaTagGuidance(inputs: any): string {
@@ -3387,12 +3318,7 @@ function findSubProfile(guide: import("../lib/guides/types").GenreGuide | null, 
 }
 
 async function loadV2Modules() {
-  const [checker, lexicon, suno] = await Promise.all([
-    import("../lib/lyricChecker"),
-    import("../lib/bannedLexicon"),
-    import("../lib/sunoStyle"),
-  ]);
-  return { checker, lexicon, suno };
+  return { checker: lyricCheckerStatic, lexicon: bannedLexiconStatic, suno: sunoStyleStatic };
 }
 
 /** Literal-ish cliché phrases only — topic-category entries ("Body/skin/touch imagery") sterilize writing. */
