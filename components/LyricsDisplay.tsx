@@ -4,6 +4,7 @@ import React, { useMemo, useState, useRef, useEffect, useCallback } from 'react'
 import { CopyIcon, CheckIcon, SaveIcon, MinimizeIcon, MaximizeIcon, ImageIcon, SocialIcon, TranslateIcon, LoadingSpinner, MagicWandIcon, EditIcon, DownloadIcon } from './icons';
 import { SocialPack, SongInputs } from '../types';
 import MetaTagLibrary from './MetaTagLibrary';
+import { toast, promptDialog } from './Feedback';
 import { polishSong, editSong } from '../services/geminiService';
 import { hasEnoughCredits, deductCredits, COSTS } from '../services/creditService';
 
@@ -172,7 +173,7 @@ const LyricsDisplay: React.FC<LyricsDisplayProps> = ({
   const handleQuickEdit = async () => {
     if (!quickEditInput.trim()) return;
     const canAfford = await hasEnoughCredits(email, COSTS.EDIT_SONG);
-    if (!canAfford) { alert("Insufficient credits for revision."); return; }
+    if (!canAfford) { toast('Insufficient credits for revision.', 'error'); return; }
     setIsQuickEditing(true);
     try {
       const generator = editSong(currentFullSong, quickEditInput, email, currentInputs);
@@ -188,7 +189,7 @@ const LyricsDisplay: React.FC<LyricsDisplayProps> = ({
 
   const handleGenerateArtwork = async () => {
     const canAfford = await hasEnoughCredits(email, COSTS.GENERATE_ART);
-    if (!canAfford) { alert("Insufficient credits for artwork."); return; }
+    if (!canAfford) { toast('Insufficient credits for artwork.', 'error'); return; }
     setIsGeneratingArt(true);
     try {
       const art = await onGenerateArt(parsed.title, parsed.prompt, artAspect);
@@ -206,7 +207,7 @@ const LyricsDisplay: React.FC<LyricsDisplayProps> = ({
       }
     } catch (e: any) {
       console.error("Art generation error:", e);
-      alert(`Artwork generation failed: ${e?.message || "Unknown error"}`);
+      toast(`Artwork generation failed: ${e?.message || 'Unknown error'}`, 'error');
     } finally {
       setIsGeneratingArt(false);
     }
@@ -228,7 +229,7 @@ const LyricsDisplay: React.FC<LyricsDisplayProps> = ({
          </div>
          <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 w-full md:w-auto md:flex-shrink-0">
             <button onClick={async () => {
-                const lang = prompt("Translate to:", "Spanish");
+                const lang = await promptDialog({ title: 'Translate lyrics', message: 'Which language should the lyrics be translated to?', placeholder: 'e.g. Spanish', initialValue: 'Spanish', confirmLabel: 'Translate' });
                 if (lang) {
                   const res = await onTranslate(parsed.lyrics, lang);
                   addToHistory(`Title: ${parsed.title}\n\n### SUNO Prompt\n${parsed.prompt}\n\n### Lyrics\n${res}`);
