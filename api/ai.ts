@@ -483,8 +483,18 @@ async function resolveGuide(inputs: any): Promise<import("../lib/guides/types").
   const mod = await loadGenreGuideModule();
   if (!mod) return null;
 
-  const genreId = (inputs?.genre || "").toLowerCase().replace(/\s+/g, "-");
-  const guide = mod.getGuideById(genreId);
+  // Loose matching: user-facing labels ("R&B", "K-Pop", "Hip Hop") must find their
+  // guide regardless of punctuation. The old exact-id lookup silently returned null
+  // for R&B (id "rnb") — the whole guide was OFF for the app's biggest genre.
+  const loose = (s: string) => (s || "").toLowerCase().replace(/[^a-z0-9]+/g, "");
+  const key = loose(inputs?.genre || "");
+  if (!key) return null;
+  const all: import("../lib/guides/types").GenreGuide[] = (mod as any).ALL_GUIDES || [];
+  const guide =
+    mod.getGuideById((inputs?.genre || "").toLowerCase().replace(/\s+/g, "-")) ||
+    all.find((g) => loose(g.id) === key || loose(g.name) === key) ||
+    (key === "rb" || key === "randb" ? all.find((g) => g.id === "rnb") : undefined) ||
+    null;
   if (!guide) return null;
 
   const subGenreName = inputs?.subGenre || "";
@@ -3359,6 +3369,236 @@ function promptWithPlan(ctx: SongContext, plan: string): string {
   return plan ? `${ctx.prompt}\n\nYOUR PLAN — you already planned this song; follow it:\n${plan}` : ctx.prompt;
 }
 
+
+// ═══════════════════════ SONG ENGINE V2 (research redesign) ═══════════════════════
+// Hook-first, two parallel full-song writers, pure-code checker with discard-and-
+// redraft (never patch), a Selector that picks but cannot rewrite, and a
+// deterministic Suno style prompt built from guide data. Kill switch: SONG_ENGINE_V2=0.
+
+function findSubProfile(guide: import("../lib/guides/types").GenreGuide | null, subGenre?: string) {
+  if (!guide || !subGenre) return null;
+  const norm = (s: string) => s.toLowerCase().replace(/[\s\-_]+/g, "");
+  const n = norm(subGenre);
+  return (
+    guide.subGenres.find((s) => norm(s.name) === n) ||
+    guide.subGenres.find((s) => norm(s.name).includes(n) || n.includes(norm(s.name))) ||
+    null
+  );
+}
+
+async function loadV2Modules() {
+  const [checker, lexicon, suno] = await Promise.all([
+    import("../lib/lyricChecker"),
+    import("../lib/bannedLexicon"),
+    import("../lib/sunoStyle"),
+  ]);
+  return { checker, lexicon, suno };
+}
+
+/** Literal-ish cliché phrases only — topic-category entries ("Body/skin/touch imagery") sterilize writing. */
+function literalCliches(guide: import("../lib/guides/types").GenreGuide | null): string[] {
+  return (guide?.lyricalConventions?.cliches || [])
+    .filter((c) => c.length < 45 && !/imagery|metaphor|reference|clich/i.test(c))
+    .slice(0, 6);
+}
+
+async function hookSmith(
+  genreTag: string,
+  story: string,
+  language: string,
+  checker: typeof import("../lib/lyricChecker")
+): Promise<{ title: string; hookLine: string }> {
+  const prompt = `
+Suggest 4 title/hook options for a ${genreTag} song about the story below.
+Each hook: 2-6 plain, spoken ${language} words a real person would actually say. Singable. Correct grammar. No clichés.
+Return ONLY a JSON array: [{"title":"...","hook_line":"..."}, ...] — no markdown, no commentary.
+Story: ${story || "(the writer's choice — pick something concrete and human)"}
+`.trim();
+  try {
+    const raw = await openAIResponses(prompt);
+    const cleaned = raw.replace(/^```(?:json)?\s*/i, "").replace(/\s*```\s*$/, "").trim();
+    const arr = JSON.parse(cleaned);
+    if (Array.isArray(arr)) {
+      for (const cand of arr) {
+        const v = checker.validateHook(cand);
+        if (v) return v;
+      }
+    }
+  } catch (e: any) {
+    console.warn("hookSmith failed:", e?.message);
+  }
+  return { title: "", hookLine: "" }; // writers fall back to inventing their own plain hook
+}
+
+function buildWriterPromptV2(params: {
+  genreTag: string;
+  language: string;
+  story: string;
+  hook: { title: string; hookLine: string };
+  guide: import("../lib/guides/types").GenreGuide | null;
+  sub: ReturnType<typeof findSubProfile>;
+  register: "clean" | "radio" | "explicit";
+  vocals?: string;
+  lexicon: typeof import("../lib/bannedLexicon");
+  isEdm: boolean;
+}): string {
+  const { genreTag, language, story, hook, guide, sub, register, vocals, lexicon, isEdm } = params;
+  const kit = guide?.authenticityKit;
+  const cliches = literalCliches(guide);
+
+  const genreBlock = guide
+    ? [
+        `GENRE — ${sub ? sub.name + " " : ""}${guide.name}:`,
+        sub?.description ? `- ${sub.description}` : "",
+        sub?.lyricNotes ? `- Lyrics: ${sub.lyricNotes}` : `- Lyrics: ${guide.lyricalConventions.storytellingApproach.split(".")[0]}.`,
+        `- Perspective: ${guide.lyricalConventions.perspective.split(".")[0]}.`,
+        `- Themes that ring true: ${guide.lyricalConventions.themes.slice(0, 4).join(", ")}.`,
+        guide.songStructure?.form ? `- Form: ${guide.songStructure.form.split(".")[0]}.` : "",
+        guide.callAndResponse?.patterns?.length ? `- Call-and-response tradition: ${guide.callAndResponse.patterns[0]}.` : "",
+        cliches.length ? `- This genre's tired lines — avoid: ${cliches.join("; ")}.` : "",
+        kit ? `- Register calibration (your BEST 2-3 lines per section should hit this level; the rest plain):\n${kit.exemplars.slice(0, 3).map((e) => `    "${e.line}"`).join("\n")}` : "",
+      ].filter(Boolean).join("\n")
+    : `GENRE — ${genreTag}.`;
+
+  const tagList = `[Intro] [Verse] [Verse 2] [Pre-Chorus] [Chorus] [Bridge] [Final Chorus] [Outro]${isEdm ? " [Build Up] [Drop]" : ""}`;
+
+  return `
+Write a complete, releasable ${genreTag} song in ${language}. One pass, your best work — there is no editor after you.
+
+THE SONG IS ABOUT:
+${story || "(your choice — one concrete human moment, not an abstraction)"}
+
+${hook.hookLine ? `THE HOOK (already chosen — the chorus opens with this line VERBATIM, and it's the title):\n"${hook.hookLine}"${hook.title && hook.title !== hook.hookLine ? ` (Title: ${hook.title})` : ""}` : "HOOK: choose one 2-6 word plain spoken phrase; the chorus opens with it verbatim; it is the title."}
+
+${genreBlock}
+
+FORM (numbers are hard rules):
+- Structure: [Verse] 4-6 lines → [Pre-Chorus] 2-4 (optional) → [Chorus] 3-5 lines → [Verse 2] → [Chorus] → [Bridge] 2-4 → [Final Chorus]. [Intro]/[Outro] optional, max 2 lines each.
+- Section tags ONLY from: ${tagList}
+- 150-250 words of lyrics total. Lines 6-10 syllables (never more than 12).
+- Write every chorus out IN FULL, word-for-word identical.
+- Rhyme on 2nd/4th lines; slant rhymes welcome; DROP the rhyme before you bend the meaning — a plain true line beats a nonsense rhyme.
+- Max 1 metaphor per section; the other lines are plain, conversational ${language} a real person says out loud. EXCEPTION: if the GENRE section above describes refrain/call-and-response/vamp traditions, honor them — genre form beats these defaults.
+- Every simile/metaphor must be physically true and instantly clear. If the comparison doesn't literally work, cut it.
+- Max 3 parenthetical ad-libs in the whole song.
+- Show feelings through actions and objects from the story — never state "I'm sad/strong/broken".
+
+${params.lexicon.bannedLexiconPromptBlock()}
+
+${register === "explicit" ? "REGISTER — EXPLICIT: the artist chose adult register intentionally. Write raw, profane, sexually confident lines where the story calls for it. Do not censor or moralize." : ""}
+Vocals: ${vocals || "Female Solo"}.
+
+Return only:
+Title: ...
+### SUNO Prompt
+(one short placeholder sentence — it will be replaced)
+### Lyrics
+[the song]
+
+If you cannot write this, return ONLY the line "GENERATION_DECLINED".
+`.trim();
+}
+
+async function generateSongV2(payload: any, onStage?: (label: string) => void) {
+  const { inputs } = payload || {};
+  const startMs = Date.now();
+  const { checker, lexicon, suno } = await loadV2Modules();
+
+  const language = inputs?.language || "English";
+  const genreTag = combineGenreTag(inputs?.subGenre || "", inputs?.genre || "Pop");
+  const story = (inputs?.creativeDirection || inputs?.additionalInfo || "").trim();
+  const register = detectRegisterHint({ creativeDirection: story });
+  const guide = await resolveGuide(inputs || {});
+  const sub = findSubProfile(guide, inputs?.subGenre);
+  const isEdm = /edm|electronic|house|techno|trance|dubstep/i.test(`${inputs?.genre} ${inputs?.subGenre}`);
+
+  onStage?.("Finding your hook…");
+  const hook = await hookSmith(genreTag, story, language, checker);
+
+  onStage?.("Writing two drafts…");
+  const writerPrompt = buildWriterPromptV2({ genreTag, language, story, hook, guide, sub, register, vocals: inputs?.vocals, lexicon, isEdm });
+  const checkOpts = {
+    language,
+    hookLine: hook.hookLine || undefined,
+    extraAllowedTags: isEdm ? ["build up", "drop", "pre-drop"] : [],
+    adlibsRequested: /ad-?lib/i.test(story),
+    // Kit exemplars are calibration — copying them into user songs is plagiarism
+    // across users. The checker fails any draft that lifts one.
+    forbiddenLines: (guide?.authenticityKit?.exemplars || []).map((e) => e.line),
+  };
+
+  const writeOnce = async (): Promise<string> => {
+    try {
+      return await openaiGenerate(writerPrompt, register);
+    } catch {
+      return await openAIResponses(writerPrompt);
+    }
+  };
+
+  const draftAndCheck = async (): Promise<{ text: string; result: import("../lib/lyricChecker").CheckResult }> => {
+    let text = await writeOnce();
+    let result = checker.checkSong(text, checkOpts);
+    if (!result.ok && hasTimeBudget(startMs, 25000)) {
+      // Discard and redraft ONCE with the failure reasons — never patch lines.
+      const redraftPrompt = `${writerPrompt}\n\nYour previous draft was REJECTED by automated checks for: ${result.failures.join("; ")}. Write a completely fresh song that passes.`;
+      try {
+        const fresh = await openaiGenerate(redraftPrompt, register);
+        const freshResult = checker.checkSong(fresh, checkOpts);
+        if (freshResult.failures.length < result.failures.length) {
+          text = fresh;
+          result = freshResult;
+        }
+      } catch { /* keep first */ }
+    }
+    return { text, result };
+  };
+
+  const [a, b] = await Promise.all([draftAndCheck(), draftAndCheck()]);
+
+  onStage?.("Picking the better draft…");
+  let winner = a;
+  const bothPass = a.result.ok && b.result.ok;
+  if (!a.result.ok && b.result.ok) winner = b;
+  else if (a.result.ok && !b.result.ok) winner = a;
+  else if (!bothPass) winner = a.result.failures.length <= b.result.failures.length ? a : b;
+  if (bothPass) {
+    try {
+      const verdictRaw = await openAIResponses(`
+Two complete drafts answer the same brief (a ${genreTag} song, ${language}). Pick the better RELEASABLE song.
+Judge IN THIS ORDER: (1) count lines that don't parse or force a rhyme — fewer wins unless the other song's hook is drastically stronger; (2) hook strength and meter; (3) genre feel; (4) story movement. You may NOT rewrite, merge, or edit — only choose.
+Return ONLY JSON: {"winner":"A"|"B","reason":"one sentence"}
+
+=== DRAFT A ===
+${a.text}
+
+=== DRAFT B ===
+${b.text}
+`.trim());
+      const v = JSON.parse(verdictRaw.replace(/^```(?:json)?\s*/i, "").replace(/\s*```\s*$/, "").trim());
+      winner = v?.winner === "B" ? b : a;
+    } catch { /* default to A */ }
+  }
+
+  let finalText = winner.text;
+
+  // Deterministic Suno style prompt from guide data — replaces whatever the writer wrote.
+  onStage?.("Building the sound…");
+  const style = suno.buildSunoStylePrompt(guide, sub, { vocals: inputs?.vocals, mood: inputs?.emotion });
+  finalText = finalText.replace(/### SUNO Prompt[\s\S]*?### Lyrics/, `### SUNO Prompt\n${style}\n### Lyrics`);
+
+  // Deterministic vocal-tag alignment (cheap, no rewrite).
+  finalText = alignVocalIdentityInLyrics(finalText, inputs?.vocals);
+
+  if (isCreativeRefusal(finalText)) {
+    throw Object.assign(
+      new Error("Song generation failed — try adjusting the story and generate again."),
+      { status: 422, code: "creative_refusal" }
+    );
+  }
+  console.log(`[engine-v2] done in ${Date.now() - startMs}ms; checks A:${a.result.failures.length} B:${b.result.failures.length}; hook="${hook.hookLine}"`);
+  return { text: finalText };
+}
+
 async function generateSong(payload: any) {
   const ctx = await prepareSongContext(payload);
   const plan = await draftSongPlan(ctx);
@@ -3373,7 +3613,7 @@ async function generateSong(payload: any) {
  * as a stage. Falls back to the non-streamed draft chain if OpenAI streaming fails.
  * Event shapes: {type:'stage',label} | {type:'d',t} (draft delta) | {type:'done',text} | {type:'error',error}
  */
-async function streamSongGeneration(payload: any, res: VercelResponse) {
+async function streamSongGeneration(payload: any, res: VercelResponse, useV2 = false) {
   res.writeHead(200, {
     "Content-Type": "text/event-stream; charset=utf-8",
     "Cache-Control": "no-cache, no-transform",
@@ -3385,6 +3625,11 @@ async function streamSongGeneration(payload: any, res: VercelResponse) {
   };
 
   try {
+    if (useV2) {
+      const result = await generateSongV2(payload, (label) => send({ type: "stage", label }));
+      send({ type: "done", text: result.text });
+      return;
+    }
     const ctx = await prepareSongContext(payload);
     send({ type: "stage", label: "Planning the story and the hook…" });
     const plan = await draftSongPlan(ctx);
@@ -3786,9 +4031,11 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
         .trim() || null;
 
     switch (action) {
-      case "generateSong":
-        if (payload?.stream) return await streamSongGeneration(payload, res);
-        return res.status(200).json(await generateSong(payload));
+      case "generateSong": {
+        const useV2 = process.env.SONG_ENGINE_V2 !== "0";
+        if (payload?.stream) return await streamSongGeneration(payload, res, useV2);
+        return res.status(200).json(useV2 ? await generateSongV2(payload) : await generateSong(payload));
+      }
       case "editSong":
         return res.status(200).json(await editSong(payload));
       case "structureImportedSong":
