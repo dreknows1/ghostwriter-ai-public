@@ -3049,6 +3049,30 @@ function extractCharacterRequirements(direction: string): string {
   return requirements.join("\n");
 }
 
+/**
+ * Build the few-shot "how this genre writes" block from a guide's authenticityKit.
+ * Original example lines + a positive word-bank demonstrate the genre's concreteness so
+ * the model imitates real craft instead of describing the genre abstractly. Empty string
+ * for genres that don't have a kit authored yet.
+ */
+async function buildAuthenticityKitBlock(inputs: any): Promise<string> {
+  const guide = await resolveGuide(inputs || {});
+  const kit = guide?.authenticityKit;
+  if (!kit || !kit.exemplars?.length) return "";
+  const exemplars = kit.exemplars.slice(0, 5).map((e) => `  • "${e.line}" — ${e.craftNote}`).join("\n");
+  const lex = kit.sensoryLexicon;
+  return [
+    `HOW ${guide!.name.toUpperCase()} ACTUALLY WRITES (study these, then write with the same concreteness — do NOT reuse these exact lines):`,
+    kit.writingEthos,
+    exemplars,
+    `WORD-BANK — this genre's native vocabulary; reach for details this specific (or your own, equally concrete):`,
+    `  Objects/places: ${lex.objectsAndPlaces.slice(0, 10).join(", ")}`,
+    `  Textures/sounds: ${lex.texturesAndSounds.slice(0, 8).join(", ")}`,
+    `  Dialect/idiom: ${lex.dialectAndIdiom.slice(0, 8).join(", ")}`,
+    `Every section must land at least one concrete detail at this level — a real object, place, texture, or named specific.`,
+  ].join("\n");
+}
+
 async function generateSong(payload: any) {
   const { inputs, userProfile } = payload || {};
   const startMs = Date.now();
@@ -3060,6 +3084,7 @@ async function generateSong(payload: any) {
   // rich guide knowledge was never injected into the prompt — the model only saw a thin
   // "genre truth" paragraph. "lyrics" mode keeps it focused on writing, not production.
   const genreCraftBlueprint = await compileGuideToDirectives(inputs || {}, "lyrics");
+  const authenticityKitBlock = await buildAuthenticityKitBlock(inputs || {});
   const referenceTeaching = await compileReferenceTrackTeaching(inputs || {});
   const metaTagPackage = await getMetaTagPackage(inputs || {});
   const vocalDirective = getVocalAndClicheHardDirective(inputs);
@@ -3070,7 +3095,7 @@ async function generateSong(payload: any) {
 
   const prompt = `
 You are a professional songwriter who has lived and breathed ${combineGenreTag(inputs?.subGenre || "", inputs?.genre || "Pop")} for 20 years.
-
+${authenticityKitBlock ? `\n${authenticityKitBlock}\n` : ""}
 RULE #1 — NO CLICHÉS (violating this = automatic failure):
 You MUST NOT use any generic, greeting-card, or motivational-poster language. If a phrase could be printed on a coffee mug, a graduation card, or an Instagram caption, it CANNOT appear in this song. Specifically banned:
 - "precious like gold", "diamond in the rough", "worth your weight in gold"

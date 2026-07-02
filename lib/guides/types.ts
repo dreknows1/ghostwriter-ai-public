@@ -238,6 +238,36 @@ export interface ReferenceTrack {
   craftHighlight: string;
 }
 
+// ── Authenticity Kit (few-shot demonstration) ────────────────────
+//
+// The descriptive dimensions above tell the model ABOUT a genre. The kit SHOWS it:
+// original example lines that demonstrate the genre's concreteness, plus a positive
+// word-bank (the counterpart to the cliché ban list). Injected as few-shot so the
+// model imitates real craft instead of falling back on generic training priors.
+
+export interface AuthenticityExemplar {
+  /**
+   * An ORIGINAL example line written to demonstrate a genre-authentic craft move.
+   * NOT a quotation of any real/copyrighted song — these are synthetic teaching lines.
+   */
+  line: string;
+  /** The craft technique this line demonstrates (e.g. "status through a concrete object"). */
+  craftNote: string;
+}
+
+export interface AuthenticityKit {
+  /** 3-6 original example lines that SHOW how this genre writes. */
+  exemplars: AuthenticityExemplar[];
+  /** Concrete vocabulary this genre reaches for — the positive side of the cliché ban list. */
+  sensoryLexicon: {
+    objectsAndPlaces: string[];
+    texturesAndSounds: string[];
+    dialectAndIdiom: string[];
+  };
+  /** One-line statement of the genre's core "show don't tell" move. */
+  writingEthos: string;
+}
+
 // ── Main Guide Interface ──────────────────────────────────────────
 
 export interface GenreGuide {
@@ -273,6 +303,10 @@ export interface GenreGuide {
 
   /** 20 highly regarded songs (last 5 years) as structural/lyrical models */
   referenceTracks: ReferenceTrack[];
+
+  /** Optional few-shot demonstration kit. Present on genres that have been authored;
+   *  injected into the draft prompt to show (not describe) the genre's craft. */
+  authenticityKit?: AuthenticityKit;
 
   sunoPromptGuide: {
     essentialKeywords: string[];
