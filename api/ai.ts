@@ -3436,19 +3436,48 @@ ${rawText || ""}
 
 async function generateDynamicOptions(payload: any) {
   const { targetField, currentInputs } = payload || {};
+  const field = String(targetField || "");
+
+  // Ground the options in the genre guide so a user picking "Drill" or "Shoegaze"
+  // sees that tradition's actual conventions, not generic filler.
+  let guideContext = "";
+  let genreName = currentInputs?.genre || "";
+  try {
+    const guide = await resolveGuide(currentInputs || {});
+    if (guide) {
+      genreName = guide.name;
+      if (field === "subGenre") {
+        guideContext = `Authoritative sub-genres of ${guide.name}: ${guide.subGenres.map((s) => s.name).join(", ")}.`;
+      } else if (field === "instrumentation") {
+        guideContext = `${guide.name} core instruments: ${guide.instrumentation.coreInstruments.join(", ")}. Signature sounds: ${guide.instrumentation.signatureSounds.slice(0, 6).join(", ")}. Never suggest: ${guide.instrumentation.avoidInstruments.join(", ")}.`;
+      } else if (field === "audioEnv") {
+        guideContext = `${guide.name} production fingerprint: ${guide.productionFingerprint.mixAesthetic} Sonic palette: ${guide.sonicPalette.overview.split(".")[0]}.`;
+      } else if (field === "scene") {
+        guideContext = `${guide.name} cultural context: ${guide.culturalContext.overview.split(".")[0]}. Scene codes: ${guide.sceneAndAudienceCodes.overview.split(".")[0]}.`;
+      } else if (field === "emotion") {
+        guideContext = `${guide.name} core lyric themes: ${guide.lyricalConventions.themes.slice(0, 6).join(", ")}.`;
+      }
+    }
+  } catch {
+    // Guide unavailable — fall through to context-free options.
+  }
+
   const prompt = `
-Generate exactly 8 options for field "${targetField}".
+Generate exactly 8 options for the "${field}" choice in a ${genreName || "song"} songwriting session.
+${guideContext ? `GENRE KNOWLEDGE (options must be idiomatic to this — an expert would recognize each):\n${guideContext}` : ""}
 Session context:
 ${JSON.stringify(currentInputs || {}, null, 2)}
 Rules:
-- Keep options unique
-- Match genre/language context
-- Return ONLY JSON array of strings
+- Each option is 1-4 words, concrete and specific to this genre/sub-genre — never generic filler like "Modern" or "Experimental".
+- Keep options unique and in the session's language where natural.
+- Return ONLY a JSON array of 8 strings, no markdown fences, no commentary.
 `.trim();
 
-  const raw = await openAIResponses(prompt);
+  // Options are a UI nicety on the wizard's critical path — use the fast tier.
+  const raw = await openAIResponses(prompt, "gpt-4.1-mini");
   try {
-    const parsed = JSON.parse(raw);
+    const cleaned = raw.replace(/^```(?:json)?\s*/i, "").replace(/\s*```\s*$/, "").trim();
+    const parsed = JSON.parse(cleaned);
     if (!Array.isArray(parsed)) return { options: [] };
     const options = parsed
       .map((v) => (typeof v === "string" ? v.trim() : ""))

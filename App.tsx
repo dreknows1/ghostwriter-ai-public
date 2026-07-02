@@ -101,6 +101,17 @@ const GENERATION_STAGES = [
   { label: 'Finalize Output', keywords: ['finalizing', 'suno prompt'] },
 ] as const;
 
+// Wizard steps whose options get AI-tailored to the session's genre (guide-grounded
+// server-side). Maps each step to the SongInputs field it fills. Static option maps
+// always render instantly as fallback; AI options swap in when they arrive.
+const DYNAMIC_OPTION_STEPS: Partial<Record<AppStep, keyof SongInputs>> = {
+  [AppStep.AWAITING_SUBGENRE]: 'subGenre',
+  [AppStep.AWAITING_INSTRUMENTATION]: 'instrumentation',
+  [AppStep.AWAITING_AUDIO_ENV]: 'audioEnv',
+  [AppStep.AWAITING_SCENE]: 'scene',
+  [AppStep.AWAITING_EMOTION]: 'emotion',
+};
+
 const STEP_ORDER = [
   AppStep.AWAITING_LANGUAGE,
   AppStep.AWAITING_GENRE,
@@ -309,7 +320,8 @@ const CreationWizard: React.FC<{
   onNext: (customVal?: string) => void;
   onPrev: () => void;
   onGenerate: () => void;
-}> = ({ step, inputs, dynamicOptions, isLoadingOptions, isGenerating, onUpdate, onNext, onPrev, onGenerate }) => {
+  onJumpTo: (step: AppStep) => void;
+}> = ({ step, inputs, dynamicOptions, isLoadingOptions, isGenerating, onUpdate, onNext, onPrev, onGenerate, onJumpTo }) => {
   const [isOther, setIsOther] = useState(false);
   const [otherText, setOtherText] = useState('');
 
@@ -355,13 +367,18 @@ const CreationWizard: React.FC<{
     const options = getOptionsForStep();
     return (
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 sm:gap-4 mt-6 sm:mt-8">
-        {isLoadingOptions ? (
+        {isLoadingOptions && options.length === 0 ? (
           <div className="col-span-full py-12 flex flex-col items-center gap-4 animate-pulse">
             <LoadingSpinner />
             <span className="text-slate-500 font-black uppercase tracking-[0.14em] md:tracking-[0.3em] text-xs text-center">Loading genre options...</span>
           </div>
         ) : (
           <>
+            {isLoadingOptions && (
+              <div className="col-span-full flex items-center justify-center gap-2 text-cyan-400/80 text-[11px] font-black uppercase tracking-widest animate-pulse">
+                ✦ Tailoring options to your {inputs.genre || 'session'}…
+              </div>
+            )}
             {options.map((opt: string) => (
               <button
                 key={opt}
@@ -458,10 +475,11 @@ const CreationWizard: React.FC<{
         )}
       </div>
 
+      {/* Song DNA chips — tap one to jump back and change that decision. */}
       <div className="mt-20 flex flex-wrap justify-center gap-4">
-          <div className="px-4 py-2 bg-slate-900 border border-slate-800 rounded-full text-xs font-black uppercase tracking-widest text-slate-500">DNA: {inputs.language || '???'}</div>
-          {inputs.genre && <div className="px-4 py-2 bg-orange-900/20 border border-orange-500/30 rounded-full text-xs font-black uppercase tracking-widest text-orange-400">GENRE: {inputs.genre}</div>}
-          {inputs.instrumentation && <div className="px-4 py-2 bg-cyan-900/20 border border-cyan-500/30 rounded-full text-xs font-black uppercase tracking-widest text-cyan-400">CORE: {inputs.instrumentation}</div>}
+          <button type="button" onClick={() => onJumpTo(AppStep.AWAITING_LANGUAGE)} title="Tap to change language" className="px-4 py-2 bg-slate-900 border border-slate-800 rounded-full text-xs font-black uppercase tracking-widest text-slate-500 hover:border-slate-500 hover:text-slate-300 transition-colors cursor-pointer">DNA: {inputs.language || '???'}</button>
+          {inputs.genre && <button type="button" onClick={() => onJumpTo(AppStep.AWAITING_GENRE)} title="Tap to change genre" className="px-4 py-2 bg-orange-900/20 border border-orange-500/30 rounded-full text-xs font-black uppercase tracking-widest text-orange-400 hover:border-orange-400 hover:text-orange-300 transition-colors cursor-pointer">GENRE: {inputs.genre}</button>}
+          {inputs.instrumentation && <button type="button" onClick={() => onJumpTo(AppStep.AWAITING_INSTRUMENTATION)} title="Tap to change instrumentation" className="px-4 py-2 bg-cyan-900/20 border border-cyan-500/30 rounded-full text-xs font-black uppercase tracking-widest text-cyan-400 hover:border-cyan-300 hover:text-cyan-200 transition-colors cursor-pointer">CORE: {inputs.instrumentation}</button>}
       </div>
     </div>
   );
@@ -481,6 +499,7 @@ export const App: React.FC = () => {
   const [inputs, setInputs] = useState<SongInputs>(DEFAULT_INPUTS);
   const [dynamicOptions, setDynamicOptions] = useState<string[]>([]);
   const [isLoadingOptions, setIsLoadingOptions] = useState(false);
+  const dynamicOptionsCache = useRef<Record<string, string[]>>({});
   const [generatedSong, setGeneratedSong] = useState('');
   const [albumArt, setAlbumArt] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(false);
@@ -590,6 +609,36 @@ export const App: React.FC = () => {
     window.addEventListener('songghost:openApiKeyModal', handler);
     return () => window.removeEventListener('songghost:openApiKeyModal', handler);
   }, []);
+
+  // AI-tailored wizard options: on entering a tailorable step, fetch options informed
+  // by the genre guide. Static options render instantly; AI options swap in when ready.
+  // Cached per (step, language, genre, subGenre) so back/forward navigation is free.
+  useEffect(() => {
+    // Never leak the previous step's AI options into this step.
+    setDynamicOptions([]);
+    setIsLoadingOptions(false);
+    const field = DYNAMIC_OPTION_STEPS[step];
+    if (!field || view !== AppView.STUDIO || !session) return;
+    if (!inputs.genre) return; // nothing to tailor to yet
+
+    const cacheKey = `${step}|${inputs.language || ''}|${inputs.genre}|${inputs.subGenre || ''}`;
+    const cached = dynamicOptionsCache.current[cacheKey];
+    if (cached) { setDynamicOptions(cached); return; }
+
+    let cancelled = false;
+    setIsLoadingOptions(true);
+    generateDynamicOptions(field, inputs)
+      .then((options) => {
+        if (cancelled) return;
+        if (Array.isArray(options) && options.length >= 4) {
+          dynamicOptionsCache.current[cacheKey] = options;
+          setDynamicOptions(options);
+        }
+      })
+      .catch(() => { /* static options remain — never block the wizard on this */ })
+      .finally(() => { if (!cancelled) setIsLoadingOptions(false); });
+    return () => { cancelled = true; };
+  }, [step, view]);
 
   useEffect(() => {
     const bootstrap = async () => {
@@ -1662,6 +1711,7 @@ export const App: React.FC = () => {
                 onNext={handleNext}
                 onPrev={handlePrev}
                 onGenerate={handleGenerate}
+                onJumpTo={(s) => setStep(s)}
               />
           )}
       </div>
