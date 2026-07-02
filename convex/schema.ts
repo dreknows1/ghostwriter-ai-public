@@ -95,4 +95,37 @@ export default defineSchema({
     active: v.boolean(),
     createdAt: v.number(),
   }).index("by_code", ["code"]),
+
+  blogAuthors: defineTable({
+    email: v.string(),
+    name: v.string(),
+    bio: v.optional(v.string()),
+    avatarUrl: v.optional(v.string()),
+    twitter: v.optional(v.string()),
+    website: v.optional(v.string()),
+    canPublish: v.boolean(),
+    isOwner: v.optional(v.boolean()),
+    createdAt: v.number(),
+  }).index("by_email", ["email"]),
+
+  blogPosts: defineTable({
+    slug: v.string(),
+    title: v.string(),
+    description: v.string(),
+    bodyMarkdown: v.string(),
+    headerImageUrl: v.string(),
+    headerImageAlt: v.optional(v.string()),
+    headerImagePhotographer: v.optional(v.string()),
+    headerImagePhotographerUrl: v.optional(v.string()),
+    tags: v.array(v.string()),
+    authorEmail: v.string(),
+    status: v.string(), // "draft" | "scheduled" | "published"
+    publishedAt: v.optional(v.number()),
+    scheduledFor: v.optional(v.number()),
+    createdAt: v.number(),
+    updatedAt: v.number(),
+  })
+    .index("by_slug", ["slug"])
+    .index("by_status_publishedAt", ["status", "publishedAt"])
+    .index("by_author", ["authorEmail"]),
 });

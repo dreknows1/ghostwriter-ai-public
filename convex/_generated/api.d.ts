@@ -11,6 +11,7 @@
 import type * as analytics from "../analytics.js";
 import type * as app from "../app.js";
 import type * as billing from "../billing.js";
+import type * as blog from "../blog.js";
 import type * as constants from "../constants.js";
 import type * as credits from "../credits.js";
 import type * as crons from "../crons.js";
@@ -31,6 +32,7 @@ declare const fullApi: ApiFromModules<{
   analytics: typeof analytics;
   app: typeof app;
   billing: typeof billing;
+  blog: typeof blog;
   constants: typeof constants;
   credits: typeof credits;
   crons: typeof crons;
