@@ -33,17 +33,25 @@ export function buildJudgePrompt(songText: string, g: JudgeGrounding): string {
     : "";
 
   return `
-You are a ruthless ${genreTag} lyric editor, a native ${g.language} speaker, judging a draft line by line.
+You are a ruthless ${genreTag} lyric editor, a native ${g.language} speaker, judging a draft line by line. Your standard is a professionally released record: clear, singable, human.
 
 A line is WEAK if it:
-- states an emotion or virtue instead of showing a concrete moment (object, place, texture, gesture, named specific)
-- could appear in any genre's song (nothing marks it as ${genreTag})
 - leans on a tired trope of this genre, or greeting-card/motivational-poster language in any language
-  (e.g. "rise above", "spread my wings", "dreams come true", "believe in yourself", "found my voice",
-  "unbreakable", "be the best I can be", "the world is mine" — and their equivalents in ${g.language})
+  (e.g. "rise above", "spread my wings", "dreams come true", "believe in yourself" — and their equivalents in ${g.language})
+- is PRETTY BUT MEANINGLESS: an image or metaphor that doesn't parse when you ask "what does this actually say?"
+  (e.g. "every shiver's perfume", "trace your missed call with my tongue") — over-written is as bad as cliché
+- is grammatically muddled, or physically/spatially incoherent
 
-CHORUS LINES ARE NOT EXEMPT. A cliché hook is the WORST offense, not a protected element —
-judge and rewrite chorus/hook lines to the same standard, keeping them just as singable and repeatable.
+PLAIN LINES ARE NOT WEAK. Simple, conversational lines a real person would say out loud
+("I just want you home", "we don't talk like we used to") are the anchors of professional
+songwriting. NEVER rewrite a line merely for being plain — a song needs breathing room
+between its images. If nearly every line carries an image, the song is over-written:
+simplify the weakest images into plain speech instead of adding more.
+
+THE CHORUS MUST HAVE A HOOK: one short, repeatable phrase (usually the title) a listener
+could sing back after one listen. If the chorus has no repeated singable hook, or its
+opening line doesn't parse, rewrite the chorus around a simple hook — keep the song's
+language, story, and section structure.
 
 ${clicheBlock}
 
@@ -53,14 +61,14 @@ ${lexBlock}
 
 YOUR TASK:
 1. Judge every lyric line. Section tags like [Verse]/[Chorus] and adlibs in parentheses are structure, not lines to judge.
-2. If fewer than 2 lines are weak, return EXACTLY this single line and nothing else:
+2. If fewer than 2 lines are weak AND the chorus has a clear singable hook, return EXACTLY this single line and nothing else:
 ${JUDGE_PASS_TOKEN}
-3. Otherwise return the COMPLETE corrected song, rewriting ONLY the weak lines. Non-negotiable constraints:
+3. Otherwise return the COMPLETE corrected song, rewriting ONLY the weak lines (and the chorus if it lacks a hook). Non-negotiable constraints:
    - Keep the language of the original lyrics (${g.language}) — do not translate.
    - Preserve the exact output format: the Title: line, ### SUNO Prompt section (unchanged), ### Lyrics section.
    - Preserve every section tag, the section order, the line count per section (±1), and the rhyme scheme.
    - Each replacement must match the original line's approximate syllable count so it stays singable.
-   - Each replacement must contain a tangible specific (a real object, place, texture, sound, or named detail) true to ${genreTag}.
+   - Replacements should be SIMPLER and clearer than what they replace — plain speech or one clean concrete detail. Never swap one ornate image for another.
    - Do not add commentary, verdicts, or explanations — output only the corrected song.
 
 Song:

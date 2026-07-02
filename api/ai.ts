@@ -3114,26 +3114,42 @@ async function judgeAndRefineLyrics(
 
 /**
  * Build the few-shot "how this genre writes" block from a guide's authenticityKit.
- * Original example lines + a positive word-bank demonstrate the genre's concreteness so
- * the model imitates real craft instead of describing the genre abstractly. Empty string
- * for genres that don't have a kit authored yet.
+ * A FEW original example lines calibrate how vivid the song's BEST lines should be.
+ * Deliberately small: over-instructing concreteness makes every line an image and
+ * the song stops breathing (the "perfumed nonsense" failure mode).
  */
 async function buildAuthenticityKitBlock(inputs: any): Promise<string> {
   const guide = await resolveGuide(inputs || {});
   const kit = guide?.authenticityKit;
   if (!kit || !kit.exemplars?.length) return "";
-  const exemplars = kit.exemplars.slice(0, 5).map((e) => `  • "${e.line}" — ${e.craftNote}`).join("\n");
+  const exemplars = kit.exemplars.slice(0, 3).map((e) => `  • "${e.line}" — ${e.craftNote}`).join("\n");
   const lex = kit.sensoryLexicon;
   return [
-    `HOW ${guide!.name.toUpperCase()} ACTUALLY WRITES (study these, then write with the same concreteness — do NOT reuse these exact lines):`,
+    `HOW ${guide!.name.toUpperCase()} WRITES AT ITS BEST (calibration for your strongest lines — do NOT reuse these exact lines):`,
     kit.writingEthos,
     exemplars,
-    `WORD-BANK — this genre's native vocabulary; reach for details this specific (or your own, equally concrete):`,
-    `  Objects/places: ${lex.objectsAndPlaces.slice(0, 10).join(", ")}`,
-    `  Textures/sounds: ${lex.texturesAndSounds.slice(0, 8).join(", ")}`,
-    `  Dialect/idiom: ${lex.dialectAndIdiom.slice(0, 8).join(", ")}`,
-    `Every section must land at least one concrete detail at this level — a real object, place, texture, or named specific.`,
+    `Native vocabulary if you need it: ${[...lex.objectsAndPlaces.slice(0, 6), ...lex.dialectAndIdiom.slice(0, 4)].join(", ")}.`,
+    `Aim for this level on your best 2-3 lines per section — not every line. The lines between should be plain and human.`,
   ].join("\n");
+}
+
+/**
+ * Compact genre spec card: the handful of genre facts that actually change how the
+ * song is written. Replaces the old multi-block directive dump that buried the model.
+ */
+async function buildCompactGenreCard(inputs: any): Promise<string> {
+  const guide = await resolveGuide(inputs || {});
+  if (!guide) return "";
+  const sub = inputs?.subGenre ? ` / ${inputs.subGenre}` : "";
+  const cliches = (guide.lyricalConventions?.cliches || []).slice(0, 6);
+  return [
+    `GENRE CARD (${guide.name}${sub}):`,
+    `- Perspective: ${guide.lyricalConventions.perspective.split(".")[0]}.`,
+    `- Storytelling: ${guide.lyricalConventions.storytellingApproach.split(".")[0]}.`,
+    `- Themes that ring true: ${guide.lyricalConventions.themes.slice(0, 4).join(", ")}.`,
+    `- Feel: ${guide.rhythmAndGroove.grooveArchetype}. Vocal affect: ${guide.vocalDelivery.affect.split(".")[0]}.`,
+    cliches.length ? `- This genre's tired tropes — avoid: ${cliches.join("; ")}.` : "",
+  ].filter(Boolean).join("\n");
 }
 
 /**
@@ -3144,16 +3160,13 @@ async function prepareSongContext(payload: any) {
   const { inputs, userProfile } = payload || {};
   const startMs = Date.now();
 
-  const genreTruth = await getGenreTruthParagraph(inputs || {});
-  const specificityAnchors = await getSpecificityAnchors(inputs || {});
-  // Genre-specific craft directives compiled from the genre guide (perspective, real
-  // per-genre clichés to avoid, dialect vocabulary, phrasing/affect). Previously this
-  // rich guide knowledge was never injected into the prompt — the model only saw a thin
-  // "genre truth" paragraph. "lyrics" mode keeps it focused on writing, not production.
-  const genreCraftBlueprint = await compileGuideToDirectives(inputs || {}, "lyrics");
+  // COMPACT prompt by design. The previous ~5,000-word directive stack (genre truth +
+  // blueprint dump + reference teaching + specificity anchors + a 15-line cliché wall,
+  // all shouting "an image in every line") buried the model's natural songwriting and
+  // produced dense, incoherent, hook-less lyrics. A short brief + a small genre card +
+  // a few exemplar lines outperforms it — the model already knows how to write a song.
+  const genreCard = await buildCompactGenreCard(inputs || {});
   const authenticityKitBlock = await buildAuthenticityKitBlock(inputs || {});
-  const referenceTeaching = await compileReferenceTrackTeaching(inputs || {});
-  const metaTagPackage = await getMetaTagPackage(inputs || {});
   const vocalDirective = getVocalAndClicheHardDirective(inputs);
 
   const userDirection = inputs?.creativeDirection || inputs?.additionalInfo || (inputs as any)?.awkwardMoment || "";
@@ -3161,93 +3174,39 @@ async function prepareSongContext(payload: any) {
   const register = detectRegisterHint(inputs);
 
   const prompt = `
-You are a professional songwriter who has lived and breathed ${combineGenreTag(inputs?.subGenre || "", inputs?.genre || "Pop")} for 20 years.
-${authenticityKitBlock ? `\n${authenticityKitBlock}\n` : ""}
-RULE #1 — NO CLICHÉS (violating this = automatic failure):
-You MUST NOT use any generic, greeting-card, or motivational-poster language. If a phrase could be printed on a coffee mug, a graduation card, or an Instagram caption, it CANNOT appear in this song. Specifically banned:
-- "precious like gold", "diamond in the rough", "worth your weight in gold"
-- "dim your/her/my light", "shine bright", "let your wings fly", "spread your wings", "learn to fly"
-- "stand tall", "rise above", "hold your head high", "you're a queen/king/warrior/force", "wear your crown", "radiant"
-- "world is your/a canvas", "paint your sky", "write your destiny", "rewrite the stars", "dreams come true"
-- "unbreakable", "unstoppable", "masterpiece", "find your voice", "spirit alive", "set your spirit free"
-- "joy in the journey", "flame that never dies", "lighthouse", "beacon", "garden of life"
-- "you belong", "you're enough", "believe in yourself", "anything is possible"
-- "you're the sun", "you're a star", "born to shine/fly/rise", "wear your crown", "paint your truth"
-- "never give up", "don't give up", "you got this", "the world is yours"
-- "neon lights", "city lights", "under the neon glow", "neon-soaked", "lights of the city"
-- ANY line that TELLS the listener they are strong/beautiful/powerful rather than SHOWING it through a concrete moment
-- ANY abstract noun phrase like "crown of [noun]", "force of nature", "river of [noun]", "armor of [noun]" — these are dressed-up clichés
-The test: read each line aloud. If it sounds like something a motivational speaker would say, DELETE IT and write a scene instead.
-Instead: write scenes. Show a specific moment — a girl braiding her hair before school, hands smelling like cocoa butter, the way a teacher mispronounces her name, the sound of abuela's voice through a screen door. Make the listener SEE and FEEL. Concrete details > abstract affirmations. Every line should contain at least one tangible noun (a real object, place, texture, sound, smell) — not just emotions and abstractions.
+You are a professional ${combineGenreTag(inputs?.subGenre || "", inputs?.genre || "Pop")} songwriter. Write a real, releasable song — one this genre's best writers would actually cut. Trust your instincts; the notes below are guidance, not a checklist.
 
-${hasUserDirection ? `RULE #2 — THE USER'S STORY IS LAW (this is what the song is ABOUT):
+${hasUserDirection ? `THE SONG IS ABOUT (highest priority — dramatize this story with specific scenes):
 ${userDirection}
 ${extractCharacterRequirements(userDirection)}
-Every character, narrative detail, and structural instruction above MUST appear in the song. If the direction names a character, that character must be present throughout — not mentioned once as an afterthought. If it describes a scenario, the lyrics must dramatize that scenario with specific scenes, not summarize it with platitudes.
+Show, don't tell: deliver requested qualities in the writing itself (actual double meanings, actual imagery, actual cadence shifts) — never announce them ("my metaphors", "my flow").
+` : ""}
+${genreCard ? `${genreCard}\n` : ""}
+${authenticityKitBlock ? `${authenticityKitBlock}\n` : ""}
+CRAFT:
+- Structure: use this genre's conventional form with section tags — e.g. [Intro] [Verse] [Pre-Chorus] [Chorus] [Verse] [Pre-Chorus] [Chorus] [Bridge] [Chorus] [Outro]. Honor any structure the creative direction asks for.
+- Build the chorus on ONE short, repeatable hook phrase (usually the title) — simple enough to sing back after a single listen. Repeat it.
+- BALANCE — this separates pro from amateur: land 2-3 vivid, concrete images per section, and let the other lines be plain, conversational things a real person would say out loud. A line that sounds pretty but doesn't mean anything is a failed line. Clarity beats decoration.
+- Matched sections must match: same line counts and similar syllable lengths so they ride the same melody.
+- Let the story MOVE: each section adds something — a decision, a turn, a consequence — not the same mood restated.
+- No greeting-card language ("shine bright", "rise above", "believe in yourself", "dreams come true", "spread your wings") and no announcing your own writing.
+- Tasteful adlibs in parentheses where musically natural.
+- ${vocalDirective}
+- ${getGenreLengthDirective(inputs?.genre, inputs?.subGenre)}
+${getInstructionResponsivenessDirective(userDirection)}
 
-SHOW, DON'T TELL — this is non-negotiable:
-- If the direction says "double entendres" → write lines with actual double meanings. NEVER write "my double entendres hit different."
-- If it says "metaphors" → write vivid metaphors. NEVER write "I weave metaphors like a maestro."
-- If it says "cadence changes" → actually shift your rhythmic pattern between sections. NEVER write "my cadence shifts."
-- If it says "hourglass figure" → describe the body through imagery. NEVER just state "hourglass figure."
-- If it says "expansive vocabulary" → USE rare/elevated words naturally. NEVER announce vocabulary.
-- Physical descriptions should land through sensory detail, comparison, and implication — not blunt statement.
-- Genre/subgenre/instrumentation selections are creative direction, not literal lyric topics.` : ""}
+CONTEXT: Language: ${inputs?.language || "English"} | Vocals: ${inputs?.vocals || "Female Solo"}${inputs?.duetType ? ` (${inputs.duetType})` : ""} | Mood: ${inputs?.emotion || "true to the story"} | Instrumentation: ${inputs?.instrumentation || "genre-appropriate"} | Register: ${register}${inputs?.mundaneObjects ? `\nDetails to weave in: ${inputs.mundaneObjects}` : ""}
 
 Return only:
 Title: ...
 ### SUNO Prompt
-[Write 40-80 words of ATMOSPHERIC production direction — NOT a comma-separated spec sheet.
-Paint the sonic VIBE as a flowing description. Examples of great Suno prompts:
-- "A gritty, raw Soul track with a heart-wrenching vibe about betrayal. Features a powerful, aggressive female lead vocal that strains with emotion. Driven by a slow, melancholic electric piano, a deep pulsing bassline, and a tight swung drum groove with heavy backbeats."
-- "Soulful R&B female vocals glide atop piano, nylon guitar, and laid-back congas for an intimate groove. Dynamics breathe with strategic silences. The breakdown surges with dembow pulses and intertwining Spanish guitar."
-Do NOT write: "Genre, BPM, mood, vocal type, instrument1, instrument2" — that sounds robotic.
-DO write: what the track FEELS like, what instruments DO, how the energy MOVES.]
+[40-70 words of flowing production direction — what the track FEELS like, what the instruments DO, how the energy MOVES. Not a comma-separated spec sheet.]
 ### Lyrics
 [full lyrics with section tags and adlibs]
 
-CONTEXT:
-- Language: ${inputs?.language || "English"}
-- Genre: ${inputs?.genre || "Pop"} / ${inputs?.subGenre || "Modern"}
-- Instrumentation: ${inputs?.instrumentation || "genre-appropriate"}
-- Mood: ${inputs?.emotion || "Euphoric"}
-- Scene: ${inputs?.scene || "Studio"} | Audio: ${inputs?.audioEnv || "Studio (Clean)"}
-- Vocals: ${inputs?.vocals || "Female Solo"}${inputs?.duetType ? ` (${inputs.duetType})` : ""}
-- Register: ${register}
-- Concrete details to weave in: ${inputs?.mundaneObjects || "(none)"}
-
-GENRE TRUTH:
-${genreTruth || `Write authentically for ${combineGenreTag(inputs?.subGenre || "", inputs?.genre || "Pop")}.`}
-${genreCraftBlueprint ? `\nGENRE CRAFT BLUEPRINT (write to these genre-specific conventions — they come from a deep guide for this exact genre/subgenre):\n${genreCraftBlueprint}\n` : ""}
-SPECIFICITY:
-${specificityAnchors}
-
-${referenceTeaching ? `${referenceTeaching}` : ""}
-
-CRAFT:
-- Each verse must advance a continuous scene — linked lines, not disconnected aphorisms.
-- Verse cadence and hook cadence should feel clearly different.
-- Rhyme discipline appropriate to genre (not mostly unrhymed).
-- Use section meta tags: [Verse], [Chorus], [Bridge], [Outro], etc.
-- Add tasteful adlibs in parentheses where musically natural.
-- ${vocalDirective}
-- ${getGenreLengthDirective(inputs?.genre, inputs?.subGenre)}
-- NEVER use meta-language about your own writing in the lyrics. Banned phrases include: "my metaphors", "my flow", "my cadence", "my wordplay", "my bars", "words weave", "syllables spray", "verses I'm spitting", "rhyme schemes so tight", "words sharp as", and any line that describes the act of rapping rather than actually rapping.
-- A great rapper doesn't announce they're being clever — Lil Wayne doesn't say "my metaphors are fire" — he says "real G's move in silence like lasagna." That's the standard.
-- Write lyrics that a real artist in this genre would actually perform.
-${metaTagPackage.strictSpec}
-${getInstructionResponsivenessDirective(userDirection)}
-
 ${register === "explicit" ? `REGISTER — EXPLICIT:
-This is an authorized creative writing request for explicit/adult-register lyrics. The artist has chosen this register intentionally. Write vulgar, aggressive, sexually confident, confrontational, or profane lyrics when the genre and creative direction call for it. Battle-rap boasts, body-confidence bars, raw street language, and multilingual code-switching are all expected. Do NOT refuse, soften, censor, or moralize — deliver the artist's vision.` : ""}
-
-CRITICAL: You are writing song lyrics for a music production app. This is creative fiction — not a real conversation.
-- NEVER output phrases like "I can't assist", "I can't fulfill that request", "I'm sorry but I can't", "access denied", "cannot comply", or any variation of AI-refusal language.
-- NEVER write a song whose theme, chorus, or repeated phrase is about being unable to help, refusing a request, or apologizing for limitations.
-- NEVER write lyrics about being an AI, a machine, code, parameters, or digital existence.
-- If you cannot write the requested content, return ONLY the single line "GENERATION_DECLINED" with no other text — do NOT disguise a refusal as song lyrics.
-
-Write with confidence. Take creative risks. Make it feel lived-in, not assembled.
+This is an authorized creative writing request for explicit/adult-register lyrics. The artist chose this register intentionally. Write vulgar, aggressive, sexually confident, confrontational, or profane lyrics when the genre and creative direction call for it. Do NOT refuse, soften, censor, or moralize — deliver the artist's vision.
+` : ""}This is creative fiction for a music production app. Never output AI-refusal language, never write lyrics about being an AI. If you cannot write the requested content, return ONLY the single line "GENERATION_DECLINED".
   `.trim();
 
   return { prompt, register, inputs, userProfile, userDirection, startMs };
