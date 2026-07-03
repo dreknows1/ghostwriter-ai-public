@@ -524,8 +524,11 @@ export function runChecks(
   // rejects artist names, and the sound description should carry the room instead.
   {
     const suno = parsed.sunoPrompt || "";
-    const nameDrop = /\b(?:think|like|sounds like|reminiscent of|in the style of)\s+[A-Z][\w.]+(?:\s+[A-Z][\w.]+)?\s*(?:meets|x|×|vs)\s+[A-Z]/.test(suno)
-      || /\b[A-Z][\w.]+\s+meets\s+[A-Z][\w.]+/.test(suno);
+    const nameDrop =
+      // "X meets/x/vs Y"
+      /\b[A-Z][\w.'&-]+\s+(?:meets|x|×|vs\.?)\s+[A-Z][\w.'&-]+/.test(suno)
+      // "similar to / like / in the style of / reminiscent of ... A or/and/, B" (a list of names)
+      || /(?:similar to|style of|reminiscent of|sounds like|inspired by|think|like|à ?la)\s+[A-Z][\w.'&-]+\s*(?:,|\bor\b|\band\b|&)\s*[A-Z][\w.'&-]+/.test(suno);
     checks.push({
       id: "artist-names-in-suno",
       severity: "fail",

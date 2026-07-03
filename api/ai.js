@@ -71,20 +71,22 @@ Musical craft (the founder's list; each becomes concrete rules)
 - **House-style words \u2014 instant failures.** These are the AI's default phrases; they belong
   to no one's story, so using one fails the song (checked by code). The founder owns this
   list and can edit it like everything else:
-  - hearts entwined; two hearts beat as one; the beat of my heart; beat inside my heart
+  - hearts entwined; two hearts beat as one; beat of my heart; beat inside my heart
   - shadows flicker; shadows dance; silhouette; neon
   - you complete me; my missing piece; meant to be; written in the stars
   - more than words can say; words can't express; honest truth
   - forever and always; till the end of time; take my breath away
   - moth to a flame; fire in my veins; electricity between us; gravity pulls
   - love like ours; heart on my sleeve; lose me too
+  - light up my; you light up; shining like the city; screaming out
+  - can't get enough; new addiction; live it up; my best; ride this riot
 - **Hook** \u2014 short, rhythmic, emotionally loaded, placed at the lift; the title lives here; a listener can sing it after one listen. In R&B and hip-hop, the hook is where the double entendre or flipped phrase pays rent \u2014 a hook that means two things beats a sincere flat one.
 - **Rhyme** \u2014 a choice, not a duty: perfect rhyme closes a thought, slant rhyme keeps it moving, internal rhyme builds momentum (rap's engine), and NO rhyme is a legitimate choice when the honest line matters more. Rhyme density is a genre decision, never a fixed rule.
 - **Emotion** \u2014 every craft decision above serves ONE core feeling with an arc (where it starts \u2192 where it turns \u2192 where it lands).`,
   "bannedPhrases": [
     "hearts entwined",
     "two hearts beat as one",
-    "the beat of my heart",
+    "beat of my heart",
     "beat inside my heart",
     "shadows flicker",
     "shadows dance",
@@ -106,7 +108,16 @@ Musical craft (the founder's list; each becomes concrete rules)
     "gravity pulls",
     "love like ours",
     "heart on my sleeve",
-    "lose me too"
+    "lose me too",
+    "light up my",
+    "you light up",
+    "shining like the city",
+    "screaming out",
+    "can't get enough",
+    "new addiction",
+    "live it up",
+    "my best",
+    "ride this riot"
   ],
   "abstractionWords": [
     "love",
@@ -756,10 +767,10 @@ Musical craft (the founder's list; each becomes concrete rules)
       ]
     }
   },
-  "hash": "3453b6facd34",
+  "hash": "fad672bffe73",
   "approxTokens": {
-    "core": 1632,
-    "largestSlice": 3333
+    "core": 1666,
+    "largestSlice": 3367
   }
 };
 
@@ -1551,7 +1562,10 @@ function runChecks(draft, opts) {
   }
   {
     const suno = parsed.sunoPrompt || "";
-    const nameDrop = /\b(?:think|like|sounds like|reminiscent of|in the style of)\s+[A-Z][\w.]+(?:\s+[A-Z][\w.]+)?\s*(?:meets|x|×|vs)\s+[A-Z]/.test(suno) || /\b[A-Z][\w.]+\s+meets\s+[A-Z][\w.]+/.test(suno);
+    const nameDrop = (
+      // "X meets/x/vs Y"
+      /\b[A-Z][\w.'&-]+\s+(?:meets|x|×|vs\.?)\s+[A-Z][\w.'&-]+/.test(suno) || /(?:similar to|style of|reminiscent of|sounds like|inspired by|think|like|à ?la)\s+[A-Z][\w.'&-]+\s*(?:,|\bor\b|\band\b|&)\s*[A-Z][\w.'&-]+/.test(suno)
+    );
     checks.push({
       id: "artist-names-in-suno",
       severity: "fail",
