@@ -173,6 +173,50 @@ Musical craft (the founder's list; each becomes concrete rules)
     "moments",
     "whisper"
   ],
+  "validTags": [
+    "[Intro]",
+    "[Verse]",
+    "[Pre-Chorus]",
+    "[Chorus]",
+    "[Post-Chorus]",
+    "[Hook]",
+    "[Refrain]",
+    "[Bridge]",
+    "[Break]",
+    "[Breakdown]",
+    "[Interlude]",
+    "[Outro]",
+    "[Instrumental]",
+    "[Ad-Lib Section]",
+    "[Male Vocal]",
+    "[Female Vocal]",
+    "[Duet]",
+    "[Choir]",
+    "[Whispered]",
+    "[Spoken]",
+    "[Belting]",
+    "[Falsetto]",
+    "[Crooning]",
+    "[Harmonies]",
+    "[Vocal Run]",
+    "[Call and Response]",
+    "[Choir enters]",
+    "[Build]",
+    "[Build Up]",
+    "[Drop]",
+    "[Crescendo]",
+    "[Big Finish]",
+    "[Soft]",
+    "[Quiet]",
+    "[Guitar Solo]",
+    "[Piano Solo]",
+    "[Sax Solo]",
+    "[Bass Solo]",
+    "[Instrumental Break]",
+    "[Instrumental Bridge]",
+    "[Instrumental Intro]",
+    "[Instrumental Outro]"
+  ],
   "genres": {
     "rnb": {
       "id": "rnb",
@@ -204,7 +248,19 @@ Musical craft (the founder's list; each becomes concrete rules)
           ],
           "rendering": "Warm sparse keys or a clean electric guitar loop over sub-heavy 808 bass, with soft half-time snares and plenty of air between elements. Lead vocal close-miked and intimate, stacked harmonies arriving on the hook, answer ad-libs tucked behind the lead. Modern polish with light vocal effects \u2014 a 2010s-to-now sheen, never busy.",
           "storyFit": "Best for real, messy, current relationship stories \u2014 situationships, self-worth after a breakup, healing, wanting someone you shouldn't, complicated love told honestly. Serves badly: formal tributes, whole-life story songs, weddings that want grandeur, or anything needing big-band ceremony.",
-          "parodyTraps": "Over-singing every line instead of talking some of them; pet-name filler and stock compliments instead of the user's actual details; tidy nursery rhymes; announcing the sexy or sad part instead of just saying the true thing; filling the space that should stay empty for ad-libs."
+          "parodyTraps": "Over-singing every line instead of talking some of them; pet-name filler and stock compliments instead of the user's actual details; tidy nursery rhymes; announcing the sexy or sad part instead of just saying the true thing; filling the space that should stay empty for ad-libs.",
+          "performance": {
+            "prose": "Density sparse; min adlibs 4; delivery tags [Harmonies] [Spoken] [Soft] [Falsetto] [Crooning]. This room performs like a late-night text thread set to music \u2014 one intimate lead talking as much as singing, so bracket tags stay light and the adlibs do the emotional work. Signature: A quiet answer vocal tucked in parentheses under the end of a lead line \u2014 echoing or gently commenting on the last few words the way a lover would murmur back over a text thread, never a full-voiced group response. Placement: The floor of 4 is reachable without ever filling the empty space the writing leaves: roughly 2 under the hook, 1 at a verse line-end, and 1 in a short repeated-hook outro tag.",
+            "adlibDensity": "sparse",
+            "minAdlibs": 4,
+            "deliveryTags": [
+              "[Harmonies]",
+              "[Spoken]",
+              "[Soft]",
+              "[Falsetto]",
+              "[Crooning]"
+            ]
+          }
         },
         {
           "id": "90s-rnb",
@@ -223,7 +279,20 @@ Musical craft (the founder's list; each becomes concrete rules)
           ],
           "rendering": "Boom-bap or live-feel drums under lush keys (Rhodes warmth, bell-tone synths), real moving bass lines, and big stacked background harmonies treated as their own instrument. Gospel-trained lead vocal upfront with runs at phrase ends, church-flavored chord changes, and an extended outro vamp \u2014 a late-80s-through-90s radio warmth throughout (the new-jack-swing option sits at the earlier end of that window).",
           "storyFit": "Best for devotion, weddings, apologies, winning somebody back, grown committed romance, and friend-group anthems that want harmony and lift. Serves badly: detached or ironic stories, guarded narrators, and minimal lo-fi moods \u2014 this style cannot keep its heart hidden.",
-          "parodyTraps": "Cramming in dated pet names and 90s slang the user never wrote (the era lives in the chords and harmonies, not the vocabulary); turning every single line into a run cue; choruses that are paragraphs instead of chants; wearing the decade as a costume instead of writing sincere devotion."
+          "parodyTraps": "Cramming in dated pet names and 90s slang the user never wrote (the era lives in the chords and harmonies, not the vocabulary); turning every single line into a run cue; choruses that are paragraphs instead of chants; wearing the decade as a costume instead of writing sincere devotion.",
+          "performance": {
+            "prose": "Density heavy; min adlibs 8; delivery tags [Call and Response] [Harmonies] [Vocal Run] [Belting] [Ad-Lib Section] [Choir enters]. This is the loudest, most vocally crowded room in R&B, so it leans hardest on adlibs and backing-vocal tags of all the siblings. Signature: A four-voice backing stack belting a chant-simple, metrically parallel chorus together while answering the lead line for line under the verses \u2014 a call-and-response conversation with the address locked on one person, opening into a final vamp where the whole stack holds the chorus and the lead runs freely over the top. Placement: Structure tags ([Verse], [Chorus], [Bridge]) go bare on their own lines.",
+            "adlibDensity": "heavy",
+            "minAdlibs": 8,
+            "deliveryTags": [
+              "[Call and Response]",
+              "[Harmonies]",
+              "[Vocal Run]",
+              "[Belting]",
+              "[Ad-Lib Section]",
+              "[Choir enters]"
+            ]
+          }
         },
         {
           "id": "2000s-rnb",
@@ -241,7 +310,18 @@ Musical craft (the founder's list; each becomes concrete rules)
           ],
           "rendering": "Glossy programmed drums with crisp snares, plush keys or plucked string-like synth lines, deep polished bass, dramatic string or choir pads at the peaks. One star lead vocal front and center with confident runs and doubled hooks, background vocals echoing the lead rather than answering it \u2014 an early-2000s radio shine, glossier than 90s warmth, fuller than trap-soul's empty space.",
           "storyFit": "Best for stories with a plot: a confession, a confrontation, a dramatic apology, the night everything changed, a breakup with actual events in it. Serves badly: quiet contentment, meditative growth stories, and whisper-close intimacy \u2014 this style needs something to happen.",
-          "parodyTraps": "Era props (flip phones, club scenes, the other woman) the user never gave; melodrama with no real event underneath it; over-running every line instead of saving runs for the peaks; letting the era's stock plots swallow the user's actual story."
+          "parodyTraps": "Era props (flip phones, club scenes, the other woman) the user never gave; melodrama with no real event underneath it; over-running every line instead of saving runs for the peaks; letting the era's stock plots swallow the user's actual story.",
+          "performance": {
+            "prose": "Density moderate; min adlibs 5; delivery tags [Vocal Run] [Falsetto] [Crescendo] [Big Finish]. This room performs like a solo star narrating the night everything changed, so nearly all the vocal texture bends around one lead voice. Signature: At the emotional peak, the single star voice breaks into a solo run over the doubled hook while the backgrounds echo its last word behind it \u2014 one voice showing off, never a group trading lines. Placement: Verses stay bare and story-forward \u2014 set the scene, the event, the fallout with almost no adlibs so the narrative reads clean; at most a single echoed last-word under the line that ends the scene.",
+            "adlibDensity": "moderate",
+            "minAdlibs": 5,
+            "deliveryTags": [
+              "[Vocal Run]",
+              "[Falsetto]",
+              "[Crescendo]",
+              "[Big Finish]"
+            ]
+          }
         },
         {
           "id": "neo-soul",
@@ -260,7 +340,19 @@ Musical craft (the founder's list; each becomes concrete rules)
           ],
           "rendering": "Fender Rhodes with extended jazz chords, warm live bass, dusty in-the-pocket drums that drag a hair behind, muted guitar licks, optional horns. Vocals layered loose and human \u2014 hummed ad-libs, spoken asides, minimal pitch correction \u2014 with a late-90s/early-2000s organic, analog warmth and room to breathe.",
           "storyFit": "Best for reflective stories \u2014 personal growth, self-love, gratitude, long-term love seen from altitude, roots and family lineage, spiritual searching. Serves badly: urgent drama, petty conflict, club energy, or any story that needs to move fast and hit hard on the beat.",
-          "parodyTraps": "Fake-deep word salad with no concrete story underneath; mystical props stacked up as decoration; imitating vocal scatting or filler syllables on the page; poeticness with zero specific detail from the user's actual life \u2014 the poetry must be built FROM their story, not draped over it."
+          "parodyTraps": "Fake-deep word salad with no concrete story underneath; mystical props stacked up as decoration; imitating vocal scatting or filler syllables on the page; poeticness with zero specific detail from the user's actual life \u2014 the poetry must be built FROM their story, not draped over it.",
+          "performance": {
+            "prose": "Density moderate; min adlibs 5; delivery tags [Crooning] [Spoken] [Vocal Run] [Instrumental Break] [Soft]. Neo-Soul performs loose and human, not staged. Signature: The closing vamp circles as a flat mantra instead of building \u2014 the chorus phrase repeats with small changes at the SAME dynamic level top to bottom while hums, a spoken aside, and a drifting (not peak) [Vocal Run] wander over a long instrumental pocket. Placement: The adlib floor is back-heavy: most of the required adlibs live in the closing vamp, verses get at most one, and the bridge is near-zero \u2014 a loaded outro over near-empty verses is what makes this room, not echoes sprinkled evenly under every hook (that is the Contemporary pattern).",
+            "adlibDensity": "moderate",
+            "minAdlibs": 5,
+            "deliveryTags": [
+              "[Crooning]",
+              "[Spoken]",
+              "[Vocal Run]",
+              "[Instrumental Break]",
+              "[Soft]"
+            ]
+          }
         },
         {
           "id": "trap-soul",
@@ -280,7 +372,18 @@ Musical craft (the founder's list; each becomes concrete rules)
           ],
           "rendering": "Dark ambient pads and detuned keys over a booming 808 sub, crisp trap hi-hats rolling in double and triple time, half-time snare. Vocals sit in reverb and delay with a subtle Auto-Tune color, doubled hooks, and murmured background ad-libs \u2014 a 2015-to-now nocturnal palette, minimal and spacious.",
           "storyFit": "Best for situationships, late-night regret, mixed feelings, ambition tangled with love, guarded hearts, and stories the user tells in blunt fragments. Serves badly: weddings, tributes to parents, joyful celebration, wholesome family stories, or any narrator who wants to sound fully open-hearted.",
-          "parodyTraps": "Forcing designer brands, substances, or city clich\xE9s the user never gave; over-singing \u2014 this style murmurs, it does not run; rhyming too neatly; letting the narrator gush emotionally when the style's whole identity is the guard staying up; cramming words into space that must stay empty."
+          "parodyTraps": "Forcing designer brands, substances, or city clich\xE9s the user never gave; over-singing \u2014 this style murmurs, it does not run; rhyming too neatly; letting the narrator gush emotionally when the style's whole identity is the guard staying up; cramming words into space that must stay empty.",
+          "performance": {
+            "prose": "Density moderate; min adlibs 3; delivery tags [Whispered] [Spoken] [Soft] [Crooning]. This room performs by murmur, not by run. Signature: A single doubled voice murmuring an echo of its own last word \u2014 the same phrase looping while a low ad-lib breathes back at the end of each pass, tone carrying the feeling instead of a run. Placement: Two placements, kept strictly apart so a writer never confuses them: bracket meta tags ([Spoken], [Whispered], [Soft]) only ever sit on their own line before a section, never mid-line and never inside a phrase; parenthetical adlibs only ever sit at a phrase END, in parentheses, never mid-line and never inside the dead air the writing protects.",
+            "adlibDensity": "moderate",
+            "minAdlibs": 3,
+            "deliveryTags": [
+              "[Whispered]",
+              "[Spoken]",
+              "[Soft]",
+              "[Crooning]"
+            ]
+          }
         },
         {
           "id": "quiet-storm",
@@ -299,7 +402,20 @@ Musical craft (the founder's list; each becomes concrete rules)
           ],
           "rendering": "Silky electric piano with soft strings or warm synth pads, gentle drums with a rimshot snare (brushed or softly programmed), round smooth bass, optional saxophone or muted guitar. Lead vocal velvet and close-miked, restraint throughout, with the tasteful runs saved for the final vamp \u2014 mid-70s-through-90s adult late-night radio warmth.",
           "storyFit": "Best for anniversaries, long marriages, proposals, devoted grown romance, and songs sung to a spouse or lifelong partner. Serves badly: breakups in progress, anger, casual flings, group anthems, or stories that need modern slang energy and pace.",
-          "parodyTraps": "Running the seduction-clich\xE9 checklist (wine, fireplace, silk) instead of using the couple's real details; breathy overacting; letting the words rush ahead of the tempo; getting explicit \u2014 this style seduces by implication only; treating the genre as a wink or a skit instead of full sincerity."
+          "parodyTraps": "Running the seduction-clich\xE9 checklist (wine, fireplace, silk) instead of using the couple's real details; breathy overacting; letting the words rush ahead of the tempo; getting explicit \u2014 this style seduces by implication only; treating the genre as a wink or a skit instead of full sincerity.",
+          "performance": {
+            "prose": "Density sparse; min adlibs 3; delivery tags [Soft] [Crooning] [Falsetto] [Sax Solo] [Vocal Run] [Harmonies]. This room performs by holding back. Signature: The final chorus becomes a vamp that stays close-miked and solo: the simple chorus words loop while one lead voice ascends over the top \u2014 climbing into falsetto and spending its saved-up tasteful runs \u2014 without ever raising the room's volume, without a background trio answering, without a group belt. Placement: Intro and verses stay almost bare \u2014 no run cues, at most a single soft hummed or breathed adlib tucked under a line where a lover would sigh; keep the pre-chorus bare too so the lift is felt, not announced.",
+            "adlibDensity": "sparse",
+            "minAdlibs": 3,
+            "deliveryTags": [
+              "[Soft]",
+              "[Crooning]",
+              "[Falsetto]",
+              "[Sax Solo]",
+              "[Vocal Run]",
+              "[Harmonies]"
+            ]
+          }
         },
         {
           "id": "classic-soul",
@@ -318,7 +434,20 @@ Musical craft (the founder's list; each becomes concrete rules)
           ],
           "rendering": "A live rhythm section \u2014 real drums, electric bass, chanking rhythm guitar (short choppy strums right on the beat), piano or organ \u2014 with horn stabs and string sweetening; tambourine on the backbeat for uptempo numbers. Raw, gospel-fired lead vocal with a background trio answering; 1960s-70s analog warmth, real room sound, no modern vocal effects.",
           "storyFit": "Best for tributes, milestone celebrations, songs for parents and grandparents, timeless full-hearted declarations of love, and joyful dance-along family songs. Serves badly: modern situationship nuance, guarded or ironic narrators, minimal lo-fi moods, and stories that hinge on texting-era details.",
-          "parodyTraps": "Fake-vintage slang and era name-dropping \u2014 the period lives in the band, the chords, and the phrasing, never in the vocabulary; over-sweetening into jingle territory; wordy verses a horn section cannot punch around; imitation-oldies pastiche instead of sincere testimony built from the user's story."
+          "parodyTraps": "Fake-vintage slang and era name-dropping \u2014 the period lives in the band, the chords, and the phrasing, never in the vocabulary; over-sweetening into jingle territory; wordy verses a horn section cannot punch around; imitation-oldies pastiche instead of sincere testimony built from the user's story.",
+          "performance": {
+            "prose": "Density heavy; min adlibs 7; delivery tags [Call and Response] [Belting] [Harmonies] [Vocal Run] [Big Finish] [Instrumental Break]. This room performs like a live band with a backing trio in the room, so it leans on adlibs harder than most siblings and on delivery tags moderately. Signature: The outro becomes a hook-loop vamp where the backing trio holds the repeated hook and the lead preaches freely over the top \u2014 but the move that most says this room is that the address opens up here: what began as testimony sung to one person widens into celebration sung to the whole room, so the vamp lands as a crowd lifting the hook, not one voice still fixed on one person. Placement: Verses carry real trio answers, not just chorus ones: short on-beat parenthetical responses and echoed line-ends, kept punchy so the words stay locked to the backbeat.",
+            "adlibDensity": "heavy",
+            "minAdlibs": 7,
+            "deliveryTags": [
+              "[Call and Response]",
+              "[Belting]",
+              "[Harmonies]",
+              "[Vocal Run]",
+              "[Big Finish]",
+              "[Instrumental Break]"
+            ]
+          }
         }
       ],
       "cues": [
@@ -620,10 +749,10 @@ Musical craft (the founder's list; each becomes concrete rules)
       ]
     }
   },
-  "hash": "3495de0eacb9",
+  "hash": "30cb96f0eb29",
   "approxTokens": {
     "core": 1632,
-    "largestSlice": 3164
+    "largestSlice": 3333
   }
 };
 
@@ -1422,6 +1551,71 @@ function runChecks(draft, opts) {
       detail: nameDrop ? "production prompt name-drops artists \u2014 describe the sound instead" : "clean"
     });
   }
+  const STRUCTURE_TAGS = /* @__PURE__ */ new Set([
+    "intro",
+    "verse",
+    "pre-chorus",
+    "prechorus",
+    "chorus",
+    "post-chorus",
+    "postchorus",
+    "hook",
+    "refrain",
+    "bridge",
+    "break",
+    "breakdown",
+    "interlude",
+    "outro",
+    "instrumental",
+    "ad-lib section",
+    "adlib section",
+    "end"
+  ]);
+  const normalizeTag = (t) => t.trim().toLowerCase().replace(/\s+\d+$/, "").replace(/\s+/g, " ");
+  const allBracketTags = [...body.match(/\[[^\]]+\]/g) || []].map((t) => t.slice(1, -1));
+  if (typeof opts.minAdlibs === "number") {
+    const adlibCount = (body.match(/\([^)]+\)/g) || []).length;
+    checks.push({
+      id: "adlibs-present",
+      severity: "fail",
+      ok: adlibCount >= opts.minAdlibs,
+      detail: `${adlibCount} adlibs in parentheses (room floor ${opts.minAdlibs})`
+    });
+  }
+  if (typeof opts.minAdlibs === "number") {
+    const perfTags = allBracketTags.filter((t) => !STRUCTURE_TAGS.has(normalizeTag(t)) && !t.includes(":"));
+    checks.push({
+      id: "performance-tags",
+      severity: "fail",
+      ok: perfTags.length >= 1,
+      detail: perfTags.length ? `${perfTags.length} performance tags: ${perfTags.slice(0, 5).join(", ")}` : "no delivery/dynamics tags"
+    });
+  }
+  {
+    const valid = new Set((opts.validTags || []).map((t) => normalizeTag(t.replace(/^\[|\]$/g, ""))));
+    const offenders = allBracketTags.filter((t) => {
+      if (t.includes(":")) return true;
+      if (valid.size === 0) return false;
+      return !valid.has(normalizeTag(t));
+    });
+    if (opts.validTags && opts.validTags.length > 0) {
+      checks.push({
+        id: "invalid-tags",
+        severity: "fail",
+        ok: offenders.length === 0,
+        detail: offenders.length ? `invalid/invented tags: ${[...new Set(offenders)].slice(0, 5).map((t) => `[${t}]`).join(", ")}` : "all tags valid"
+      });
+    }
+  }
+  if (typeof opts.minAdlibs === "number") {
+    const inline = (parsed.lyricLines || []).filter((l) => /\[[^\]]+\]/.test(l));
+    checks.push({
+      id: "tags-own-line",
+      severity: "fail",
+      ok: inline.length === 0,
+      detail: inline.length ? `${inline.length} lyric line(s) have an inline bracket tag` : "all tags on their own line"
+    });
+  }
   let failCount = 0;
   let warnCount = 0;
   for (const check of checks) {
@@ -1664,6 +1858,16 @@ The hook (and title): ${hook}
 Section plan:
 ${sectionLines}
 
+=== THE PERFORMANCE (tags & adlibs \u2014 this is what makes it a real song, not a page) ===
+${card.performance.prose}
+Adlib density for this room: ${card.performance.adlibDensity}. Use AT LEAST ${card.performance.minAdlibs} adlibs in parentheses () across the song.
+Delivery/dynamics tags that fit this room: ${card.performance.deliveryTags.join(" ")}.
+HOW to place them (never random \u2014 placement follows the emotional arc):
+- Meta tags go in [square brackets] on their OWN line, in the gap between lyric lines. Never inline inside a lyric line.
+- Use ONLY real Suno tags \u2014 the section tags plus this room's delivery tags above. NEVER invent key:value tags like [Energy: High] or [Vocals: Confident]; the renderer ignores them and they ruin the song.
+- Adlibs go in (parentheses) and MAY sit inline at a line's end or on their own short line right under it \u2014 exactly where a real singer would answer, echo, or breathe. Adlibs are SOUNDS/short responses, never slang or dialect the user didn't write.
+- Density rises and falls with the dynamics: sparse in an intimate verse/bridge, fuller on the hook, heaviest at the final vamp/outro. Match this room's character above.
+
 ${story ? `=== THE STORY (the user's own words) ===
 ${story}` : `=== NO STORY WAS GIVEN ===
 Write from the brief alone. Keep it universal but concrete. NEVER invent fake personal details \u2014 no invented names, streets, dates, or events pretending to be the user's.`}
@@ -1691,7 +1895,11 @@ var GUIDANCE = {
   "leaked-labels": "the lyrics must contain only the song itself \u2014 no notes, no labels, no planning talk",
   "banned-phrases": "some lines were stock phrases that belong to no one's story \u2014 say the specific true thing instead",
   "central-image": "keep coming back to the one real thing at the center of this song \u2014 put it in the listener's hands",
-  "artist-names-in-suno": "describe the sound in the production prompt without naming any real artist"
+  "artist-names-in-suno": "describe the sound in the production prompt without naming any real artist",
+  "adlibs-present": "add the room's adlibs in parentheses where a singer would answer or echo \u2014 this song sounds bare without them",
+  "performance-tags": "place this room's delivery tags on their own lines where the vocal changes or the song builds",
+  "invalid-tags": "remove any invented tags like [Energy: High] \u2014 use only real Suno section and delivery tags",
+  "tags-own-line": "every square-bracket tag goes on its own line, never inside a lyric line"
 };
 function guidanceFor(reports) {
   const failed = /* @__PURE__ */ new Set();
@@ -1763,7 +1971,9 @@ async function runEngine(curriculum, inputs, generate, stage = () => {
         spec: brief.spec,
         hook,
         centralImage: brief.centralImage,
-        bannedPhrases: curriculum.bannedPhrases
+        bannedPhrases: curriculum.bannedPhrases,
+        validTags: curriculum.validTags,
+        minAdlibs: card.performance.minAdlibs
       })
     };
   };

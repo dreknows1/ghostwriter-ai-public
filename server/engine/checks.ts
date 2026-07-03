@@ -243,6 +243,10 @@ export function runChecks(
     centralImage?: string;
     /** the founder's house-style ban list (compiled from BRAIN Layer 3) — any hit fails */
     bannedPhrases?: string[];
+    /** the valid Suno tag list (BRAIN Layer 6) — bracket tags outside this set are flagged */
+    validTags?: string[];
+    /** this room's adlib floor (Layer 6) — a real song needs at least this many adlibs */
+    minAdlibs?: number;
   },
 ): DraftReport {
   // NOTE: opts.card is part of the stable call contract. The plan (§2 Step 6)
@@ -512,6 +516,73 @@ export function runChecks(
       severity: "fail",
       ok: !nameDrop,
       detail: nameDrop ? "production prompt name-drops artists — describe the sound instead" : "clean",
+    });
+  }
+
+  // ── Performance layer (BRAIN Layer 6): tags & adlibs make a written song a
+  //    performance. Founder mandate: no song ships bare. ───────────────────────
+  const STRUCTURE_TAGS = new Set([
+    "intro", "verse", "pre-chorus", "prechorus", "chorus", "post-chorus", "postchorus",
+    "hook", "refrain", "bridge", "break", "breakdown", "interlude", "outro", "instrumental",
+    "ad-lib section", "adlib section", "end",
+  ]);
+  const normalizeTag = (t: string) => t.trim().toLowerCase().replace(/\s+\d+$/, "").replace(/\s+/g, " ");
+  const allBracketTags = [...(body.match(/\[[^\]]+\]/g) || [])].map((t) => t.slice(1, -1));
+
+  // adlibs-present (fail): a real song in this room needs its adlib floor.
+  if (typeof opts.minAdlibs === "number") {
+    const adlibCount = (body.match(/\([^)]+\)/g) || []).length;
+    checks.push({
+      id: "adlibs-present",
+      severity: "fail",
+      ok: adlibCount >= opts.minAdlibs,
+      detail: `${adlibCount} adlibs in parentheses (room floor ${opts.minAdlibs})`,
+    });
+  }
+
+  // performance-tags (fail): at least one non-structure delivery/dynamics tag —
+  // a song with only [Verse]/[Chorus] has no performance direction. Gated on the
+  // performance-aware engine path (minAdlibs supplied) so it doesn't fire on callers
+  // that aren't checking the performance layer.
+  if (typeof opts.minAdlibs === "number") {
+    const perfTags = allBracketTags.filter((t) => !STRUCTURE_TAGS.has(normalizeTag(t)) && !t.includes(":"));
+    checks.push({
+      id: "performance-tags",
+      severity: "fail",
+      ok: perfTags.length >= 1,
+      detail: perfTags.length ? `${perfTags.length} performance tags: ${perfTags.slice(0, 5).join(", ")}` : "no delivery/dynamics tags",
+    });
+  }
+
+  // invalid-tags (fail): invented key:value tags (Suno ignores them) or tags outside
+  // the founder's valid list. This is the guard against [Energy: High] style garbage.
+  {
+    const valid = new Set((opts.validTags || []).map((t) => normalizeTag(t.replace(/^\[|\]$/g, ""))));
+    const offenders = allBracketTags.filter((t) => {
+      if (t.includes(":")) return true;
+      if (valid.size === 0) return false;
+      return !valid.has(normalizeTag(t));
+    });
+    if (opts.validTags && opts.validTags.length > 0) {
+      checks.push({
+        id: "invalid-tags",
+        severity: "fail",
+        ok: offenders.length === 0,
+        detail: offenders.length ? `invalid/invented tags: ${[...new Set(offenders)].slice(0, 5).map((t) => `[${t}]`).join(", ")}` : "all tags valid",
+      });
+    }
+  }
+
+  // tags-own-line (fail): a bracket tag placed inside a lyric line is ignored by
+  // the renderer. parseDraft consumes proper tag-lines into sections, so any bracket
+  // tag left in a lyric content line is inline. Gated on the performance-aware path.
+  if (typeof opts.minAdlibs === "number") {
+    const inline = (parsed.lyricLines || []).filter((l) => /\[[^\]]+\]/.test(l));
+    checks.push({
+      id: "tags-own-line",
+      severity: "fail",
+      ok: inline.length === 0,
+      detail: inline.length ? `${inline.length} lyric line(s) have an inline bracket tag` : "all tags on their own line",
     });
   }
 

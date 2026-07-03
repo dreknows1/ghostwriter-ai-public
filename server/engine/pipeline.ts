@@ -315,6 +315,16 @@ The hook (and title): ${hook}
 Section plan:
 ${sectionLines}
 
+=== THE PERFORMANCE (tags & adlibs — this is what makes it a real song, not a page) ===
+${card.performance.prose}
+Adlib density for this room: ${card.performance.adlibDensity}. Use AT LEAST ${card.performance.minAdlibs} adlibs in parentheses () across the song.
+Delivery/dynamics tags that fit this room: ${card.performance.deliveryTags.join(" ")}.
+HOW to place them (never random — placement follows the emotional arc):
+- Meta tags go in [square brackets] on their OWN line, in the gap between lyric lines. Never inline inside a lyric line.
+- Use ONLY real Suno tags — the section tags plus this room's delivery tags above. NEVER invent key:value tags like [Energy: High] or [Vocals: Confident]; the renderer ignores them and they ruin the song.
+- Adlibs go in (parentheses) and MAY sit inline at a line's end or on their own short line right under it — exactly where a real singer would answer, echo, or breathe. Adlibs are SOUNDS/short responses, never slang or dialect the user didn't write.
+- Density rises and falls with the dynamics: sparse in an intimate verse/bridge, fuller on the hook, heaviest at the final vamp/outro. Match this room's character above.
+
 ${story ? `=== THE STORY (the user's own words) ===\n${story}` : `=== NO STORY WAS GIVEN ===\nWrite from the brief alone. Keep it universal but concrete. NEVER invent fake personal details — no invented names, streets, dates, or events pretending to be the user's.`}
 
 ${approach}${guidance ? `\n\nOne more thing from the last attempt: ${guidance}` : ""}
@@ -341,6 +351,10 @@ const GUIDANCE: Record<string, string> = {
   "banned-phrases": "some lines were stock phrases that belong to no one's story — say the specific true thing instead",
   "central-image": "keep coming back to the one real thing at the center of this song — put it in the listener's hands",
   "artist-names-in-suno": "describe the sound in the production prompt without naming any real artist",
+  "adlibs-present": "add the room's adlibs in parentheses where a singer would answer or echo — this song sounds bare without them",
+  "performance-tags": "place this room's delivery tags on their own lines where the vocal changes or the song builds",
+  "invalid-tags": "remove any invented tags like [Energy: High] — use only real Suno section and delivery tags",
+  "tags-own-line": "every square-bracket tag goes on its own line, never inside a lyric line",
 };
 
 function guidanceFor(reports: DraftReport[]): string {
@@ -459,6 +473,8 @@ export async function runEngine(
         story, card, spec: brief.spec, hook,
         centralImage: brief.centralImage,
         bannedPhrases: curriculum.bannedPhrases,
+        validTags: curriculum.validTags,
+        minAdlibs: card.performance.minAdlibs,
       }),
     };
   };

@@ -108,6 +108,16 @@ export function compileRooms(subgenresMd) {
     const firewall = bulletText(block, "Cross-genre firewall:");
     if (firewall) dials.push(`Cross-genre firewall: ${firewall}`);
 
+    const perfText = bulletText(block, "How it performs (tags & adlibs):");
+    if (!perfText) fail(`room "${name}": missing "How it performs (tags & adlibs)" bullet`);
+    const density = (perfText.match(/Density (sparse|moderate|heavy)/i) || [])[1];
+    const minAdlibs = Number((perfText.match(/min adlibs (\d+)/i) || [])[1]);
+    const tagsChunk = (perfText.match(/delivery tags ([^.]+)\./i) || [])[1] || "";
+    const deliveryTags = (tagsChunk.match(/\[[^\]]+\]/g) || []);
+    if (!density || !Number.isInteger(minAdlibs) || minAdlibs < 2 || deliveryTags.length < 2) {
+      fail(`room "${name}": performance bullet must state Density, min adlibs (>=2), and >=2 delivery tags`);
+    }
+
     const card = {
       id,
       name,
@@ -117,9 +127,12 @@ export function compileRooms(subgenresMd) {
       rendering: bulletText(block, "How it renders (Suno production prompt):"),
       storyFit: bulletText(block, "Stories it serves:"),
       parodyTraps: bulletText(block, "What makes it a parody:"),
+      performance: { prose: perfText, adlibDensity: density.toLowerCase(), minAdlibs, deliveryTags },
     };
     for (const [field, value] of Object.entries(card)) {
-      if (field === "writingDials" ? value.length < 3 : !value) fail(`room "${name}": empty field ${field}`);
+      if (field === "writingDials" ? value.length < 3 : field === "performance" ? false : !value) {
+        fail(`room "${name}": empty field ${field}`);
+      }
     }
     rooms.push(card);
   }
@@ -204,6 +217,18 @@ export function compileAbstractionWords(brainMd) {
   return [...new Set(words)];
 }
 
+/** The valid Suno tag list from BRAIN Layer 6 — the only tags the renderer reads. */
+export function compileValidTags(brainMd) {
+  const marker = "**Valid Suno tags";
+  const start = brainMd.indexOf(marker);
+  if (start === -1) fail("BRAIN is missing the Valid Suno tags list (Layer 6)");
+  const lineEnd = brainMd.indexOf("\n", brainMd.indexOf(":**", start));
+  const chunk = brainMd.slice(start, lineEnd === -1 ? undefined : lineEnd);
+  const tags = (chunk.match(/\[[^\]]+\]/g) || []).map((t) => t.trim());
+  if (tags.length < 20) fail(`valid-tag list suspiciously small (${tags.length} tags)`);
+  return [...new Set(tags)];
+}
+
 export function lintNoLyricLines(compiled) {
   const texts = [compiled.core];
   for (const pack of Object.values(compiled.genres)) {
@@ -228,7 +253,7 @@ export function compile(brainMd, subgenresMd, profileMd) {
   // concern and never reaches the writer, so it doesn't count against the budget.
   const cardChars = (room) =>
     room.oneLine.length + room.tempoGroove.length + room.rendering.length +
-    room.parodyTraps.length +
+    room.parodyTraps.length + room.performance.prose.length +
     room.writingDials.reduce((n, d) => n + d.length, 0);
   const largestCard = Math.max(...rooms.map(cardChars));
   const largestSlice = Math.round((core.length + profileText.length + largestCard) / 4);
@@ -240,10 +265,12 @@ export function compile(brainMd, subgenresMd, profileMd) {
 
   const bannedPhrases = compileBannedPhrases(brainMd);
   const abstractionWords = compileAbstractionWords(brainMd);
+  const validTags = compileValidTags(brainMd);
   const compiled = {
     core,
     bannedPhrases,
     abstractionWords,
+    validTags,
     genres: {
       rnb: {
         id: "rnb",

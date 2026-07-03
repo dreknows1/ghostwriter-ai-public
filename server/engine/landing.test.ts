@@ -17,6 +17,7 @@ function room(id: string, name: string, oneLine: string): RoomCard {
     rendering: "warm keys, soft drums, close vocal",
     storyFit: "everyday love and loss",
     parodyTraps: "no stock pet names",
+    performance: { prose: "tasteful adlibs", adlibDensity: "moderate", minAdlibs: 4, deliveryTags: ["[Soft]", "[Harmonies]"] },
   };
 }
 
