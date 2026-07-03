@@ -800,6 +800,15 @@ assistant:
 // passed straight through. The real engine will be built fresh from SONGWRITING_BRAIN.md
 // per SONGWRITING_ENGINE_PLAN.md, and replaces this only after the founder's blind gate.
 
+// Every song the app makes must be a PERFORMANCE, not a bare lyric sheet (founder rule).
+// The curriculum engine enforces this per-room; the interim/edit/import paths at least
+// carry this shared instruction so no path emits section labels only.
+const PERFORMANCE_TAGS_INSTRUCTION = `The lyrics MUST be performance-ready, not a bare sheet:
+- Beyond section headers, place real Suno performance tags in [square brackets] on their OWN line where the music changes — e.g. [Build] before a chorus, [Harmonies] on the hook, [Belting] or [Falsetto] at a peak, [Vocal Run], [Call and Response], [Soft], [Sax Solo], [Guitar Solo], [Big Finish], [Vamp] at the end. Match the tags to the genre and the emotional arc; heavier toward the choruses and the outro, lighter in an intimate verse.
+- Weave several adlibs in (parentheses) where a real singer would answer, echo, or breathe — inline at line ends or on short lines under them. Adlibs are sounds/short responses, never slang the writer didn't give you.
+- Use ONLY real Suno tags. NEVER invent key:value tags like [Energy: High] or [Vocals: Confident] — the renderer ignores them.
+- In the SUNO production prompt, describe the sound; NEVER name real artists ("similar to X", "like Y").`;
+
 export function buildInterimSongPrompt(inputs: any): string {
   const genre = String(inputs?.genre || "Pop").trim();
   const story = String(inputs?.creativeDirection || inputs?.additionalInfo || "").trim();
@@ -814,6 +823,8 @@ export function buildInterimSongPrompt(inputs: any): string {
     inputs?.title && `Title (use exactly this): ${String(inputs.title).trim()}`,
   ].filter(Boolean).join("\n");
   return `Write a ${genre} song${story ? ` about the following:\n\n${story}\n\n` : ". "}${picks ? `\nThe writer chose:\n${picks}\n\n` : ""}It should have a ${voice} and section tags like [Verse] [Chorus] [Bridge].
+
+${PERFORMANCE_TAGS_INSTRUCTION}
 
 Also write a 40-70 word Suno production prompt describing how the track should sound.
 
@@ -887,6 +898,9 @@ Title: ...
 ### Lyrics
 ...
 
+${PERFORMANCE_TAGS_INSTRUCTION}
+(If the song came in with only section labels and no performance tags/adlibs, ADD them as part of this revision.)
+
 INSTRUCTION: ${String(editInstruction || "").trim()}
 
 SONG:
@@ -902,6 +916,8 @@ async function structureImportedSongInterim(payload: any) {
   const { pastedContent, inputs } = payload || {};
   const genre = String(inputs?.genre || "").trim();
   const prompt = `Structure the pasted lyrics/ideas below into a complete song${genre ? ` (${genre})` : ""} with section tags like [Verse] [Chorus] [Bridge]. Preserve the writer's own words wherever possible.
+
+${PERFORMANCE_TAGS_INSTRUCTION}
 
 Also write a 40-70 word Suno production prompt describing how the track should sound.
 
