@@ -184,10 +184,16 @@ pass 7" idea was noise (a coin-flip engine passes it 1 time in 6). The honest ve
 
 - The live site keeps working untouched while Phase 1 is built beside it (per-engine
   rollback flag from day one).
-- Input stays: genre + story + voice, plus an OPTIONAL sub-genre pick (each room shown
-  with its one-line description; "let the app decide" is the default and uses the landing
-  rules). English-only buildout per your direction (patois/pidgin handled inside their
-  genre profiles, under the dialect rule).
+- Input (founder direction 2026-07-02): a guided SONG BUILDER — composition questions,
+  each with concrete choices and every one skippable ("let the app decide"):
+  genre → room (the sub-genre pages' own one-liners as the choices) → theme → what the
+  song should DO (purpose) → who it speaks to → voice → an OPTIONAL "tell us the real
+  story" box (names, places, moments — the biggest quality lever, but the user may skip
+  it) → title ideas generated FROM their picks and story (the engine's own hook
+  candidates, shown as choices) → the app puts the puzzle together. Picks flow into the
+  brief as structured constraints, never prose. One input set, ONE song. English-only
+  buildout per your direction (patois/pidgin handled inside their genre profiles, under
+  the dialect rule).
 - The wizard/UI debate rides later; this plan changes the brain first.
 
 ---

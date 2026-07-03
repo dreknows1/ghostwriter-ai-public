@@ -5,6 +5,7 @@ import {
   parseFirstJson,
   resolveGenre,
   runEngine,
+  runTitleIdeas,
   scoreHook,
   storyTokens,
   type EngineGenerate,
@@ -190,11 +191,46 @@ describe("runEngine end-to-end (scripted model, real landing + checks)", () => {
     expect(writes.length).toBe(2); // the write, then exactly one guided retry — never more
   });
 
-  it("rejects a missing story before spending anything", async () => {
+  it("rejects a missing story before spending anything (unless a theme was picked)", async () => {
     const { gen, writes } = scriptedGenerate();
     await expect(runEngine(CURRICULUM_FIXTURE, { genre: "R&B", story: "" }, gen)).rejects.toMatchObject({
       code: "story_required",
     });
     expect(writes.length).toBe(0);
+  });
+
+  it("a user-chosen title becomes THE hook — no candidates generated", async () => {
+    const { gen, writes } = scriptedGenerate();
+    const result = await runEngine(
+      CURRICULUM_FIXTURE,
+      { genre: "R&B", story: STORY, title: "Receipt In Your Wallet" },
+      gen
+    );
+    expect(result.meta.hook).toBe("Receipt In Your Wallet");
+    expect(result.text).toContain("Title: Receipt In Your Wallet");
+    // exactly one write; the naming step never ran (no hooks prompt hit the model)
+    expect(writes.length).toBe(1);
+  });
+
+  it("picks alone can carry a song (no story) — and the writer is told not to invent details", async () => {
+    const { gen, writes } = scriptedGenerate();
+    const result = await runEngine(
+      CURRICULUM_FIXTURE,
+      { genre: "R&B", story: "", theme: "Deep love / devotion", purpose: "Slow dance", audience: "One person" },
+      gen
+    );
+    expect(result.text).toContain("Title:");
+    expect(writes[0]).toContain("NO STORY WAS GIVEN");
+    expect(writes[0]).toContain("NEVER invent fake personal details");
+  });
+
+  it("runTitleIdeas returns up to 5 candidates plus the room, without writing a song", async () => {
+    const { gen, writes } = scriptedGenerate();
+    const ideas = await runTitleIdeas(CURRICULUM_FIXTURE, { genre: "R&B", story: STORY }, gen);
+    expect(ideas.titles.length).toBeGreaterThanOrEqual(3);
+    expect(ideas.titles.length).toBeLessThanOrEqual(5);
+    expect(ideas.roomName).toBe("Quiet Storm");
+    expect(ideas.landingNote).toContain("anniversary");
+    expect(writes.length).toBe(0); // ideas only — no song was written, nothing charged
   });
 });

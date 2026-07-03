@@ -1,7 +1,7 @@
 
 import React, { useState, useEffect, useCallback, useRef } from 'react';
 import { AppStep, AppView, SongInputs, UserProfile } from './types';
-import { generateSong, generateAlbumArt, generateSocialPack, translateLyrics, structureImportedSong } from './services/geminiService';
+import { generateSong, generateAlbumArt, generateSocialPack, translateLyrics, structureImportedSong, suggestTitles } from './services/geminiService';
 import { saveSong } from './services/songService';
 import { getUserProfile } from './services/userService';
 import { getSession, signOut, signIn, signUp, signInWithOAuthEmail, startProviderSignIn } from './services/authService';
@@ -85,93 +85,367 @@ const DEFAULT_INPUTS: SongInputs = {
   additionalInfo: ''
 };
 
+/** A room card from GET /api/ai — one sub-genre the curriculum engine can write in. */
+type RoomCard = { id?: string; name: string; oneLine: string };
+type RoomPacks = Record<string, RoomCard[]>;
+
+type BuilderStepId = 'genre' | 'room' | 'theme' | 'purpose' | 'audience' | 'voice' | 'story';
+
+const LET_GHOST_DECIDE = 'Let Song Ghost decide';
+
+const THEME_OPTIONS = [
+  'New love', 'Deep love / devotion', 'Complicated love', 'Heartbreak / letting go',
+  'Missing someone', 'Celebration / milestone', 'Family', 'Faith / gratitude',
+  'Growth / proving myself', 'Remembering someone',
+];
+
+const PURPOSE_OPTIONS = [
+  'Slow dance', 'Bring happy tears', 'Party / celebrate', 'Make them feel seen',
+  'Testify / give thanks', 'Win them back', 'Say what I never said',
+];
+
+const AUDIENCE_OPTIONS = [
+  "One person — I'm talking right to them",
+  "My own story — I'm telling it",
+  'Everybody — made to sing along',
+];
+
+const VOICE_OPTIONS = ['Female Solo', 'Male Solo', 'Duo/Group'];
+
 /**
- * Fast Track — the 3-decision lane: pick a genre, describe the vibe, generate.
- * Everything else gets smart defaults; the genre guide fills in the craft.
- * "Deep Studio" hands the picked genre + vibe off to the full wizard.
+ * Match a display genre against the room packs' ids. Pack ids are squashed
+ * lowercase ("rnb", "hiphop"); "R&B" needs the &→n form to land on "rnb".
  */
-const FastTrack: React.FC<{
+const roomsForGenre = (packs: RoomPacks | null, genre: string): RoomCard[] => {
+  if (!packs || !genre) return [];
+  const squash = (s: string) => s.toLowerCase().replace(/[^a-z0-9]/g, '');
+  const candidates = new Set([
+    squash(genre),
+    squash(genre.replace(/&/g, 'n')),
+    squash(genre.replace(/&/g, ' and ')),
+  ]);
+  for (const [packId, rooms] of Object.entries(packs)) {
+    if (!candidates.has(squash(packId))) continue;
+    return (Array.isArray(rooms) ? rooms : []).filter(
+      (r): r is RoomCard => !!r && typeof r.name === 'string' && typeof r.oneLine === 'string'
+    );
+  }
+  return [];
+};
+
+/**
+ * Song Builder — the guided creation flow. One composition question per screen
+ * (genre → room → theme → purpose → audience → voice → story + title), big
+ * tappable chips that auto-advance, every step skippable ("Let Song Ghost
+ * decide"), then the app puts the puzzle together into a single SongInputs.
+ */
+const SongBuilder: React.FC<{
   isGenerating: boolean;
-  onGenerate: (fastInputs: SongInputs) => void;
-}> = ({ isGenerating, onGenerate }) => {
+  email: string;
+  onGenerate: (builtInputs: SongInputs) => void;
+}> = ({ isGenerating, email, onGenerate }) => {
+  const [stepId, setStepId] = useState<BuilderStepId>('genre');
+  // The puzzle pieces — '' everywhere means "Song Ghost decides".
   const [genre, setGenre] = useState('');
-  const [vibe, setVibe] = useState('');
+  const [subGenre, setSubGenre] = useState('');
+  const [theme, setTheme] = useState('');
+  const [purpose, setPurpose] = useState('');
+  const [audience, setAudience] = useState('');
   const [vocals, setVocals] = useState('Female Solo');
-  const genres: string[] = ENGLISH_GENRES;
+  const [title, setTitle] = useState('');
+  const [story, setStory] = useState('');
+  // Rooms (sub-genres) from the engine; null until fetched — the room step only exists when the genre has rooms.
+  const [roomPacks, setRoomPacks] = useState<RoomPacks | null>(null);
+  // Title ideas: null = not asked yet; [] = asked, nothing usable came back.
+  const [titleIdeas, setTitleIdeas] = useState<string[] | null>(null);
+  const [titleRoom, setTitleRoom] = useState<{ name: string; note: string } | null>(null);
+  const [isTitleLoading, setIsTitleLoading] = useState(false);
+
+  // Fetch the room catalog once. No auth; failure just means the room step never shows.
+  useEffect(() => {
+    let cancelled = false;
+    (async () => {
+      try {
+        const res = await fetch('/api/ai');
+        if (!res.ok) return;
+        const json = await res.json();
+        if (!cancelled && json && typeof json.rooms === 'object' && json.rooms) {
+          setRoomPacks(json.rooms as RoomPacks);
+        }
+      } catch {
+        // Silent: the builder works fine without sub-genre rooms.
+      }
+    })();
+    return () => { cancelled = true; };
+  }, []);
+
+  const genreRooms = roomsForGenre(roomPacks, genre);
+  const steps: BuilderStepId[] = [
+    'genre',
+    ...(genreRooms.length ? (['room'] as BuilderStepId[]) : []),
+    'theme', 'purpose', 'audience', 'voice', 'story',
+  ];
+  const stepIndex = Math.max(0, steps.indexOf(stepId));
+  const isLastStep = stepId === 'story';
+
+  const goNext = () => setStepId(steps[Math.min(steps.length - 1, stepIndex + 1)]);
+  const goBack = () => setStepId(steps[Math.max(0, stepIndex - 1)]);
+
+  const pickGenre = (g: string) => {
+    setGenre(g);
+    setSubGenre(''); // a different genre's room can't carry over
+    // Compute the next step from the NEW genre — the steps array above still holds the old one.
+    setStepId(roomsForGenre(roomPacks, g).length ? 'room' : 'theme');
+  };
 
   const buildInputs = (): SongInputs => ({
     ...DEFAULT_INPUTS,
     genre,
+    subGenre,
+    theme,
+    purpose,
+    audience,
+    title,
     vocals,
-    // Don't let the default mood fight the user's story — the vibe is the law.
+    // Don't let the default mood fight the user's story — the story is the law.
     emotion: 'Match the creative direction',
-    creativeDirection: vibe.trim(),
+    creativeDirection: story.trim(),
   });
+
+  const handleTitleIdeas = async () => {
+    if (isTitleLoading) return;
+    setIsTitleLoading(true);
+    try {
+      const result = await suggestTitles(
+        { genre, subGenre, theme, purpose, audience, vocals, creativeDirection: story.trim() },
+        email
+      );
+      // Dedupe defensively (titles are React keys) and cap at 5.
+      setTitleIdeas(Array.from(new Set(result.titles.filter((t) => typeof t === 'string' && t.trim()))).slice(0, 5));
+      setTitleRoom(result.room || null);
+      if (!result.titles.length) {
+        toast('No title ideas this time — Song Ghost will pick one during creation.', 'info');
+      }
+    } catch (err: any) {
+      // Never block creation on titles — surface it and move on.
+      toast(`Couldn't get title ideas: ${err?.message || 'please try again.'} You can still create your song.`, 'error');
+    } finally {
+      setIsTitleLoading(false);
+    }
+  };
+
+  const headers: Record<BuilderStepId, { title: string; caption: string }> = {
+    genre: { title: "What's your sound?", caption: 'Pick a genre — skip anything and Song Ghost decides' },
+    room: { title: 'Pick your room', caption: `The corner of ${genre} this song lives in` },
+    theme: { title: 'What is this song about?', caption: 'The heart of the song' },
+    purpose: { title: 'What should this song DO?', caption: 'Its job in the room' },
+    audience: { title: 'Who is this song speaking to?', caption: 'The point of view' },
+    voice: { title: 'Whose voice sings it?', caption: 'Pick the lead vocal' },
+    story: { title: 'Tell us the real story', caption: 'Optional — but this is what makes it YOURS' },
+  };
+  const header = headers[stepId];
+
+  // Shared chip styles — same visual language as the genre grid.
+  const chipBase =
+    'w-full p-4 sm:p-5 rounded-3xl border transition-all text-sm sm:text-base leading-tight font-black uppercase tracking-[0.08em] min-h-[56px] flex items-center justify-center text-center break-words';
+  const chipIdle = 'bg-slate-700 border-slate-600 text-slate-200 hover:bg-slate-600 hover:border-orange-400 hover:text-white';
+  const chipPicked = 'bg-slate-600 border-orange-400 text-white';
+  const decideIdle = 'bg-slate-800 border-slate-700 text-slate-400 hover:border-cyan-400 hover:text-cyan-200';
+  const decidePicked = 'bg-cyan-500/15 border-cyan-400 text-cyan-200';
+
+  /** Chip list for the simple option steps: "Let Song Ghost decide" first, picks auto-advance. */
+  const optionChips = (options: string[], value: string, pick: (v: string) => void) => (
+    <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+      <button
+        type="button"
+        onClick={() => { pick(''); goNext(); }}
+        className={`${chipBase} ${value === '' ? decidePicked : decideIdle}`}
+      >
+        {LET_GHOST_DECIDE}
+      </button>
+      {options.map((opt) => (
+        <button
+          key={opt}
+          type="button"
+          onClick={() => { pick(opt); goNext(); }}
+          className={`${chipBase} ${value === opt ? chipPicked : chipIdle}`}
+        >
+          {opt}
+        </button>
+      ))}
+    </div>
+  );
 
   return (
     <div className="w-full max-w-4xl mx-auto px-4 pt-10 md:pt-16 pb-24 animate-fade-in">
-      <div className="text-center mb-10">
-        <h2 className="heading-display text-3xl md:text-5xl font-black text-white tracking-tighter mb-3">Quick Song</h2>
-        <p className="text-slate-500 font-black uppercase tracking-[0.14em] md:tracking-[0.28em] text-[10px] md:text-xs">
-          {genre ? 'Tell us the story — the genre guide handles the craft' : 'Pick a genre — we handle the rest'}
-        </p>
+      {/* Back — progress dots — Skip. Back and Skip always reachable; chips auto-advance. */}
+      <div className="flex items-center justify-between mb-8">
+        {stepIndex > 0 ? (
+          <button
+            type="button"
+            onClick={goBack}
+            className="text-xs font-black uppercase tracking-widest text-slate-400 hover:text-white transition-colors"
+          >
+            ← Back
+          </button>
+        ) : (
+          <span className="w-14" aria-hidden="true" />
+        )}
+        <div className="flex items-center gap-2" aria-label={`Step ${stepIndex + 1} of ${steps.length}`}>
+          {steps.map((s, i) => (
+            <span
+              key={s}
+              className={`h-2 rounded-full transition-all ${
+                i === stepIndex ? 'w-6 bg-cyan-400' : i < stepIndex ? 'w-2 bg-amber-400/80' : 'w-2 bg-slate-700'
+              }`}
+            />
+          ))}
+        </div>
+        {!isLastStep ? (
+          <button
+            type="button"
+            onClick={goNext}
+            title={LET_GHOST_DECIDE}
+            className="text-xs font-black uppercase tracking-widest text-slate-400 hover:text-white transition-colors"
+          >
+            Skip →
+          </button>
+        ) : (
+          <span className="w-14" aria-hidden="true" />
+        )}
       </div>
 
-      {!genre ? (
+      <div className="text-center mb-10">
+        <h2 className="heading-display text-3xl md:text-5xl font-black text-white tracking-tighter mb-3">{header.title}</h2>
+        <p className="text-slate-500 font-black uppercase tracking-[0.14em] md:tracking-[0.28em] text-[10px] md:text-xs">{header.caption}</p>
+      </div>
+
+      {stepId === 'genre' && (
         <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3 sm:gap-4">
-          {genres.map((g) => (
+          {ENGLISH_GENRES.map((g) => (
             <button
               key={g}
-              onClick={() => setGenre(g)}
-              className="w-full p-4 sm:p-5 rounded-3xl border bg-slate-700 border-slate-600 text-slate-200 hover:bg-slate-600 hover:border-orange-400 hover:text-white transition-all text-sm sm:text-base leading-tight font-black uppercase tracking-[0.08em] min-h-[56px] flex items-center justify-center text-center break-words"
+              onClick={() => pickGenre(g)}
+              className={`${chipBase} ${genre === g ? chipPicked : chipIdle}`}
             >
               {g}
             </button>
           ))}
         </div>
-      ) : (
-        <div className="flex flex-col gap-6">
-          <div className="flex justify-center">
-            <button
-              type="button"
-              onClick={() => setGenre('')}
-              title="Tap to change genre"
-              className="px-4 py-2 bg-orange-900/20 border border-orange-500/30 rounded-full text-xs font-black uppercase tracking-widest text-orange-400 hover:border-orange-400 hover:text-orange-300 transition-colors"
-            >
-              GENRE: {genre} ✕
-            </button>
-          </div>
+      )}
 
+      {stepId === 'room' && (
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+          <button
+            type="button"
+            onClick={() => { setSubGenre(''); goNext(); }}
+            className={`w-full p-4 sm:p-5 rounded-3xl border text-left transition-all ${subGenre === '' ? decidePicked : decideIdle}`}
+          >
+            <span className="block font-black uppercase tracking-[0.08em] text-sm sm:text-base">{LET_GHOST_DECIDE}</span>
+            <span className="mt-1 block text-xs text-slate-400 leading-relaxed">We read your story and pick the room that fits it best.</span>
+          </button>
+          {genreRooms.map((room) => (
+            <button
+              key={room.id || room.name}
+              type="button"
+              onClick={() => { setSubGenre(room.name); goNext(); }}
+              className={`w-full p-4 sm:p-5 rounded-3xl border text-left transition-all ${
+                subGenre === room.name ? chipPicked : chipIdle
+              }`}
+            >
+              <span className="block font-black text-sm sm:text-base text-white">{room.name}</span>
+              <span className="mt-1 block text-xs text-slate-400 leading-relaxed">{room.oneLine}</span>
+            </button>
+          ))}
+        </div>
+      )}
+
+      {stepId === 'theme' && optionChips(THEME_OPTIONS, theme, setTheme)}
+      {stepId === 'purpose' && optionChips(PURPOSE_OPTIONS, purpose, setPurpose)}
+      {stepId === 'audience' && optionChips(AUDIENCE_OPTIONS, audience, setAudience)}
+
+      {stepId === 'voice' && (
+        <div className="flex justify-center gap-2">
+          {VOICE_OPTIONS.map((v) => (
+            <button
+              key={v}
+              type="button"
+              onClick={() => { setVocals(v); goNext(); }}
+              className={`px-4 py-2.5 rounded-xl text-[11px] font-black uppercase tracking-widest transition-all ${
+                vocals === v ? 'bg-cyan-500 text-white shadow-lg' : 'bg-slate-800 text-slate-400 hover:bg-slate-700 hover:text-slate-200'
+              }`}
+            >
+              {v}
+            </button>
+          ))}
+        </div>
+      )}
+
+      {stepId === 'story' && (
+        <div className="flex flex-col gap-6">
           <textarea
             autoFocus
-            value={vibe}
-            onChange={(e) => setVibe(e.target.value)}
+            value={story}
+            onChange={(e) => setStory(e.target.value)}
             rows={6}
-            placeholder="What's this song about? The story, the feeling, a moment, a person — anything. The more specific, the better the song…"
+            placeholder="Names, places, moments — the night you met, the song in the car, the thing they said. The more real, the better the song…"
             className="w-full bg-slate-800/90 border-2 border-cyan-400/60 rounded-[1.5rem] md:rounded-[2rem] p-6 md:p-8 text-base md:text-lg leading-relaxed text-white placeholder:text-slate-500 focus:border-cyan-400 outline-none resize-none shadow-[0_0_40px_rgba(34,211,238,0.15)]"
           />
 
-          <div className="flex justify-center gap-2">
-            {['Female Solo', 'Male Solo', 'Duo/Group'].map((v) => (
-              <button
-                key={v}
-                type="button"
-                onClick={() => setVocals(v)}
-                className={`px-4 py-2.5 rounded-xl text-[11px] font-black uppercase tracking-widest transition-all ${
-                  vocals === v ? 'bg-cyan-500 text-white shadow-lg' : 'bg-slate-800 text-slate-400 hover:bg-slate-700 hover:text-slate-200'
-                }`}
-              >
-                {v}
-              </button>
-            ))}
+          <div className="flex justify-center">
+            <button
+              type="button"
+              onClick={handleTitleIdeas}
+              disabled={isTitleLoading}
+              className="px-5 py-3 rounded-xl bg-slate-800 border border-slate-700 text-slate-200 text-xs font-black uppercase tracking-widest hover:border-cyan-400 hover:text-cyan-200 transition-all disabled:opacity-60 flex items-center gap-2"
+            >
+              {isTitleLoading && (
+                <span className="inline-block w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" aria-hidden="true" />
+              )}
+              {isTitleLoading ? 'Thinking…' : 'Get title ideas'}
+            </button>
           </div>
+
+          {titleIdeas !== null && (
+            <div className="flex flex-col gap-3">
+              {titleRoom && (
+                <p className="text-center text-sm text-slate-400">
+                  Your song will live in: <span className="text-cyan-300 font-bold">{titleRoom.name}</span>
+                  {titleRoom.note && <span className="block text-xs text-slate-500 mt-1">{titleRoom.note}</span>}
+                </p>
+              )}
+              <div className="flex flex-wrap justify-center gap-2">
+                <button
+                  type="button"
+                  onClick={() => setTitle('')}
+                  className={`px-4 py-2.5 rounded-xl text-sm font-bold transition-all border ${
+                    title === '' ? decidePicked : decideIdle
+                  }`}
+                >
+                  Let Song Ghost pick
+                </button>
+                {titleIdeas.map((t) => (
+                  <button
+                    key={t}
+                    type="button"
+                    onClick={() => setTitle(t)}
+                    className={`px-4 py-2.5 rounded-xl text-sm font-bold transition-all border ${
+                      title === t ? chipPicked : chipIdle
+                    }`}
+                  >
+                    {t}
+                  </button>
+                ))}
+              </div>
+            </div>
+          )}
 
           <button
             onClick={() => onGenerate(buildInputs())}
-            disabled={isGenerating || !vibe.trim()}
+            disabled={isGenerating}
             className="w-full bg-gradient-to-r from-orange-500 via-amber-500 to-cyan-500 py-6 md:py-7 rounded-[2rem] text-base md:text-xl font-black uppercase tracking-[0.16em] md:tracking-[0.4em] text-white shadow-xl transition-all hover:scale-[1.02] disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100"
           >
-            {isGenerating ? 'GENERATING…' : `MASTER THE RECORD (${COSTS.GENERATE_SONG} CREDITS)`}
+            {isGenerating ? 'GENERATING…' : `CREATE MY SONG (${COSTS.GENERATE_SONG} CREDITS)`}
           </button>
         </div>
       )}
@@ -399,7 +673,7 @@ export const App: React.FC = () => {
       if (generationInFlightRef.current) return;
       generationInFlightRef.current = true;
       // Guard: DOM event objects can arrive here via onClick={onGenerate}; only accept
-      // a real SongInputs override (Fast Track passes one explicitly).
+      // a real SongInputs override (the Song Builder passes one explicitly).
       const overrides = overrideInputs && typeof overrideInputs === 'object' && 'genre' in overrideInputs ? overrideInputs : undefined;
       if (overrides) setInputs(overrides);
       const sourceInputs = overrides || inputs;
@@ -1203,9 +1477,10 @@ export const App: React.FC = () => {
                   )}
               </div>
           ) : (
-              <FastTrack
+              <SongBuilder
                 isGenerating={isLoading}
-                onGenerate={(fastInputs) => handleGenerate(fastInputs)}
+                email={session?.user?.email || ''}
+                onGenerate={(builtInputs) => handleGenerate(builtInputs)}
               />
           )}
       </div>

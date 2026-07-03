@@ -48,6 +48,11 @@ export interface SongInputs {
   additionalInfo?: string;
   mundaneObjects?: string;
   creativeDirection?: string;
+  // Song Builder picks (composition questions — every one optional)
+  theme?: string;
+  purpose?: string;
+  audience?: string;
+  title?: string;
 }
 
 export interface UserProfile {

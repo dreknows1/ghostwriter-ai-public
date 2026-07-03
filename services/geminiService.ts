@@ -3,6 +3,7 @@ import { sanitizeEmail, sanitizeUnknown } from "../lib/sanitizeInput";
 
 type AIAction =
   | "generateSong"
+  | "suggestTitles"
   | "editSong"
   | "structureImportedSong"
   | "generateAlbumArt"
@@ -86,6 +87,23 @@ async function callAI<T>(action: AIAction, email: string, payload: Record<string
   }
 
   return response.json();
+}
+
+/**
+ * Song Builder: title ideas built FROM the user's picks and story. Returns up to 5
+ * candidates, plus (when the curriculum engine handled it) which room the song will
+ * live in and why — shown to the user, never a silent swap.
+ */
+export async function suggestTitles(
+  inputs: Partial<SongInputs>,
+  email: string
+): Promise<{ titles: string[]; room?: { name: string; note: string } }> {
+  const result = await callAI<{ titles: string[]; room?: { name: string; note: string } }>(
+    "suggestTitles",
+    email,
+    { inputs }
+  );
+  return { titles: Array.isArray(result?.titles) ? result.titles : [], room: result?.room };
 }
 
 export function promptToSetGeminiApiKey(): void {
