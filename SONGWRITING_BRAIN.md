@@ -143,6 +143,71 @@ The full room-by-room pages for all five priority genres live in **SONGWRITING_S
 4. Decide each section's job for THIS song (what verse 1 establishes, what the bridge reveals).
 5. Write.
 6. Revise with intent (read aloud; check melody-room, cadence, emotion arc; cut what doesn't serve).
+7. Perform it: place the meta tags and adlibs (Layer 6) — the song is not done until it is a performance.
+
+---
+
+## Layer 6 — The performance layer: meta tags and adlibs
+
+> Founder-driven: tags and adlibs are how a written song becomes a performance and how
+> the renderer gives it identity. Not decoration — composition. This layer is founder-editable.
+
+A well-written song is only words on a page until it is performed. Meta tags in square brackets [] and adlibs in parentheses () are how a written song becomes a performance — and how Suno gives that performance its identity. They are not decoration you sprinkle on at the end; they are part of composing, the same as choosing a hook or shaping the emotional arc. A meta tag is a stage direction: it tells the singer and the machine what this moment IS — a chorus, a whisper, a build, a piano solo. An adlib is a human sound layered on top of the words — a breathed response, a hummed note, an echoed last word, a call answered by another voice. Tags shape the structure and the dynamics; adlibs put a living body in the room.
+
+Here is why they matter this much. Everything the earlier layers built — the core emotion, the room left for the melody, the dynamics that make a verse quiet and a chorus wide open, the imagery, the replay value — all of it only reaches the listener through performance. A song can be perfectly written and land flat because nothing told it how to rise, breathe, or answer itself. Tags and adlibs are the layer that turns craft into feeling you can hear.
+
+The golden rule: placement is never random. Every tag and every adlib must serve the job of the section it sits in and the emotional arc the song is riding. A [Whispered] tag belongs where the song has pulled inward, not thrown in for flavor. An adlib belongs where a real singer would actually answer the line. If a tag or adlib does not serve the section's job or the arc, it is noise — cut it. Serving the song is the only reason any of them exists.
+
+**Where they go (placement follows the arc, never random):**
+
+Placement follows the same dynamics the earlier layers set: conversational verse, building pre, wide-open chorus, intimate bridge, heaviest release at the outro or vamp. Tag and adlib density rises and falls WITH that intensity curve — sparse where the song is quiet, full where it opens up.
+
+Where performance tags earn their place:
+- Right before a chorus, where a pre-chorus is climbing — a build tag makes the lift feel inevitable.
+- At a moment the song needs air — an instrumental break or solo lets the listener breathe before the next wave.
+- Where the vocal delivery changes — the point where the voice drops to a whisper, opens into belting, or floats into falsetto. Tag the change where it actually happens, not before.
+- At the biggest emotional peak — the final chorus or the last vamp, where the dynamics tag marks the largest moment in the song.
+
+Where adlibs cluster:
+- On hook and chorus repeats, where a second voice answers or doubles the main line.
+- At the ends of lines in a call-and-response section, where the answer lands.
+- Hardest and most freely at the final vamp or outro — the heaviest adlib zone, the release after everything has been said.
+
+Where to stay bare:
+- An intimate verse or a confessional bridge. When the song has pulled inward, silence around the voice IS the performance. Crowding it with adlibs kills the intimacy. Let the words stand alone and let the quiet do the work.
+
+Tie density to dynamics as a discipline: verse light, chorus fuller, bridge stripped back to the voice, outro/vamp the fullest. The performance should map onto the emotional arc so a listener feels the rise and fall without being told it.
+
+**The valid tag families:**
+
+Use only real, recognized tags. They come in five families, and each family does one job:
+- Structure — names the section (intro, verse, pre-chorus, chorus, post-chorus, hook, refrain, bridge, break, breakdown, interlude, outro, instrumental, ad-lib section). This is the song's skeleton.
+- Vocal identity — who is singing (male vocal, female vocal, duet, choir).
+- Vocal delivery — how the voice is used (whispered, spoken, belting, falsetto, crooning, harmonies, vocal run, call and response, choir enters). Reach for these where the delivery genuinely shifts.
+- Dynamics and energy — the intensity of a moment (build, build-up, drop, crescendo, big finish, soft, quiet). These carry the arc.
+- Instrumental — a non-vocal moment (a named solo, an instrumental break, bridge, intro, or outro).
+
+Use the tag's exact recognized wording, not a paraphrase. The cue is [Choir enters], not "choir entering" — if you rewrite a real tag into your own words, the machine no longer recognizes it. Say the token the way Suno knows it.
+
+The hard warning, no exceptions: NEVER invent made-up key:value tags. Anything shaped like [Energy: High], [Vocals: Confident], [Harmonies swell], or [Drums hit harder] is NOT real — the machine ignores it and it reads as clutter that makes the song worse, not better. If a cue is not a recognized tag, it does not go in brackets. Stick to the real families above.
+
+The own-line rule: every bracket tag sits on its OWN line, between lyric lines — never jammed inside a lyric line. A tag placed mid-line is ignored. One tag, one line, in the gap where it applies.
+
+**Adlibs:**
+
+Adlibs go in parentheses () and are the single biggest lever that moves a song from "written" to "performed." Unlike bracket tags, an adlib MAY sit inline — at the end of a lyric line or on its own short line right under it — exactly where a real singer would answer, echo, or breathe. That placement is the point: it puts a second living voice in the natural gap. This inline freedom is for parentheses only — a bracket tag NEVER goes inline; it always sits on its own line. Keep the two straight: parentheses can ride with the words, brackets always stand alone.
+
+What an adlib is: a sound or a short human response. The form of it — a hummed vowel, a breathed affirmation under the line, the last word of a line echoed back, one voice calling and another answering. Notice these are described as SOUNDS, not spelled-out words to sing. Keep every adlib at the level of the sound, never a scripted syllable — these are examples of the FORM, never content to copy.
+
+The dialect rule applies to adlibs with full force: an adlib is NEVER slang, patois, or dialect the user did not write in their own story. Generated dialect in an adlib reads as parody, not authenticity — the same failure the genre layer warns against. Keep adlibs to genuine sounds and honest short responses in the song's own plain voice, and let the earlier craft carry the identity.
+
+Placement discipline is the same as everywhere: an adlib goes where a singer would actually respond — the answer to a call, the echo on a hook, the sound at the end of a phrase. Not scattered to fill space. One well-placed adlib that answers a line beats ten thrown at the wall.
+
+**The mandate:**
+
+Every song this app makes uses meta tags and adlibs — the floor is never zero. A song delivered with none has failed as a performance, no matter how well the words are written. HOW MANY and, just as important, WHICH KIND is a room decision. The chosen sub-genre sets not only how full the vocal space gets but the TYPE of adlib event the song leans on — and these are different dials. One room answers every line-end with a run; another uses short adlibs as punctuation instead of runs; another saves its heaviest runs for the final vamp only; another is built on written call-and-response between two voices. Density is one dial (how much); kind is the other (call-and-response vs echoing the lead vs a single delivery tag vs a run saved for the vamp). Set both from the room, or every room collapses into the same "echo the last word on the hook" default. So an R&B room leans into runs and a heavy adlib room while a sparse ballad room uses far fewer and a different kind — but neither drops to none. The amount flexes, the kind flexes, the presence never does.
+
+- **Valid Suno tags (the only ones the machine reads — founder-editable):** [Intro], [Verse], [Pre-Chorus], [Chorus], [Post-Chorus], [Hook], [Refrain], [Bridge], [Break], [Breakdown], [Interlude], [Outro], [Instrumental], [Ad-Lib Section], [Male Vocal], [Female Vocal], [Duet], [Choir], [Whispered], [Spoken], [Belting], [Falsetto], [Crooning], [Harmonies], [Vocal Run], [Call and Response], [Choir enters], [Build], [Build Up], [Drop], [Crescendo], [Big Finish], [Soft], [Quiet], [Guitar Solo], [Piano Solo], [Sax Solo], [Bass Solo], [Instrumental Break], [Instrumental Bridge], [Instrumental Intro], [Instrumental Outro]
 
 ---
 

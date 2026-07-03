@@ -23,12 +23,19 @@ const room = (id: string, name: string): RoomCard => ({
   rendering: "Test keys over test drums with a close test vocal.",
   storyFit: "Testing stories.",
   parodyTraps: "Sounding like a test.",
+  performance: {
+    prose: "Test room performs with tasteful adlibs and a soft delivery.",
+    adlibDensity: "sparse",
+    minAdlibs: 2,
+    deliveryTags: ["[Soft]", "[Harmonies]"],
+  },
 });
 
 const CURRICULUM_FIXTURE: CompiledCurriculum = {
   core: "Core craft text for testing. A song is a felt emotion delivered through structure.",
   bannedPhrases: ["hearts entwined", "beat inside my heart", "honest truth"],
   abstractionWords: ["sun", "sunlight", "colors", "distance", "shade", "light", "goodbye", "space", "memory", "love", "heart", "dream", "drift", "fade"],
+  validTags: ["[Intro]", "[Verse]", "[Pre-Chorus]", "[Chorus]", "[Bridge]", "[Outro]", "[Soft]", "[Harmonies]", "[Falsetto]", "[Vocal Run]", "[Crooning]", "[Sax Solo]"],
   genres: {
     rnb: {
       id: "rnb",
@@ -60,18 +67,20 @@ function goodDraft(hook: string): string {
 ### SUNO Prompt
 ${suno}
 ### Lyrics
+[Soft]
 [Verse]
 Nine years since the pancake diner on Fulton Street
-You laminated the receipt where we first sat to eat
+You laminated the receipt where we first sat to eat (ooh)
 [Chorus]
 ${hook} is what you gave
-${hook} is what we save
+${hook} is what we save (stay)
 [Verse]
 That laminated receipt still hides inside your wallet warm
 Every year another dinner, every year another storm
+[Harmonies]
 [Chorus]
 ${hook} is what you gave
-${hook} is what we save`;
+${hook} is what we save (stay with me)`;
 }
 
 function scriptedGenerate(opts?: { badDrafts?: boolean; abstractImageFirst?: boolean }): {

@@ -16,7 +16,18 @@ const CARD: RoomCard = {
   rendering: "warm keys, soft drums, sparse guitar",
   storyFit: "quiet object-centered stories",
   parodyTraps: "none — synthetic",
+  performance: {
+    prose: "sparse tasteful adlibs, soft delivery",
+    adlibDensity: "sparse",
+    minAdlibs: 2,
+    deliveryTags: ["[Soft]", "[Harmonies]"],
+  },
 };
+
+const VALID_TAGS = [
+  "[Intro]", "[Verse]", "[Pre-Chorus]", "[Chorus]", "[Bridge]", "[Outro]",
+  "[Soft]", "[Harmonies]", "[Falsetto]", "[Vocal Run]", "[Sax Solo]", "[Belting]",
+];
 
 const SPEC: MusicalSpec = { tempo: "60-70 BPM", groove: "slow swing", wordDensity: "moderate" };
 
@@ -155,6 +166,65 @@ describe("artist-names-in-suno", () => {
     const check = getCheck(runChecks(buildDraft({ suno }), OPTS), "artist-names-in-suno");
     expect(check.ok).toBe(false);
     expect(check.severity).toBe("fail");
+  });
+});
+
+describe("performance layer (tags & adlibs, BRAIN Layer 6)", () => {
+  // A synthetic song WITH performance tags on their own lines and adlibs in parens.
+  const PERFORMED = [
+    "[Soft]",
+    "[Verse]",
+    "He kept it on the workbench every year (mmm)",
+    "Beside the frosted window in the cold",
+    "Copper case gone green along the seam",
+    "He said the needle knows a patient road (patient road)",
+    "[Chorus]",
+    "This broken compass keeps on turning home (turning home)",
+    "Copper needle spinning wide and slow",
+    "I follow where the winter light has gone",
+    "This broken compass keeps on turning home",
+    "[Harmonies]",
+    "[Chorus]",
+    "This broken compass keeps on turning home (oh)",
+    "Copper needle spinning wide and slow",
+    "I follow where the winter light has gone",
+    "This broken compass keeps on turning home (turning home)",
+  ].join("\n");
+  const PERF_OPTS = { ...OPTS, minAdlibs: 2, validTags: VALID_TAGS };
+
+  it("does not run performance checks without performance context", () => {
+    const ids = runChecks(buildDraft(), OPTS).checks.map((c) => c.id);
+    expect(ids).not.toContain("adlibs-present");
+    expect(ids).not.toContain("performance-tags");
+    expect(ids).not.toContain("tags-own-line");
+  });
+
+  it("a fully performed draft passes all performance checks", () => {
+    const report = runChecks(buildDraft({ lyrics: PERFORMED }), PERF_OPTS);
+    for (const id of ["adlibs-present", "performance-tags", "invalid-tags", "tags-own-line"]) {
+      expect(getCheck(report, id).ok).toBe(true);
+    }
+  });
+
+  it("fails a bare draft with no adlibs and no delivery tags", () => {
+    const bare = ["[Verse]", "just plain lines here", "no adlibs no delivery tags", "[Chorus]", "still nothing extra", "still nothing extra"].join("\n");
+    const report = runChecks(buildDraft({ lyrics: bare }), PERF_OPTS);
+    expect(getCheck(report, "adlibs-present").ok).toBe(false);
+    expect(getCheck(report, "performance-tags").ok).toBe(false);
+  });
+
+  it("fails invented key:value tags and tags outside the valid list", () => {
+    const bad = ["[Energy: High]", "[Verse]", "a line here (yeah)", "another line (oh)", "[Harmonies swell]", "[Chorus]", "hook line one (go)", "hook line one (go)"].join("\n");
+    const report = runChecks(buildDraft({ lyrics: bad }), PERF_OPTS);
+    const check = getCheck(report, "invalid-tags");
+    expect(check.ok).toBe(false);
+    expect(check.detail).toMatch(/Energy|Harmonies swell/);
+  });
+
+  it("fails a bracket tag placed inline inside a lyric line", () => {
+    const inline = ["[Verse]", "I miss you [Belting] every night (mmm)", "the copper case still turns (oh)", "[Chorus]", "turning home again (home)", "turning home again (home)"].join("\n");
+    const report = runChecks(buildDraft({ lyrics: inline }), PERF_OPTS);
+    expect(getCheck(report, "tags-own-line").ok).toBe(false);
   });
 });
 

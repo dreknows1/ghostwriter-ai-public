@@ -18,6 +18,16 @@ export type RoomCard = {
   rendering: string;
   storyFit: string;
   parodyTraps: string;
+  /** Layer 6 performance policy for this room (tags & adlibs) */
+  performance: {
+    /** the writer-facing "How it performs" prose */
+    prose: string;
+    adlibDensity: "sparse" | "moderate" | "heavy";
+    /** the code floor: a real song in this room needs at least this many adlibs */
+    minAdlibs: number;
+    /** the real Suno delivery/dynamics tags that fit this room, e.g. ["[Soft]","[Sax Solo]"] */
+    deliveryTags: string[];
+  };
 };
 
 /** A landing cue from the Composer Profile, marked strong or weak. */
@@ -49,6 +59,8 @@ export type CompiledCurriculum = {
   bannedPhrases: string[];
   /** abstraction words (BRAIN Layer 2) — a central image made only of these is rejected */
   abstractionWords: string[];
+  /** the only Suno tags the renderer reads (BRAIN Layer 6) — anything else is invalid */
+  validTags: string[];
   genres: Record<string, GenrePack>;
   /** sha256 of all source docs — reported on /api/health as curriculumHash */
   hash: string;
