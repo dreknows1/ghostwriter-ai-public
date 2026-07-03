@@ -2,6 +2,7 @@ import { describe, it, expect } from "vitest";
 import type { CompiledCurriculum, RoomCard } from "./types";
 import {
   EngineFailure,
+  isConcreteImage,
   parseFirstJson,
   resolveGenre,
   runEngine,
@@ -27,6 +28,7 @@ const room = (id: string, name: string): RoomCard => ({
 const CURRICULUM_FIXTURE: CompiledCurriculum = {
   core: "Core craft text for testing. A song is a felt emotion delivered through structure.",
   bannedPhrases: ["hearts entwined", "beat inside my heart", "honest truth"],
+  abstractionWords: ["sun", "sunlight", "colors", "distance", "shade", "light", "goodbye", "space", "memory", "love", "heart", "dream", "drift", "fade"],
   genres: {
     rnb: {
       id: "rnb",
@@ -72,17 +74,25 @@ ${hook} is what you gave
 ${hook} is what we save`;
 }
 
-function scriptedGenerate(opts?: { badDrafts?: boolean }): { gen: EngineGenerate; writes: string[] } {
+function scriptedGenerate(opts?: { badDrafts?: boolean; abstractImageFirst?: boolean }): {
+  gen: EngineGenerate;
+  writes: string[];
+} {
   const writes: string[] = [];
+  let briefCalls = 0;
   const gen: EngineGenerate = async (prompt, kind) => {
     if (kind === "plan") {
       if (prompt.includes("planning a song")) {
+        briefCalls++;
+        // Simulate a model that first returns an abstract image, then a concrete one
+        // after the re-plan feedback lands in the prompt.
+        const abstractTry = opts?.abstractImageFirst && briefCalls === 1 && !prompt.includes("too abstract");
         return JSON.stringify({
           coreEmotion: "quiet pride in being kept",
           purpose: "celebrate nine years",
           pov: "first person to my wife, tonight",
           turn: "from a saved receipt to a saved life",
-          centralImage: "the laminated receipt",
+          centralImage: abstractTry ? "the fading light of love" : "the laminated receipt",
           spec: { tempo: "85-95 BPM", groove: "straight", barsPerSection: "verse 8, chorus 8", wordDensity: "moderate" },
         });
       }
@@ -132,6 +142,18 @@ describe("pipeline pure helpers", () => {
   it("scoreHook prefers short, story-grounded, singable hooks", () => {
     const tokens = storyTokens(STORY);
     expect(scoreHook("Laminated Love", tokens)).toBeGreaterThan(scoreHook('A: "generic song"', tokens));
+  });
+
+  it("isConcreteImage accepts real things and rejects pure abstraction", () => {
+    const abstract = ["sun", "sunlight", "colors", "distance", "shade", "light", "goodbye", "space", "love", "fade", "drift"];
+    expect(isConcreteImage("a chipped coffee mug", abstract)).toBe(true);
+    expect(isConcreteImage("the old army jacket", abstract)).toBe(true);
+    expect(isConcreteImage("orange enamel pot", abstract)).toBe(true);
+    // pure abstraction / greeting-card images
+    expect(isConcreteImage("the fading sunlight", abstract)).toBe(false);
+    expect(isConcreteImage("a long goodbye", abstract)).toBe(false);
+    expect(isConcreteImage("colors", abstract)).toBe(false);
+    expect(isConcreteImage("the space between us", abstract)).toBe(false);
   });
 
   it("resolveGenre matches ids, names, and aliases; rejects unknown", () => {
@@ -199,6 +221,13 @@ describe("runEngine end-to-end (scripted model, real landing + checks)", () => {
       code: "story_required",
     });
     expect(writes.length).toBe(0);
+  });
+
+  it("re-plans the brief when the central image is pure abstraction (concrete-image law)", async () => {
+    const { gen } = scriptedGenerate({ abstractImageFirst: true });
+    const result = await runEngine(CURRICULUM_FIXTURE, { genre: "R&B", story: STORY }, gen);
+    // the abstract "fading light of love" was rejected; the re-plan produced a real thing
+    expect(result.meta.brief.centralImage).toBe("the laminated receipt");
   });
 
   it("a user-chosen title becomes THE hook — no candidates generated", async () => {

@@ -46,6 +46,16 @@ Creative writing craft
 - **Originality** \u2014 the non-negotiable: no house formulas of ANY kind (no greeting-card affirmations,
   no "inventory of objects the ex left behind" template, no borrowed hooks from famous songs).
   If two users with different stories could receive the same song, the writing has failed.
+- **The concrete-image law (checked by code).** Every song is built around ONE real thing you
+  could photograph \u2014 an object, a place, a physical action. Feelings attach to that thing; they
+  never float free. A song made only of weather and abstraction is the greeting-card failure.
+  A central image built only from the words below is rejected and re-planned (founder-editable):
+  - **abstraction words (never a central image on their own):** love, heart, soul, spirit, light,
+    dark, darkness, shadow, shade, color, colors, colour, sky, sun, sunlight, moon, star, stars,
+    distance, space, time, memory, memories, dream, dreams, goodbye, forever, fire, flame, spark,
+    gravity, ocean, sea, wave, waves, storm, rain, pieces, piece, fade, drift, glow, shine, light,
+    silence, echo, horizon, wings, chains, walls, road, journey, feeling, feelings, emotion, magic,
+    destiny, fate, eternity, universe, stardust, moment, moments, whisper, breath
 - Emotional truth: write the specific feeling, not the category ("the ache of hearing they moved on
   from a mutual friend" \u2014 not "sadness").
 
@@ -97,6 +107,71 @@ Musical craft (the founder's list; each becomes concrete rules)
     "love like ours",
     "heart on my sleeve",
     "lose me too"
+  ],
+  "abstractionWords": [
+    "love",
+    "heart",
+    "soul",
+    "spirit",
+    "light",
+    "dark",
+    "darkness",
+    "shadow",
+    "shade",
+    "color",
+    "colors",
+    "colour",
+    "sky",
+    "sun",
+    "sunlight",
+    "moon",
+    "star",
+    "stars",
+    "distance",
+    "space",
+    "time",
+    "memory",
+    "memories",
+    "dream",
+    "dreams",
+    "goodbye",
+    "forever",
+    "fire",
+    "flame",
+    "spark",
+    "gravity",
+    "ocean",
+    "sea",
+    "wave",
+    "waves",
+    "storm",
+    "rain",
+    "pieces",
+    "piece",
+    "fade",
+    "drift",
+    "glow",
+    "shine",
+    "silence",
+    "echo",
+    "horizon",
+    "wings",
+    "chains",
+    "walls",
+    "road",
+    "journey",
+    "feeling",
+    "feelings",
+    "emotion",
+    "magic",
+    "destiny",
+    "fate",
+    "eternity",
+    "universe",
+    "stardust",
+    "moment",
+    "moments",
+    "whisper"
   ],
   "genres": {
     "rnb": {
@@ -545,10 +620,10 @@ Musical craft (the founder's list; each becomes concrete rules)
       ]
     }
   },
-  "hash": "36d14b3c8fc8",
+  "hash": "3495de0eacb9",
   "approxTokens": {
-    "core": 1393,
-    "largestSlice": 2925
+    "core": 1632,
+    "largestSlice": 3164
   }
 };
 
@@ -1446,6 +1521,14 @@ function scoreHook(hook, tokens) {
   if (/["“”:;]/.test(hook)) score -= 1;
   return score;
 }
+var IMAGE_MODIFIERS = new Set(
+  "the a an my your his her our their this that of in on at with and or to for from by between beneath beyond around through without within into onto over under us we you me it old broken little big small warm cold soft hard bright dark faded fading last first final only one two every long short sweet gentle quiet loud deep high low new young lost sweetest".split(" ")
+);
+function isConcreteImage(image, abstractionWords) {
+  const abstract = new Set(abstractionWords.map((w) => w.toLowerCase()));
+  const words = String(image).toLowerCase().split(/[^a-z]+/).filter(Boolean);
+  return words.some((w) => !abstract.has(w) && !IMAGE_MODIFIERS.has(w) && w.length > 2);
+}
 function picksBlock(inputs) {
   const picks = [];
   if (inputs.theme) picks.push(`Theme: ${inputs.theme}`);
@@ -1457,7 +1540,7 @@ THE USER'S CHOICES (honor these exactly \u2014 they are decisions, not suggestio
 ${picks.join("\n")}
 `;
 }
-function briefPrompt(story, card, inputs) {
+function briefPrompt(story, card, inputs, imageFeedback = "") {
   const storyBlock = story ? `THE STORY (the user's own words):
 ${story}` : `No story details were given \u2014 build the brief from the choices alone. Keep it universal but concrete, and NEVER invent fake personal details (no invented names, streets, dates, or events pretending to be the user's).`;
   return `You are planning a song. Do not write any lyrics. Read the story and return ONLY a JSON object.
@@ -1465,7 +1548,9 @@ ${story}` : `No story details were given \u2014 build the brief from the choices
 THE ROOM this song lives in: ${card.name} \u2014 ${card.oneLine}
 Its tempo & groove: ${card.tempoGroove}
 ${picksBlock(inputs)}
-${storyBlock}
+${storyBlock}${imageFeedback ? `
+
+IMPORTANT \u2014 fix your central image: ${imageFeedback}` : ""}
 
 Return JSON with exactly these string fields:
 {
@@ -1473,7 +1558,7 @@ Return JSON with exactly these string fields:
   "purpose": "what this song is FOR (dance, testify, feel seen, flirt, grieve...)",
   "pov": "who is speaking, to whom, and why now",
   "turn": "what changes inside this song \u2014 where it starts, where it turns, where it lands",
-  "centralImage": "ONE ordinary physical image the song returns to \u2014 a thing you can touch, see, or smell, named in 2-5 plain words. From the story when there is one; universal for the theme when there isn't (an object anyone could own \u2014 never a fake personal detail). Not a feeling, not a metaphor label \u2014 a thing.",
+  "centralImage": "ONE real object or place you could photograph \u2014 a thing with edges, named in 2-5 plain words. GOOD: a chipped coffee mug, the back porch steps, his old army jacket, a bus transfer ticket, the kitchen radio. BAD (rejected): sunlight, colors, the distance, a long goodbye, our love, the space between us \u2014 those are moods, not things. From the story when there is one; universal-but-real for the theme when there isn't (an object anyone could own \u2014 never a fake personal detail).",
   "spec": {
     "tempo": "a BPM range for THIS song, inside the room's range",
     "groove": "straight / swung / half-time \u2014 the feel for THIS song",
@@ -1630,7 +1715,16 @@ async function planSong(curriculum, inputs, generate, stage) {
   if (!card) throw new EngineNotAvailable(`room "${landing.roomId}" missing from pack`);
   const landingNote = describeLanding(landing, pack);
   stage(`Room: ${card.name} \u2014 ${landingNote}`);
-  const brief = validateBrief(await planJson(generate, briefPrompt(story, card, inputs)), card, landing);
+  let brief;
+  let imageFeedback = "";
+  for (let attempt = 0; attempt < 3; attempt++) {
+    brief = validateBrief(await planJson(generate, briefPrompt(story, card, inputs, imageFeedback)), card, landing);
+    if (isConcreteImage(brief.centralImage, curriculum.abstractionWords)) break;
+    imageFeedback = `Your last central image "${brief.centralImage}" was too abstract \u2014 it named a mood, not a thing. Give ONE real object or place you could photograph (a jacket, a kitchen table, a bus stop, a scar), never a weather/light/feeling word.`;
+    if (attempt === 2) {
+      throw new EngineFailure(["could not anchor the song to a concrete image"]);
+    }
+  }
   const userTitle = String(inputs.title || "").trim();
   if (userTitle) {
     return { pack, card, landing, landingNote, brief, story, rankedHooks: [] };

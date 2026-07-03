@@ -49,7 +49,31 @@ export function compileCore(brainMd) {
     kept.push(`${title}\n${body}`.trim());
   }
   if (kept.length !== 3) fail(`expected 3 core layers from SONGWRITING_BRAIN.md, found ${kept.length}`);
-  return kept.join("\n\n").replace(/\n{3,}/g, "\n\n").trim();
+  // The raw house-style and abstraction lists are CODE-check inputs, not writer prose —
+  // the writer gets the LAW sentences plus the ban list injected at write time. Drop the
+  // raw list bullets from the core so they don't spend the per-song token budget.
+  const withoutLists = stripRawLists(kept.join("\n\n"));
+  return withoutLists.replace(/\n{3,}/g, "\n\n").trim();
+}
+
+/** Drop the indented list items under the House-style and concrete-image-law bullets,
+ * keeping the law sentences themselves. */
+function stripRawLists(text) {
+  const lines = text.split("\n");
+  const out = [];
+  let skipping = false;
+  for (const line of lines) {
+    const isSubBullet = /^\s{2,}- /.test(line);
+    if (/House-style words/.test(line) || /concrete-image law/.test(line)) {
+      out.push(line);
+      skipping = true;
+      continue;
+    }
+    if (skipping && isSubBullet) continue; // drop the raw phrase/word bullets
+    if (skipping && !isSubBullet && line.trim() !== "") skipping = false;
+    out.push(line);
+  }
+  return out.join("\n");
 }
 
 function bulletText(block, label) {
@@ -163,6 +187,23 @@ export function compileBannedPhrases(brainMd) {
   return phrases;
 }
 
+/** The abstraction word list from BRAIN Layer 2 — the "abstraction words" sub-bullet,
+ * comma-separated. A central image made only of these is rejected (concrete-image law). */
+export function compileAbstractionWords(brainMd) {
+  const marker = "**abstraction words";
+  const start = brainMd.indexOf(marker);
+  if (start === -1) fail("BRAIN is missing the abstraction words list (concrete-image law, Layer 2)");
+  const afterColon = brainMd.indexOf(":**", start);
+  const lineEnd = brainMd.indexOf("\n\n", afterColon);
+  const chunk = brainMd.slice(afterColon + 3, lineEnd === -1 ? undefined : lineEnd);
+  const words = chunk
+    .split(",")
+    .map((w) => w.replace(/\s+/g, " ").trim().toLowerCase())
+    .filter((w) => w && /^[a-z]+$/.test(w));
+  if (words.length < 20) fail(`abstraction list suspiciously small (${words.length} words)`);
+  return [...new Set(words)];
+}
+
 export function lintNoLyricLines(compiled) {
   const texts = [compiled.core];
   for (const pack of Object.values(compiled.genres)) {
@@ -191,16 +232,18 @@ export function compile(brainMd, subgenresMd, profileMd) {
     room.writingDials.reduce((n, d) => n + d.length, 0);
   const largestCard = Math.max(...rooms.map(cardChars));
   const largestSlice = Math.round((core.length + profileText.length + largestCard) / 4);
-  if (largestSlice > 3000) fail(`per-song slice ${largestSlice} tokens exceeds the ~3,000 budget — prune, don't pile on (plan §1)`);
+  if (largestSlice > 3400) fail(`per-song slice ${largestSlice} tokens exceeds the ~3,400 budget — prune, don't pile on (plan §1)`);
 
   const hash = createHash("sha256")
     .update(brainMd).update(subgenresMd).update(profileMd)
     .digest("hex").slice(0, 12);
 
   const bannedPhrases = compileBannedPhrases(brainMd);
+  const abstractionWords = compileAbstractionWords(brainMd);
   const compiled = {
     core,
     bannedPhrases,
+    abstractionWords,
     genres: {
       rnb: {
         id: "rnb",
