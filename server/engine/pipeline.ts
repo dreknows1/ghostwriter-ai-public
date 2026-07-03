@@ -345,6 +345,48 @@ The song, with section tags in brackets.
 This is creative fiction for a music app. If you cannot write it, return ONLY the line "GENERATION_DECLINED".`;
 }
 
+/** For auto-hooks, the title should BE the line the chorus actually loops — the writer
+ * sometimes titles the song something poetic that differs from its own chorus hook. Adopt
+ * the dominant chorus line as the Title so the sung hook and the title always agree (and
+ * the listener gets the memorable line as the title). Never touches a user-locked title. */
+export function adoptChorusHookAsTitle(draft: string): string {
+  const lyricsAt = draft.search(/^###\s*lyrics\s*$/im);
+  if (lyricsAt === -1) return draft;
+  const body = draft.slice(lyricsAt);
+  const HOOK_TAG = /^\s*\[(chorus|hook|refrain|post-?chorus|vamp)/i;
+  const ANY_TAG = /^\s*\[[^\]]+\]/;
+  const lines = body.split(/\r?\n/);
+  const counts = new Map<string, { display: string; n: number }>();
+  let inHook = false;
+  for (const raw of lines) {
+    if (ANY_TAG.test(raw)) { inHook = HOOK_TAG.test(raw); continue; }
+    if (!inHook) continue;
+    const display = raw.replace(/\([^)]*\)/g, "").trim(); // drop adlibs
+    const key = display.toLowerCase().replace(/[^a-z0-9 ]/g, "").replace(/\s+/g, " ").trim();
+    const words = key.split(" ").filter(Boolean);
+    if (words.length < 2 || words.length > 9) continue;
+    const cur = counts.get(key) || { display, n: 0 };
+    cur.n += 1;
+    counts.set(key, cur);
+  }
+  // Prefer the most-repeated line; on ties, the shorter one (that's the hook, not a
+  // longer chorus line that happened to repeat).
+  let best: { display: string; n: number; words: number } | null = null;
+  for (const v of counts.values()) {
+    if (v.n < 2) continue;
+    const words = v.display.split(/\s+/).length;
+    if (!best || v.n > best.n || (v.n === best.n && words < best.words)) best = { ...v, words };
+  }
+  if (!best) return draft;
+  const title = best.display.replace(/[—–-]+$/, "").trim();
+  if (!title) return draft;
+  // Replace the existing Title line (or insert one if somehow missing).
+  if (/^\s*title\s*:/im.test(draft)) {
+    return draft.replace(/^\s*title\s*:.*$/im, `Title: ${title}`);
+  }
+  return `Title: ${title}\n${draft}`;
+}
+
 /** Plain writer-voice guidance from failed check ids (plan: never paste raw checker strings). */
 const GUIDANCE: Record<string, string> = {
   "story-fidelity": "use the real details from the story — name the actual places, objects, and moments the writer gave you",
@@ -468,11 +510,13 @@ export async function runEngine(
   // the song once, straight through; the checks GATE it, they never pick between
   // versions. A failed check earns one more write with plain guidance — then fail-loud.
   const writeOne = async (variant: "straight" | "hook-first", guidance?: string) => {
-    const draft = await generate(
+    const raw = await generate(
       writerPrompt({ core: curriculum.core, pack, card, brief, hook, sections, story, vocals: inputs.vocals, variant, guidance, bannedPhrases: curriculum.bannedPhrases, hookLocked }),
       "write"
     ).catch(() => "");
-    if (!draft || draft.includes("GENERATION_DECLINED")) return null;
+    if (!raw || raw.includes("GENERATION_DECLINED")) return null;
+    // Auto-hooks: make the Title the song's actual chorus hook before checking.
+    const draft = hookLocked ? raw : adoptChorusHookAsTitle(raw);
     return {
       draft,
       report: runChecks(draft, {
