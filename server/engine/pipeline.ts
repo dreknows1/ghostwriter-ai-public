@@ -143,6 +143,24 @@ export function scoreHook(hook: string, tokens: string[]): number {
   return score;
 }
 
+// Words that describe or connect an image but aren't the thing itself — allowed
+// alongside a real noun, but never enough to make an image concrete on their own.
+const IMAGE_MODIFIERS = new Set(
+  ("the a an my your his her our their this that of in on at with and or to for from by " +
+    "between beneath beyond around through without within into onto over under us we you me it " +
+    "old broken little big small warm cold soft hard bright dark faded fading last first final only " +
+    "one two every long short sweet gentle quiet loud deep high low new young lost sweetest").split(" ")
+);
+
+/** The concrete-image law (BRAIN Layer 2): a central image must name at least one real
+ * thing — a word that is neither an abstraction nor a mere modifier. "orange enamel pot"
+ * passes (pot); "fading sunlight" / "the long goodbye" / "colors" do not. */
+export function isConcreteImage(image: string, abstractionWords: string[]): boolean {
+  const abstract = new Set(abstractionWords.map((w) => w.toLowerCase()));
+  const words = String(image).toLowerCase().split(/[^a-z]+/).filter(Boolean);
+  return words.some((w) => !abstract.has(w) && !IMAGE_MODIFIERS.has(w) && w.length > 2);
+}
+
 function picksBlock(inputs: EngineInputs): string {
   const picks: string[] = [];
   if (inputs.theme) picks.push(`Theme: ${inputs.theme}`);
@@ -152,7 +170,7 @@ function picksBlock(inputs: EngineInputs): string {
   return `\nTHE USER'S CHOICES (honor these exactly — they are decisions, not suggestions):\n${picks.join("\n")}\n`;
 }
 
-function briefPrompt(story: string, card: RoomCard, inputs: EngineInputs): string {
+function briefPrompt(story: string, card: RoomCard, inputs: EngineInputs, imageFeedback = ""): string {
   const storyBlock = story
     ? `THE STORY (the user's own words):\n${story}`
     : `No story details were given — build the brief from the choices alone. Keep it universal but concrete, and NEVER invent fake personal details (no invented names, streets, dates, or events pretending to be the user's).`;
@@ -161,7 +179,7 @@ function briefPrompt(story: string, card: RoomCard, inputs: EngineInputs): strin
 THE ROOM this song lives in: ${card.name} — ${card.oneLine}
 Its tempo & groove: ${card.tempoGroove}
 ${picksBlock(inputs)}
-${storyBlock}
+${storyBlock}${imageFeedback ? `\n\nIMPORTANT — fix your central image: ${imageFeedback}` : ""}
 
 Return JSON with exactly these string fields:
 {
@@ -169,7 +187,7 @@ Return JSON with exactly these string fields:
   "purpose": "what this song is FOR (dance, testify, feel seen, flirt, grieve...)",
   "pov": "who is speaking, to whom, and why now",
   "turn": "what changes inside this song — where it starts, where it turns, where it lands",
-  "centralImage": "ONE ordinary physical image the song returns to — a thing you can touch, see, or smell, named in 2-5 plain words. From the story when there is one; universal for the theme when there isn't (an object anyone could own — never a fake personal detail). Not a feeling, not a metaphor label — a thing.",
+  "centralImage": "ONE real object or place you could photograph — a thing with edges, named in 2-5 plain words. GOOD: a chipped coffee mug, the back porch steps, his old army jacket, a bus transfer ticket, the kitchen radio. BAD (rejected): sunlight, colors, the distance, a long goodbye, our love, the space between us — those are moods, not things. From the story when there is one; universal-but-real for the theme when there isn't (an object anyone could own — never a fake personal detail).",
   "spec": {
     "tempo": "a BPM range for THIS song, inside the room's range",
     "groove": "straight / swung / half-time — the feel for THIS song",
@@ -370,7 +388,19 @@ async function planSong(
   const landingNote = describeLanding(landing, pack);
   stage(`Room: ${card.name} — ${landingNote}`);
 
-  const brief = validateBrief(await planJson(generate, briefPrompt(story, card, inputs)), card, landing);
+  // Plan the brief, then enforce the concrete-image law: if the central image is pure
+  // abstraction (sun, colors, distance...), re-plan with explicit feedback. Up to 3 tries,
+  // then fail loud — a song with no real thing at its center is the greeting-card failure.
+  let brief!: Brief;
+  let imageFeedback = "";
+  for (let attempt = 0; attempt < 3; attempt++) {
+    brief = validateBrief(await planJson(generate, briefPrompt(story, card, inputs, imageFeedback)), card, landing);
+    if (isConcreteImage(brief.centralImage, curriculum.abstractionWords)) break;
+    imageFeedback = `Your last central image "${brief.centralImage}" was too abstract — it named a mood, not a thing. Give ONE real object or place you could photograph (a jacket, a kitchen table, a bus stop, a scar), never a weather/light/feeling word.`;
+    if (attempt === 2) {
+      throw new EngineFailure(["could not anchor the song to a concrete image"]);
+    }
+  }
 
   const userTitle = String(inputs.title || "").trim();
   if (userTitle) {

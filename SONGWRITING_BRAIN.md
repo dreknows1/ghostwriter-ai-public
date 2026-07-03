@@ -45,6 +45,16 @@ and each sub-genre page says when that bend applies.)
 - **Originality** — the non-negotiable: no house formulas of ANY kind (no greeting-card affirmations,
   no "inventory of objects the ex left behind" template, no borrowed hooks from famous songs).
   If two users with different stories could receive the same song, the writing has failed.
+- **The concrete-image law (checked by code).** Every song is built around ONE real thing you
+  could photograph — an object, a place, a physical action. Feelings attach to that thing; they
+  never float free. A song made only of weather and abstraction is the greeting-card failure.
+  A central image built only from the words below is rejected and re-planned (founder-editable):
+  - **abstraction words (never a central image on their own):** love, heart, soul, spirit, light,
+    dark, darkness, shadow, shade, color, colors, colour, sky, sun, sunlight, moon, star, stars,
+    distance, space, time, memory, memories, dream, dreams, goodbye, forever, fire, flame, spark,
+    gravity, ocean, sea, wave, waves, storm, rain, pieces, piece, fade, drift, glow, shine, light,
+    silence, echo, horizon, wings, chains, walls, road, journey, feeling, feelings, emotion, magic,
+    destiny, fate, eternity, universe, stardust, moment, moments, whisper, breath
 - Emotional truth: write the specific feeling, not the category ("the ache of hearing they moved on
   from a mutual friend" — not "sadness").
 

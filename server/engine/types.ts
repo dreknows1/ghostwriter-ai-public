@@ -47,6 +47,8 @@ export type CompiledCurriculum = {
   core: string;
   /** the founder's house-style ban list (BRAIN Layer 3) — any hit fails the draft */
   bannedPhrases: string[];
+  /** abstraction words (BRAIN Layer 2) — a central image made only of these is rejected */
+  abstractionWords: string[];
   genres: Record<string, GenrePack>;
   /** sha256 of all source docs — reported on /api/health as curriculumHash */
   hash: string;
