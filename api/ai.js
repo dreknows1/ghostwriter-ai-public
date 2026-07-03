@@ -1389,7 +1389,7 @@ function runChecks(draft, opts) {
   {
     const hookText = parsed.title && contentWords(parsed.title).length > 0 ? parsed.title : opts.hook;
     const hookContent = contentWords(hookText);
-    const hookBearing = parsed.sections.filter((s) => /^(chorus|hook|refrain|post-?chorus)/.test(s.tag));
+    const hookBearing = parsed.sections.filter((s) => /^(chorus|hook|refrain|post-?chorus|vamp)/.test(s.tag));
     if (hookBearing.length === 0) {
       checks.push({ id: "hook-placement", severity: "fail", ok: false, detail: "no [Chorus]/[Hook] block to place the hook in" });
     } else if (hookContent.length === 0) {
@@ -1416,22 +1416,21 @@ function runChecks(draft, opts) {
     });
   }
   {
-    const chorusSections = parsed.sections.filter((s) => s.tag.startsWith("chorus"));
+    const stripAdlibs = (s) => s.replace(/\([^)]*\)/g, " ");
+    const chorusSections = parsed.sections.filter((s) => /^(chorus|hook|refrain|post-?chorus|vamp)/.test(s.tag));
+    const hookWords = contentWords(parsed.title || opts.hook);
+    const hasHook = (tokens) => hookWords.length > 0 && hookWords.filter((w) => tokens.has(w)).length / hookWords.length >= 0.6;
     if (chorusSections.length < 2) {
       checks.push({ id: "chorus-consistency", severity: "fail", ok: true, detail: "fewer than two chorus blocks" });
     } else {
-      const tokenSets = chorusSections.map((s) => distinctTokens(s.lines.join("\n")));
-      let worst = 1;
-      for (let i = 0; i < tokenSets.length; i++) {
-        for (let j = i + 1; j < tokenSets.length; j++) {
-          worst = Math.min(worst, overlapRatio(tokenSets[i], tokenSets[j]));
-        }
-      }
+      const tokenSets = chorusSections.map((s) => distinctTokens(stripAdlibs(s.lines.join("\n"))));
+      const ref = tokenSets[0];
+      const drifters = tokenSets.slice(1).filter((t) => overlapRatio(ref, t) < 0.6 && !hasHook(t));
       checks.push({
         id: "chorus-consistency",
         severity: "fail",
-        ok: worst >= 0.7,
-        detail: `worst chorus-pair overlap ${Math.round(worst * 100)}%`
+        ok: drifters.length === 0,
+        detail: drifters.length ? `${drifters.length} chorus/vamp block(s) neither match the first nor carry the hook` : "choruses consistent (vamps carry the hook)"
       });
     }
   }
