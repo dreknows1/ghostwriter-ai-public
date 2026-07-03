@@ -321,7 +321,8 @@ Adlib density for this room: ${card.performance.adlibDensity}. Use AT LEAST ${ca
 Delivery/dynamics tags that fit this room: ${card.performance.deliveryTags.join(" ")}.
 HOW to place them (never random — placement follows the emotional arc):
 - Meta tags go in [square brackets] on their OWN line, in the gap between lyric lines. Never inline inside a lyric line.
-- Use ONLY real Suno tags — the section tags plus this room's delivery tags above. NEVER invent key:value tags like [Energy: High] or [Vocals: Confident]; the renderer ignores them and they ruin the song.
+- Keep every bracket tag SHORT (1-3 words), no colons, no descriptions: [Belting] not [Belting with full power], [Harmonies] not [Harmonies swell]. NEVER invent key:value tags like [Energy: High] or [Vocals: Confident]; the renderer ignores them and they ruin the song. Use ONLY real Suno tags — the section tags plus this room's delivery tags above.
+- The hook line "${hook}" must lead the chorus (or [Hook]) section and appear in it word-for-word — the chorus is built around it.
 - Adlibs go in (parentheses) and MAY sit inline at a line's end or on their own short line right under it — exactly where a real singer would answer, echo, or breathe. Adlibs are SOUNDS/short responses, never slang or dialect the user didn't write.
 - Density rises and falls with the dynamics: sparse in an intimate verse/bridge, fuller on the hook, heaviest at the final vamp/outro. Match this room's character above.
 
@@ -479,23 +480,27 @@ export async function runEngine(
     };
   };
 
-  stage("Writing your song...");
-  const first = await writeOne("straight");
-  let draftsTried = first ? 1 : 0;
-
-  stage("Checking the writing...");
-  let winner = first && first.report.failCount === 0 ? first : null;
-  if (!winner) {
-    stage("Not good enough yet — one more pass...");
-    const guidance = first ? guidanceFor([first.report]) || undefined : undefined;
-    const retry = await writeOne("hook-first", guidance);
-    if (retry) draftsTried += 1;
-    if (retry && retry.report.failCount === 0) winner = retry;
-    if (!winner) {
-      const reports = [first, retry].filter(Boolean) as Array<{ report: DraftReport }>;
-      const reasons = [...new Set(reports.flatMap((a) => a.report.checks.filter((c) => !c.ok && c.severity === "fail").map((c) => c.id)))];
-      throw new EngineFailure(reasons.length ? reasons : ["the writer declined the request"]);
+  // ONE song out — but give the write up to 3 internal attempts to clear the code checks,
+  // each with plain guidance from the last failure, before failing loud. (Heavy rooms like
+  // 90s R&B juggle the most constraints and occasionally need the extra pass.)
+  const variants: Array<"straight" | "hook-first"> = ["straight", "hook-first", "hook-first"];
+  const attempted: Array<{ report: DraftReport } | null> = [];
+  let winner: { draft: string; report: DraftReport } | null = null;
+  let draftsTried = 0;
+  for (let i = 0; i < variants.length; i++) {
+    stage(i === 0 ? "Writing your song..." : "Not quite — refining the performance...");
+    const guidance = i === 0 ? undefined : guidanceFor((attempted.filter(Boolean) as Array<{ report: DraftReport }>).map((a) => a.report)) || undefined;
+    const attempt = await writeOne(variants[i], guidance);
+    attempted.push(attempt);
+    if (attempt) {
+      draftsTried += 1;
+      if (attempt.report.failCount === 0) { winner = attempt; break; }
     }
+  }
+  if (!winner) {
+    const reports = attempted.filter(Boolean) as Array<{ report: DraftReport }>;
+    const reasons = [...new Set(reports.flatMap((a) => a.report.checks.filter((c) => !c.ok && c.severity === "fail").map((c) => c.id)))];
+    throw new EngineFailure(reasons.length ? reasons : ["the writer declined the request"]);
   }
 
   return {

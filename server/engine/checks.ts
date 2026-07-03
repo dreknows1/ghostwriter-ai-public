@@ -322,22 +322,24 @@ export function runChecks(
     }
   }
 
-  // hook-placement (fail): >=60% of hook content words in the FIRST chorus
+  // hook-placement (fail): >=60% of hook content words appear in a hook-bearing section.
+  // The hook lives in whatever the room calls its anthem — [Chorus], [Hook], [Refrain],
+  // or [Post-Chorus] (90s R&B labels it [Hook]) — so check the union of all of them.
   {
     const hookContent = contentWords(opts.hook);
-    const firstChorus = parsed.sections.find((s) => s.tag.startsWith("chorus"));
-    if (!firstChorus) {
-      checks.push({ id: "hook-placement", severity: "fail", ok: false, detail: "no [Chorus] block to place the hook in" });
+    const hookBearing = parsed.sections.filter((s) => /^(chorus|hook|refrain|post-?chorus)/.test(s.tag));
+    if (hookBearing.length === 0) {
+      checks.push({ id: "hook-placement", severity: "fail", ok: false, detail: "no [Chorus]/[Hook] block to place the hook in" });
     } else if (hookContent.length === 0) {
       checks.push({ id: "hook-placement", severity: "fail", ok: true, detail: "hook has no content words to place" });
     } else {
-      const chorusTokens = distinctTokens(firstChorus.lines.join("\n"));
+      const chorusTokens = distinctTokens(hookBearing.map((s) => s.lines.join("\n")).join("\n"));
       const found = hookContent.filter((w) => chorusTokens.has(w));
       checks.push({
         id: "hook-placement",
         severity: "fail",
         ok: found.length / hookContent.length >= 0.6,
-        detail: `${found.length}/${hookContent.length} hook words in first chorus`,
+        detail: `${found.length}/${hookContent.length} hook words in the chorus/hook`,
       });
     }
   }

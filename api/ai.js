@@ -1388,19 +1388,19 @@ function runChecks(draft, opts) {
   }
   {
     const hookContent = contentWords(opts.hook);
-    const firstChorus = parsed.sections.find((s) => s.tag.startsWith("chorus"));
-    if (!firstChorus) {
-      checks.push({ id: "hook-placement", severity: "fail", ok: false, detail: "no [Chorus] block to place the hook in" });
+    const hookBearing = parsed.sections.filter((s) => /^(chorus|hook|refrain|post-?chorus)/.test(s.tag));
+    if (hookBearing.length === 0) {
+      checks.push({ id: "hook-placement", severity: "fail", ok: false, detail: "no [Chorus]/[Hook] block to place the hook in" });
     } else if (hookContent.length === 0) {
       checks.push({ id: "hook-placement", severity: "fail", ok: true, detail: "hook has no content words to place" });
     } else {
-      const chorusTokens = distinctTokens(firstChorus.lines.join("\n"));
+      const chorusTokens = distinctTokens(hookBearing.map((s) => s.lines.join("\n")).join("\n"));
       const found = hookContent.filter((w) => chorusTokens.has(w));
       checks.push({
         id: "hook-placement",
         severity: "fail",
         ok: found.length / hookContent.length >= 0.6,
-        detail: `${found.length}/${hookContent.length} hook words in first chorus`
+        detail: `${found.length}/${hookContent.length} hook words in the chorus/hook`
       });
     }
   }
@@ -1874,7 +1874,8 @@ Adlib density for this room: ${card.performance.adlibDensity}. Use AT LEAST ${ca
 Delivery/dynamics tags that fit this room: ${card.performance.deliveryTags.join(" ")}.
 HOW to place them (never random \u2014 placement follows the emotional arc):
 - Meta tags go in [square brackets] on their OWN line, in the gap between lyric lines. Never inline inside a lyric line.
-- Use ONLY real Suno tags \u2014 the section tags plus this room's delivery tags above. NEVER invent key:value tags like [Energy: High] or [Vocals: Confident]; the renderer ignores them and they ruin the song.
+- Keep every bracket tag SHORT (1-3 words), no colons, no descriptions: [Belting] not [Belting with full power], [Harmonies] not [Harmonies swell]. NEVER invent key:value tags like [Energy: High] or [Vocals: Confident]; the renderer ignores them and they ruin the song. Use ONLY real Suno tags \u2014 the section tags plus this room's delivery tags above.
+- The hook line "${hook}" must lead the chorus (or [Hook]) section and appear in it word-for-word \u2014 the chorus is built around it.
 - Adlibs go in (parentheses) and MAY sit inline at a line's end or on their own short line right under it \u2014 exactly where a real singer would answer, echo, or breathe. Adlibs are SOUNDS/short responses, never slang or dialect the user didn't write.
 - Density rises and falls with the dynamics: sparse in an intimate verse/bridge, fuller on the hook, heaviest at the final vamp/outro. Match this room's character above.
 
@@ -1987,22 +1988,27 @@ async function runEngine(curriculum, inputs, generate, stage = () => {
       })
     };
   };
-  stage("Writing your song...");
-  const first = await writeOne("straight");
-  let draftsTried = first ? 1 : 0;
-  stage("Checking the writing...");
-  let winner = first && first.report.failCount === 0 ? first : null;
-  if (!winner) {
-    stage("Not good enough yet \u2014 one more pass...");
-    const guidance = first ? guidanceFor([first.report]) || void 0 : void 0;
-    const retry = await writeOne("hook-first", guidance);
-    if (retry) draftsTried += 1;
-    if (retry && retry.report.failCount === 0) winner = retry;
-    if (!winner) {
-      const reports = [first, retry].filter(Boolean);
-      const reasons = [...new Set(reports.flatMap((a) => a.report.checks.filter((c) => !c.ok && c.severity === "fail").map((c) => c.id)))];
-      throw new EngineFailure(reasons.length ? reasons : ["the writer declined the request"]);
+  const variants = ["straight", "hook-first", "hook-first"];
+  const attempted = [];
+  let winner = null;
+  let draftsTried = 0;
+  for (let i = 0; i < variants.length; i++) {
+    stage(i === 0 ? "Writing your song..." : "Not quite \u2014 refining the performance...");
+    const guidance = i === 0 ? void 0 : guidanceFor(attempted.filter(Boolean).map((a) => a.report)) || void 0;
+    const attempt = await writeOne(variants[i], guidance);
+    attempted.push(attempt);
+    if (attempt) {
+      draftsTried += 1;
+      if (attempt.report.failCount === 0) {
+        winner = attempt;
+        break;
+      }
     }
+  }
+  if (!winner) {
+    const reports = attempted.filter(Boolean);
+    const reasons = [...new Set(reports.flatMap((a) => a.report.checks.filter((c) => !c.ok && c.severity === "fail").map((c) => c.id)))];
+    throw new EngineFailure(reasons.length ? reasons : ["the writer declined the request"]);
   }
   return {
     text: winner.draft.trim(),
