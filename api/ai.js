@@ -215,7 +215,14 @@ Musical craft (the founder's list; each becomes concrete rules)
     "[Instrumental Break]",
     "[Instrumental Bridge]",
     "[Instrumental Intro]",
-    "[Instrumental Outro]"
+    "[Instrumental Outro]",
+    "[Vamp]",
+    "[Outro Vamp]",
+    "[Final Vamp]",
+    "[Guitar Riff]",
+    "[Vocal Runs]",
+    "[Runs]",
+    "[Groove]"
   ],
   "genres": {
     "rnb": {
@@ -749,7 +756,7 @@ Musical craft (the founder's list; each becomes concrete rules)
       ]
     }
   },
-  "hash": "30cb96f0eb29",
+  "hash": "3453b6facd34",
   "approxTokens": {
     "core": 1632,
     "largestSlice": 3333
@@ -1591,19 +1598,22 @@ function runChecks(draft, opts) {
       detail: perfTags.length ? `${perfTags.length} performance tags: ${perfTags.slice(0, 5).join(", ")}` : "no delivery/dynamics tags"
     });
   }
-  {
-    const valid = new Set((opts.validTags || []).map((t) => normalizeTag(t.replace(/^\[|\]$/g, ""))));
-    const offenders = allBracketTags.filter((t) => {
-      if (t.includes(":")) return true;
-      if (valid.size === 0) return false;
-      return !valid.has(normalizeTag(t));
+  if (typeof opts.minAdlibs === "number") {
+    const junk = allBracketTags.filter((t) => t.includes(":") || t.trim().split(/\s+/).length > 4);
+    checks.push({
+      id: "invalid-tags",
+      severity: "fail",
+      ok: junk.length === 0,
+      detail: junk.length ? `invented tags (renderer ignores these): ${[...new Set(junk)].slice(0, 5).map((t) => `[${t}]`).join(", ")}` : "no invented tags"
     });
     if (opts.validTags && opts.validTags.length > 0) {
+      const valid = new Set(opts.validTags.map((t) => normalizeTag(t.replace(/^\[|\]$/g, ""))));
+      const unknown = [...new Set(allBracketTags.filter((t) => !t.includes(":") && !valid.has(normalizeTag(t))))];
       checks.push({
-        id: "invalid-tags",
-        severity: "fail",
-        ok: offenders.length === 0,
-        detail: offenders.length ? `invalid/invented tags: ${[...new Set(offenders)].slice(0, 5).map((t) => `[${t}]`).join(", ")}` : "all tags valid"
+        id: "unknown-tags",
+        severity: "warn",
+        ok: unknown.length === 0,
+        detail: unknown.length ? `off-list tags: ${unknown.slice(0, 6).map((t) => `[${t}]`).join(", ")}` : "all tags on the valid list"
       });
     }
   }
@@ -2856,7 +2866,11 @@ async function streamSongV3(payload, res) {
     send({ type: "d", t: result.text });
     send({ type: "done", text: result.text, meta: result.meta });
   } catch (error) {
-    send({ type: "error", error: error?.message || "Song generation failed." });
+    send({
+      type: "error",
+      error: error?.message || "Song generation failed.",
+      ...Array.isArray(error?.reasons) ? { reasons: error.reasons } : {}
+    });
   } finally {
     res.end();
   }
@@ -2922,12 +2936,15 @@ async function handler(req, res) {
       message: error?.message,
       code: error?.code,
       status: error?.status,
-      details: error?.details
+      details: error?.details,
+      reasons: error?.reasons
     });
     const status = Number.isInteger(error?.status) ? error.status : 500;
     return res.status(status).json({
       error: error?.message || "AI API failed",
-      code: error?.code || "ai_request_failed"
+      code: error?.code || "ai_request_failed",
+      // Which code checks blocked the song (EngineFailure) — for diagnosis, not user-facing.
+      ...Array.isArray(error?.reasons) ? { reasons: error.reasons } : {}
     });
   } finally {
     requestGeminiTextApiKey = null;

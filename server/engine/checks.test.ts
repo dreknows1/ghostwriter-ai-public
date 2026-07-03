@@ -213,12 +213,14 @@ describe("performance layer (tags & adlibs, BRAIN Layer 6)", () => {
     expect(getCheck(report, "performance-tags").ok).toBe(false);
   });
 
-  it("fails invented key:value tags and tags outside the valid list", () => {
-    const bad = ["[Energy: High]", "[Verse]", "a line here (yeah)", "another line (oh)", "[Harmonies swell]", "[Chorus]", "hook line one (go)", "hook line one (go)"].join("\n");
+  it("fails invented key:value tags (the [Energy: High] junk) but not real creative tags", () => {
+    const bad = ["[Energy: High]", "[Verse]", "a line here (yeah)", "another line (oh)", "[Vamp]", "[Chorus]", "hook line one (go)", "hook line one (go)"].join("\n");
     const report = runChecks(buildDraft({ lyrics: bad }), PERF_OPTS);
     const check = getCheck(report, "invalid-tags");
     expect(check.ok).toBe(false);
-    expect(check.detail).toMatch(/Energy|Harmonies swell/);
+    expect(check.detail).toContain("Energy: High");
+    // [Vamp] is a real creative cue, off our fixture list — a warning, never a hard fail
+    expect(getCheck(report, "unknown-tags").ok).toBe(false);
   });
 
   it("fails a bracket tag placed inline inside a lyric line", () => {

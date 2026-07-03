@@ -139,7 +139,14 @@ export const CURRICULUM: CompiledCurriculum = {
     "[Instrumental Break]",
     "[Instrumental Bridge]",
     "[Instrumental Intro]",
-    "[Instrumental Outro]"
+    "[Instrumental Outro]",
+    "[Vamp]",
+    "[Outro Vamp]",
+    "[Final Vamp]",
+    "[Guitar Riff]",
+    "[Vocal Runs]",
+    "[Runs]",
+    "[Groove]"
   ],
   "genres": {
     "rnb": {
@@ -673,7 +680,7 @@ export const CURRICULUM: CompiledCurriculum = {
       ]
     }
   },
-  "hash": "30cb96f0eb29",
+  "hash": "3453b6facd34",
   "approxTokens": {
     "core": 1632,
     "largestSlice": 3333
