@@ -1898,6 +1898,44 @@ The song, with section tags in brackets.
 
 This is creative fiction for a music app. If you cannot write it, return ONLY the line "GENERATION_DECLINED".`;
 }
+function adoptChorusHookAsTitle(draft) {
+  const lyricsAt = draft.search(/^###\s*lyrics\s*$/im);
+  if (lyricsAt === -1) return draft;
+  const body = draft.slice(lyricsAt);
+  const HOOK_TAG = /^\s*\[(chorus|hook|refrain|post-?chorus|vamp)/i;
+  const ANY_TAG = /^\s*\[[^\]]+\]/;
+  const lines = body.split(/\r?\n/);
+  const counts = /* @__PURE__ */ new Map();
+  let inHook = false;
+  for (const raw of lines) {
+    if (ANY_TAG.test(raw)) {
+      inHook = HOOK_TAG.test(raw);
+      continue;
+    }
+    if (!inHook) continue;
+    const display = raw.replace(/\([^)]*\)/g, "").trim();
+    const key = display.toLowerCase().replace(/[^a-z0-9 ]/g, "").replace(/\s+/g, " ").trim();
+    const words = key.split(" ").filter(Boolean);
+    if (words.length < 2 || words.length > 9) continue;
+    const cur = counts.get(key) || { display, n: 0 };
+    cur.n += 1;
+    counts.set(key, cur);
+  }
+  let best = null;
+  for (const v of counts.values()) {
+    if (v.n < 2) continue;
+    const words = v.display.split(/\s+/).length;
+    if (!best || v.n > best.n || v.n === best.n && words < best.words) best = { ...v, words };
+  }
+  if (!best) return draft;
+  const title = best.display.replace(/[—–-]+$/, "").trim();
+  if (!title) return draft;
+  if (/^\s*title\s*:/im.test(draft)) {
+    return draft.replace(/^\s*title\s*:.*$/im, `Title: ${title}`);
+  }
+  return `Title: ${title}
+${draft}`;
+}
 var GUIDANCE = {
   "story-fidelity": "use the real details from the story \u2014 name the actual places, objects, and moments the writer gave you",
   "hook-placement": "the chorus must be built around the hook \u2014 the hook line leads it",
@@ -1971,11 +2009,12 @@ async function runEngine(curriculum, inputs, generate, stage = () => {
   stage("Planning sections...");
   const sections = validateSections(await planJson(generate, sectionsPrompt(brief, hook, card)));
   const writeOne = async (variant, guidance) => {
-    const draft = await generate(
+    const raw = await generate(
       writerPrompt({ core: curriculum.core, pack, card, brief, hook, sections, story, vocals: inputs.vocals, variant, guidance, bannedPhrases: curriculum.bannedPhrases, hookLocked }),
       "write"
     ).catch(() => "");
-    if (!draft || draft.includes("GENERATION_DECLINED")) return null;
+    if (!raw || raw.includes("GENERATION_DECLINED")) return null;
+    const draft = hookLocked ? raw : adoptChorusHookAsTitle(raw);
     return {
       draft,
       report: runChecks(draft, {
