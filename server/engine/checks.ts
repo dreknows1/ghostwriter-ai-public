@@ -247,6 +247,10 @@ export function runChecks(
     validTags?: string[];
     /** this room's adlib floor (Layer 6) — a real song needs at least this many adlibs */
     minAdlibs?: number;
+    /** true when the user locked a title: hook-placement is then a hard fail (their title
+     * must be sung); when the engine auto-picked the hook it's advisory (chorus-consistency
+     * already guarantees a real repeated chorus) */
+    hookLocked?: boolean;
   },
 ): DraftReport {
   // NOTE: opts.card is part of the stable call contract. The plan (§2 Step 6)
@@ -328,19 +332,22 @@ export function runChecks(
   {
     // The song's OWN title is the hook that must live in its chorus — the writer may
     // sharpen an auto-suggested hook while writing, and the title follows that choice.
+    // Strict only when the user locked a title; advisory when the engine auto-picked the
+    // hook (chorus-consistency already guarantees a real repeated chorus).
+    const hookSeverity: "fail" | "warn" = opts.hookLocked === false ? "warn" : "fail";
     const hookText = parsed.title && contentWords(parsed.title).length > 0 ? parsed.title : opts.hook;
     const hookContent = contentWords(hookText);
     const hookBearing = parsed.sections.filter((s) => /^(chorus|hook|refrain|post-?chorus|vamp)/.test(s.tag));
     if (hookBearing.length === 0) {
-      checks.push({ id: "hook-placement", severity: "fail", ok: false, detail: "no [Chorus]/[Hook] block to place the hook in" });
+      checks.push({ id: "hook-placement", severity: hookSeverity, ok: false, detail: "no [Chorus]/[Hook] block to place the hook in" });
     } else if (hookContent.length === 0) {
-      checks.push({ id: "hook-placement", severity: "fail", ok: true, detail: "hook has no content words to place" });
+      checks.push({ id: "hook-placement", severity: hookSeverity, ok: true, detail: "hook has no content words to place" });
     } else {
       const chorusTokens = distinctTokens(hookBearing.map((s) => s.lines.join("\n")).join("\n"));
       const found = hookContent.filter((w) => chorusTokens.has(w));
       checks.push({
         id: "hook-placement",
-        severity: "fail",
+        severity: hookSeverity,
         ok: found.length / hookContent.length >= 0.6,
         detail: `${found.length}/${hookContent.length} hook words in the chorus/hook`,
       });

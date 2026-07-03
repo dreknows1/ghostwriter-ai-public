@@ -365,6 +365,14 @@ describe("hook-placement", () => {
     expect(check.ok).toBe(false);
     expect(check.detail).toContain("no [Chorus]");
   });
+
+  it("is a hard fail for a user-locked title but only advisory for an auto hook", () => {
+    const off = buildDraft({ title: "Completely Unrelated Title Words" });
+    // user locked their title -> must be sung -> hard fail
+    expect(getCheck(runChecks(off, { ...OPTS, hookLocked: true }), "hook-placement").severity).toBe("fail");
+    // engine auto-picked -> advisory (chorus-consistency guards the real hook)
+    expect(getCheck(runChecks(off, { ...OPTS, hookLocked: false }), "hook-placement").severity).toBe("warn");
+  });
 });
 
 describe("title-hook", () => {

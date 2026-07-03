@@ -525,6 +525,7 @@ export async function runEngine(
         bannedPhrases: curriculum.bannedPhrases,
         validTags: curriculum.validTags,
         minAdlibs: card.performance.minAdlibs,
+        hookLocked,
       }),
     };
   };
