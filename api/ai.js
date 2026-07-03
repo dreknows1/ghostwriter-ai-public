@@ -2699,6 +2699,11 @@ assistant:
   }
   return { text: finalText };
 }
+var PERFORMANCE_TAGS_INSTRUCTION = `The lyrics MUST be performance-ready, not a bare sheet:
+- Beyond section headers, place real Suno performance tags in [square brackets] on their OWN line where the music changes \u2014 e.g. [Build] before a chorus, [Harmonies] on the hook, [Belting] or [Falsetto] at a peak, [Vocal Run], [Call and Response], [Soft], [Sax Solo], [Guitar Solo], [Big Finish], [Vamp] at the end. Match the tags to the genre and the emotional arc; heavier toward the choruses and the outro, lighter in an intimate verse.
+- Weave several adlibs in (parentheses) where a real singer would answer, echo, or breathe \u2014 inline at line ends or on short lines under them. Adlibs are sounds/short responses, never slang the writer didn't give you.
+- Use ONLY real Suno tags. NEVER invent key:value tags like [Energy: High] or [Vocals: Confident] \u2014 the renderer ignores them.
+- In the SUNO production prompt, describe the sound; NEVER name real artists ("similar to X", "like Y").`;
 function buildInterimSongPrompt(inputs) {
   const genre = String(inputs?.genre || "Pop").trim();
   const story = String(inputs?.creativeDirection || inputs?.additionalInfo || "").trim();
@@ -2720,6 +2725,8 @@ The writer chose:
 ${picks}
 
 ` : ""}It should have a ${voice} and section tags like [Verse] [Chorus] [Bridge].
+
+${PERFORMANCE_TAGS_INSTRUCTION}
 
 Also write a 40-70 word Suno production prompt describing how the track should sound.
 
@@ -2806,6 +2813,9 @@ Title: ...
 ### Lyrics
 ...
 
+${PERFORMANCE_TAGS_INSTRUCTION}
+(If the song came in with only section labels and no performance tags/adlibs, ADD them as part of this revision.)
+
 INSTRUCTION: ${String(editInstruction || "").trim()}
 
 SONG:
@@ -2820,6 +2830,8 @@ async function structureImportedSongInterim(payload) {
   const { pastedContent, inputs } = payload || {};
   const genre = String(inputs?.genre || "").trim();
   const prompt = `Structure the pasted lyrics/ideas below into a complete song${genre ? ` (${genre})` : ""} with section tags like [Verse] [Chorus] [Bridge]. Preserve the writer's own words wherever possible.
+
+${PERFORMANCE_TAGS_INSTRUCTION}
 
 Also write a 40-70 word Suno production prompt describing how the track should sound.
 
