@@ -1023,7 +1023,11 @@ async function streamSongV3(payload: any, res: VercelResponse) {
     send({ type: "d", t: result.text });
     send({ type: "done", text: result.text, meta: result.meta });
   } catch (error: any) {
-    send({ type: "error", error: error?.message || "Song generation failed." });
+    send({
+      type: "error",
+      error: error?.message || "Song generation failed.",
+      ...(Array.isArray(error?.reasons) ? { reasons: error.reasons } : {}),
+    });
   } finally {
     res.end();
   }
@@ -1106,11 +1110,14 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
       code: error?.code,
       status: error?.status,
       details: error?.details,
+      reasons: error?.reasons,
     });
     const status = Number.isInteger(error?.status) ? error.status : 500;
     return res.status(status).json({
       error: error?.message || "AI API failed",
       code: error?.code || "ai_request_failed",
+      // Which code checks blocked the song (EngineFailure) — for diagnosis, not user-facing.
+      ...(Array.isArray(error?.reasons) ? { reasons: error.reasons } : {}),
     });
   }
   finally {

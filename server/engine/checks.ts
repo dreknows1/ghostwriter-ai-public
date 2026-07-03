@@ -554,21 +554,29 @@ export function runChecks(
     });
   }
 
-  // invalid-tags (fail): invented key:value tags (Suno ignores them) or tags outside
-  // the founder's valid list. This is the guard against [Energy: High] style garbage.
-  {
-    const valid = new Set((opts.validTags || []).map((t) => normalizeTag(t.replace(/^\[|\]$/g, ""))));
-    const offenders = allBracketTags.filter((t) => {
-      if (t.includes(":")) return true;
-      if (valid.size === 0) return false;
-      return !valid.has(normalizeTag(t));
+  // invalid-tags (fail): the genuine junk — invented key:value tags like [Energy: High]
+  // or [Vocals: Confident] that Suno ignores. High precision: only the colon pattern and
+  // overly-wordy descriptive "tags" hard-fail, so real creative cues ([Vamp], [Sax Solo])
+  // are never falsely blocked.
+  if (typeof opts.minAdlibs === "number") {
+    const junk = allBracketTags.filter((t) => t.includes(":") || t.trim().split(/\s+/).length > 4);
+    checks.push({
+      id: "invalid-tags",
+      severity: "fail",
+      ok: junk.length === 0,
+      detail: junk.length ? `invented tags (renderer ignores these): ${[...new Set(junk)].slice(0, 5).map((t) => `[${t}]`).join(", ")}` : "no invented tags",
     });
+
+    // unknown-tags (warn): a bracket tag not in the founder's valid list — probably fine
+    // (Suno is permissive), but flagged so the writer trends toward known-good tags.
     if (opts.validTags && opts.validTags.length > 0) {
+      const valid = new Set(opts.validTags.map((t) => normalizeTag(t.replace(/^\[|\]$/g, ""))));
+      const unknown = [...new Set(allBracketTags.filter((t) => !t.includes(":") && !valid.has(normalizeTag(t))))];
       checks.push({
-        id: "invalid-tags",
-        severity: "fail",
-        ok: offenders.length === 0,
-        detail: offenders.length ? `invalid/invented tags: ${[...new Set(offenders)].slice(0, 5).map((t) => `[${t}]`).join(", ")}` : "all tags valid",
+        id: "unknown-tags",
+        severity: "warn",
+        ok: unknown.length === 0,
+        detail: unknown.length ? `off-list tags: ${unknown.slice(0, 6).map((t) => `[${t}]`).join(", ")}` : "all tags on the valid list",
       });
     }
   }
