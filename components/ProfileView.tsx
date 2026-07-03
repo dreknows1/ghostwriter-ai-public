@@ -3,7 +3,7 @@ import React, { useState, useEffect } from 'react';
 import { UserProfile, SavedSong, Transaction } from '../types';
 import { getUserProfile, upsertUserProfile, deleteUserProfile, getUserTransactions } from '../services/userService';
 import { getSavedSongs, deleteSong, deleteAllUserSongs } from '../services/songService';
-import { COSTS, deductCredits, hasEnoughCredits } from '../services/creditService';
+import { COSTS, deductCredits, hasEnoughCredits, formatCredits } from '../services/creditService';
 import { toast, confirmDialog } from './Feedback';
 import { 
     LoadingSpinner, ProfileIcon, TrashIcon, ImageIcon, 
@@ -302,7 +302,7 @@ const ProfileView: React.FC<ProfileViewProps> = ({ email, onLoadSong, onBack, on
                     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                         <div className="glass-panel bg-gradient-to-br from-orange-900/25 to-slate-900 rounded-[2rem] md:rounded-[2.5rem] p-8 relative overflow-hidden">
                             <h3 className="text-sm font-black uppercase tracking-[0.2em] text-orange-400 mb-4">Available Credits</h3>
-                            <div className="text-5xl md:text-6xl font-black text-white mb-2">{profile?.credits || 0}</div>
+                            <div className="text-5xl md:text-6xl font-black text-white mb-2">{formatCredits(profile?.credits ?? 0)}</div>
                             
                             {nextRefillDate && (
                                 <div className="mb-4 inline-block px-3 py-1 bg-orange-500/10 rounded-lg border border-orange-500/20">
@@ -448,7 +448,7 @@ const ProfileView: React.FC<ProfileViewProps> = ({ email, onLoadSong, onBack, on
                     <div className="bg-[#161030] border border-slate-800 rounded-[2rem] md:rounded-[2.5rem] p-6 md:p-10 mb-12 flex items-center justify-between relative overflow-hidden gap-4">
                         <div className="relative z-10">
                             <span className="text-sm font-black uppercase tracking-[0.2em] text-slate-400 block mb-2">Current Balance</span>
-                            <span className="text-5xl md:text-7xl font-black text-white tracking-tighter block mb-4">{profile?.credits}</span>
+                            <span className="text-5xl md:text-7xl font-black text-white tracking-tighter block mb-4">{formatCredits(profile?.credits)}</span>
                             
                             {nextRefillDate && (
                                 <div className="flex flex-col gap-1 mt-2">

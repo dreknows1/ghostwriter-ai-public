@@ -5,7 +5,7 @@ import { generateSong, generateAlbumArt, generateSocialPack, translateLyrics, st
 import { saveSong } from './services/songService';
 import { getUserProfile } from './services/userService';
 import { getSession, signOut, signIn, signUp, signInWithOAuthEmail, startProviderSignIn } from './services/authService';
-import { getUserCredits, hasEnoughCredits, deductCredits, COSTS } from './services/creditService';
+import { getUserCredits, hasEnoughCredits, deductCredits, COSTS, formatCredits } from './services/creditService';
 import LyricsDisplay from './components/LyricsDisplay';
 import ProfileView from './components/ProfileView';
 import PricingView from './components/PricingView';
@@ -1306,7 +1306,7 @@ export const App: React.FC = () => {
                      <div className="mt-16 flex flex-wrap justify-center gap-4 md:gap-6">
                          <div className="flex items-center gap-2 px-5 py-2 bg-slate-900 rounded-full border border-slate-800">
                              <WalletIcon className="w-4 h-4 text-slate-500" />
-                             <span className="text-xs font-black text-slate-300 uppercase tracking-widest">Balance: {credits}</span>
+                             <span className="text-xs font-black text-slate-300 uppercase tracking-widest">Balance: {formatCredits(credits)}</span>
                          </div>
                          <button onClick={handleManageGeminiApiKey} className="text-xs font-black text-slate-400 uppercase tracking-widest hover:text-white transition-colors">Set AI Key</button>
                          <button onClick={() => signOut().then(() => { setSession(null); setView(AppView.AUTH); })} className="text-xs font-black text-slate-600 uppercase tracking-widest hover:text-white transition-colors">Sign Out</button>
@@ -1349,13 +1349,13 @@ export const App: React.FC = () => {
          <div className="flex items-center gap-2 md:gap-4">
              <div className="md:hidden flex items-center gap-1 px-3 py-2 rounded-full bg-slate-900 border border-slate-800 text-cyan-400">
                 <WalletIcon className="w-3.5 h-3.5" />
-                <span className="text-[11px] font-black tracking-wider tabular-nums">{credits}</span>
+                <span className="text-[11px] font-black tracking-wider tabular-nums">{formatCredits(credits)}</span>
              </div>
              {/* Credit Monitor & Add Button */}
              <div className="hidden md:flex items-center bg-[#140e28] border border-slate-800 rounded-full p-1 pl-1 pr-4 gap-3 shadow-inner">
                 <div className="flex items-center gap-2 px-4 py-2 rounded-full bg-slate-800 border border-slate-700 text-cyan-400">
                     <WalletIcon className="w-4 h-4" />
-                    <span className="text-sm font-black tracking-widest tabular-nums">{credits}</span>
+                    <span className="text-sm font-black tracking-widest tabular-nums">{formatCredits(credits)}</span>
                 </div>
                 <button onClick={() => setView(AppView.PRICING)} className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-400 hover:text-white transition-colors">
                     Add Credits
