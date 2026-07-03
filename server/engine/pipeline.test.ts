@@ -67,19 +67,21 @@ function goodDraft(hook: string): string {
 ### SUNO Prompt
 ${suno}
 ### Lyrics
-[Soft]
-[Verse]
+[Verse: soft, intimate]
 Nine years since the pancake diner on Fulton Street
 You laminated the receipt where we first sat to eat (ooh)
-[Chorus]
-${hook} is what you gave
-${hook} is what we save (stay)
-[Verse]
-That laminated receipt still hides inside your wallet warm
-Every year another dinner, every year another storm
-[Harmonies]
-[Chorus]
-${hook} is what you gave
+Tucked behind your license, kept it all this time
+A little slip of paper says you once were mine
+[Chorus: warm harmonies]
+${hook} is what you gave (gave)
+${hook} is what we save
+[Verse: soft]
+That laminated receipt still rides inside your wallet warm
+Every winter dinner, every summer storm
+The pancake house closed down but you kept the proof
+Four faded lines of ink still telling me the truth
+[Chorus: warm harmonies]
+${hook} is what you gave (stay)
 ${hook} is what we save (stay with me)`;
 }
 
