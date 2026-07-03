@@ -414,6 +414,21 @@ describe("chorus-consistency", () => {
     expect(check.ok).toBe(true);
     expect(check.detail).toContain("fewer than two");
   });
+
+  it("passes a final vamp that embellishes but still loops the hook (Quiet Storm move)", () => {
+    // title carries the hook words; the vamp adds runs/adlibs but keeps the hook line
+    const vamped = [
+      "[Chorus]",
+      "This broken compass keeps on turning home",
+      "Copper needle spinning wide and slow",
+      "[Vamp]",
+      "This broken compass keeps on turning home (turning, turning)",
+      "Keeps on turning (oh) home (yeah, home)",
+      "This broken compass keeps on turning home",
+    ].join("\n");
+    const check = getCheck(runChecks(buildDraft({ title: "Turning Home", lyrics: vamped }), OPTS), "chorus-consistency");
+    expect(check.ok).toBe(true);
+  });
 });
 
 describe("metric-parallel", () => {
