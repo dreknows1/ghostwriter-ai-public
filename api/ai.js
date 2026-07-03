@@ -13,7 +13,10 @@ A song is a felt emotion delivered through structure, repetition, and melody ove
 Sections are not labels; they are jobs:
 
 - **Intro** \u2014 sets the world in seconds; earns the first verse.
-- **Verse** \u2014 advances the story. Each verse must add new information; verse 2 is never verse 1 reworded.
+- **Verse** \u2014 the SUBSTANCE; where the story is told. Each verse adds new information (verse 2
+  is never verse 1 reworded) and must be **at least as long as the chorus, usually longer** \u2014 a
+  song whose verses are shorter than its chorus has starved itself of meaning. Build the verse;
+  earn the chorus.
 - **Pre-Chorus** \u2014 builds tension; the ramp that makes the chorus feel inevitable.
 - **Chorus** \u2014 the emotional thesis. It must LIFT (energy, melody, simplicity). It repeats because it's true every time.
 - **Bridge** \u2014 the turn: a new angle, a confession, a decision. The song must be different after it.
@@ -767,10 +770,10 @@ Musical craft (the founder's list; each becomes concrete rules)
       ]
     }
   },
-  "hash": "fad672bffe73",
+  "hash": "23460d12c291",
   "approxTokens": {
-    "core": 1666,
-    "largestSlice": 3367
+    "core": 1716,
+    "largestSlice": 3417
   }
 };
 
@@ -1595,6 +1598,12 @@ function runChecks(draft, opts) {
   ]);
   const normalizeTag = (t) => t.trim().toLowerCase().replace(/\s+\d+$/, "").replace(/\s+/g, " ");
   const allBracketTags = [...body.match(/\[[^\]]+\]/g) || []].map((t) => t.slice(1, -1));
+  const SECTION_KEYS = /* @__PURE__ */ new Set([...STRUCTURE_TAGS, "vamp"]);
+  const colonKey = (t) => t.includes(":") ? normalizeTag(t.slice(0, t.indexOf(":"))) : null;
+  const isValidColon = (t) => {
+    const k = colonKey(t);
+    return k !== null && SECTION_KEYS.has(k);
+  };
   if (typeof opts.minAdlibs === "number") {
     const adlibCount = (body.match(/\([^)]+\)/g) || []).length;
     checks.push({
@@ -1605,21 +1614,23 @@ function runChecks(draft, opts) {
     });
   }
   if (typeof opts.minAdlibs === "number") {
-    const perfTags = allBracketTags.filter((t) => !STRUCTURE_TAGS.has(normalizeTag(t)) && !t.includes(":"));
+    const perfTags = allBracketTags.filter((t) => isValidColon(t) || !t.includes(":") && !STRUCTURE_TAGS.has(normalizeTag(t)));
     checks.push({
       id: "performance-tags",
       severity: "fail",
       ok: perfTags.length >= 1,
-      detail: perfTags.length ? `${perfTags.length} performance tags: ${perfTags.slice(0, 5).join(", ")}` : "no delivery/dynamics tags"
+      detail: perfTags.length ? `${perfTags.length} performance tags: ${perfTags.slice(0, 5).map((t) => `[${t}]`).join(", ")}` : "no delivery/dynamics tags"
     });
   }
   if (typeof opts.minAdlibs === "number") {
-    const junk = allBracketTags.filter((t) => t.includes(":") || t.trim().split(/\s+/).length > 4);
+    const junk = allBracketTags.filter(
+      (t) => t.includes(":") ? !isValidColon(t) : t.trim().split(/\s+/).length > 4
+    );
     checks.push({
       id: "invalid-tags",
       severity: "fail",
       ok: junk.length === 0,
-      detail: junk.length ? `invented tags (renderer ignores these): ${[...new Set(junk)].slice(0, 5).map((t) => `[${t}]`).join(", ")}` : "no invented tags"
+      detail: junk.length ? `invented tags (renderer ignores/sings these): ${[...new Set(junk)].slice(0, 5).map((t) => `[${t}]`).join(", ")}` : "no invented tags"
     });
     if (opts.validTags && opts.validTags.length > 0) {
       const valid = new Set(opts.validTags.map((t) => normalizeTag(t.replace(/^\[|\]$/g, ""))));
@@ -1639,6 +1650,37 @@ function runChecks(draft, opts) {
       severity: "fail",
       ok: inline.length === 0,
       detail: inline.length ? `${inline.length} lyric line(s) have an inline bracket tag` : "all tags on their own line"
+    });
+  }
+  if (typeof opts.minAdlibs === "number") {
+    const contentCount = (s) => s.lines.filter((l) => !/^\(.*\)$/.test(l.trim())).length;
+    const verses = parsed.sections.filter((s) => s.tag.startsWith("verse"));
+    const choruses = parsed.sections.filter((s) => /^(chorus|hook|refrain|post-?chorus)/.test(s.tag));
+    if (verses.length > 0 && choruses.length > 0) {
+      const verseCounts = verses.map(contentCount);
+      const avgVerse = verseCounts.reduce((a, b) => a + b, 0) / verseCounts.length;
+      const minVerse = Math.min(...verseCounts);
+      const chorusLen = Math.max(...choruses.map(contentCount));
+      const ok = minVerse >= 4 && avgVerse >= chorusLen - 1;
+      checks.push({
+        id: "verse-substance",
+        severity: "fail",
+        ok,
+        detail: ok ? `verses avg ${avgVerse.toFixed(1)} lines vs chorus ${chorusLen}` : `verses too thin (avg ${avgVerse.toFixed(1)}, min ${minVerse} lines) under a ${chorusLen}-line chorus \u2014 the verse must carry the story`
+      });
+    }
+  }
+  if (typeof opts.minAdlibs === "number") {
+    const empties = parsed.sections.filter((s) => {
+      const isDelivery = !s.tag.includes(":") && !STRUCTURE_TAGS.has(normalizeTag(s.tag));
+      const contentLines = s.lines.filter((l) => !/^\(.*\)$/.test(l.trim())).length;
+      return isDelivery && contentLines === 0;
+    });
+    checks.push({
+      id: "empty-tags",
+      severity: "warn",
+      ok: empties.length < 2,
+      detail: empties.length >= 2 ? `${empties.length} delivery tags stand alone with nothing under them \u2014 fold them into the section header` : "no sprinkled empty tags"
     });
   }
   let failCount = 0;
@@ -1829,6 +1871,7 @@ function sectionsPrompt(brief, hook, card) {
 
 Allowed tags: [Intro] [Verse] [Pre-Chorus] [Chorus] [Bridge] [Outro] (repeat [Verse]/[Chorus] as needed).
 Every job is one sentence saying what THAT section must do for THIS song (what verse 1 establishes, what the bridge reveals). The chorus builds around the hook "${hook}".
+THE VERSE CARRIES THE STORY \u2014 it is the substance. Plan the verses to be as long as the chorus or longer (about 6\u20138 lines each), each verse advancing the story with new, specific detail. A song whose verses are shorter than its chorus has no room for meaning \u2014 do NOT plan thin 4-line verses under a big repeating hook.
 Room conventions: ${card.name} \u2014 ${card.oneLine}
 How this room writes (plan the sections to honor these \u2014 if the room vamps, PLAN the vamp):
 ${card.writingDials.map((d) => `- ${d}`).join("\n")}
@@ -1883,16 +1926,17 @@ ${hookLocked ? `The hook (and title) is FIXED: ${hook}. Use it exactly as the Ti
 Section plan:
 ${sectionLines}
 
-=== THE PERFORMANCE (tags & adlibs \u2014 this is what makes it a real song, not a page) ===
+=== THE PERFORMANCE (tags & adlibs \u2014 Suno-correct, never sprinkled) ===
 ${card.performance.prose}
-Adlib density for this room: ${card.performance.adlibDensity}. Use AT LEAST ${card.performance.minAdlibs} adlibs in parentheses () across the song.
-Delivery/dynamics tags that fit this room: ${card.performance.deliveryTags.join(" ")}.
-HOW to place them (never random \u2014 placement follows the emotional arc):
-- Meta tags go in [square brackets] on their OWN line, in the gap between lyric lines. Never inline inside a lyric line.
-- Keep every bracket tag SHORT (1-3 words), no colons, no descriptions: [Belting] not [Belting with full power], [Harmonies] not [Harmonies swell]. NEVER invent key:value tags like [Energy: High] or [Vocals: Confident]; the renderer ignores them and they ruin the song. Use ONLY real Suno tags \u2014 the section tags plus this room's delivery tags above.
-- Your final hook (the Title) must lead the chorus (or [Hook]) section and appear in it word-for-word \u2014 the chorus is built around it.
-- Adlibs go in (parentheses) and MAY sit inline at a line's end or on their own short line right under it \u2014 exactly where a real singer would answer, echo, or breathe. Adlibs are SOUNDS/short responses, never slang or dialect the user didn't write.
-- Density rises and falls with the dynamics: sparse in an intimate verse/bridge, fuller on the hook, heaviest at the final vamp/outro. Match this room's character above.
+This room's delivery colors: ${card.performance.deliveryTags.map((t) => t.replace(/[[\]]/g, "").toLowerCase()).join(", ")}.
+Adlib density: ${card.performance.adlibDensity} \u2014 include AT LEAST ${card.performance.minAdlibs} sung adlibs across the song.
+HOW to place them:
+- ONE tag line per section, on its own line directly above that section's lyrics. FOLD the delivery into the section header with a colon: [Verse: soft, intimate], [Chorus: belted, full harmonies], [Bridge: whispered]. Do NOT stack separate delivery tags on their own empty lines ([Soft] then [Build] then [Harmonies]) \u2014 Suno DROPS sprinkled tags, and a tag with no lyrics under it is the #1 mistake.
+- A colon is valid ONLY after a real section word ([Chorus: ...], [Verse: ...], [Bridge: ...]). NEVER invent [Energy: High] or [Vocals: Confident] tags. At most one or two modifiers per header.
+- Adlibs go INLINE in (parentheses) at the END of the line they answer \u2014 everything in parentheses is SUNG, so write the actual 1-3 short words a backing voice sings: an echo of the last word, a "yeah", a short answer. NEVER put a direction like (whispered) or (echo) in parentheses \u2014 it gets sung out loud. Never slang the user didn't write.
+- Density follows the dynamics: light in an intimate verse, fuller on the chorus, heaviest at the final vamp/outro. Match this room's character above.
+- Your final hook (the Title) leads the chorus (or [Hook]) section and appears in it word-for-word.
+- Production notes (BPM, reverb, "layered vocals", artist names) go ONLY in the SUNO prompt, never in a lyric bracket.
 
 ${story ? `=== THE STORY (the user's own words) ===
 ${story}` : `=== NO STORY WAS GIVEN ===
@@ -1961,9 +2005,11 @@ var GUIDANCE = {
   "central-image": "keep coming back to the one real thing at the center of this song \u2014 put it in the listener's hands",
   "artist-names-in-suno": "describe the sound in the production prompt without naming any real artist",
   "adlibs-present": "add the room's adlibs in parentheses where a singer would answer or echo \u2014 this song sounds bare without them",
-  "performance-tags": "place this room's delivery tags on their own lines where the vocal changes or the song builds",
-  "invalid-tags": "remove any invented tags like [Energy: High] \u2014 use only real Suno section and delivery tags",
-  "tags-own-line": "every square-bracket tag goes on its own line, never inside a lyric line"
+  "performance-tags": "fold this room's delivery into the section headers, like [Chorus: belted] or [Verse: soft]",
+  "invalid-tags": "a colon is only valid after a section word ([Chorus: belted]); remove invented tags like [Energy: High]",
+  "tags-own-line": "every square-bracket tag goes on its own line, never inside a lyric line",
+  "verse-substance": "make the verses carry the story \u2014 as long as the chorus or longer, each adding new specific detail, never thin 4-line verses under a big hook",
+  "empty-tags": "don't stack delivery tags on empty lines \u2014 fold them into the section header like [Chorus: belted]"
 };
 function guidanceFor(reports) {
   const failed = /* @__PURE__ */ new Set();

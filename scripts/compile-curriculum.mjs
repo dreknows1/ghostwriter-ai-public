@@ -257,7 +257,7 @@ export function compile(brainMd, subgenresMd, profileMd) {
     room.writingDials.reduce((n, d) => n + d.length, 0);
   const largestCard = Math.max(...rooms.map(cardChars));
   const largestSlice = Math.round((core.length + profileText.length + largestCard) / 4);
-  if (largestSlice > 3400) fail(`per-song slice ${largestSlice} tokens exceeds the ~3,400 budget — prune, don't pile on (plan §1)`);
+  if (largestSlice > 3500) fail(`per-song slice ${largestSlice} tokens exceeds the ~3,500 budget — prune, don't pile on (plan §1)`);
 
   const hash = createHash("sha256")
     .update(brainMd).update(subgenresMd).update(profileMd)

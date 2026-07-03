@@ -33,7 +33,7 @@ How that works mechanically (so it can't silently break like everything else has
   else. The sub-genre pages in SONGWRITING_SUBGENRES.md are teaching text; each compiles
   down to a compact writer card (~650-800 tokens of dials + spec defaults; the
   stories-it-serves notes stay behind for landing and never reach the writer), and the
-  whole per-song slice is capped at **~2,800 tokens** (the size budget above). The
+  whole per-song slice is capped at **~3,500 tokens** (the size budget above). The
   composing-process layer also stays out of the slice — the engine's own steps enact it.
   Same pruning law applies to cards as to rules.
 

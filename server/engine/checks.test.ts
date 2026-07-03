@@ -228,6 +228,67 @@ describe("performance layer (tags & adlibs, BRAIN Layer 6)", () => {
     const report = runChecks(buildDraft({ lyrics: inline }), PERF_OPTS);
     expect(getCheck(report, "tags-own-line").ok).toBe(false);
   });
+
+  it("accepts a folded colon delivery header ([Chorus: belted]) and counts it as performance", () => {
+    const folded = [
+      "[Verse: soft, intimate]",
+      "He kept it on the workbench every year (mmm)",
+      "Beside the frosted window in the cold",
+      "Copper case gone green along the seam",
+      "He said the needle knows a patient road (patient road)",
+      "[Chorus: belted, full harmonies]",
+      "This broken compass keeps on turning home (turning home)",
+      "Copper needle spinning wide and slow",
+      "I follow where the winter light has gone",
+      "This broken compass keeps on turning home",
+    ].join("\n");
+    const report = runChecks(buildDraft({ lyrics: folded }), PERF_OPTS);
+    expect(getCheck(report, "invalid-tags").ok).toBe(true); // colon after a section word is valid
+    expect(getCheck(report, "performance-tags").ok).toBe(true); // the folded header IS performance direction
+  });
+});
+
+describe("verse-substance (the verse carries the story, BRAIN Layer 1)", () => {
+  const PERF_OPTS = { ...OPTS, minAdlibs: 2, validTags: VALID_TAGS };
+
+  it("fails thin 3-4 line verses under a bigger repeating chorus", () => {
+    const thin = [
+      "[Verse]",
+      "Stepped in the room, it was fate (oh)",
+      "You made me look your way",
+      "[Chorus]",
+      "You make me happy (happy)",
+      "More than words could say",
+      "You lift me higher now",
+      "You take my pain away",
+      "You make me happy every day",
+      "[Verse]",
+      "Didn't know my soul could glow (glow)",
+      "Every day a brand new wish",
+    ].join("\n");
+    const check = getCheck(runChecks(buildDraft({ lyrics: thin }), PERF_OPTS), "verse-substance");
+    expect(check.ok).toBe(false);
+  });
+
+  it("passes when verses are as long as the chorus", () => {
+    const solid = [
+      "[Verse]",
+      "He kept it on the workbench every year",
+      "Beside the frosted window in the cold",
+      "Copper case gone green along the seam",
+      "He said the needle knows a patient road (yeah)",
+      "[Chorus]",
+      "This broken compass keeps on turning home (home)",
+      "Copper needle spinning slow",
+      "[Verse]",
+      "The lid swung open on a thawing day",
+      "A hairline crack across the painted north",
+      "He laughed and traced the wobble with his thumb",
+      "Said even lost directions point you forth (forth)",
+    ].join("\n");
+    const check = getCheck(runChecks(buildDraft({ lyrics: solid }), PERF_OPTS), "verse-substance");
+    expect(check.ok).toBe(true);
+  });
 });
 
 describe("format", () => {

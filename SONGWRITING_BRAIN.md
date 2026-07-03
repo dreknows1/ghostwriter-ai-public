@@ -12,7 +12,10 @@ A song is a felt emotion delivered through structure, repetition, and melody ove
 Sections are not labels; they are jobs:
 
 - **Intro** — sets the world in seconds; earns the first verse.
-- **Verse** — advances the story. Each verse must add new information; verse 2 is never verse 1 reworded.
+- **Verse** — the SUBSTANCE; where the story is told. Each verse adds new information (verse 2
+  is never verse 1 reworded) and must be **at least as long as the chorus, usually longer** — a
+  song whose verses are shorter than its chorus has starved itself of meaning. Build the verse;
+  earn the chorus.
 - **Pre-Chorus** — builds tension; the ramp that makes the chorus feel inevitable.
 - **Chorus** — the emotional thesis. It must LIFT (energy, melody, simplicity). It repeats because it's true every time.
 - **Bridge** — the turn: a new angle, a confession, a decision. The song must be different after it.
@@ -189,17 +192,47 @@ Use only real, recognized tags. They come in five families, and each family does
 - Dynamics and energy — the intensity of a moment (build, build-up, drop, crescendo, big finish, soft, quiet). These carry the arc.
 - Instrumental — a non-vocal moment (a named solo, an instrumental break, bridge, intro, or outro).
 
-Use the tag's exact recognized wording, not a paraphrase. The cue is [Choir enters], not "choir entering" — if you rewrite a real tag into your own words, the machine no longer recognizes it. Say the token the way Suno knows it.
+Use the tag's exact recognized wording, not a paraphrase — [Belting], not "sing it big."
 
-The hard warning, no exceptions: NEVER invent made-up key:value tags. Anything shaped like [Energy: High], [Vocals: Confident], [Harmonies swell], or [Drums hit harder] is NOT real — the machine ignores it and it reads as clutter that makes the song worse, not better. If a cue is not a recognized tag, it does not go in brackets. Stick to the real families above.
+**Fold delivery into the section header (the modern, reliable way).** Instead of a separate
+delivery tag standing on its own line, attach the delivery and any instrument change to the
+section it governs, inside ONE bracket, using a colon: [Chorus: belted, full harmonies],
+[Verse: soft, intimate], [Bridge: whispered]. This scopes the change to that one section, reads
+reliably, and avoids the sprinkle mistake. A standalone [Whispered] line still works for a
+mid-section shift, but prefer the folded header.
 
-The own-line rule: every bracket tag sits on its OWN line, between lyric lines — never jammed inside a lyric line. A tag placed mid-line is ignored. One tag, one line, in the gap where it applies.
+**Don't sprinkle — Suno DROPS extra tags.** One section tag per section, plus at most one or two
+modifiers folded into it. Past ~2–4 brackets on a section the renderer starts dropping the later
+ones, so decorative extras literally do nothing. Combining modifiers inside one bracket beats
+stacking [Soft] [Build] [Harmonies] as separate lines with nothing under them — that stacking IS
+the "tags standing empty" failure.
+
+**Never invent key:value tags.** [Energy: High], [Vocals: Confident], [Harmonies swell] are NOT
+real — the renderer ignores them or sings them aloud. A colon is valid ONLY after a real section
+word ([Chorus: ...], [Verse: ...]); after anything else it's junk. Production concerns — BPM,
+reverb, "layered vocals", artist names — belong in the SUNO production prompt, never in a lyric bracket.
+
+**Curly braces { } do nothing.** Suno does not read them — content in braces can even get sung
+aloud. Directives go in [ ]. Nothing else is a directive.
+
+The own-line rule: every bracket tag sits on its OWN line, directly above the lyrics it governs —
+never jammed mid-line, never stacked over another tag with no lyrics between them.
 
 **Adlibs:**
 
-Adlibs go in parentheses () and are the single biggest lever that moves a song from "written" to "performed." Unlike bracket tags, an adlib MAY sit inline — at the end of a lyric line or on its own short line right under it — exactly where a real singer would answer, echo, or breathe. That placement is the point: it puts a second living voice in the natural gap. This inline freedom is for parentheses only — a bracket tag NEVER goes inline; it always sits on its own line. Keep the two straight: parentheses can ride with the words, brackets always stand alone.
+Adlibs go in parentheses () and are the single biggest lever that moves a song from "written"
+to "performed." **Everything inside parentheses gets SUNG** — it renders as a second, usually
+quieter backing voice layered under the line. So an adlib sits INLINE, at the end of the lyric
+line it answers ("Rise up (rise up)", "I'm still here (still here)") — that inline placement is
+what bonds the answer to the line and layers it underneath. Brackets stand alone on their own
+line; parentheses ride inline with the words. Keep the two straight.
 
-What an adlib is: a sound or a short human response. The form of it — a hummed vowel, a breathed affirmation under the line, the last word of a line echoed back, one voice calling and another answering. Notice these are described as SOUNDS, not spelled-out words to sing. Keep every adlib at the level of the sound, never a scripted syllable — these are examples of the FORM, never content to copy.
+What goes in the parentheses is the actual SHORT words you want a second voice to sing — 1 to 3
+words: an echo of the last word, a short answer, a "yeah" or "oh" where a singer would respond.
+Because parentheses are ALWAYS sung, the cardinal error is putting a DIRECTION in them:
+"(whispered)" makes Suno literally sing the word "whispered." Directions and delivery cues go in
+[brackets]; only words you want vocalized go in (parentheses). Long sentences in parentheses get
+mangled — keep them short and singable.
 
 The dialect rule applies to adlibs with full force: an adlib is NEVER slang, patois, or dialect the user did not write in their own story. Generated dialect in an adlib reads as parody, not authenticity — the same failure the genre layer warns against. Keep adlibs to genuine sounds and honest short responses in the song's own plain voice, and let the earlier craft carry the identity.
 
