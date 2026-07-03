@@ -216,12 +216,12 @@ describe("runEngine end-to-end (scripted model, real landing + checks)", () => {
     expect(result.meta.landing.rule).toBe("picked");
   });
 
-  it("fails loud (never least-bad) after one guided retry when the writing flunks", async () => {
+  it("fails loud (never least-bad) after exhausting the guided retries", async () => {
     const { gen, writes } = scriptedGenerate({ badDrafts: true });
     await expect(
       runEngine(CURRICULUM_FIXTURE, { genre: "R&B", story: STORY }, gen)
     ).rejects.toSatisfy((e: any) => e instanceof EngineFailure && e.status === 422 && e.reasons.length > 0);
-    expect(writes.length).toBe(2); // the write, then exactly one guided retry — never more
+    expect(writes.length).toBe(3); // up to 3 internal attempts, then fail loud — never a least-bad ship
   });
 
   it("rejects a missing story before spending anything (unless a theme was picked)", async () => {
