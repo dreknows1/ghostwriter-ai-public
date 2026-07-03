@@ -339,42 +339,36 @@ export async function runEngine(
   stage("Planning sections...");
   const sections = validateSections(await planJson(generate, sectionsPrompt(brief, hook, card)));
 
-  const writeRound = async (guidance?: string) => {
-    const variants: Array<"straight" | "hook-first"> = ["straight", "hook-first"];
-    const drafts = await Promise.all(
-      variants.map((variant) =>
-        generate(
-          writerPrompt({ core: curriculum.core, pack, card, brief, hook, sections, story, vocals: inputs.vocals, variant, guidance }),
-          "write"
-        ).catch(() => "")
-      )
-    );
-    return drafts
-      .filter((d) => d && !d.includes("GENERATION_DECLINED"))
-      .map((d) => ({ draft: d, report: runChecks(d, { story, card, spec: brief.spec, hook }) }));
+  // ONE user input produces ONE song (founder order 2026-07-02). The engine writes
+  // the song once, straight through; the checks GATE it, they never pick between
+  // versions. A failed check earns one more write with plain guidance — then fail-loud.
+  const writeOne = async (variant: "straight" | "hook-first", guidance?: string) => {
+    const draft = await generate(
+      writerPrompt({ core: curriculum.core, pack, card, brief, hook, sections, story, vocals: inputs.vocals, variant, guidance }),
+      "write"
+    ).catch(() => "");
+    if (!draft || draft.includes("GENERATION_DECLINED")) return null;
+    return { draft, report: runChecks(draft, { story, card, spec: brief.spec, hook }) };
   };
 
-  stage("Writing drafts...");
-  let attempts = await writeRound();
-  let draftsTried = attempts.length;
+  stage("Writing your song...");
+  const first = await writeOne("straight");
+  let draftsTried = first ? 1 : 0;
 
   stage("Checking the writing...");
-  let passing = attempts.filter((a) => a.report.failCount === 0);
-  if (passing.length === 0) {
-    // One retry with writer-voice guidance (plan Step 6) — then fail loud.
+  let winner = first && first.report.failCount === 0 ? first : null;
+  if (!winner) {
     stage("Not good enough yet — one more pass...");
-    const retry = await writeRound(guidanceFor(attempts.map((a) => a.report)) || undefined);
-    draftsTried += retry.length;
-    passing = retry.filter((a) => a.report.failCount === 0);
-    if (passing.length === 0) {
-      const reasons = [...new Set([...attempts, ...retry].flatMap((a) => a.report.checks.filter((c) => !c.ok && c.severity === "fail").map((c) => c.id)))];
-      throw new EngineFailure(reasons);
+    const guidance = first ? guidanceFor([first.report]) || undefined : undefined;
+    const retry = await writeOne("hook-first", guidance);
+    if (retry) draftsTried += 1;
+    if (retry && retry.report.failCount === 0) winner = retry;
+    if (!winner) {
+      const reports = [first, retry].filter(Boolean) as Array<{ report: DraftReport }>;
+      const reasons = [...new Set(reports.flatMap((a) => a.report.checks.filter((c) => !c.ok && c.severity === "fail").map((c) => c.id)))];
+      throw new EngineFailure(reasons.length ? reasons : ["the writer declined the request"]);
     }
   }
-
-  // Selection, not revision (plan Step 5): best passing draft ships, ranked by warnings.
-  passing.sort((a, b) => a.report.warnCount - b.report.warnCount);
-  const winner = passing[0];
 
   return {
     text: winner.draft.trim(),

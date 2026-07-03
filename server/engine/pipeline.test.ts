@@ -154,6 +154,9 @@ describe("runEngine end-to-end (scripted model, real landing + checks)", () => {
     expect(result.meta.landing.rule).toBe("inferred");
     // the landing is SHOWN via a stage event (plan Rule 6 — never a silent swap)
     expect(stages.some((s) => s.includes("Quiet Storm"))).toBe(true);
+    // ONE user input produces ONE song (founder order): exactly one write, no picking
+    expect(writes.length).toBe(1);
+    expect(result.meta.draftsTried).toBe(1);
     // the story arrived whole in every writer prompt (plan Step 0)
     for (const w of writes) expect(w).toContain(STORY);
     // writer prompts carry curriculum, profile, and room dials
@@ -179,11 +182,12 @@ describe("runEngine end-to-end (scripted model, real landing + checks)", () => {
     expect(result.meta.landing.rule).toBe("picked");
   });
 
-  it("fails loud (never least-bad) when every draft flunks the checks", async () => {
-    const { gen } = scriptedGenerate({ badDrafts: true });
+  it("fails loud (never least-bad) after one guided retry when the writing flunks", async () => {
+    const { gen, writes } = scriptedGenerate({ badDrafts: true });
     await expect(
       runEngine(CURRICULUM_FIXTURE, { genre: "R&B", story: STORY }, gen)
     ).rejects.toSatisfy((e: any) => e instanceof EngineFailure && e.status === 422 && e.reasons.length > 0);
+    expect(writes.length).toBe(2); // the write, then exactly one guided retry — never more
   });
 
   it("rejects a missing story before spending anything", async () => {
