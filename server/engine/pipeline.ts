@@ -22,6 +22,12 @@ export type EngineInputs = {
   story: string;
   vocals?: string;
   subGenre?: string;
+  // Song Builder picks — structured constraints the brief must honor (never prose)
+  theme?: string;
+  purpose?: string;
+  audience?: string;
+  /** a user-chosen title: becomes THE hook, no candidates generated */
+  title?: string;
 };
 
 export type EngineResult = {
@@ -137,14 +143,25 @@ export function scoreHook(hook: string, tokens: string[]): number {
   return score;
 }
 
-function briefPrompt(story: string, card: RoomCard): string {
+function picksBlock(inputs: EngineInputs): string {
+  const picks: string[] = [];
+  if (inputs.theme) picks.push(`Theme: ${inputs.theme}`);
+  if (inputs.purpose) picks.push(`What the song should do: ${inputs.purpose}`);
+  if (inputs.audience) picks.push(`Who it speaks to: ${inputs.audience}`);
+  if (!picks.length) return "";
+  return `\nTHE USER'S CHOICES (honor these exactly — they are decisions, not suggestions):\n${picks.join("\n")}\n`;
+}
+
+function briefPrompt(story: string, card: RoomCard, inputs: EngineInputs): string {
+  const storyBlock = story
+    ? `THE STORY (the user's own words):\n${story}`
+    : `No story details were given — build the brief from the choices alone. Keep it universal but concrete, and NEVER invent fake personal details (no invented names, streets, dates, or events pretending to be the user's).`;
   return `You are planning a song. Do not write any lyrics. Read the story and return ONLY a JSON object.
 
 THE ROOM this song lives in: ${card.name} — ${card.oneLine}
 Its tempo & groove: ${card.tempoGroove}
-
-THE STORY (the user's own words):
-${story}
+${picksBlock(inputs)}
+${storyBlock}
 
 Return JSON with exactly these string fields:
 {
@@ -186,16 +203,18 @@ function validateBrief(raw: any, card: RoomCard, landing: Landing): Brief {
   return brief;
 }
 
-function hooksPrompt(story: string, brief: Brief, card: RoomCard): string {
+function hooksPrompt(story: string, brief: Brief, card: RoomCard, inputs: EngineInputs): string {
+  const source = story
+    ? `built from THIS story's actual details — never a generic phrase that could belong to anyone's song`
+    : `built from the core emotion and the user's choices — concrete and singable, but NEVER inventing fake personal details`;
+  const storyBlock = story ? `\nTHE STORY:\n${story}` : "";
   return `You are naming a song, the way real writers sing twenty and keep one. Return ONLY a JSON array of 12 strings.
 
-Each string is a hook/title candidate: short (2-6 words), rhythmic, emotionally loaded, built from THIS story's actual details — never a generic phrase that could belong to anyone's song. In this room (${card.name}), a hook that means two things at once beats a sincere flat one — but it must land naturally, never announced.
+Each string is a hook/title candidate: short (2-6 words), rhythmic, emotionally loaded, ${source}. In this room (${card.name}), a hook that means two things at once beats a sincere flat one — but it must land naturally, never announced.
 
 Core emotion: ${brief.coreEmotion}
 The turn: ${brief.turn}
-
-THE STORY:
-${story}`;
+${picksBlock(inputs)}${storyBlock}`;
 }
 
 function sectionsPrompt(brief: Brief, hook: string, card: RoomCard): string {
@@ -266,8 +285,7 @@ The hook (and title): ${hook}
 Section plan:
 ${sectionLines}
 
-=== THE STORY (the user's own words) ===
-${story}
+${story ? `=== THE STORY (the user's own words) ===\n${story}` : `=== NO STORY WAS GIVEN ===\nWrite from the brief alone. Keep it universal but concrete. NEVER invent fake personal details — no invented names, streets, dates, or events pretending to be the user's.`}
 
 ${approach}${guidance ? `\n\nOne more thing from the last attempt: ${guidance}` : ""}
 
@@ -299,18 +317,32 @@ function guidanceFor(reports: DraftReport[]): string {
   return lines.join("; ");
 }
 
-export async function runEngine(
+type SongPlan = {
+  pack: GenrePack;
+  card: RoomCard;
+  landing: Landing;
+  landingNote: string;
+  brief: Brief;
+  story: string;
+  /** hook candidates, best first (empty when the user brought their own title) */
+  rankedHooks: string[];
+};
+
+/** The shared front half: landing → brief → hook candidates. Used by the full engine
+ * run AND by the Song Builder's title-ideas step. */
+async function planSong(
   curriculum: CompiledCurriculum,
   inputs: EngineInputs,
   generate: EngineGenerate,
-  stage: EngineStage = () => {}
-): Promise<EngineResult> {
+  stage: EngineStage
+): Promise<SongPlan> {
   const pack = resolveGenre(curriculum, inputs.genre);
   if (!pack) throw new EngineNotAvailable(`no curriculum for genre "${inputs.genre}"`);
 
   const story = String(inputs.story || "").trim();
-  if (story.length < 10) {
-    throw Object.assign(new Error("Tell us the story first — a few sentences in your own words."), {
+  // The Song Builder makes the story optional: picks alone can carry a song.
+  if (story.length < 10 && !inputs.theme) {
+    throw Object.assign(new Error("Pick a theme or tell us the story first — a few sentences in your own words."), {
       status: 400,
       code: "story_required",
     });
@@ -323,18 +355,46 @@ export async function runEngine(
   const landingNote = describeLanding(landing, pack);
   stage(`Room: ${card.name} — ${landingNote}`);
 
-  const brief = validateBrief(await planJson(generate, briefPrompt(story, card)), card, landing);
+  const brief = validateBrief(await planJson(generate, briefPrompt(story, card, inputs)), card, landing);
+
+  const userTitle = String(inputs.title || "").trim();
+  if (userTitle) {
+    return { pack, card, landing, landingNote, brief, story, rankedHooks: [] };
+  }
 
   stage("Writing hooks...");
-  const hooksRaw = await planJson(generate, hooksPrompt(story, brief, card));
+  const hooksRaw = await planJson(generate, hooksPrompt(story, brief, card, inputs));
   const hooks: string[] = (Array.isArray(hooksRaw) ? hooksRaw : [])
     .map((h: any) => String(h || "").trim())
     .filter((h: string) => h.length > 0 && h.length < 60);
   if (hooks.length < 5) throw new EngineFailure(["hook step returned too few candidates"]);
-  const tokens = storyTokens(story);
-  const hook = hooks
+  const tokens = storyTokens(`${story} ${inputs.theme || ""}`);
+  const rankedHooks = hooks
     .map((h, i) => ({ h, score: scoreHook(h, tokens), i }))
-    .sort((a, b) => b.score - a.score || a.i - b.i)[0].h;
+    .sort((a, b) => b.score - a.score || a.i - b.i)
+    .map((x) => x.h);
+  return { pack, card, landing, landingNote, brief, story, rankedHooks };
+}
+
+/** Song Builder title ideas: the engine's own hook candidates, best first. */
+export async function runTitleIdeas(
+  curriculum: CompiledCurriculum,
+  inputs: EngineInputs,
+  generate: EngineGenerate
+): Promise<{ titles: string[]; roomName: string; landingNote: string }> {
+  const plan = await planSong(curriculum, { ...inputs, title: undefined }, generate, () => {});
+  return { titles: plan.rankedHooks.slice(0, 5), roomName: plan.card.name, landingNote: plan.landingNote };
+}
+
+export async function runEngine(
+  curriculum: CompiledCurriculum,
+  inputs: EngineInputs,
+  generate: EngineGenerate,
+  stage: EngineStage = () => {}
+): Promise<EngineResult> {
+  const plan = await planSong(curriculum, inputs, generate, stage);
+  const { pack, card, landing, landingNote, brief, story } = plan;
+  const hook = String(inputs.title || "").trim().slice(0, 80) || plan.rankedHooks[0];
 
   stage("Planning sections...");
   const sections = validateSections(await planJson(generate, sectionsPrompt(brief, hook, card)));

@@ -9,8 +9,10 @@ import {
   ENGINE_MODEL,
   ENGINE_VERSION,
   EngineNotAvailable,
+  parseFirstJson,
   resolveGenre,
   runEngine,
+  runTitleIdeas,
   type EngineGenerate,
 } from "./engine/pipeline";
 
@@ -32,6 +34,7 @@ export const config = {
 
 type AIAction =
   | "generateSong"
+  | "suggestTitles"
   | "editSong"
   | "structureImportedSong"
   | "generateDynamicOptions"
@@ -802,7 +805,15 @@ export function buildInterimSongPrompt(inputs: any): string {
   const story = String(inputs?.creativeDirection || inputs?.additionalInfo || "").trim();
   const vocals = String(inputs?.vocals || "Female Solo").trim();
   const voice = /female/i.test(vocals) ? "female vocal" : /male/i.test(vocals) ? "male vocal" : "duet vocals";
-  return `Write a ${genre} song${story ? ` about the following:\n\n${story}\n\n` : ". "}It should have a ${voice} and section tags like [Verse] [Chorus] [Bridge].
+  // Song Builder picks — passed through plainly; the user chose these.
+  const picks = [
+    inputs?.subGenre && `Style: ${String(inputs.subGenre).trim()}`,
+    inputs?.theme && `Theme: ${String(inputs.theme).trim()}`,
+    inputs?.purpose && `The song should: ${String(inputs.purpose).trim()}`,
+    inputs?.audience && `It speaks to: ${String(inputs.audience).trim()}`,
+    inputs?.title && `Title (use exactly this): ${String(inputs.title).trim()}`,
+  ].filter(Boolean).join("\n");
+  return `Write a ${genre} song${story ? ` about the following:\n\n${story}\n\n` : ". "}${picks ? `\nThe writer chose:\n${picks}\n\n` : ""}It should have a ${voice} and section tags like [Verse] [Chorus] [Bridge].
 
 Also write a 40-70 word Suno production prompt describing how the track should sound.
 
@@ -951,12 +962,46 @@ function engineStory(inputs: any): string {
 
 function engineInputs(payload: any) {
   const inputs = payload?.inputs || {};
+  const opt = (v: any) => (v ? String(v) : undefined);
   return {
     genre: String(inputs.genre || ""),
     story: engineStory(inputs),
-    vocals: inputs.vocals ? String(inputs.vocals) : undefined,
-    subGenre: inputs.subGenre ? String(inputs.subGenre) : undefined,
+    vocals: opt(inputs.vocals),
+    subGenre: opt(inputs.subGenre),
+    theme: opt(inputs.theme),
+    purpose: opt(inputs.purpose),
+    audience: opt(inputs.audience),
+    title: opt(inputs.title),
   };
+}
+
+/** Song Builder title ideas. Engine-backed for allowlisted emails; one cheap planning
+ * call for everyone else. Always returns { titles, room? }. */
+async function suggestTitles(payload: any, email?: string) {
+  const inputs = engineInputs(payload);
+  if (engineAllowed(email) && resolveGenre(CURRICULUM, inputs.genre)) {
+    const ideas = await runTitleIdeas(CURRICULUM, inputs, engineGenerate);
+    return { titles: ideas.titles, room: { name: ideas.roomName, note: ideas.landingNote } };
+  }
+  const picks = [
+    inputs.theme && `Theme: ${inputs.theme}`,
+    inputs.purpose && `What the song should do: ${inputs.purpose}`,
+    inputs.audience && `Who it speaks to: ${inputs.audience}`,
+  ].filter(Boolean).join("\n");
+  const prompt = `Suggest 5 song title ideas for a ${inputs.genre || "Pop"} song. Short (2-6 words), emotionally loaded, singable. ${
+    inputs.story ? "Build them from the story's actual details." : "Build them from the choices; never invent fake personal details."
+  }
+${picks}
+${inputs.story ? `THE STORY:\n${inputs.story}` : ""}
+Return ONLY a JSON array of 5 strings.`;
+  const raw = await engineGenerate(prompt, "plan");
+  let titles: string[] = [];
+  try {
+    titles = (parseFirstJson(raw) as any[]).map((t) => String(t).trim()).filter(Boolean).slice(0, 5);
+  } catch {
+    titles = [];
+  }
+  return { titles };
 }
 
 async function generateSongV3(payload: any) {
@@ -987,12 +1032,18 @@ async function streamSongV3(payload: any, res: VercelResponse) {
 export default async function handler(req: VercelRequest, res: VercelResponse) {
   if (req.method === "GET") {
     // Deployment canary (plan §1): proves the curriculum is inside the deployed bundle.
+    // `rooms` also feeds the Song Builder's sub-genre step (name + picker one-liner).
+    const rooms: Record<string, Array<{ id: string; name: string; oneLine: string }>> = {};
+    for (const pack of Object.values(CURRICULUM.genres)) {
+      rooms[pack.id] = pack.rooms.map((r) => ({ id: r.id, name: r.name, oneLine: r.oneLine }));
+    }
     return res.status(200).json({
       ok: true,
       engineVersion: ENGINE_VERSION,
       curriculumHash: CURRICULUM.hash,
       model: ENGINE_MODEL,
       genres: Object.keys(CURRICULUM.genres),
+      rooms,
     });
   }
   if (req.method !== "POST") {
@@ -1032,6 +1083,8 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
         if (payload?.stream) return await streamSongInterim(payload, res);
         return res.status(200).json(await generateSongInterim(payload));
       }
+      case "suggestTitles":
+        return res.status(200).json(await suggestTitles(payload, email));
       case "editSong":
         return res.status(200).json(await editSongInterim(payload));
       case "structureImportedSong":

@@ -1364,14 +1364,26 @@ function scoreHook(hook, tokens) {
   if (/["“”:;]/.test(hook)) score -= 1;
   return score;
 }
-function briefPrompt(story, card) {
+function picksBlock(inputs) {
+  const picks = [];
+  if (inputs.theme) picks.push(`Theme: ${inputs.theme}`);
+  if (inputs.purpose) picks.push(`What the song should do: ${inputs.purpose}`);
+  if (inputs.audience) picks.push(`Who it speaks to: ${inputs.audience}`);
+  if (!picks.length) return "";
+  return `
+THE USER'S CHOICES (honor these exactly \u2014 they are decisions, not suggestions):
+${picks.join("\n")}
+`;
+}
+function briefPrompt(story, card, inputs) {
+  const storyBlock = story ? `THE STORY (the user's own words):
+${story}` : `No story details were given \u2014 build the brief from the choices alone. Keep it universal but concrete, and NEVER invent fake personal details (no invented names, streets, dates, or events pretending to be the user's).`;
   return `You are planning a song. Do not write any lyrics. Read the story and return ONLY a JSON object.
 
 THE ROOM this song lives in: ${card.name} \u2014 ${card.oneLine}
 Its tempo & groove: ${card.tempoGroove}
-
-THE STORY (the user's own words):
-${story}
+${picksBlock(inputs)}
+${storyBlock}
 
 Return JSON with exactly these string fields:
 {
@@ -1411,16 +1423,18 @@ function validateBrief(raw, card, landing) {
   }
   return brief;
 }
-function hooksPrompt(story, brief, card) {
+function hooksPrompt(story, brief, card, inputs) {
+  const source = story ? `built from THIS story's actual details \u2014 never a generic phrase that could belong to anyone's song` : `built from the core emotion and the user's choices \u2014 concrete and singable, but NEVER inventing fake personal details`;
+  const storyBlock = story ? `
+THE STORY:
+${story}` : "";
   return `You are naming a song, the way real writers sing twenty and keep one. Return ONLY a JSON array of 12 strings.
 
-Each string is a hook/title candidate: short (2-6 words), rhythmic, emotionally loaded, built from THIS story's actual details \u2014 never a generic phrase that could belong to anyone's song. In this room (${card.name}), a hook that means two things at once beats a sincere flat one \u2014 but it must land naturally, never announced.
+Each string is a hook/title candidate: short (2-6 words), rhythmic, emotionally loaded, ${source}. In this room (${card.name}), a hook that means two things at once beats a sincere flat one \u2014 but it must land naturally, never announced.
 
 Core emotion: ${brief.coreEmotion}
 The turn: ${brief.turn}
-
-THE STORY:
-${story}`;
+${picksBlock(inputs)}${storyBlock}`;
 }
 function sectionsPrompt(brief, hook, card) {
   return `Plan the sections for one song. No lyrics. Return ONLY a JSON array of 4-8 objects like {"tag":"[Verse]","job":"..."}.
@@ -1472,8 +1486,9 @@ The hook (and title): ${hook}
 Section plan:
 ${sectionLines}
 
-=== THE STORY (the user's own words) ===
-${story}
+${story ? `=== THE STORY (the user's own words) ===
+${story}` : `=== NO STORY WAS GIVEN ===
+Write from the brief alone. Keep it universal but concrete. NEVER invent fake personal details \u2014 no invented names, streets, dates, or events pretending to be the user's.`}
 
 ${approach}${guidance ? `
 
@@ -1503,13 +1518,12 @@ function guidanceFor(reports) {
   const lines = [...failed].map((id) => GUIDANCE[id]).filter(Boolean);
   return lines.join("; ");
 }
-async function runEngine(curriculum, inputs, generate, stage = () => {
-}) {
+async function planSong(curriculum, inputs, generate, stage) {
   const pack = resolveGenre(curriculum, inputs.genre);
   if (!pack) throw new EngineNotAvailable(`no curriculum for genre "${inputs.genre}"`);
   const story = String(inputs.story || "").trim();
-  if (story.length < 10) {
-    throw Object.assign(new Error("Tell us the story first \u2014 a few sentences in your own words."), {
+  if (story.length < 10 && !inputs.theme) {
+    throw Object.assign(new Error("Pick a theme or tell us the story first \u2014 a few sentences in your own words."), {
       status: 400,
       code: "story_required"
     });
@@ -1520,13 +1534,29 @@ async function runEngine(curriculum, inputs, generate, stage = () => {
   if (!card) throw new EngineNotAvailable(`room "${landing.roomId}" missing from pack`);
   const landingNote = describeLanding(landing, pack);
   stage(`Room: ${card.name} \u2014 ${landingNote}`);
-  const brief = validateBrief(await planJson(generate, briefPrompt(story, card)), card, landing);
+  const brief = validateBrief(await planJson(generate, briefPrompt(story, card, inputs)), card, landing);
+  const userTitle = String(inputs.title || "").trim();
+  if (userTitle) {
+    return { pack, card, landing, landingNote, brief, story, rankedHooks: [] };
+  }
   stage("Writing hooks...");
-  const hooksRaw = await planJson(generate, hooksPrompt(story, brief, card));
+  const hooksRaw = await planJson(generate, hooksPrompt(story, brief, card, inputs));
   const hooks = (Array.isArray(hooksRaw) ? hooksRaw : []).map((h) => String(h || "").trim()).filter((h) => h.length > 0 && h.length < 60);
   if (hooks.length < 5) throw new EngineFailure(["hook step returned too few candidates"]);
-  const tokens = storyTokens(story);
-  const hook = hooks.map((h, i) => ({ h, score: scoreHook(h, tokens), i })).sort((a, b) => b.score - a.score || a.i - b.i)[0].h;
+  const tokens = storyTokens(`${story} ${inputs.theme || ""}`);
+  const rankedHooks = hooks.map((h, i) => ({ h, score: scoreHook(h, tokens), i })).sort((a, b) => b.score - a.score || a.i - b.i).map((x) => x.h);
+  return { pack, card, landing, landingNote, brief, story, rankedHooks };
+}
+async function runTitleIdeas(curriculum, inputs, generate) {
+  const plan = await planSong(curriculum, { ...inputs, title: void 0 }, generate, () => {
+  });
+  return { titles: plan.rankedHooks.slice(0, 5), roomName: plan.card.name, landingNote: plan.landingNote };
+}
+async function runEngine(curriculum, inputs, generate, stage = () => {
+}) {
+  const plan = await planSong(curriculum, inputs, generate, stage);
+  const { pack, card, landing, landingNote, brief, story } = plan;
+  const hook = String(inputs.title || "").trim().slice(0, 80) || plan.rankedHooks[0];
   stage("Planning sections...");
   const sections = validateSections(await planJson(generate, sectionsPrompt(brief, hook, card)));
   const writeOne = async (variant, guidance) => {
@@ -2190,11 +2220,22 @@ function buildInterimSongPrompt(inputs) {
   const story = String(inputs?.creativeDirection || inputs?.additionalInfo || "").trim();
   const vocals = String(inputs?.vocals || "Female Solo").trim();
   const voice = /female/i.test(vocals) ? "female vocal" : /male/i.test(vocals) ? "male vocal" : "duet vocals";
+  const picks = [
+    inputs?.subGenre && `Style: ${String(inputs.subGenre).trim()}`,
+    inputs?.theme && `Theme: ${String(inputs.theme).trim()}`,
+    inputs?.purpose && `The song should: ${String(inputs.purpose).trim()}`,
+    inputs?.audience && `It speaks to: ${String(inputs.audience).trim()}`,
+    inputs?.title && `Title (use exactly this): ${String(inputs.title).trim()}`
+  ].filter(Boolean).join("\n");
   return `Write a ${genre} song${story ? ` about the following:
 
 ${story}
 
-` : ". "}It should have a ${voice} and section tags like [Verse] [Chorus] [Bridge].
+` : ". "}${picks ? `
+The writer chose:
+${picks}
+
+` : ""}It should have a ${voice} and section tags like [Verse] [Chorus] [Bridge].
 
 Also write a 40-70 word Suno production prompt describing how the track should sound.
 
@@ -2342,12 +2383,42 @@ function engineStory(inputs) {
 }
 function engineInputs(payload) {
   const inputs = payload?.inputs || {};
+  const opt = (v) => v ? String(v) : void 0;
   return {
     genre: String(inputs.genre || ""),
     story: engineStory(inputs),
-    vocals: inputs.vocals ? String(inputs.vocals) : void 0,
-    subGenre: inputs.subGenre ? String(inputs.subGenre) : void 0
+    vocals: opt(inputs.vocals),
+    subGenre: opt(inputs.subGenre),
+    theme: opt(inputs.theme),
+    purpose: opt(inputs.purpose),
+    audience: opt(inputs.audience),
+    title: opt(inputs.title)
   };
+}
+async function suggestTitles(payload, email) {
+  const inputs = engineInputs(payload);
+  if (engineAllowed(email) && resolveGenre(CURRICULUM, inputs.genre)) {
+    const ideas = await runTitleIdeas(CURRICULUM, inputs, engineGenerate);
+    return { titles: ideas.titles, room: { name: ideas.roomName, note: ideas.landingNote } };
+  }
+  const picks = [
+    inputs.theme && `Theme: ${inputs.theme}`,
+    inputs.purpose && `What the song should do: ${inputs.purpose}`,
+    inputs.audience && `Who it speaks to: ${inputs.audience}`
+  ].filter(Boolean).join("\n");
+  const prompt = `Suggest 5 song title ideas for a ${inputs.genre || "Pop"} song. Short (2-6 words), emotionally loaded, singable. ${inputs.story ? "Build them from the story's actual details." : "Build them from the choices; never invent fake personal details."}
+${picks}
+${inputs.story ? `THE STORY:
+${inputs.story}` : ""}
+Return ONLY a JSON array of 5 strings.`;
+  const raw = await engineGenerate(prompt, "plan");
+  let titles = [];
+  try {
+    titles = parseFirstJson(raw).map((t) => String(t).trim()).filter(Boolean).slice(0, 5);
+  } catch {
+    titles = [];
+  }
+  return { titles };
 }
 async function generateSongV3(payload) {
   const result = await runEngine(CURRICULUM, engineInputs(payload), engineGenerate);
@@ -2382,12 +2453,17 @@ async function streamSongV3(payload, res) {
 }
 async function handler(req, res) {
   if (req.method === "GET") {
+    const rooms = {};
+    for (const pack of Object.values(CURRICULUM.genres)) {
+      rooms[pack.id] = pack.rooms.map((r) => ({ id: r.id, name: r.name, oneLine: r.oneLine }));
+    }
     return res.status(200).json({
       ok: true,
       engineVersion: ENGINE_VERSION,
       curriculumHash: CURRICULUM.hash,
       model: ENGINE_MODEL,
-      genres: Object.keys(CURRICULUM.genres)
+      genres: Object.keys(CURRICULUM.genres),
+      rooms
     });
   }
   if (req.method !== "POST") {
@@ -2414,6 +2490,8 @@ async function handler(req, res) {
         if (payload?.stream) return await streamSongInterim(payload, res);
         return res.status(200).json(await generateSongInterim(payload));
       }
+      case "suggestTitles":
+        return res.status(200).json(await suggestTitles(payload, email));
       case "editSong":
         return res.status(200).json(await editSongInterim(payload));
       case "structureImportedSong":
