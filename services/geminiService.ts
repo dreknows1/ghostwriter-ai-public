@@ -188,7 +188,9 @@ async function* streamSongEvents(
         yield obj.text || draft;
         finished = true;
       } else if (obj.type === "error") {
-        throw new Error(obj.error || "Song generation failed.");
+        // The server answered and said no — surface it. Marking it fromServer stops the
+        // caller's transport-failure fallback from silently generating a SECOND song.
+        throw Object.assign(new Error(obj.error || "Song generation failed."), { fromServer: true });
       }
     }
   }
@@ -217,9 +219,10 @@ export async function* generateSong(
     }
     return;
   } catch (err) {
-    // If lyrics already streamed, a silent re-request would generate (and pay for)
-    // the song twice — surface the error instead.
-    if (yieldedLyrics) throw err;
+    // ONE user input produces ONE song. If lyrics already streamed, or the server
+    // itself reported the failure, a silent re-request would generate (and pay for)
+    // a second song — surface the error instead.
+    if (yieldedLyrics || (err as any)?.fromServer) throw err;
     // Stream never got going (older deploy, proxy buffering, network) — classic path.
   }
 

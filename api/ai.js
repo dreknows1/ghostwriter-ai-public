@@ -1529,35 +1529,31 @@ async function runEngine(curriculum, inputs, generate, stage = () => {
   const hook = hooks.map((h, i) => ({ h, score: scoreHook(h, tokens), i })).sort((a, b) => b.score - a.score || a.i - b.i)[0].h;
   stage("Planning sections...");
   const sections = validateSections(await planJson(generate, sectionsPrompt(brief, hook, card)));
-  const writeRound = async (guidance) => {
-    const variants = ["straight", "hook-first"];
-    const drafts = await Promise.all(
-      variants.map(
-        (variant) => generate(
-          writerPrompt({ core: curriculum.core, pack, card, brief, hook, sections, story, vocals: inputs.vocals, variant, guidance }),
-          "write"
-        ).catch(() => "")
-      )
-    );
-    return drafts.filter((d) => d && !d.includes("GENERATION_DECLINED")).map((d) => ({ draft: d, report: runChecks(d, { story, card, spec: brief.spec, hook }) }));
+  const writeOne = async (variant, guidance) => {
+    const draft = await generate(
+      writerPrompt({ core: curriculum.core, pack, card, brief, hook, sections, story, vocals: inputs.vocals, variant, guidance }),
+      "write"
+    ).catch(() => "");
+    if (!draft || draft.includes("GENERATION_DECLINED")) return null;
+    return { draft, report: runChecks(draft, { story, card, spec: brief.spec, hook }) };
   };
-  stage("Writing drafts...");
-  let attempts = await writeRound();
-  let draftsTried = attempts.length;
+  stage("Writing your song...");
+  const first = await writeOne("straight");
+  let draftsTried = first ? 1 : 0;
   stage("Checking the writing...");
-  let passing = attempts.filter((a) => a.report.failCount === 0);
-  if (passing.length === 0) {
+  let winner = first && first.report.failCount === 0 ? first : null;
+  if (!winner) {
     stage("Not good enough yet \u2014 one more pass...");
-    const retry = await writeRound(guidanceFor(attempts.map((a) => a.report)) || void 0);
-    draftsTried += retry.length;
-    passing = retry.filter((a) => a.report.failCount === 0);
-    if (passing.length === 0) {
-      const reasons = [...new Set([...attempts, ...retry].flatMap((a) => a.report.checks.filter((c) => !c.ok && c.severity === "fail").map((c) => c.id)))];
-      throw new EngineFailure(reasons);
+    const guidance = first ? guidanceFor([first.report]) || void 0 : void 0;
+    const retry = await writeOne("hook-first", guidance);
+    if (retry) draftsTried += 1;
+    if (retry && retry.report.failCount === 0) winner = retry;
+    if (!winner) {
+      const reports = [first, retry].filter(Boolean);
+      const reasons = [...new Set(reports.flatMap((a) => a.report.checks.filter((c) => !c.ok && c.severity === "fail").map((c) => c.id)))];
+      throw new EngineFailure(reasons.length ? reasons : ["the writer declined the request"]);
     }
   }
-  passing.sort((a, b) => a.report.warnCount - b.report.warnCount);
-  const winner = passing[0];
   return {
     text: winner.draft.trim(),
     meta: {

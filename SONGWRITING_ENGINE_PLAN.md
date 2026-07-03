@@ -74,17 +74,18 @@ entendre or a flipped common phrase get preference — that's where the hook pay
 what the chorus declares, what the bridge reveals — planned against the musical spec
 (a gospel song plans its vamp cell here; a hip-hop song plans its flow switch).
 
-**Step 4 — Write 2–3 complete drafts, in parallel.** Each written straight through, one
-voice, guided by: the compiled curriculum, the genre's Composer Profile, the brief, the
-chosen hook, the section plan. **No numeric one-size rules, no example lines to imitate** —
-the two live bugs in today's engine both get deleted in Phase 1 (the critic caught that my
-draft plan banned them while they were still running in production).
+**Step 4 — Write THE song, straight through.** *(Founder order 2026-07-02: one user
+input produces ONE song. The earlier 2–3-parallel-drafts design is dead.)* The engine
+writes one complete draft, one voice, guided by: the compiled curriculum, the genre's
+Composer Profile, the room card, the brief, the chosen hook, the section plan.
+**No numeric one-size rules, no example lines to imitate.**
 
-**Step 5 — Selection, not revision.** The old "revise like a writer" idea is out — an AI
-can't actually "read aloud," and an unconstrained revision pass is the photocopy machine
-with better branding (engineer's words). Instead: **code checks every draft, and the best
-passing draft ships.** If a trim pass exists at all, it may only DELETE lines — enforced in
-code (every surviving line must exist in the original draft) — never rewrite or add.
+**Step 5 — The checks GATE the song; they never rewrite it and never pick between
+versions.** The old "revise like a writer" idea is out — an AI can't actually "read
+aloud," and an unconstrained revision pass is the photocopy machine with better branding
+(engineer's words). Code checks the one draft: passing → it ships. If a trim pass exists
+at all, it may only DELETE lines — enforced in code (every surviving line must exist in
+the original draft) — never rewrite or add.
 
 **Step 6 — Code checks (no AI) — now including the musical ones.** The checks are
 parameterized by the chosen sub-genre page's dials — a check runs only where the room
@@ -99,15 +100,10 @@ turns it on (some rooms forbid perfect symmetry; drill forbids a lifted singable
 - format, tags from the genre's own vocabulary, no leaked labels, no plagiarism
   (paraphrase-aware, not just word-for-word)
 
-**If every draft fails: the user gets an honest "let's try one more" — never a least-bad
-song.** (Today's engine ships the least-bad failing draft; that dies in Phase 1.) On the
-one automatic retry, the failure reasons are translated by code into writer-voice guidance
-("keep your chorus lines the same length") — never pasted raw into the prompt.
-
-**Who picks between passing drafts:** code-measurable criteria first (checker margins,
-hook-meter fit). If an AI picker is ever used, it must first prove it agrees with YOUR
-picks at least 70% of the time on a graded batch — otherwise it's just the fired judge
-sneaking back in through the side door.
+**If the draft fails the checks: ONE more write with plain writer-voice guidance**
+("keep your chorus lines the same length" — never raw checker strings pasted into the
+prompt), then an honest "let's try again" — never a least-bad song. One input, one song,
+or an honest miss.
 
 ## 3. Composer Profiles — how a writer thinks per genre, AND how it renders
 
