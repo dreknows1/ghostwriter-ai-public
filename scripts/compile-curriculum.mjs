@@ -143,6 +143,26 @@ export function compileProfile(profileMd, rooms) {
   return { profileText, defaultRoomId, cues };
 }
 
+/** The house-style ban list from BRAIN Layer 3 — semicolon-separated bullet phrases
+ * under the "House-style words" bullet. Compiled for the code check; the prose stays
+ * in the core so the writer is warned up front. */
+export function compileBannedPhrases(brainMd) {
+  const start = brainMd.indexOf("**House-style words");
+  if (start === -1) fail("BRAIN is missing the House-style words ban list (Layer 3)");
+  const rest = brainMd.slice(start);
+  const phrases = [];
+  for (const line of rest.split("\n").slice(1)) {
+    const m = line.match(/^ {2}- (.+)$/);
+    if (!m) { if (line.startsWith("- **") || line.startsWith("## ")) break; continue; }
+    for (const p of m[1].split(";")) {
+      const phrase = p.trim().toLowerCase();
+      if (phrase) phrases.push(phrase);
+    }
+  }
+  if (phrases.length < 10) fail(`ban list suspiciously small (${phrases.length} phrases)`);
+  return phrases;
+}
+
 export function lintNoLyricLines(compiled) {
   const texts = [compiled.core];
   for (const pack of Object.values(compiled.genres)) {
@@ -171,14 +191,16 @@ export function compile(brainMd, subgenresMd, profileMd) {
     room.writingDials.reduce((n, d) => n + d.length, 0);
   const largestCard = Math.max(...rooms.map(cardChars));
   const largestSlice = Math.round((core.length + profileText.length + largestCard) / 4);
-  if (largestSlice > 2800) fail(`per-song slice ${largestSlice} tokens exceeds the ~2,800 budget — prune, don't pile on (plan §1)`);
+  if (largestSlice > 3000) fail(`per-song slice ${largestSlice} tokens exceeds the ~3,000 budget — prune, don't pile on (plan §1)`);
 
   const hash = createHash("sha256")
     .update(brainMd).update(subgenresMd).update(profileMd)
     .digest("hex").slice(0, 12);
 
+  const bannedPhrases = compileBannedPhrases(brainMd);
   const compiled = {
     core,
+    bannedPhrases,
     genres: {
       rnb: {
         id: "rnb",

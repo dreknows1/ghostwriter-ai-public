@@ -83,19 +83,78 @@ describe("runChecks — a clean draft", () => {
     expect(report.checks.every((c) => c.ok)).toBe(true);
   });
 
-  it("emits all ten checks in stable order with the right severities", () => {
+  it("emits the base checks in stable order with the right severities", () => {
     const report = runChecks(buildDraft(), OPTS);
+    // artist-names-in-suno always runs; banned-phrases and central-image only when
+    // their opts are supplied (not in OPTS here).
     expect(report.checks.map((c) => c.id)).toEqual([
       "format", "leaked-labels", "story-fidelity", "hook-placement", "title-hook",
       "chorus-consistency", "metric-parallel", "nursery-rhyme", "word-density", "verse-advance",
+      "artist-names-in-suno",
     ]);
     const severity = (id: string) => getCheck(report, id).severity;
-    for (const id of ["format", "leaked-labels", "story-fidelity", "hook-placement", "chorus-consistency"]) {
+    for (const id of ["format", "leaked-labels", "story-fidelity", "hook-placement", "chorus-consistency", "artist-names-in-suno"]) {
       expect(severity(id)).toBe("fail");
     }
     for (const id of ["title-hook", "metric-parallel", "nursery-rhyme", "word-density", "verse-advance"]) {
       expect(severity(id)).toBe("warn");
     }
+  });
+});
+
+describe("banned-phrases (founder's house-style ban list)", () => {
+  const banned = ["hearts entwined", "beat inside my heart", "honest truth"];
+
+  it("does not run when no ban list is supplied", () => {
+    const report = runChecks(buildDraft(), OPTS);
+    expect(report.checks.find((c) => c.id === "banned-phrases")).toBeUndefined();
+  });
+
+  it("fails when a house-style phrase appears in the lyrics", () => {
+    const lyrics = GOOD_LYRICS.replace("He said the needle knows a patient road", "Our hearts entwined along that patient road");
+    const report = runChecks(buildDraft({ lyrics }), { ...OPTS, bannedPhrases: banned });
+    const check = getCheck(report, "banned-phrases");
+    expect(check.ok).toBe(false);
+    expect(check.severity).toBe("fail");
+    expect(check.detail).toContain("hearts entwined");
+  });
+
+  it("passes a clean draft against the ban list", () => {
+    const report = runChecks(buildDraft(), { ...OPTS, bannedPhrases: banned });
+    expect(getCheck(report, "banned-phrases").ok).toBe(true);
+  });
+});
+
+describe("central-image (anti-greeting-card anchor)", () => {
+  it("does not run when no central image is supplied", () => {
+    const report = runChecks(buildDraft(), OPTS);
+    expect(report.checks.find((c) => c.id === "central-image")).toBeUndefined();
+  });
+
+  it("passes when the image lives in two or more lyric lines", () => {
+    // GOOD_LYRICS mentions the compass in the chorus (twice) and a copper case line
+    const report = runChecks(buildDraft(), { ...OPTS, centralImage: "broken compass" });
+    expect(getCheck(report, "central-image").ok).toBe(true);
+  });
+
+  it("fails when the image is absent from the song", () => {
+    const report = runChecks(buildDraft(), { ...OPTS, centralImage: "rusted bicycle bell" });
+    const check = getCheck(report, "central-image");
+    expect(check.ok).toBe(false);
+    expect(check.severity).toBe("fail");
+  });
+});
+
+describe("artist-names-in-suno", () => {
+  it("passes a production prompt that describes the sound without naming artists", () => {
+    expect(getCheck(runChecks(buildDraft(), OPTS), "artist-names-in-suno").ok).toBe(true);
+  });
+
+  it("fails a 'think X meets Y' artist name-drop", () => {
+    const suno = SUNO_PROMPT + " Think Sade meets Anita Baker.";
+    const check = getCheck(runChecks(buildDraft({ suno }), OPTS), "artist-names-in-suno");
+    expect(check.ok).toBe(false);
+    expect(check.severity).toBe("fail");
   });
 });
 

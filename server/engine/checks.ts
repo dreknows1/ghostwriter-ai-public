@@ -234,7 +234,16 @@ function rhymeKey(line: string): string | null {
 
 export function runChecks(
   draft: string,
-  opts: { story: string; card: RoomCard; spec: MusicalSpec; hook: string },
+  opts: {
+    story: string;
+    card: RoomCard;
+    spec: MusicalSpec;
+    hook: string;
+    /** the brief's ONE ordinary physical image — must appear at least twice in the lyrics */
+    centralImage?: string;
+    /** the founder's house-style ban list (compiled from BRAIN Layer 3) — any hit fails */
+    bannedPhrases?: string[];
+  },
 ): DraftReport {
   // NOTE: opts.card is part of the stable call contract. The plan (§2 Step 6)
   // eventually lets a room's dials switch individual checks on/off; Phase 1
@@ -448,6 +457,62 @@ export function runChecks(
         detail: `${Math.round(share * 100)}% of verse-2 tokens already in verse 1`,
       });
     }
+  }
+
+  // banned-phrases (fail): the founder's house-style ban list (BRAIN Layer 3).
+  // These are the AI's default lines — they belong to no one's story.
+  {
+    const banned = opts.bannedPhrases || [];
+    if (banned.length > 0) {
+      const lower = body.toLowerCase();
+      const hits = banned.filter((p) => lower.includes(p));
+      checks.push({
+        id: "banned-phrases",
+        severity: "fail",
+        ok: hits.length === 0,
+        detail: hits.length ? `house-style phrases found: ${hits.join("; ")}` : "clean",
+      });
+    }
+  }
+
+  // central-image (fail): the brief's ONE ordinary physical image must actually live
+  // in the song — its key words appearing at least twice. Anti-greeting-card rule:
+  // a song with no concrete anchor is a song anyone could have received.
+  {
+    const image = String(opts.centralImage || "").trim();
+    if (image) {
+      const keyWords = distinctTokens(image);
+      let appearances = 0;
+      const lowerLines = (parsed.lyricLines || []).map((l) => l.toLowerCase());
+      for (const line of lowerLines) {
+        for (const w of keyWords) {
+          if (w.length > 3 && line.includes(w.slice(0, 5))) {
+            appearances++;
+            break;
+          }
+        }
+      }
+      checks.push({
+        id: "central-image",
+        severity: "fail",
+        ok: keyWords.size === 0 || appearances >= 2,
+        detail: `image "${image}" appears in ${appearances} lyric lines (needs 2+)`,
+      });
+    }
+  }
+
+  // artist-names-in-suno (fail): "think Sade meets Toni Braxton" — the renderer
+  // rejects artist names, and the sound description should carry the room instead.
+  {
+    const suno = parsed.sunoPrompt || "";
+    const nameDrop = /\b(?:think|like|sounds like|reminiscent of|in the style of)\s+[A-Z][\w.]+(?:\s+[A-Z][\w.]+)?\s*(?:meets|x|×|vs)\s+[A-Z]/.test(suno)
+      || /\b[A-Z][\w.]+\s+meets\s+[A-Z][\w.]+/.test(suno);
+    checks.push({
+      id: "artist-names-in-suno",
+      severity: "fail",
+      ok: !nameDrop,
+      detail: nameDrop ? "production prompt name-drops artists — describe the sound instead" : "clean",
+    });
   }
 
   let failCount = 0;

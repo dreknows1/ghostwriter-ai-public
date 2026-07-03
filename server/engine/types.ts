@@ -45,6 +45,8 @@ export type GenrePack = {
 export type CompiledCurriculum = {
   /** universal writer core compiled from SONGWRITING_BRAIN.md */
   core: string;
+  /** the founder's house-style ban list (BRAIN Layer 3) — any hit fails the draft */
+  bannedPhrases: string[];
   genres: Record<string, GenrePack>;
   /** sha256 of all source docs — reported on /api/health as curriculumHash */
   hash: string;
@@ -76,6 +78,10 @@ export type Brief = {
   purpose: string;
   pov: string;
   turn: string;
+  /** ONE ordinary physical image the song returns to — from the story when there is
+   * one, universal for the theme when there isn't. Code-checked: it must actually
+   * appear (twice) in the lyrics. This is the anti-greeting-card enforcement. */
+  centralImage: string;
   spec: MusicalSpec;
   landing: Landing;
 };
