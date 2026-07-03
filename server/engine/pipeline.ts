@@ -169,6 +169,7 @@ Return JSON with exactly these string fields:
   "purpose": "what this song is FOR (dance, testify, feel seen, flirt, grieve...)",
   "pov": "who is speaking, to whom, and why now",
   "turn": "what changes inside this song — where it starts, where it turns, where it lands",
+  "centralImage": "ONE ordinary physical image the song returns to — a thing you can touch, see, or smell, named in 2-5 plain words. From the story when there is one; universal for the theme when there isn't (an object anyone could own — never a fake personal detail). Not a feeling, not a metaphor label — a thing.",
   "spec": {
     "tempo": "a BPM range for THIS song, inside the room's range",
     "groove": "straight / swung / half-time — the feel for THIS song",
@@ -194,10 +195,11 @@ function validateBrief(raw: any, card: RoomCard, landing: Landing): Brief {
     purpose: s(raw?.purpose, ""),
     pov: s(raw?.pov, ""),
     turn: s(raw?.turn, ""),
+    centralImage: s(raw?.centralImage, ""),
     spec,
     landing,
   };
-  if (!brief.coreEmotion || !brief.purpose || !brief.pov || !brief.turn) {
+  if (!brief.coreEmotion || !brief.purpose || !brief.pov || !brief.turn || !brief.centralImage) {
     throw new Error("brief incomplete");
   }
   return brief;
@@ -223,7 +225,9 @@ function sectionsPrompt(brief: Brief, hook: string, card: RoomCard): string {
 Allowed tags: [Intro] [Verse] [Pre-Chorus] [Chorus] [Bridge] [Outro] (repeat [Verse]/[Chorus] as needed).
 Every job is one sentence saying what THAT section must do for THIS song (what verse 1 establishes, what the bridge reveals). The chorus builds around the hook "${hook}".
 Room conventions: ${card.name} — ${card.oneLine}
-Bars: ${brief.spec.barsPerSection}. The song's turn: ${brief.turn}`;
+How this room writes (plan the sections to honor these — if the room vamps, PLAN the vamp):
+${card.writingDials.map((d) => `- ${d}`).join("\n")}
+Bars: ${brief.spec.barsPerSection}. The song's turn: ${brief.turn}. The central image: ${brief.centralImage}`;
 }
 
 type SectionPlan = Array<{ tag: string; job: string }>;
@@ -253,14 +257,21 @@ function writerPrompt(args: {
   vocals?: string;
   variant: "straight" | "hook-first";
   guidance?: string;
+  bannedPhrases: string[];
 }): string {
-  const { core, pack, card, brief, hook, sections, story, vocals, variant, guidance } = args;
+  const { core, pack, card, brief, hook, sections, story, vocals, variant, guidance, bannedPhrases } = args;
   const sectionLines = sections.map((s) => `${s.tag} — ${s.job}`).join("\n");
   const approach =
     variant === "hook-first"
       ? "Approach: get the chorus singing first in your head, then build every verse toward it. Output in normal top-to-bottom order."
       : "Approach: write the song straight through, top to bottom, one voice, one sitting.";
+  const banList = bannedPhrases.slice(0, 40).join("; ");
   return `You are writing one real song for one specific person. Their story is the only source of truth — use their real details; never invent replacements for them.
+
+=== THE ONE RULE ABOVE ALL ===
+Every line must be one a stranger could NOT have written about their own love. If a line would fit any love song ever made, it has failed — cut it and write the specific true thing instead. The test for the whole song: could two different people with different stories both receive it? If yes, you failed.
+BANNED — these are the machine's default phrases; using even one fails the song: ${banList}.
+No greeting-card abstractions (no "beat of my heart", "words I never spoke", "let the world slip away", "you complete me"). Concrete nouns over feeling-words. A real thing the listener can touch beats any adjective.
 
 === THE CRAFT (applies to every song) ===
 ${core}
@@ -281,6 +292,7 @@ Purpose: ${brief.purpose}
 Point of view: ${brief.pov}
 The turn: ${brief.turn}
 Musical spec: tempo ${brief.spec.tempo}; groove ${brief.spec.groove}; ${brief.spec.barsPerSection}; word density ${brief.spec.wordDensity}.
+The central image: ${brief.centralImage} — the song returns to it; the feelings live in and around this real thing, never floating free. If the room welcomes a second meaning, this image carries it.
 The hook (and title): ${hook}
 Section plan:
 ${sectionLines}
@@ -294,7 +306,7 @@ Vocal: ${voiceLine(vocals)}.
 Return exactly this format:
 Title: ${hook}
 ### SUNO Prompt
-One 40-70 word production prompt for this exact song. Ground it in this room's sound: ${card.rendering}
+One 40-70 word production prompt for this exact song. Ground it in this room's sound (never name real artists — describe the sound instead): ${card.rendering}
 ### Lyrics
 The song, with section tags in brackets.
 
@@ -308,6 +320,9 @@ const GUIDANCE: Record<string, string> = {
   "chorus-consistency": "the chorus is the same words every time it returns",
   format: "keep the exact Title / SUNO Prompt / Lyrics format with bracketed section tags",
   "leaked-labels": "the lyrics must contain only the song itself — no notes, no labels, no planning talk",
+  "banned-phrases": "some lines were stock phrases that belong to no one's story — say the specific true thing instead",
+  "central-image": "keep coming back to the one real thing at the center of this song — put it in the listener's hands",
+  "artist-names-in-suno": "describe the sound in the production prompt without naming any real artist",
 };
 
 function guidanceFor(reports: DraftReport[]): string {
@@ -404,11 +419,18 @@ export async function runEngine(
   // versions. A failed check earns one more write with plain guidance — then fail-loud.
   const writeOne = async (variant: "straight" | "hook-first", guidance?: string) => {
     const draft = await generate(
-      writerPrompt({ core: curriculum.core, pack, card, brief, hook, sections, story, vocals: inputs.vocals, variant, guidance }),
+      writerPrompt({ core: curriculum.core, pack, card, brief, hook, sections, story, vocals: inputs.vocals, variant, guidance, bannedPhrases: curriculum.bannedPhrases }),
       "write"
     ).catch(() => "");
     if (!draft || draft.includes("GENERATION_DECLINED")) return null;
-    return { draft, report: runChecks(draft, { story, card, spec: brief.spec, hook }) };
+    return {
+      draft,
+      report: runChecks(draft, {
+        story, card, spec: brief.spec, hook,
+        centralImage: brief.centralImage,
+        bannedPhrases: curriculum.bannedPhrases,
+      }),
+    };
   };
 
   stage("Writing your song...");

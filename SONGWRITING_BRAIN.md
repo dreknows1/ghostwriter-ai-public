@@ -57,6 +57,16 @@ and each sub-genre page says when that bend applies.)
 - **Cadence** — control where phrases resolve vs hang; use hanging lines to pull the listener forward, resolving lines to close thoughts.
 - **Musicality** — the sum test: read it aloud — does it already want to be sung?
 - **Word choice** — words have sound-color; match the mouth-feel to the feeling (percussive words for anger, humming/open words for longing); prefer words a singer can act.
+- **House-style words — instant failures.** These are the AI's default phrases; they belong
+  to no one's story, so using one fails the song (checked by code). The founder owns this
+  list and can edit it like everything else:
+  - hearts entwined; two hearts beat as one; the beat of my heart; beat inside my heart
+  - shadows flicker; shadows dance; silhouette; neon
+  - you complete me; my missing piece; meant to be; written in the stars
+  - more than words can say; words can't express; honest truth
+  - forever and always; till the end of time; take my breath away
+  - moth to a flame; fire in my veins; electricity between us; gravity pulls
+  - love like ours; heart on my sleeve; lose me too
 - **Hook** — short, rhythmic, emotionally loaded, placed at the lift; the title lives here; a listener can sing it after one listen. In R&B and hip-hop, the hook is where the double entendre or flipped phrase pays rent — a hook that means two things beats a sincere flat one.
 - **Rhyme** — a choice, not a duty: perfect rhyme closes a thought, slant rhyme keeps it moving, internal rhyme builds momentum (rap's engine), and NO rhyme is a legitimate choice when the honest line matters more. Rhyme density is a genre decision, never a fixed rule.
 - **Emotion** — every craft decision above serves ONE core feeling with an arc (where it starts → where it turns → where it lands).

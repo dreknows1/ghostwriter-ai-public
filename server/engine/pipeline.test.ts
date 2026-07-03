@@ -26,6 +26,7 @@ const room = (id: string, name: string): RoomCard => ({
 
 const CURRICULUM_FIXTURE: CompiledCurriculum = {
   core: "Core craft text for testing. A song is a felt emotion delivered through structure.",
+  bannedPhrases: ["hearts entwined", "beat inside my heart", "honest truth"],
   genres: {
     rnb: {
       id: "rnb",
@@ -64,7 +65,7 @@ You laminated the receipt where we first sat to eat
 ${hook} is what you gave
 ${hook} is what we save
 [Verse]
-Your wallet held that paper like a vow kept warm
+That laminated receipt still hides inside your wallet warm
 Every year another dinner, every year another storm
 [Chorus]
 ${hook} is what you gave
@@ -81,6 +82,7 @@ function scriptedGenerate(opts?: { badDrafts?: boolean }): { gen: EngineGenerate
           purpose: "celebrate nine years",
           pov: "first person to my wife, tonight",
           turn: "from a saved receipt to a saved life",
+          centralImage: "the laminated receipt",
           spec: { tempo: "85-95 BPM", groove: "straight", barsPerSection: "verse 8, chorus 8", wordDensity: "moderate" },
         });
       }

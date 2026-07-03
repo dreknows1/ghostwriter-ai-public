@@ -58,9 +58,46 @@ Musical craft (the founder's list; each becomes concrete rules)
 - **Cadence** \u2014 control where phrases resolve vs hang; use hanging lines to pull the listener forward, resolving lines to close thoughts.
 - **Musicality** \u2014 the sum test: read it aloud \u2014 does it already want to be sung?
 - **Word choice** \u2014 words have sound-color; match the mouth-feel to the feeling (percussive words for anger, humming/open words for longing); prefer words a singer can act.
+- **House-style words \u2014 instant failures.** These are the AI's default phrases; they belong
+  to no one's story, so using one fails the song (checked by code). The founder owns this
+  list and can edit it like everything else:
+  - hearts entwined; two hearts beat as one; the beat of my heart; beat inside my heart
+  - shadows flicker; shadows dance; silhouette; neon
+  - you complete me; my missing piece; meant to be; written in the stars
+  - more than words can say; words can't express; honest truth
+  - forever and always; till the end of time; take my breath away
+  - moth to a flame; fire in my veins; electricity between us; gravity pulls
+  - love like ours; heart on my sleeve; lose me too
 - **Hook** \u2014 short, rhythmic, emotionally loaded, placed at the lift; the title lives here; a listener can sing it after one listen. In R&B and hip-hop, the hook is where the double entendre or flipped phrase pays rent \u2014 a hook that means two things beats a sincere flat one.
 - **Rhyme** \u2014 a choice, not a duty: perfect rhyme closes a thought, slant rhyme keeps it moving, internal rhyme builds momentum (rap's engine), and NO rhyme is a legitimate choice when the honest line matters more. Rhyme density is a genre decision, never a fixed rule.
 - **Emotion** \u2014 every craft decision above serves ONE core feeling with an arc (where it starts \u2192 where it turns \u2192 where it lands).`,
+  "bannedPhrases": [
+    "hearts entwined",
+    "two hearts beat as one",
+    "the beat of my heart",
+    "beat inside my heart",
+    "shadows flicker",
+    "shadows dance",
+    "silhouette",
+    "neon",
+    "you complete me",
+    "my missing piece",
+    "meant to be",
+    "written in the stars",
+    "more than words can say",
+    "words can't express",
+    "honest truth",
+    "forever and always",
+    "till the end of time",
+    "take my breath away",
+    "moth to a flame",
+    "fire in my veins",
+    "electricity between us",
+    "gravity pulls",
+    "love like ours",
+    "heart on my sleeve",
+    "lose me too"
+  ],
   "genres": {
     "rnb": {
       "id": "rnb",
@@ -508,10 +545,10 @@ Musical craft (the founder's list; each becomes concrete rules)
       ]
     }
   },
-  "hash": "314364581034",
+  "hash": "36d14b3c8fc8",
   "approxTokens": {
-    "core": 1218,
-    "largestSlice": 2750
+    "core": 1393,
+    "largestSlice": 2925
   }
 };
 
@@ -1265,6 +1302,51 @@ function runChecks(draft, opts) {
       });
     }
   }
+  {
+    const banned = opts.bannedPhrases || [];
+    if (banned.length > 0) {
+      const lower = body.toLowerCase();
+      const hits = banned.filter((p) => lower.includes(p));
+      checks.push({
+        id: "banned-phrases",
+        severity: "fail",
+        ok: hits.length === 0,
+        detail: hits.length ? `house-style phrases found: ${hits.join("; ")}` : "clean"
+      });
+    }
+  }
+  {
+    const image = String(opts.centralImage || "").trim();
+    if (image) {
+      const keyWords = distinctTokens(image);
+      let appearances = 0;
+      const lowerLines = (parsed.lyricLines || []).map((l) => l.toLowerCase());
+      for (const line of lowerLines) {
+        for (const w of keyWords) {
+          if (w.length > 3 && line.includes(w.slice(0, 5))) {
+            appearances++;
+            break;
+          }
+        }
+      }
+      checks.push({
+        id: "central-image",
+        severity: "fail",
+        ok: keyWords.size === 0 || appearances >= 2,
+        detail: `image "${image}" appears in ${appearances} lyric lines (needs 2+)`
+      });
+    }
+  }
+  {
+    const suno = parsed.sunoPrompt || "";
+    const nameDrop = /\b(?:think|like|sounds like|reminiscent of|in the style of)\s+[A-Z][\w.]+(?:\s+[A-Z][\w.]+)?\s*(?:meets|x|×|vs)\s+[A-Z]/.test(suno) || /\b[A-Z][\w.]+\s+meets\s+[A-Z][\w.]+/.test(suno);
+    checks.push({
+      id: "artist-names-in-suno",
+      severity: "fail",
+      ok: !nameDrop,
+      detail: nameDrop ? "production prompt name-drops artists \u2014 describe the sound instead" : "clean"
+    });
+  }
   let failCount = 0;
   let warnCount = 0;
   for (const check of checks) {
@@ -1391,6 +1473,7 @@ Return JSON with exactly these string fields:
   "purpose": "what this song is FOR (dance, testify, feel seen, flirt, grieve...)",
   "pov": "who is speaking, to whom, and why now",
   "turn": "what changes inside this song \u2014 where it starts, where it turns, where it lands",
+  "centralImage": "ONE ordinary physical image the song returns to \u2014 a thing you can touch, see, or smell, named in 2-5 plain words. From the story when there is one; universal for the theme when there isn't (an object anyone could own \u2014 never a fake personal detail). Not a feeling, not a metaphor label \u2014 a thing.",
   "spec": {
     "tempo": "a BPM range for THIS song, inside the room's range",
     "groove": "straight / swung / half-time \u2014 the feel for THIS song",
@@ -1415,10 +1498,11 @@ function validateBrief(raw, card, landing) {
     purpose: s(raw?.purpose, ""),
     pov: s(raw?.pov, ""),
     turn: s(raw?.turn, ""),
+    centralImage: s(raw?.centralImage, ""),
     spec,
     landing
   };
-  if (!brief.coreEmotion || !brief.purpose || !brief.pov || !brief.turn) {
+  if (!brief.coreEmotion || !brief.purpose || !brief.pov || !brief.turn || !brief.centralImage) {
     throw new Error("brief incomplete");
   }
   return brief;
@@ -1442,7 +1526,9 @@ function sectionsPrompt(brief, hook, card) {
 Allowed tags: [Intro] [Verse] [Pre-Chorus] [Chorus] [Bridge] [Outro] (repeat [Verse]/[Chorus] as needed).
 Every job is one sentence saying what THAT section must do for THIS song (what verse 1 establishes, what the bridge reveals). The chorus builds around the hook "${hook}".
 Room conventions: ${card.name} \u2014 ${card.oneLine}
-Bars: ${brief.spec.barsPerSection}. The song's turn: ${brief.turn}`;
+How this room writes (plan the sections to honor these \u2014 if the room vamps, PLAN the vamp):
+${card.writingDials.map((d) => `- ${d}`).join("\n")}
+Bars: ${brief.spec.barsPerSection}. The song's turn: ${brief.turn}. The central image: ${brief.centralImage}`;
 }
 function validateSections(raw) {
   if (!Array.isArray(raw) || raw.length < 4 || raw.length > 10) throw new Error("bad section plan");
@@ -1458,10 +1544,16 @@ function validateSections(raw) {
   return plan;
 }
 function writerPrompt(args) {
-  const { core, pack, card, brief, hook, sections, story, vocals, variant, guidance } = args;
+  const { core, pack, card, brief, hook, sections, story, vocals, variant, guidance, bannedPhrases } = args;
   const sectionLines = sections.map((s) => `${s.tag} \u2014 ${s.job}`).join("\n");
   const approach = variant === "hook-first" ? "Approach: get the chorus singing first in your head, then build every verse toward it. Output in normal top-to-bottom order." : "Approach: write the song straight through, top to bottom, one voice, one sitting.";
+  const banList = bannedPhrases.slice(0, 40).join("; ");
   return `You are writing one real song for one specific person. Their story is the only source of truth \u2014 use their real details; never invent replacements for them.
+
+=== THE ONE RULE ABOVE ALL ===
+Every line must be one a stranger could NOT have written about their own love. If a line would fit any love song ever made, it has failed \u2014 cut it and write the specific true thing instead. The test for the whole song: could two different people with different stories both receive it? If yes, you failed.
+BANNED \u2014 these are the machine's default phrases; using even one fails the song: ${banList}.
+No greeting-card abstractions (no "beat of my heart", "words I never spoke", "let the world slip away", "you complete me"). Concrete nouns over feeling-words. A real thing the listener can touch beats any adjective.
 
 === THE CRAFT (applies to every song) ===
 ${core}
@@ -1482,6 +1574,7 @@ Purpose: ${brief.purpose}
 Point of view: ${brief.pov}
 The turn: ${brief.turn}
 Musical spec: tempo ${brief.spec.tempo}; groove ${brief.spec.groove}; ${brief.spec.barsPerSection}; word density ${brief.spec.wordDensity}.
+The central image: ${brief.centralImage} \u2014 the song returns to it; the feelings live in and around this real thing, never floating free. If the room welcomes a second meaning, this image carries it.
 The hook (and title): ${hook}
 Section plan:
 ${sectionLines}
@@ -1499,7 +1592,7 @@ Vocal: ${voiceLine(vocals)}.
 Return exactly this format:
 Title: ${hook}
 ### SUNO Prompt
-One 40-70 word production prompt for this exact song. Ground it in this room's sound: ${card.rendering}
+One 40-70 word production prompt for this exact song. Ground it in this room's sound (never name real artists \u2014 describe the sound instead): ${card.rendering}
 ### Lyrics
 The song, with section tags in brackets.
 
@@ -1510,7 +1603,10 @@ var GUIDANCE = {
   "hook-placement": "the chorus must be built around the hook \u2014 the hook line leads it",
   "chorus-consistency": "the chorus is the same words every time it returns",
   format: "keep the exact Title / SUNO Prompt / Lyrics format with bracketed section tags",
-  "leaked-labels": "the lyrics must contain only the song itself \u2014 no notes, no labels, no planning talk"
+  "leaked-labels": "the lyrics must contain only the song itself \u2014 no notes, no labels, no planning talk",
+  "banned-phrases": "some lines were stock phrases that belong to no one's story \u2014 say the specific true thing instead",
+  "central-image": "keep coming back to the one real thing at the center of this song \u2014 put it in the listener's hands",
+  "artist-names-in-suno": "describe the sound in the production prompt without naming any real artist"
 };
 function guidanceFor(reports) {
   const failed = /* @__PURE__ */ new Set();
@@ -1561,11 +1657,21 @@ async function runEngine(curriculum, inputs, generate, stage = () => {
   const sections = validateSections(await planJson(generate, sectionsPrompt(brief, hook, card)));
   const writeOne = async (variant, guidance) => {
     const draft = await generate(
-      writerPrompt({ core: curriculum.core, pack, card, brief, hook, sections, story, vocals: inputs.vocals, variant, guidance }),
+      writerPrompt({ core: curriculum.core, pack, card, brief, hook, sections, story, vocals: inputs.vocals, variant, guidance, bannedPhrases: curriculum.bannedPhrases }),
       "write"
     ).catch(() => "");
     if (!draft || draft.includes("GENERATION_DECLINED")) return null;
-    return { draft, report: runChecks(draft, { story, card, spec: brief.spec, hook }) };
+    return {
+      draft,
+      report: runChecks(draft, {
+        story,
+        card,
+        spec: brief.spec,
+        hook,
+        centralImage: brief.centralImage,
+        bannedPhrases: curriculum.bannedPhrases
+      })
+    };
   };
   stage("Writing your song...");
   const first = await writeOne("straight");
