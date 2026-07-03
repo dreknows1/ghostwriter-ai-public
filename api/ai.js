@@ -1387,19 +1387,20 @@ function runChecks(draft, opts) {
     }
   }
   {
+    const hookSeverity = opts.hookLocked === false ? "warn" : "fail";
     const hookText = parsed.title && contentWords(parsed.title).length > 0 ? parsed.title : opts.hook;
     const hookContent = contentWords(hookText);
     const hookBearing = parsed.sections.filter((s) => /^(chorus|hook|refrain|post-?chorus|vamp)/.test(s.tag));
     if (hookBearing.length === 0) {
-      checks.push({ id: "hook-placement", severity: "fail", ok: false, detail: "no [Chorus]/[Hook] block to place the hook in" });
+      checks.push({ id: "hook-placement", severity: hookSeverity, ok: false, detail: "no [Chorus]/[Hook] block to place the hook in" });
     } else if (hookContent.length === 0) {
-      checks.push({ id: "hook-placement", severity: "fail", ok: true, detail: "hook has no content words to place" });
+      checks.push({ id: "hook-placement", severity: hookSeverity, ok: true, detail: "hook has no content words to place" });
     } else {
       const chorusTokens = distinctTokens(hookBearing.map((s) => s.lines.join("\n")).join("\n"));
       const found = hookContent.filter((w) => chorusTokens.has(w));
       checks.push({
         id: "hook-placement",
-        severity: "fail",
+        severity: hookSeverity,
         ok: found.length / hookContent.length >= 0.6,
         detail: `${found.length}/${hookContent.length} hook words in the chorus/hook`
       });
@@ -2025,7 +2026,8 @@ async function runEngine(curriculum, inputs, generate, stage = () => {
         centralImage: brief.centralImage,
         bannedPhrases: curriculum.bannedPhrases,
         validTags: curriculum.validTags,
-        minAdlibs: card.performance.minAdlibs
+        minAdlibs: card.performance.minAdlibs,
+        hookLocked
       })
     };
   };
