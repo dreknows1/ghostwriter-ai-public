@@ -326,7 +326,10 @@ export function runChecks(
   // The hook lives in whatever the room calls its anthem — [Chorus], [Hook], [Refrain],
   // or [Post-Chorus] (90s R&B labels it [Hook]) — so check the union of all of them.
   {
-    const hookContent = contentWords(opts.hook);
+    // The song's OWN title is the hook that must live in its chorus — the writer may
+    // sharpen an auto-suggested hook while writing, and the title follows that choice.
+    const hookText = parsed.title && contentWords(parsed.title).length > 0 ? parsed.title : opts.hook;
+    const hookContent = contentWords(hookText);
     const hookBearing = parsed.sections.filter((s) => /^(chorus|hook|refrain|post-?chorus)/.test(s.tag));
     if (hookBearing.length === 0) {
       checks.push({ id: "hook-placement", severity: "fail", ok: false, detail: "no [Chorus]/[Hook] block to place the hook in" });

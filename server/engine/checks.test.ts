@@ -350,13 +350,13 @@ describe("hook-placement", () => {
     expect(check.ok).toBe(false);
   });
 
-  it("passes at exactly 60% of hook content words and fails below it", () => {
-    // good chorus contains copper, needle, winter — not garden, road
-    const atBoundary = { ...OPTS, hook: "copper needle winter garden road" };
-    expect(getCheck(runChecks(buildDraft(), atBoundary), "hook-placement").ok).toBe(true);
+  it("passes at exactly 60% of title content words and fails below it", () => {
+    // the check reads the song's own Title; good chorus contains copper, needle, winter
+    const atBoundary = getCheck(runChecks(buildDraft({ title: "copper needle winter garden road" }), OPTS), "hook-placement");
+    expect(atBoundary.ok).toBe(true);
 
-    const below = { ...OPTS, hook: "copper needle stone garden road" };
-    expect(getCheck(runChecks(buildDraft(), below), "hook-placement").ok).toBe(false);
+    const below = getCheck(runChecks(buildDraft({ title: "copper needle stone garden road" }), OPTS), "hook-placement");
+    expect(below.ok).toBe(false);
   });
 
   it("fails when there is no chorus block at all", () => {
@@ -369,7 +369,9 @@ describe("hook-placement", () => {
 
 describe("title-hook", () => {
   it("warns when the title shares no content word with the hook", () => {
-    const report = runChecks(buildDraft({ title: "Winter Evening" }), OPTS);
+    // "Copper Needle" is in the chorus (so hook-placement passes) but shares no word
+    // with the HOOK "Broken Compass Turning Home" — so only title-hook warns.
+    const report = runChecks(buildDraft({ title: "Copper Needle" }), OPTS);
     const check = getCheck(report, "title-hook");
     expect(check.ok).toBe(false);
     expect(check.severity).toBe("warn");
