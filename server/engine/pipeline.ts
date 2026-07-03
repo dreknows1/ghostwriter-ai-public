@@ -276,8 +276,9 @@ function writerPrompt(args: {
   variant: "straight" | "hook-first";
   guidance?: string;
   bannedPhrases: string[];
+  hookLocked: boolean;
 }): string {
-  const { core, pack, card, brief, hook, sections, story, vocals, variant, guidance, bannedPhrases } = args;
+  const { core, pack, card, brief, hook, sections, story, vocals, variant, guidance, bannedPhrases, hookLocked } = args;
   const sectionLines = sections.map((s) => `${s.tag} — ${s.job}`).join("\n");
   const approach =
     variant === "hook-first"
@@ -311,7 +312,9 @@ Point of view: ${brief.pov}
 The turn: ${brief.turn}
 Musical spec: tempo ${brief.spec.tempo}; groove ${brief.spec.groove}; ${brief.spec.barsPerSection}; word density ${brief.spec.wordDensity}.
 The central image: ${brief.centralImage} — the song returns to it; the feelings live in and around this real thing, never floating free. If the room welcomes a second meaning, this image carries it.
-The hook (and title): ${hook}
+${hookLocked
+  ? `The hook (and title) is FIXED: ${hook}. Use it exactly as the Title and lead the chorus with it, word-for-word.`
+  : `Suggested hook: ${hook} — keep it, or sharpen it into a stronger, more specific hook straight from the story. Whatever you choose becomes BOTH the Title AND the line that leads the chorus, word-for-word. Title and chorus must use the SAME hook.`}
 Section plan:
 ${sectionLines}
 
@@ -322,7 +325,7 @@ Delivery/dynamics tags that fit this room: ${card.performance.deliveryTags.join(
 HOW to place them (never random — placement follows the emotional arc):
 - Meta tags go in [square brackets] on their OWN line, in the gap between lyric lines. Never inline inside a lyric line.
 - Keep every bracket tag SHORT (1-3 words), no colons, no descriptions: [Belting] not [Belting with full power], [Harmonies] not [Harmonies swell]. NEVER invent key:value tags like [Energy: High] or [Vocals: Confident]; the renderer ignores them and they ruin the song. Use ONLY real Suno tags — the section tags plus this room's delivery tags above.
-- The hook line "${hook}" must lead the chorus (or [Hook]) section and appear in it word-for-word — the chorus is built around it.
+- Your final hook (the Title) must lead the chorus (or [Hook]) section and appear in it word-for-word — the chorus is built around it.
 - Adlibs go in (parentheses) and MAY sit inline at a line's end or on their own short line right under it — exactly where a real singer would answer, echo, or breathe. Adlibs are SOUNDS/short responses, never slang or dialect the user didn't write.
 - Density rises and falls with the dynamics: sparse in an intimate verse/bridge, fuller on the hook, heaviest at the final vamp/outro. Match this room's character above.
 
@@ -333,7 +336,7 @@ ${approach}${guidance ? `\n\nOne more thing from the last attempt: ${guidance}` 
 Vocal: ${voiceLine(vocals)}.
 
 Return exactly this format:
-Title: ${hook}
+Title: ${hookLocked ? hook : "<your final hook>"}
 ### SUNO Prompt
 One 40-70 word production prompt for this exact song. Ground it in this room's sound (never name real artists — describe the sound instead): ${card.rendering}
 ### Lyrics
@@ -454,7 +457,9 @@ export async function runEngine(
 ): Promise<EngineResult> {
   const plan = await planSong(curriculum, inputs, generate, stage);
   const { pack, card, landing, landingNote, brief, story } = plan;
-  const hook = String(inputs.title || "").trim().slice(0, 80) || plan.rankedHooks[0];
+  const userTitle = String(inputs.title || "").trim();
+  const hookLocked = userTitle.length > 0;
+  const hook = userTitle.slice(0, 80) || plan.rankedHooks[0];
 
   stage("Planning sections...");
   const sections = validateSections(await planJson(generate, sectionsPrompt(brief, hook, card)));
@@ -464,7 +469,7 @@ export async function runEngine(
   // versions. A failed check earns one more write with plain guidance — then fail-loud.
   const writeOne = async (variant: "straight" | "hook-first", guidance?: string) => {
     const draft = await generate(
-      writerPrompt({ core: curriculum.core, pack, card, brief, hook, sections, story, vocals: inputs.vocals, variant, guidance, bannedPhrases: curriculum.bannedPhrases }),
+      writerPrompt({ core: curriculum.core, pack, card, brief, hook, sections, story, vocals: inputs.vocals, variant, guidance, bannedPhrases: curriculum.bannedPhrases, hookLocked }),
       "write"
     ).catch(() => "");
     if (!draft || draft.includes("GENERATION_DECLINED")) return null;
@@ -503,6 +508,10 @@ export async function runEngine(
     throw new EngineFailure(reasons.length ? reasons : ["the writer declined the request"]);
   }
 
+  // The hook the listener actually gets is the winning draft's own Title (the writer
+  // may have sharpened the suggested hook), so report that.
+  const winnerTitle = (winner.draft.match(/^\s*title\s*:\s*(.+)$/im)?.[1] || hook).trim();
+
   return {
     text: winner.draft.trim(),
     meta: {
@@ -510,7 +519,7 @@ export async function runEngine(
       curriculumHash: curriculum.hash,
       landing,
       landingNote,
-      hook,
+      hook: winnerTitle,
       brief,
       draftsTried,
       winnerWarnings: winner.report.warnCount,

@@ -1387,7 +1387,8 @@ function runChecks(draft, opts) {
     }
   }
   {
-    const hookContent = contentWords(opts.hook);
+    const hookText = parsed.title && contentWords(parsed.title).length > 0 ? parsed.title : opts.hook;
+    const hookContent = contentWords(hookText);
     const hookBearing = parsed.sections.filter((s) => /^(chorus|hook|refrain|post-?chorus)/.test(s.tag));
     if (hookBearing.length === 0) {
       checks.push({ id: "hook-placement", severity: "fail", ok: false, detail: "no [Chorus]/[Hook] block to place the hook in" });
@@ -1833,7 +1834,7 @@ function validateSections(raw) {
   return plan;
 }
 function writerPrompt(args) {
-  const { core, pack, card, brief, hook, sections, story, vocals, variant, guidance, bannedPhrases } = args;
+  const { core, pack, card, brief, hook, sections, story, vocals, variant, guidance, bannedPhrases, hookLocked } = args;
   const sectionLines = sections.map((s) => `${s.tag} \u2014 ${s.job}`).join("\n");
   const approach = variant === "hook-first" ? "Approach: get the chorus singing first in your head, then build every verse toward it. Output in normal top-to-bottom order." : "Approach: write the song straight through, top to bottom, one voice, one sitting.";
   const banList = bannedPhrases.slice(0, 40).join("; ");
@@ -1864,7 +1865,7 @@ Point of view: ${brief.pov}
 The turn: ${brief.turn}
 Musical spec: tempo ${brief.spec.tempo}; groove ${brief.spec.groove}; ${brief.spec.barsPerSection}; word density ${brief.spec.wordDensity}.
 The central image: ${brief.centralImage} \u2014 the song returns to it; the feelings live in and around this real thing, never floating free. If the room welcomes a second meaning, this image carries it.
-The hook (and title): ${hook}
+${hookLocked ? `The hook (and title) is FIXED: ${hook}. Use it exactly as the Title and lead the chorus with it, word-for-word.` : `Suggested hook: ${hook} \u2014 keep it, or sharpen it into a stronger, more specific hook straight from the story. Whatever you choose becomes BOTH the Title AND the line that leads the chorus, word-for-word. Title and chorus must use the SAME hook.`}
 Section plan:
 ${sectionLines}
 
@@ -1875,7 +1876,7 @@ Delivery/dynamics tags that fit this room: ${card.performance.deliveryTags.join(
 HOW to place them (never random \u2014 placement follows the emotional arc):
 - Meta tags go in [square brackets] on their OWN line, in the gap between lyric lines. Never inline inside a lyric line.
 - Keep every bracket tag SHORT (1-3 words), no colons, no descriptions: [Belting] not [Belting with full power], [Harmonies] not [Harmonies swell]. NEVER invent key:value tags like [Energy: High] or [Vocals: Confident]; the renderer ignores them and they ruin the song. Use ONLY real Suno tags \u2014 the section tags plus this room's delivery tags above.
-- The hook line "${hook}" must lead the chorus (or [Hook]) section and appear in it word-for-word \u2014 the chorus is built around it.
+- Your final hook (the Title) must lead the chorus (or [Hook]) section and appear in it word-for-word \u2014 the chorus is built around it.
 - Adlibs go in (parentheses) and MAY sit inline at a line's end or on their own short line right under it \u2014 exactly where a real singer would answer, echo, or breathe. Adlibs are SOUNDS/short responses, never slang or dialect the user didn't write.
 - Density rises and falls with the dynamics: sparse in an intimate verse/bridge, fuller on the hook, heaviest at the final vamp/outro. Match this room's character above.
 
@@ -1890,7 +1891,7 @@ One more thing from the last attempt: ${guidance}` : ""}
 Vocal: ${voiceLine(vocals)}.
 
 Return exactly this format:
-Title: ${hook}
+Title: ${hookLocked ? hook : "<your final hook>"}
 ### SUNO Prompt
 One 40-70 word production prompt for this exact song. Ground it in this room's sound (never name real artists \u2014 describe the sound instead): ${card.rendering}
 ### Lyrics
@@ -1965,12 +1966,14 @@ async function runEngine(curriculum, inputs, generate, stage = () => {
 }) {
   const plan = await planSong(curriculum, inputs, generate, stage);
   const { pack, card, landing, landingNote, brief, story } = plan;
-  const hook = String(inputs.title || "").trim().slice(0, 80) || plan.rankedHooks[0];
+  const userTitle = String(inputs.title || "").trim();
+  const hookLocked = userTitle.length > 0;
+  const hook = userTitle.slice(0, 80) || plan.rankedHooks[0];
   stage("Planning sections...");
   const sections = validateSections(await planJson(generate, sectionsPrompt(brief, hook, card)));
   const writeOne = async (variant, guidance) => {
     const draft = await generate(
-      writerPrompt({ core: curriculum.core, pack, card, brief, hook, sections, story, vocals: inputs.vocals, variant, guidance, bannedPhrases: curriculum.bannedPhrases }),
+      writerPrompt({ core: curriculum.core, pack, card, brief, hook, sections, story, vocals: inputs.vocals, variant, guidance, bannedPhrases: curriculum.bannedPhrases, hookLocked }),
       "write"
     ).catch(() => "");
     if (!draft || draft.includes("GENERATION_DECLINED")) return null;
@@ -2010,6 +2013,7 @@ async function runEngine(curriculum, inputs, generate, stage = () => {
     const reasons = [...new Set(reports.flatMap((a) => a.report.checks.filter((c) => !c.ok && c.severity === "fail").map((c) => c.id)))];
     throw new EngineFailure(reasons.length ? reasons : ["the writer declined the request"]);
   }
+  const winnerTitle = (winner.draft.match(/^\s*title\s*:\s*(.+)$/im)?.[1] || hook).trim();
   return {
     text: winner.draft.trim(),
     meta: {
@@ -2017,7 +2021,7 @@ async function runEngine(curriculum, inputs, generate, stage = () => {
       curriculumHash: curriculum.hash,
       landing,
       landingNote,
-      hook,
+      hook: winnerTitle,
       brief,
       draftsTried,
       winnerWarnings: winner.report.warnCount

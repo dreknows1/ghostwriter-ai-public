@@ -127,7 +127,9 @@ function scriptedGenerate(opts?: { badDrafts?: boolean; abstractImageFirst?: boo
     }
     writes.push(prompt);
     if (opts?.badDrafts) return "not a song at all, just prose with no format";
-    const hookMatch = prompt.match(/The hook \(and title\): (.+)/);
+    // The writer prompt states the hook as either "is FIXED: X" (user title) or
+    // "Suggested hook: X" (auto); the scripted writer just echoes it as the Title.
+    const hookMatch = prompt.match(/is FIXED: (.+?)\. Use it/) || prompt.match(/Suggested hook: (.+?) —/);
     return goodDraft(hookMatch ? hookMatch[1].trim() : "What You Kept");
   };
   return { gen, writes };
