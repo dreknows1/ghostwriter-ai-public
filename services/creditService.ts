@@ -8,6 +8,10 @@ export const COSTS = {
   CREATE_AVATAR: 100,
 };
 
+// Owner accounts carry a very large sentinel balance — show it as "∞" not "9999999".
+export const formatCredits = (n: number | null | undefined): string =>
+  typeof n === "number" && n >= 1_000_000 ? "∞" : String(n ?? 0);
+
 async function callDb(action: string, payload: any) {
   const res = await fetch("/api/auth", {
     method: "POST",

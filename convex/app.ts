@@ -1,6 +1,6 @@
 import { mutation, query, internalMutation } from "./_generated/server";
 import { v } from "convex/values";
-import { CREDITS_PUBLIC, CREDITS_SKOOL } from "./constants";
+import { CREDITS_PUBLIC, CREDITS_SKOOL, UNLIMITED_CREDITS, isOwnerEmail } from "./constants";
 const REFERRAL_INVITER_CREDITS = 40;
 const REFERRAL_INVITEE_CREDITS = 20;
 
@@ -400,6 +400,13 @@ export const getCreditsByEmail = mutation({
   args: { email: v.string() },
   handler: async (ctx: any, args: any) => {
     const { profile } = await ensureUserAndProfile(ctx, args.email);
+    // Owner accounts: unlimited credits, pinned and never reset down.
+    if (isOwnerEmail(args.email)) {
+      if (profile.credits !== UNLIMITED_CREDITS) {
+        await ctx.db.patch(profile._id, { credits: UNLIMITED_CREDITS, updatedAt: Date.now() });
+      }
+      return UNLIMITED_CREDITS;
+    }
     const now = Date.now();
     const lastReset = profile.lastResetDate ? new Date(profile.lastResetDate).getTime() : 0;
     if (monthKey(now) !== monthKey(lastReset)) {
@@ -426,6 +433,8 @@ export const getCreditsByEmail = mutation({
 export const spendCreditsByEmail = mutation({
   args: { email: v.string(), amount: v.number(), reason: v.string() },
   handler: async (ctx: any, args: any) => {
+    // Owner accounts: spends are no-ops — unlimited credits, never charged.
+    if (isOwnerEmail(args.email)) return UNLIMITED_CREDITS;
     const { profile } = await ensureUserAndProfile(ctx, args.email);
     const next = Math.max(0, profile.credits - args.amount);
     await ctx.db.patch(profile._id, { credits: next, updatedAt: Date.now() });
