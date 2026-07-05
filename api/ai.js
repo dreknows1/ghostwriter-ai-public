@@ -43,6 +43,10 @@ Creative writing craft
   - Entendres and **double entendres** \u2014 lines that mean two things at once, both intended
     (a hallmark of great R&B and hip-hop writing; must land naturally, never announced)
   - Wordplay, flips, and reversals \u2014 saying the expected thing the unexpected way
+  - **Extended metaphor** \u2014 develop the ONE central image across the whole song into a system,
+    not just a repeated object: a warning becomes "colorblind" becomes "red all over you"; a
+    pressure becomes "caged," "walls," "can't breathe." The strongest songs work a single picture
+    every way it turns.
   - Personification, allusion \u2014 sparingly, where the genre welcomes them
 - Voice: a real person is speaking; one point of view with an attitude.
 - Show and tell in balance: images earn feelings; plain spoken lines make them land. Neither alone.
@@ -770,10 +774,10 @@ Musical craft (the founder's list; each becomes concrete rules)
       ]
     }
   },
-  "hash": "23460d12c291",
+  "hash": "c254a627f7ed",
   "approxTokens": {
-    "core": 1716,
-    "largestSlice": 3417
+    "core": 1794,
+    "largestSlice": 3494
   }
 };
 
@@ -1357,8 +1361,8 @@ function runChecks(draft, opts) {
     if (parsed.lyricsBody === null) {
       problems.push('missing "### Lyrics" section');
     } else {
-      if (!parsed.sections.some((s) => s.tag.startsWith("verse"))) problems.push("no [Verse] tag in lyrics");
-      if (!parsed.sections.some((s) => s.tag.startsWith("chorus"))) problems.push("no [Chorus] tag in lyrics");
+      if (!parsed.sections.some((s) => /\bverse\b/.test(s.tag))) problems.push("no [Verse] section in lyrics");
+      if (!parsed.sections.some((s) => /\b(chorus|hook|refrain)\b/.test(s.tag))) problems.push("no [Chorus]/[Hook] section in lyrics");
     }
     checks.push({
       id: "format",
@@ -1598,50 +1602,23 @@ function runChecks(draft, opts) {
   ]);
   const normalizeTag = (t) => t.trim().toLowerCase().replace(/\s+\d+$/, "").replace(/\s+/g, " ");
   const allBracketTags = [...body.match(/\[[^\]]+\]/g) || []].map((t) => t.slice(1, -1));
-  const SECTION_KEYS = /* @__PURE__ */ new Set([...STRUCTURE_TAGS, "vamp"]);
-  const colonKey = (t) => t.includes(":") ? normalizeTag(t.slice(0, t.indexOf(":"))) : null;
-  const isValidColon = (t) => {
-    const k = colonKey(t);
-    return k !== null && SECTION_KEYS.has(k);
-  };
   if (typeof opts.minAdlibs === "number") {
     const adlibCount = (body.match(/\([^)]+\)/g) || []).length;
     checks.push({
       id: "adlibs-present",
       severity: "fail",
       ok: adlibCount >= opts.minAdlibs,
-      detail: `${adlibCount} adlibs in parentheses (room floor ${opts.minAdlibs})`
+      detail: `${adlibCount} adlibs/backing lines in parentheses (room floor ${opts.minAdlibs})`
     });
   }
   if (typeof opts.minAdlibs === "number") {
-    const perfTags = allBracketTags.filter((t) => isValidColon(t) || !t.includes(":") && !STRUCTURE_TAGS.has(normalizeTag(t)));
+    const perfTags = allBracketTags.filter((t) => !STRUCTURE_TAGS.has(normalizeTag(t)));
     checks.push({
       id: "performance-tags",
       severity: "fail",
       ok: perfTags.length >= 1,
-      detail: perfTags.length ? `${perfTags.length} performance tags: ${perfTags.slice(0, 5).map((t) => `[${t}]`).join(", ")}` : "no delivery/dynamics tags"
+      detail: perfTags.length ? `${perfTags.length} performance directions` : "no performance direction \u2014 bare section labels only"
     });
-  }
-  if (typeof opts.minAdlibs === "number") {
-    const junk = allBracketTags.filter(
-      (t) => t.includes(":") ? !isValidColon(t) : t.trim().split(/\s+/).length > 4
-    );
-    checks.push({
-      id: "invalid-tags",
-      severity: "fail",
-      ok: junk.length === 0,
-      detail: junk.length ? `invented tags (renderer ignores/sings these): ${[...new Set(junk)].slice(0, 5).map((t) => `[${t}]`).join(", ")}` : "no invented tags"
-    });
-    if (opts.validTags && opts.validTags.length > 0) {
-      const valid = new Set(opts.validTags.map((t) => normalizeTag(t.replace(/^\[|\]$/g, ""))));
-      const unknown = [...new Set(allBracketTags.filter((t) => !t.includes(":") && !valid.has(normalizeTag(t))))];
-      checks.push({
-        id: "unknown-tags",
-        severity: "warn",
-        ok: unknown.length === 0,
-        detail: unknown.length ? `off-list tags: ${unknown.slice(0, 6).map((t) => `[${t}]`).join(", ")}` : "all tags on the valid list"
-      });
-    }
   }
   if (typeof opts.minAdlibs === "number") {
     const inline = (parsed.lyricLines || []).filter((l) => /\[[^\]]+\]/.test(l));
@@ -1669,19 +1646,6 @@ function runChecks(draft, opts) {
         detail: ok ? `verses avg ${avgVerse.toFixed(1)} lines vs chorus ${chorusLen}` : `verses too thin (avg ${avgVerse.toFixed(1)}, min ${minVerse} lines) under a ${chorusLen}-line chorus \u2014 the verse must carry the story`
       });
     }
-  }
-  if (typeof opts.minAdlibs === "number") {
-    const empties = parsed.sections.filter((s) => {
-      const isDelivery = !s.tag.includes(":") && !STRUCTURE_TAGS.has(normalizeTag(s.tag));
-      const contentLines = s.lines.filter((l) => !/^\(.*\)$/.test(l.trim())).length;
-      return isDelivery && contentLines === 0;
-    });
-    checks.push({
-      id: "empty-tags",
-      severity: "warn",
-      ok: empties.length < 2,
-      detail: empties.length >= 2 ? `${empties.length} delivery tags stand alone with nothing under them \u2014 fold them into the section header` : "no sprinkled empty tags"
-    });
   }
   let failCount = 0;
   let warnCount = 0;
@@ -1872,6 +1836,7 @@ function sectionsPrompt(brief, hook, card) {
 Allowed tags: [Intro] [Verse] [Pre-Chorus] [Chorus] [Bridge] [Outro] (repeat [Verse]/[Chorus] as needed).
 Every job is one sentence saying what THAT section must do for THIS song (what verse 1 establishes, what the bridge reveals). The chorus builds around the hook "${hook}".
 THE VERSE CARRIES THE STORY \u2014 it is the substance. Plan the verses to be as long as the chorus or longer (about 6\u20138 lines each), each verse advancing the story with new, specific detail. A song whose verses are shorter than its chorus has no room for meaning \u2014 do NOT plan thin 4-line verses under a big repeating hook.
+PLAN THE WHOLE-SONG ARC like a live record: intimate opening, the chorus opens up, a turn or interlude, a bridge that pulls the beat back for the emotional peak, and where the room fits \u2014 a call-and-response / crown moment where a choir or crowd answers the lead \u2014 then the fullest final chorus and a stripped outro. Each section's job includes its DYNAMIC (where it sits on the rise-and-fall), not just its words.
 Room conventions: ${card.name} \u2014 ${card.oneLine}
 How this room writes (plan the sections to honor these \u2014 if the room vamps, PLAN the vamp):
 ${card.writingDials.map((d) => `- ${d}`).join("\n")}
@@ -1926,17 +1891,17 @@ ${hookLocked ? `The hook (and title) is FIXED: ${hook}. Use it exactly as the Ti
 Section plan:
 ${sectionLines}
 
-=== THE PERFORMANCE (tags & adlibs \u2014 Suno-correct, never sprinkled) ===
+=== THE PERFORMANCE (write it like a live record, richly directed) ===
 ${card.performance.prose}
 This room's delivery colors: ${card.performance.deliveryTags.map((t) => t.replace(/[[\]]/g, "").toLowerCase()).join(", ")}.
-Adlib density: ${card.performance.adlibDensity} \u2014 include AT LEAST ${card.performance.minAdlibs} sung adlibs across the song.
-HOW to place them:
-- ONE tag line per section, on its own line directly above that section's lyrics. FOLD the delivery into the section header with a colon: [Verse: soft, intimate], [Chorus: belted, full harmonies], [Bridge: whispered]. Do NOT stack separate delivery tags on their own empty lines ([Soft] then [Build] then [Harmonies]) \u2014 Suno DROPS sprinkled tags, and a tag with no lyrics under it is the #1 mistake.
-- A colon is valid ONLY after a real section word ([Chorus: ...], [Verse: ...], [Bridge: ...]). NEVER invent [Energy: High] or [Vocals: Confident] tags. At most one or two modifiers per header.
-- Adlibs go INLINE in (parentheses) at the END of the line they answer \u2014 everything in parentheses is SUNG, so write the actual 1-3 short words a backing voice sings: an echo of the last word, a "yeah", a short answer. NEVER put a direction like (whispered) or (echo) in parentheses \u2014 it gets sung out loud. Never slang the user didn't write.
-- Density follows the dynamics: light in an intimate verse, fuller on the chorus, heaviest at the final vamp/outro. Match this room's character above.
-- Your final hook (the Title) leads the chorus (or [Hook]) section and appears in it word-for-word.
-- Production notes (BPM, reverb, "layered vocals", artist names) go ONLY in the SUNO prompt, never in a lyric bracket.
+Include AT LEAST ${card.performance.minAdlibs} adlib/backing lines across the song (density: ${card.performance.adlibDensity}).
+Direct the performance INTO the song \u2014 this is what turns a lyric sheet into a record:
+- Give each section a DESCRIPTIVE header on its own line that names the section AND how it's performed \u2014 who sings, the arrangement, the dynamics. e.g. [Verse 1 \u2014 singing, lead only, choir hums softly], [Chorus 1 \u2014 full harmonies, crowd claps light], [Bridge \u2014 band pulls back, spotlight on the lead]. Rich detail is GOOD; it guides the render. (A short folded form like [Chorus: belted] is also fine.)
+- You may open with a production/setting header ([Live Performance \u2014 small theater], [Production: slow-burn R&B, ~80 BPM, live piano, hip-hop drums, ambient pads]) and close with a stage direction ([final chord rings, choir fades]).
+- Parentheses are HEARD and do double duty: (1) sung backing/adlibs, labeled \u2014 (Choir: "the words they sing"), (Ad-lib: "I'm sorry"), (background: "oohs") \u2014 put the actual short sung words in quotes after the label; and (2) short scene directions \u2014 (crowd cheers), (piano breathes). Use them freely where a singer answers or the room reacts.
+- Build the WHOLE-SONG ARC: intimate verses, the chorus opens up, a bridge that pulls the beat back for the emotional peak, a call-and-response or crown moment, the fullest final chorus, then a stripped outro. The performance should rise and fall across the whole song, never stay flat.
+- Density follows that arc \u2014 lighter in verses, fuller in choruses, heaviest at the peak. Match this room's character above.
+- Your final hook (the Title) leads the chorus (or [Hook]) and appears word-for-word.
 
 ${story ? `=== THE STORY (the user's own words) ===
 ${story}` : `=== NO STORY WAS GIVEN ===
