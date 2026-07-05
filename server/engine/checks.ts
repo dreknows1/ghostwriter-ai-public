@@ -275,8 +275,9 @@ export function runChecks(
     if (parsed.lyricsBody === null) {
       problems.push('missing "### Lyrics" section');
     } else {
-      if (!parsed.sections.some((s) => s.tag.startsWith("verse"))) problems.push("no [Verse] tag in lyrics");
-      if (!parsed.sections.some((s) => s.tag.startsWith("chorus"))) problems.push("no [Chorus] tag in lyrics");
+      // Accept rich headers anywhere in the tag: [Verse 1 — ...], [Hook / Chorus 1 — ...].
+      if (!parsed.sections.some((s) => /\bverse\b/.test(s.tag))) problems.push("no [Verse] section in lyrics");
+      if (!parsed.sections.some((s) => /\b(chorus|hook|refrain)\b/.test(s.tag))) problems.push("no [Chorus]/[Hook] section in lyrics");
     }
     checks.push({
       id: "format",
@@ -546,67 +547,37 @@ export function runChecks(
   ]);
   const normalizeTag = (t: string) => t.trim().toLowerCase().replace(/\s+\d+$/, "").replace(/\s+/g, " ");
   const allBracketTags = [...(body.match(/\[[^\]]+\]/g) || [])].map((t) => t.slice(1, -1));
-  // A colon is valid ONLY after a real section word ([Chorus: belted]) — the modern Suno
-  // way to fold a delivery cue into the header. The word before the colon must be a section.
-  const SECTION_KEYS = new Set([...STRUCTURE_TAGS, "vamp"]);
-  const colonKey = (t: string) => (t.includes(":") ? normalizeTag(t.slice(0, t.indexOf(":"))) : null);
-  const isValidColon = (t: string) => { const k = colonKey(t); return k !== null && SECTION_KEYS.has(k); };
 
-  // adlibs-present (fail): a real song in this room needs its adlib floor.
+  // adlibs-present (fail): a real song in this room needs its adlib floor. Parentheses do
+  // double duty — sung backing lines like (Choir: "...") and scene directions like
+  // (crowd cheers) — both count; the point is the song is not a bare lyric sheet.
   if (typeof opts.minAdlibs === "number") {
     const adlibCount = (body.match(/\([^)]+\)/g) || []).length;
     checks.push({
       id: "adlibs-present",
       severity: "fail",
       ok: adlibCount >= opts.minAdlibs,
-      detail: `${adlibCount} adlibs in parentheses (room floor ${opts.minAdlibs})`,
+      detail: `${adlibCount} adlibs/backing lines in parentheses (room floor ${opts.minAdlibs})`,
     });
   }
 
   // performance-tags (fail): the song must carry real performance direction beyond bare
-  // [Verse]/[Chorus] — either a folded delivery header ([Chorus: belted]) or a standalone
-  // delivery/dynamics tag. Gated on the performance-aware engine path.
+  // [Verse]/[Chorus] — a rich section header ([Verse 1 — Singing, choir hums softly]),
+  // a folded delivery ([Chorus: belted]), or a production/stage direction all count.
+  // (Calibrated to the founder's released Suno songs, which use exactly this rich style.)
   if (typeof opts.minAdlibs === "number") {
-    const perfTags = allBracketTags.filter((t) => isValidColon(t) || (!t.includes(":") && !STRUCTURE_TAGS.has(normalizeTag(t))));
+    const perfTags = allBracketTags.filter((t) => !STRUCTURE_TAGS.has(normalizeTag(t)));
     checks.push({
       id: "performance-tags",
       severity: "fail",
       ok: perfTags.length >= 1,
-      detail: perfTags.length ? `${perfTags.length} performance tags: ${perfTags.slice(0, 5).map((t) => `[${t}]`).join(", ")}` : "no delivery/dynamics tags",
+      detail: perfTags.length ? `${perfTags.length} performance directions` : "no performance direction — bare section labels only",
     });
   }
 
-  // invalid-tags (fail): genuine junk — invented key:value tags like [Energy: High] that
-  // Suno ignores or sings. A colon is fine after a section word ([Chorus: belted]); after
-  // anything else it's junk. Long descriptive non-colon "tags" also fail.
-  if (typeof opts.minAdlibs === "number") {
-    const junk = allBracketTags.filter((t) =>
-      (t.includes(":") ? !isValidColon(t) : t.trim().split(/\s+/).length > 4)
-    );
-    checks.push({
-      id: "invalid-tags",
-      severity: "fail",
-      ok: junk.length === 0,
-      detail: junk.length ? `invented tags (renderer ignores/sings these): ${[...new Set(junk)].slice(0, 5).map((t) => `[${t}]`).join(", ")}` : "no invented tags",
-    });
-
-    // unknown-tags (warn): a non-colon bracket tag not on the founder's valid list — probably
-    // fine (Suno is permissive), but flagged. Valid colon headers are skipped.
-    if (opts.validTags && opts.validTags.length > 0) {
-      const valid = new Set(opts.validTags.map((t) => normalizeTag(t.replace(/^\[|\]$/g, ""))));
-      const unknown = [...new Set(allBracketTags.filter((t) => !t.includes(":") && !valid.has(normalizeTag(t))))];
-      checks.push({
-        id: "unknown-tags",
-        severity: "warn",
-        ok: unknown.length === 0,
-        detail: unknown.length ? `off-list tags: ${unknown.slice(0, 6).map((t) => `[${t}]`).join(", ")}` : "all tags on the valid list",
-      });
-    }
-  }
-
-  // tags-own-line (fail): a bracket tag placed inside a lyric line is ignored by
-  // the renderer. parseDraft consumes proper tag-lines into sections, so any bracket
-  // tag left in a lyric content line is inline. Gated on the performance-aware path.
+  // tags-own-line (fail): a bracket tag jammed inside a lyric line governs nothing.
+  // parseDraft consumes proper tag-lines into sections, so any bracket tag left in a lyric
+  // content line is inline. (Rich descriptive tags are welcome — they just go on their own line.)
   if (typeof opts.minAdlibs === "number") {
     const inline = (parsed.lyricLines || []).filter((l) => /\[[^\]]+\]/.test(l));
     checks.push({
@@ -639,22 +610,6 @@ export function runChecks(
           : `verses too thin (avg ${avgVerse.toFixed(1)}, min ${minVerse} lines) under a ${chorusLen}-line chorus — the verse must carry the story`,
       });
     }
-  }
-
-  // empty-tags (warn): a delivery tag standing alone with nothing under it is the sprinkle
-  // mistake — Suno drops it. Fold delivery into the section header instead ([Chorus: belted]).
-  if (typeof opts.minAdlibs === "number") {
-    const empties = parsed.sections.filter((s) => {
-      const isDelivery = !s.tag.includes(":") && !STRUCTURE_TAGS.has(normalizeTag(s.tag));
-      const contentLines = s.lines.filter((l) => !/^\(.*\)$/.test(l.trim())).length;
-      return isDelivery && contentLines === 0;
-    });
-    checks.push({
-      id: "empty-tags",
-      severity: "warn",
-      ok: empties.length < 2,
-      detail: empties.length >= 2 ? `${empties.length} delivery tags stand alone with nothing under them — fold them into the section header` : "no sprinkled empty tags",
-    });
   }
 
   let failCount = 0;

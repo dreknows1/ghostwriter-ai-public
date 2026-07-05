@@ -243,6 +243,7 @@ function sectionsPrompt(brief: Brief, hook: string, card: RoomCard): string {
 Allowed tags: [Intro] [Verse] [Pre-Chorus] [Chorus] [Bridge] [Outro] (repeat [Verse]/[Chorus] as needed).
 Every job is one sentence saying what THAT section must do for THIS song (what verse 1 establishes, what the bridge reveals). The chorus builds around the hook "${hook}".
 THE VERSE CARRIES THE STORY — it is the substance. Plan the verses to be as long as the chorus or longer (about 6–8 lines each), each verse advancing the story with new, specific detail. A song whose verses are shorter than its chorus has no room for meaning — do NOT plan thin 4-line verses under a big repeating hook.
+PLAN THE WHOLE-SONG ARC like a live record: intimate opening, the chorus opens up, a turn or interlude, a bridge that pulls the beat back for the emotional peak, and where the room fits — a call-and-response / crown moment where a choir or crowd answers the lead — then the fullest final chorus and a stripped outro. Each section's job includes its DYNAMIC (where it sits on the rise-and-fall), not just its words.
 Room conventions: ${card.name} — ${card.oneLine}
 How this room writes (plan the sections to honor these — if the room vamps, PLAN the vamp):
 ${card.writingDials.map((d) => `- ${d}`).join("\n")}
@@ -319,17 +320,17 @@ ${hookLocked
 Section plan:
 ${sectionLines}
 
-=== THE PERFORMANCE (tags & adlibs — Suno-correct, never sprinkled) ===
+=== THE PERFORMANCE (write it like a live record, richly directed) ===
 ${card.performance.prose}
 This room's delivery colors: ${card.performance.deliveryTags.map((t) => t.replace(/[[\]]/g, "").toLowerCase()).join(", ")}.
-Adlib density: ${card.performance.adlibDensity} — include AT LEAST ${card.performance.minAdlibs} sung adlibs across the song.
-HOW to place them:
-- ONE tag line per section, on its own line directly above that section's lyrics. FOLD the delivery into the section header with a colon: [Verse: soft, intimate], [Chorus: belted, full harmonies], [Bridge: whispered]. Do NOT stack separate delivery tags on their own empty lines ([Soft] then [Build] then [Harmonies]) — Suno DROPS sprinkled tags, and a tag with no lyrics under it is the #1 mistake.
-- A colon is valid ONLY after a real section word ([Chorus: ...], [Verse: ...], [Bridge: ...]). NEVER invent [Energy: High] or [Vocals: Confident] tags. At most one or two modifiers per header.
-- Adlibs go INLINE in (parentheses) at the END of the line they answer — everything in parentheses is SUNG, so write the actual 1-3 short words a backing voice sings: an echo of the last word, a "yeah", a short answer. NEVER put a direction like (whispered) or (echo) in parentheses — it gets sung out loud. Never slang the user didn't write.
-- Density follows the dynamics: light in an intimate verse, fuller on the chorus, heaviest at the final vamp/outro. Match this room's character above.
-- Your final hook (the Title) leads the chorus (or [Hook]) section and appears in it word-for-word.
-- Production notes (BPM, reverb, "layered vocals", artist names) go ONLY in the SUNO prompt, never in a lyric bracket.
+Include AT LEAST ${card.performance.minAdlibs} adlib/backing lines across the song (density: ${card.performance.adlibDensity}).
+Direct the performance INTO the song — this is what turns a lyric sheet into a record:
+- Give each section a DESCRIPTIVE header on its own line that names the section AND how it's performed — who sings, the arrangement, the dynamics. e.g. [Verse 1 — singing, lead only, choir hums softly], [Chorus 1 — full harmonies, crowd claps light], [Bridge — band pulls back, spotlight on the lead]. Rich detail is GOOD; it guides the render. (A short folded form like [Chorus: belted] is also fine.)
+- You may open with a production/setting header ([Live Performance — small theater], [Production: slow-burn R&B, ~80 BPM, live piano, hip-hop drums, ambient pads]) and close with a stage direction ([final chord rings, choir fades]).
+- Parentheses are HEARD and do double duty: (1) sung backing/adlibs, labeled — (Choir: "the words they sing"), (Ad-lib: "I'm sorry"), (background: "oohs") — put the actual short sung words in quotes after the label; and (2) short scene directions — (crowd cheers), (piano breathes). Use them freely where a singer answers or the room reacts.
+- Build the WHOLE-SONG ARC: intimate verses, the chorus opens up, a bridge that pulls the beat back for the emotional peak, a call-and-response or crown moment, the fullest final chorus, then a stripped outro. The performance should rise and fall across the whole song, never stay flat.
+- Density follows that arc — lighter in verses, fuller in choruses, heaviest at the peak. Match this room's character above.
+- Your final hook (the Title) leads the chorus (or [Hook]) and appears word-for-word.
 
 ${story ? `=== THE STORY (the user's own words) ===\n${story}` : `=== NO STORY WAS GIVEN ===\nWrite from the brief alone. Keep it universal but concrete. NEVER invent fake personal details — no invented names, streets, dates, or events pretending to be the user's.`}
 

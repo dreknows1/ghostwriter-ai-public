@@ -42,6 +42,10 @@ and each sub-genre page says when that bend applies.)
   - Entendres and **double entendres** — lines that mean two things at once, both intended
     (a hallmark of great R&B and hip-hop writing; must land naturally, never announced)
   - Wordplay, flips, and reversals — saying the expected thing the unexpected way
+  - **Extended metaphor** — develop the ONE central image across the whole song into a system,
+    not just a repeated object: a warning becomes "colorblind" becomes "red all over you"; a
+    pressure becomes "caged," "walls," "can't breathe." The strongest songs work a single picture
+    every way it turns.
   - Personification, allusion — sparingly, where the genre welcomes them
 - Voice: a real person is speaking; one point of view with an attitude.
 - Show and tell in balance: images earn feelings; plain spoken lines make them land. Neither alone.
@@ -192,51 +196,44 @@ Use only real, recognized tags. They come in five families, and each family does
 - Dynamics and energy — the intensity of a moment (build, build-up, drop, crescendo, big finish, soft, quiet). These carry the arc.
 - Instrumental — a non-vocal moment (a named solo, an instrumental break, bridge, intro, or outro).
 
-Use the tag's exact recognized wording, not a paraphrase — [Belting], not "sing it big."
-
-**Fold delivery into the section header (the modern, reliable way).** Instead of a separate
-delivery tag standing on its own line, attach the delivery and any instrument change to the
-section it governs, inside ONE bracket, using a colon: [Chorus: belted, full harmonies],
-[Verse: soft, intimate], [Bridge: whispered]. This scopes the change to that one section, reads
-reliably, and avoids the sprinkle mistake. A standalone [Whispered] line still works for a
-mid-section shift, but prefer the folded header.
-
-**Don't sprinkle — Suno DROPS extra tags.** One section tag per section, plus at most one or two
-modifiers folded into it. Past ~2–4 brackets on a section the renderer starts dropping the later
-ones, so decorative extras literally do nothing. Combining modifiers inside one bracket beats
-stacking [Soft] [Build] [Harmonies] as separate lines with nothing under them — that stacking IS
-the "tags standing empty" failure.
-
-**Never invent key:value tags.** [Energy: High], [Vocals: Confident], [Harmonies swell] are NOT
-real — the renderer ignores them or sings them aloud. A colon is valid ONLY after a real section
-word ([Chorus: ...], [Verse: ...]); after anything else it's junk. Production concerns — BPM,
-reverb, "layered vocals", artist names — belong in the SUNO production prompt, never in a lyric bracket.
-
-**Curly braces { } do nothing.** Suno does not read them — content in braces can even get sung
-aloud. Directives go in [ ]. Nothing else is a directive.
+**Direct richly — Suno rewards a producer's score (grounded in released songs).** Give each
+section a DESCRIPTIVE header on its own line that names the section AND how it's performed —
+who sings, the arrangement, the dynamics. Real released examples: [Verse 1 — singing, lead only,
+choir hums softly], [Chorus 1 — full harmonies, crowd claps light], [Bridge — band pulls back,
+spotlight on the lead]. A short folded form works too: [Chorus: belted]. Detail is not clutter
+here — it guides the render. Open with a production/setting header when it fits
+([Live Performance — small theater], [Production: slow-burn R&B, ~80 BPM, live piano, hip-hop
+drums]) and close with a stage direction ([final chord rings, choir fades]).
 
 The own-line rule: every bracket tag sits on its OWN line, directly above the lyrics it governs —
-never jammed mid-line, never stacked over another tag with no lyrics between them.
+never jammed mid-line. Curly braces { } are NOT a directive delimiter; directions go in [ ].
 
-**Adlibs:**
+**Adlibs and backing lines (parentheses do double duty — and they are HEARD):**
 
-Adlibs go in parentheses () and are the single biggest lever that moves a song from "written"
-to "performed." **Everything inside parentheses gets SUNG** — it renders as a second, usually
-quieter backing voice layered under the line. So an adlib sits INLINE, at the end of the lyric
-line it answers ("Rise up (rise up)", "I'm still here (still here)") — that inline placement is
-what bonds the answer to the line and layers it underneath. Brackets stand alone on their own
-line; parentheses ride inline with the words. Keep the two straight.
+Parentheses are the biggest lever from "written" to "performed," and they carry two kinds of
+thing, both of which the render acts on:
+1. **Sung backing / adlibs, labeled** — (Choir: "the words they sing"), (Ad-lib: "I'm sorry"),
+   (background: "oohs"). The label says who/how; the quoted part is the actual short words a
+   second voice sings, layered under the lead. This is where call-and-response and gospel-style
+   answers live.
+2. **Short scene directions** — (crowd cheers), (piano breathes), (beat drops out for a bar).
+   These color the moment.
 
-What goes in the parentheses is the actual SHORT words you want a second voice to sing — 1 to 3
-words: an echo of the last word, a short answer, a "yeah" or "oh" where a singer would respond.
-Because parentheses are ALWAYS sung, the cardinal error is putting a DIRECTION in them:
-"(whispered)" makes Suno literally sing the word "whispered." Directions and delivery cues go in
-[brackets]; only words you want vocalized go in (parentheses). Long sentences in parentheses get
-mangled — keep them short and singable.
+Use them freely where a singer would answer or the room would react — on hook repeats, at
+line-ends, hardest at the crown moment and the final chorus. Keep the sung part short and
+singable. The dialect rule still applies: an adlib is NEVER slang or dialect the user didn't
+write in their own story.
 
 The dialect rule applies to adlibs with full force: an adlib is NEVER slang, patois, or dialect the user did not write in their own story. Generated dialect in an adlib reads as parody, not authenticity — the same failure the genre layer warns against. Keep adlibs to genuine sounds and honest short responses in the song's own plain voice, and let the earlier craft carry the identity.
 
 Placement discipline is the same as everywhere: an adlib goes where a singer would actually respond — the answer to a call, the echo on a hook, the sound at the end of a phrase. Not scattered to fill space. One well-placed adlib that answers a line beats ten thrown at the wall.
+
+**The whole-song arc — arrange it like a live record.** A great performance rises and falls
+across the ENTIRE song, not section by section: intimate verses, the chorus opens up, an
+interlude or turn, a bigger chorus, a bridge that pulls the beat back for the emotional peak, a
+call-and-response or crown moment where a choir/crowd answers the lead, the fullest final chorus,
+then a stripped outro that lets the last chord ring. Plan that shape; write the tags and adlibs
+to serve it. The dynamics are the drama.
 
 **The mandate:**
 
