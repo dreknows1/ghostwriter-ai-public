@@ -813,6 +813,10 @@ export function buildInterimSongPrompt(inputs: any): string {
   const genre = String(inputs?.genre || "Pop").trim();
   const story = String(inputs?.creativeDirection || inputs?.additionalInfo || "").trim();
   const vocals = String(inputs?.vocals || "Female Solo").trim();
+  const language = String(inputs?.language || "English").trim();
+  const languageLine = /^english$/i.test(language)
+    ? ""
+    : `\nWrite ALL lyrics in ${language} — natural, native phrasing, never translated-sounding. Bracket [tags] and the SUNO production prompt stay in ENGLISH; sung words in (parentheses) follow the lyrics' language. The Title is in ${language}.\n`;
   const voice = /female/i.test(vocals) ? "female vocal" : /male/i.test(vocals) ? "male vocal" : "duet vocals";
   // Song Builder picks — passed through plainly; the user chose these.
   const picks = [
@@ -824,7 +828,7 @@ export function buildInterimSongPrompt(inputs: any): string {
     inputs?.title && `Title (use exactly this): ${String(inputs.title).trim()}`,
   ].filter(Boolean).join("\n");
   return `Write a ${genre} song${story ? ` about the following:\n\n${story}\n\n` : ". "}${picks ? `\nThe writer chose:\n${picks}\n\n` : ""}It should have a ${voice} and section tags like [Verse] [Chorus] [Bridge].
-
+${languageLine}
 ${PERFORMANCE_TAGS_INSTRUCTION}
 
 Also write a 40-70 word Suno production prompt describing how the track should sound.
@@ -990,6 +994,7 @@ function engineInputs(payload: any) {
     audience: opt(inputs.audience),
     title: opt(inputs.title),
     instrumentation: opt(inputs.instrumentation),
+    language: opt(inputs.language),
   };
 }
 
@@ -1073,6 +1078,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
       model: ENGINE_MODEL,
       genres: Object.keys(CURRICULUM.genres),
       rooms,
+      genreBuilder: CURRICULUM.genreBuilder ?? {},
     });
   }
   if (req.method !== "POST") {

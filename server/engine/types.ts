@@ -67,6 +67,8 @@ export type CompiledCurriculum = {
   abstractionWords: string[];
   /** the only Suno tags the renderer reads (BRAIN Layer 6) — anything else is invalid */
   validTags: string[];
+  /** per-genre questionnaire worlds (SONGWRITING_GENRES.md) — themes/purposes/instruments; UI concern */
+  genreBuilder?: Record<string, { themes: string[]; purposes: string[]; instruments: string[] }>;
   genres: Record<string, GenrePack>;
   /** sha256 of all source docs — reported on /api/health as curriculumHash */
   hash: string;

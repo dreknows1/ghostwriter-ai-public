@@ -30,6 +30,8 @@ export type EngineInputs = {
   title?: string;
   /** Song Builder instrument picks (comma-joined), featured in the render */
   instrumentation?: string;
+  /** lyric language (English default). Tags stay English; sung parens follow the language. */
+  language?: string;
 };
 
 export type EngineResult = {
@@ -283,8 +285,13 @@ function writerPrompt(args: {
   bannedPhrases: string[];
   hookLocked: boolean;
   instrumentation?: string;
+  language?: string;
 }): string {
-  const { core, pack, card, brief, hook, sections, story, vocals, variant, guidance, bannedPhrases, hookLocked, instrumentation } = args;
+  const { core, pack, card, brief, hook, sections, story, vocals, variant, guidance, bannedPhrases, hookLocked, instrumentation, language } = args;
+  const lang = String(language || "English").trim();
+  const languageLine = /^english$/i.test(lang)
+    ? ""
+    : `\nLANGUAGE: write ALL lyrics in ${lang} — natural, native phrasing a native speaker would sing, never translated-sounding. Bracket [tags] and the SUNO Prompt stay in ENGLISH; sung words in (parentheses) follow the lyrics' language. The Title is in ${lang}.\n`;
   const sectionLines = sections.map((s) => `${s.tag} — ${s.job}`).join("\n");
   const approach =
     variant === "hook-first"
@@ -340,7 +347,7 @@ ${story ? `=== THE STORY (the user's own words) ===\n${story}` : `=== NO STORY W
 
 ${approach}${guidance ? `\n\nOne more thing from the last attempt: ${guidance}` : ""}
 
-Vocal: ${voiceLine(vocals)}.
+Vocal: ${voiceLine(vocals)}.${languageLine}
 
 Return exactly this format:
 Title: ${hookLocked ? hook : "<your final hook>"}
@@ -520,7 +527,7 @@ export async function runEngine(
   // versions. A failed check earns one more write with plain guidance — then fail-loud.
   const writeOne = async (variant: "straight" | "hook-first", guidance?: string) => {
     const raw = await generate(
-      writerPrompt({ core: curriculum.core, pack, card, brief, hook, sections, story, vocals: inputs.vocals, variant, guidance, bannedPhrases: curriculum.bannedPhrases, hookLocked, instrumentation: inputs.instrumentation }),
+      writerPrompt({ core: curriculum.core, pack, card, brief, hook, sections, story, vocals: inputs.vocals, variant, guidance, bannedPhrases: curriculum.bannedPhrases, hookLocked, instrumentation: inputs.instrumentation, language: inputs.language }),
       "write"
     ).catch(() => "");
     if (!raw || raw.includes("GENERATION_DECLINED")) return null;
