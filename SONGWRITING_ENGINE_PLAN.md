@@ -22,7 +22,7 @@ How that works mechanically (so it can't silently break like everything else has
 - The live site reports a **curriculum fingerprint** on its health check, and an automated
   smoke test confirms a known sentence from your curriculum is actually inside the deployed
   writer's instructions. If your words aren't in the machine, alarms ring — no more silent rot.
-- **Size budget:** the compiled writing instructions are capped at **~2,800 tokens per
+- **Size budget:** the compiled writing instructions are capped at **~3,700 tokens per
   song** (measured against the real approved curriculum: core ~1,200 + genre profile
   ~800 + largest room card ~750, with ~50 headroom — the build fails the moment content
   exceeds it). New rules must refine or replace old ones, not pile on — with a standing
@@ -33,7 +33,7 @@ How that works mechanically (so it can't silently break like everything else has
   else. The sub-genre pages in SONGWRITING_SUBGENRES.md are teaching text; each compiles
   down to a compact writer card (~650-800 tokens of dials + spec defaults; the
   stories-it-serves notes stay behind for landing and never reach the writer), and the
-  whole per-song slice is capped at **~3,500 tokens** (the size budget above). The
+  whole per-song slice is capped at **~3,700 tokens** (the size budget above). The
   composing-process layer also stays out of the slice — the engine's own steps enact it.
   Same pruning law applies to cards as to rules.
 

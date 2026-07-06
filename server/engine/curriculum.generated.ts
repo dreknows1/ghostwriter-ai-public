@@ -190,7 +190,7 @@ export const CURRICULUM: CompiledCurriculum = {
           "storyFit": "Best for real, messy, current relationship stories — situationships, self-worth after a breakup, healing, wanting someone you shouldn't, complicated love told honestly. Serves badly: formal tributes, whole-life story songs, weddings that want grandeur, or anything needing big-band ceremony.",
           "parodyTraps": "Over-singing every line instead of talking some of them; pet-name filler and stock compliments instead of the user's actual details; tidy nursery rhymes; announcing the sexy or sad part instead of just saying the true thing; filling the space that should stay empty for ad-libs.",
           "performance": {
-            "prose": "Density sparse; min adlibs 4; delivery tags [Harmonies] [Spoken] [Soft] [Falsetto] [Crooning]. This room performs like a late-night text thread set to music — one intimate lead talking as much as singing, so bracket tags stay light and the adlibs do the emotional work. Signature: A quiet answer vocal tucked in parentheses under the end of a lead line — echoing or gently commenting on the last few words the way a lover would murmur back over a text thread, never a full-voiced group response. Placement: The floor of 4 is reachable without ever filling the empty space the writing leaves: roughly 2 under the hook, 1 at a verse line-end, and 1 in a short repeated-hook outro tag.",
+            "prose": "Density sparse; min adlibs 4; delivery tags [Harmonies] [Spoken] [Soft] [Falsetto] [Crooning]. This room performs like a late-night text thread set to music — one intimate lead talking as much as singing, so bracket tags stay light and the adlibs do the emotional work. Signature: A quiet answer vocal tucked in parentheses under the end of a lead line — echoing or gently commenting on the last few words the way a lover would murmur back over a text thread, never a full-voiced group response. Placement: The floor of 4 is reachable without ever filling the empty space the writing leaves: roughly 2 under the hook, 1 at a verse line-end, and 1 in a short repeated-hook outro tag. Tag identity: a solo modern voice — texty echo doubles at line ends, a labeled (background: soft oohs) on the hook, an occasional (spoken: quiet aside) on its own line. No choir, no crowd — the room is one person and their own layered voice.",
             "adlibDensity": "sparse",
             "minAdlibs": 4,
             "deliveryTags": [
@@ -199,6 +199,31 @@ export const CURRICULUM: CompiledCurriculum = {
               "[Soft]",
               "[Falsetto]",
               "[Crooning]"
+            ]
+          },
+          "builder": {
+            "instruments": [
+              "soft keys",
+              "clean electric guitar loop",
+              "808 sub-bass",
+              "half-time drums",
+              "airy pads",
+              "light strings"
+            ],
+            "themes": [
+              "New love",
+              "Deep love / devotion",
+              "Complicated love",
+              "Heartbreak / letting go",
+              "Missing someone",
+              "Growth / proving myself"
+            ],
+            "purposes": [
+              "Make them feel seen",
+              "Say what I never said",
+              "Win them back",
+              "Slow dance",
+              "Bring happy tears"
             ]
           }
         },
@@ -221,7 +246,7 @@ export const CURRICULUM: CompiledCurriculum = {
           "storyFit": "Best for devotion, weddings, apologies, winning somebody back, grown committed romance, and friend-group anthems that want harmony and lift. Serves badly: detached or ironic stories, guarded narrators, and minimal lo-fi moods — this style cannot keep its heart hidden.",
           "parodyTraps": "Cramming in dated pet names and 90s slang the user never wrote (the era lives in the chords and harmonies, not the vocabulary); turning every single line into a run cue; choruses that are paragraphs instead of chants; wearing the decade as a costume instead of writing sincere devotion.",
           "performance": {
-            "prose": "Density heavy; min adlibs 8; delivery tags [Call and Response] [Harmonies] [Vocal Run] [Belting] [Ad-Lib Section] [Choir enters]. This is the loudest, most vocally crowded room in R&B, so it leans hardest on adlibs and backing-vocal tags of all the siblings. Signature: A four-voice backing stack belting a chant-simple, metrically parallel chorus together while answering the lead line for line under the verses — a call-and-response conversation with the address locked on one person, opening into a final vamp where the whole stack holds the chorus and the lead runs freely over the top. Placement: Structure tags ([Verse], [Chorus], [Bridge]) go bare on their own lines.",
+            "prose": "Density heavy; min adlibs 8; delivery tags [Call and Response] [Harmonies] [Vocal Run] [Belting] [Ad-Lib Section] [Choir enters]. This is the loudest, most vocally crowded room in R&B, so it leans hardest on adlibs and backing-vocal tags of all the siblings. Signature: A four-voice backing stack belting a chant-simple, metrically parallel chorus together while answering the lead line for line under the verses — a call-and-response conversation with the address locked on one person, opening into a final vamp where the whole stack holds the chorus and the lead runs freely over the top. Placement: Structure tags ([Verse], [Chorus], [Bridge]) go bare on their own lines. Tag identity: a lead with a 3–4 voice backing stack that answers line-for-line — (background: echo of the last words) everywhere, written call-and-response blocks with line-start Lead: and (response) pairs, group belt on the final chorus, run cues at phrase ends. The stack is a character in the song.",
             "adlibDensity": "heavy",
             "minAdlibs": 8,
             "deliveryTags": [
@@ -231,6 +256,30 @@ export const CURRICULUM: CompiledCurriculum = {
               "[Belting]",
               "[Ad-Lib Section]",
               "[Choir enters]"
+            ]
+          },
+          "builder": {
+            "instruments": [
+              "boom-bap drums",
+              "Rhodes keys",
+              "bell-tone synths",
+              "live bass",
+              "gospel-voiced piano",
+              "new-jack-swing drum machine"
+            ],
+            "themes": [
+              "Deep love / devotion",
+              "New love",
+              "Missing someone",
+              "Complicated love",
+              "Celebration / milestone"
+            ],
+            "purposes": [
+              "Win them back",
+              "Slow dance",
+              "Party / celebrate",
+              "Bring happy tears",
+              "Make them feel seen"
             ]
           }
         },
@@ -252,7 +301,7 @@ export const CURRICULUM: CompiledCurriculum = {
           "storyFit": "Best for stories with a plot: a confession, a confrontation, a dramatic apology, the night everything changed, a breakup with actual events in it. Serves badly: quiet contentment, meditative growth stories, and whisper-close intimacy — this style needs something to happen.",
           "parodyTraps": "Era props (flip phones, club scenes, the other woman) the user never gave; melodrama with no real event underneath it; over-running every line instead of saving runs for the peaks; letting the era's stock plots swallow the user's actual story.",
           "performance": {
-            "prose": "Density moderate; min adlibs 5; delivery tags [Vocal Run] [Falsetto] [Crescendo] [Big Finish]. This room performs like a solo star narrating the night everything changed, so nearly all the vocal texture bends around one lead voice. Signature: At the emotional peak, the single star voice breaks into a solo run over the doubled hook while the backgrounds echo its last word behind it — one voice showing off, never a group trading lines. Placement: Verses stay bare and story-forward — set the scene, the event, the fallout with almost no adlibs so the narrative reads clean; at most a single echoed last-word under the line that ends the scene.",
+            "prose": "Density moderate; min adlibs 5; delivery tags [Vocal Run] [Falsetto] [Crescendo] [Big Finish]. This room performs like a solo star narrating the night everything changed, so nearly all the vocal texture bends around one lead voice. Signature: At the emotional peak, the single star voice breaks into a solo run over the doubled hook while the backgrounds echo its last word behind it — one voice showing off, never a group trading lines. Placement: Verses stay bare and story-forward — set the scene, the event, the fallout with almost no adlibs so the narrative reads clean; at most a single echoed last-word under the line that ends the scene. Tag identity: one star voice with backgrounds that ECHO the lead's own words at the peaks (never answer with new words), a dramatic pulled-back bridge header, and a solo run cue before the final chorus. Theatrical, single-spotlight tagging.",
             "adlibDensity": "moderate",
             "minAdlibs": 5,
             "deliveryTags": [
@@ -260,6 +309,27 @@ export const CURRICULUM: CompiledCurriculum = {
               "[Falsetto]",
               "[Crescendo]",
               "[Big Finish]"
+            ]
+          },
+          "builder": {
+            "instruments": [
+              "glossy programmed drums",
+              "plush keys",
+              "deep polished bass",
+              "string and choir pads",
+              "plucked synth lines"
+            ],
+            "themes": [
+              "Complicated love",
+              "Heartbreak / letting go",
+              "New love",
+              "Deep love / devotion"
+            ],
+            "purposes": [
+              "Say what I never said",
+              "Win them back",
+              "Slow dance",
+              "Make them feel seen"
             ]
           }
         },
@@ -282,7 +352,7 @@ export const CURRICULUM: CompiledCurriculum = {
           "storyFit": "Best for reflective stories — personal growth, self-love, gratitude, long-term love seen from altitude, roots and family lineage, spiritual searching. Serves badly: urgent drama, petty conflict, club energy, or any story that needs to move fast and hit hard on the beat.",
           "parodyTraps": "Fake-deep word salad with no concrete story underneath; mystical props stacked up as decoration; imitating vocal scatting or filler syllables on the page; poeticness with zero specific detail from the user's actual life — the poetry must be built FROM their story, not draped over it.",
           "performance": {
-            "prose": "Density moderate; min adlibs 5; delivery tags [Crooning] [Spoken] [Vocal Run] [Instrumental Break] [Soft]. Neo-Soul performs loose and human, not staged. Signature: The closing vamp circles as a flat mantra instead of building — the chorus phrase repeats with small changes at the SAME dynamic level top to bottom while hums, a spoken aside, and a drifting (not peak) [Vocal Run] wander over a long instrumental pocket. Placement: The adlib floor is back-heavy: most of the required adlibs live in the closing vamp, verses get at most one, and the bridge is near-zero — a loaded outro over near-empty verses is what makes this room, not echoes sprinkled evenly under every hook (that is the Contemporary pattern).",
+            "prose": "Density moderate; min adlibs 5; delivery tags [Crooning] [Spoken] [Vocal Run] [Instrumental Break] [Soft]. Neo-Soul performs loose and human, not staged. Signature: The closing vamp circles as a flat mantra instead of building — the chorus phrase repeats with small changes at the SAME dynamic level top to bottom while hums, a spoken aside, and a drifting (not peak) [Vocal Run] wander over a long instrumental pocket. Placement: The adlib floor is back-heavy: most of the required adlibs live in the closing vamp, verses get at most one, and the bridge is near-zero — a loaded outro over near-empty verses is what makes this room, not echoes sprinkled evenly under every hook (that is the Contemporary pattern). Tag identity: a loose live room — hummed (mmm) drifting anywhere in a line (start, middle, end), (spoken: low observation) asides on their own lines, instrumental-breathing headers where the band talks. Human, unquantized, nobody performing AT anyone.",
             "adlibDensity": "moderate",
             "minAdlibs": 5,
             "deliveryTags": [
@@ -291,6 +361,29 @@ export const CURRICULUM: CompiledCurriculum = {
               "[Vocal Run]",
               "[Instrumental Break]",
               "[Soft]"
+            ]
+          },
+          "builder": {
+            "instruments": [
+              "Fender Rhodes",
+              "in-the-pocket live drums",
+              "warm bass",
+              "muted guitar",
+              "horns",
+              "Wurlitzer"
+            ],
+            "themes": [
+              "Growth / proving myself",
+              "Faith / gratitude",
+              "Deep love / devotion",
+              "Family",
+              "Remembering someone"
+            ],
+            "purposes": [
+              "Make them feel seen",
+              "Testify / give thanks",
+              "Bring happy tears",
+              "Slow dance"
             ]
           }
         },
@@ -314,7 +407,7 @@ export const CURRICULUM: CompiledCurriculum = {
           "storyFit": "Best for situationships, late-night regret, mixed feelings, ambition tangled with love, guarded hearts, and stories the user tells in blunt fragments. Serves badly: weddings, tributes to parents, joyful celebration, wholesome family stories, or any narrator who wants to sound fully open-hearted.",
           "parodyTraps": "Forcing designer brands, substances, or city clichés the user never gave; over-singing — this style murmurs, it does not run; rhyming too neatly; letting the narrator gush emotionally when the style's whole identity is the guard staying up; cramming words into space that must stay empty.",
           "performance": {
-            "prose": "Density moderate; min adlibs 3; delivery tags [Whispered] [Spoken] [Soft] [Crooning]. This room performs by murmur, not by run. Signature: A single doubled voice murmuring an echo of its own last word — the same phrase looping while a low ad-lib breathes back at the end of each pass, tone carrying the feeling instead of a run. Placement: Two placements, kept strictly apart so a writer never confuses them: bracket meta tags ([Spoken], [Whispered], [Soft]) only ever sit on their own line before a section, never mid-line and never inside a phrase; parenthetical adlibs only ever sit at a phrase END, in parentheses, never mid-line and never inside the dead air the writing protects.",
+            "prose": "Density moderate; min adlibs 3; delivery tags [Whispered] [Spoken] [Soft] [Crooning]. This room performs by murmur, not by run. Signature: A single doubled voice murmuring an echo of its own last word — the same phrase looping while a low ad-lib breathes back at the end of each pass, tone carrying the feeling instead of a run. Placement: Two placements, kept strictly apart so a writer never confuses them: bracket meta tags ([Spoken], [Whispered], [Soft]) only ever sit on their own line before a section, never mid-line and never inside a phrase; parenthetical adlibs only ever sit at a phrase END, in parentheses, never mid-line and never inside the dead air the writing protects. Tag identity: the lead's OWN voice doubling single murmured words at line ends — never a choir, never a crowd; a whispered header where the guard drops, emphasis carried by a stretched word (lo-ove) or a held last word, not by answers.",
             "adlibDensity": "moderate",
             "minAdlibs": 3,
             "deliveryTags": [
@@ -322,6 +415,25 @@ export const CURRICULUM: CompiledCurriculum = {
               "[Spoken]",
               "[Soft]",
               "[Crooning]"
+            ]
+          },
+          "builder": {
+            "instruments": [
+              "dark ambient pads",
+              "detuned keys",
+              "booming 808 sub",
+              "rolling trap hi-hats",
+              "sparse guitar loop"
+            ],
+            "themes": [
+              "Complicated love",
+              "Heartbreak / letting go",
+              "Missing someone",
+              "Growth / proving myself"
+            ],
+            "purposes": [
+              "Say what I never said",
+              "Make them feel seen"
             ]
           }
         },
@@ -344,7 +456,7 @@ export const CURRICULUM: CompiledCurriculum = {
           "storyFit": "Best for anniversaries, long marriages, proposals, devoted grown romance, and songs sung to a spouse or lifelong partner. Serves badly: breakups in progress, anger, casual flings, group anthems, or stories that need modern slang energy and pace.",
           "parodyTraps": "Running the seduction-cliché checklist (wine, fireplace, silk) instead of using the couple's real details; breathy overacting; letting the words rush ahead of the tempo; getting explicit — this style seduces by implication only; treating the genre as a wink or a skit instead of full sincerity.",
           "performance": {
-            "prose": "Density sparse; min adlibs 3; delivery tags [Soft] [Crooning] [Falsetto] [Sax Solo] [Vocal Run] [Harmonies]. This room performs by holding back. Signature: The final chorus becomes a vamp that stays close-miked and solo: the simple chorus words loop while one lead voice ascends over the top — climbing into falsetto and spending its saved-up tasteful runs — without ever raising the room's volume, without a background trio answering, without a group belt. Placement: Intro and verses stay almost bare — no run cues, at most a single soft hummed or breathed adlib tucked under a line where a lover would sigh; keep the pre-chorus bare too so the lift is felt, not announced.",
+            "prose": "Density sparse; min adlibs 3; delivery tags [Soft] [Crooning] [Falsetto] [Sax Solo] [Vocal Run] [Harmonies]. This room performs by holding back. Signature: The final chorus becomes a vamp that stays close-miked and solo: the simple chorus words loop while one lead voice ascends over the top — climbing into falsetto and spending its saved-up tasteful runs — without ever raising the room's volume, without a background trio answering, without a group belt. Placement: Intro and verses stay almost bare — no run cues, at most a single soft hummed or breathed adlib tucked under a line where a lover would sigh; keep the pre-chorus bare too so the lift is felt, not announced. Tag identity: near-silence as a choice — at most a single breathed hum under a line, held last words marked with trailing dots, soft harmonies arriving only on the final chorus, and ONE closing vamp header where the lead finally climbs over the looping words. Tags whisper here.",
             "adlibDensity": "sparse",
             "minAdlibs": 3,
             "deliveryTags": [
@@ -354,6 +466,25 @@ export const CURRICULUM: CompiledCurriculum = {
               "[Sax Solo]",
               "[Vocal Run]",
               "[Harmonies]"
+            ]
+          },
+          "builder": {
+            "instruments": [
+              "silky electric piano",
+              "soft strings",
+              "brushed rimshot drums",
+              "round smooth bass",
+              "saxophone",
+              "muted guitar"
+            ],
+            "themes": [
+              "Deep love / devotion",
+              "Celebration / milestone"
+            ],
+            "purposes": [
+              "Slow dance",
+              "Bring happy tears",
+              "Make them feel seen"
             ]
           }
         },
@@ -376,7 +507,7 @@ export const CURRICULUM: CompiledCurriculum = {
           "storyFit": "Best for tributes, milestone celebrations, songs for parents and grandparents, timeless full-hearted declarations of love, and joyful dance-along family songs. Serves badly: modern situationship nuance, guarded or ironic narrators, minimal lo-fi moods, and stories that hinge on texting-era details.",
           "parodyTraps": "Fake-vintage slang and era name-dropping — the period lives in the band, the chords, and the phrasing, never in the vocabulary; over-sweetening into jingle territory; wordy verses a horn section cannot punch around; imitation-oldies pastiche instead of sincere testimony built from the user's story.",
           "performance": {
-            "prose": "Density heavy; min adlibs 7; delivery tags [Call and Response] [Belting] [Harmonies] [Vocal Run] [Big Finish] [Instrumental Break]. This room performs like a live band with a backing trio in the room, so it leans on adlibs harder than most siblings and on delivery tags moderately. Signature: The outro becomes a hook-loop vamp where the backing trio holds the repeated hook and the lead preaches freely over the top — but the move that most says this room is that the address opens up here: what began as testimony sung to one person widens into celebration sung to the whole room, so the vamp lands as a crowd lifting the hook, not one voice still fixed on one person. Placement: Verses carry real trio answers, not just chorus ones: short on-beat parenthetical responses and echoed line-ends, kept punchy so the words stay locked to the backbeat.",
+            "prose": "Density heavy; min adlibs 7; delivery tags [Call and Response] [Belting] [Harmonies] [Vocal Run] [Big Finish] [Instrumental Break]. This room performs like a live band with a backing trio in the room, so it leans on adlibs harder than most siblings and on delivery tags moderately. Signature: The outro becomes a hook-loop vamp where the backing trio holds the repeated hook and the lead preaches freely over the top — but the move that most says this room is that the address opens up here: what began as testimony sung to one person widens into celebration sung to the whole room, so the vamp lands as a crowd lifting the hook, not one voice still fixed on one person. Placement: Verses carry real trio answers, not just chorus ones: short on-beat parenthetical responses and echoed line-ends, kept punchy so the words stay locked to the backbeat. Tag identity: church-born and communal — a backing trio's (response phrases) written after the lead's calls, line-start Lead: and (CROWD: response) blocks at the crown moment, handclap and live-room headers, and an outro hook-loop vamp with the lead preaching over it. The room itself sings.",
             "adlibDensity": "heavy",
             "minAdlibs": 7,
             "deliveryTags": [
@@ -386,6 +517,30 @@ export const CURRICULUM: CompiledCurriculum = {
               "[Vocal Run]",
               "[Big Finish]",
               "[Instrumental Break]"
+            ]
+          },
+          "builder": {
+            "instruments": [
+              "live rhythm section",
+              "horn stabs",
+              "tambourine on the backbeat",
+              "organ",
+              "chanking rhythm guitar",
+              "strings"
+            ],
+            "themes": [
+              "Celebration / milestone",
+              "Family",
+              "Deep love / devotion",
+              "Remembering someone",
+              "Faith / gratitude"
+            ],
+            "purposes": [
+              "Party / celebrate",
+              "Bring happy tears",
+              "Testify / give thanks",
+              "Slow dance",
+              "Win them back"
             ]
           }
         }
@@ -689,9 +844,9 @@ export const CURRICULUM: CompiledCurriculum = {
       ]
     }
   },
-  "hash": "c254a627f7ed",
+  "hash": "d3cb083da1cb",
   "approxTokens": {
     "core": 1794,
-    "largestSlice": 3494
+    "largestSlice": 3570
   }
 };

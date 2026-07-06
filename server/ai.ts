@@ -820,6 +820,7 @@ export function buildInterimSongPrompt(inputs: any): string {
     inputs?.theme && `Theme: ${String(inputs.theme).trim()}`,
     inputs?.purpose && `The song should: ${String(inputs.purpose).trim()}`,
     inputs?.audience && `It speaks to: ${String(inputs.audience).trim()}`,
+    inputs?.instrumentation && `Featured instruments: ${String(inputs.instrumentation).trim()}`,
     inputs?.title && `Title (use exactly this): ${String(inputs.title).trim()}`,
   ].filter(Boolean).join("\n");
   return `Write a ${genre} song${story ? ` about the following:\n\n${story}\n\n` : ". "}${picks ? `\nThe writer chose:\n${picks}\n\n` : ""}It should have a ${voice} and section tags like [Verse] [Chorus] [Bridge].
@@ -988,6 +989,7 @@ function engineInputs(payload: any) {
     purpose: opt(inputs.purpose),
     audience: opt(inputs.audience),
     title: opt(inputs.title),
+    instrumentation: opt(inputs.instrumentation),
   };
 }
 
@@ -1055,7 +1057,14 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     // `rooms` also feeds the Song Builder's sub-genre step (name + picker one-liner).
     const rooms: Record<string, Array<{ id: string; name: string; oneLine: string }>> = {};
     for (const pack of Object.values(CURRICULUM.genres)) {
-      rooms[pack.id] = pack.rooms.map((r) => ({ id: r.id, name: r.name, oneLine: r.oneLine }));
+      rooms[pack.id] = pack.rooms.map((r) => ({
+        id: r.id,
+        name: r.name,
+        oneLine: r.oneLine,
+        instruments: r.builder?.instruments ?? [],
+        themes: r.builder?.themes ?? [],
+        purposes: r.builder?.purposes ?? [],
+      }));
     }
     return res.status(200).json({
       ok: true,
