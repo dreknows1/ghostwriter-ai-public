@@ -18,6 +18,12 @@ export type RoomCard = {
   rendering: string;
   storyFit: string;
   parodyTraps: string;
+  /** Song Builder data: instrument palette + which themes/purposes fit this room (UI concern, never in the writer slice) */
+  builder?: {
+    instruments: string[];
+    themes: string[];
+    purposes: string[];
+  };
   /** Layer 6 performance policy for this room (tags & adlibs) */
   performance: {
     /** the writer-facing "How it performs" prose */

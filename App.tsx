@@ -86,10 +86,17 @@ const DEFAULT_INPUTS: SongInputs = {
 };
 
 /** A room card from GET /api/ai — one sub-genre the curriculum engine can write in. */
-type RoomCard = { id?: string; name: string; oneLine: string };
+type RoomCard = {
+  id?: string;
+  name: string;
+  oneLine: string;
+  instruments?: string[];
+  themes?: string[];
+  purposes?: string[];
+};
 type RoomPacks = Record<string, RoomCard[]>;
 
-type BuilderStepId = 'genre' | 'room' | 'theme' | 'purpose' | 'audience' | 'voice' | 'story';
+type BuilderStepId = 'genre' | 'room' | 'theme' | 'purpose' | 'audience' | 'voice' | 'instruments' | 'story';
 
 const LET_GHOST_DECIDE = 'Let Song Ghost decide';
 
@@ -152,6 +159,7 @@ const SongBuilder: React.FC<{
   const [purpose, setPurpose] = useState('');
   const [audience, setAudience] = useState('');
   const [vocals, setVocals] = useState('Female Solo');
+  const [instruments, setInstruments] = useState<string[]>([]);
   const [title, setTitle] = useState('');
   const [story, setStory] = useState('');
   // Rooms (sub-genres) from the engine; null until fetched — the room step only exists when the genre has rooms.
@@ -180,10 +188,22 @@ const SongBuilder: React.FC<{
   }, []);
 
   const genreRooms = roomsForGenre(roomPacks, genre);
+  const selectedRoom = genreRooms.find((r) => r.name === subGenre) || null;
+  // The picked room narrows the questionnaire: only options that fit its world,
+  // and its own instrument palette. No room picked = the full lists.
+  const themeOptions = selectedRoom?.themes?.length
+    ? THEME_OPTIONS.filter((t) => selectedRoom.themes!.includes(t))
+    : THEME_OPTIONS;
+  const purposeOptions = selectedRoom?.purposes?.length
+    ? PURPOSE_OPTIONS.filter((p) => selectedRoom.purposes!.includes(p))
+    : PURPOSE_OPTIONS;
+  const instrumentOptions = selectedRoom?.instruments || [];
   const steps: BuilderStepId[] = [
     'genre',
     ...(genreRooms.length ? (['room'] as BuilderStepId[]) : []),
-    'theme', 'purpose', 'audience', 'voice', 'story',
+    'theme', 'purpose', 'audience', 'voice',
+    ...(instrumentOptions.length ? (['instruments'] as BuilderStepId[]) : []),
+    'story',
   ];
   const stepIndex = Math.max(0, steps.indexOf(stepId));
   const isLastStep = stepId === 'story';
@@ -194,6 +214,7 @@ const SongBuilder: React.FC<{
   const pickGenre = (g: string) => {
     setGenre(g);
     setSubGenre(''); // a different genre's room can't carry over
+    setInstruments([]);
     // Compute the next step from the NEW genre — the steps array above still holds the old one.
     setStepId(roomsForGenre(roomPacks, g).length ? 'room' : 'theme');
   };
@@ -207,6 +228,7 @@ const SongBuilder: React.FC<{
     audience,
     title,
     vocals,
+    instrumentation: instruments.join(', '),
     // Don't let the default mood fight the user's story — the story is the law.
     emotion: 'Match the creative direction',
     creativeDirection: story.trim(),
@@ -241,6 +263,7 @@ const SongBuilder: React.FC<{
     purpose: { title: 'What should this song DO?', caption: 'Its job in the room' },
     audience: { title: 'Who is this song speaking to?', caption: 'The point of view' },
     voice: { title: 'Whose voice sings it?', caption: 'Pick the lead vocal' },
+    instruments: { title: 'What should we hear?', caption: `${subGenre || genre} instruments — pick up to 3, or skip` },
     story: { title: 'Tell us the real story', caption: 'Optional — but this is what makes it YOURS' },
   };
   const header = headers[stepId];
@@ -338,7 +361,7 @@ const SongBuilder: React.FC<{
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
           <button
             type="button"
-            onClick={() => { setSubGenre(''); goNext(); }}
+            onClick={() => { setSubGenre(''); setInstruments([]); goNext(); }}
             className={`w-full p-4 sm:p-5 rounded-3xl border text-left transition-all ${subGenre === '' ? decidePicked : decideIdle}`}
           >
             <span className="block font-black uppercase tracking-[0.08em] text-sm sm:text-base">{LET_GHOST_DECIDE}</span>
@@ -348,7 +371,7 @@ const SongBuilder: React.FC<{
             <button
               key={room.id || room.name}
               type="button"
-              onClick={() => { setSubGenre(room.name); goNext(); }}
+              onClick={() => { setSubGenre(room.name); setInstruments([]); goNext(); }}
               className={`w-full p-4 sm:p-5 rounded-3xl border text-left transition-all ${
                 subGenre === room.name ? chipPicked : chipIdle
               }`}
@@ -360,9 +383,51 @@ const SongBuilder: React.FC<{
         </div>
       )}
 
-      {stepId === 'theme' && optionChips(THEME_OPTIONS, theme, setTheme)}
-      {stepId === 'purpose' && optionChips(PURPOSE_OPTIONS, purpose, setPurpose)}
+      {stepId === 'theme' && optionChips(themeOptions, theme, setTheme)}
+      {stepId === 'purpose' && optionChips(purposeOptions, purpose, setPurpose)}
       {stepId === 'audience' && optionChips(AUDIENCE_OPTIONS, audience, setAudience)}
+
+      {stepId === 'instruments' && (
+        <div className="flex flex-col gap-6">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+            <button
+              type="button"
+              onClick={() => { setInstruments([]); goNext(); }}
+              className={`${chipBase} ${instruments.length === 0 ? decidePicked : decideIdle}`}
+            >
+              {LET_GHOST_DECIDE}
+            </button>
+            {instrumentOptions.map((inst) => {
+              const picked = instruments.includes(inst);
+              return (
+                <button
+                  key={inst}
+                  type="button"
+                  onClick={() =>
+                    setInstruments((prev) =>
+                      prev.includes(inst) ? prev.filter((x) => x !== inst) : prev.length >= 3 ? prev : [...prev, inst]
+                    )
+                  }
+                  className={`${chipBase} ${picked ? chipPicked : chipIdle}`}
+                >
+                  {inst}
+                </button>
+              );
+            })}
+          </div>
+          {instruments.length > 0 && (
+            <div className="flex justify-center">
+              <button
+                type="button"
+                onClick={goNext}
+                className="px-8 py-3 rounded-xl bg-cyan-500 text-white text-xs font-black uppercase tracking-widest hover:bg-cyan-400 transition-all"
+              >
+                Continue with {instruments.length} →
+              </button>
+            </div>
+          )}
+        </div>
+      )}
 
       {stepId === 'voice' && (
         <div className="flex justify-center gap-2">

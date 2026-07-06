@@ -167,6 +167,22 @@ Here is why they matter this much. Everything the earlier layers built — the c
 
 The golden rule: placement is never random. Every tag and every adlib must serve the job of the section it sits in and the emotional arc the song is riding. A [Whispered] tag belongs where the song has pulled inward, not thrown in for flavor. An adlib belongs where a real singer would actually answer the line. If a tag or adlib does not serve the section's job or the arc, it is noise — cut it. Serving the song is the only reason any of them exists.
 
+**Tags carry culture.** Tagging is not one system with the volume turned up or down — it is part
+of the genre's identity, decided by WHO is performing, WHERE the tradition comes from, and WHAT
+the song is. A gospel-soul song tags a choir answering the lead and a congregation responding at
+the crown moment; a trap-soul song tags only the lead's own murmured double — putting a choir in
+it would be a costume. A reggaeton song and a gospel song are tagged like different worlds. Every
+room's page declares its TAG IDENTITY: the cast in the room (choir, crowd, backing stack, or the
+singer's own layered voice) and that cast's grammar. Never tag outside the room's cast.
+
+**Tags live anywhere the performance needs them — not just line-end parens:**
+- section headers ([Chorus 1 — full harmonies, crowd claps light])
+- line-START speaker cues in call-and-response blocks (a line beginning Lead: with the crowd's
+  (response) on the next line)
+- ON a word — ALL CAPS for force, a stretched spelling (lo-ove) or trailing dots for a held note
+- inline parens mid-line or at line ends for answers and echoes
+- standalone direction lines ((beat drops out for a bar), (piano breathes))
+
 **Where they go (placement follows the arc, never random):**
 
 Placement follows the same dynamics the earlier layers set: conversational verse, building pre, wide-open chorus, intimate bridge, heaviest release at the outro or vamp. Tag and adlib density rises and falls WITH that intensity curve — sparse where the song is quiet, full where it opens up.

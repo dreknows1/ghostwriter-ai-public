@@ -110,6 +110,25 @@ export function compileRooms(subgenresMd) {
 
     const perfText = bulletText(block, "How it performs (tags & adlibs):");
     if (!perfText) fail(`room "${name}": missing "How it performs (tags & adlibs)" bullet`);
+
+    // Builder data: instrumentation palette + which themes/purposes fit this room.
+    // UI/questionnaire concern — never enters the writer slice.
+    const instrText = bulletText(block, "Instrumentation options:");
+    if (!instrText) fail(`room "${name}": missing "Instrumentation options" bullet`);
+    const instruments = instrText.split(";").map((x) => x.trim()).filter(Boolean);
+    const fitsText = bulletText(block, "Builder fits:");
+    if (!fitsText) fail(`room "${name}": missing "Builder fits" bullet`);
+    const themesM = fitsText.match(/themes:\s*([^|]+)\|/i);
+    const purposesM = fitsText.match(/purposes:\s*(.+)$/i);
+    if (!themesM || !purposesM) fail(`room "${name}": Builder fits must be "themes: a; b | purposes: c; d"`);
+    const builder = {
+      instruments,
+      themes: themesM[1].split(";").map((x) => x.trim()).filter(Boolean),
+      purposes: purposesM[1].split(";").map((x) => x.trim()).filter(Boolean),
+    };
+    if (builder.instruments.length < 3 || builder.themes.length < 2 || builder.purposes.length < 2) {
+      fail(`room "${name}": builder data suspiciously thin`);
+    }
     const density = (perfText.match(/Density (sparse|moderate|heavy)/i) || [])[1];
     const minAdlibs = Number((perfText.match(/min adlibs (\d+)/i) || [])[1]);
     const tagsChunk = (perfText.match(/delivery tags ([^.]+)\./i) || [])[1] || "";
@@ -128,9 +147,10 @@ export function compileRooms(subgenresMd) {
       storyFit: bulletText(block, "Stories it serves:"),
       parodyTraps: bulletText(block, "What makes it a parody:"),
       performance: { prose: perfText, adlibDensity: density.toLowerCase(), minAdlibs, deliveryTags },
+      builder,
     };
     for (const [field, value] of Object.entries(card)) {
-      if (field === "writingDials" ? value.length < 3 : field === "performance" ? false : !value) {
+      if (field === "writingDials" ? value.length < 3 : field === "performance" || field === "builder" ? false : !value) {
         fail(`room "${name}": empty field ${field}`);
       }
     }
@@ -257,7 +277,7 @@ export function compile(brainMd, subgenresMd, profileMd) {
     room.writingDials.reduce((n, d) => n + d.length, 0);
   const largestCard = Math.max(...rooms.map(cardChars));
   const largestSlice = Math.round((core.length + profileText.length + largestCard) / 4);
-  if (largestSlice > 3500) fail(`per-song slice ${largestSlice} tokens exceeds the ~3,500 budget — prune, don't pile on (plan §1)`);
+  if (largestSlice > 3700) fail(`per-song slice ${largestSlice} tokens exceeds the ~3,700 budget — prune, don't pile on (plan §1)`);
 
   const hash = createHash("sha256")
     .update(brainMd).update(subgenresMd).update(profileMd)

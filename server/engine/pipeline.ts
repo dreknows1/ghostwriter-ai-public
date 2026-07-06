@@ -28,6 +28,8 @@ export type EngineInputs = {
   audience?: string;
   /** a user-chosen title: becomes THE hook, no candidates generated */
   title?: string;
+  /** Song Builder instrument picks (comma-joined), featured in the render */
+  instrumentation?: string;
 };
 
 export type EngineResult = {
@@ -166,6 +168,7 @@ function picksBlock(inputs: EngineInputs): string {
   if (inputs.theme) picks.push(`Theme: ${inputs.theme}`);
   if (inputs.purpose) picks.push(`What the song should do: ${inputs.purpose}`);
   if (inputs.audience) picks.push(`Who it speaks to: ${inputs.audience}`);
+  if (inputs.instrumentation) picks.push(`Featured instruments: ${inputs.instrumentation}`);
   if (!picks.length) return "";
   return `\nTHE USER'S CHOICES (honor these exactly — they are decisions, not suggestions):\n${picks.join("\n")}\n`;
 }
@@ -279,8 +282,9 @@ function writerPrompt(args: {
   guidance?: string;
   bannedPhrases: string[];
   hookLocked: boolean;
+  instrumentation?: string;
 }): string {
-  const { core, pack, card, brief, hook, sections, story, vocals, variant, guidance, bannedPhrases, hookLocked } = args;
+  const { core, pack, card, brief, hook, sections, story, vocals, variant, guidance, bannedPhrases, hookLocked, instrumentation } = args;
   const sectionLines = sections.map((s) => `${s.tag} — ${s.job}`).join("\n");
   const approach =
     variant === "hook-first"
@@ -341,7 +345,7 @@ Vocal: ${voiceLine(vocals)}.
 Return exactly this format:
 Title: ${hookLocked ? hook : "<your final hook>"}
 ### SUNO Prompt
-One 40-70 word production prompt for this exact song. Ground it in this room's sound (never name real artists — describe the sound instead): ${card.rendering}
+One 40-70 word production prompt for this exact song. Ground it in this room's sound (never name real artists — describe the sound instead)${instrumentation ? `, and FEATURE the writer's chosen instruments: ${instrumentation}` : ""}: ${card.rendering}
 ### Lyrics
 The song, with section tags in brackets.
 
@@ -516,7 +520,7 @@ export async function runEngine(
   // versions. A failed check earns one more write with plain guidance — then fail-loud.
   const writeOne = async (variant: "straight" | "hook-first", guidance?: string) => {
     const raw = await generate(
-      writerPrompt({ core: curriculum.core, pack, card, brief, hook, sections, story, vocals: inputs.vocals, variant, guidance, bannedPhrases: curriculum.bannedPhrases, hookLocked }),
+      writerPrompt({ core: curriculum.core, pack, card, brief, hook, sections, story, vocals: inputs.vocals, variant, guidance, bannedPhrases: curriculum.bannedPhrases, hookLocked, instrumentation: inputs.instrumentation }),
       "write"
     ).catch(() => "");
     if (!raw || raw.includes("GENERATION_DECLINED")) return null;
