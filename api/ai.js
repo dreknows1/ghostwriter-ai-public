@@ -7,6 +7,364 @@ import OpenAI from "openai";
 
 // server/engine/curriculum.generated.ts
 var CURRICULUM = {
+  "genreBuilder": {
+    "R&B": {
+      "themes": [
+        "New love",
+        "Deep love / devotion",
+        "Complicated love",
+        "Heartbreak / letting go",
+        "Missing someone",
+        "Celebration / milestone",
+        "Family",
+        "Faith / gratitude",
+        "Growth / proving myself",
+        "Remembering someone"
+      ],
+      "purposes": [
+        "Slow dance",
+        "Bring happy tears",
+        "Party / celebrate",
+        "Make them feel seen",
+        "Testify / give thanks",
+        "Win them back",
+        "Say what I never said"
+      ],
+      "instruments": [
+        "soft keys",
+        "808 sub-bass",
+        "live bass",
+        "Rhodes piano",
+        "saxophone",
+        "strings",
+        "brushed drums",
+        "muted guitar"
+      ]
+    },
+    "Hip-Hop": {
+      "themes": [
+        "The come-up / hustle",
+        "Proving them wrong",
+        "Where I'm from",
+        "Love & loyalty",
+        "Losing a friend",
+        "Money & ambition",
+        "The struggle",
+        "Celebration / flexing"
+      ],
+      "purposes": [
+        "Flex / celebrate",
+        "Tell my story",
+        "Motivate the ones grinding",
+        "Ride music",
+        "Call somebody out",
+        "Grieve a loss"
+      ],
+      "instruments": [
+        "heavy 808s",
+        "boom-bap drums",
+        "dusty piano loop",
+        "soul sample chops",
+        "dark synth lead",
+        "strings",
+        "live bass"
+      ]
+    },
+    "Gospel": {
+      "themes": [
+        "Praise & worship",
+        "Testimony / what God brought me through",
+        "Gratitude",
+        "Faith through the storm",
+        "Deliverance",
+        "Celebration of His love",
+        "For the congregation"
+      ],
+      "purposes": [
+        "Worship / exalt",
+        "Testify",
+        "Lift the congregation",
+        "Comfort in grief",
+        "Celebrate",
+        "Altar call"
+      ],
+      "instruments": [
+        "Hammond organ",
+        "grand piano",
+        "full choir",
+        "tambourine",
+        "live bass",
+        "gospel drums",
+        "handclaps"
+      ]
+    },
+    "Reggae": {
+      "themes": [
+        "One love / unity",
+        "Sufferation & struggle",
+        "Praise & spirituality",
+        "Romance (lovers rock)",
+        "Freedom & justice",
+        "Celebration"
+      ],
+      "purposes": [
+        "Uplift the people",
+        "Protest",
+        "Romance",
+        "Skank / dance",
+        "Give thanks"
+      ],
+      "instruments": [
+        "one-drop drums",
+        "skanking guitar",
+        "organ bubble",
+        "deep bass",
+        "horns",
+        "melodica"
+      ]
+    },
+    "Afrobeats": {
+      "themes": [
+        "Celebration of life",
+        "Love & desire",
+        "Hustle & blessings",
+        "Homeland pride",
+        "Dance & good vibes",
+        "Gratitude"
+      ],
+      "purposes": [
+        "Dance",
+        "Celebrate",
+        "Romance",
+        "Give thanks",
+        "Summer anthem"
+      ],
+      "instruments": [
+        "log drums",
+        "talking drum",
+        "shakers",
+        "afro percussion",
+        "warm synth keys",
+        "guitar licks",
+        "deep bass"
+      ]
+    },
+    "Pop": {
+      "themes": [
+        "New love",
+        "Heartbreak",
+        "Self-empowerment",
+        "Night out / freedom",
+        "Nostalgia",
+        "Friendship",
+        "Missing someone"
+      ],
+      "purposes": [
+        "Sing along",
+        "Dance",
+        "Cry it out",
+        "Empower",
+        "Celebrate",
+        "Windows-down driving"
+      ],
+      "instruments": [
+        "bright synths",
+        "piano",
+        "electric guitar",
+        "punchy drums",
+        "strings",
+        "handclaps",
+        "vocal stacks"
+      ]
+    },
+    "Country": {
+      "themes": [
+        "Small-town life",
+        "First love",
+        "Heartbreak",
+        "Family & faith",
+        "Home & roots",
+        "Losing someone",
+        "Friday night"
+      ],
+      "purposes": [
+        "Two-step / dance",
+        "Cry in your beer",
+        "Tell a story",
+        "Celebrate",
+        "Honor someone"
+      ],
+      "instruments": [
+        "acoustic guitar",
+        "fiddle",
+        "pedal steel",
+        "banjo",
+        "upright bass",
+        "brushed drums",
+        "telecaster"
+      ]
+    },
+    "Rock": {
+      "themes": [
+        "Rebellion",
+        "Love & obsession",
+        "Feeling like an outsider",
+        "The road",
+        "Standing back up",
+        "Loss"
+      ],
+      "purposes": [
+        "Anthem / fists up",
+        "Raw energy",
+        "Power ballad",
+        "Drive music"
+      ],
+      "instruments": [
+        "electric guitars",
+        "live drums",
+        "driving bass",
+        "organ",
+        "power chords",
+        "feedback swells"
+      ]
+    },
+    "Soul": {
+      "themes": [
+        "Devotion",
+        "Heartache",
+        "Pride & respect",
+        "Longing",
+        "Celebration of love",
+        "Remembering someone"
+      ],
+      "purposes": [
+        "Slow dance",
+        "Testify my love",
+        "Cry it out",
+        "Celebrate"
+      ],
+      "instruments": [
+        "horns",
+        "Rhodes piano",
+        "live bass",
+        "tambourine",
+        "organ",
+        "strings",
+        "backing trio"
+      ]
+    },
+    "Blues": {
+      "themes": [
+        "Hard times",
+        "Love done me wrong",
+        "The road",
+        "Regret & redemption",
+        "Working for nothing"
+      ],
+      "purposes": [
+        "Moan it out",
+        "Shuffle / dance",
+        "Tell it straight"
+      ],
+      "instruments": [
+        "slide guitar",
+        "harmonica",
+        "upright bass",
+        "brushed drums",
+        "barrelhouse piano",
+        "resonator guitar"
+      ]
+    },
+    "Jazz": {
+      "themes": [
+        "Late-night romance",
+        "City nights",
+        "Longing",
+        "Bittersweet memory",
+        "New flame"
+      ],
+      "purposes": [
+        "Slow burn",
+        "Swing / dance",
+        "Croon it close"
+      ],
+      "instruments": [
+        "upright bass",
+        "brushed drums",
+        "piano trio",
+        "muted trumpet",
+        "tenor sax",
+        "comping guitar"
+      ]
+    },
+    "Folk": {
+      "themes": [
+        "Home & roots",
+        "Protest & justice",
+        "Plain-spoken love",
+        "Passing time",
+        "Nature & seasons",
+        "A person's story"
+      ],
+      "purposes": [
+        "Tell a story",
+        "Protest",
+        "Comfort",
+        "Sing together"
+      ],
+      "instruments": [
+        "acoustic guitar",
+        "banjo",
+        "fiddle",
+        "mandolin",
+        "harmonica",
+        "upright bass"
+      ]
+    },
+    "EDM": {
+      "themes": [
+        "Euphoria",
+        "Lost in the night",
+        "Freedom",
+        "Love rush",
+        "Letting go"
+      ],
+      "purposes": [
+        "The drop / rave",
+        "Festival anthem",
+        "Sunrise chill"
+      ],
+      "instruments": [
+        "supersaw synths",
+        "sidechained bass",
+        "four-on-the-floor kick",
+        "plucks",
+        "risers",
+        "vocal chops"
+      ]
+    },
+    "Metal": {
+      "themes": [
+        "Rage & defiance",
+        "Inner demons",
+        "War & darkness",
+        "Betrayal",
+        "Survival"
+      ],
+      "purposes": [
+        "Mosh",
+        "Scream it out",
+        "Epic saga"
+      ],
+      "instruments": [
+        "down-tuned guitars",
+        "double-kick drums",
+        "growling bass",
+        "blast beats",
+        "orchestral hits"
+      ]
+    }
+  },
   "core": `What a song IS, and the job of every section
 
 A song is a felt emotion delivered through structure, repetition, and melody over time.
@@ -929,7 +1287,7 @@ Musical craft (the founder's list; each becomes concrete rules)
       ]
     }
   },
-  "hash": "d3cb083da1cb",
+  "hash": "08dc2fd46f07",
   "approxTokens": {
     "core": 1794,
     "largestSlice": 3570
@@ -2012,7 +2370,11 @@ function validateSections(raw) {
   return plan;
 }
 function writerPrompt(args) {
-  const { core, pack, card, brief, hook, sections, story, vocals, variant, guidance, bannedPhrases, hookLocked, instrumentation } = args;
+  const { core, pack, card, brief, hook, sections, story, vocals, variant, guidance, bannedPhrases, hookLocked, instrumentation, language } = args;
+  const lang = String(language || "English").trim();
+  const languageLine = /^english$/i.test(lang) ? "" : `
+LANGUAGE: write ALL lyrics in ${lang} \u2014 natural, native phrasing a native speaker would sing, never translated-sounding. Bracket [tags] and the SUNO Prompt stay in ENGLISH; sung words in (parentheses) follow the lyrics' language. The Title is in ${lang}.
+`;
   const sectionLines = sections.map((s) => `${s.tag} \u2014 ${s.job}`).join("\n");
   const approach = variant === "hook-first" ? "Approach: get the chorus singing first in your head, then build every verse toward it. Output in normal top-to-bottom order." : "Approach: write the song straight through, top to bottom, one voice, one sitting.";
   const banList = bannedPhrases.slice(0, 40).join("; ");
@@ -2067,7 +2429,7 @@ ${approach}${guidance ? `
 
 One more thing from the last attempt: ${guidance}` : ""}
 
-Vocal: ${voiceLine(vocals)}.
+Vocal: ${voiceLine(vocals)}.${languageLine}
 
 Return exactly this format:
 Title: ${hookLocked ? hook : "<your final hook>"}
@@ -2192,7 +2554,7 @@ async function runEngine(curriculum, inputs, generate, stage = () => {
   const sections = validateSections(await planJson(generate, sectionsPrompt(brief, hook, card)));
   const writeOne = async (variant, guidance) => {
     const raw = await generate(
-      writerPrompt({ core: curriculum.core, pack, card, brief, hook, sections, story, vocals: inputs.vocals, variant, guidance, bannedPhrases: curriculum.bannedPhrases, hookLocked, instrumentation: inputs.instrumentation }),
+      writerPrompt({ core: curriculum.core, pack, card, brief, hook, sections, story, vocals: inputs.vocals, variant, guidance, bannedPhrases: curriculum.bannedPhrases, hookLocked, instrumentation: inputs.instrumentation, language: inputs.language }),
       "write"
     ).catch(() => "");
     if (!raw || raw.includes("GENERATION_DECLINED")) return null;
@@ -2875,6 +3237,10 @@ function buildInterimSongPrompt(inputs) {
   const genre = String(inputs?.genre || "Pop").trim();
   const story = String(inputs?.creativeDirection || inputs?.additionalInfo || "").trim();
   const vocals = String(inputs?.vocals || "Female Solo").trim();
+  const language = String(inputs?.language || "English").trim();
+  const languageLine = /^english$/i.test(language) ? "" : `
+Write ALL lyrics in ${language} \u2014 natural, native phrasing, never translated-sounding. Bracket [tags] and the SUNO production prompt stay in ENGLISH; sung words in (parentheses) follow the lyrics' language. The Title is in ${language}.
+`;
   const voice = /female/i.test(vocals) ? "female vocal" : /male/i.test(vocals) ? "male vocal" : "duet vocals";
   const picks = [
     inputs?.subGenre && `Style: ${String(inputs.subGenre).trim()}`,
@@ -2893,7 +3259,7 @@ The writer chose:
 ${picks}
 
 ` : ""}It should have a ${voice} and section tags like [Verse] [Chorus] [Bridge].
-
+${languageLine}
 ${PERFORMANCE_TAGS_INSTRUCTION}
 
 Also write a 40-70 word Suno production prompt describing how the track should sound.
@@ -3057,7 +3423,8 @@ function engineInputs(payload) {
     purpose: opt(inputs.purpose),
     audience: opt(inputs.audience),
     title: opt(inputs.title),
-    instrumentation: opt(inputs.instrumentation)
+    instrumentation: opt(inputs.instrumentation),
+    language: opt(inputs.language)
   };
 }
 async function suggestTitles(payload, email) {
@@ -3139,7 +3506,8 @@ async function handler(req, res) {
       curriculumHash: CURRICULUM.hash,
       model: ENGINE_MODEL,
       genres: Object.keys(CURRICULUM.genres),
-      rooms
+      rooms,
+      genreBuilder: CURRICULUM.genreBuilder ?? {}
     });
   }
   if (req.method !== "POST") {

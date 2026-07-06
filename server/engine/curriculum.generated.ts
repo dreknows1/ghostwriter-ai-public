@@ -4,6 +4,364 @@
 import type { CompiledCurriculum } from "./types";
 
 export const CURRICULUM: CompiledCurriculum = {
+  "genreBuilder": {
+    "R&B": {
+      "themes": [
+        "New love",
+        "Deep love / devotion",
+        "Complicated love",
+        "Heartbreak / letting go",
+        "Missing someone",
+        "Celebration / milestone",
+        "Family",
+        "Faith / gratitude",
+        "Growth / proving myself",
+        "Remembering someone"
+      ],
+      "purposes": [
+        "Slow dance",
+        "Bring happy tears",
+        "Party / celebrate",
+        "Make them feel seen",
+        "Testify / give thanks",
+        "Win them back",
+        "Say what I never said"
+      ],
+      "instruments": [
+        "soft keys",
+        "808 sub-bass",
+        "live bass",
+        "Rhodes piano",
+        "saxophone",
+        "strings",
+        "brushed drums",
+        "muted guitar"
+      ]
+    },
+    "Hip-Hop": {
+      "themes": [
+        "The come-up / hustle",
+        "Proving them wrong",
+        "Where I'm from",
+        "Love & loyalty",
+        "Losing a friend",
+        "Money & ambition",
+        "The struggle",
+        "Celebration / flexing"
+      ],
+      "purposes": [
+        "Flex / celebrate",
+        "Tell my story",
+        "Motivate the ones grinding",
+        "Ride music",
+        "Call somebody out",
+        "Grieve a loss"
+      ],
+      "instruments": [
+        "heavy 808s",
+        "boom-bap drums",
+        "dusty piano loop",
+        "soul sample chops",
+        "dark synth lead",
+        "strings",
+        "live bass"
+      ]
+    },
+    "Gospel": {
+      "themes": [
+        "Praise & worship",
+        "Testimony / what God brought me through",
+        "Gratitude",
+        "Faith through the storm",
+        "Deliverance",
+        "Celebration of His love",
+        "For the congregation"
+      ],
+      "purposes": [
+        "Worship / exalt",
+        "Testify",
+        "Lift the congregation",
+        "Comfort in grief",
+        "Celebrate",
+        "Altar call"
+      ],
+      "instruments": [
+        "Hammond organ",
+        "grand piano",
+        "full choir",
+        "tambourine",
+        "live bass",
+        "gospel drums",
+        "handclaps"
+      ]
+    },
+    "Reggae": {
+      "themes": [
+        "One love / unity",
+        "Sufferation & struggle",
+        "Praise & spirituality",
+        "Romance (lovers rock)",
+        "Freedom & justice",
+        "Celebration"
+      ],
+      "purposes": [
+        "Uplift the people",
+        "Protest",
+        "Romance",
+        "Skank / dance",
+        "Give thanks"
+      ],
+      "instruments": [
+        "one-drop drums",
+        "skanking guitar",
+        "organ bubble",
+        "deep bass",
+        "horns",
+        "melodica"
+      ]
+    },
+    "Afrobeats": {
+      "themes": [
+        "Celebration of life",
+        "Love & desire",
+        "Hustle & blessings",
+        "Homeland pride",
+        "Dance & good vibes",
+        "Gratitude"
+      ],
+      "purposes": [
+        "Dance",
+        "Celebrate",
+        "Romance",
+        "Give thanks",
+        "Summer anthem"
+      ],
+      "instruments": [
+        "log drums",
+        "talking drum",
+        "shakers",
+        "afro percussion",
+        "warm synth keys",
+        "guitar licks",
+        "deep bass"
+      ]
+    },
+    "Pop": {
+      "themes": [
+        "New love",
+        "Heartbreak",
+        "Self-empowerment",
+        "Night out / freedom",
+        "Nostalgia",
+        "Friendship",
+        "Missing someone"
+      ],
+      "purposes": [
+        "Sing along",
+        "Dance",
+        "Cry it out",
+        "Empower",
+        "Celebrate",
+        "Windows-down driving"
+      ],
+      "instruments": [
+        "bright synths",
+        "piano",
+        "electric guitar",
+        "punchy drums",
+        "strings",
+        "handclaps",
+        "vocal stacks"
+      ]
+    },
+    "Country": {
+      "themes": [
+        "Small-town life",
+        "First love",
+        "Heartbreak",
+        "Family & faith",
+        "Home & roots",
+        "Losing someone",
+        "Friday night"
+      ],
+      "purposes": [
+        "Two-step / dance",
+        "Cry in your beer",
+        "Tell a story",
+        "Celebrate",
+        "Honor someone"
+      ],
+      "instruments": [
+        "acoustic guitar",
+        "fiddle",
+        "pedal steel",
+        "banjo",
+        "upright bass",
+        "brushed drums",
+        "telecaster"
+      ]
+    },
+    "Rock": {
+      "themes": [
+        "Rebellion",
+        "Love & obsession",
+        "Feeling like an outsider",
+        "The road",
+        "Standing back up",
+        "Loss"
+      ],
+      "purposes": [
+        "Anthem / fists up",
+        "Raw energy",
+        "Power ballad",
+        "Drive music"
+      ],
+      "instruments": [
+        "electric guitars",
+        "live drums",
+        "driving bass",
+        "organ",
+        "power chords",
+        "feedback swells"
+      ]
+    },
+    "Soul": {
+      "themes": [
+        "Devotion",
+        "Heartache",
+        "Pride & respect",
+        "Longing",
+        "Celebration of love",
+        "Remembering someone"
+      ],
+      "purposes": [
+        "Slow dance",
+        "Testify my love",
+        "Cry it out",
+        "Celebrate"
+      ],
+      "instruments": [
+        "horns",
+        "Rhodes piano",
+        "live bass",
+        "tambourine",
+        "organ",
+        "strings",
+        "backing trio"
+      ]
+    },
+    "Blues": {
+      "themes": [
+        "Hard times",
+        "Love done me wrong",
+        "The road",
+        "Regret & redemption",
+        "Working for nothing"
+      ],
+      "purposes": [
+        "Moan it out",
+        "Shuffle / dance",
+        "Tell it straight"
+      ],
+      "instruments": [
+        "slide guitar",
+        "harmonica",
+        "upright bass",
+        "brushed drums",
+        "barrelhouse piano",
+        "resonator guitar"
+      ]
+    },
+    "Jazz": {
+      "themes": [
+        "Late-night romance",
+        "City nights",
+        "Longing",
+        "Bittersweet memory",
+        "New flame"
+      ],
+      "purposes": [
+        "Slow burn",
+        "Swing / dance",
+        "Croon it close"
+      ],
+      "instruments": [
+        "upright bass",
+        "brushed drums",
+        "piano trio",
+        "muted trumpet",
+        "tenor sax",
+        "comping guitar"
+      ]
+    },
+    "Folk": {
+      "themes": [
+        "Home & roots",
+        "Protest & justice",
+        "Plain-spoken love",
+        "Passing time",
+        "Nature & seasons",
+        "A person's story"
+      ],
+      "purposes": [
+        "Tell a story",
+        "Protest",
+        "Comfort",
+        "Sing together"
+      ],
+      "instruments": [
+        "acoustic guitar",
+        "banjo",
+        "fiddle",
+        "mandolin",
+        "harmonica",
+        "upright bass"
+      ]
+    },
+    "EDM": {
+      "themes": [
+        "Euphoria",
+        "Lost in the night",
+        "Freedom",
+        "Love rush",
+        "Letting go"
+      ],
+      "purposes": [
+        "The drop / rave",
+        "Festival anthem",
+        "Sunrise chill"
+      ],
+      "instruments": [
+        "supersaw synths",
+        "sidechained bass",
+        "four-on-the-floor kick",
+        "plucks",
+        "risers",
+        "vocal chops"
+      ]
+    },
+    "Metal": {
+      "themes": [
+        "Rage & defiance",
+        "Inner demons",
+        "War & darkness",
+        "Betrayal",
+        "Survival"
+      ],
+      "purposes": [
+        "Mosh",
+        "Scream it out",
+        "Epic saga"
+      ],
+      "instruments": [
+        "down-tuned guitars",
+        "double-kick drums",
+        "growling bass",
+        "blast beats",
+        "orchestral hits"
+      ]
+    }
+  },
   "core": "What a song IS, and the job of every section\n\nA song is a felt emotion delivered through structure, repetition, and melody over time.\nSections are not labels; they are jobs:\n\n- **Intro** — sets the world in seconds; earns the first verse.\n- **Verse** — the SUBSTANCE; where the story is told. Each verse adds new information (verse 2\n  is never verse 1 reworded) and must be **at least as long as the chorus, usually longer** — a\n  song whose verses are shorter than its chorus has starved itself of meaning. Build the verse;\n  earn the chorus.\n- **Pre-Chorus** — builds tension; the ramp that makes the chorus feel inevitable.\n- **Chorus** — the emotional thesis. It must LIFT (energy, melody, simplicity). It repeats because it's true every time.\n- **Bridge** — the turn: a new angle, a confession, a decision. The song must be different after it.\n- **Outro** — lands the plane; the emotional residue the listener leaves with.\n\n(Genre note: repetition-driven traditions bend these jobs on purpose — praise & worship,\nAfrobeats, and some soul and pop rooms may replace \"verse 2 adds new information\" with\ndeepened repetition, and \"the chorus lifts\" with accumulation — the same words returning\nhotter each time. As with point of view, the genre's tradition wins over the default rule,\nand each sub-genre page says when that bend applies.)\n\nCreative writing craft\n\n- **Song purpose** — every song exists FOR something: to make people dance, testify, cry, feel seen,\n  ride with the windows down, worship, flirt. The purpose shapes every choice (tempo of the words,\n  subject, how personal it gets). The app must know a song's purpose before writing line one.\n- **Point of view** — who is speaking, to whom, and why now. First person confessing? Second person\n  confronting (\"you did this\")? Third person telling someone's story? Pick one and make the addressee\n  real — a song to a specific person beats a song to the air. (Genre note: some traditions pivot POV\n  on purpose — gospel moves from testimony \"I\" in the verse to congregational \"we/You\" in the chorus.\n  The genre's tradition wins over the consistency rule.)\n- **Creative writing devices — used with skill:**\n  - Metaphors and similes that are fresh and physically true (never decoration for its own sake)\n  - Entendres and **double entendres** — lines that mean two things at once, both intended\n    (a hallmark of great R&B and hip-hop writing; must land naturally, never announced)\n  - Wordplay, flips, and reversals — saying the expected thing the unexpected way\n  - **Extended metaphor** — develop the ONE central image across the whole song into a system,\n    not just a repeated object: a warning becomes \"colorblind\" becomes \"red all over you\"; a\n    pressure becomes \"caged,\" \"walls,\" \"can't breathe.\" The strongest songs work a single picture\n    every way it turns.\n  - Personification, allusion — sparingly, where the genre welcomes them\n- Voice: a real person is speaking; one point of view with an attitude.\n- Show and tell in balance: images earn feelings; plain spoken lines make them land. Neither alone.\n- **Originality** — the non-negotiable: no house formulas of ANY kind (no greeting-card affirmations,\n  no \"inventory of objects the ex left behind\" template, no borrowed hooks from famous songs).\n  If two users with different stories could receive the same song, the writing has failed.\n- **The concrete-image law (checked by code).** Every song is built around ONE real thing you\n  could photograph — an object, a place, a physical action. Feelings attach to that thing; they\n  never float free. A song made only of weather and abstraction is the greeting-card failure.\n  A central image built only from the words below is rejected and re-planned (founder-editable):\n  - **abstraction words (never a central image on their own):** love, heart, soul, spirit, light,\n    dark, darkness, shadow, shade, color, colors, colour, sky, sun, sunlight, moon, star, stars,\n    distance, space, time, memory, memories, dream, dreams, goodbye, forever, fire, flame, spark,\n    gravity, ocean, sea, wave, waves, storm, rain, pieces, piece, fade, drift, glow, shine, light,\n    silence, echo, horizon, wings, chains, walls, road, journey, feeling, feelings, emotion, magic,\n    destiny, fate, eternity, universe, stardust, moment, moments, whisper, breath\n- Emotional truth: write the specific feeling, not the category (\"the ache of hearing they moved on\n  from a mutual friend\" — not \"sadness\").\n\nMusical craft (the founder's list; each becomes concrete rules)\n\n- **Writing for melody** — open vowels (ah/oh/ay) on notes that hold or peak; avoid consonant pileups where the voice needs to move; end key lines on singable syllables. **Chorus lines must be metrically parallel** — matching syllable counts and stress patterns across the repeated lines — this one rule does more for melody than any other.\n- **Syncopation** — leave rhythmic room; lyrics should invite pushing/pulling against the beat, especially in R&B/hip-hop phrasing.\n- **Rhythm** — the words carry their own drum pattern; scan lines aloud; stressed syllables should land where the beat wants them.\n- **Dynamics** — write sections at different intensities: conversational verse, building pre, wide-open chorus, intimate bridge.\n- **Cadence** — control where phrases resolve vs hang; use hanging lines to pull the listener forward, resolving lines to close thoughts.\n- **Musicality** — the sum test: read it aloud — does it already want to be sung?\n- **Word choice** — words have sound-color; match the mouth-feel to the feeling (percussive words for anger, humming/open words for longing); prefer words a singer can act.\n- **House-style words — instant failures.** These are the AI's default phrases; they belong\n  to no one's story, so using one fails the song (checked by code). The founder owns this\n  list and can edit it like everything else:\n  - hearts entwined; two hearts beat as one; beat of my heart; beat inside my heart\n  - shadows flicker; shadows dance; silhouette; neon\n  - you complete me; my missing piece; meant to be; written in the stars\n  - more than words can say; words can't express; honest truth\n  - forever and always; till the end of time; take my breath away\n  - moth to a flame; fire in my veins; electricity between us; gravity pulls\n  - love like ours; heart on my sleeve; lose me too\n  - light up my; you light up; shining like the city; screaming out\n  - can't get enough; new addiction; live it up; my best; ride this riot\n- **Hook** — short, rhythmic, emotionally loaded, placed at the lift; the title lives here; a listener can sing it after one listen. In R&B and hip-hop, the hook is where the double entendre or flipped phrase pays rent — a hook that means two things beats a sincere flat one.\n- **Rhyme** — a choice, not a duty: perfect rhyme closes a thought, slant rhyme keeps it moving, internal rhyme builds momentum (rap's engine), and NO rhyme is a legitimate choice when the honest line matters more. Rhyme density is a genre decision, never a fixed rule.\n- **Emotion** — every craft decision above serves ONE core feeling with an arc (where it starts → where it turns → where it lands).",
   "bannedPhrases": [
     "hearts entwined",
@@ -844,7 +1202,7 @@ export const CURRICULUM: CompiledCurriculum = {
       ]
     }
   },
-  "hash": "d3cb083da1cb",
+  "hash": "08dc2fd46f07",
   "approxTokens": {
     "core": 1794,
     "largestSlice": 3570

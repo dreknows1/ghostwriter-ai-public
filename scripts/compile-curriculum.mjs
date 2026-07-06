@@ -249,6 +249,25 @@ export function compileValidTags(brainMd) {
   return [...new Set(tags)];
 }
 
+/** Genre questionnaire worlds from SONGWRITING_GENRES.md — themes/purposes/instruments
+ * per genre. Questionnaire concern; never enters the writer slice. */
+export function compileGenreBuilder(genresMd) {
+  const out = {};
+  const sections = genresMd.split(/^(?=## )/m).slice(1);
+  for (const section of sections) {
+    const name = section.split("\n", 1)[0].replace(/^## /, "").trim();
+    const themes = bulletText(section, "Themes:").split(";").map((x) => x.trim()).filter(Boolean);
+    const purposes = bulletText(section, "Purposes:").split(";").map((x) => x.trim()).filter(Boolean);
+    const instruments = bulletText(section, "Instrumentation options:").split(";").map((x) => x.trim()).filter(Boolean);
+    if (themes.length < 3 || purposes.length < 2 || instruments.length < 3) {
+      fail(`genre "${name}": questionnaire world too thin (needs themes>=3, purposes>=2, instruments>=3)`);
+    }
+    out[name] = { themes, purposes, instruments };
+  }
+  if (Object.keys(out).length < 10) fail(`genre builder suspiciously small (${Object.keys(out).length} genres)`);
+  return out;
+}
+
 export function lintNoLyricLines(compiled) {
   const texts = [compiled.core];
   for (const pack of Object.values(compiled.genres)) {
@@ -263,7 +282,7 @@ export function lintNoLyricLines(compiled) {
   }
 }
 
-export function compile(brainMd, subgenresMd, profileMd) {
+export function compile(brainMd, subgenresMd, profileMd, genresMd = "") {
   const core = compileCore(brainMd);
   if (core.length < 1500) fail(`core suspiciously small (${core.length} chars)`);
   const rooms = compileRooms(subgenresMd);
@@ -280,13 +299,15 @@ export function compile(brainMd, subgenresMd, profileMd) {
   if (largestSlice > 3700) fail(`per-song slice ${largestSlice} tokens exceeds the ~3,700 budget — prune, don't pile on (plan §1)`);
 
   const hash = createHash("sha256")
-    .update(brainMd).update(subgenresMd).update(profileMd)
+    .update(brainMd).update(subgenresMd).update(profileMd).update(genresMd)
     .digest("hex").slice(0, 12);
 
   const bannedPhrases = compileBannedPhrases(brainMd);
   const abstractionWords = compileAbstractionWords(brainMd);
   const validTags = compileValidTags(brainMd);
+  const genreBuilder = genresMd ? compileGenreBuilder(genresMd) : {};
   const compiled = {
+    genreBuilder,
     core,
     bannedPhrases,
     abstractionWords,
@@ -330,7 +351,8 @@ function main() {
   const compiled = compile(
     read("SONGWRITING_BRAIN.md"),
     read("SONGWRITING_SUBGENRES.md"),
-    read("SONGWRITING_PROFILE_RNB.md")
+    read("SONGWRITING_PROFILE_RNB.md"),
+    read("SONGWRITING_GENRES.md")
   );
   writeFileSync(join(ROOT, "server/engine/curriculum.generated.ts"), render(compiled));
   console.log(

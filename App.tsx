@@ -96,7 +96,10 @@ type RoomCard = {
 };
 type RoomPacks = Record<string, RoomCard[]>;
 
-type BuilderStepId = 'genre' | 'room' | 'theme' | 'purpose' | 'audience' | 'voice' | 'instruments' | 'story';
+type BuilderStepId = 'language' | 'genre' | 'room' | 'theme' | 'purpose' | 'audience' | 'voice' | 'instruments' | 'story';
+
+type GenreWorld = { themes: string[]; purposes: string[]; instruments: string[] };
+const LANGUAGE_OPTIONS = ['English', 'Spanish', 'French', 'Portuguese'];
 
 const LET_GHOST_DECIDE = 'Let Song Ghost decide';
 
@@ -151,8 +154,9 @@ const SongBuilder: React.FC<{
   email: string;
   onGenerate: (builtInputs: SongInputs) => void;
 }> = ({ isGenerating, email, onGenerate }) => {
-  const [stepId, setStepId] = useState<BuilderStepId>('genre');
+  const [stepId, setStepId] = useState<BuilderStepId>('language');
   // The puzzle pieces — '' everywhere means "Song Ghost decides".
+  const [language, setLanguage] = useState('English');
   const [genre, setGenre] = useState('');
   const [subGenre, setSubGenre] = useState('');
   const [theme, setTheme] = useState('');
@@ -164,6 +168,11 @@ const SongBuilder: React.FC<{
   const [story, setStory] = useState('');
   // Rooms (sub-genres) from the engine; null until fetched — the room step only exists when the genre has rooms.
   const [roomPacks, setRoomPacks] = useState<RoomPacks | null>(null);
+  // Per-genre questionnaire worlds (themes/purposes/instruments) from the curriculum.
+  const [genreWorlds, setGenreWorlds] = useState<Record<string, GenreWorld> | null>(null);
+  // "Write my own" affordance — one draft box, keyed to the step it's open on.
+  const [customFor, setCustomFor] = useState<BuilderStepId | null>(null);
+  const [customDraft, setCustomDraft] = useState('');
   // Title ideas: null = not asked yet; [] = asked, nothing usable came back.
   const [titleIdeas, setTitleIdeas] = useState<string[] | null>(null);
   const [titleRoom, setTitleRoom] = useState<{ name: string; note: string } | null>(null);
@@ -180,6 +189,9 @@ const SongBuilder: React.FC<{
         if (!cancelled && json && typeof json.rooms === 'object' && json.rooms) {
           setRoomPacks(json.rooms as RoomPacks);
         }
+        if (!cancelled && json && typeof json.genreBuilder === 'object' && json.genreBuilder) {
+          setGenreWorlds(json.genreBuilder as Record<string, GenreWorld>);
+        }
       } catch {
         // Silent: the builder works fine without sub-genre rooms.
       }
@@ -189,16 +201,25 @@ const SongBuilder: React.FC<{
 
   const genreRooms = roomsForGenre(roomPacks, genre);
   const selectedRoom = genreRooms.find((r) => r.name === subGenre) || null;
-  // The picked room narrows the questionnaire: only options that fit its world,
-  // and its own instrument palette. No room picked = the full lists.
-  const themeOptions = selectedRoom?.themes?.length
-    ? THEME_OPTIONS.filter((t) => selectedRoom.themes!.includes(t))
-    : THEME_OPTIONS;
-  const purposeOptions = selectedRoom?.purposes?.length
-    ? PURPOSE_OPTIONS.filter((p) => selectedRoom.purposes!.includes(p))
-    : PURPOSE_OPTIONS;
-  const instrumentOptions = selectedRoom?.instruments || [];
+  // Question logic is genre-logical: each genre's world (from the curriculum) supplies its
+  // own themes/purposes/instruments; a picked deep room narrows further. Custom picks
+  // (typed answers) bypass the lists entirely.
+  const world: GenreWorld | null = (genreWorlds && genreWorlds[genre]) || null;
+  const themeBase = world?.themes?.length ? world.themes : THEME_OPTIONS;
+  const roomThemes = selectedRoom?.themes?.length
+    ? themeBase.filter((t) => selectedRoom.themes!.includes(t))
+    : themeBase;
+  const themeOptions = roomThemes.length ? roomThemes : (selectedRoom?.themes || themeBase);
+  const purposeBase = world?.purposes?.length ? world.purposes : PURPOSE_OPTIONS;
+  const roomPurposes = selectedRoom?.purposes?.length
+    ? purposeBase.filter((p) => selectedRoom.purposes!.includes(p))
+    : purposeBase;
+  const purposeOptions = roomPurposes.length ? roomPurposes : (selectedRoom?.purposes || purposeBase);
+  const instrumentOptions = selectedRoom?.instruments?.length
+    ? selectedRoom.instruments
+    : (world?.instruments || []);
   const steps: BuilderStepId[] = [
+    'language',
     'genre',
     ...(genreRooms.length ? (['room'] as BuilderStepId[]) : []),
     'theme', 'purpose', 'audience', 'voice',
@@ -208,8 +229,8 @@ const SongBuilder: React.FC<{
   const stepIndex = Math.max(0, steps.indexOf(stepId));
   const isLastStep = stepId === 'story';
 
-  const goNext = () => setStepId(steps[Math.min(steps.length - 1, stepIndex + 1)]);
-  const goBack = () => setStepId(steps[Math.max(0, stepIndex - 1)]);
+  const goNext = () => { setCustomFor(null); setCustomDraft(''); setStepId(steps[Math.min(steps.length - 1, stepIndex + 1)]); };
+  const goBack = () => { setCustomFor(null); setCustomDraft(''); setStepId(steps[Math.max(0, stepIndex - 1)]); };
 
   const pickGenre = (g: string) => {
     setGenre(g);
@@ -221,6 +242,7 @@ const SongBuilder: React.FC<{
 
   const buildInputs = (): SongInputs => ({
     ...DEFAULT_INPUTS,
+    language,
     genre,
     subGenre,
     theme,
@@ -257,7 +279,8 @@ const SongBuilder: React.FC<{
   };
 
   const headers: Record<BuilderStepId, { title: string; caption: string }> = {
-    genre: { title: "What's your sound?", caption: 'Pick a genre — skip anything and Song Ghost decides' },
+    language: { title: 'What language will it sing in?', caption: 'The lyrics follow your language' },
+    genre: { title: "What's your sound?", caption: 'Pick a genre or type your own — every question below follows it' },
     room: { title: 'Pick your room', caption: `The corner of ${genre} this song lives in` },
     theme: { title: 'What is this song about?', caption: 'The heart of the song' },
     purpose: { title: 'What should this song DO?', caption: 'Its job in the room' },
@@ -276,26 +299,61 @@ const SongBuilder: React.FC<{
   const decideIdle = 'bg-slate-800 border-slate-700 text-slate-400 hover:border-cyan-400 hover:text-cyan-200';
   const decidePicked = 'bg-cyan-500/15 border-cyan-400 text-cyan-200';
 
-  /** Chip list for the simple option steps: "Let Song Ghost decide" first, picks auto-advance. */
-  const optionChips = (options: string[], value: string, pick: (v: string) => void) => (
-    <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-      <button
-        type="button"
-        onClick={() => { pick(''); goNext(); }}
-        className={`${chipBase} ${value === '' ? decidePicked : decideIdle}`}
-      >
-        {LET_GHOST_DECIDE}
-      </button>
-      {options.map((opt) => (
-        <button
-          key={opt}
-          type="button"
-          onClick={() => { pick(opt); goNext(); }}
-          className={`${chipBase} ${value === opt ? chipPicked : chipIdle}`}
+  /** "Write my own" — every question accepts a typed answer, and it flows into the song
+   * exactly like a chip pick (same field, same weight in the brief). */
+  const customAnswer = (step: BuilderStepId, apply: (v: string) => void, placeholder: string) => (
+    <div className="mt-3">
+      {customFor === step ? (
+        <form
+          onSubmit={(e) => { e.preventDefault(); const v = customDraft.trim(); if (v) { apply(v); goNext(); } }}
+          className="flex gap-2"
         >
-          {opt}
+          <input
+            autoFocus
+            value={customDraft}
+            onChange={(e) => setCustomDraft(e.target.value)}
+            placeholder={placeholder}
+            className="flex-1 bg-slate-800 border border-cyan-400/60 rounded-xl px-4 py-3 text-sm text-white placeholder:text-slate-500 focus:border-cyan-400 outline-none"
+          />
+          <button type="submit" className="px-5 py-3 rounded-xl bg-cyan-500 text-white text-xs font-black uppercase tracking-widest hover:bg-cyan-400 transition-all">
+            Use it →
+          </button>
+        </form>
+      ) : (
+        <button
+          type="button"
+          onClick={() => { setCustomFor(step); setCustomDraft(''); }}
+          className="w-full p-3 rounded-xl border border-dashed border-slate-600 text-slate-400 text-xs font-black uppercase tracking-widest hover:border-cyan-400 hover:text-cyan-200 transition-all"
+        >
+          ✍️ Write my own
         </button>
-      ))}
+      )}
+    </div>
+  );
+
+  /** Chip list for the simple option steps: "Let Song Ghost decide" first, picks auto-advance. */
+  const optionChips = (step: BuilderStepId, options: string[], value: string, pick: (v: string) => void, customPlaceholder: string) => (
+    <div>
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+        <button
+          type="button"
+          onClick={() => { pick(''); goNext(); }}
+          className={`${chipBase} ${value === '' ? decidePicked : decideIdle}`}
+        >
+          {LET_GHOST_DECIDE}
+        </button>
+        {options.map((opt) => (
+          <button
+            key={opt}
+            type="button"
+            onClick={() => { pick(opt); goNext(); }}
+            className={`${chipBase} ${value === opt ? chipPicked : chipIdle}`}
+          >
+            {opt}
+          </button>
+        ))}
+      </div>
+      {customAnswer(step, pick, customPlaceholder)}
     </div>
   );
 
@@ -343,22 +401,41 @@ const SongBuilder: React.FC<{
         <p className="text-slate-500 font-black uppercase tracking-[0.14em] md:tracking-[0.28em] text-[10px] md:text-xs">{header.caption}</p>
       </div>
 
-      {stepId === 'genre' && (
-        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3 sm:gap-4">
-          {ENGLISH_GENRES.map((g) => (
+      {stepId === 'language' && (
+        <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
+          {LANGUAGE_OPTIONS.map((l) => (
             <button
-              key={g}
-              onClick={() => pickGenre(g)}
-              className={`${chipBase} ${genre === g ? chipPicked : chipIdle}`}
+              key={l}
+              type="button"
+              onClick={() => { setLanguage(l); goNext(); }}
+              className={`${chipBase} ${language === l ? chipPicked : chipIdle}`}
             >
-              {g}
+              {l}
             </button>
           ))}
         </div>
       )}
 
+      {stepId === 'genre' && (
+        <div>
+          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3 sm:gap-4">
+            {ENGLISH_GENRES.map((g) => (
+              <button
+                key={g}
+                onClick={() => pickGenre(g)}
+                className={`${chipBase} ${genre === g ? chipPicked : chipIdle}`}
+              >
+                {g}
+              </button>
+            ))}
+          </div>
+          {customAnswer('genre', (v) => pickGenre(v), 'e.g. Bachata, Amapiano, Neo-grunge…')}
+        </div>
+      )}
+
       {stepId === 'room' && (
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+        <div>
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
           <button
             type="button"
             onClick={() => { setSubGenre(''); setInstruments([]); goNext(); }}
@@ -380,12 +457,14 @@ const SongBuilder: React.FC<{
               <span className="mt-1 block text-xs text-slate-400 leading-relaxed">{room.oneLine}</span>
             </button>
           ))}
+          </div>
+          {customAnswer('room', (v) => { setSubGenre(v); setInstruments([]); }, 'Name the style in your words…')}
         </div>
       )}
 
-      {stepId === 'theme' && optionChips(themeOptions, theme, setTheme)}
-      {stepId === 'purpose' && optionChips(purposeOptions, purpose, setPurpose)}
-      {stepId === 'audience' && optionChips(AUDIENCE_OPTIONS, audience, setAudience)}
+      {stepId === 'theme' && optionChips('theme', themeOptions, theme, setTheme, 'What is this song about, in your words…')}
+      {stepId === 'purpose' && optionChips('purpose', purposeOptions, purpose, setPurpose, 'What should this song do…')}
+      {stepId === 'audience' && optionChips('audience', AUDIENCE_OPTIONS, audience, setAudience, 'Who is it speaking to…')}
 
       {stepId === 'instruments' && (
         <div className="flex flex-col gap-6">
@@ -415,6 +494,7 @@ const SongBuilder: React.FC<{
               );
             })}
           </div>
+          {customAnswer('instruments', (v) => setInstruments((prev) => (prev.includes(v) || prev.length >= 3 ? prev : [...prev, v])), 'e.g. steel pan, talkbox, 12-string…')}
           {instruments.length > 0 && (
             <div className="flex justify-center">
               <button
