@@ -1285,12 +1285,672 @@ Musical craft (the founder's list; each becomes concrete rules)
           "roomId": "classic-soul"
         }
       ]
+    },
+    "hiphop": {
+      "id": "hiphop",
+      "name": "Hip-Hop",
+      "aliases": [
+        "hip hop",
+        "hiphop",
+        "hip-hop",
+        "rap"
+      ],
+      "profileText": "A hip-hop writer thinks in bars. A bar is one measure of drums plus the words that ride it \u2014 the unit of thought, the way the sentence is for prose. Before line one the writer picks a flow: how many syllables sit on the bar, where they cluster, where they stop, which syllable stomps the snare. The same sentence can become a boom-bap punchline, a trap burst, or a sung phrase depending on how it rides \u2014 flow, not subject, is what separates the rooms. Every line takes the read-aloud test against its drums: if the stresses land nowhere, it is a poem, not a rap.\n\nThe verse is the star. Sixteen bars is the standard verse and the hook usually runs eight or less, so the meaning lives in the verses. Every verse must earn its bars: a new angle, new information, the story moved forward \u2014 verse two is never verse one reworded. The hook's job is smaller and exact: state the thesis in a form a listener can carry, then reset the room. Whether it is chanted, sung, talk-sung, scratched, or nearly absent is the room's call.\n\nInternal rhyme is the engine, and density is a dial. Rhymes inside the line, not just at its end, give rap its motor. One room chains multi-syllable internals and changes the sound every few bars; another rides one vowel sound for eight bars and hammers repeated end-words; another wants easy rhymes that sound like talking. Slant rhyme is everyday equipment everywhere. The genre-wide law is smaller and firmer: the honest word outranks the rhyming word, and a sentence bent to reach a rhyme has it backwards.\n\nWordplay is the genre's signature intelligence. The flip \u2014 the expected thing said the unexpected way \u2014 the double meaning with both meanings intended, the punchline built on a setup bar: all home equipment here. Where cleverness lives is the room's call \u2014 in one room it is the meal, in most it is seasoning \u2014 but the manner is a law: never announced, never explained. Every flip is built from the user's own details; a borrowed punchline is theft, a generic one is worse.\n\nCadence is dynamics. A hip-hop writer switches flows the way other genres change chords \u2014 tighten as tension rises, drop to half speed for the line that matters, flip the pattern at the turn. The writing also plans its own performance: gaps between phrases are written on purpose, because that is where the ad-lib cast lives, and the cast is a room decision \u2014 one room doubles its own punchlines, one is trailed by its own ad-lib track, one gets a crew's cold echo, one hands half the record to a shouting crowd. A writer who fills every gap has erased the second performer.\n\nWhat disqualifies is the same list in every room: words with no relationship to the drums; starved verses under an oversized hook; identity worn as a costume. Slang, accents, place names, menace, or street content the user never wrote is the loudest parody in the genre \u2014 rhythm and cadence carry the identity in the user's own plain language. And a lyric two different users could both receive \u2014 stock flexes, brand lists, off-the-shelf struggle \u2014 has failed before the beat drops.",
+      "defaultRoomId": "trap",
+      "rooms": [
+        {
+          "id": "boom-bap",
+          "name": "Boom-Bap",
+          "oneLine": "The classic 90s sound: dusty drums, dense clever bars, and skill on display \u2014 hip-hop that rewards close listening.",
+          "tempoGroove": "85-95 BPM. Slightly swung head-nod pocket; the kick and snare are the whole conversation and the stressed rhyme word of each bar lands square on the snare. Word density is high \u2014 roughly 10-14 syllables per bar, nearly every beat carries a word.",
+          "writingDials": [
+            "Flow decision: the one constant is that the stressed rhyme word lands on the snare. Sentences are free to run across the bar line \u2014 the great 90s writers did this constantly \u2014 but every bar should still be quotable on its own, a punchline that can stand alone. That quotability is what separates boom-bap from conscious rap, where sentences chain across bars to serve the plot.",
+            "Rhyme engine: dense multi-syllable rhyme, including internal rhyme (rhymes inside the line, not just at the end). Chain two or three rhyming syllables at a time, and change the rhyme sound every 2-4 bars so it never becomes a typewriter.",
+            "Wordplay placement: this is the sub-genre where flips, double meanings, and punchlines live in the VERSE, roughly one clever turn every 2-4 bars \u2014 setup bar, payoff bar. In the siblings, cleverness is seasoning; here it is the meal.",
+            "Hook treatment: small and functional. A short chanted refrain, a repeated phrase with a cut-up scratched-record feel, or no sung hook at all \u2014 the verses are the star and the hook just resets the room.",
+            "Section shape: 16-bar verses are standard, two or three of them. No pre-chorus, rarely a bridge. Each verse must open a new angle on the story \u2014 same subject, new camera position.",
+            "Subject treatment: everyday concrete detail is the currency \u2014 the block, the job, the small specific moments of the user's story told with wit. Skill itself is allowed to be part of the subject: the writing can visibly enjoy being good.",
+            "Vocal space: almost none needed. No melody room and no big ad-lib gaps \u2014 the bar is full; the only planned space is the tail of a punchline bar, where the writer marks which rhyme word gets doubled."
+          ],
+          "rendering": "Dusty chopped soul or jazz sample as the main melody, thick swung kick-and-snare break with vinyl crackle, deep upright-style or filtered bassline. DJ scratches and record cuts can act as the hook. 85-95 BPM, raw close-mic rap vocal with no pitch tuning, small room feel, 90s East Coast character. Keep the beat loop-based and let it ride \u2014 no big drops or builds.",
+          "storyFit": "Best for witty roasts, skill-flex tributes, nostalgia stories, day-in-the-life narratives, odes to a craft or a city, users who say real hip-hop or name 90s artists. Serves badly: tender love songs and grief (the density crowds the feeling out), party songs meant for dancing (the pocket nods heads, it does not move hips), and anything that needs a big singable chorus.",
+          "parodyTraps": "Forced 90s slang the user never wrote; rhyming every single syllable until the meaning dies; fake New York references for a user from somewhere else; generic nostalgia filler instead of the user's actual story; tough-guy content the story does not contain. Boom-bap parody sounds like a rhyme robot \u2014 real boom-bap sounds like a sharp person talking in rhythm.",
+          "performance": {
+            "prose": "Density sparse; min adlibs 3; delivery tags [Spoken] [Break] [Instrumental Break] [Groove]. This room performs like one MC and a DJ in a small room \u2014 the voice stays dry and upfront, the beat never stops nodding, and the DJ is the second performer, so the tags lean on breaks and cuts instead of vocal effects. Signature: the lead doubling its own last rhyme word \u2014 a tight second track landing with the snare on the punchline bars, plus one short hype echo at the hand-off between verses. Placement: doubles go only on the bars that earn them, roughly one every four bars at most, and the hook slot can be an [Instrumental Break] header where the DJ cuts and scratches a phrase instead of anyone singing; everywhere else the bar stays full and bare. Tag identity: one MC plus their own double-track, with the DJ treated as an instrument \u2014 (echo of the rhyme word) doubles on punchlines, a single short (yeah) or (uh) at section turns, scratch-hook headers. No crew, no crowd, no singing stack \u2014 skill does not need backup.",
+            "adlibDensity": "sparse",
+            "minAdlibs": 3,
+            "deliveryTags": [
+              "[Spoken]",
+              "[Break]",
+              "[Instrumental Break]",
+              "[Groove]"
+            ]
+          },
+          "builder": {
+            "instruments": [
+              "dusty soul sample chops",
+              "swung boom-bap drum break",
+              "vinyl crackle",
+              "filtered upright-style bass",
+              "DJ scratches",
+              "dusty piano loop"
+            ],
+            "themes": [
+              "Where I'm from",
+              "The come-up / hustle",
+              "Proving them wrong",
+              "Celebration / flexing"
+            ],
+            "purposes": [
+              "Tell my story",
+              "Flex / celebrate",
+              "Call somebody out"
+            ]
+          }
+        },
+        {
+          "id": "trap",
+          "name": "Trap",
+          "oneLine": "The modern mainstream sound: booming 808 bass (deep bass-drum boom), rattling hi-hats, short punchy phrases with swagger and space.",
+          "tempoGroove": "Usually written at 130-160 BPM but FELT in half-time (the body hears roughly 65-80). The snare cracks on beat three, hi-hats roll in fast triplet bursts (three quick hits per beat). Word density is medium and bursty \u2014 quick runs of 8-12 syllables, then deliberate air where the ad-libs (the echo words between lines) live.",
+          "writingDials": [
+            "Flow decision: write in bursts, not full bars \u2014 a rapid phrase (often in threes, matching the triplet hi-hats), then a gap. Each phrase should be able to stand alone like a caption; long winding sentences kill the bounce.",
+            "The gap is a written thing: the air after each burst is not empty \u2014 it is where the ad-lib track answers \u2014 so the writer plans which word gets echoed and leaves the gap its exact size. Filling every gap is the fastest way to break the style.",
+            "Rhyme engine: ride ONE rhyme sound for 4-8 bars before switching, and let repetition be a device \u2014 repeating the same word at the end of back-to-back lines is a legitimate hammer, not laziness. This is the opposite of boom-bap's constantly-shifting internals.",
+            "Cadence switching: hold one flow pattern for a 4-bar block, then flip to a new one \u2014 the flip is the event in a trap verse, doing the job a chord change does elsewhere. Plan one or two flips per verse and let the hook keep the simplest cadence in the song.",
+            "Hook treatment: chanted, not sung \u2014 two short phrases traded back and forth, simple enough to say along by the second listen. The hook can open the song before any verse, and it returns often.",
+            "Section shape: verses of 12-16 bars \u2014 even with the hook returning every 30-40 seconds the verse stays the star, and an 8-bar verse plan starves the song. No pre-chorus, rarely a bridge. Momentum comes from the hook returning, not from a build.",
+            "Subject treatment: present tense, first person, confident \u2014 the user's wins, grind, loyalty, glow-up stated as facts. Vulnerability is allowed but delivered flat and unbothered; one plain line dropped between flexes hits harder than a whole sad verse.",
+            "Concrete detail rule: swagger only works when the details are the USER'S \u2014 their real car, job, block, win. Generic luxury inventory is how two different users end up with the same song, which is failure."
+          ],
+          "rendering": "Deep gliding 808 sub-bass, crisp fast hi-hats with triplet rolls, hard clap or snare on beat three, sparse dark melody \u2014 bells, muted keys, a lone flute or pad. 130-160 BPM with a half-time feel. Modern lightly-tuned rap vocal with a stacked ad-lib track echoing key words. Wide, punchy, radio-modern mix with plenty of low end.",
+          "storyFit": "Best for hype songs, hustle and glow-up stories, birthday flexes, gym and pregame anthems, celebrating a win, making one person feel like a boss. Handles pain too, if the user's story carries it \u2014 flat delivery over hard drums reads as strength. Serves badly: tender detailed storytelling (the burst-flow chops narratives into confetti) and songs that need a big emotional sung chorus.",
+          "parodyTraps": "Inventing drug, gun, or street content the user never wrote \u2014 the number one trap parody; brand-name shopping lists; writing the ad-libs into every line like punctuation; forcing triplets onto every single bar until it sounds like a typewriter; confusing loud with confident. Real trap is economical and cold; parody trap is busy and try-hard.",
+          "performance": {
+            "prose": "Density heavy; min adlibs 8; delivery tags [Ad-Lib Section] [Build Up] [Drop] [Spoken]. Trap performs as a two-voice conversation where both voices are the lead \u2014 the main track and its own ad-lib track punctuating behind it \u2014 and that punctuation is the room's signature invention. Signature: the punctuation ad-lib \u2014 a bar lands, and in the written gap the second track answers with an echo of the bar's key word or a short exclamation sound, one answer per gap, cold and exact, never stepping on the next burst. Placement: ad-libs live ONLY in the gaps the bursts leave and thicken under the hook's returns \u2014 the verse floor is roughly one echo every two bars, the hook doubles that, and a [Drop] or [Build Up] header can frame the hook's arrival; the one place to stay bare is the single flat vulnerable line, which lands alone. Tag identity: the lead and its own second self \u2014 (echo of the key word) after bars, short exclamation sounds like (yeah) (okay) (woo) as punctuation, a doubled chant hook. No crew, no crowd, no melody stack: one voice twice.",
+            "adlibDensity": "heavy",
+            "minAdlibs": 8,
+            "deliveryTags": [
+              "[Ad-Lib Section]",
+              "[Build Up]",
+              "[Drop]",
+              "[Spoken]"
+            ]
+          },
+          "builder": {
+            "instruments": [
+              "gliding 808 sub-bass",
+              "rolling triplet hi-hats",
+              "hard clap snare",
+              "dark bell melody",
+              "muted keys",
+              "lone flute"
+            ],
+            "themes": [
+              "The come-up / hustle",
+              "Money & ambition",
+              "Celebration / flexing",
+              "Proving them wrong"
+            ],
+            "purposes": [
+              "Flex / celebrate",
+              "Motivate the ones grinding",
+              "Ride music"
+            ]
+          }
+        },
+        {
+          "id": "drill",
+          "name": "Drill",
+          "oneLine": "The cold, sliding, late-night cousin of trap: menacing bass that slides, clipped deadpan (flat-voiced) phrases, confidence with the temperature turned down.",
+          "tempoGroove": "138-150 BPM, almost always right around 140, half-time feel. The signature is the sliding 808 bass (a deep bass boom that bends in pitch) and drums that hit slightly off the grid \u2014 so phrases enter LATE, behind the beat, and get clipped short. Word density medium-high but chopped: 9-13 syllables per bar delivered in short cold pieces, little air for melody, some air for punch.",
+          "writingDials": [
+            "Flow decision: slide in late. Where trap bursts on top of the beat, drill phrases start a hair behind it and lean on the last word of each phrase \u2014 write lines whose final word is the heaviest one, because that is the word the flow stomps on.",
+            "Tone dial (the big one): understatement. Drill's power is saying a hard thing flatly, like it barely matters. Exclamation is weakness here; the coldest line in the verse should read almost bored. If humor shows up, it is a dry shrug inside an otherwise serious line \u2014 never a set-up-and-punchline like boom-bap. This is the exact opposite of bounce's shouted energy.",
+            "Rhyme engine: slant rhyme (near-rhyme) over perfect rhyme, and repeated cadence patterns \u2014 the same rhythmic shape recurring line after line matters more than the rhyme sounds matching cleanly.",
+            "Hook treatment: the hook is a colder, tighter verse \u2014 same flow, same deadpan, just more repetition. The boundary between verse and hook blurs; do not write a lifted singable chorus, it breaks the spell.",
+            "Section shape: 16-bar verses are the norm (12 at the shortest) and a hook that returns often; no pre-chorus, no bridge, no builds \u2014 the song tightens by repetition, it never lifts.",
+            "Point-of-view norm: the crew voice is at home here \u2014 we and us carry weight, and direct address to a rival or a doubter is a standard move. Use it only if the user's story actually has a them.",
+            "Subject treatment for a consumer app: translate drill's edge into what the user actually wrote \u2014 rivalry, doubters, surviving something, cold self-belief. NEVER import violence, gang references, or threats the user's story does not contain."
+          ],
+          "rendering": "Sliding, pitch-bending 808 bass (the defining sound), sparse eerie melody \u2014 a lonely piano, a bell, a ghostly vocal texture \u2014 and syncopated (off-beat) skittering hi-hats with hard off-grid snare placement. 138-150 BPM (usually right at 140), half-time feel. Deadpan low-energy rap vocal, dry and up-front, minimal tuning, UK/NY drill drum character. Dark, minimal, no warmth in the mix.",
+          "storyFit": "Best for rivalry and doubters stories, cold-confidence anthems, survived-something narratives, competitive sports or business energy, users whose own words carry an edge. Serves badly: celebrations, love songs, tributes, and anything warm \u2014 drill cannot smile without breaking. If the user's story has no adversary and no edge, do not put it in drill.",
+          "parodyTraps": "Invented street beef or gang content \u2014 instantly fake and potentially harmful; borrowed UK slang from a non-UK user's story (the dialect law applies to slang too \u2014 only the user's own words); mistaking shouted aggression for drill's cold restraint; threats aimed at nobody. Parody drill is loud and cartoonish; real drill is quiet and heavy.",
+          "performance": {
+            "prose": "Density moderate; min adlibs 4; delivery tags [Spoken] [Break] [Drop] [Quiet]. Drill performs cold \u2014 the crew is in the room, but nobody is hype, and the whole performance sits low and level like the temperature dropped. Signature: the crew echo on the heaviest word \u2014 the phrase-final word gets a flat low group double, more grunt than shout, landing a hair behind the lead exactly where the flow leans. Placement: crew echoes land only on phrase-final words and only on the bars that carry the most weight \u2014 never inside a phrase, never on every line; the hook carries the most repetition and so the most echoes, and one [Quiet] or bare [Break] header can mark the coldest moment instead of any build. Tag identity: the lead plus a low crew \u2014 flat (group echo of the last word) on the heavy bars, an occasional short cold exclamation sound, every delivery kept deadpan. No melody stack, no belting, no party energy \u2014 the crew confirms, it never cheers.",
+            "adlibDensity": "moderate",
+            "minAdlibs": 4,
+            "deliveryTags": [
+              "[Spoken]",
+              "[Break]",
+              "[Drop]",
+              "[Quiet]"
+            ]
+          },
+          "builder": {
+            "instruments": [
+              "sliding pitch-bending 808 bass",
+              "skittering off-grid hi-hats",
+              "lonely piano",
+              "eerie bell",
+              "ghostly vocal texture pad"
+            ],
+            "themes": [
+              "Proving them wrong",
+              "The struggle",
+              "Money & ambition",
+              "Where I'm from"
+            ],
+            "purposes": [
+              "Call somebody out",
+              "Motivate the ones grinding",
+              "Flex / celebrate"
+            ]
+          }
+        },
+        {
+          "id": "melodic-rap",
+          "name": "Melodic Rap",
+          "oneLine": "Half-rapped, half-sung feelings over booming soft beats \u2014 the lane for heartbreak, longing, and loyalty said out loud.",
+          "tempoGroove": "Written 130-150 BPM with a half-time feel, so it FEELS slow and floaty (roughly 65-75 in the body). Flow sings: notes get held, words get stretched. Word density is LOW \u2014 about 6-9 syllables per bar \u2014 with the most air per phrase of any rap-flow lane; melody fills what the words leave empty.",
+          "writingDials": [
+            "Flow decision: write phrases that can be SUNG, not just said \u2014 end lines on open vowel sounds (ah, oh, ay) that a voice can hold and bend, and keep lines short enough that stretching a word does not crowd the next one.",
+            "Rhyme engine: clean, singable end rhymes and very few internal rhymes. Dense internals fight the melody; here the rhyme's job is to make the tune feel inevitable, not to show skill.",
+            "Hook treatment: fully sung, and it IS the emotional thesis of the song \u2014 the one line the user's whole story boils down to. Chorus lines must match each other in syllable count and stress so the melody repeats cleanly \u2014 Layer 3's matching-length-lines rule matters most in this sub-genre.",
+            "Section shape: the only hip-hop sub-genre where a pre-chorus (the short build before the chorus) and a bridge genuinely belong. Verses still run 12-16 bars and stay the substance \u2014 melody never excuses a thin verse. Verses can melt into the hook instead of stopping dead \u2014 write the last verse line to hand off, not to slam shut.",
+            "Subject treatment: feelings stated to a specific person \u2014 second person address (you) is the home position. Name the feeling AND the concrete moment it comes from; a feeling with no scene is greeting-card mush.",
+            "Vulnerability dial: this is the one hip-hop lane where soft is strong. No armor required \u2014 but the confession must be the USER'S confession, in their situation, not stock heartbreak.",
+            "Repetition as emotion: repeating one phrase with a different melody or emphasis reads as obsession or ache \u2014 a legitimate device here that would read as lazy in boom-bap.",
+            "Cross-genre firewall: R&B's Trap-Soul and gospel's urban/trap room run the same drums and tempo as this one \u2014 the dial that makes it Melodic Rap is the guard coming down, a sung ache aimed straight at a person."
+          ],
+          "rendering": "Warm atmospheric foundation \u2014 ambient keys, soft guitar, or airy pads \u2014 over booming but rounded 808 bass (deep bass-drum boom) and relaxed half-time trap drums with only light hi-hat rolls. 130-150 BPM half-time feel. Heavily melodic tuned vocal with harmony stacks and background layers; the voice is the lead instrument. Emotional, spacious, late-night mix.",
+          "storyFit": "Best for heartbreak, missing someone, love, apology, grief, loyalty, ambition mixed with loneliness \u2014 any story that is mainly a FEELING aimed at a person. The single most useful lane for a consumer app's sentimental stories that still want to knock. Serves badly: wit-driven roasts, dense storytelling, and crowd-chant party songs \u2014 the low word density cannot carry jokes or plot.",
+          "parodyTraps": "Autopilot heartbreak clich\xE9s and numbness tropes the user never wrote; vowel-mush lines with no concrete image (pretty sound, says nothing); every line the exact same length in a singsong lull; sad-boy costume on a story that is not sad. Real melodic rap earns the ache with one specific detail; parody just moans in tune.",
+          "performance": {
+            "prose": "Density moderate; min adlibs 5; delivery tags [Falsetto] [Harmonies] [Crooning] [Soft] [Build]. This room performs like one hurt voice multiplied \u2014 every added voice is the lead layering itself, and everything added sings; nothing talks back. Signature: the sung trail \u2014 the last words of the hook line return behind it as a higher or softer sung layer, melody carrying what the words leave unsaid, the ache thickening as layers stack on each hook return. Placement: verses stay barer so the confession reads plainly \u2014 at most one soft sung echo per verse \u2014 then harmonies bloom on the hook and thicken every return, and the bridge or final chorus can lift into a [Falsetto] peak; a [Build] belongs only at the hand-off into the last hook. Tag identity: the lead's harmonized self \u2014 sung (echo of the hook's last words), harmony stacks on held open vowels, a falsetto double at the emotional peak. No punctuation ad-libs, no crew, no crowd \u2014 if a voice answers here, it sings.",
+            "adlibDensity": "moderate",
+            "minAdlibs": 5,
+            "deliveryTags": [
+              "[Falsetto]",
+              "[Harmonies]",
+              "[Crooning]",
+              "[Soft]",
+              "[Build]"
+            ]
+          },
+          "builder": {
+            "instruments": [
+              "rounded 808 bass",
+              "ambient keys",
+              "soft guitar loop",
+              "airy pads",
+              "relaxed half-time trap drums"
+            ],
+            "themes": [
+              "Love & loyalty",
+              "Losing a friend",
+              "The struggle",
+              "Money & ambition"
+            ],
+            "purposes": [
+              "Grieve a loss",
+              "Say what I never said",
+              "Ride music"
+            ]
+          }
+        },
+        {
+          "id": "conscious",
+          "name": "Conscious / Storytelling",
+          "oneLine": "Hip-hop with a point: real narratives, tributes, and messages told with craft \u2014 the verse as a short film.",
+          "tempoGroove": "Most at home at 85-100 BPM with a live, roomy pocket \u2014 the constant is drums that leave space for words to be HEARD. Word density is the highest in hip-hop, 10-16 syllables per bar, but delivered conversationally, like gripping speech more than performance.",
+          "writingDials": [
+            "Flow decision: shift cadence WITHIN the verse to mark emotional turns \u2014 start conversational, tighten and speed up as tension rises, slow down for the gut-punch line. Sentences chain across bar lines in service of the plot; unlike boom-bap, no single bar has to work as a stand-alone punchline \u2014 the paragraph is the unit here, not the bar.",
+            "Structure decision: the story poses a QUESTION and answers it late. Somewhere along the way something must shift \u2014 a new set of eyes, a different point in time \u2014 but the user's story decides how many verses it needs and where that shift lands; never assign fixed jobs to verse numbers. Verses run long: 16-24 bars is normal.",
+            "The extended metaphor: this is the one sub-genre where a single comparison can carry the WHOLE song \u2014 the entire story told as if it were something else, revealed fully only near the end. In the siblings a metaphor lasts a line or two; here it can be the architecture.",
+            "Hook treatment: understated on purpose \u2014 sparse, low, sometimes half-spoken, sometimes just a breath between chapters. A big shiny chorus would cheapen the story; the hook's job is to let the listener absorb, then pull them back in.",
+            "Detail-first rule: proper nouns, dates, places, small physical facts from the user's story do the emotional work. The lesson is never stated first \u2014 the details earn it, and the point lands late.",
+            "Rhyme engine: internals as dense as boom-bap but in SERVICE of the argument \u2014 rhyme follows the sentence, the sentence never bends to reach a rhyme. When the honest line does not rhyme, the honest line wins (Layer 3's no-rhyme option lives here).",
+            "Point-of-view discipline: choose the narrator deliberately \u2014 first person confessing, third person telling someone else's story, or second person putting the listener inside it \u2014 and breaking that point of view once, late, is a power move, not an accident."
+          ],
+          "rendering": "Live-feeling drums or a warm boom-bap hybrid, soulful keys, strings, or a gospel-tinged sample; the beat should DROP OUT or thin down under the most important lines. 85-100 BPM. Clear untuned vocal sitting close and upfront, minimal effects, dynamic arrangement that breathes with the story rather than looping flat. Sparse, low-key hook treatment.",
+          "storyFit": "Best for tributes to a parent or a lost loved one, life-lesson stories, overcoming-something narratives, injustice, faith journeys, telling a real person's real story with dignity. The lane for the app's heaviest, most meaningful requests. Serves badly: party songs, flexes, and quick fun \u2014 it takes itself seriously and needs a story with actual weight to justify that.",
+          "parodyTraps": "Preaching \u2014 turning the user's story into a sermon aimed at the listener; clich\xE9s that order the listener to pay attention or get conscious instead of showing a life; rhyming-dictionary big words to sound deep; stating the moral up front instead of earning it; name-dropping social issues the user's story never touched. Real conscious rap shows a life and lets the listener conclude; parody lectures.",
+          "performance": {
+            "prose": "Density sparse; min adlibs 2; delivery tags [Spoken] [Breakdown] [Instrumental Break] [Soft] [Quiet]. This room performs like a story told to a quiet room \u2014 the production reacts to the words and voices almost never do, so it is the barest ad-lib room in hip-hop and the tags do the reacting. Signature: the drop-out under the gut-punch \u2014 a direction line pulling the beat away for a bar so the heaviest sentence lands in near silence, then the drums return and carry the weight forward. Placement: the required adlibs are quiet ones \u2014 a low spoken aside where the story turns, a single breath or hum before the final section \u2014 and they never land on the heavy lines, which always stand bare; the hook header stays low ([Soft] or [Spoken]) because a shiny chorus would cheapen the story. Tag identity: the narrator alone with a band that listens \u2014 (beat drops out for a bar) direction lines, one (spoken: low aside) on its own line, soft half-spoken hook headers. No hype voices, no echoes chasing bars \u2014 silence is the second performer.",
+            "adlibDensity": "sparse",
+            "minAdlibs": 2,
+            "deliveryTags": [
+              "[Spoken]",
+              "[Breakdown]",
+              "[Instrumental Break]",
+              "[Soft]",
+              "[Quiet]"
+            ]
+          },
+          "builder": {
+            "instruments": [
+              "live-feel drums",
+              "soulful keys",
+              "strings",
+              "gospel-tinged sample",
+              "warm live bass",
+              "dusty piano loop"
+            ],
+            "themes": [
+              "Losing a friend",
+              "The struggle",
+              "Where I'm from",
+              "The come-up / hustle"
+            ],
+            "purposes": [
+              "Tell my story",
+              "Grieve a loss",
+              "Motivate the ones grinding"
+            ]
+          }
+        },
+        {
+          "id": "west-coast",
+          "name": "West Coast / G-Funk",
+          "oneLine": "Laid-back funk-driven rap built for cruising \u2014 a relaxed, talk-sung flow that leans back on a rolling groove and sounds like a good day.",
+          "tempoGroove": "90-100 BPM, swung rolling funk bounce \u2014 the flow sits BEHIND the beat, unhurried, stretching vowels at phrase ends. Word density is medium, about 8-12 syllables per bar, but delivered so relaxed it feels lighter; nothing is ever allowed to sound rushed.",
+          "writingDials": [
+            "Flow decision: lay back. Phrases start a touch after the beat and drawl through it \u2014 where boom-bap stomps the snare and trap bursts on top, this flow lounges. If a line cannot be said in one relaxed exhale, it is too crowded \u2014 cut words until it can.",
+            "Rhyme engine: easy, conversational end rhymes with a light singsong lilt \u2014 a few internals for bounce, never packed. The rhyme must sound effortless; the moment a rhyme feels reached-for, the cool breaks.",
+            "Hook treatment: talk-sung and smooth \u2014 melodic but cool, never aching. The hook states a vibe, not a confession; that is the line between this lane and melodic rap, which sings feelings AT someone.",
+            "Subject treatment: the good day \u2014 scene-setting sensory detail carries the song: the weather, the ride, the company, the music, the food, all from the user's story. Wins are told with a shrug and a smile; urgency is the one thing this lane refuses.",
+            "Vocal space: medium \u2014 leave the ends of phrases open so the high synth line and the bassline can answer. The groove is a duet partner, not a backdrop; write as if something else gets the last word of the bar.",
+            "Tone dial: wry and warm \u2014 observational humor delivered slow, never set-up-and-punchline like boom-bap. Even the flex is friendly; this is the one hip-hop lane where the confidence smiles.",
+            "Section shape: standard 16-bar verses with a sung hook and one steady temperature throughout \u2014 instead of a bridge, leave room for the groove itself (a synth or bass break) to take a turn. No drops, no builds; the ride just keeps rolling."
+          ],
+          "rendering": "Rolling funk bassline up front, a high whining synth lead that slides between notes (the classic G-funk whistle), warm electric-piano chords, an optional talkbox hook (the melodic robot-voice synth, a G-funk signature), and laid-back swung drums with a snappy snare. 90-100 BPM. Smooth, relaxed, talk-sung vocal with light melody and a few harmony touches, sunny 90s West Coast character. Groove-led and steady \u2014 no drops, no big builds, just ride.",
+          "storyFit": "Best for windows-down cruising songs, laid-back celebrations, summer cookouts and reunions told smooth instead of loud, good-day stories, city or neighborhood pride with a smile, users who ask for a West Coast vibe. Serves badly: urgent hype (too relaxed), heartbreak and grief (too sunny), dense wordplay showcases, and cold rivalry \u2014 this lane cannot frown for long.",
+          "parodyTraps": "Fake California scenery \u2014 palm trees, lowriders, and beach references for a user whose story never leaves Ohio; borrowed 90s West Coast slang the user never wrote (the dialect law covers slang too); importing gang references from the era's famous records; forced chill \u2014 filler about relaxing instead of the user's actual good day. Real G-funk is unhurried confidence in the user's own scene; parody is a costume.",
+          "performance": {
+            "prose": "Density moderate; min adlibs 5; delivery tags [Harmonies] [Spoken] [Groove] [Instrumental Break]. This room performs like a backyard function on a warm evening \u2014 a couple of relaxed voices in the cut answering the lead, nobody in a hurry, and the groove itself allowed the last word. Signature: the laid-back call-out \u2014 a smooth second voice answering the open end of a phrase from across the yard, low and easy, plus light harmonies leaning into the talk-sung hook. Placement: answers sit only at the phrase ends the writing left open \u2014 where the synth line or bassline was invited to reply, a voice may reply instead \u2014 the hook carries the harmonies, and one [Instrumental Break] or [Groove] header gives the band its own turn in place of a bridge. Tag identity: the lead plus a few laid-back friends and a smooth hook voice \u2014 relaxed (call-outs answering phrase ends), light hook harmonies, groove headers where the music talks. Warm and unhurried; nobody shouts, nobody rushes, and even the answers smile.",
+            "adlibDensity": "moderate",
+            "minAdlibs": 5,
+            "deliveryTags": [
+              "[Harmonies]",
+              "[Spoken]",
+              "[Groove]",
+              "[Instrumental Break]"
+            ]
+          },
+          "builder": {
+            "instruments": [
+              "rolling funk bassline",
+              "high whining synth lead",
+              "warm electric-piano chords",
+              "laid-back swung drums",
+              "talkbox-style synth",
+              "snappy snare"
+            ],
+            "themes": [
+              "Where I'm from",
+              "Celebration / flexing",
+              "Love & loyalty"
+            ],
+            "purposes": [
+              "Ride music",
+              "Flex / celebrate",
+              "Tell my story"
+            ]
+          }
+        },
+        {
+          "id": "southern-bounce",
+          "name": "Southern Bounce / Club",
+          "oneLine": "Call-and-response party rap built for a room full of people shouting back \u2014 the celebration machine.",
+          "tempoGroove": "95-105 BPM, straight relentless groove with a rapid syncopated (off-beat) kick \u2014 no half-time, no swing, just forward drive. The drum flavor can vary (New Orleans bounce, crunk stomp, modern club) but the writing engine is the same. Word density is the fewest syllables per line in hip-hop \u2014 short chant-sized lines of 4-8 syllables \u2014 but the lines turn over fast, so the song never sits still.",
+          "writingDials": [
+            "The writing engine is call-and-response: write in pairs \u2014 a call line, then a gap or a response line a CROWD could shout back. Every section must pass the test: could a room full of people who just heard it once yell the answer? If not, shorten it.",
+            "Command voice: this is the one sub-genre where telling the listener what to do is the norm \u2014 commands that get the room moving, celebrating, or honoring the named person. Build the actual command wording from the user's own story and people, never from stock party phrases.",
+            "Rhyme engine: simple, percussive, and proudly repetitive \u2014 repeating the same end word across lines is not lazy here, it IS the hook mechanism. Complex internals would only slow the crowd down.",
+            "Hook treatment: the hook is the whole point and it eats the song \u2014 expect the hook to take up half the runtime, with mini-verses (4-8 bars) as quick breathers between chant sections. Structure is hook-heavy, verse-light: the mirror image of boom-bap, and the genre's one lawful bend of verse-is-the-star \u2014 even these mini-verses must carry the user's real people and details, never filler.",
+            "Roll-call device: naming \u2014 the birthday person, the team, the family members, the city \u2014 chanted so the named people react. This is the sub-genre's superpower for celebration songs, and the names must come from the user's story (which also keeps the originality law satisfied automatically).",
+            "Space rule: leave the response gaps EMPTY in the writing. Filling every beat kills the party \u2014 the crowd's answer is part of the song, so the lyric sheet must have holes shaped like it.",
+            "Energy discipline: no dynamic dips. Where melodic rap breathes and conscious rap slows down for weight, bounce holds one high temperature start to finish \u2014 the only build allowed is stacking more voices."
+          ],
+          "rendering": "Choose the drum character from the story's energy: rapid New Orleans bounce-style kicks, a heavy stomping crunk-style clap groove, or clean modern club drums \u2014 all straight and driving at 95-105 BPM. Sharp claps and a simple bass riff; horn stabs and whistle hits only when the story wants full-blast parade energy. Lead chant vocal answered by stacked group-shout response vocals \u2014 the call-and-response must be audible in the arrangement. Big live party energy, handclap layers, no ballad softness anywhere.",
+          "storyFit": "Best for birthdays, graduations, weddings, team and family anthems, reunions, city pride, any story whose purpose is a ROOM celebrating together. The best hip-hop lane for making the named person light up in front of everyone. Serves badly: introspection, heartbreak, tributes to the departed, and detailed storytelling \u2014 the chant format physically cannot hold a narrative or a quiet feeling.",
+          "parodyTraps": "Generic party filler so interchangeable that any name could be swapped in (the exact failure the originality law forbids \u2014 the user's specific people and moments must be IN the chants); instructing dances that do not exist or are ten years stale; writing it as generic pop-EDM party lyrics with no call-and-response structure; filling every gap so the crowd has nowhere to answer; locking every party song into one city's sound the user never mentioned; and instructing any regional dialect \u2014 the bounce rhythm carries the identity in standard English.",
+          "performance": {
+            "prose": "Density heavy; min adlibs 9; delivery tags [Call and Response] [Ad-Lib Section] [Groove] [Big Finish]. The crowd IS the record \u2014 this room performs as one leader and a room full of people, and the writing already cut the holes their answers fill, so it carries the biggest cast and the highest adlib floor in hip-hop. Signature: the written answer \u2014 a call line, then the crowd's short shouted response in the gap, over and over, with roll-call lines where the room shouts back the named people from the user's story. Placement: response gaps everywhere \u2014 every call gets its answer, chant sections stack more voices each pass, the mini-verses run near-bare as breathers, and the [Big Finish] stacks every voice in the room; the floor of 9 is met by the response gaps alone, never by decorating the calls. Tag identity: a lead caller and a full crowd \u2014 written call-and-response blocks with line-start Lead: and (crowd: shouted response) pairs, roll-call answers, handclap and stomp direction lines, group shouts stacking to the end. The one hip-hop room where the cast outnumbers the lead.",
+            "adlibDensity": "heavy",
+            "minAdlibs": 9,
+            "deliveryTags": [
+              "[Call and Response]",
+              "[Ad-Lib Section]",
+              "[Groove]",
+              "[Big Finish]"
+            ]
+          },
+          "builder": {
+            "instruments": [
+              "rapid bounce kicks",
+              "sharp handclaps",
+              "simple bass riff",
+              "horn stabs",
+              "whistle hits",
+              "stomping crunk claps"
+            ],
+            "themes": [
+              "Celebration / flexing",
+              "Where I'm from",
+              "Love & loyalty"
+            ],
+            "purposes": [
+              "Flex / celebrate",
+              "Ride music"
+            ]
+          }
+        }
+      ],
+      "cues": [
+        {
+          "cue": "boom bap",
+          "strength": "strong",
+          "roomId": "boom-bap"
+        },
+        {
+          "cue": "boom-bap",
+          "strength": "strong",
+          "roomId": "boom-bap"
+        },
+        {
+          "cue": "real hip-hop",
+          "strength": "strong",
+          "roomId": "boom-bap"
+        },
+        {
+          "cue": "golden era",
+          "strength": "weak",
+          "roomId": "boom-bap"
+        },
+        {
+          "cue": "90s",
+          "strength": "weak",
+          "roomId": "boom-bap"
+        },
+        {
+          "cue": "old school",
+          "strength": "weak",
+          "roomId": "boom-bap"
+        },
+        {
+          "cue": "wordplay",
+          "strength": "weak",
+          "roomId": "boom-bap"
+        },
+        {
+          "cue": "roast",
+          "strength": "weak",
+          "roomId": "boom-bap"
+        },
+        {
+          "cue": "trap",
+          "strength": "strong",
+          "roomId": "trap"
+        },
+        {
+          "cue": "808",
+          "strength": "weak",
+          "roomId": "trap"
+        },
+        {
+          "cue": "flex",
+          "strength": "weak",
+          "roomId": "trap"
+        },
+        {
+          "cue": "hustle",
+          "strength": "weak",
+          "roomId": "trap"
+        },
+        {
+          "cue": "grind",
+          "strength": "weak",
+          "roomId": "trap"
+        },
+        {
+          "cue": "glow-up",
+          "strength": "weak",
+          "roomId": "trap"
+        },
+        {
+          "cue": "glow up",
+          "strength": "weak",
+          "roomId": "trap"
+        },
+        {
+          "cue": "gym",
+          "strength": "weak",
+          "roomId": "trap"
+        },
+        {
+          "cue": "boss",
+          "strength": "weak",
+          "roomId": "trap"
+        },
+        {
+          "cue": "drill",
+          "strength": "strong",
+          "roomId": "drill"
+        },
+        {
+          "cue": "uk drill",
+          "strength": "strong",
+          "roomId": "drill"
+        },
+        {
+          "cue": "ny drill",
+          "strength": "strong",
+          "roomId": "drill"
+        },
+        {
+          "cue": "rival",
+          "strength": "weak",
+          "roomId": "drill"
+        },
+        {
+          "cue": "doubters",
+          "strength": "weak",
+          "roomId": "drill"
+        },
+        {
+          "cue": "haters",
+          "strength": "weak",
+          "roomId": "drill"
+        },
+        {
+          "cue": "unbothered",
+          "strength": "weak",
+          "roomId": "drill"
+        },
+        {
+          "cue": "enemies",
+          "strength": "weak",
+          "roomId": "drill"
+        },
+        {
+          "cue": "melodic rap",
+          "strength": "strong",
+          "roomId": "melodic-rap"
+        },
+        {
+          "cue": "emo rap",
+          "strength": "strong",
+          "roomId": "melodic-rap"
+        },
+        {
+          "cue": "sad rap",
+          "strength": "strong",
+          "roomId": "melodic-rap"
+        },
+        {
+          "cue": "soundcloud rap",
+          "strength": "strong",
+          "roomId": "melodic-rap"
+        },
+        {
+          "cue": "heartbreak",
+          "strength": "weak",
+          "roomId": "melodic-rap"
+        },
+        {
+          "cue": "missing",
+          "strength": "weak",
+          "roomId": "melodic-rap"
+        },
+        {
+          "cue": "apology",
+          "strength": "weak",
+          "roomId": "melodic-rap"
+        },
+        {
+          "cue": "lonely",
+          "strength": "weak",
+          "roomId": "melodic-rap"
+        },
+        {
+          "cue": "conscious rap",
+          "strength": "strong",
+          "roomId": "conscious"
+        },
+        {
+          "cue": "storytelling",
+          "strength": "strong",
+          "roomId": "conscious"
+        },
+        {
+          "cue": "life story",
+          "strength": "strong",
+          "roomId": "conscious"
+        },
+        {
+          "cue": "rest in peace",
+          "strength": "strong",
+          "roomId": "conscious"
+        },
+        {
+          "cue": "conscious",
+          "strength": "weak",
+          "roomId": "conscious"
+        },
+        {
+          "cue": "tribute",
+          "strength": "weak",
+          "roomId": "conscious"
+        },
+        {
+          "cue": "lesson",
+          "strength": "weak",
+          "roomId": "conscious"
+        },
+        {
+          "cue": "injustice",
+          "strength": "weak",
+          "roomId": "conscious"
+        },
+        {
+          "cue": "west coast",
+          "strength": "strong",
+          "roomId": "west-coast"
+        },
+        {
+          "cue": "g-funk",
+          "strength": "strong",
+          "roomId": "west-coast"
+        },
+        {
+          "cue": "g funk",
+          "strength": "strong",
+          "roomId": "west-coast"
+        },
+        {
+          "cue": "lowrider",
+          "strength": "strong",
+          "roomId": "west-coast"
+        },
+        {
+          "cue": "cruising",
+          "strength": "weak",
+          "roomId": "west-coast"
+        },
+        {
+          "cue": "windows down",
+          "strength": "weak",
+          "roomId": "west-coast"
+        },
+        {
+          "cue": "summer",
+          "strength": "weak",
+          "roomId": "west-coast"
+        },
+        {
+          "cue": "cookout",
+          "strength": "weak",
+          "roomId": "west-coast"
+        },
+        {
+          "cue": "bounce music",
+          "strength": "strong",
+          "roomId": "southern-bounce"
+        },
+        {
+          "cue": "new orleans bounce",
+          "strength": "strong",
+          "roomId": "southern-bounce"
+        },
+        {
+          "cue": "twerk",
+          "strength": "strong",
+          "roomId": "southern-bounce"
+        },
+        {
+          "cue": "crunk",
+          "strength": "strong",
+          "roomId": "southern-bounce"
+        },
+        {
+          "cue": "block party",
+          "strength": "strong",
+          "roomId": "southern-bounce"
+        },
+        {
+          "cue": "bounce",
+          "strength": "weak",
+          "roomId": "southern-bounce"
+        },
+        {
+          "cue": "club",
+          "strength": "weak",
+          "roomId": "southern-bounce"
+        },
+        {
+          "cue": "birthday",
+          "strength": "weak",
+          "roomId": "southern-bounce"
+        },
+        {
+          "cue": "party",
+          "strength": "weak",
+          "roomId": "southern-bounce"
+        },
+        {
+          "cue": "graduation",
+          "strength": "weak",
+          "roomId": "southern-bounce"
+        }
+      ]
     }
   },
-  "hash": "08dc2fd46f07",
+  "hash": "a93f759df8e5",
   "approxTokens": {
     "core": 1794,
-    "largestSlice": 3570
+    "largestSlice": 3667
   }
 };
 
@@ -2388,7 +3048,7 @@ No greeting-card abstractions (no "beat of my heart", "words I never spoke", "le
 === THE CRAFT (applies to every song) ===
 ${core}
 
-=== HOW AN R&B WRITER THINKS ===
+=== HOW A ${pack.name.toUpperCase()} WRITER THINKS ===
 ${pack.profileText}
 
 === THE ROOM: ${card.name} ===
