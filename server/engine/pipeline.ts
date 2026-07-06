@@ -308,7 +308,7 @@ No greeting-card abstractions (no "beat of my heart", "words I never spoke", "le
 === THE CRAFT (applies to every song) ===
 ${core}
 
-=== HOW AN R&B WRITER THINKS ===
+=== HOW A ${pack.name.toUpperCase()} WRITER THINKS ===
 ${pack.profileText}
 
 === THE ROOM: ${card.name} ===

@@ -18,6 +18,7 @@ import { fileURLToPath } from "node:url";
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), "..");
 
 const ROOM_IDS = {
+  // R&B
   "Contemporary R&B": "contemporary-rnb",
   "90s R&B": "90s-rnb",
   "2000s R&B": "2000s-rnb",
@@ -25,7 +26,31 @@ const ROOM_IDS = {
   "Trap-Soul / Alt-R&B": "trap-soul",
   "Quiet Storm / Slow Jam": "quiet-storm",
   "Classic Soul / Motown": "classic-soul",
+  // Hip-Hop
+  "Boom-Bap": "boom-bap",
+  "Trap": "trap",
+  "Drill": "drill",
+  "Melodic Rap": "melodic-rap",
+  "Conscious / Storytelling": "conscious",
+  "West Coast / G-Funk": "west-coast",
+  "Southern Bounce / Club": "southern-bounce",
 };
+
+// The deep genres the engine carries: each maps a SUBGENRES section + a profile doc to a pack.
+const GENRE_PACKS = [
+  {
+    section: "R&B", id: "rnb", name: "R&B",
+    aliases: ["r&b", "rnb", "r and b", "randb", "rhythm and blues"],
+    profileFile: "SONGWRITING_PROFILE_RNB.md",
+    roomCount: 7,
+  },
+  {
+    section: "Hip-Hop", id: "hiphop", name: "Hip-Hop",
+    aliases: ["hip hop", "hiphop", "hip-hop", "rap"],
+    profileFile: "SONGWRITING_PROFILE_HIPHOP.md",
+    roomCount: 7,
+  },
+];
 
 // The plan's build check: no quoted lyric lines anywhere in compiled writer text.
 const LYRIC_LINE_LINT = /"[A-Z][a-z][^"]{10,60}"/;
@@ -82,10 +107,10 @@ function bulletText(block, label) {
   return m ? m[1].trim() : "";
 }
 
-/** Room cards from the ## R&B section of SONGWRITING_SUBGENRES.md. */
-export function compileRooms(subgenresMd) {
-  const start = subgenresMd.indexOf("\n## R&B\n");
-  if (start === -1) fail("no ## R&B section in SONGWRITING_SUBGENRES.md");
+/** Room cards from one ## <Genre> section of SONGWRITING_SUBGENRES.md. */
+export function compileRooms(subgenresMd, sectionName = "R&B", expectedCount = 7) {
+  const start = subgenresMd.indexOf(`\n## ${sectionName}\n`);
+  if (start === -1) fail(`no ## ${sectionName} section in SONGWRITING_SUBGENRES.md`);
   const rest = subgenresMd.slice(start + 1);
   const end = rest.indexOf("\n## ");
   const section = end === -1 ? rest : rest.slice(0, end);
@@ -156,7 +181,7 @@ export function compileRooms(subgenresMd) {
     }
     rooms.push(card);
   }
-  if (rooms.length !== 7) fail(`expected 7 R&B rooms, found ${rooms.length}`);
+  if (rooms.length !== expectedCount) fail(`expected ${expectedCount} ${sectionName} rooms, found ${rooms.length}`);
   return rooms;
 }
 
@@ -171,7 +196,9 @@ export function compileProfile(profileMd, rooms) {
     return (next === -1 ? profileMd.slice(from) : profileMd.slice(from, from + next)).trim();
   };
 
-  const profileText = grab("How an R&B writer thinks");
+  const thinkHeader = profileMd.match(/^## (How an? [^\n]+ writer thinks)\s*$/im);
+  if (!thinkHeader) fail('profile missing "## How a/an <Genre> writer thinks" section');
+  const profileText = grab(thinkHeader[1]);
   const defaultName = grab("Declared safe default").split("\n")[0].trim();
   const defaultRoomId = ROOM_IDS[defaultName];
   if (!defaultRoomId) fail(`declared default "${defaultName}" is not a known room`);
@@ -199,6 +226,8 @@ export function compileProfile(profileMd, rooms) {
   }
   return { profileText, defaultRoomId, cues };
 }
+
+/** "What disqualifies" grab is optional profile content — not compiled into the pack yet. */
 
 /** The house-style ban list from BRAIN Layer 3 — semicolon-separated bullet phrases
  * under the "House-style words" bullet. Compiled for the code check; the prose stays
@@ -282,11 +311,30 @@ export function lintNoLyricLines(compiled) {
   }
 }
 
-export function compile(brainMd, subgenresMd, profileMd, genresMd = "") {
+export function compile(brainMd, subgenresMd, profilesByGenreId, genresMd = "") {
   const core = compileCore(brainMd);
   if (core.length < 1500) fail(`core suspiciously small (${core.length} chars)`);
-  const rooms = compileRooms(subgenresMd);
-  const { profileText, defaultRoomId, cues } = compileProfile(profileMd, rooms);
+  // Back-compat: a lone string is the R&B profile (old signature).
+  const profiles = typeof profilesByGenreId === "string" ? { rnb: profilesByGenreId } : profilesByGenreId;
+  const packs = {};
+  const allRooms = [];
+  for (const def of GENRE_PACKS) {
+    const profileMd = profiles[def.id];
+    if (!profileMd) continue; // pack ships only when its profile exists
+    const rooms = compileRooms(subgenresMd, def.section, def.roomCount);
+    const { profileText, defaultRoomId, cues } = compileProfile(profileMd, rooms);
+    packs[def.id] = {
+      id: def.id,
+      name: def.name,
+      aliases: def.aliases,
+      profileText,
+      defaultRoomId,
+      rooms,
+      cues,
+    };
+    allRooms.push(...rooms.map((r) => ({ room: r, profileText })));
+  }
+  if (!packs.rnb) fail("R&B pack is required");
 
   // Mirrors the real writer prompt (pipeline.writerPrompt): storyFit is a landing
   // concern and never reaches the writer, so it doesn't count against the budget.
@@ -294,13 +342,14 @@ export function compile(brainMd, subgenresMd, profileMd, genresMd = "") {
     room.oneLine.length + room.tempoGroove.length + room.rendering.length +
     room.parodyTraps.length + room.performance.prose.length +
     room.writingDials.reduce((n, d) => n + d.length, 0);
-  const largestCard = Math.max(...rooms.map(cardChars));
-  const largestSlice = Math.round((core.length + profileText.length + largestCard) / 4);
+  const largestSlice = Math.round(
+    Math.max(...allRooms.map(({ room, profileText }) => core.length + profileText.length + cardChars(room))) / 4
+  );
   if (largestSlice > 3700) fail(`per-song slice ${largestSlice} tokens exceeds the ~3,700 budget — prune, don't pile on (plan §1)`);
 
-  const hash = createHash("sha256")
-    .update(brainMd).update(subgenresMd).update(profileMd).update(genresMd)
-    .digest("hex").slice(0, 12);
+  const hashBuilder = createHash("sha256").update(brainMd).update(subgenresMd).update(genresMd);
+  for (const id of Object.keys(profiles).sort()) hashBuilder.update(profiles[id]);
+  const hash = hashBuilder.digest("hex").slice(0, 12);
 
   const bannedPhrases = compileBannedPhrases(brainMd);
   const abstractionWords = compileAbstractionWords(brainMd);
@@ -312,17 +361,7 @@ export function compile(brainMd, subgenresMd, profileMd, genresMd = "") {
     bannedPhrases,
     abstractionWords,
     validTags,
-    genres: {
-      rnb: {
-        id: "rnb",
-        name: "R&B",
-        aliases: ["r&b", "rnb", "r and b", "randb", "rhythm and blues"],
-        profileText,
-        defaultRoomId,
-        rooms,
-        cues,
-      },
-    },
+    genres: packs,
     hash,
     approxTokens: { core: Math.round(core.length / 4), largestSlice },
   };
@@ -348,17 +387,28 @@ function main() {
       fail(`cannot read ${name} — the curriculum documents are the engine; this file is required`);
     }
   };
+  const profiles = {};
+  for (const def of GENRE_PACKS) {
+    try {
+      profiles[def.id] = readFileSync(join(ROOT, def.profileFile), "utf8");
+    } catch {
+      if (def.id === "rnb") fail("SONGWRITING_PROFILE_RNB.md is required");
+      // other packs ship when their profile lands
+    }
+  }
   const compiled = compile(
     read("SONGWRITING_BRAIN.md"),
     read("SONGWRITING_SUBGENRES.md"),
-    read("SONGWRITING_PROFILE_RNB.md"),
+    profiles,
     read("SONGWRITING_GENRES.md")
   );
   writeFileSync(join(ROOT, "server/engine/curriculum.generated.ts"), render(compiled));
+  const packSummary = Object.values(compiled.genres)
+    .map((p) => `${p.name}: ${p.rooms.length} rooms/${p.cues.length} cues`)
+    .join("; ");
   console.log(
     `curriculum compiled: hash ${compiled.hash}, core ~${compiled.approxTokens.core} tokens, ` +
-    `largest per-song slice ~${compiled.approxTokens.largestSlice} tokens, ` +
-    `${compiled.genres.rnb.rooms.length} R&B rooms, ${compiled.genres.rnb.cues.length} cues`
+    `largest per-song slice ~${compiled.approxTokens.largestSlice} tokens — ${packSummary}`
   );
 }
 
