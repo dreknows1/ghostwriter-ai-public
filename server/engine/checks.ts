@@ -600,7 +600,10 @@ export function runChecks(
       const avgVerse = verseCounts.reduce((a, b) => a + b, 0) / verseCounts.length;
       const minVerse = Math.min(...verseCounts);
       const chorusLen = Math.max(...choruses.map(contentCount));
-      const ok = minVerse >= 4 && avgVerse >= chorusLen - 1;
+      // Absolute floor of 3 lines admits legitimate short-stanza forms (blues AAB,
+      // some folk/hip-hop). The real anti-starvation guard is the relative rule:
+      // verses must not run shorter than the chorus (avg >= chorusLen - 1).
+      const ok = minVerse >= 3 && avgVerse >= chorusLen - 1;
       checks.push({
         id: "verse-substance",
         severity: "fail",
