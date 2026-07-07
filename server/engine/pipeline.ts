@@ -8,7 +8,7 @@ import type { Brief, CompiledCurriculum, DraftReport, GenrePack, Landing, Musica
 import { landRoom, describeLanding } from "./landing";
 import { runChecks } from "./checks";
 
-export const ENGINE_VERSION = "v3.0-rnb";
+export const ENGINE_VERSION = "v3.2-multigenre";
 // Pinned per plan §5 (drift protection). Changing this requires re-running the
 // frozen regression batch and re-gating with the founder.
 export const ENGINE_MODEL = "gpt-4.1";

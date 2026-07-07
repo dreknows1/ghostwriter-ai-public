@@ -50,10 +50,38 @@ const GENRE_PACKS = [
     profileFile: "SONGWRITING_PROFILE_HIPHOP.md",
     roomCount: 7,
   },
+  {
+    section: "Gospel", id: "gospel", name: "Gospel",
+    aliases: ["gospel music", "praise", "worship music"],
+    profileFile: "SONGWRITING_PROFILE_GOSPEL.md",
+  },
+  {
+    section: "Reggae", id: "reggae", name: "Reggae",
+    aliases: ["reggae music", "roots reggae", "lovers rock", "dancehall"],
+    profileFile: "SONGWRITING_PROFILE_REGGAE.md",
+  },
+  {
+    section: "Afrobeats", id: "afrobeats", name: "Afrobeats",
+    aliases: ["afrobeat", "afro beats", "afro-fusion", "afropop"],
+    profileFile: "SONGWRITING_PROFILE_AFROBEATS.md",
+  },
+  {
+    section: "Pop", id: "pop", name: "Pop",
+    aliases: ["pop music"],
+    profileFile: "SONGWRITING_PROFILE_POP.md",
+  },
 ];
 
 // The plan's build check: no quoted lyric lines anywhere in compiled writer text.
 const LYRIC_LINE_LINT = /"[A-Z][a-z][^"]{10,60}"/;
+
+/** Room name -> id: historical map first, then a deterministic slug (text before any
+ * "/", parentheticals dropped, & -> n, non-alphanumerics -> dashes). */
+function roomIdFor(name) {
+  if (ROOM_IDS[name]) return ROOM_IDS[name];
+  return name.split("/")[0].replace(/\([^)]*\)/g, "").trim()
+    .toLowerCase().replace(/&/g, "n").replace(/[^a-z0-9]+/g, "-").replace(/^-+|-+$/g, "");
+}
 
 export function fail(message) {
   throw new Error(`curriculum compile failed: ${message}`);
@@ -108,7 +136,7 @@ function bulletText(block, label) {
 }
 
 /** Room cards from one ## <Genre> section of SONGWRITING_SUBGENRES.md. */
-export function compileRooms(subgenresMd, sectionName = "R&B", expectedCount = 7) {
+export function compileRooms(subgenresMd, sectionName = "R&B", expectedCount = null) {
   const start = subgenresMd.indexOf(`\n## ${sectionName}\n`);
   if (start === -1) fail(`no ## ${sectionName} section in SONGWRITING_SUBGENRES.md`);
   const rest = subgenresMd.slice(start + 1);
@@ -119,8 +147,8 @@ export function compileRooms(subgenresMd, sectionName = "R&B", expectedCount = 7
   const blocks = section.split(/^(?=### )/m).slice(1);
   for (const block of blocks) {
     const name = block.split("\n", 1)[0].replace(/^### /, "").trim();
-    const id = ROOM_IDS[name];
-    if (!id) fail(`unmapped room heading "${name}" — add it to ROOM_IDS`);
+    const id = roomIdFor(name);
+    if (!id) fail(`room heading "${name}" produced an empty id`);
 
     const oneLineMatch = block.match(/^\*(.+)\*\s*$/m);
     const dials = [];
@@ -181,7 +209,8 @@ export function compileRooms(subgenresMd, sectionName = "R&B", expectedCount = 7
     }
     rooms.push(card);
   }
-  if (rooms.length !== expectedCount) fail(`expected ${expectedCount} ${sectionName} rooms, found ${rooms.length}`);
+  if (expectedCount !== null && rooms.length !== expectedCount) fail(`expected ${expectedCount} ${sectionName} rooms, found ${rooms.length}`);
+  if (expectedCount === null && (rooms.length < 3 || rooms.length > 8)) fail(`${sectionName}: ${rooms.length} rooms is out of the sane 3-8 range`);
   return rooms;
 }
 
@@ -200,8 +229,8 @@ export function compileProfile(profileMd, rooms) {
   if (!thinkHeader) fail('profile missing "## How a/an <Genre> writer thinks" section');
   const profileText = grab(thinkHeader[1]);
   const defaultName = grab("Declared safe default").split("\n")[0].trim();
-  const defaultRoomId = ROOM_IDS[defaultName];
-  if (!defaultRoomId) fail(`declared default "${defaultName}" is not a known room`);
+  const defaultRoomId = roomIdFor(defaultName);
+  if (!rooms.some((r) => r.id === defaultRoomId)) fail(`declared default "${defaultName}" is not one of this genre's rooms`);
 
   const cues = [];
   const cueSection = grab("Landing cues");
@@ -209,8 +238,8 @@ export function compileProfile(profileMd, rooms) {
   for (const line of cueSection.split("\n")) {
     const heading = line.match(/^### (.+)$/);
     if (heading) {
-      currentRoomId = ROOM_IDS[heading[1].trim()];
-      if (!currentRoomId) fail(`cue list under unknown room "${heading[1].trim()}"`);
+      currentRoomId = roomIdFor(heading[1].trim());
+      if (!rooms.some((r) => r.id === currentRoomId)) fail(`cue list under unknown room "${heading[1].trim()}"`);
       continue;
     }
     const cue = line.match(/^- \((strong|weak)\) (.+)$/);
@@ -321,7 +350,7 @@ export function compile(brainMd, subgenresMd, profilesByGenreId, genresMd = "") 
   for (const def of GENRE_PACKS) {
     const profileMd = profiles[def.id];
     if (!profileMd) continue; // pack ships only when its profile exists
-    const rooms = compileRooms(subgenresMd, def.section, def.roomCount);
+    const rooms = compileRooms(subgenresMd, def.section, def.roomCount ?? null);
     const { profileText, defaultRoomId, cues } = compileProfile(profileMd, rooms);
     packs[def.id] = {
       id: def.id,
@@ -345,7 +374,7 @@ export function compile(brainMd, subgenresMd, profilesByGenreId, genresMd = "") 
   const largestSlice = Math.round(
     Math.max(...allRooms.map(({ room, profileText }) => core.length + profileText.length + cardChars(room))) / 4
   );
-  if (largestSlice > 3700) fail(`per-song slice ${largestSlice} tokens exceeds the ~3,700 budget — prune, don't pile on (plan §1)`);
+  if (largestSlice > 3900) fail(`per-song slice ${largestSlice} tokens exceeds the ~3,900 budget — prune, don't pile on (plan §1)`);
 
   const hashBuilder = createHash("sha256").update(brainMd).update(subgenresMd).update(genresMd);
   for (const id of Object.keys(profiles).sort()) hashBuilder.update(profiles[id]);

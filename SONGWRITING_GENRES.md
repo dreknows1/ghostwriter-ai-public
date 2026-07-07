@@ -18,12 +18,12 @@
 
 ## Gospel
 - **Themes:** Praise & worship; Testimony / what God brought me through; Gratitude; Faith through the storm; Deliverance; Celebration of His love; For the congregation
-- **Purposes:** Worship / exalt; Testify; Lift the congregation; Comfort in grief; Celebrate; Altar call
+- **Purposes:** Worship / exalt; Testify; Lift the congregation; Comfort in grief; Celebrate; Encourage / motivate; Altar call
 - **Instrumentation options:** Hammond organ; grand piano; full choir; tambourine; live bass; gospel drums; handclaps
 
 ## Reggae
-- **Themes:** One love / unity; Sufferation & struggle; Praise & spirituality; Romance (lovers rock); Freedom & justice; Celebration
-- **Purposes:** Uplift the people; Protest; Romance; Skank / dance; Give thanks
+- **Themes:** One love / unity; Sufferation & struggle; Praise & spirituality; Romance (lovers rock); Freedom & justice; Celebration; Missing someone; Confidence & swagger; Proving them wrong
+- **Purposes:** Uplift the people; Protest; Romance; Slow dance; Skank / dance; Give thanks; Party / celebrate; Flex / celebrate
 - **Instrumentation options:** one-drop drums; skanking guitar; organ bubble; deep bass; horns; melodica
 
 ## Afrobeats

@@ -50,6 +50,10 @@ const AMBIGUOUS_SINGLE_WORDS = new Set([
   "soft", "southern", "northern", "western", "eastern", "coast", "country",
   "house", "roots", "golden", "future", "traditional", "pop", "wave",
   "urban", "indie", "neo", "progressive", "experimental",
+  // Pop rooms strip to everyday story words ("Dance-Pop" -> "dance",
+  // "Bedroom Pop" -> "bedroom", "Synth-Pop" -> "synth"): a first dance at a
+  // wedding or a synth in a party brief must never read as naming a room.
+  "dance", "bedroom", "synth",
 ]);
 
 /** "80s" / "1980s" -> "eighties", so era picks match either spelling (Rule 1 era mapping). */
