@@ -64,12 +64,19 @@ export class EngineFailure extends Error {
   }
 }
 
+/** Fold to a match key: strip accents/diacritics so "Reggaetón" == "reggaeton". */
+function genreKey(s: string): string {
+  return String(s || "")
+    .toLowerCase()
+    .normalize("NFD")
+    .replace(/[̀-ͯ]/g, "")
+    .replace(/[^a-z0-9&]/g, "");
+}
+
 export function resolveGenre(curriculum: CompiledCurriculum, genre: string): GenrePack | null {
-  const norm = String(genre || "").toLowerCase().replace(/[^a-z0-9&]/g, "");
+  const norm = genreKey(genre);
   for (const pack of Object.values(curriculum.genres)) {
-    const candidates = [pack.id, pack.name.toLowerCase(), ...pack.aliases].map((a) =>
-      a.toLowerCase().replace(/[^a-z0-9&]/g, "")
-    );
+    const candidates = [pack.id, pack.name, ...pack.aliases].map(genreKey);
     if (candidates.includes(norm)) return pack;
   }
   return null;

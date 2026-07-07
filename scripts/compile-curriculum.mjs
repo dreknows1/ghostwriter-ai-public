@@ -70,6 +70,31 @@ const GENRE_PACKS = [
     aliases: ["pop music"],
     profileFile: "SONGWRITING_PROFILE_POP.md",
   },
+  {
+    section: "Reggaetón", id: "reggaeton", name: "Reggaetón",
+    aliases: ["reggaeton", "reguetón", "regueton", "perreo", "urbano", "reggaeton music"],
+    profileFile: "SONGWRITING_PROFILE_REGGAETON.md",
+  },
+  {
+    section: "Bachata", id: "bachata", name: "Bachata",
+    aliases: ["bachata music", "bachata sensual", "bachata moderna", "bachata tradicional"],
+    profileFile: "SONGWRITING_PROFILE_BACHATA.md",
+  },
+  {
+    section: "Regional Mexicano", id: "regionalmexicano", name: "Regional Mexicano",
+    aliases: ["regional", "banda", "norteño", "norteno", "corrido", "sierreño", "sierreno", "musica mexicana", "música mexicana"],
+    profileFile: "SONGWRITING_PROFILE_REGIONALMEXICANO.md",
+  },
+  {
+    section: "Salsa", id: "salsa", name: "Salsa",
+    aliases: ["salsa music", "salsa dura", "salsa romantica", "salsa romántica", "timba", "salsa brava"],
+    profileFile: "SONGWRITING_PROFILE_SALSA.md",
+  },
+  {
+    section: "Corrido Tumbado", id: "corridotumbado", name: "Corrido Tumbado",
+    aliases: ["corridos tumbados", "tumbado", "tumbados", "corrido belico", "corrido bélico", "corridos belicos", "trap corrido", "corridos"],
+    profileFile: "SONGWRITING_PROFILE_CORRIDOTUMBADO.md",
+  },
 ];
 
 // The plan's build check: no quoted lyric lines anywhere in compiled writer text.
