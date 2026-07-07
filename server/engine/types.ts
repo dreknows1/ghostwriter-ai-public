@@ -69,6 +69,8 @@ export type CompiledCurriculum = {
   validTags: string[];
   /** per-genre questionnaire worlds (SONGWRITING_GENRES.md) — themes/purposes/instruments; UI concern */
   genreBuilder?: Record<string, { themes: string[]; purposes: string[]; instruments: string[] }>;
+  /** language -> its native genre worlds (English + es/fr/pt catalogs); UI concern */
+  genreBuilderByLang?: Record<string, Record<string, { themes: string[]; purposes: string[]; instruments: string[] }>>;
   genres: Record<string, GenrePack>;
   /** sha256 of all source docs — reported on /api/health as curriculumHash */
   hash: string;

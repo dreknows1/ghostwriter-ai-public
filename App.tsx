@@ -170,6 +170,8 @@ const SongBuilder: React.FC<{
   const [roomPacks, setRoomPacks] = useState<RoomPacks | null>(null);
   // Per-genre questionnaire worlds (themes/purposes/instruments) from the curriculum.
   const [genreWorlds, setGenreWorlds] = useState<Record<string, GenreWorld> | null>(null);
+  // language -> its native genre worlds (English + es/fr/pt from the curriculum)
+  const [genresByLang, setGenresByLang] = useState<Record<string, Record<string, GenreWorld>> | null>(null);
   // "Write my own" affordance — one draft box, keyed to the step it's open on.
   const [customFor, setCustomFor] = useState<BuilderStepId | null>(null);
   const [customDraft, setCustomDraft] = useState('');
@@ -192,6 +194,9 @@ const SongBuilder: React.FC<{
         if (!cancelled && json && typeof json.genreBuilder === 'object' && json.genreBuilder) {
           setGenreWorlds(json.genreBuilder as Record<string, GenreWorld>);
         }
+        if (!cancelled && json && typeof json.genreBuilderByLang === 'object' && json.genreBuilderByLang) {
+          setGenresByLang(json.genreBuilderByLang as Record<string, Record<string, GenreWorld>>);
+        }
       } catch {
         // Silent: the builder works fine without sub-genre rooms.
       }
@@ -204,7 +209,13 @@ const SongBuilder: React.FC<{
   // Question logic is genre-logical: each genre's world (from the curriculum) supplies its
   // own themes/purposes/instruments; a picked deep room narrows further. Custom picks
   // (typed answers) bypass the lists entirely.
-  const world: GenreWorld | null = (genreWorlds && genreWorlds[genre]) || null;
+  // The chosen language decides which genres appear and each genre's world.
+  const langCatalog: Record<string, GenreWorld> | null =
+    (genresByLang && (genresByLang[language] || genresByLang['English'])) || genreWorlds;
+  const genreChips: string[] = langCatalog && Object.keys(langCatalog).length
+    ? Object.keys(langCatalog)
+    : ENGLISH_GENRES;
+  const world: GenreWorld | null = (langCatalog && langCatalog[genre]) || (genreWorlds && genreWorlds[genre]) || null;
   const themeBase = world?.themes?.length ? world.themes : THEME_OPTIONS;
   const roomThemes = selectedRoom?.themes?.length
     ? themeBase.filter((t) => selectedRoom.themes!.includes(t))
@@ -280,7 +291,7 @@ const SongBuilder: React.FC<{
 
   const headers: Record<BuilderStepId, { title: string; caption: string }> = {
     language: { title: 'What language will it sing in?', caption: 'The lyrics follow your language' },
-    genre: { title: "What's your sound?", caption: 'Pick a genre or type your own — every question below follows it' },
+    genre: { title: "What's your sound?", caption: language === 'English' ? 'Pick a genre or type your own — every question below follows it' : `${language} genres — pick one or type your own` },
     room: { title: 'Pick your room', caption: `The corner of ${genre} this song lives in` },
     theme: { title: 'What is this song about?', caption: 'The heart of the song' },
     purpose: { title: 'What should this song DO?', caption: 'Its job in the room' },
@@ -407,7 +418,10 @@ const SongBuilder: React.FC<{
             <button
               key={l}
               type="button"
-              onClick={() => { setLanguage(l); goNext(); }}
+              onClick={() => {
+                if (l !== language) { setGenre(''); setSubGenre(''); setInstruments([]); setTheme(''); setPurpose(''); }
+                setLanguage(l); goNext();
+              }}
               className={`${chipBase} ${language === l ? chipPicked : chipIdle}`}
             >
               {l}
@@ -419,7 +433,7 @@ const SongBuilder: React.FC<{
       {stepId === 'genre' && (
         <div>
           <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3 sm:gap-4">
-            {ENGLISH_GENRES.map((g) => (
+            {genreChips.map((g) => (
               <button
                 key={g}
                 onClick={() => pickGenre(g)}

@@ -372,6 +372,1432 @@ var CURRICULUM = {
       ]
     }
   },
+  "genreBuilderByLang": {
+    "English": {
+      "R&B": {
+        "themes": [
+          "New love",
+          "Deep love / devotion",
+          "Complicated love",
+          "Heartbreak / letting go",
+          "Missing someone",
+          "Celebration / milestone",
+          "Family",
+          "Faith / gratitude",
+          "Growth / proving myself",
+          "Remembering someone"
+        ],
+        "purposes": [
+          "Slow dance",
+          "Bring happy tears",
+          "Party / celebrate",
+          "Make them feel seen",
+          "Testify / give thanks",
+          "Win them back",
+          "Say what I never said"
+        ],
+        "instruments": [
+          "soft keys",
+          "808 sub-bass",
+          "live bass",
+          "Rhodes piano",
+          "saxophone",
+          "strings",
+          "brushed drums",
+          "muted guitar"
+        ]
+      },
+      "Hip-Hop": {
+        "themes": [
+          "The come-up / hustle",
+          "Proving them wrong",
+          "Where I'm from",
+          "Love & loyalty",
+          "Losing a friend",
+          "Money & ambition",
+          "The struggle",
+          "Celebration / flexing"
+        ],
+        "purposes": [
+          "Flex / celebrate",
+          "Tell my story",
+          "Motivate the ones grinding",
+          "Ride music",
+          "Call somebody out",
+          "Grieve a loss"
+        ],
+        "instruments": [
+          "heavy 808s",
+          "boom-bap drums",
+          "dusty piano loop",
+          "soul sample chops",
+          "dark synth lead",
+          "strings",
+          "live bass"
+        ]
+      },
+      "Gospel": {
+        "themes": [
+          "Praise & worship",
+          "Testimony / what God brought me through",
+          "Gratitude",
+          "Faith through the storm",
+          "Deliverance",
+          "Celebration of His love",
+          "For the congregation"
+        ],
+        "purposes": [
+          "Worship / exalt",
+          "Testify",
+          "Lift the congregation",
+          "Comfort in grief",
+          "Celebrate",
+          "Encourage / motivate",
+          "Altar call"
+        ],
+        "instruments": [
+          "Hammond organ",
+          "grand piano",
+          "full choir",
+          "tambourine",
+          "live bass",
+          "gospel drums",
+          "handclaps"
+        ]
+      },
+      "Reggae": {
+        "themes": [
+          "One love / unity",
+          "Sufferation & struggle",
+          "Praise & spirituality",
+          "Romance (lovers rock)",
+          "Freedom & justice",
+          "Celebration",
+          "Missing someone",
+          "Confidence & swagger",
+          "Proving them wrong"
+        ],
+        "purposes": [
+          "Uplift the people",
+          "Protest",
+          "Romance",
+          "Slow dance",
+          "Skank / dance",
+          "Give thanks",
+          "Party / celebrate",
+          "Flex / celebrate"
+        ],
+        "instruments": [
+          "one-drop drums",
+          "skanking guitar",
+          "organ bubble",
+          "deep bass",
+          "horns",
+          "melodica"
+        ]
+      },
+      "Afrobeats": {
+        "themes": [
+          "Celebration of life",
+          "Love & desire",
+          "Hustle & blessings",
+          "Homeland pride",
+          "Dance & good vibes",
+          "Gratitude"
+        ],
+        "purposes": [
+          "Dance",
+          "Celebrate",
+          "Romance",
+          "Give thanks",
+          "Summer anthem"
+        ],
+        "instruments": [
+          "log drums",
+          "talking drum",
+          "shakers",
+          "afro percussion",
+          "warm synth keys",
+          "guitar licks",
+          "deep bass"
+        ]
+      },
+      "Pop": {
+        "themes": [
+          "New love",
+          "Heartbreak",
+          "Self-empowerment",
+          "Night out / freedom",
+          "Nostalgia",
+          "Friendship",
+          "Missing someone"
+        ],
+        "purposes": [
+          "Sing along",
+          "Dance",
+          "Cry it out",
+          "Empower",
+          "Celebrate",
+          "Windows-down driving"
+        ],
+        "instruments": [
+          "bright synths",
+          "piano",
+          "electric guitar",
+          "punchy drums",
+          "strings",
+          "handclaps",
+          "vocal stacks"
+        ]
+      },
+      "Country": {
+        "themes": [
+          "Small-town life",
+          "First love",
+          "Heartbreak",
+          "Family & faith",
+          "Home & roots",
+          "Losing someone",
+          "Friday night"
+        ],
+        "purposes": [
+          "Two-step / dance",
+          "Cry in your beer",
+          "Tell a story",
+          "Celebrate",
+          "Honor someone"
+        ],
+        "instruments": [
+          "acoustic guitar",
+          "fiddle",
+          "pedal steel",
+          "banjo",
+          "upright bass",
+          "brushed drums",
+          "telecaster"
+        ]
+      },
+      "Rock": {
+        "themes": [
+          "Rebellion",
+          "Love & obsession",
+          "Feeling like an outsider",
+          "The road",
+          "Standing back up",
+          "Loss"
+        ],
+        "purposes": [
+          "Anthem / fists up",
+          "Raw energy",
+          "Power ballad",
+          "Drive music"
+        ],
+        "instruments": [
+          "electric guitars",
+          "live drums",
+          "driving bass",
+          "organ",
+          "power chords",
+          "feedback swells"
+        ]
+      },
+      "Soul": {
+        "themes": [
+          "Devotion",
+          "Heartache",
+          "Pride & respect",
+          "Longing",
+          "Celebration of love",
+          "Remembering someone"
+        ],
+        "purposes": [
+          "Slow dance",
+          "Testify my love",
+          "Cry it out",
+          "Celebrate"
+        ],
+        "instruments": [
+          "horns",
+          "Rhodes piano",
+          "live bass",
+          "tambourine",
+          "organ",
+          "strings",
+          "backing trio"
+        ]
+      },
+      "Blues": {
+        "themes": [
+          "Hard times",
+          "Love done me wrong",
+          "The road",
+          "Regret & redemption",
+          "Working for nothing"
+        ],
+        "purposes": [
+          "Moan it out",
+          "Shuffle / dance",
+          "Tell it straight"
+        ],
+        "instruments": [
+          "slide guitar",
+          "harmonica",
+          "upright bass",
+          "brushed drums",
+          "barrelhouse piano",
+          "resonator guitar"
+        ]
+      },
+      "Jazz": {
+        "themes": [
+          "Late-night romance",
+          "City nights",
+          "Longing",
+          "Bittersweet memory",
+          "New flame"
+        ],
+        "purposes": [
+          "Slow burn",
+          "Swing / dance",
+          "Croon it close"
+        ],
+        "instruments": [
+          "upright bass",
+          "brushed drums",
+          "piano trio",
+          "muted trumpet",
+          "tenor sax",
+          "comping guitar"
+        ]
+      },
+      "Folk": {
+        "themes": [
+          "Home & roots",
+          "Protest & justice",
+          "Plain-spoken love",
+          "Passing time",
+          "Nature & seasons",
+          "A person's story"
+        ],
+        "purposes": [
+          "Tell a story",
+          "Protest",
+          "Comfort",
+          "Sing together"
+        ],
+        "instruments": [
+          "acoustic guitar",
+          "banjo",
+          "fiddle",
+          "mandolin",
+          "harmonica",
+          "upright bass"
+        ]
+      },
+      "EDM": {
+        "themes": [
+          "Euphoria",
+          "Lost in the night",
+          "Freedom",
+          "Love rush",
+          "Letting go"
+        ],
+        "purposes": [
+          "The drop / rave",
+          "Festival anthem",
+          "Sunrise chill"
+        ],
+        "instruments": [
+          "supersaw synths",
+          "sidechained bass",
+          "four-on-the-floor kick",
+          "plucks",
+          "risers",
+          "vocal chops"
+        ]
+      },
+      "Metal": {
+        "themes": [
+          "Rage & defiance",
+          "Inner demons",
+          "War & darkness",
+          "Betrayal",
+          "Survival"
+        ],
+        "purposes": [
+          "Mosh",
+          "Scream it out",
+          "Epic saga"
+        ],
+        "instruments": [
+          "down-tuned guitars",
+          "double-kick drums",
+          "growling bass",
+          "blast beats",
+          "orchestral hits"
+        ]
+      }
+    },
+    "Spanish": {
+      "Reggaet\xF3n": {
+        "themes": [
+          "Perreo y fiesta",
+          "Deseo y calentura",
+          "Desamor y superaci\xF3n",
+          "Presumir y flexear",
+          "La disco y la noche",
+          "Amor t\xF3xico",
+          "Lealtad al barrio",
+          "Confianza y actitud"
+        ],
+        "purposes": [
+          "Perrear",
+          "Prender la disco",
+          "Presumir",
+          "Levantar el ego",
+          "Conquistar",
+          "Olvidar a alguien"
+        ],
+        "instruments": [
+          "dembow",
+          "sub bajo 808",
+          "sintetizador oscuro",
+          "hi-hats picados",
+          "pads atmosf\xE9ricos",
+          "efectos y vocal chops",
+          "snare del dembow"
+        ]
+      },
+      "Bachata": {
+        "themes": [
+          "Amor y desamor",
+          "Traici\xF3n",
+          "Nostalgia",
+          "Borrachera de despecho",
+          "Amor imposible",
+          "Rogar y suplicar",
+          "Celos",
+          "Recuerdos de un amor"
+        ],
+        "purposes": [
+          "Bailar pegado",
+          "Llorar el despecho",
+          "Dedicar a un amor",
+          "Rogar que vuelva",
+          "Desahogar la pena"
+        ],
+        "instruments": [
+          "requinto",
+          "guitarra r\xEDtmica",
+          "bong\xF3",
+          "g\xFCira",
+          "bajo",
+          "segunda guitarra",
+          "maracas"
+        ]
+      },
+      "Regional Mexicano": {
+        "themes": [
+          "La lucha y el trabajo",
+          "El rancho y la tierra",
+          "Lealtad y la palabra",
+          "La frontera",
+          "El corrido de un valiente",
+          "Traici\xF3n y venganza",
+          "Orgullo del pueblo",
+          "La familia y la madre"
+        ],
+        "purposes": [
+          "Contar una historia",
+          "Honrar a alguien",
+          "Presumir el logro",
+          "Bailar en la fiesta",
+          "Recordar al ausente",
+          "Celebrar con la banda"
+        ],
+        "instruments": [
+          "acorde\xF3n",
+          "bajo sexto",
+          "tuba",
+          "tarola",
+          "charcheta",
+          "clarinete",
+          "trompetas de banda"
+        ]
+      },
+      "Salsa": {
+        "themes": [
+          "El barrio y la calle",
+          "Romance caliente",
+          "Celebraci\xF3n y rumba",
+          "Orgullo latino",
+          "Amor y enga\xF1o",
+          "Nostalgia del que se fue",
+          "Injusticia social",
+          "Sabor y alegr\xEDa de vivir"
+        ],
+        "purposes": [
+          "Bailar en la pista",
+          "Celebrar la rumba",
+          "Enamorar",
+          "Recordar la tierra",
+          "Encender la fiesta",
+          "Contar la vida del barrio"
+        ],
+        "instruments": [
+          "timbales",
+          "congas",
+          "bong\xF3",
+          "piano montuno",
+          "trompetas",
+          "tromb\xF3n",
+          "bajo tumbao",
+          "campana"
+        ]
+      },
+      "Cumbia": {
+        "themes": [
+          "El baile y la fiesta del pueblo",
+          "Amor sencillo",
+          "La cantina y el trago",
+          "Nostalgia y migraci\xF3n",
+          "Alegr\xEDa popular",
+          "Desamor con sabor",
+          "Orgullo del barrio",
+          "La vida cotidiana"
+        ],
+        "purposes": [
+          "Bailar en la fiesta",
+          "Alegrar la reuni\xF3n",
+          "Enamorar",
+          "Cantar en la cantina",
+          "Prender el bailongo"
+        ],
+        "instruments": [
+          "acorde\xF3n",
+          "guacharaca",
+          "g\xFCira",
+          "teclado tropical",
+          "bajo",
+          "congas",
+          "timbal",
+          "guitarra"
+        ]
+      },
+      "Merengue": {
+        "themes": [
+          "Fiesta y desenfreno",
+          "Amor y coqueteo",
+          "Picard\xEDa y doble sentido",
+          "Orgullo dominicano",
+          "Desamor con humor",
+          "La calle y el ambiente",
+          "Celebraci\xF3n sin parar",
+          "Sabrosura"
+        ],
+        "purposes": [
+          "Bailar r\xE1pido",
+          "Prender la fiesta",
+          "Coquetear",
+          "Re\xEDr y gozar",
+          "Encender el ambiente"
+        ],
+        "instruments": [
+          "tambora",
+          "g\xFCira",
+          "acorde\xF3n",
+          "saxof\xF3n",
+          "piano",
+          "bajo",
+          "metales"
+        ]
+      },
+      "Vallenato": {
+        "themes": [
+          "Amor y despecho",
+          "La tierra y el campo",
+          "La parranda entre amigos",
+          "Nostalgia del terru\xF1o",
+          "Amor imposible",
+          "La mujer que se fue",
+          "Vivencias y an\xE9cdotas",
+          "El r\xEDo y el pueblo"
+        ],
+        "purposes": [
+          "Enamorar",
+          "Parrandear con los amigos",
+          "Llorar el desamor",
+          "Contar una vivencia",
+          "Recordar la tierra"
+        ],
+        "instruments": [
+          "acorde\xF3n",
+          "caja vallenata",
+          "guacharaca",
+          "bajo",
+          "guitarra",
+          "coros"
+        ]
+      },
+      "Balada / Bolero": {
+        "themes": [
+          "Amor eterno",
+          "Desamor y p\xE9rdida",
+          "Nostalgia",
+          "Amor prohibido",
+          "Soledad",
+          "Recuerdos de un gran amor",
+          "Arrepentimiento",
+          "Entrega total al amor"
+        ],
+        "purposes": [
+          "Dedicar a un amor",
+          "Llorar la p\xE9rdida",
+          "Enamorar despacio",
+          "Recordar a alguien",
+          "Pedir perd\xF3n"
+        ],
+        "instruments": [
+          "piano",
+          "cuerdas",
+          "guitarra espa\xF1ola",
+          "requinto",
+          "bajo",
+          "contrabajo",
+          "percusi\xF3n suave"
+        ]
+      },
+      "Pop Latino": {
+        "themes": [
+          "Amor nuevo",
+          "Desamor y superaci\xF3n",
+          "Empoderamiento",
+          "Amor de verano",
+          "Nostalgia",
+          "Amistad",
+          "Sentirse libre",
+          "Extra\xF1ar a alguien"
+        ],
+        "purposes": [
+          "Cantar a coro",
+          "Bailar",
+          "Superar una ruptura",
+          "Sentirse fuerte",
+          "Celebrar",
+          "Enamorar"
+        ],
+        "instruments": [
+          "sintetizadores brillantes",
+          "piano",
+          "guitarra el\xE9ctrica",
+          "bater\xEDa pop",
+          "palmas",
+          "percusi\xF3n latina",
+          "coros"
+        ]
+      },
+      "Latin Trap / Trap Latino": {
+        "themes": [
+          "La calle y el bloque",
+          "Dinero y ambici\xF3n",
+          "La lucha y el hambre",
+          "Amor t\xF3xico",
+          "Lealtad y traici\xF3n",
+          "Presumir lo conseguido",
+          "Desconfianza",
+          "Vicios y noche"
+        ],
+        "purposes": [
+          "Contar mi historia",
+          "Flexear el logro",
+          "Motivar al que lucha",
+          "Encarar a alguien",
+          "Desahogar la calle",
+          "Prender el ambiente"
+        ],
+        "instruments": [
+          "808 profundo",
+          "hi-hats en tresillos",
+          "sintetizador melanc\xF3lico",
+          "pads oscuros",
+          "efectos y ad-libs",
+          "piano sombr\xEDo"
+        ]
+      },
+      "Flamenco / Rumba": {
+        "themes": [
+          "El quej\xEDo y el dolor",
+          "Amor y pasi\xF3n",
+          "La fiesta y la juerga",
+          "Orgullo y ra\xEDces",
+          "Pena y desenga\xF1o",
+          "Libertad",
+          "La tierra y el pueblo",
+          "La vida gitana"
+        ],
+        "purposes": [
+          "Sentir el quej\xEDo",
+          "Prender la fiesta",
+          "Enamorar con arte",
+          "Desahogar la pena",
+          "Palmear y bailar"
+        ],
+        "instruments": [
+          "guitarra flamenca",
+          "palmas",
+          "caj\xF3n",
+          "casta\xF1uelas",
+          "jaleo y coros",
+          "bajo",
+          "taconeo"
+        ]
+      },
+      "Mariachi / Ranchera": {
+        "themes": [
+          "Amor y desamor",
+          "Borrachera de despecho",
+          "Orgullo mexicano",
+          "La madre y la familia",
+          "Traici\xF3n",
+          "Nostalgia del pueblo",
+          "Amor eterno",
+          "Fuerza para seguir"
+        ],
+        "purposes": [
+          "Cantar con el alma",
+          "Dedicar a un amor",
+          "Ahogar las penas",
+          "Celebrar con mariachi",
+          "Honrar a alguien",
+          "Recordar la tierra"
+        ],
+        "instruments": [
+          "trompetas",
+          "violines",
+          "vihuela",
+          "guitarr\xF3n",
+          "guitarra",
+          "arpa"
+        ]
+      },
+      "Corrido Tumbado": {
+        "themes": [
+          "La vida en la calle",
+          "La lucha y el ascenso",
+          "Lealtad y el clan",
+          "Dinero y lujos",
+          "Traici\xF3n",
+          "Orgullo del barrio",
+          "La frontera",
+          "Adrenalina y riesgo"
+        ],
+        "purposes": [
+          "Contar una historia",
+          "Presumir el logro",
+          "Honrar a los leales",
+          "Encender la fiesta",
+          "Motivar al que lucha",
+          "Recordar de d\xF3nde vengo"
+        ],
+        "instruments": [
+          "guitarra requinto",
+          "bajo sexto",
+          "tuba",
+          "charcheta",
+          "808 sutil",
+          "guitarra ac\xFAstica"
+        ]
+      }
+    },
+    "French": {
+      "Chanson Fran\xE7aise": {
+        "themes": [
+          "L'amour et ses vertiges",
+          "La m\xE9lancolie et le spleen",
+          "Paris et ses rues",
+          "La condition humaine",
+          "L'engagement et la r\xE9volte",
+          "Le temps qui passe",
+          "La nostalgie de l'enfance",
+          "La libert\xE9",
+          "Les gens ordinaires",
+          "La mort et l'absence"
+        ],
+        "purposes": [
+          "Raconter une histoire",
+          "\xC9mouvoir jusqu aux larmes",
+          "D\xE9noncer une injustice",
+          "Rendre hommage \xE0 quelqu un",
+          "Faire r\xE9fl\xE9chir",
+          "Chanter la vie"
+        ],
+        "instruments": [
+          "guitare s\xE8che",
+          "piano",
+          "accord\xE9on",
+          "contrebasse",
+          "cordes",
+          "clarinette",
+          "balais sur batterie"
+        ]
+      },
+      "Vari\xE9t\xE9 Fran\xE7aise": {
+        "themes": [
+          "L'amour naissant",
+          "La rupture",
+          "Le souvenir",
+          "La f\xEAte et l'insouciance",
+          "L'\xE9t\xE9 et les vacances",
+          "La famille",
+          "Grandir et vieillir",
+          "L'espoir malgr\xE9 tout"
+        ],
+        "purposes": [
+          "Chanter en ch\u0153ur",
+          "Danser",
+          "Pleurer un chagrin",
+          "C\xE9l\xE9brer",
+          "R\xE9conforter",
+          "Faire vibrer un stade"
+        ],
+        "instruments": [
+          "piano",
+          "synth\xE9",
+          "guitare \xE9lectrique",
+          "cordes",
+          "batterie franche",
+          "basse",
+          "ch\u0153urs",
+          "cuivres"
+        ]
+      },
+      "Rap Fran\xE7ais": {
+        "themes": [
+          "La rue et le quartier",
+          "La r\xE9ussite et l'ambition",
+          "La famille et la m\xE8re",
+          "Les origines et le pays",
+          "L'injustice et le syst\xE8me",
+          "La loyaut\xE9 et les vrais",
+          "L'argent et la d\xE9brouille",
+          "La foi",
+          "Prouver aux autres",
+          "Le deuil d'un fr\xE8re"
+        ],
+        "purposes": [
+          "Raconter mon histoire",
+          "Repr\xE9senter d'o\xF9 je viens",
+          "Motiver ceux qui gal\xE8rent",
+          "Clasher / r\xE9pondre",
+          "Faire bouger la t\xEAte",
+          "Rendre hommage \xE0 un disparu",
+          "C\xE9l\xE9brer la r\xE9ussite"
+        ],
+        "instruments": [
+          "808 lourdes",
+          "bo\xEEte \xE0 rythmes trap",
+          "sample soul",
+          "piano sombre",
+          "nappes de synth\xE9",
+          "cordes",
+          "basse profonde",
+          "boom-bap"
+        ]
+      },
+      "Zouk": {
+        "themes": [
+          "L'amour sensuel",
+          "La s\xE9paration et le manque",
+          "La f\xEAte et le carnaval",
+          "Le pays natal et l'exil",
+          "La femme aim\xE9e",
+          "La douceur des \xEEles",
+          "La jalousie",
+          "La joie de vivre cr\xE9ole"
+        ],
+        "purposes": [
+          "Danser coll\xE9",
+          "S\xE9duire",
+          "C\xE9l\xE9brer le pays",
+          "Faire la f\xEAte",
+          "Consoler un c\u0153ur bris\xE9",
+          "Ambiancer la soir\xE9e"
+        ],
+        "instruments": [
+          "ti-bwa",
+          "tambour ka",
+          "bo\xEEte \xE0 rythmes",
+          "synth\xE9 chaud",
+          "guitare rythmique",
+          "basse ronde",
+          "cuivres",
+          "congas"
+        ]
+      },
+      "Afro": {
+        "themes": [
+          "La f\xEAte et l'ambiance",
+          "L'amour et le d\xE9sir",
+          "La d\xE9brouille et les b\xE9n\xE9dictions",
+          "La fiert\xE9 du continent",
+          "La femme",
+          "La r\xE9ussite",
+          "Danser jusqu au bout de la nuit",
+          "La joie communicative"
+        ],
+        "purposes": [
+          "Danser",
+          "Ambiancer le dancefloor",
+          "S\xE9duire",
+          "C\xE9l\xE9brer",
+          "Remercier Dieu",
+          "Faire l'anth\xE8me de l'\xE9t\xE9"
+        ],
+        "instruments": [
+          "percussions afro",
+          "djemb\xE9",
+          "shakers",
+          "guitare highlife",
+          "synth\xE9 chaud",
+          "basse profonde",
+          "bo\xEEte \xE0 rythmes",
+          "congas"
+        ]
+      },
+      "Ra\xEF": {
+        "themes": [
+          "L'amour interdit",
+          "La douleur et la solitude",
+          "L'exil et le bled",
+          "La libert\xE9",
+          "La f\xEAte et l'ivresse",
+          "Le destin et la vie dure",
+          "La nostalgie du pays",
+          "La jeunesse"
+        ],
+        "purposes": [
+          "Danser",
+          "Vider son c\u0153ur",
+          "C\xE9l\xE9brer un mariage",
+          "Faire la f\xEAte",
+          "Chanter l'amour impossible",
+          "Ambiancer"
+        ],
+        "instruments": [
+          "derbouka",
+          "synth\xE9 oriental",
+          "accord\xE9on",
+          "guembri",
+          "violon",
+          "bo\xEEte \xE0 rythmes",
+          "guitare",
+          "cuivres"
+        ]
+      },
+      "Ballade Fran\xE7aise": {
+        "themes": [
+          "L'amour profond",
+          "Le manque de l'\xEAtre aim\xE9",
+          "La rupture et le regret",
+          "Le souvenir tendre",
+          "La promesse",
+          "La solitude",
+          "Le pardon",
+          "L'espoir d'un retour"
+        ],
+        "purposes": [
+          "\xC9mouvoir jusqu aux larmes",
+          "D\xE9clarer sa flamme",
+          "Danser un slow",
+          "Consoler",
+          "Rendre hommage"
+        ],
+        "instruments": [
+          "piano",
+          "cordes",
+          "guitare s\xE8che",
+          "nappes de synth\xE9",
+          "basse douce",
+          "batterie feutr\xE9e",
+          "violoncelle"
+        ]
+      },
+      "French Touch": {
+        "themes": [
+          "L'euphorie de la nuit",
+          "L'amour \xE9lectrique",
+          "La libert\xE9",
+          "La nostalgie douce",
+          "Se perdre dans la f\xEAte",
+          "Le rush du dancefloor",
+          "Paris la nuit"
+        ],
+        "purposes": [
+          "Danser toute la nuit",
+          "Faire l'anth\xE8me de club",
+          "Planer au lever du soleil",
+          "Se l\xE2cher",
+          "Ambiancer un festival"
+        ],
+        "instruments": [
+          "synth\xE9s filtr\xE9s",
+          "basse funky",
+          "bo\xEEte \xE0 rythmes house",
+          "nappes analogiques",
+          "samples disco",
+          "vocoder",
+          "claps",
+          "four-on-the-floor"
+        ]
+      },
+      "Slam": {
+        "themes": [
+          "La condition humaine",
+          "L'injustice sociale",
+          "Les origines et l'identit\xE9",
+          "La ville et ses oubli\xE9s",
+          "L'amour et la perte",
+          "L'enfance",
+          "La r\xE9volte",
+          "La qu\xEAte de sens"
+        ],
+        "purposes": [
+          "Faire passer un message",
+          "\xC9mouvoir",
+          "D\xE9noncer",
+          "Raconter une histoire vraie",
+          "Faire r\xE9fl\xE9chir",
+          "Poser des mots sur un silence"
+        ],
+        "instruments": [
+          "piano",
+          "contrebasse",
+          "guitare s\xE8che",
+          "nappes discr\xE8tes",
+          "percussions l\xE9g\xE8res",
+          "violoncelle",
+          "ambiances feutr\xE9es"
+        ]
+      },
+      "RnB Fran\xE7ais": {
+        "themes": [
+          "L'amour naissant",
+          "L'amour compliqu\xE9",
+          "Le manque et la distance",
+          "La sensualit\xE9",
+          "La trahison",
+          "La nuit et les sentiments",
+          "Grandir et s'affirmer",
+          "La famille"
+        ],
+        "purposes": [
+          "Danser un slow",
+          "S\xE9duire",
+          "Vider son c\u0153ur",
+          "Se sentir compris",
+          "Ambiancer la nuit",
+          "Reconqu\xE9rir quelqu un"
+        ],
+        "instruments": [
+          "claviers doux",
+          "808 sub-bass",
+          "Rhodes",
+          "nappes de synth\xE9",
+          "guitare feutr\xE9e",
+          "cordes",
+          "bo\xEEte \xE0 rythmes",
+          "basse live"
+        ]
+      },
+      "Musette": {
+        "themes": [
+          "Paris et ses guinguettes",
+          "L'amour d'autrefois",
+          "La nostalgie",
+          "Le bal et la valse",
+          "Les amours de bistrot",
+          "La joie populaire",
+          "Le souvenir des anciens"
+        ],
+        "purposes": [
+          "Danser la valse",
+          "Faire tourner le bal",
+          "\xC9mouvoir avec nostalgie",
+          "C\xE9l\xE9brer une f\xEAte",
+          "Rassembler les g\xE9n\xE9rations"
+        ],
+        "instruments": [
+          "accord\xE9on",
+          "guitare manouche",
+          "contrebasse",
+          "banjo",
+          "violon",
+          "clarinette",
+          "piano"
+        ]
+      }
+    },
+    "Portuguese": {
+      "MPB": {
+        "themes": [
+          "Amor maduro e cotidiano",
+          "O Brasil e sua gente",
+          "Saudade e passagem do tempo",
+          "Poesia do dia a dia",
+          "Cr\xEDtica social e esperan\xE7a",
+          "Mar, sol e paisagem",
+          "Reencontro e despedida",
+          "Mem\xF3ria e ra\xEDzes",
+          "Beleza nas pequenas coisas",
+          "A vida como ela \xE9"
+        ],
+        "purposes": [
+          "Emocionar e fazer pensar",
+          "Cantar junto de viol\xE3o",
+          "Homenagear algu\xE9m",
+          "Dizer uma verdade com delicadeza",
+          "Celebrar a vida",
+          "Consolar"
+        ],
+        "instruments": [
+          "viol\xE3o",
+          "piano",
+          "cordas",
+          "flauta",
+          "percuss\xE3o brasileira",
+          "contrabaixo ac\xFAstico",
+          "sopros suaves",
+          "voz e coro"
+        ]
+      },
+      "Bossa Nova": {
+        "themes": [
+          "Saudade serena",
+          "O amor tranquilo",
+          "O mar e a orla do Rio",
+          "A garota que passa",
+          "Fim de tarde e melancolia doce",
+          "Desejo contido",
+          "Sofistica\xE7\xE3o e intimidade",
+          "A beleza discreta"
+        ],
+        "purposes": [
+          "Sussurrar bem de perto",
+          "Dan\xE7a a dois lenta",
+          "Embalar um fim de noite",
+          "Seduzir com suavidade",
+          "Acalmar o cora\xE7\xE3o"
+        ],
+        "instruments": [
+          "viol\xE3o de nylon",
+          "piano",
+          "contrabaixo ac\xFAstico",
+          "bateria com vassourinhas",
+          "flauta",
+          "saxofone suave",
+          "voz sussurrada"
+        ]
+      },
+      "Sertanejo": {
+        "themes": [
+          "Amor sofrido",
+          "A mod\xE3o e a dor de cotovelo",
+          "A ro\xE7a e a viola",
+          "Cerveja e desilus\xE3o",
+          "O pe\xE3o e a estrada",
+          "Trai\xE7\xE3o e saudade",
+          "Balada e paquera na festa",
+          "Homenagem \xE0 m\xE3e e \xE0 terra",
+          "Supera\xE7\xE3o depois do fim"
+        ],
+        "purposes": [
+          "Chorar as m\xE1goas",
+          "Dan\xE7ar agarradinho",
+          "Beber e esquecer",
+          "Cantar no karaok\xEA com os amigos",
+          "Declarar um amor",
+          "Animar o rodeio"
+        ],
+        "instruments": [
+          "viola caipira",
+          "viol\xE3o",
+          "sanfona",
+          "acorde\xE3o",
+          "contrabaixo",
+          "bateria",
+          "teclado",
+          "guitarra"
+        ]
+      },
+      "Samba": {
+        "themes": [
+          "Alegria apesar da vida",
+          "Malandragem e ginga",
+          "Amor e ci\xFAme",
+          "O botequim e a roda",
+          "Saudade do que ficou",
+          "Orgulho do samba e do morro",
+          "F\xE9 e agradecimento",
+          "A batucada da comunidade",
+          "Resist\xEAncia com sorriso no rosto"
+        ],
+        "purposes": [
+          "Fazer sambar",
+          "Levantar a roda",
+          "Celebrar em grupo",
+          "Chorar de saudade sorrindo",
+          "Homenagear o samba e seus mestres",
+          "Animar o boteco"
+        ],
+        "instruments": [
+          "cavaquinho",
+          "pandeiro",
+          "surdo",
+          "tant\xE3",
+          "cu\xEDca",
+          "viol\xE3o de sete cordas",
+          "tamborim",
+          "agog\xF4"
+        ]
+      },
+      "Pagode": {
+        "themes": [
+          "Amor apaixonado",
+          "O churrasco e a resenha",
+          "Cora\xE7\xE3o partido",
+          "Paquera e desejo",
+          "Amizade e roda de amigos",
+          "Saudade da antiga",
+          "Reconcilia\xE7\xE3o",
+          "Curti\xE7\xE3o de fim de semana",
+          "Ci\xFAme e volta por cima"
+        ],
+        "purposes": [
+          "Animar o churrasco",
+          "Dan\xE7ar coladinho",
+          "Cantar com a galera",
+          "Chorar um t\xE9rmino",
+          "Paquerar na festa",
+          "Celebrar a amizade"
+        ],
+        "instruments": [
+          "cavaquinho",
+          "banjo",
+          "pandeiro",
+          "tant\xE3",
+          "repique de m\xE3o",
+          "viol\xE3o",
+          "surdo",
+          "teclado"
+        ]
+      },
+      "Funk Carioca": {
+        "themes": [
+          "O baile e a pista",
+          "A quebrada e a favela",
+          "Ostenta\xE7\xE3o e conquista",
+          "Desejo e sensualidade",
+          "F\xE9 e agradecimento a Deus",
+          "Supera\xE7\xE3o da comunidade",
+          "Poder feminino e atitude",
+          "A vida na correria",
+          "Orgulho de onde vim"
+        ],
+        "purposes": [
+          "Botar pra quebrar no baile",
+          "Rebolar e dan\xE7ar",
+          "Ostentar e celebrar",
+          "Provocar e seduzir",
+          "Contar a realidade da rua",
+          "Dar volta por cima"
+        ],
+        "instruments": [
+          "batida de funk",
+          "tamborz\xE3o",
+          "808 grave",
+          "beat eletr\xF4nico",
+          "sintetizador",
+          "sample vocal",
+          "percuss\xE3o eletr\xF4nica"
+        ]
+      },
+      "Forr\xF3": {
+        "themes": [
+          "Amor e paix\xE3o nordestina",
+          "Saudade do sert\xE3o e da terra natal",
+          "O S\xE3o Jo\xE3o e a fogueira",
+          "Namoro no arraial",
+          "A seca e a esperan\xE7a de chuva",
+          "A vida do sertanejo",
+          "Reencontro depois da dist\xE2ncia",
+          "Alegria do Nordeste"
+        ],
+        "purposes": [
+          "Dan\xE7ar colado o forr\xF3",
+          "Animar o S\xE3o Jo\xE3o",
+          "Matar a saudade da terra",
+          "Namorar no arrasta-p\xE9",
+          "Celebrar o Nordeste",
+          "Aquecer a festa junina"
+        ],
+        "instruments": [
+          "sanfona",
+          "zabumba",
+          "tri\xE2ngulo",
+          "acorde\xE3o",
+          "contrabaixo",
+          "viol\xE3o",
+          "rabeca",
+          "p\xEDfano"
+        ]
+      },
+      "Pop Brasileiro": {
+        "themes": [
+          "Amor novo e paix\xE3o",
+          "Supera\xE7\xE3o e autoestima",
+          "Noite e liberdade",
+          "Cora\xE7\xE3o partido",
+          "Amizade e juventude",
+          "Saudade de algu\xE9m",
+          "Empoderamento e brilho pr\xF3prio"
+        ],
+        "purposes": [
+          "Cantar junto",
+          "Dan\xE7ar",
+          "Chorar e superar",
+          "Empoderar",
+          "Celebrar",
+          "Curtir de janela aberta"
+        ],
+        "instruments": [
+          "sintetizadores brilhantes",
+          "piano",
+          "guitarra",
+          "bateria marcante",
+          "cordas",
+          "palmas",
+          "camadas de voz",
+          "contrabaixo"
+        ]
+      },
+      "Ax\xE9": {
+        "themes": [
+          "Alegria da Bahia",
+          "Carnaval e folia",
+          "Amor de ver\xE3o",
+          "Sensualidade e dan\xE7a",
+          "Orgulho baiano e afro",
+          "Curti\xE7\xE3o no bloco",
+          "Energia e liberdade",
+          "Celebra\xE7\xE3o da vida"
+        ],
+        "purposes": [
+          "Pular o Carnaval",
+          "Dan\xE7ar sem parar",
+          "Levantar o bloco",
+          "Animar o ver\xE3o",
+          "Celebrar a Bahia",
+          "Contagiar a multid\xE3o"
+        ],
+        "instruments": [
+          "guitarra baiana",
+          "timbau",
+          "surdo",
+          "percuss\xE3o afro",
+          "agog\xF4",
+          "sopros",
+          "repique",
+          "teclado"
+        ]
+      },
+      "Piseiro / Arrocha": {
+        "themes": [
+          "Amor sofrido e trai\xE7\xE3o",
+          "Balada e bebedeira",
+          "Paquera e sofr\xEAncia",
+          "Cora\xE7\xE3o partido de novo",
+          "Curti\xE7\xE3o na vaquejada",
+          "Volta por cima com atitude",
+          "Saudade misturada com festa",
+          "Desejo e reconcilia\xE7\xE3o"
+        ],
+        "purposes": [
+          "Dan\xE7ar agarradinho",
+          "Beber e chorar a sofr\xEAncia",
+          "Animar o pared\xE3o",
+          "Cantar com os amigos na farra",
+          "Esquecer um amor",
+          "Levantar a vaquejada"
+        ],
+        "instruments": [
+          "teclado de piseiro",
+          "sintetizador",
+          "acorde\xE3o eletr\xF4nico",
+          "batida eletr\xF4nica",
+          "contrabaixo",
+          "groovebox",
+          "percuss\xE3o"
+        ]
+      },
+      "Fado": {
+        "themes": [
+          "Saudade e destino",
+          "Lisboa e o Tejo",
+          "O fado da vida e a sina",
+          "Amor perdido e aus\xEAncia",
+          "Melancolia e alma portuguesa",
+          "O mar e a partida",
+          "Tradi\xE7\xE3o e mem\xF3ria",
+          "Dor de um adeus"
+        ],
+        "purposes": [
+          "Cantar a saudade",
+          "Emocionar at\xE9 as l\xE1grimas",
+          "Contar a sina de uma vida",
+          "Homenagear Lisboa e os que partiram",
+          "Recolher a alma",
+          "Confessar uma dor"
+        ],
+        "instruments": [
+          "guitarra portuguesa",
+          "viola de fado",
+          "viol\xE3o",
+          "contrabaixo ac\xFAstico",
+          "viola baixo",
+          "voz solo"
+        ]
+      },
+      "Kizomba": {
+        "themes": [
+          "Amor sensual e apaixonado",
+          "Saudade de quem se ama",
+          "O abra\xE7o e o corpo colado",
+          "Desejo e ternura",
+          "Aus\xEAncia e dist\xE2ncia",
+          "Reconcilia\xE7\xE3o",
+          "Noite quente e romance",
+          "Alma de Angola e Cabo Verde"
+        ],
+        "purposes": [
+          "Dan\xE7ar bem colado",
+          "Seduzir com carinho",
+          "Embalar a noite rom\xE2ntica",
+          "Matar a saudade do amor",
+          "Aquecer um encontro",
+          "Declarar paix\xE3o"
+        ],
+        "instruments": [
+          "guitarra",
+          "sintetizador suave",
+          "baixo marcante",
+          "percuss\xE3o africana",
+          "teclado",
+          "batida de kizomba",
+          "caixa de ritmo"
+        ]
+      }
+    }
+  },
   "core": `What a song IS, and the job of every section
 
 A song is a felt emotion delivered through structure, repetition, and melody over time.
@@ -3802,7 +5228,7 @@ Musical craft (the founder's list; each becomes concrete rules)
       ]
     }
   },
-  "hash": "de01399a840b",
+  "hash": "65da8a835a79",
   "approxTokens": {
     "core": 1794,
     "largestSlice": 3774
@@ -6028,7 +7454,8 @@ async function handler(req, res) {
       model: ENGINE_MODEL,
       genres: Object.keys(CURRICULUM.genres),
       rooms,
-      genreBuilder: CURRICULUM.genreBuilder ?? {}
+      genreBuilder: CURRICULUM.genreBuilder ?? {},
+      genreBuilderByLang: CURRICULUM.genreBuilderByLang ?? {}
     });
   }
   if (req.method !== "POST") {
