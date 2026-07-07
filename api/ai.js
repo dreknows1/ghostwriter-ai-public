@@ -5226,9 +5226,1680 @@ Musical craft (the founder's list; each becomes concrete rules)
           "roomId": "latin"
         }
       ]
+    },
+    "reggaeton": {
+      "id": "reggaeton",
+      "name": "Reggaet\xF3n",
+      "aliases": [
+        "reggaeton",
+        "reguet\xF3n",
+        "regueton",
+        "perreo",
+        "urbano",
+        "reggaeton music"
+      ],
+      "profileText": "A reggaet\xF3n writer starts with the dembow \u2014 the riddim is the engine, that looping boom-ch-boom-chick with the snare snapping on the offbeat, and every word is a guest on it. The dembow, not the trap tresillo, is the identity: the bounce moves the body before it moves the mind, and the writing job is rhythmic before it is verbal. Scan every line aloud against the boom-ch-boom-chick, lock the stressed syllables to the snare, and treat the lyric as another percussion layer \u2014 a line that fights the bounce gets recut, never forced. Get the pocket wrong and no clever word saves it.\n\nThe hook is the room. Across the genre the coro carries the song, but each room answers it differently: Perreo hammers a grind command flat and dense; Reggaet\xF3n Rom\xE1ntico thins the verses so a sung, melodic chorus can lift on held vowels; Old-School builds the whole song on the coro-and-preg\xF3n call-and-response the barrio shouts back; Neoperreo warps a cold cell sparse and glitchy. That one choice \u2014 who is the song for, and does the hook command, soar, gather a crowd, or flip cold \u2014 moves more dials than any other: it sets density, point of view, how explicit the heat gets, and who answers on top of the beat. Perreo aims below the waist, rom\xE1ntico at the chest, old-school at the crowd's fist, neoperreo at the art-brat edge; the body register picks the room, and topic alone never can, because desire and the club and the night run through all four.\n\nThe law above every dial is the voice. The lyrics are written in Spanish by the language layer later \u2014 this page writes craft in English, and it never fakes the dialect. Slang, calle vocabulary, and accent spellings appear ONLY if the user wrote them in their own story, in the lyrics, adlibs, delivery directions, and render notes alike. The craft terms these pages teach with \u2014 dembow, perreo, preg\xF3n, coro, flow, gasolina-era, neoperreo \u2014 are the writer's working vocabulary, never the song's: they stay out unless the user reached for them first, and delivery is directed as rhythm, energy, and register in plain English \u2014 bounce, punch, swagger, cold \u2014 never as an accent, a nationality, or manufactured slang. Machine-faked slang is the genre's cardinal sin, a costume, and here the costume is worse than a dull song. The same goes for the postcard: beaches, palm trees, and the Latin-lover clich\xE9 are not reggaet\xF3n \u2014 the club's real dark, the user's own night, people, and want are. Rendering in any room protects three things: the bounce (the dembow stays felt, softened for rom\xE1ntico but never deleted), the low end (deep sub bajo 808 and dark minor synths mixed to move a body), and the voice as a person answered by whichever cast the room declares \u2014 a hype shouter, self-harmonies, the whole barrio, or a cold effected self \u2014 never an added accent. Every dial bends to the user's story; none may change what the song is about.",
+      "defaultRoomId": "perreo",
+      "rooms": [
+        {
+          "id": "perreo",
+          "name": "Perreo",
+          "oneLine": "The dense, sweaty club-and-heat lane \u2014 the reggaet\xF3n a stranger pictures when they hear the word: grind-floor commands, minor-key darkness, the hardest dembow bounce, aimed straight at the body.",
+          "tempoGroove": "90-102 BPM locked to the dembow riddim \u2014 the boom-ch-boom-chick with the snare snapping on the offbeat, the bounce that moves hips before it moves minds. High word density with a chant hook: verses pack tight rhythmic phrases that lock to the snare, and the hook is a short command repeated until the floor obeys.",
+          "writingDials": [
+            "Aim below the waist and stay there: this is a body song about right now, the floor, the grind, the heat. Keep it physical and present-tense \u2014 desire stated, never a story explained. The moment the heat gets a backstory it cools.",
+            "The hook is a command or a demand, not a confession: tell the body what to do or state the want flat, in a phrase short enough to chant back on the second pass. Two short lines trading can carry it.",
+            "Ride the snare: every line locks its stressed syllables to the dembow's offbeat snap \u2014 scan aloud against the boom-ch-boom-chick and recut anything that fights the bounce. The words are another percussion layer.",
+            "Hammer one rhyme sound across several lines on purpose: here the repeated end-sound builds momentum and grind, where in a ballad it would read as lazy.",
+            "Confidence is the only posture: the singer runs the floor. Even want is delivered from power, never from need \u2014 this room does not beg.",
+            "Repetition is the architecture: the hook can eat half the song and verse two can deepen the same heat rather than add plot \u2014 but the verses still carry the user's real person, real night, real want, because repetition deepens a real thing, it never invents one.",
+            "Explicitness is a dial the user sets, never one the room adds: match the heat the user brought and go no further \u2014 never invent bodies, acts, or partners the story did not name.",
+            "Cross-genre firewall: the engine is the dembow riddim (boom-ch-boom-chick, snare on the offbeat), NOT Latin Trap's rolling tresillo hi-hats and half-time drift \u2014 if the bounce turns into a trap crawl, the room is gone. And the hook rides the dembow bounce, not dancehall's deejay toasting."
+          ],
+          "rendering": "Hard dembow drums with the signature offbeat snare snap, deep sub bajo 808 pushing the low end, one dark minor-key synth riff carrying most of the melody, sharp hi-hats picados, sparse atmospheric pads leaving the bounce room to breathe, vocal chops and risers on the transitions. Rhythmic half-sung half-rapped lead riding the pocket with hype doubles cracking on the punch words; modern urbano club polish, dark and physical, the low end mixed to move a body.",
+          "storyFit": "Best for: club heat, dance-floor grind, bold desire, confident flirtation, a night out, owning the room. Poor fit: grief, tender apology, worship, slow storytelling \u2014 the bounce has no patience and the darkness has no tenderness.",
+          "parodyTraps": "Machine-faked calle slang or accent spellings the user never wrote (the fastest way to fake it); a trap tresillo crawl standing in for the dembow bounce; long narrative verses that explain instead of grind; beach-and-palm-tree postcard imagery instead of the club's real dark; inventing explicit props the user's story never named; a hook too wordy for the floor to shout back.",
+          "performance": {
+            "prose": "Density heavy; min adlibs 8; delivery tags [Perreo] [Ad-Lib Section] [Drop] [Build Up]. This room performs like an artist working a packed dark club \u2014 the lead rides the dembow and the crowd is the second instrument, with hype doubles cracking the punch words and a signature producer-tag shout stamping the drops. Signature: the answered command \u2014 the grind hook lands and the written gap gets a hype double of the last word or a short crowd shout, one answer per pocket, so the record sounds like the floor it runs. Placement: doubles hit the punch words the verse rhymes hammer; crowd answers thicken on every hook return; a [Build Up] into [Drop] frames the beat re-entering, and the two bars before the drop stay bare so the dembow alone loads the pressure. Tag identity: a lead, a hype shouter, and the crowd \u2014 hype (double of the punch word) on the hard lines, short (crowd: shouted answer) in the gaps, a producer-style ad-lib stamp on the drop; all direction stays rhythm-and-energy in plain English \u2014 bounce, punch, swagger \u2014 never a request for an accent, a nationality, or slang beyond words the user's own sheet already holds.",
+            "adlibDensity": "heavy",
+            "minAdlibs": 8,
+            "deliveryTags": [
+              "[Perreo]",
+              "[Ad-Lib Section]",
+              "[Drop]",
+              "[Build Up]"
+            ]
+          },
+          "builder": {
+            "instruments": [
+              "dembow",
+              "sub bajo 808",
+              "sintetizador oscuro",
+              "hi-hats picados",
+              "snare del dembow",
+              "efectos y vocal chops",
+              "pads atmosf\xE9ricos"
+            ],
+            "themes": [
+              "Perreo y fiesta",
+              "Deseo y calentura",
+              "La disco y la noche"
+            ],
+            "purposes": [
+              "Perrear",
+              "Prender la disco",
+              "Conquistar"
+            ]
+          }
+        },
+        {
+          "id": "reggaet-n-rom-ntico",
+          "name": "Reggaet\xF3n Rom\xE1ntico",
+          "oneLine": "The melodic crossover lane \u2014 dembow under real feeling, the sung reggaet\xF3n of love, heartbreak, and devotion that carries the genre to radio without losing the bounce.",
+          "tempoGroove": "90-96 BPM on a softened dembow \u2014 the boom-ch-boom-chick stays, but the snare eases and the synths open so a real melody can ride on top. Medium-low word density: verses thin out and the pre-chorus and chorus breathe with sung, held lines the voice can bend, so the hook lifts instead of hammering.",
+          "writingDials": [
+            "Aim at the chest, not the floor: this room carries feeling \u2014 love, longing, heartbreak, devotion. The dembow still bounces, but the song is about one person and how they make the singer feel, not a command to the crowd.",
+            "Write a melodic hook that lifts, not a chant that hammers: the chorus is a sung promise, a question, or an ache built to soar on open vowels \u2014 end the feeling-lines on sounds a voice can hold and slide, and let the melody, not the word-count, do the lifting.",
+            "Thin the verses so the chorus can breathe: verses stay lower and more spoken-melodic to set up the lift; the density drop between verse and chorus IS the drama, the opposite of perreo's flat grind.",
+            "Verse two must move the story of these two people forward \u2014 an answer, a memory, a turn \u2014 never re-circle verse one's feeling; the melody repeats, the story advances.",
+            "Vulnerability is allowed here and nowhere else in the genre so freely: the singer can want, miss, regret, and admit fault \u2014 the ache is the point, delivered warm.",
+            "Keep one detail only the real person would recognize: rom\xE1ntico dies as greeting-card sweetness the second it stops being about a specific someone from the user's story.",
+            "The bounce is the floor, the feeling is the ceiling: if the dembow disappears entirely under the ballad, this has become a Latin pop song, not reggaet\xF3n \u2014 the riddim must stay felt.",
+            "Cross-genre firewall: the dial that keeps it reggaet\xF3n and not Latin ballad is the dembow riddim staying audible under the melody \u2014 soften it, do not delete it; a sung love song with the boom-ch-boom-chick gone is Pop, not this room."
+          ],
+          "rendering": "Softened dembow drums with an eased offbeat snare, warm sub bajo 808, bright melodic synth riffs and lush atmospheric pads opening the top end, gentle vocal chops answering the hook, guitar or piano color allowed under the chorus. Melodic lead vocal with a light modern tuning sheen, stacked harmony doubles lifting the chorus and generous air; current urbano-crossover polish \u2014 warm, open, radio-bright, the bounce still there but never harsh.",
+          "storyFit": "Best for: love songs, heartbreak, missing someone, devotion, apology with a beat, a crush, longing across distance. Poor fit: hard club grind, pure boasting, aggressive flexing, party commands \u2014 the feeling needs room the perreo floor will not give it.",
+          "parodyTraps": "Deleting the dembow entirely so it becomes generic Latin balladry; greeting-card devotion with no specific person in it; machine-faked slang dropped into a tender song; getting club-explicit where the room asked for ache; a chorus that chants like a floor command instead of soaring.",
+          "performance": {
+            "prose": "Density moderate; min adlibs 4; delivery tags [Melodic] [Harmonies] [Drop] [Falsetto]. This room performs like one melodic lead multiplied by their own harmonies over a bouncing beat \u2014 warmer and more intimate than perreo, with soft doubles instead of a hype shouter. Signature: the harmony lift \u2014 the lead sings the hook and stacked self-harmonies swell under the last words, thickening the ache without a crowd shouting from outside. Placement: verses stay nearly bare with at most a breathed double so the story reads clean, then the harmonies bloom on the pre-chorus and stack fullest on the chorus lift; a [Drop] can mark the beat opening back up under the first chorus, and a [Falsetto] rise is saved for the final chorus where the feeling peaks. Tag identity: a melodic lead and their own harmony stack \u2014 soft (echo of the hook's last words) doubles, a saved [Falsetto] lift, warm ad-libs answering the melody; no hype shouter, no crowd chant, and every echoed word comes from the song's own sheet, directed as feeling and melody in plain English, never as an accent.",
+            "adlibDensity": "moderate",
+            "minAdlibs": 4,
+            "deliveryTags": [
+              "[Melodic]",
+              "[Harmonies]",
+              "[Drop]",
+              "[Falsetto]"
+            ]
+          },
+          "builder": {
+            "instruments": [
+              "dembow",
+              "sub bajo 808",
+              "sintetizador oscuro",
+              "pads atmosf\xE9ricos",
+              "efectos y vocal chops",
+              "snare del dembow",
+              "hi-hats picados"
+            ],
+            "themes": [
+              "Desamor y superaci\xF3n",
+              "Amor t\xF3xico",
+              "La disco y la noche"
+            ],
+            "purposes": [
+              "Conquistar",
+              "Olvidar a alguien",
+              "Prender la disco"
+            ]
+          }
+        },
+        {
+          "id": "old-school",
+          "name": "Old-School / Reggaet\xF3n Cl\xE1sico",
+          "oneLine": "The 2000s boom era \u2014 the raw Puerto Rican coro-and-preg\xF3n sound, chant hooks and crowd energy, the gasolina-era bounce built for the whole barrio to shout back.",
+          "tempoGroove": "94-102 BPM on a rawer, harder dembow \u2014 the classic snare cracking loud and dry, less polish, more punch. Medium-high word density built on the coro structure: a big call-and-response chorus the crowd shouts, verses of rhythmic preg\xF3n between, hooks short and blunt enough for a stadium to answer.",
+          "writingDials": [
+            "Build the whole song around the coro: the chorus is a call-and-response chant the whole barrio shouts back \u2014 write the call AND the answer, keep both short and blunt, and make the coro the thing the song is remembered by.",
+            "Write the verses as preg\xF3n: rhythmic, chant-adjacent delivery between coros, riding the raw dembow with hard internal rhyme \u2014 closer to the crowd than to the radio.",
+            "This is a we song, not an I-and-you song: the energy is collective, the barrio, the crew, the party as one \u2014 the coro speaks for the whole floor, not a private feeling.",
+            "Keep it raw and direct: the era's charm is grit, not gloss \u2014 blunt hooks, hard bounce, no melodic softening. If it sounds radio-smooth, it has left the room.",
+            "Ride and repeat one hook phrase past polite \u2014 the coro gains power each round as more voices pile onto it, so the return is the feature, never the failure.",
+            "Present-tense party energy: the night is happening now, the floor is full now \u2014 celebration, swagger, the dance, told from inside the moment, not remembered after.",
+            "Keep the user's real crew, real barrio, real night in the verses \u2014 the era is a sound and an energy, never an excuse to swap the user's story for stock 2000s club props.",
+            "Cross-genre firewall: the tag-identity gold is the coro-and-preg\xF3n crowd chant \u2014 a whole barrio answering the call \u2014 which is what makes it reggaet\xF3n cl\xE1sico and not dancehall's lone deejay toasting or hip-hop's solo-plus-hype; the crowd IS the co-star here."
+          ],
+          "rendering": "Raw hard dembow with a loud dry cracking snare del dembow, punchy sub bajo 808, gritty minor synth stabs, sharp hi-hats picados, minimal pads \u2014 the rougher, less-polished 2000s club sound. Rhythmic preg\xF3n lead answered by a shouting crowd coro, hype doubles on the punch words; gasolina-era energy, raw and loud, mixed to sound like a packed marquesina, not a studio.",
+          "storyFit": "Best for: party anthems, crew and barrio pride, the dance floor, confident swagger, a big night, throwback celebration. Poor fit: tender heartbreak, private devotion, slow reflection, polished radio love \u2014 the raw coro has no room for whisper-distance feeling.",
+          "parodyTraps": "Machine-faked slang or accent spellings instead of the user's own words; a coro too wordy or too smooth for a crowd to shout back; melodic radio gloss papering over the era's grit; stock 2000s club props swapped in for the user's real barrio and crew; a solo hook where the whole floor should be answering.",
+          "performance": {
+            "prose": "Density heavy; min adlibs 7; delivery tags [Call and Response] [Ad-Lib Section] [Drop] [Build Up]. This room performs like a packed marquesina answering one MC \u2014 the lead throws the coro call and the whole crowd shouts the answer back, the barrio itself the co-star, with hype doubles cracking the preg\xF3n. Signature: the coro answer \u2014 the lead calls the hook and the crowd shouts the response in its gap, more voices piling on each return, so the same coro lands louder every round. Placement: crowd answers live on the coro call-and-response and the preg\xF3n line-ends that ask for witness; doubles hit the punch words the verses hammer; a [Build Up] into [Drop] frames the coro slamming back in, and the final coros stack the fullest crowd. Tag identity: an MC and the whole barrio \u2014 call (lead) and (crowd: shouted answer) trading the coro, hype (double of the punch word) on the preg\xF3n, the crowd swelling each hook repeat; all direction stays rhythm-and-energy in plain English \u2014 bounce, punch, crowd \u2014 never a request for an accent, a nationality, or slang the user's own sheet did not already carry.",
+            "adlibDensity": "heavy",
+            "minAdlibs": 7,
+            "deliveryTags": [
+              "[Call and Response]",
+              "[Ad-Lib Section]",
+              "[Drop]",
+              "[Build Up]"
+            ]
+          },
+          "builder": {
+            "instruments": [
+              "dembow",
+              "snare del dembow",
+              "sub bajo 808",
+              "sintetizador oscuro",
+              "hi-hats picados",
+              "efectos y vocal chops"
+            ],
+            "themes": [
+              "Perreo y fiesta",
+              "Lealtad al barrio",
+              "Presumir y flexear"
+            ],
+            "purposes": [
+              "Perrear",
+              "Prender la disco",
+              "Levantar el ego"
+            ]
+          }
+        },
+        {
+          "id": "neoperreo",
+          "name": "Neoperreo",
+          "oneLine": "The underground, art-brat lane \u2014 the femme-forward, queer-leaning experimental reggaet\xF3n that flips the dembow cold: glitchy, sparse, distorted, self-aware, made for the club fringe not the radio.",
+          "tempoGroove": "95-105 BPM on a warped, stripped dembow \u2014 the boom-ch-boom-chick present but flipped cold, sometimes distorted, sometimes cut to skeleton. Deliberately shifting word density: sparse, chopped, glitchy cells and long stretches where the beat drops to almost nothing, more texture than verse-chorus.",
+          "writingDials": [
+            "Flip the perreo posture: same body heat, but ironic, self-aware, and in control \u2014 the singer owns the gaze rather than performing for it, and attitude outranks explicitness.",
+            "Write sparse and chopped: short cells built to loop, pitch, and glitch, with hard silences engineered in \u2014 the space and the distortion are half the song, so hand whole bars to the beat.",
+            "Cold over warm: detached, deadpan, edged delivery beats sweetness or hype here; the energy is the underground club at 3am, not the mainstage.",
+            "Attitude is the whole register: confidence, defiance, boredom-as-power, the fringe looking back at the mainstream \u2014 a posture the other three rooms rarely hold.",
+            "Repetition works by warping, not warmth: the same cell returns pitched, chopped, or filtered differently each time \u2014 freshness comes from the flip, never from new words.",
+            "Keep the user's real edge and real story inside the cells: neoperreo is a stance, never a license to fake a persona the user never wrote.",
+            "Cross-genre firewall: still the dembow, just flipped cold and sparse \u2014 the bounce survives under the glitch; strip the dembow out entirely for straight distorted club and it stops being reggaet\xF3n, and its cold self-aware stance is what separates it from Perreo's straight sweat."
+          ],
+          "rendering": "Warped, stripped dembow with the offbeat snare distorted or filtered, heavy sub bajo 808, cold detuned sintetizador oscuro, glitchy hi-hats picados, aggressive efectos y vocal chops pitched and chopped as texture, atmospheric pads bleeding into silence \u2014 space and distortion mixed as instruments. Deadpan, close-mic, effected lead with pitched and glitched vocal treatment; underground 2010s-to-now neoperreo aesthetic, cold and self-aware, the club fringe not the radio.",
+          "storyFit": "Best for: defiant confidence, ironic heat, owning the gaze, fringe swagger, self-possessed flirtation, attitude over romance. Poor fit: warm devotion, crowd singalongs, tender apology, earnest celebration \u2014 the cold detachment kills sincerity and the sparseness kills the singalong.",
+          "parodyTraps": "Faking underground edge with machine-generated slang instead of the user's real voice; writing it warm or hype like mainstream perreo; deleting the dembow for generic glitch club; filling the engineered silences with words; a persona the user never wrote pasted on as costume.",
+          "performance": {
+            "prose": "Density sparse; min adlibs 3; delivery tags [Ad-Lib Section] [Drop] [Build Up]. This room performs by subtraction and effect \u2014 the lead is cold and close, the beat is the co-star, and the boldest move is the voice glitching or stepping aside. Signature: the pitched self-chop \u2014 the lead's own line returns chopped, pitched, or filtered in the engineered gap, a cold self-echo that thickens by effect rather than by a crowd. Placement: the few vocal events sit exactly where the writing cut the holes \u2014 a pitched chop after the cell, a deadpan aside on the [Drop], nothing at all where the beat strips to silence; a [Build Up] into [Drop] does the arranging while the adlib count stays low enough to count on one hand. Tag identity: a cold solo lead and their own effected self \u2014 pitched (chop of the last word) and glitched doubles, one deadpan aside, no crowd and no warm harmony stack; all direction stays energy and texture in plain English \u2014 cold, deadpan, chopped \u2014 never an accent or faked slang, and if the page fills the engineered silence the room is gone.",
+            "adlibDensity": "sparse",
+            "minAdlibs": 3,
+            "deliveryTags": [
+              "[Ad-Lib Section]",
+              "[Drop]",
+              "[Build Up]"
+            ]
+          },
+          "builder": {
+            "instruments": [
+              "dembow",
+              "sub bajo 808",
+              "sintetizador oscuro",
+              "efectos y vocal chops",
+              "hi-hats picados",
+              "pads atmosf\xE9ricos"
+            ],
+            "themes": [
+              "Confianza y actitud",
+              "Deseo y calentura",
+              "Perreo y fiesta"
+            ],
+            "purposes": [
+              "Levantar el ego",
+              "Perrear",
+              "Conquistar"
+            ]
+          }
+        }
+      ],
+      "cues": [
+        {
+          "cue": "perreo",
+          "strength": "strong",
+          "roomId": "perreo"
+        },
+        {
+          "cue": "perrear",
+          "strength": "strong",
+          "roomId": "perreo"
+        },
+        {
+          "cue": "dembow",
+          "strength": "strong",
+          "roomId": "perreo"
+        },
+        {
+          "cue": "club",
+          "strength": "weak",
+          "roomId": "perreo"
+        },
+        {
+          "cue": "disco",
+          "strength": "weak",
+          "roomId": "perreo"
+        },
+        {
+          "cue": "grind",
+          "strength": "weak",
+          "roomId": "perreo"
+        },
+        {
+          "cue": "calentura",
+          "strength": "weak",
+          "roomId": "perreo"
+        },
+        {
+          "cue": "fiesta",
+          "strength": "weak",
+          "roomId": "perreo"
+        },
+        {
+          "cue": "baile",
+          "strength": "weak",
+          "roomId": "perreo"
+        },
+        {
+          "cue": "rom\xE1ntico",
+          "strength": "strong",
+          "roomId": "reggaet-n-rom-ntico"
+        },
+        {
+          "cue": "desamor",
+          "strength": "strong",
+          "roomId": "reggaet-n-rom-ntico"
+        },
+        {
+          "cue": "reggaet\xF3n rom\xE1ntico",
+          "strength": "strong",
+          "roomId": "reggaet-n-rom-ntico"
+        },
+        {
+          "cue": "amor",
+          "strength": "weak",
+          "roomId": "reggaet-n-rom-ntico"
+        },
+        {
+          "cue": "heartbreak",
+          "strength": "weak",
+          "roomId": "reggaet-n-rom-ntico"
+        },
+        {
+          "cue": "coraz\xF3n",
+          "strength": "weak",
+          "roomId": "reggaet-n-rom-ntico"
+        },
+        {
+          "cue": "devotion",
+          "strength": "weak",
+          "roomId": "reggaet-n-rom-ntico"
+        },
+        {
+          "cue": "te extra\xF1o",
+          "strength": "weak",
+          "roomId": "reggaet-n-rom-ntico"
+        },
+        {
+          "cue": "olvidar",
+          "strength": "weak",
+          "roomId": "reggaet-n-rom-ntico"
+        },
+        {
+          "cue": "cl\xE1sico",
+          "strength": "strong",
+          "roomId": "old-school"
+        },
+        {
+          "cue": "reggaet\xF3n cl\xE1sico",
+          "strength": "strong",
+          "roomId": "old-school"
+        },
+        {
+          "cue": "gasolina",
+          "strength": "strong",
+          "roomId": "old-school"
+        },
+        {
+          "cue": "coro",
+          "strength": "strong",
+          "roomId": "old-school"
+        },
+        {
+          "cue": "viejo school",
+          "strength": "weak",
+          "roomId": "old-school"
+        },
+        {
+          "cue": "barrio",
+          "strength": "weak",
+          "roomId": "old-school"
+        },
+        {
+          "cue": "2000s",
+          "strength": "weak",
+          "roomId": "old-school"
+        },
+        {
+          "cue": "throwback",
+          "strength": "weak",
+          "roomId": "old-school"
+        },
+        {
+          "cue": "marquesina",
+          "strength": "weak",
+          "roomId": "old-school"
+        },
+        {
+          "cue": "neoperreo",
+          "strength": "strong",
+          "roomId": "neoperreo"
+        },
+        {
+          "cue": "underground",
+          "strength": "strong",
+          "roomId": "neoperreo"
+        },
+        {
+          "cue": "glitch",
+          "strength": "weak",
+          "roomId": "neoperreo"
+        },
+        {
+          "cue": "experimental",
+          "strength": "weak",
+          "roomId": "neoperreo"
+        },
+        {
+          "cue": "alt",
+          "strength": "weak",
+          "roomId": "neoperreo"
+        },
+        {
+          "cue": "fringe",
+          "strength": "weak",
+          "roomId": "neoperreo"
+        }
+      ]
+    },
+    "bachata": {
+      "id": "bachata",
+      "name": "Bachata",
+      "aliases": [
+        "bachata music",
+        "bachata sensual",
+        "bachata moderna",
+        "bachata tradicional"
+      ],
+      "profileText": "A bachata writer starts with the second voice. The lead requinto guitar is not accompaniment \u2014 it is a character, and it answers the singer at the end of nearly every line. So the writing job is spatial before it is verbal: phrases end early and leave the line hanging so the requinto can cry its reply in the gap, and a lyric sheet packed wall-to-wall has silenced the instrument that defines the genre before its first word is judged. Under that call-and-answer runs the groove that separates bachata from bolero: the g\xFCira scraping steady sixteenths and the bong\xF3 rolling into every phrase-turn, danceable even when the words are breaking. The writer plans where the words are NOT, because that space belongs to the guitar and the scrape.\n\nThe tradition the genre was built to carry is amargue \u2014 bitterness, the wound of a love gone wrong worn openly. That is the emotional root, but the three rooms wear it three different ways, and choosing the room is choosing how nakedly the hurt shows and to whom. Tradicional wears it undignified, the drunk undefended confession sung to a cantina that already knows the cry \u2014 short wailed phrases, plain rhyme, the requinto answering like a second mourner. Moderna / Urbana keeps composure and narrates the wound like a man telling you the story of what she did \u2014 the Aventura / Romeo Santos lane, richer harmony, R&B-tinged phrasing that leans and syncopates, real plot per verse, the requinto now trading with a controlled voice. Sensual lowers the lights and pulls two bodies close, folding the ache into desire and breathing it as wanting rather than wailing it \u2014 sparse breathed phrases, suggestion over statement, the requinto answering warm and mellow instead of crying. Same guitar, same wound; different amount of dignity kept, different distance to the listener.\n\nThe law above every dial is language. Spanish is the song's native tongue here \u2014 the lyrics are written in Spanish by a later layer \u2014 but the writer works in plain English craft instruction and never invents endearments, slang, or accent flavor to costume the song; only words the user wrote in their own story survive, and the identity is carried by rhythm, phrasing, and the requinto's answer, never by sprinkled vocabulary. Craft terms the writer thinks with \u2014 requinto, amargue, g\xFCira, bong\xF3, derecho, mambo section \u2014 are working vocabulary and stay out of the lyrics, adlibs, and render notes unless the user wrote them first. And the postcard is not bachata: generic Latin-lover romance, beaches, and cocktails are the tourist parody the founder rejects; the user's own bottle, door, name, and room are the song.",
+      "defaultRoomId": "bachata-tradicional",
+      "rooms": [
+        {
+          "id": "bachata-tradicional",
+          "name": "Bachata Tradicional",
+          "oneLine": "The raw amargue of the cabaret and the campo \u2014 1960s-90s Dominican heartbreak sung wide open, requinto crying back at every line, no dignity left to protect.",
+          "tempoGroove": "130-160 BPM (the amargue ballad end sits around 130-140, the campo and cabaret dance end pushes 150-160 \u2014 the fastest and most agitated of the three rooms) felt in a lilting four with the g\xFCira scraping steady sixteenths and the bong\xF3 rolling into every phrase-turn; the derecho verse groove opens up into the mambo section where the requinto takes over. Low-to-medium word density: short wounded phrases with real air after them, because the requinto answers the voice at the end of nearly every line and the singer needs room to break.",
+          "writingDials": [
+            "Requinto-first: the lead guitar is the second voice and it gets the last word. End phrases early and leave the line hanging so the requinto can cry the answer in the gap \u2014 a sheet that fills every bar has silenced the instrument that defines the genre.",
+            "Wear the amargue undignified: this room is the drunk, undefended confession \u2014 the man who has stopped protecting his pride and says the pain plainly. Self-pity is not a flaw here; it is the register.",
+            "The hook is a wail the whole cantina knows: a short heartbroken phrase of roughly four to seven words, re-sung more times than dignity allows, gathering grief each round rather than resolving it.",
+            "Rhyme stays plain and singable: a repeated key word or an easy near-rhyme beats a clever scheme; the point is the cry landing, not the craft showing.",
+            "Keep the story bodily and specific to the user's own life \u2014 the actual bottle, the actual door, the actual name \u2014 but let the feeling run to the floor. Understatement is the wrong instinct here; this room says the whole hurt.",
+            "Direct address to the one who left is fully at home: begging, accusing, remembering out loud. Second person aimed at her, or a first person collapsing in front of the room.",
+            "The mambo section is a written silence: plan a stretch where the words stop entirely and the requinto and bong\xF3 take the song \u2014 the lyric is built around that instrumental cry, not over it.",
+            "Cross-genre firewall: What makes it tradicional and not bolero is the g\xFCira and bong\xF3 driving a danceable lilt under the heartbreak \u2014 bolero broods in orchestral rubato with no scraper and no dance; this room aches on its feet."
+          ],
+          "rendering": "Bright crying lead requinto answering every vocal line, steady rhythm guitar (segunda), rolling bong\xF3 with open-tone fills into each turn, g\xFCira scraping constant sixteenths, upright-toned electric bass, a derecho verse groove breaking into a requinto-led mambo section. Raw impassioned lead vocal pushed to the edge of breaking, minimal doubling, dry-to-warm cabaret room sound; 1970s-90s Dominican amargue era.",
+          "storyFit": "Best for: heartbreak worn openly, betrayal, drunken despecho, begging someone to come back, an amor imposible confessed, the memory of a love that ruined you. Poor fit: cool composed storytelling with a plot to unfold \u2014 that is moderna; slow-dance seduction \u2014 that is sensual; party confidence and joy of any kind, which this room has no register for.",
+          "parodyTraps": "Any Spanish endearment or slang the writer sprinkled that the user never said; generic Latin-lover postcard romance with no real wound under it; making the hook clever instead of cry-able; filling the requinto's answer gaps with words; keeping a dignified distance when the whole point is the man who has lost his.",
+          "performance": {
+            "prose": "Density moderate; min adlibs 4; delivery tags [Guitar Solo] [Instrumental Break] [Harmonies] [Melancholy]. This room performs like a man crying to a room that already knows the song \u2014 one raw lead voice and the requinto answering him like a second mourner, no crowd, no polish. Signature: the requinto answer \u2014 the guitar cries back the emotion of the line in the gap the phrasing leaves, so the ache is stated twice, once in words and once in strings. Placement: the requinto answers land at the line-ends the singer leaves open, roughly one per line through the verses, and the mambo section gets a [Guitar Solo] or [Instrumental Break] header on its own line where the words stop entirely and the requinto and bong\xF3 carry the grief; a thin harmony can shadow the hook's last words, and the final wails push hardest. Tag identity: a lone heartbroken voice and its crying requinto \u2014 the guitar as the answering mourner, a bare harmony shadow on the hook only, the mambo break marked as its own instrumental cry. No group, no hype, no club \u2014 one man, one guitar answering him, and any sung word is plain language from the user's own sheet.",
+            "adlibDensity": "moderate",
+            "minAdlibs": 4,
+            "deliveryTags": [
+              "[Guitar Solo]",
+              "[Instrumental Break]",
+              "[Harmonies]",
+              "[Melancholy]"
+            ]
+          },
+          "builder": {
+            "instruments": [
+              "requinto",
+              "segunda guitarra",
+              "bong\xF3",
+              "g\xFCira",
+              "bajo"
+            ],
+            "themes": [
+              "Amor y desamor",
+              "Borrachera de despecho",
+              "Traici\xF3n",
+              "Rogar y suplicar",
+              "Amor imposible"
+            ],
+            "purposes": [
+              "Llorar el despecho",
+              "Rogar que vuelva",
+              "Desahogar la pena"
+            ]
+          }
+        },
+        {
+          "id": "bachata-moderna",
+          "name": "Bachata Moderna / Urbana",
+          "oneLine": "The Aventura / Romeo Santos lane \u2014 bachata that tells the story instead of only wailing it: richer harmony, R&B-tinged phrasing, a composed narrator working through heartbreak with a cooler head.",
+          "tempoGroove": "125-140 BPM with the classic g\xFCira-and-bong\xF3 bachata groove kept intact but produced clean and modern, the requinto often electric and effected. Medium word density: longer storytelling lines with an R&B sense of phrasing that leans and syncopates, still leaving the requinto its answer but carrying real plot per verse.",
+          "writingDials": [
+            "Narrate, do not only wail: the singer is composed enough to tell you what happened \u2014 this room has a plot, a point of view, sometimes a twist. The heartbreak is delivered as a story with a narrator who has thought about it.",
+            "Verses move forward with real information: verse two must advance the account of these two specific people \u2014 what she said, what he did next, how it turned \u2014 never re-circle verse one's feeling. The story is the engine.",
+            "Write for R&B-tinged phrasing: lines can lean, drag, and syncopate against the groove the way a smooth vocal bends a bachata, and melisma on held vowels is welcome where tradicional stays plain \u2014 so end feeling-lines on vowels the voice can slide.",
+            "Harmony is richer, so the hook can carry a fuller melodic idea than the plain tradicional wail \u2014 a sung refrain, memorable and returning, that deepens as the chapters accumulate rather than just repeating.",
+            "Keep the requinto answering even inside the fuller production: leave it real gaps at line-ends. A modern bachata that buries the guitar's reply under wall-to-wall vocals has lost the lane's spine.",
+            "Point of view is confident and specific: first person telling one person the story, with room for wit, irony, or an unexpected angle on the heartbreak that a pure amargue wail would never pause for.",
+            "Register can widen past pure despecho: devotion, seduction inside a story, a proud reckoning, even confidence \u2014 but it stays a bachata story, and the requinto stays its second voice.",
+            "Cross-genre firewall: What makes it moderna and not salsa is that the requinto answering the voice over g\xFCira and bong\xF3 still runs the song \u2014 keys may add pads or color, but never a repeating salsa-style piano montuno pattern, no brass section, no clave driving it; the R&B flavor lives in the phrasing and harmony, never in a horn arrangement."
+          ],
+          "rendering": "Clean modern bachata production \u2014 electric requinto with light effects answering the vocal lines, tight rhythm guitar, crisp bong\xF3, g\xFCira scraping steady sixteenths, rounded modern bass, subtle keys or pads under the harmony. Smooth controlled lead vocal with R&B phrasing, tasteful runs and doubled harmonies, a polished contemporary sheen; Aventura-to-Romeo-Santos era, 2000s to now.",
+          "storyFit": "Best for: a heartbreak with a story to tell, betrayal narrated with composure, devotion, a proud reckoning with an ex, seduction framed as a story, an amor imposible worked through with a cooler head. Poor fit: an undignified drunk collapse with no plot \u2014 that is tradicional; a wordless slow-grind mood \u2014 that is sensual; anything that needs a horn section or a montuno, which belongs to salsa, not here.",
+          "parodyTraps": "Sprinkled Spanish phrases the user never wrote; a story that never actually advances \u2014 verses re-circling one feeling while pretending to narrate; burying the requinto under nonstop vocals; borrowing a famous Romeo hook line the user's story never contained; mistaking R&B flavor for turning the track into generic Latin R&B with the bachata guitar removed.",
+          "performance": {
+            "prose": "Density moderate; min adlibs 3; delivery tags [Guitar Solo] [Harmonies] [Smooth] [Ad-Lib Section]. This room performs like a smooth narrator with the requinto as his confidant \u2014 one composed lead voice, tasteful self-harmonies, the electric requinto answering and trading with him. Signature: the requinto trade \u2014 the guitar answers the sung line and sometimes finishes the phrase the voice starts, a call-and-answer between the narrator and his second voice that carries the story's mood between the words. Placement: requinto answers sit in the gaps at line-ends and a full [Guitar Solo] takes the instrumental section; light harmony doubles thicken the hook, and a short ad-lib run can lift the last chorus where a pure wail would not. Tag identity: a composed lead and his electric requinto \u2014 self-harmonies on the refrain, the guitar trading and answering across the verses, one tasteful run reserved for the final chorus. No cantina crowd and no club stack \u2014 a narrator, his harmonies, and the guitar that answers him, every sung word from the user's own sheet.",
+            "adlibDensity": "moderate",
+            "minAdlibs": 3,
+            "deliveryTags": [
+              "[Guitar Solo]",
+              "[Harmonies]",
+              "[Smooth]",
+              "[Ad-Lib Section]"
+            ]
+          },
+          "builder": {
+            "instruments": [
+              "requinto",
+              "segunda guitarra",
+              "bong\xF3",
+              "g\xFCira",
+              "bajo"
+            ],
+            "themes": [
+              "Amor y desamor",
+              "Traici\xF3n",
+              "Nostalgia",
+              "Recuerdos de un amor",
+              "Celos"
+            ],
+            "purposes": [
+              "Dedicar a un amor",
+              "Rogar que vuelva",
+              "Llorar el despecho"
+            ]
+          }
+        },
+        {
+          "id": "bachata-sensual",
+          "name": "Bachata Sensual",
+          "oneLine": "The modern Spanish-born sensual lane \u2014 bachata pulled close and slowed to a grind: smooth, breathy, intimate, the ache folded into desire on a dimly lit floor.",
+          "tempoGroove": "125-135 BPM but felt smooth and unhurried, the g\xFCira and bong\xF3 softened and the pocket relaxed for a body-to-body sway; the requinto answers warm and mellow rather than crying. Low word density with long breathed phrases and held vowels; the singer sits close to the mic, so lines must leave room to soften and stretch.",
+          "writingDials": [
+            "Keep the world close: two bodies, one dim room, one slow dance. The whole song is at skin distance \u2014 never widen to a public cry or a narrated saga; this room is felt, not declared.",
+            "Fold the ache into the desire: sensual bachata still carries longing and even hurt, but it breathes it as wanting rather than wailing it \u2014 the amargue is present, lowered to a murmur, tangled with the pull of the body.",
+            "Write for a breathy close vocal: end feeling-lines on open vowels the voice can hold and soften; avoid hard consonant endings there, and let phrases trail so the requinto's warm answer can slide underneath.",
+            "Suggestion over statement: the heat is in what is implied and physical from the user's own moment \u2014 the closeness, the breath, the hand \u2014 never in explicit spelling-out; sensual insinuates, it does not narrate the act.",
+            "The hook is a low intimate phrase aimed at one body, re-sung softer and closer each pass \u2014 a private murmur, never a phrase a room would shout back.",
+            "Keep the requinto answering, but mellow: leave it the line-end gaps so its warm reply threads the sway; the space still belongs to the guitar even at this closeness.",
+            "Point of view is first person to a you who must feel like the real person from the user's story \u2014 one detail only the two of them would recognize keeps it from becoming a generic seduction template.",
+            "Cross-genre firewall: What makes it bachata and not reggaeton or tropical pop is the requinto answering the voice over a real g\xFCira-and-bong\xF3 bachata groove \u2014 there is no dembow boom-chick under it; if the guitar answer and the scraper vanish, the room is gone."
+          ],
+          "rendering": "Smooth modern sensual production \u2014 warm mellow requinto answering softly, silky rhythm guitar, relaxed bong\xF3 and softened g\xFCira holding the sway, deep rounded bass, airy pads and light reverb for intimacy. Breathy close-mic lead vocal with soft doubled harmonies and a controlled falsetto lift, polished and low; 2010s-to-now sensual bachata sound.",
+          "storyFit": "Best for: slow-dance intimacy, seduction, close devotion, a sensual anniversary, missing a partner's body, longing folded into desire. Poor fit: an undignified drunk heartbreak wail \u2014 that is tradicional; a plot-driven story of what went wrong \u2014 that is moderna; anger, protest, or party energy, which this hushed room has no room for.",
+          "parodyTraps": "Getting explicit where the room insists on suggestion; Spanish endearments the user never wrote pasted in as flavor; strings-and-candles greeting-card seduction with no specific real person in it; a hook that behaves like a crowd chant instead of a murmur; dropping the requinto and the g\xFCira so it becomes generic slow R&B with a Latin coat of paint.",
+          "performance": {
+            "prose": "Density sparse; min adlibs 3; delivery tags [Soft] [Harmonies] [Falsetto] [Sensual]. This room performs at skin distance \u2014 one breathy lead voice with its own soft harmony doubles and the requinto answering warm and low, nobody else in the room. Signature: the breathed echo and mellow guitar \u2014 a soft doubled harmony repeats the last words of a line the way a body leans closer, while the warm requinto slides its answer under the gap, close and unhurried, never a crowd. Placement: the floor of 3 sits where the closeness peaks \u2014 one soft echo under the hook's last words, one breathed harmony where the phrase trails at the bridge, one held falsetto or hummed note in the outro; verses stay nearly bare so the breath carries them, and the requinto's warm answer can take a whole passage instead of any vocal show. Tag identity: an intimate solo voice with soft self-harmonies and a mellow answering requinto \u2014 a breathed (echo of the last words) double, a [Falsetto] lift saved for the closest moment, a [Soft] header where the song pulls nearest. No crowd, no narrator's trade, no cantina \u2014 two bodies and a slow sway, every echoed word from the user's own sheet.",
+            "adlibDensity": "sparse",
+            "minAdlibs": 3,
+            "deliveryTags": [
+              "[Soft]",
+              "[Harmonies]",
+              "[Falsetto]",
+              "[Sensual]"
+            ]
+          },
+          "builder": {
+            "instruments": [
+              "requinto",
+              "segunda guitarra",
+              "bong\xF3",
+              "g\xFCira",
+              "bajo"
+            ],
+            "themes": [
+              "Amor y desamor",
+              "Nostalgia",
+              "Recuerdos de un amor",
+              "Celos"
+            ],
+            "purposes": [
+              "Bailar pegado",
+              "Dedicar a un amor",
+              "Desahogar la pena"
+            ]
+          }
+        }
+      ],
+      "cues": [
+        {
+          "cue": "amargue",
+          "strength": "strong",
+          "roomId": "bachata-tradicional"
+        },
+        {
+          "cue": "despecho",
+          "strength": "strong",
+          "roomId": "bachata-tradicional"
+        },
+        {
+          "cue": "borrachera de despecho",
+          "strength": "strong",
+          "roomId": "bachata-tradicional"
+        },
+        {
+          "cue": "cabaret",
+          "strength": "strong",
+          "roomId": "bachata-tradicional"
+        },
+        {
+          "cue": "bachata del campo",
+          "strength": "strong",
+          "roomId": "bachata-tradicional"
+        },
+        {
+          "cue": "heartbreak",
+          "strength": "weak",
+          "roomId": "bachata-tradicional"
+        },
+        {
+          "cue": "traici\xF3n",
+          "strength": "weak",
+          "roomId": "bachata-tradicional"
+        },
+        {
+          "cue": "rogar",
+          "strength": "weak",
+          "roomId": "bachata-tradicional"
+        },
+        {
+          "cue": "suplicar",
+          "strength": "weak",
+          "roomId": "bachata-tradicional"
+        },
+        {
+          "cue": "amor imposible",
+          "strength": "weak",
+          "roomId": "bachata-tradicional"
+        },
+        {
+          "cue": "llorar",
+          "strength": "weak",
+          "roomId": "bachata-tradicional"
+        },
+        {
+          "cue": "aventura",
+          "strength": "strong",
+          "roomId": "bachata-moderna"
+        },
+        {
+          "cue": "romeo santos",
+          "strength": "strong",
+          "roomId": "bachata-moderna"
+        },
+        {
+          "cue": "bachata urbana",
+          "strength": "strong",
+          "roomId": "bachata-moderna"
+        },
+        {
+          "cue": "contar la historia",
+          "strength": "weak",
+          "roomId": "bachata-moderna"
+        },
+        {
+          "cue": "storytelling",
+          "strength": "weak",
+          "roomId": "bachata-moderna"
+        },
+        {
+          "cue": "devoci\xF3n",
+          "strength": "weak",
+          "roomId": "bachata-moderna"
+        },
+        {
+          "cue": "reproche",
+          "strength": "weak",
+          "roomId": "bachata-moderna"
+        },
+        {
+          "cue": "nostalgia",
+          "strength": "weak",
+          "roomId": "bachata-moderna"
+        },
+        {
+          "cue": "bachata sensual",
+          "strength": "strong",
+          "roomId": "bachata-sensual"
+        },
+        {
+          "cue": "sensual",
+          "strength": "strong",
+          "roomId": "bachata-sensual"
+        },
+        {
+          "cue": "bailar pegado",
+          "strength": "strong",
+          "roomId": "bachata-sensual"
+        },
+        {
+          "cue": "pegao",
+          "strength": "strong",
+          "roomId": "bachata-sensual"
+        },
+        {
+          "cue": "seducci\xF3n",
+          "strength": "weak",
+          "roomId": "bachata-sensual"
+        },
+        {
+          "cue": "slow dance",
+          "strength": "weak",
+          "roomId": "bachata-sensual"
+        },
+        {
+          "cue": "intimidad",
+          "strength": "weak",
+          "roomId": "bachata-sensual"
+        },
+        {
+          "cue": "cuerpo a cuerpo",
+          "strength": "weak",
+          "roomId": "bachata-sensual"
+        }
+      ]
+    },
+    "regionalmexicano": {
+      "id": "regionalmexicano",
+      "name": "Regional Mexicano",
+      "aliases": [
+        "regional",
+        "banda",
+        "norte\xF1o",
+        "norteno",
+        "corrido",
+        "sierre\xF1o",
+        "sierreno",
+        "musica mexicana",
+        "m\xFAsica mexicana"
+      ],
+      "profileText": "A Regional Mexicano writer starts by choosing the room the band lives in, because in this umbrella the instrumentation is the identity and it rewrites the whole lyric. Banda is a full acoustic wind band from Sinaloa \u2014 a wall of trumpets and trombones over tambora and sousaphone \u2014 so its writing is loud, communal, and belted, with phrase-ends left open for the brass to shout back. Norteno is leaner: accordion and bajo sexto over an upright or electric bass, a dance band equally at home carrying a corrido or aching through a cantina love song, sung close to speech with the accordion answering as a second voice. Sierreno strips it further to a spare acoustic trio \u2014 requinto guitar, twelve-string bajo, and tuba \u2014 intimate and unhurried, the traditional root the modern tumbado grew from. Pick the band first; the room decides density, delivery, and how much air the words leave.\n\nAt the center of it all is the corrido: a sung narrative ballad that tells one true story in the third person, plainly and in order, with real names, places, and dates. The corrido announces its subject up front and takes its leave at the end; it advances the plot every verse and treats a repeated hook as optional. It is the storytelling engine of the genre and it can be carried by norteno accordion or banda brass alike. The grito \u2014 the joyful, defiant shout the players throw over a peak or into a solo \u2014 is legitimate energy in every room; write it as a shout in plain English, never as a phonetic spelling.\n\nTwo laws sit above every dial. First, dialect: never write generated border slang, accent spelling, or fake exclamations \u2014 delivery is directed as register, energy, and phrasing in plain English, and the craft words these pages teach with (corrido, banda, norteno, bajo sexto, requinto, sierreno) stay out of the lyrics unless the user wrote them. Second, and absolute for corridos: never invent violence, weapons, cartels, or crime the user did not put in their own story. The corrido form serves whatever true story the user brings \u2014 a struggle, a rise, a loyalty, a hero, a loss \u2014 and the craft is the storytelling, never the narco costume.",
+      "defaultRoomId": "corrido",
+      "rooms": [
+        {
+          "id": "banda-sinaloense",
+          "name": "Banda Sinaloense",
+          "oneLine": "Sinaloa's brass-and-tambora powerhouse \u2014 a full acoustic wind band, loud and celebratory, built to fill a plaza and move a whole crowd at once.",
+          "tempoGroove": "120-160 BPM most commonly, spanning a driving 2/4 for a fast pace and a swaying 3/4 waltz (vals); the tambora and tuba drive a bouncing oom-pah pulse. Word density is medium and singable \u2014 the brass answers between vocal lines, so leave the ends of phrases open for the horns to shout back.",
+          "writingDials": [
+            "Write for the brass to answer: end vocal phrases a beat early and leave a hole where the trumpets and trombones throw their fanfare \u2014 the horn response is part of the line, so a sheet that fills every beat smothers the band that defines the genre.",
+            "Big and communal on top of the user's real story: banda is celebration music for a plaza, so the chorus opens outward for a crowd to sing while the verses keep the specific names, places, and details the user brought.",
+            "Melody rides high and declamatory: write lines a singer belts near the top of the range with strong open vowels at the peaks, because banda vocals are pushed out over a wall of brass, never crooned under it.",
+            "Chorus is a raised toast, not a whisper: a short, hooky, repeatable phrase the room can lift on \u2014 if it could not be shouted across a packed dance floor with drinks in the air, it is pitched wrong for this room.",
+            "Match the meter to the dance: a fast 2/4 for the up-tempo quebradita and tambora numbers, a swaying 3/4 waltz (vals) when the story wants it \u2014 pick the pulse first and write the syllable count to sit inside it.",
+            "Rhyme clean and sturdy: banda leans on solid, satisfying end-rhyme the crowd hears coming \u2014 this is not the room for slant-rhyme subtlety, the rhyme lands square with the downbeat.",
+            "Registers are pride, love, heartbreak, and party: a boast honoring a hometown, a devoted love song, a drink-in-hand heartbreak, or a flat-out fiesta \u2014 all delivered at full chest, warmth and volume together even when the news is sad."
+          ],
+          "rendering": "Full brass band: trumpets and trombones stacked in tight harmony throwing fanfare responses, clarinets on top, sousaphone (tuba) walking the bass, tambora (bass drum played both heads) and tarola (snare) driving the oom-pah, a charcheta answering. Lead vocal belted high and forward or a two- or three-voice harmony chorus; big, live, plaza-loud acoustic mix, no synths \u2014 modern Sinaloa banda sound.",
+          "storyFit": "Best for: pride in a hometown or a person, celebration and fiesta, devoted love, drink-in-hand heartbreak, honoring someone, a quinceanera or a wedding. Poor fit: quiet confession, intricate storytelling that needs stillness, anything wanting an intimate low-volume delivery.",
+          "parodyTraps": "Fake border-Spanish or slang the user never wrote; sombrero-and-tequila postcard cliches standing in for a real story; a thin lyric that gives the brass nothing to answer; a whispered or under-sung delivery that fights the wall of horns; cramming every beat so the band cannot breathe.",
+          "performance": {
+            "prose": "Density moderate; min adlibs 4; delivery tags [Instrumental Break] [Harmonies] [Shout] [Call and Response]. This room performs like a full brass band around one belting lead \u2014 the cast is the players themselves, and their shouted brass answers and joyful gritos are most of the energy. Signature: the brass answer \u2014 the horns throw a fanfare into the hole the singer leaves at a phrase end, and a joyful shout from the players lands on the peaks, the whole band lifting each chorus. Placement: horn responses fall at verse and chorus line-ends where the vocal steps aside; a joyful shout tops the chorus and the biggest turns; an [Instrumental Break] hands a whole section to the trumpets between verses, and harmony voices thicken the final choruses. Tag identity: a brass band and its lead \u2014 trumpets and trombones answering in the gaps, a joyful defiant shout thrown by the players over the peaks, a harmony chorus swelling on the hook. Every shout is energy in plain English, never a scripted foreign exclamation the user did not write.",
+            "adlibDensity": "moderate",
+            "minAdlibs": 4,
+            "deliveryTags": [
+              "[Instrumental Break]",
+              "[Harmonies]",
+              "[Shout]",
+              "[Call and Response]"
+            ]
+          },
+          "builder": {
+            "instruments": [
+              "trompetas de banda",
+              "charcheta",
+              "clarinete",
+              "tuba",
+              "tambora",
+              "tarola"
+            ],
+            "themes": [
+              "Orgullo del pueblo",
+              "La familia y la madre",
+              "La lucha y el trabajo",
+              "Lealtad y la palabra"
+            ],
+            "purposes": [
+              "Celebrar con la banda",
+              "Bailar en la fiesta",
+              "Honrar a alguien",
+              "Presumir el logro"
+            ]
+          }
+        },
+        {
+          "id": "norte-o",
+          "name": "Norte\xF1o",
+          "oneLine": "The accordion-and-bajo-sexto sound of northern Mexico and the border \u2014 leaner than banda, equally at home telling a corrido or aching through a cantina love song.",
+          "tempoGroove": "Wide range by dance: 80-110 BPM for a bolero or a slow cantina ballad, up to 140-180 for a polka, redova, or an up-tempo corrido; the bajo sexto and bass lock a two-step or waltz pulse under the accordion. Word density is medium \u2014 carry a real narrative or a real ache, but leave the accordion room to answer and fill.",
+          "writingDials": [
+            "The accordion is the second voice: it answers vocal phrases and takes whole solo breaks, so write line-ends that hand off to it and plan the instrumental turnaround where the accordion sings alone.",
+            "Pick the dance and let it set the feel: a polka or redova for bright momentum, a waltz (vals) for a swaying number, a bolero tempo for a slow love song \u2014 norteno is dance music first, so the groove decides the phrasing before the words do.",
+            "Two home registers, one band: the sung narrative (a corrido carrying a story with names and places) and the cantina love song (devotion, heartbreak, longing, a drink and a hard night) \u2014 decide which the user's story is before choosing point of view.",
+            "For the love songs, keep it plainspoken and sincere: direct first-person address, everyday words, real ache \u2014 norteno romance is heartfelt and unironic, so understatement and a true detail beat any clever turn.",
+            "Rhyme steady and singable: clean end-rhyme, often in couplets or the corrido quatrain, so the story or the sentiment stays easy to follow at dance-floor volume.",
+            "Sit the vocal in a natural, conversational range: norteno is sung close to speech, warm and slightly nasal in tradition, more told than belted \u2014 write phrases a plain voice can carry without straining.",
+            "Let the chorus land the ache or the boast in one clear line: the hook is the emotional headline the accordion then echoes, so make it plain enough to sing back and true enough to mean."
+          ],
+          "rendering": "Accordion leading melody and answering the vocal, bajo sexto (twelve-string) strumming and running bass runs, tololoche (upright bass) or electric bass, tarola and a light drum kit keeping the two-step or waltz. Warm conversational lead vocal, often a two-voice harmony on the chorus; tight border-norteno acoustic mix, cantina-live feel \u2014 accordion and bajo sexto out front, no synths.",
+          "storyFit": "Best for: sung stories with real people and places, devoted or heartbroken love, longing across the border, loyalty, a hard-luck night, honoring someone in narrative. Poor fit: dense club boasting, huge plaza-anthem energy (that is banda), abstract mood pieces with no story or no one being addressed.",
+          "parodyTraps": "Generated border slang or accent spelling the user never wrote; cartel or gun props injected into a story that never had them; postcard cliches instead of the user's real details; a wall-to-wall lyric that leaves the accordion no room to answer or solo; a belted plaza delivery that ignores the conversational voice.",
+          "performance": {
+            "prose": "Density moderate; min adlibs 3; delivery tags [Instrumental Break] [Harmonies] [Shout]. This room performs like a small border band in a cantina \u2014 one warm conversational lead, a second harmony voice on the chorus, and the accordion as the answering instrument, with the players throwing an occasional joyful shout. Signature: the accordion answer and turnaround \u2014 the squeezebox echoes the vocal at line-ends and takes the instrumental break alone, and a joyful shout from the players tops a big line or kicks off the solo. Placement: the harmony voice comes in on the chorus and the emotional peaks; the accordion fills the gaps at line-ends and owns the [Instrumental Break]; a joyful shout marks the turn into the solo or the last chorus. Tag identity: a lead and a harmony partner over an answering accordion \u2014 a second voice on the hook, the accordion singing in the holes, a joyful shout thrown by the players as release. Any shout is plain-English energy, never a scripted exclamation the user did not bring.",
+            "adlibDensity": "moderate",
+            "minAdlibs": 3,
+            "deliveryTags": [
+              "[Instrumental Break]",
+              "[Harmonies]",
+              "[Shout]"
+            ]
+          },
+          "builder": {
+            "instruments": [
+              "acorde\xF3n",
+              "bajo sexto",
+              "tololoche",
+              "tarola"
+            ],
+            "themes": [
+              "La frontera",
+              "Lealtad y la palabra",
+              "El corrido de un valiente",
+              "La familia y la madre",
+              "Traici\xF3n y venganza"
+            ],
+            "purposes": [
+              "Contar una historia",
+              "Recordar al ausente",
+              "Honrar a alguien",
+              "Bailar en la fiesta"
+            ]
+          }
+        },
+        {
+          "id": "corrido",
+          "name": "Corrido (Tradicional)",
+          "oneLine": "The storytelling engine of the whole genre \u2014 a sung ballad that narrates one true story in the third person, with real names, places, and dates, plainly and in order.",
+          "tempoGroove": "75-140 BPM in a steady march or waltz that never rushes the tale; the band keeps a driving, even pulse so the words stay front and center. Word density is high for the genre \u2014 this is a narrative form, so verses carry a lot of story, but phrases still break for the accordion or brass to punctuate.",
+          "writingDials": [
+            "Tell it third-person and in order: the corrido narrates a story about someone, start to finish, like a news ballad \u2014 even if the story is the user's own, the traditional frame reports the events plainly rather than confessing them inward.",
+            "Name the specifics the tradition lives on: a real person, a real place, a real time \u2014 the corrido earns belief through concrete detail, so build the verses from the actual who, where, and when of the user's story.",
+            "Open by announcing the subject and close by taking leave: corridos traditionally state up front who and what this ballad is about, and end with a farewell or a moral \u2014 plan the first verse as an announcement and the last as a sign-off.",
+            "Advance the plot every verse: each verse moves the events forward \u2014 this is the one room where narrative progression outranks a repeated hook, and a chorus is optional; if there is one, keep it a short refrain between story beats.",
+            "Serve whatever true story the user brought \u2014 a struggle, a rise, a loyalty, a hero, a loss: honor the storytelling craft, and never add violence, weapons, cartels, or crime the user did not put in their own story.",
+            "Stay acoustic and traditional in the writing: this is the old sung-ballad form on accordion or brass, not the modern trap-fused sound \u2014 keep the cadence a march or waltz, never an 808 bounce.",
+            "Keep the language plain and reportorial: steady quatrains, clean end-rhyme, everyday words the story rides on \u2014 the drama comes from the events, not from ornament, and a clear line beats a clever one."
+          ],
+          "rendering": "Traditional acoustic backing \u2014 either norteno accordion and bajo sexto with upright bass, or a banda brass section \u2014 over a steady march or waltz, with instrumental turnarounds between verses. Clear storytelling lead vocal, more narrated than belted, plain and forward so every word of the tale lands; live traditional mix, no 808s or trap production, no synths.",
+          "storyFit": "Best for: telling one true story, honoring a hero or an elder, a struggle or a rise, loyalty and the given word, remembering the fallen, an event worth recording. Poor fit: abstract mood, tight repetitive dance hooks, present-tense party energy, or any story with no events to narrate in sequence.",
+          "parodyTraps": "Inventing violence, guns, cartels, or crime the user never wrote \u2014 the single hardest law here; narco costume pasted onto a peaceful story; vague generalities where names and places belong; skipping the story to loop a hook; any 808 or trap production, which belongs to the separate modern corrido lane, not this traditional room.",
+          "performance": {
+            "prose": "Density sparse; min adlibs 2; delivery tags [Instrumental Break] [Shout]. This room performs like a balladeer telling a true story to a listening room \u2014 one clear narrating lead carries nearly all of it, and the band punctuates between story beats rather than answering every line. Signature: the instrumental turnaround between verses \u2014 the accordion or brass takes a short break that marks the passage of time in the tale, and a joyful shout from the players lifts the turn into a new verse or the finish. Placement: the lead narrates the verses almost unbroken; an [Instrumental Break] falls between major story beats to let events breathe; a joyful shout marks a peak or the sign-off. Tag identity: a lone storyteller and a punctuating band \u2014 the narrating lead front and center, instrumental turnarounds between verses, a joyful shout thrown by the players as release. The shout is energy in plain English, never a scripted exclamation, and the story is only ever the one the user actually told.",
+            "adlibDensity": "sparse",
+            "minAdlibs": 2,
+            "deliveryTags": [
+              "[Instrumental Break]",
+              "[Shout]"
+            ]
+          },
+          "builder": {
+            "instruments": [
+              "acorde\xF3n",
+              "bajo sexto",
+              "tololoche",
+              "trompetas de banda",
+              "tarola",
+              "tuba"
+            ],
+            "themes": [
+              "El corrido de un valiente",
+              "La lucha y el trabajo",
+              "Lealtad y la palabra",
+              "Orgullo del pueblo",
+              "La familia y la madre"
+            ],
+            "purposes": [
+              "Contar una historia",
+              "Honrar a alguien",
+              "Recordar al ausente",
+              "Presumir el logro"
+            ]
+          }
+        },
+        {
+          "id": "sierre-o",
+          "name": "Sierre\xF1o",
+          "oneLine": "The stripped acoustic corner of the sierra \u2014 just requinto guitar, twelve-string bajo, and tuba, spare and intimate, the traditional root the modern tumbado grew from.",
+          "tempoGroove": "70-120 BPM, unhurried and often rubato at the edges, a small acoustic trio breathing with the singer; the tuba walks a soft bass while the requinto answers. Word density is low-to-medium \u2014 the sparseness is the point, so leave real air around the lines and let the requinto fill it.",
+          "writingDials": [
+            "Write for a trio, not a band: only requinto, bajo, and tuba are holding the song up, so keep the arrangement in mind and leave open space for the lead guitar to answer and the bass to walk between phrases.",
+            "Intimacy over spectacle: this is the close, personal end of the umbrella \u2014 a small-room confession or a first-person story sung near to the mic, so favor a true quiet detail over any big communal gesture.",
+            "The requinto is a duet partner: write phrase-ends that invite the lead acoustic guitar to answer and take delicate solo runs, and plan the turnaround where it sings alone between verses.",
+            "Let the tempo breathe: sierreno often sits back and rushes nothing, so write phrases that can stretch and settle rather than lock hard to a dance grid \u2014 the space is a feature, not a gap to fill.",
+            "Plain, sincere, unadorned language: with so little instrumentation, the words are exposed, so understatement and honesty carry further than ornament, and one real image outweighs a pretty generality.",
+            "Serves both the ballad and the quiet story: a heartfelt love song or a first-person telling both fit here \u2014 and the same no-invented-violence law holds, the form carries whatever true story the user brought.",
+            "Keep it acoustic and traditional: this is the unplugged sierra root, requinto and tuba, not the 808-fused modern sound \u2014 hold the writing to that spare live-trio world."
+          ],
+          "rendering": "Spare acoustic trio: requinto (small nylon-string lead guitar) answering the vocal with delicate runs, twelve-string bajo (bajo sexto or bajo quinto) strumming, sousaphone or tuba walking a soft bass. Intimate close-miked lead vocal, sometimes a second harmony voice; dry, warm, unplugged sierra mix with real air around everything \u2014 no drums needed, no synths, no 808s.",
+          "storyFit": "Best for: intimate love songs, a personal first-person story, longing, devotion, a quiet tribute, reflection sung close. Poor fit: plaza-anthem energy, dense party boasting, big brass celebration, anything that needs volume and a crowd.",
+          "parodyTraps": "Fake regional slang the user never wrote; imported cartel or gun props in a tender story; filling the spare arrangement with extra instruments until the intimacy is gone; an over-belted delivery that breaks the closeness; 808s or trap drums, which belong to the separate modern lane, not this acoustic room.",
+          "performance": {
+            "prose": "Density sparse; min adlibs 2; delivery tags [Instrumental Break] [Harmonies]. This room performs like two or three players close together in a small room \u2014 an intimate lead, sometimes a single harmony voice, and the requinto as the answering partner, no crowd and no wall of sound. Signature: the requinto answer \u2014 the lead acoustic guitar replies to the vocal in the open space at line-ends and takes a delicate solo turnaround between verses, the whole trio breathing with the singer. Placement: a harmony voice slips in on the emotional peaks only; the requinto fills the gaps the sparse writing leaves and owns the [Instrumental Break] turnaround; verses stay bare so the closeness reads. Tag identity: a small acoustic trio and an intimate lead \u2014 the requinto answering in the holes, an occasional second harmony voice at the peaks, the tuba walking soft underneath. No crowd, no brass wall, no shouted hype \u2014 just a few players and the air between them, and every word is the user's own.",
+            "adlibDensity": "sparse",
+            "minAdlibs": 2,
+            "deliveryTags": [
+              "[Instrumental Break]",
+              "[Harmonies]"
+            ]
+          },
+          "builder": {
+            "instruments": [
+              "requinto",
+              "guitarra ac\xFAstica",
+              "bajo sexto",
+              "tuba"
+            ],
+            "themes": [
+              "La familia y la madre",
+              "Lealtad y la palabra",
+              "El rancho y la tierra",
+              "La lucha y el trabajo"
+            ],
+            "purposes": [
+              "Recordar al ausente",
+              "Honrar a alguien",
+              "Contar una historia",
+              "Celebrar con la banda"
+            ]
+          }
+        }
+      ],
+      "cues": [
+        {
+          "cue": "banda",
+          "strength": "strong",
+          "roomId": "banda-sinaloense"
+        },
+        {
+          "cue": "banda sinaloense",
+          "strength": "strong",
+          "roomId": "banda-sinaloense"
+        },
+        {
+          "cue": "tambora",
+          "strength": "strong",
+          "roomId": "banda-sinaloense"
+        },
+        {
+          "cue": "quebradita",
+          "strength": "strong",
+          "roomId": "banda-sinaloense"
+        },
+        {
+          "cue": "brass band",
+          "strength": "weak",
+          "roomId": "banda-sinaloense"
+        },
+        {
+          "cue": "plaza",
+          "strength": "weak",
+          "roomId": "banda-sinaloense"
+        },
+        {
+          "cue": "fiesta",
+          "strength": "weak",
+          "roomId": "banda-sinaloense"
+        },
+        {
+          "cue": "hometown pride",
+          "strength": "weak",
+          "roomId": "banda-sinaloense"
+        },
+        {
+          "cue": "celebration",
+          "strength": "weak",
+          "roomId": "banda-sinaloense"
+        },
+        {
+          "cue": "norte\xF1o",
+          "strength": "strong",
+          "roomId": "norte-o"
+        },
+        {
+          "cue": "norteno",
+          "strength": "strong",
+          "roomId": "norte-o"
+        },
+        {
+          "cue": "accordion",
+          "strength": "strong",
+          "roomId": "norte-o"
+        },
+        {
+          "cue": "bajo sexto",
+          "strength": "strong",
+          "roomId": "norte-o"
+        },
+        {
+          "cue": "polka",
+          "strength": "weak",
+          "roomId": "norte-o"
+        },
+        {
+          "cue": "cantina",
+          "strength": "weak",
+          "roomId": "norte-o"
+        },
+        {
+          "cue": "border",
+          "strength": "weak",
+          "roomId": "norte-o"
+        },
+        {
+          "cue": "two-step",
+          "strength": "weak",
+          "roomId": "norte-o"
+        },
+        {
+          "cue": "love song",
+          "strength": "weak",
+          "roomId": "norte-o"
+        },
+        {
+          "cue": "corrido",
+          "strength": "strong",
+          "roomId": "corrido"
+        },
+        {
+          "cue": "corrido tradicional",
+          "strength": "strong",
+          "roomId": "corrido"
+        },
+        {
+          "cue": "ballad",
+          "strength": "strong",
+          "roomId": "corrido"
+        },
+        {
+          "cue": "true story",
+          "strength": "weak",
+          "roomId": "corrido"
+        },
+        {
+          "cue": "tell the story of",
+          "strength": "weak",
+          "roomId": "corrido"
+        },
+        {
+          "cue": "hero",
+          "strength": "weak",
+          "roomId": "corrido"
+        },
+        {
+          "cue": "honor him",
+          "strength": "weak",
+          "roomId": "corrido"
+        },
+        {
+          "cue": "honor her",
+          "strength": "weak",
+          "roomId": "corrido"
+        },
+        {
+          "cue": "remember the fallen",
+          "strength": "weak",
+          "roomId": "corrido"
+        },
+        {
+          "cue": "sierre\xF1o",
+          "strength": "strong",
+          "roomId": "sierre-o"
+        },
+        {
+          "cue": "sierreno",
+          "strength": "strong",
+          "roomId": "sierre-o"
+        },
+        {
+          "cue": "requinto",
+          "strength": "strong",
+          "roomId": "sierre-o"
+        },
+        {
+          "cue": "acoustic trio",
+          "strength": "weak",
+          "roomId": "sierre-o"
+        },
+        {
+          "cue": "stripped",
+          "strength": "weak",
+          "roomId": "sierre-o"
+        },
+        {
+          "cue": "intimate",
+          "strength": "weak",
+          "roomId": "sierre-o"
+        },
+        {
+          "cue": "unplugged",
+          "strength": "weak",
+          "roomId": "sierre-o"
+        }
+      ]
+    },
+    "salsa": {
+      "id": "salsa",
+      "name": "Salsa",
+      "aliases": [
+        "salsa music",
+        "salsa dura",
+        "salsa romantica",
+        "salsa rom\xE1ntica",
+        "timba",
+        "salsa brava"
+      ],
+      "profileText": "A salsa writer starts with the clave \u2014 the hidden two-bar pulse that every line, every stab, and every drum answers to. It is rarely played on its own, but it governs everything: a phrase that fights the clave sounds wrong even to a listener who could not name why. So the writing job is rhythmic before it is verbal \u2014 scan each line against the clave, land the stressed syllables where the pulse wants them, and leave the piano montuno, the tumbao bass, and the brass room to answer between phrases. A salsa sheet packed wall-to-wall, with no gaps for the mambo to punch, has failed before its first word is judged. And the song commits to one clave direction \u2014 2-3 or 3-2; once it is set, every line, the canto, the coro, and the preg\xF3n, stays on that side of it, because a phrase that lands reversed against the section (crossing the clave) is the fastest tell of fake salsa and gets recut, never forced.\n\nThe song has two halves, and the second is the soul of the genre. First the canto \u2014 the sung verses that lay out the story. Then the montuno: a fixed coro (a short repeated chorus line the writer sets) trades with the sonero, the lead singer, who improvises fresh calls \u2014 the preg\xF3n \u2014 around it. The writer builds both halves on purpose. The coro must be short, chantable, and open enough to answer, because it repeats many times and the sonero fires new lines into the gaps after it. That improvisation is the genre's living heart; the page cannot script it, but it must leave the exact room for it and set a coro worth answering.\n\nThe rooms bend all of this. Salsa dura writes hard on-the-beat testimony for a barrio, its coro a shouted verdict, the I widening into we. Salsa rom\xE1ntica writes longer sung phrases for one lover, its coro a private promise, open vowels saved for the voice. Timba writes the densest, most syncopated lines and turns on abrupt breaks, its coro a command snapped at the floor. The law above every dial is the same as everywhere: Spanish is the song's language, but slang, accent spellings, and island or street costume appear only if the user wrote them. Craft words \u2014 clave, montuno, coro, preg\xF3n, sonero, tumbao, mambo \u2014 are the writer's tools, never the song's, and never enter the lyrics, adlibs, or render notes. Delivery is directed as rhythm and energy in plain English \u2014 cadence, bounce, punch \u2014 never as an accent, and the user's own places and people always outrank any stock tropical scenery.",
+      "defaultRoomId": "salsa-dura",
+      "rooms": [
+        {
+          "id": "salsa-dura",
+          "name": "Salsa Dura",
+          "oneLine": "The hard Fania-era sound of the barrio \u2014 aggressive brass, social weight, and a sonero who testifies over a driving montuno.",
+          "tempoGroove": "~90-100 BPM counted on the quarter note (felt in cut-time, in 2 \u2014 the danced pulse is the slow half, not a fast one) locked to a 2-3 or 3-2 son clave \u2014 the hidden pulse every line must respect. Word density moderate and percussive: tight on-the-beat phrases short enough for a brass mambo to punch between them, never wall-to-wall.",
+          "writingDials": [
+            "Clave-first: scan every line against the clave before keeping it \u2014 stressed syllables lock to the clave hits, and a line that fights the pulse gets recut, never forced onto it.",
+            "Two-part build is structural: write a sung canto that lays out the story in order, then hand the song to the montuno where a fixed coro repeats and the sonero answers \u2014 plan both halves from the start, because the montuno is where a dura song lives.",
+            "Write the coro as a rallying chant: a short declarative phrase of roughly two to five words, built for a group to shout back and repeat many times, gaining weight each round; the coro states the song's verdict, the barrio's line on it.",
+            "Leave real space for the preg\xF3n: after each coro, mark the gap where the sonero improvises a fresh call \u2014 so the coro line must end open enough to answer and stay simple enough to survive twenty returns.",
+            "Register is testimony with an edge: injustice, barrio pride, betrayal, survival told plainly and defiantly; the I is allowed to widen into we by the montuno, one man's complaint becoming the block's.",
+            "Rhyme is clean and confident \u2014 simple perfect rhymes read as timeless here, and repeating a key word beats a clever scheme; the honest word outranks the rhyming one.",
+            "Concrete detail is the currency: the real corner, the real work, the real name from the user's story \u2014 never stock barrio scenery.",
+            "Cross-genre firewall: the aggressive brass mambo and the montuno's rallying call-and-response make it dura, not rom\xE1ntica's smoothed love-croon \u2014 dura's coro is a crowd shouting a verdict, not a lover echoing a promise."
+          ],
+          "rendering": "Driving piano montuno, tumbao bass locked to the clave, congas timbales and bongo full and hot, aggressive trombone-and-trumpet mambo stabs between phrases. Raw upfront lead vocal answered by a full coro shouting the responses; 1970s Fania analog warmth, real room, no modern gloss.",
+          "storyFit": "Best for: barrio pride, social injustice, betrayal and its comeuppance, survival, hard-won respect, the block itself. Poor fit: tender private love at whisper distance, delicate apology, quiet reflection \u2014 that heat belongs to rom\xE1ntica.",
+          "parodyTraps": "Any Spanish slang the user did not write; generic spicy-Latin-party clich\xE9s; postcard tropical scenery; making the coro clever instead of chantable; letting the horns and words fill every beat so the clave drowns.",
+          "performance": {
+            "prose": "Density heavy; min adlibs 8; delivery tags [Call and Response] [Brass] [Percussion Break] [Ad-Lib Section]. This room performs like a barrio band with the block singing back \u2014 a lead sonero over a full brass section, and the montuno's call-and-response is the whole signature. Signature: the coro answered \u2014 the group shouts the fixed coro and the sonero fires a fresh improvised call into the gap after it, the coro gathering voices on each return so the same line lands harder every round. Placement: the canto stays lead-forward with light doubles; the adlibs and answers live in the montuno, where the sonero and coro trade every pass and a [Percussion Break] header can hand the drums a stretch. Tag identity: a lead sonero plus a full coro answering as the barrio \u2014 short shouted (coro responses) to the sonero's improvised calls, brass-stab and break headers, group voices swelling on each coro repeat. No solo crooning, no lone star \u2014 the room answers as one, in the song's own plain words.",
+            "adlibDensity": "heavy",
+            "minAdlibs": 8,
+            "deliveryTags": [
+              "[Call and Response]",
+              "[Brass]",
+              "[Percussion Break]",
+              "[Ad-Lib Section]"
+            ]
+          },
+          "builder": {
+            "instruments": [
+              "piano montuno",
+              "bajo tumbao",
+              "congas",
+              "timbales",
+              "bong\xF3",
+              "tromb\xF3n",
+              "trompetas",
+              "campana"
+            ],
+            "themes": [
+              "El barrio y la calle",
+              "Injusticia social",
+              "Orgullo latino"
+            ],
+            "purposes": [
+              "Contar la vida del barrio",
+              "Bailar en la pista",
+              "Encender la fiesta"
+            ]
+          }
+        },
+        {
+          "id": "salsa-rom-ntica",
+          "name": "Salsa Rom\xE1ntica",
+          "oneLine": "The smooth 80s-and-90s love lane \u2014 polished, melodic, and sung close, where the montuno turns into a lover's repeated promise.",
+          "tempoGroove": "~85-95 BPM (quarter-note, felt in cut-time) over a lighter, rounded clave groove with every edge softened \u2014 the pulse stays, but the room is intimate, not a rally. Lower word density with open vowels at line-ends; the singer croons, so lines must leave room to hold and bend a note.",
+          "writingDials": [
+            "Keep the world close: one couple, one feeling \u2014 devotion, longing, an apology, a memory of them. Never widen to community or message; that is dura's lane.",
+            "The canto is a real conversation moving forward: verse two must advance the story of these two specific people \u2014 an answer, a next step, a memory \u2014 never re-circle verse one's feeling.",
+            "Write for a crooner: end the lines that carry the feeling on open vowels a voice can hold and slide; avoid hard consonant endings on the peaks.",
+            "The montuno is still the engine, but the coro is a tender vow: write a short repeated promise or a lover's question aimed at one person \u2014 intimate, never a crowd chant \u2014 and leave the gap where the sonero improvises softer, warmer calls around it.",
+            "Couplets that resolve: gentle perfect or near-perfect rhymes that close sweetly feel romantic here, where dura leaves lines open for the shout.",
+            "Sensuality is adult and suggested, carried by one image that turns romantic on the second listen and sustains \u2014 never spelled out.",
+            "Point of view: first person to a you who must feel like the real person from the user's story \u2014 include one detail only they would recognize.",
+            "Cross-genre firewall: the smooth polished production and a montuno coro sung as a private promise make it rom\xE1ntica, not dura \u2014 here the coro is a lover repeating a vow, not a barrio shouting a verdict."
+          ],
+          "rendering": "Silky piano montuno, round warm tumbao bass, congas and timbales played soft and tight, lush strings or pads, tender muted brass answering the voice. Polished close-miked lead with airy harmonies and generous reverb; late-80s-through-90s studio sheen.",
+          "storyFit": "Best for: love letters, anniversaries, apologies, new romance, missing a partner, devotion through hard times. Poor fit: protest, barrio boasting, hard social weight, explicit heat \u2014 rom\xE1ntica suggests, it never spells out.",
+          "parodyTraps": "Machine-added Spanish pet names the user never wrote; running the seduction-cliche checklist instead of the couple's real details; getting explicit; a coro that behaves like a crowd chant instead of a private promise; strings-and-roses greeting-card lines with no specific person in them.",
+          "performance": {
+            "prose": "Density moderate; min adlibs 4; delivery tags [Call and Response] [Harmonies] [Crooning] [Soft]. This room performs at close distance \u2014 one tender sonero with soft harmony doubles, and the montuno softened into intimate trading. Signature: the promise answered \u2014 a small warm coro repeats the sung vow and the lead improvises tender calls into the gap after it, close and breathy, gathering feeling each pass rather than volume. Placement: the canto stays nearly bare so the crooning carries it, at most one soft echo under a peak line; the trading lives in the montuno, kept intimate, and a muted brass or piano answer can take a section instead of any vocal show. Tag identity: an intimate lead with a soft coro answering as one warm voice \u2014 airy (coro responses) to the sonero's tender calls, a held last word marked with trailing dots, harmonies arriving on the final montuno. No shouting barrio, no crowd \u2014 two people and a soft groove, every echoed word from the song's own sheet.",
+            "adlibDensity": "moderate",
+            "minAdlibs": 4,
+            "deliveryTags": [
+              "[Call and Response]",
+              "[Harmonies]",
+              "[Crooning]",
+              "[Soft]"
+            ]
+          },
+          "builder": {
+            "instruments": [
+              "piano montuno",
+              "bajo tumbao",
+              "congas",
+              "timbales",
+              "trompetas",
+              "tromb\xF3n"
+            ],
+            "themes": [
+              "Romance caliente",
+              "Amor y enga\xF1o",
+              "Nostalgia del que se fue"
+            ],
+            "purposes": [
+              "Enamorar",
+              "Recordar la tierra",
+              "Bailar en la pista"
+            ]
+          }
+        },
+        {
+          "id": "timba",
+          "name": "Timba / Salsa Brava",
+          "oneLine": "The dense, virtuosic Cuban lane \u2014 streetwise, syncopated, and cocky, with a montuno that trades commands at speed.",
+          "tempoGroove": "~85-100 BPM (quarter-note), rolling and heavy \u2014 its intensity comes from dense syncopation and abrupt section breaks, not a faster tempo, over the clave. The highest word density of the three: rapid rhythm-riding phrases locked to the bounce, with punch-and-pause gaps left for the coro to snap back.",
+          "writingDials": [
+            "Ride the clave dense: near-rap cadence with internal rhyme locked to the syncopation \u2014 the words work as another percussion line, so mouth-feel and pocket outrank neat sentences.",
+            "Two-part shape, but the montuno dominates: keep the canto short and get to the montuno fast, where the fixed coro and the sonero trade at speed \u2014 plan many short coros a song can cycle through, because the trading IS the song.",
+            "Write the coro as a command or a flat boast: tell the floor what to do or state the claim plain, short enough to shout back on the second pass; two alternating coro lines trading back and forth make a legitimate hook.",
+            "Write punch-and-pause: land a hard phrase, then leave a beat for the coro or the crowd to snap back \u2014 the gap after the punch is part of the lyric, and the sonero's calls fire fast and cocky into it.",
+            "Ride one rhyme sound for several lines on purpose: hammering the same end-sound builds momentum here, where most lanes would read it as lazy.",
+            "Present tense and cocky: the song happens NOW, on the floor or on the street \u2014 swagger, rivalry, flirtation, hustle pride, stated flat and never explained; a boast that gets justified dies.",
+            "Sections contrast by feel and break, not by adding plot: switch the vocal rhythm and drop into a hard break instead of walking through a story \u2014 and the boasts must be the user's real wins, not stock luxury.",
+            "Cross-genre firewall: the density, the abrupt breaks, and a montuno of rapid traded commands make it timba, not dura's slower on-the-beat testimony \u2014 timba's coro snaps a command at the floor where dura's shouts a verdict to the barrio."
+          ],
+          "rendering": "Aggressive syncopated piano montuno, hard-driving tumbao bass, congas timbales and bongo dense and virtuosic with abrupt breaks, stabbing full brass. Rhythm-riding lead vocal talk-singing more than crooning, with hype coro doubles cracking on the punch words; modern 1990s-to-now Havana sound, hot and busy but clave-locked.",
+          "storyFit": "Best for: dancefloor swagger, confidence, bold flirtation, rivalry and winning, street hustle pride, celebration. Poor fit: grief, tender apology, slow reflection, quiet devotion \u2014 the groove has no patience for them.",
+          "parodyTraps": "Machine-written Cuban slang the user never wrote; American rap phrasing pasted over the clave (loses the bounce entirely); long storytelling verses; explaining or softening the boast; coros with too many words for a crowd to snap back.",
+          "performance": {
+            "prose": "Density heavy; min adlibs 8; delivery tags [Call and Response] [Brass] [Break] [Ad-Lib Section]. This room performs like a band working a packed floor \u2014 the sonero rides the clave and the coro snaps back, with hype doubles cracking on the punch words. Signature: the answered punch \u2014 a hard phrase lands, and the written gap gets the coro's short shouted snap-back or a hype double of the punch word, one answer per gap, so the record sounds like the floor it is for. Placement: the short canto stays lead-forward; the trading floods the montuno, where the coro answers every pass and thickens on each command's return, and a hard [Break] header can drop the band out for a bar. Tag identity: a sonero and a snapping coro \u2014 hype (coro doubles) on the hard lines, short shouted (coro snap-backs) in the written gaps, two-line command coros traded between lead and group. All delivery stays rhythm-and-energy language in the song's own plain words \u2014 cadence, bounce, punch \u2014 never a request for slang or accent beyond what the user wrote.",
+            "adlibDensity": "heavy",
+            "minAdlibs": 8,
+            "deliveryTags": [
+              "[Call and Response]",
+              "[Brass]",
+              "[Break]",
+              "[Ad-Lib Section]"
+            ]
+          },
+          "builder": {
+            "instruments": [
+              "piano montuno",
+              "bajo tumbao",
+              "congas",
+              "timbales",
+              "bong\xF3",
+              "trompetas",
+              "tromb\xF3n",
+              "campana"
+            ],
+            "themes": [
+              "Celebraci\xF3n y rumba",
+              "Sabor y alegr\xEDa de vivir",
+              "Orgullo latino"
+            ],
+            "purposes": [
+              "Encender la fiesta",
+              "Celebrar la rumba",
+              "Bailar en la pista"
+            ]
+          }
+        }
+      ],
+      "cues": [
+        {
+          "cue": "salsa dura",
+          "strength": "strong",
+          "roomId": "salsa-dura"
+        },
+        {
+          "cue": "fania",
+          "strength": "strong",
+          "roomId": "salsa-dura"
+        },
+        {
+          "cue": "el barrio",
+          "strength": "strong",
+          "roomId": "salsa-dura"
+        },
+        {
+          "cue": "injusticia",
+          "strength": "weak",
+          "roomId": "salsa-dura"
+        },
+        {
+          "cue": "la calle",
+          "strength": "weak",
+          "roomId": "salsa-dura"
+        },
+        {
+          "cue": "orgullo",
+          "strength": "weak",
+          "roomId": "salsa-dura"
+        },
+        {
+          "cue": "struggle",
+          "strength": "weak",
+          "roomId": "salsa-dura"
+        },
+        {
+          "cue": "old school",
+          "strength": "weak",
+          "roomId": "salsa-dura"
+        },
+        {
+          "cue": "salsa rom\xE1ntica",
+          "strength": "strong",
+          "roomId": "salsa-rom-ntica"
+        },
+        {
+          "cue": "romance",
+          "strength": "strong",
+          "roomId": "salsa-rom-ntica"
+        },
+        {
+          "cue": "anniversary",
+          "strength": "strong",
+          "roomId": "salsa-rom-ntica"
+        },
+        {
+          "cue": "amor",
+          "strength": "weak",
+          "roomId": "salsa-rom-ntica"
+        },
+        {
+          "cue": "love song",
+          "strength": "weak",
+          "roomId": "salsa-rom-ntica"
+        },
+        {
+          "cue": "apology",
+          "strength": "weak",
+          "roomId": "salsa-rom-ntica"
+        },
+        {
+          "cue": "mi amor",
+          "strength": "weak",
+          "roomId": "salsa-rom-ntica"
+        },
+        {
+          "cue": "missing someone",
+          "strength": "weak",
+          "roomId": "salsa-rom-ntica"
+        },
+        {
+          "cue": "timba",
+          "strength": "strong",
+          "roomId": "timba"
+        },
+        {
+          "cue": "salsa brava",
+          "strength": "strong",
+          "roomId": "timba"
+        },
+        {
+          "cue": "cuban salsa",
+          "strength": "strong",
+          "roomId": "timba"
+        },
+        {
+          "cue": "party",
+          "strength": "weak",
+          "roomId": "timba"
+        },
+        {
+          "cue": "swagger",
+          "strength": "weak",
+          "roomId": "timba"
+        },
+        {
+          "cue": "flirting",
+          "strength": "weak",
+          "roomId": "timba"
+        },
+        {
+          "cue": "rumba",
+          "strength": "weak",
+          "roomId": "timba"
+        }
+      ]
+    },
+    "corridotumbado": {
+      "id": "corridotumbado",
+      "name": "Corrido Tumbado",
+      "aliases": [
+        "corridos tumbados",
+        "tumbado",
+        "tumbados",
+        "corrido belico",
+        "corrido b\xE9lico",
+        "corridos belicos",
+        "trap corrido",
+        "corridos"
+      ],
+      "profileText": "A tumbado writer starts from a fusion, not a template: the acoustic sierre\xF1o core \u2014 a lead requinto running melodic answers, a bajo sexto strumming the body, a tuba walking the bass, sometimes charcheta accents \u2014 married to trap phrasing, a half-time bounce, and the conversational cadence of a generation. The voice is talk-sung and modern: closer to someone recounting their life than to a belted old-style verse, riding just off the beat. The song is a corrido \u2014 a first-person narrative with swagger \u2014 but a MODERN one, so the writing job is to carry a real story or a real feeling on live strings while letting the requinto answer in the gaps. Plan where the words are NOT: land a phrase, stop, and leave the run its room. A wall of words with no air buries the exact sound that makes it tumbado, whatever the drums do.\n\nThe signature performance is a cast, not a solo. The pl\xE1tica opens it \u2014 a short spoken intro from the crew, a few hyped words traded before the requinto and the beat drop in \u2014 and the gritos punctuate it, sharp shouts of pride landing on the hard lines and the coro. These are legit ad-libs, directed as energy in plain English: a burst of hype, a sharp answer, the crew behind the lead. They are never phonetic spelling and never an added accent. The requinto itself is a second voice \u2014 it answers the vocal, it cries under the sad lines, it takes whole breaks of its own. Craft terms this page teaches with \u2014 tumbado, sierre\xF1o, requinto, b\xE9lico, corrido, trap-corrido \u2014 are the writer's working vocabulary, never the song's: they stay out of the lyrics, the adlibs, and the render notes unless the user wrote them first.\n\nTwo laws sit above every dial. Dialect: the user's own words and slang rule; delivery is directed as cadence and energy, never as a Mexican accent or invented slang spellings \u2014 rhythm and phrasing carry the identity in Spanish, written later. And the ethics law, which this genre needs stated plainly: NEVER invent violence, weapons, cartels, drugs, or crime the user did not write. The tumbado can carry a hard, streetwise, flex energy \u2014 but the craft is the NARRATIVE and the swagger, and the song serves the user's real story: a come-up, loyalty, ambition, risk, heartbreak, proving them wrong. If the user brings none of that darkness, the song has none. The drive is never an excuse to write a crime the user never lived.",
+      "defaultRoomId": "corrido-b-lico",
+      "rooms": [
+        {
+          "id": "corrido-b-lico",
+          "name": "Corrido B\xE9lico",
+          "oneLine": "The hard, driving, story-forward core of the movement \u2014 a first-person modern narrative told with swagger over galloping requinto, character and plot leading, energy turned all the way up.",
+          "tempoGroove": "120-150 BPM in a driving corrido gallop \u2014 the bajo sexto and tuba lock a fast walking pulse, the requinto answers in the gaps between phrases. Word density is medium-high and narrative: verses carry story and detail, delivered talk-sung and conversational, riding just ahead of the beat like someone recounting a night that actually happened.",
+          "writingDials": [
+            "Narrative-first: this room tells a STORY. Open on a scene or a name, move it forward verse to verse \u2014 a come-up, a debt paid, a night, a name earned \u2014 and let the plot, not a chorus hook, be the engine. A song that only repeats a mood has failed this room.",
+            "Write the requinto its holes: land phrases and stop, leaving the ends of lines open for the lead run to answer \u2014 the guitar is the second narrator, so a wall of words with no gaps buries the sound that makes it tumbado.",
+            "The swagger is earned, not stated: build the flex through concrete detail from the user's OWN come-up \u2014 the specific work, the people, the risk taken, the doubt proved wrong \u2014 so the confidence reads as a true account, never a generic boast.",
+            "NEVER invent violence, weapons, cartels, drugs, or crime the user did not write. B\xE9lico names the driving ENERGY and the narrative swing, not a subject requirement \u2014 the craft is the story and the nerve; the darkness in the song is only ever the darkness the user brought. A clean come-up told with full b\xE9lico drive is exactly right.",
+            "Point of view is a real person telling it: first person, past or present, direct \u2014 name people, name places, keep the loyalty and the pride specific to whoever the user actually stood with.",
+            "Cadence is talk-sung: conversational phrasing that sits just ahead of the gallop, closer to spoken storytelling than to sustained melody \u2014 the modern youth delivery, not a belted old-style verse.",
+            "Sections carry the arc: verses do the storytelling and run long; the coro is a short summary line or a name the crew can shout back, returning to punctuate the tale rather than to replace it.",
+            "Cross-genre firewall: what makes it THIS room and not Hip-Hop's Trap or Drill is the acoustic engine \u2014 galloping bajo sexto and tuba with the requinto answering runs, a live-string gallop under talk-sung Spanish narrative, no 808 leading; the moment a sliding 808 or a triplet-hat grid takes the floor it has left tumbado for trap."
+          ],
+          "rendering": "Galloping bajo sexto and acoustic guitar, walking tuba bassline, lead requinto runs answering the vocal in the gaps, charcheta accents, driving mid-fast tempo. Talk-sung modern male lead, up-front and dry with a light double, crew shouts in the breaks; modern tumbado production, live acoustic feel, no orchestra, no banda brass.",
+          "storyFit": "Best for: a come-up told as story, loyalty and the crew, proving them wrong, ambition and the risk it took, pride in where you are from, a night that became a legend. Poor fit: tender heartbreak and longing (that is the Sad room), pure dance-floor party, worship \u2014 the gallop wants a story with nerve.",
+          "parodyTraps": "Invented narco, guns, or cartel props the user never wrote; banda brass or mariachi trumpets pasted on; polka-corrido oompah stiffness instead of the modern gallop; a sung stadium chorus where the story should keep moving; American rap phrasing dropped over the requinto; swagger with no real detail under it.",
+          "performance": {
+            "prose": "Density moderate; min adlibs 4; delivery tags [Spoken] [Instrumental Break] [Shout] [Groove]. This room performs like a storyteller with his crew behind him \u2014 the lead talk-sings the tale and the crew answers, and the pl\xE1tica comes first: a short spoken crew intro, a few hyped words traded before the requinto kicks in, is the signature opening of the style. Signature: the crew grito \u2014 a sharp shouted burst of hype from the crew punctuating the end of a hard line or the top of a section, landing in the gaps the phrasing leaves. Placement: the spoken crew intro opens the record before the first requinto run; gritos and short crew shouts land on the coro and at the ends of the boldest verse lines; an [Instrumental Break] gives the requinto a run of its own between verses. Tag identity: a lead narrator and his crew \u2014 a spoken pl\xE1tica intro, sharp crew shouts and gritos on the hard lines, the requinto answering as a second voice. All shouts are pure energy directed in plain English \u2014 hype, sharpness, a burst of pride \u2014 never phonetic spelling and never an invented accent.",
+            "adlibDensity": "moderate",
+            "minAdlibs": 4,
+            "deliveryTags": [
+              "[Spoken]",
+              "[Instrumental Break]",
+              "[Shout]",
+              "[Groove]"
+            ]
+          },
+          "builder": {
+            "instruments": [
+              "guitarra requinto",
+              "bajo sexto",
+              "tuba",
+              "charcheta",
+              "guitarra ac\xFAstica"
+            ],
+            "themes": [
+              "La lucha y el ascenso",
+              "Lealtad y el clan",
+              "Orgullo del barrio",
+              "Adrenalina y riesgo"
+            ],
+            "purposes": [
+              "Contar una historia",
+              "Honrar a los leales",
+              "Motivar al que lucha",
+              "Recordar de d\xF3nde vengo"
+            ]
+          }
+        },
+        {
+          "id": "corrido-sad",
+          "name": "Corrido Sad",
+          "oneLine": "The melancholic sierre\xF1o heart of the movement \u2014 corrido sad, tumbado rom\xE1ntico \u2014 heartbreak, longing, and the quiet ache told over soft requinto, the huge modern crossover lane where the swagger drops and the feeling leads.",
+          "tempoGroove": "75-105 BPM, a slower sierre\xF1o sway \u2014 bajo sexto and light acoustic guitar breathe under a requinto that cries the melodic lead, tuba soft or resting. Word density is low-to-medium: fewer words, more air, phrases that end on held vowels so the voice and the requinto can ache into the gaps.",
+          "writingDials": [
+            "Feeling leads, story stays intimate: this is the ache, not the flex. Keep the world small \u2014 one person, one loss, one memory \u2014 and let the hurt, the missing, the pride that still stings carry the song instead of a plot.",
+            "Write the requinto room to cry: end the feeling-lines on open vowels and leave the bar's tail empty, because the lead run answers the voice like a second person grieving \u2014 a crowded line gives the guitar nothing to say.",
+            "The confession is direct and unguarded: first person to a you who is gone or slipping away, plain and honest \u2014 the modern sad-corrido voice admits the wound flatly, more spoken-tender than belted.",
+            "Pride and heartbreak share one breath: the movement's sadness is proud \u2014 missing someone while refusing to beg, hurting while still standing tall. Let the ache and the swagger coexist; do not sand the song into pure sweetness or pure self-pity.",
+            "NEVER invent violence, drugs, cartels, or crime the user did not write \u2014 and here especially, do not reach for narco melancholy or drowning-the-pain vice imagery the user never brought. If the user's loss is a breakup, a distance, a person, that is the whole of it.",
+            "Keep it specific: one real detail only the two of them would know does more than any general sorrow \u2014 the actual place, the actual habit, the actual last thing said, from the user's own story.",
+            "Sections deepen the wound: verses move the ache forward \u2014 a memory, an admission, a question left hanging \u2014 and the coro is a short aching line that returns heavier each time; the requinto often takes a whole passage where the words stop.",
+            "Cross-genre firewall: what makes it THIS room and not the piano-sierre\xF1o pop crossover (the corridos-con-piano wave) is the acoustic sierre\xF1o engine \u2014 a crying requinto lead and bajo sexto with the tumba-tumba sway, talk-tender modern phrasing, no piano-and-strings ballad bed and no belted power chorus; swap the requinto for a grand piano build and it has left tumbado for the crossover lane."
+          ],
+          "rendering": "Soft requinto crying the lead melody, gentle bajo sexto and acoustic guitar, tuba soft or absent, slower sierre\xF1o sway, spacious and intimate. Tender talk-sung modern male lead, close-mic and dry with light doubles, minimal treatment; modern tumbado sierre\xF1o feel, no orchestra, no strings, no banda.",
+          "storyFit": "Best for: heartbreak, longing, missing someone, an unspoken apology, love that ended, distance, the proud ache of being left. Poor fit: party anthems, hard flex boasts, driving action stories \u2014 the sway has no hurry and the flex would break the ache.",
+          "parodyTraps": "Adding narco or vice melancholy the user never wrote; swapping the requinto for a piano ballad or power-ballad strings; belting a huge stadium chorus where a tender admission belongs; greeting-card sorrow with no specific person in it; mariachi trumpets crying instead of the requinto; self-pity with no pride left in it.",
+          "performance": {
+            "prose": "Density sparse; min adlibs 2; delivery tags [Soft] [Instrumental Break] [Harmonies] [Spoken]. This room performs close and wounded \u2014 one tender lead with the requinto grieving beside him and almost no one else in the room. Signature: the requinto answer \u2014 the lead lands an aching line and the guitar cries a run back into the gap the phrasing left, the instrument carrying the second half of the feeling like a friend who says nothing but stays. Placement: the requinto answer lives at the ends of the feeling-lines and takes a whole [Instrumental Break] where the words stop; the sparse floor of 2 sits where the ache peaks \u2014 a soft harmony ghosting the coro's last words, one low spoken aside where the guard drops. Tag identity: an intimate lead and a crying requinto \u2014 a soft self-harmony echoing the hurt, one quiet spoken confession, the guitar as the grieving second voice. Any spoken or sung direction is tenderness and ache in plain English \u2014 never phonetic spelling, never an added accent.",
+            "adlibDensity": "sparse",
+            "minAdlibs": 2,
+            "deliveryTags": [
+              "[Soft]",
+              "[Instrumental Break]",
+              "[Harmonies]",
+              "[Spoken]"
+            ]
+          },
+          "builder": {
+            "instruments": [
+              "guitarra requinto",
+              "bajo sexto",
+              "guitarra ac\xFAstica",
+              "tuba"
+            ],
+            "themes": [
+              "Traici\xF3n",
+              "La vida en la calle",
+              "Orgullo del barrio"
+            ],
+            "purposes": [
+              "Contar una historia",
+              "Recordar de d\xF3nde vengo",
+              "Motivar al que lucha"
+            ]
+          }
+        },
+        {
+          "id": "tumbado-flex",
+          "name": "Tumbado Flex",
+          "oneLine": "The 808-tinged, boastful come-up lane \u2014 trap phrasing fused onto the requinto, youth cadence and swagger up front, the flex of having made it out told cold and confident.",
+          "tempoGroove": "130-160 BPM felt in a half-time bounce \u2014 a subtle 808 shadows the tuba, bajo sexto and requinto keep the tumbado core, and the pocket bounces like trap while the strings stay live. Word density is medium and bursty: short punchy phrases with swagger, then air where the ad-libs and the requinto answer.",
+          "writingDials": [
+            "Flex leads, told cold: this room boasts the come-up \u2014 money made, doubt proved wrong, the block that raised you \u2014 stated flat and confident as fact, never explained. The moment a flex gets justified it dies.",
+            "Write in bursts, leave the gaps: land a short hard phrase and stop, because the gap is where the ad-lib or the requinto run answers \u2014 filling every bar breaks the bounce and buries the guitar at once.",
+            "Keep the tumbado engine under the trap: the requinto still answers and the bajo sexto still walks \u2014 the 808 is a shadow, not the whole floor. If the acoustic drops out entirely it is Latin trap, not tumbado flex.",
+            "The detail is the user's OWN: swagger only lands when the car, the work, the win, the name are real and specific \u2014 generic luxury inventory is how two users end up with the same song, which is failure.",
+            "NEVER invent narco, weapons, cartels, drugs, or crime the user did not write \u2014 this room's hard edge is the flex of a come-up and the cold confidence of proving them wrong, not a crime r\xE9sum\xE9. A clean flex told with full swagger is exactly the room; imported darkness is parody and worse.",
+            "Cadence is modern and talk-sung: youth flow riding just off the beat, closer to a confident spoken flex than to melody, with a coro that stays the simplest chant in the song.",
+            "Sections lean on the hook: verses drop bursts of flex and detail, the coro is a short chant the crew shouts back and returns often \u2014 momentum comes from the hook coming back, not from a build.",
+            "Cross-genre firewall: what makes it THIS room and not Hip-Hop's Trap or Latin Trap is that the requinto and bajo sexto still lead \u2014 the 808 is subtle and acoustic strings carry the melody in Spanish tumbado phrasing; kill the requinto and let the 808 and hats run the whole beat and it has crossed fully into trap, out of the movement."
+          ],
+          "rendering": "Requinto runs and walking bajo sexto over a subtle 808 sub shadowing the tuba, half-time bounce, sparse and hard, charcheta accents. Modern talk-sung male lead, dry and up-front with a stacked ad-lib track echoing key words; modern tumbado-trap fusion, live acoustic strings kept present, 808 felt but never dominant.",
+          "storyFit": "Best for: the come-up flexed, money and ambition, proving them wrong, pride in the block, a glow-up stated cold, hyping the grind. Poor fit: tender heartbreak (the Sad room), long narrative storytelling (the burst flow chops a story up), worship \u2014 the bounce wants confidence, not plot or ache.",
+          "parodyTraps": "Inventing narco, guns, or drug content the user never wrote \u2014 the number-one tell; letting the 808 and hats fully replace the requinto until it is just Latin trap; brand-name shopping-list flexes with no real detail; writing ad-libs into every line like punctuation; forcing triplets onto every bar; confusing loud with confident \u2014 real flex is cold and economical.",
+          "performance": {
+            "prose": "Density heavy; min adlibs 4; delivery tags [Spoken] [Ad-Lib Section] [Drop] [Shout]. This room performs as a lead and his own hype behind him, with the crew close by \u2014 the pl\xE1tica still opens it, a short spoken intro traded before the requinto and the 808 drop in. Signature: the punctuation ad-lib \u2014 a burst lands and in the gap the second track answers with an echo of the key word or a sharp hype burst, cold and exact, never stepping on the next phrase. Placement: the spoken intro opens the record; ad-libs live in the gaps the bursts leave and thicken under the coro's returns; crew gritos punctuate the hardest lines and the hook, and a [Drop] can frame the coro's arrival. Tag identity: the lead and his own second self plus the crew \u2014 an echo of the key word after bursts, sharp hype gritos on the flex lines, a doubled chant coro. Every ad-lib and shout is energy and swagger in plain English \u2014 a burst of hype, a hard echo \u2014 never phonetic spelling and never an invented accent.",
+            "adlibDensity": "heavy",
+            "minAdlibs": 4,
+            "deliveryTags": [
+              "[Spoken]",
+              "[Ad-Lib Section]",
+              "[Drop]",
+              "[Shout]"
+            ]
+          },
+          "builder": {
+            "instruments": [
+              "guitarra requinto",
+              "bajo sexto",
+              "808 sutil",
+              "tuba",
+              "charcheta"
+            ],
+            "themes": [
+              "Dinero y lujos",
+              "La lucha y el ascenso",
+              "Orgullo del barrio",
+              "La vida en la calle"
+            ],
+            "purposes": [
+              "Presumir el logro",
+              "Motivar al que lucha",
+              "Recordar de d\xF3nde vengo",
+              "Encender la fiesta"
+            ]
+          }
+        }
+      ],
+      "cues": [
+        {
+          "cue": "corrido tumbado",
+          "strength": "strong",
+          "roomId": "corrido-b-lico"
+        },
+        {
+          "cue": "corrido",
+          "strength": "strong",
+          "roomId": "corrido-b-lico"
+        },
+        {
+          "cue": "la lucha y el ascenso",
+          "strength": "strong",
+          "roomId": "corrido-b-lico"
+        },
+        {
+          "cue": "el ascenso",
+          "strength": "weak",
+          "roomId": "corrido-b-lico"
+        },
+        {
+          "cue": "lealtad",
+          "strength": "weak",
+          "roomId": "corrido-b-lico"
+        },
+        {
+          "cue": "el clan",
+          "strength": "weak",
+          "roomId": "corrido-b-lico"
+        },
+        {
+          "cue": "orgullo del barrio",
+          "strength": "weak",
+          "roomId": "corrido-b-lico"
+        },
+        {
+          "cue": "de d\xF3nde vengo",
+          "strength": "weak",
+          "roomId": "corrido-b-lico"
+        },
+        {
+          "cue": "proving them wrong",
+          "strength": "weak",
+          "roomId": "corrido-b-lico"
+        },
+        {
+          "cue": "la historia",
+          "strength": "weak",
+          "roomId": "corrido-b-lico"
+        },
+        {
+          "cue": "corrido sad",
+          "strength": "strong",
+          "roomId": "corrido-sad"
+        },
+        {
+          "cue": "tumbado rom\xE1ntico",
+          "strength": "strong",
+          "roomId": "corrido-sad"
+        },
+        {
+          "cue": "desamor",
+          "strength": "strong",
+          "roomId": "corrido-sad"
+        },
+        {
+          "cue": "heartbreak",
+          "strength": "weak",
+          "roomId": "corrido-sad"
+        },
+        {
+          "cue": "la extra\xF1o",
+          "strength": "weak",
+          "roomId": "corrido-sad"
+        },
+        {
+          "cue": "lo extra\xF1o",
+          "strength": "weak",
+          "roomId": "corrido-sad"
+        },
+        {
+          "cue": "traici\xF3n",
+          "strength": "weak",
+          "roomId": "corrido-sad"
+        },
+        {
+          "cue": "longing",
+          "strength": "weak",
+          "roomId": "corrido-sad"
+        },
+        {
+          "cue": "missing someone",
+          "strength": "weak",
+          "roomId": "corrido-sad"
+        },
+        {
+          "cue": "tumbado flex",
+          "strength": "strong",
+          "roomId": "tumbado-flex"
+        },
+        {
+          "cue": "trap corrido",
+          "strength": "strong",
+          "roomId": "tumbado-flex"
+        },
+        {
+          "cue": "presumir el logro",
+          "strength": "strong",
+          "roomId": "tumbado-flex"
+        },
+        {
+          "cue": "dinero y lujos",
+          "strength": "weak",
+          "roomId": "tumbado-flex"
+        },
+        {
+          "cue": "flex",
+          "strength": "weak",
+          "roomId": "tumbado-flex"
+        },
+        {
+          "cue": "el logro",
+          "strength": "weak",
+          "roomId": "tumbado-flex"
+        },
+        {
+          "cue": "la ambici\xF3n",
+          "strength": "weak",
+          "roomId": "tumbado-flex"
+        },
+        {
+          "cue": "glow-up",
+          "strength": "weak",
+          "roomId": "tumbado-flex"
+        },
+        {
+          "cue": "808",
+          "strength": "weak",
+          "roomId": "tumbado-flex"
+        }
+      ]
     }
   },
-  "hash": "65da8a835a79",
+  "hash": "20cdf83cfe46",
   "approxTokens": {
     "core": 1794,
     "largestSlice": 3774
@@ -6132,12 +7803,13 @@ var EngineFailure = class extends Error {
     this.reasons = reasons;
   }
 };
+function genreKey(s) {
+  return String(s || "").toLowerCase().normalize("NFD").replace(/[̀-ͯ]/g, "").replace(/[^a-z0-9&]/g, "");
+}
 function resolveGenre(curriculum, genre) {
-  const norm = String(genre || "").toLowerCase().replace(/[^a-z0-9&]/g, "");
+  const norm = genreKey(genre);
   for (const pack of Object.values(curriculum.genres)) {
-    const candidates = [pack.id, pack.name.toLowerCase(), ...pack.aliases].map(
-      (a) => a.toLowerCase().replace(/[^a-z0-9&]/g, "")
-    );
+    const candidates = [pack.id, pack.name, ...pack.aliases].map(genreKey);
     if (candidates.includes(norm)) return pack;
   }
   return null;
