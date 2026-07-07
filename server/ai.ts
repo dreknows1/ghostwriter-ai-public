@@ -1079,6 +1079,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
       genres: Object.keys(CURRICULUM.genres),
       rooms,
       genreBuilder: CURRICULUM.genreBuilder ?? {},
+      genreBuilderByLang: CURRICULUM.genreBuilderByLang ?? {},
     });
   }
   if (req.method !== "POST") {

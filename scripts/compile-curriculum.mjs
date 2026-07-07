@@ -340,7 +340,7 @@ export function lintNoLyricLines(compiled) {
   }
 }
 
-export function compile(brainMd, subgenresMd, profilesByGenreId, genresMd = "") {
+export function compile(brainMd, subgenresMd, profilesByGenreId, genresMd = "", langGenres = {}) {
   const core = compileCore(brainMd);
   if (core.length < 1500) fail(`core suspiciously small (${core.length} chars)`);
   // Back-compat: a lone string is the R&B profile (old signature).
@@ -378,14 +378,21 @@ export function compile(brainMd, subgenresMd, profilesByGenreId, genresMd = "") 
 
   const hashBuilder = createHash("sha256").update(brainMd).update(subgenresMd).update(genresMd);
   for (const id of Object.keys(profiles).sort()) hashBuilder.update(profiles[id]);
+  for (const lang of Object.keys(langGenres || {}).sort()) {
+    for (const g of Object.keys(langGenres[lang]).sort()) {
+      hashBuilder.update(lang).update(g).update(JSON.stringify(langGenres[lang][g]));
+    }
+  }
   const hash = hashBuilder.digest("hex").slice(0, 12);
 
   const bannedPhrases = compileBannedPhrases(brainMd);
   const abstractionWords = compileAbstractionWords(brainMd);
   const validTags = compileValidTags(brainMd);
   const genreBuilder = genresMd ? compileGenreBuilder(genresMd) : {};
+  const genreBuilderByLang = { English: genreBuilder, ...(langGenres || {}) };
   const compiled = {
     genreBuilder,
+    genreBuilderByLang,
     core,
     bannedPhrases,
     abstractionWords,
@@ -425,11 +432,20 @@ function main() {
       // other packs ship when their profile lands
     }
   }
+  const langGenres = {};
+  for (const [lang, file] of [["Spanish", "SONGWRITING_GENRES_ES.md"], ["French", "SONGWRITING_GENRES_FR.md"], ["Portuguese", "SONGWRITING_GENRES_PT.md"]]) {
+    try {
+      langGenres[lang] = compileGenreBuilder(readFileSync(join(ROOT, file), "utf8"));
+    } catch {
+      // a language catalog ships when its file lands
+    }
+  }
   const compiled = compile(
     read("SONGWRITING_BRAIN.md"),
     read("SONGWRITING_SUBGENRES.md"),
     profiles,
-    read("SONGWRITING_GENRES.md")
+    read("SONGWRITING_GENRES.md"),
+    langGenres
   );
   writeFileSync(join(ROOT, "server/engine/curriculum.generated.ts"), render(compiled));
   const packSummary = Object.values(compiled.genres)
@@ -439,6 +455,8 @@ function main() {
     `curriculum compiled: hash ${compiled.hash}, core ~${compiled.approxTokens.core} tokens, ` +
     `largest per-song slice ~${compiled.approxTokens.largestSlice} tokens — ${packSummary}`
   );
+  const langs = Object.entries(compiled.genreBuilderByLang).map(([l, g]) => `${l}:${Object.keys(g).length}`).join(", ");
+  console.log(`  genre catalogs by language — ${langs}`);
 }
 
 if (process.argv[1] === fileURLToPath(import.meta.url)) {
