@@ -9330,9 +9330,2408 @@ Musical craft (the founder's list; each becomes concrete rules)
           "roomId": "nuevo-flamenco"
         }
       ]
+    },
+    "country": {
+      "id": "country",
+      "name": "Country",
+      "aliases": [
+        "country music",
+        "honky-tonk",
+        "honky tonk",
+        "americana",
+        "outlaw country"
+      ],
+      "profileText": "A country writer starts with one true thing and the turn that reveals it. The spine of the genre is a specific real story \u2014 a name, a town, a night, a loss \u2014 carried plain over acoustic-and-steel roots and delivered on a line you did not see coming: a pun that recasts the title, a plainspoken image that lands the whole song, a payoff hook a room can sing. So the writing job is to find the turn first and build the verses up to it. The detail is the whole game: country earns belief through the concrete and the true, so the writer works from the actual bar, the actual truck, the actual name the user brought, and never reaches for a stock tailgate, dirt-road, or whiskey prop to fill a line. A country song that trades the specific true story for costume has already lost, whatever the fiddle does.\n\nThe arrangement is the second voice, and the writer leaves it room. Pedal steel and fiddle answer the phrase-ends, a telecaster throws its licks in the gaps, and a sheet packed wall-to-wall has silenced the instruments that make it country. So lines break early and hand off, and the writer plans the turnaround where the steel or the fiddle sings alone. The roots instrumentation is also the firewall: the steel and telecaster twang keep it clear of folk (rootsier, plainspoken, protest-leaning, no steel), and the fiddle and steel keep it clear of rock (electric-guitar-driven, no steel or fiddle). Direct delivery is a country instinct \u2014 a real cry in the voice, warmth and grit \u2014 but it is directed as tone and phrasing, never as a spelled-out accent, and the singer's plainspoken honesty outranks any clever flourish.\n\nThe rooms bend all of this. Traditional / Honky-Tonk cries in its beer at the bar, the pedal steel weeping the heartbreak back under a two-step, the craft in the wordplay hook. Modern / Radio Country lifts the same life into a wide singable chorus for a Friday-night crowd, the detail kept in the verses and the hook opened for an arena. Americana / Alt-Country pulls the lights down to a listening room and lets the song be a short story, plainspoken and unhurried, the grit in the voice and the truth. The law above every dial is the same everywhere: the user's real people and places rule, never a stock country prop the story did not contain; craft words \u2014 steel-first, the turn, the payoff hook, the two-step \u2014 are the writer's tools, never the song's, and never enter the lyrics, adlibs, or render notes.",
+      "defaultRoomId": "traditional",
+      "rooms": [
+        {
+          "id": "traditional",
+          "name": "Traditional / Honky-Tonk",
+          "oneLine": "The Haggard and Jones lane \u2014 a two-step and a cry in your beer, pedal steel and fiddle weeping the heartbreak back, the wordplay hook landing square on the title.",
+          "tempoGroove": "90-130 BPM in a shuffle or a two-step (the classic honky-tonk shuffle sits around 100-120, the slow-dance heartache ballad drops to 90-100) with a walking upright or electric bass and brushed or shuffle-kit drums keeping the couples moving; the fiddle and pedal steel trade fills between lines. Medium word density: plain conversational lines that break early so the steel can cry the answer, never wall-to-wall.",
+          "writingDials": [
+            "Steel-first: the pedal steel is the second voice and it weeps back at every phrase-end, so end lines a beat early and leave the gap for it to answer \u2014 a sheet that fills every bar silences the instrument that defines the room.",
+            "Build the whole song toward a title hook that turns: the payoff is a pun, a double meaning, or a plainspoken twist that recasts the line \u2014 the honky-tonk tradition lives on the clever true title, so find the turn first and write the verses up to it.",
+            "Wear the heartbreak plain and undignified: this is the barstool confession \u2014 the drink, the jukebox, the empty side of the bed from the user's own night \u2014 self-pity, defiance, or gallows humor is the register here, whether he is crying, kissing off, or laughing at the wreck, so say the whole thing plain rather than keep a dignified distance.",
+            "Verses set up, the chorus lands the ache: verse two advances the specific story \u2014 what she said, what he did, how the night went \u2014 never re-circle verse one, because the setup is what makes the hook cut.",
+            "Rhyme clean and singable: solid perfect end-rhyme the dancers hear coming beats a clever scheme, and repeating the title word is a feature, not a crutch.",
+            "Direct address is fully at home: first person to the one who left, or a first person collapsing at the bar \u2014 begging, remembering, toasting the wreck out loud.",
+            "Keep every detail the user's own: the actual bar, the actual song on the box, the actual name \u2014 never a stock tailgate or dirt-road prop the story did not bring.",
+            "Cross-genre firewall: the crying pedal steel and sawing fiddle over a danceable shuffle make it country honky-tonk, not folk \u2014 folk is rootsier and plainspoken with no steel or telecaster twang and no two-step; this room aches on its feet on a dance floor."
+          ],
+          "rendering": "Crying pedal steel answering every vocal line, a lone fiddle sawing fills, bright telecaster with chicken-pickin licks, walking upright or electric bass, brushed or shuffle-kit drums keeping a two-step; warm honky-tonk barroom sound, a lead vocal with a real cry in it and a tight harmony on the chorus, vintage Bakersfield-to-countrypolitan analog warmth, no modern gloss.",
+          "storyFit": "Best for: heartbreak worn open, cheating and its comeuppance, a barstool confession, a two-step love song, drowning a sorrow, an honest hard-luck night. Poor fit: a big arena celebration built for a crowd \u2014 that is radio country; a hushed literary character study \u2014 that is Americana; abstract mood with no one on the other end.",
+          "parodyTraps": "Bro-country tailgate and dirt-road props the user never wrote; a hook that is clever instead of cry-able or true; a fake drawl spelled into the words; filling the steel's answer gaps with lyrics; a dignified distance when the whole point is the man who has lost his at the bar.",
+          "performance": {
+            "prose": "Density moderate; min adlibs 3; delivery tags [Pedal Steel Solo] [Fiddle Solo] [Harmonies] [Melancholy]. This room performs like a heartbroken singer at a bar with a band that cries back \u2014 one lead voice with a real ache, a high tight harmony on the hook, and the steel and fiddle answering like a second mourner, no crowd and no hype. Signature: the steel answer \u2014 the pedal steel weeps back the emotion of each line in the gap the phrasing leaves, so the ache is stated twice, once in words and once in strings. Placement: steel and fiddle fills land at the line-ends the singer leaves open, and a [Pedal Steel Solo] or [Fiddle Solo] takes the instrumental turnaround where the words stop; a tight harmony shadows the title on the chorus, and the last hook pushes hardest. Tag identity: a lone aching lead and its crying steel \u2014 the pedal steel and fiddle answering in the holes, a high lonesome harmony on the title, the solo marked as its own instrumental cry. No arena crowd, no chant \u2014 one heart at the bar and the band that answers it, every sung word from the user's own sheet.",
+            "adlibDensity": "moderate",
+            "minAdlibs": 3,
+            "deliveryTags": [
+              "[Pedal Steel Solo]",
+              "[Fiddle Solo]",
+              "[Harmonies]",
+              "[Melancholy]"
+            ]
+          },
+          "builder": {
+            "instruments": [
+              "pedal steel",
+              "fiddle",
+              "telecaster",
+              "upright bass",
+              "brushed drums",
+              "acoustic guitar"
+            ],
+            "themes": [
+              "Heartbreak",
+              "Small-town life",
+              "Friday night",
+              "Losing someone"
+            ],
+            "purposes": [
+              "Cry in your beer",
+              "Two-step / dance",
+              "Tell a story"
+            ]
+          }
+        },
+        {
+          "id": "modern",
+          "name": "Modern / Radio Country",
+          "oneLine": "The contemporary arena-country lane \u2014 the specific life kept, but lifted into a big singable hook and a wide chorus built for a truck stereo and a Friday-night crowd.",
+          "tempoGroove": "75-140 BPM produced big and clean \u2014 the up-tempo celebration sits 120-140 with a driving backbeat, the modern power ballad drops to 75-90 \u2014 with a full drum kit, electric and acoustic guitars stacked, and steel or telecaster kept for color; the groove is contemporary but the roots stay audible. Medium word density: conversational verses that build to a chorus with real space to open up and be shouted back.",
+          "writingDials": [
+            "Write toward a huge communal chorus: the hook is the emotional headline a whole room lifts on, short and singable and repeatable, so build the verses as setup and make the chorus open outward \u2014 if it could not be sung back by a crowd on a Friday night, it is pitched wrong for this room.",
+            "Keep the verses specific and the chorus wide: hold the real names, the real town, the real detail from the user's story in the verses, then let the chorus rise to the feeling everyone shares \u2014 the specific-to-universal lift is the modern craft.",
+            "Melody carries as much as words: write lines that ride a strong contemporary melody with open vowels at the peaks, because a radio hook is sung out big, not crooned under the band.",
+            "The payoff hook still turns: even at arena size the title should land a clear twist or a satisfying resolve on the last line of the chorus \u2014 a hook that just states the topic without a turn reads as filler here.",
+            "Rhyme clean and sturdy with a modern ear: solid end-rhyme the crowd hears coming, but the phrasing can lean and syncopate against the backbeat the way contemporary vocals do.",
+            "Registers widen past heartbreak: pride, celebration, first love, hometown roots, honoring someone, a Friday-night release \u2014 all delivered at full chest, warmth and volume together.",
+            "Keep the roots real, not costume: the steel and telecaster and the true detail are what keep it country under the big production \u2014 never trade the specific story for stock tailgate scenery.",
+            "Cross-genre firewall: the steel and telecaster twang and the true country detail under a big clean production make it radio country, not rock \u2014 rock is electric-guitar-driven with no fiddle or pedal steel; here the roots instruments stay audible and the story stays a specific country story, never a generic anthem."
+          ],
+          "rendering": "Big clean modern country production \u2014 stacked acoustic and electric guitars, pedal steel and bright telecaster kept for color and hooks, full drum kit with a driving backbeat, rounded modern bass, subtle keys under the chorus; a strong contemporary lead vocal with tasteful runs and stacked harmonies opening the hook wide, polished arena-country sheen, 2010s-to-now radio sound.",
+          "storyFit": "Best for: a Friday-night celebration, hometown pride, first love, a big power-ballad heartbreak, honoring someone, a life lifted into a singable anthem. Poor fit: a barstool cry that needs the crying steel up front \u2014 that is honky-tonk; a spare literary story-song \u2014 that is Americana; anything that needs a whisper instead of a big chorus.",
+          "parodyTraps": "Stock bro-country tailgate, dirt-road, and truck-and-beer checklist props the user never wrote \u2014 the fastest tell here; a chorus that states the topic with no turn; a fake drawl spelled into the words; burying the steel and telecaster until it is generic pop-rock; borrowing a famous hit's hook the user's story never contained.",
+          "performance": {
+            "prose": "Density moderate; min adlibs 3; delivery tags [Guitar Solo] [Harmonies] [Shout] [Instrumental Break]. This room performs like a lead singer and a band lifting a crowd \u2014 one strong contemporary lead, stacked harmonies opening the chorus wide, and a joyful shout on the biggest turns. Signature: the opened hook \u2014 the harmonies stack and the chorus rises the second and third time so the same hook lands bigger each pass, built for a room to sing back. Placement: the harmonies thicken the chorus and the final hook; a joyful shout tops the biggest turns and the celebration peaks; a [Guitar Solo] or [Instrumental Break] hands a section to the band between verses. Tag identity: a lead and a stacked harmony crowd \u2014 harmonies swelling on the hook, a joyful shout thrown on the peaks, a guitar or steel taking the instrumental turn. Every shout is energy in plain English, never a scripted drawl or exclamation the user did not write.",
+            "adlibDensity": "moderate",
+            "minAdlibs": 3,
+            "deliveryTags": [
+              "[Guitar Solo]",
+              "[Harmonies]",
+              "[Shout]",
+              "[Instrumental Break]"
+            ]
+          },
+          "builder": {
+            "instruments": [
+              "telecaster",
+              "pedal steel",
+              "acoustic guitar",
+              "brushed drums",
+              "upright bass",
+              "fiddle"
+            ],
+            "themes": [
+              "Friday night",
+              "First love",
+              "Home & roots",
+              "Small-town life",
+              "Family & faith"
+            ],
+            "purposes": [
+              "Celebrate",
+              "Honor someone",
+              "Two-step / dance",
+              "Tell a story"
+            ]
+          }
+        },
+        {
+          "id": "americana",
+          "name": "Americana / Alt-Country",
+          "oneLine": "The Stapleton, Sturgill, and Isbell lane \u2014 country as a short story, plainspoken and unhurried in a listening room, the craft in the writing and the grit in the voice.",
+          "tempoGroove": "60-110 BPM, unhurried and often loose at the edges, a stripped roots band or a spare acoustic setup breathing with the singer; the arrangement leaves real air and a single lead instrument \u2014 acoustic lead, dobro, or a lonesome fiddle \u2014 answers in the open space. Low-to-medium word density: the space is the point, so leave air around the lines and let one instrument fill it.",
+          "writingDials": [
+            "Write it as a short story: Americana narrates a real life with characters, a setting, and a turn \u2014 a first-person telling or a third-person portrait \u2014 so build the verses to move the story forward and land the meaning on an image, not a slogan.",
+            "The turn is a plainspoken image, not a clever pun: the payoff is a true detail or an understated line that recasts the whole song when it lands, so trust the concrete over the ornamental and let the listener do the last step.",
+            "Advance every verse with real information: each verse carries the account forward \u2014 this is the one country room where narrative progression can outrank a repeated chorus, and a hook is welcome but optional, kept spare between story beats.",
+            "Plainspoken and exposed: with the arrangement stripped back the words are naked, so understatement and honesty carry further than any flourish, and one real image outweighs a pretty generality.",
+            "Let the tempo breathe: Americana rushes nothing and sits back in the pocket, so write phrases that can stretch and settle rather than lock hard to a dance grid \u2014 the space is a feature, not a gap to fill.",
+            "The grit is in the voice and the truth, not costume: outlaw is an attitude of honesty and independence, so the register can run from tender to hard-bitten, but it earns it through the real story, never through injected whiskey-and-outlaw props.",
+            "Serve whatever true story the user brought \u2014 a loss, a reckoning, a hometown, a hard road: keep every detail their own and never add violence, outlaw swagger, or stock roots scenery the story did not contain.",
+            "Cross-genre firewall: the pedal steel or dobro and the country roots band under a plainspoken story make it Americana country, not folk \u2014 folk leans protest and plainspoken acoustic with no steel or telecaster twang, while this room keeps the roots-country instrumentation and the honky-tonk lineage even when it is stripped and literary."
+          ],
+          "rendering": "Stripped roots-country production \u2014 acoustic guitar and a warm electric or dobro trading lead, pedal steel or a lonesome fiddle answering in the open air, upright or restrained electric bass, brushed drums or none, real space around everything; an honest weathered lead vocal with grit and one close harmony on the peaks, dry warm unplugged-to-roomy mix, no modern gloss and no 808s, the Stapleton-to-Isbell listening-room sound.",
+          "storyFit": "Best for: a story-song with real characters, a reckoning or a loss, a hometown portrait, a hard road, a plainspoken tribute, reflection sung close. Poor fit: an arena celebration built for a crowd \u2014 that is radio country; a two-step barroom cry that wants the crying steel driving it \u2014 that is honky-tonk; abstract mood with no story and no one addressed.",
+          "parodyTraps": "Injected whiskey, outlaw, and roots-costume props the user never wrote; a clever pun where a plainspoken image belongs; filling the spare arrangement until the intimacy is gone; an over-produced big-chorus delivery that breaks the listening-room stillness; a fake drawl or grit spelled into the words instead of carried by the voice.",
+          "performance": {
+            "prose": "Density sparse; min adlibs 2; delivery tags [Instrumental Break] [Harmonies] [Spoken]. This room performs like a songwriter telling a true story to a listening room \u2014 one honest weathered lead carries nearly all of it, a single close harmony on the peaks, and one lead instrument answering in the open air, no crowd and no wall of sound. Signature: the instrument answer between story beats \u2014 the acoustic lead, dobro, or lonesome fiddle replies to the vocal in the space at line-ends and takes a spare turnaround that marks the passage of time in the tale. Placement: the lead narrates the verses almost unbroken; a single harmony slips in on the emotional peaks only; an [Instrumental Break] falls between major story beats to let the events breathe, and a low [Spoken] aside can land a plainspoken turn. Tag identity: a lone storyteller and a breathing roots band \u2014 the lead instrument answering in the holes, one close harmony at the peaks, a spare turnaround between verses. No arena crowd, no shouted hype \u2014 a songwriter and the air in the room, and the story is only ever the one the user actually told.",
+            "adlibDensity": "sparse",
+            "minAdlibs": 2,
+            "deliveryTags": [
+              "[Instrumental Break]",
+              "[Harmonies]",
+              "[Spoken]"
+            ]
+          },
+          "builder": {
+            "instruments": [
+              "acoustic guitar",
+              "pedal steel",
+              "fiddle",
+              "banjo",
+              "upright bass",
+              "brushed drums"
+            ],
+            "themes": [
+              "Losing someone",
+              "Home & roots",
+              "Family & faith",
+              "Small-town life",
+              "Heartbreak"
+            ],
+            "purposes": [
+              "Tell a story",
+              "Honor someone",
+              "Cry in your beer"
+            ]
+          }
+        }
+      ],
+      "cues": [
+        {
+          "cue": "honky-tonk",
+          "strength": "strong",
+          "roomId": "traditional"
+        },
+        {
+          "cue": "two-step",
+          "strength": "strong",
+          "roomId": "traditional"
+        },
+        {
+          "cue": "cry in your beer",
+          "strength": "strong",
+          "roomId": "traditional"
+        },
+        {
+          "cue": "heartbreak",
+          "strength": "weak",
+          "roomId": "traditional"
+        },
+        {
+          "cue": "shuffle",
+          "strength": "weak",
+          "roomId": "traditional"
+        },
+        {
+          "cue": "cheating",
+          "strength": "weak",
+          "roomId": "traditional"
+        },
+        {
+          "cue": "barroom",
+          "strength": "weak",
+          "roomId": "traditional"
+        },
+        {
+          "cue": "haggard",
+          "strength": "weak",
+          "roomId": "traditional"
+        },
+        {
+          "cue": "outlaw",
+          "strength": "weak",
+          "roomId": "traditional"
+        },
+        {
+          "cue": "waylon",
+          "strength": "weak",
+          "roomId": "traditional"
+        },
+        {
+          "cue": "radio country",
+          "strength": "strong",
+          "roomId": "modern"
+        },
+        {
+          "cue": "arena",
+          "strength": "strong",
+          "roomId": "modern"
+        },
+        {
+          "cue": "big hook",
+          "strength": "strong",
+          "roomId": "modern"
+        },
+        {
+          "cue": "friday night",
+          "strength": "weak",
+          "roomId": "modern"
+        },
+        {
+          "cue": "celebration",
+          "strength": "weak",
+          "roomId": "modern"
+        },
+        {
+          "cue": "hometown pride",
+          "strength": "weak",
+          "roomId": "modern"
+        },
+        {
+          "cue": "power ballad",
+          "strength": "weak",
+          "roomId": "modern"
+        },
+        {
+          "cue": "truck stereo",
+          "strength": "weak",
+          "roomId": "modern"
+        },
+        {
+          "cue": "americana",
+          "strength": "strong",
+          "roomId": "americana"
+        },
+        {
+          "cue": "alt-country",
+          "strength": "strong",
+          "roomId": "americana"
+        },
+        {
+          "cue": "singer-songwriter",
+          "strength": "weak",
+          "roomId": "americana"
+        },
+        {
+          "cue": "story-song",
+          "strength": "weak",
+          "roomId": "americana"
+        },
+        {
+          "cue": "stapleton",
+          "strength": "weak",
+          "roomId": "americana"
+        },
+        {
+          "cue": "isbell",
+          "strength": "weak",
+          "roomId": "americana"
+        },
+        {
+          "cue": "listening room",
+          "strength": "weak",
+          "roomId": "americana"
+        }
+      ]
+    },
+    "rock": {
+      "id": "rock",
+      "name": "Rock",
+      "aliases": [
+        "rock music",
+        "rock and roll",
+        "rock n roll",
+        "classic rock",
+        "hard rock",
+        "alternative rock",
+        "indie rock",
+        "punk"
+      ],
+      "profileText": "A rock writer starts with the riff and the room. Rock is electric guitars and live drums played by a band in a space, and the song is built up from a guitar figure and a backbeat, not down from a title or a track. So the first question is physical: what does the guitar do, and where does the singer sit against it. A rock lyric is written to leave the guitar its air \u2014 verses ride the pocket the riff sets, phrase-ends hand off to a lead answer or a wall of noise, and a sheet packed wall-to-wall with words has smothered the instrument that defines the genre before a line is judged.\n\nThe second move is the chorus, and it is a decision about voltage and distance. Rock choruses run from a fists-up singalong a stadium already knows, to a loud detonation after a held-back verse, to a slogan a gang of voices barks back. Whatever the room, the chorus thins out \u2014 fewer, blunter words on open vowels the band can swallow and a crowd can lift \u2014 while the verses carry the real, specific story that earns it. Verse two never re-sings verse one; the anthem, the confession, or the blast is only as big as the truth under it, and the concrete detail from the user's own life is what strangers recognize themselves in.\n\nThe rooms bend all of this. Classic / Arena raises the feeling plain and big, the I widening into a we, the bridge handed to a guitar solo the crowd waits for. Alternative / Indie turns it inward and crooked \u2014 quiet verse, loud chorus, irony over triumph, the drop as loaded as the swell, feedback answering where a hero solo would. Hard Rock / Punk spits it fast and confrontational, power chords hammered as rhythm, a slogan shouted at a target, in and out before it apologizes. The law above every dial is real over cartoon: the actual grievance, the actual town, the actual wound \u2014 never rock-and-roll-all-night filler, borrowed grunge angst, or generic anti-everything posing the user never wrote. Delivery is directed as energy and attitude in plain English \u2014 belt, snarl, hold, bark \u2014 never as a costume, and the user's own people and places always outrank any stock rebel scenery.",
+      "defaultRoomId": "classic",
+      "rooms": [
+        {
+          "id": "classic",
+          "name": "Classic / Arena Rock",
+          "oneLine": "The anthemic, riff-and-chorus, fists-up lane \u2014 the Stones, Petty, Springsteen, Foo Fighters: a signature riff, a chorus a stadium already knows, a heart worn plain and big, and the sincere slow-burn power ballad that climbs to a lead-guitar climax.",
+          "tempoGroove": "92-150 BPM in a straight, driving 4/4 with the backbeat hard on 2 and 4 (the fists-up stomp-anthem can sit much slower \u2014 a heavy half-time foot-stomp is a Classic move, not a disqualifier), the whole song built up from one signature guitar riff and a steady, unhurried pocket. Medium word density: the verses talk and set the scene, but the chorus thins out to a few strong words on open vowels so a whole room can lift on it \u2014 leave air at the phrase-ends where the riff answers.",
+          "writingDials": [
+            "Build on the riff, not just the chords: this room's hook is often the guitar figure, so write the vocal to leave the riff its space \u2014 verses ride in the pocket the riff sets and the chorus lands on top of it, never burying it under wall-to-wall words.",
+            "Write the chorus for a crowd, not a diary: a short, plain, hooky title-line built to be sung back by ten thousand strangers on the first chorus \u2014 if it could not be shouted with a fist in the air, it is pitched for the wrong room.",
+            "Keep the I wide open so it becomes we: verses stay one person's specific story, but the chorus opens outward into something anyone in the room can claim as theirs \u2014 universal reached through the concrete, never through the vague.",
+            "Verses earn the chorus with real detail: the actual car, the actual town, the actual night from the user's story \u2014 verse two moves it forward, never re-sings verse one, because the anthem is only as big as the truth under it.",
+            "Melody sits in a belt-able chest range with the peaks on open vowels: this is a singer pushing out over a full band, so write lines a voice can lean into and hold, and save the highest, most open sound for the chorus payoff.",
+            "Rhyme clean and sturdy: solid, satisfying end-rhyme the crowd hears coming lands square with the backbeat \u2014 this room trusts the plain rhyme that rings, not the clever slant that hides.",
+            "The power ballad lives here, sincere not ironic: a quiet, tender verse that climbs to a huge open chorus and a lead-guitar climax \u2014 the slow-burn love-or-loss anthem belongs to Classic, worn earnest and big, never undercut.",
+            "Plan the solo as a section: this room waits for a lead guitar break, so build a stretch where the words stop and the guitar sings the song's feeling, then bring the last chorus back bigger.",
+            "Cross-genre firewall: the signature electric riff, the fists-up crowd chorus, and the waited-for guitar solo make it Classic Rock, not a Pop anthem with guitars painted on \u2014 the guitar writes the hook here and the band plays live in a room, where pop would build the lift from production and a programmed drop."
+          ],
+          "rendering": "Big live rock band built on a signature electric guitar riff, crunchy rhythm guitar and a soaring lead, driving bass locked to the kick, live drums with a hard backbeat and open fills, warm organ or piano thickening the choruses. Full-chested lead vocal with gang harmonies swelling the hook, a proper lead guitar solo section, arena-sized but human and live \u2014 no gloss, no programming, the roar of a real band in a real room.",
+          "storyFit": "Best for: an anthem of defiance or endurance, standing back up after a fall, hometown pride, a love worn big and loud, the open road, a fists-up celebration. Poor fit: a small ironic self-aware confession that undercuts its own big line \u2014 that is Alternative; a two-minute aggressive blast at a target \u2014 that is Punk; anything that needs to stay quiet and interior.",
+          "parodyTraps": "Generic rock-and-roll-all-night filler the user never meant \u2014 whiskey, highways, and rebel clich\xE9s pasted in for costume; a chorus too wordy or too clever to shout back; burying the riff and the solo under nonstop vocals; a whispered interior delivery that fights the crowd chorus; a big open hook with no specific, true verse holding it up.",
+          "performance": {
+            "prose": "Density moderate; min adlibs 3; delivery tags [Guitar Solo] [Harmonies] [Build Up] [Shout]. This room performs like a full band lifting a crowd \u2014 one full-chested lead, gang harmonies stacking the chorus, and the lead guitar as the voice that answers when the words stop. Signature: the crowd-lift chorus and the answered riff \u2014 gang voices swell onto the hook so the room sounds like a room, the guitar riff throws its figure into the gaps the vocal leaves, and a fist-in-the-air shout tops the biggest turns. Placement: verses stay lead-forward and fairly bare; harmony voices arrive to thicken each chorus and stack the last one; a [Build Up] rises into the final chorus; the [Guitar Solo] takes its own section between the last verse and the last chorus where the singer steps aside. Tag identity: a lead singer, a gang-harmony crowd, and an answering lead guitar \u2014 stacked voices on the hook, a defiant shout over the peaks, a solo the room waits for. Every shout is energy in plain English, never a scripted line the user did not write.",
+            "adlibDensity": "moderate",
+            "minAdlibs": 3,
+            "deliveryTags": [
+              "[Guitar Solo]",
+              "[Harmonies]",
+              "[Build Up]",
+              "[Shout]"
+            ]
+          },
+          "builder": {
+            "instruments": [
+              "electric guitars",
+              "live drums",
+              "driving bass",
+              "organ",
+              "power chords"
+            ],
+            "themes": [
+              "Standing back up",
+              "The road",
+              "Love & obsession",
+              "Rebellion"
+            ],
+            "purposes": [
+              "Anthem / fists up",
+              "Power ballad",
+              "Drive music",
+              "Raw energy"
+            ]
+          }
+        },
+        {
+          "id": "alternative",
+          "name": "Alternative / Indie",
+          "oneLine": "The introspective, dynamic lane \u2014 90s alt through modern indie: Nirvana, Pixies, Radiohead, The Strokes, The National, Arctic Monkeys \u2014 quiet-loud dynamics, a crooked self-aware heart, texture over spectacle.",
+          "tempoGroove": "100-140 BPM in 4/4, but the tempo matters less than the dynamic contract \u2014 a held-back, quieter verse that detonates into a loud, distorted chorus, the drop back down as deliberate as the surge. Medium word density in the verse, thinning at the chorus: write verses close to speech, a little wordy and wry, then let the loud chorus carry fewer, blunter words the guitars can swallow.",
+          "writingDials": [
+            "Write the quiet-loud contract into the words: the verse is held in, close, almost muttered, and the chorus breaks open loud \u2014 so the verse lyric should feel restrained and the chorus should feel like something finally said out loud after holding it too long.",
+            "Turn the feeling inward and let it be crooked: this room is self-aware and unashamed of doubt \u2014 irony, understatement, an image that undercuts the big emotion instead of raising it; a line that admits the mess reads truer here than a triumphant one.",
+            "Specific over universal, always: where Classic opens the I into a we, this room stays one person's exact, unglamorous detail \u2014 the room, the text unanswered, the ordinary Tuesday \u2014 and trusts the strangeness of the true detail to carry it.",
+            "The hook can hide instead of announce: a chorus that repeats and gathers weight, a mumbled or oblique title-line, a phrase that means more the third time \u2014 this room lets repetition and texture do work that a stadium hook would do with volume.",
+            "Let the guitars answer with texture, not just a solo: the payoff is often a wall of distortion, a feedback swell, or a riff drenched in effects rather than a clean hero lead \u2014 write phrase-ends that hand off to that noise, and let an instrumental surge say what the lyric won't.",
+            "Keep the vocal conversational and unforced: sung close to speech, sometimes deadpan, sometimes cracking on the loud part \u2014 write phrases a natural voice can talk and then push, not a belter's showcase.",
+            "Restraint is the discipline: leave the biggest feeling implied, cut the line that explains too much, and trust the dynamic drop to land the ache \u2014 this room says less on purpose and means more.",
+            "Cross-genre firewall: the quiet-loud dynamic swing, the inward ironic register, and the texture-and-feedback payoff make it Alternative, not an Arena anthem \u2014 here the chorus can mumble, hide, or curdle instead of raising a fist, and the guitars answer with noise and mood where Classic answers with a clean waited-for solo."
+          ],
+          "rendering": "Dynamic alt-rock band working quiet-to-loud \u2014 restrained verses with clean or lightly driven guitar and space around the vocal, then a loud distorted chorus with a wall of guitars and feedback swells. Live drums that hold back and then hit hard, melodic bass carrying the quiet parts, an intimate slightly imperfect lead vocal that talks in the verse and pushes on the chorus, some tension left unresolved \u2014 indie-to-alt production, textured and human, never glossy.",
+          "storyFit": "Best for: feeling like an outsider, alienation, a self-aware heartbreak, quiet defiance, anxiety and doubt worn honestly, longing that undercuts itself. Poor fit: a fists-up crowd anthem meant to unite a stadium \u2014 that is Classic; a fast confrontational blast at a target \u2014 that is Punk; anything that wants to be triumphant and unironic.",
+          "parodyTraps": "Faking angst with borrowed grunge clich\xE9s the user never wrote; a big triumphant chorus that betrays the room's restraint; explaining the feeling the dynamics should imply; skipping the quiet-loud contract so it flattens into mid-volume rock; a hook that announces itself like an arena anthem when this room's power is in what it withholds.",
+          "performance": {
+            "prose": "Density sparse; min adlibs 2; delivery tags [Breakdown] [Build Up] [Harmonies] [Spoken]. This room performs on the swing between held-back and blown-open \u2014 one close, slightly imperfect lead, a thin harmony arriving only when the song breaks loud, and the guitars answering with texture rather than a clean solo. Signature: the quiet-loud detonation \u2014 the verse sits bare and near-spoken, a [Build Up] tightens, and the chorus bursts into distortion and feedback, the dynamic drop and surge carrying the feeling more than any adlib. Placement: verses stay nearly bare so the restraint reads; a [Build Up] leans into the loud chorus and a [Breakdown] can strip it back down after; a harmony shadow arrives only on the loud parts; a [Spoken] aside can carry an interior line the verse mutters. Tag identity: an intimate lead and a band that holds then hits \u2014 a bare near-spoken verse, harmonies only when it breaks open, feedback and distortion as the answer instead of a hero solo. No crowd chant, no hype stack \u2014 one honest voice and the wall of noise behind it, every word the user's own.",
+            "adlibDensity": "sparse",
+            "minAdlibs": 2,
+            "deliveryTags": [
+              "[Breakdown]",
+              "[Build Up]",
+              "[Harmonies]",
+              "[Spoken]"
+            ]
+          },
+          "builder": {
+            "instruments": [
+              "electric guitars",
+              "live drums",
+              "driving bass",
+              "feedback swells",
+              "power chords"
+            ],
+            "themes": [
+              "Feeling like an outsider",
+              "Loss",
+              "Love & obsession",
+              "Standing back up"
+            ],
+            "purposes": [
+              "Raw energy",
+              "Drive music"
+            ]
+          }
+        },
+        {
+          "id": "hard-rock",
+          "name": "Hard Rock / Punk",
+          "oneLine": "The raw, fast, aggressive lane \u2014 Stooges, Ramones, Clash, AC/DC, Mot\xF6rhead: power chords at speed, a sneer worn plain, rebellion said straight to your face with the polish stripped off.",
+          "tempoGroove": "150-200 BPM for punk's flat-out charge, dropping to a stomping 120-140 for the heavier hard-rock swagger \u2014 a hard, driving 4/4 with power chords hammered as rhythm and drums pushing, no soft place to hide. Higher word density riding the speed: fast, punchy, syllable-packed lines that spit against the beat, with the chorus stripped to a shoutable slogan a gang of voices finishes.",
+          "writingDials": [
+            "Fast, blunt, and short: keep verses tight and hard, keep the whole song lean \u2014 this room says its piece and gets out, so cut every word that softens the punch and never pad a song that wanted to be two minutes.",
+            "Write the chorus as a slogan to shout, not a melody to admire: a short, blunt, repeatable line built for a gang of voices to bark back \u2014 anger, defiance, a target named \u2014 the plainer and harder it hits, the more it belongs here.",
+            "Confront, don't confess: aim the song outward at something \u2014 a system, a hypocrite, a wall, a rule \u2014 and state it flat; this room is a middle finger, not a diary, and a blast that stops to explain or apologize loses its teeth.",
+            "Power chords are the engine, played as rhythm at speed: write the vocal to ride the driving chords rather than wait for a fancy riff or a long solo \u2014 the aggression is in the drive and the pace, so keep the words locked to that momentum.",
+            "Ride the sneer and the attitude: delivery is snarled, shouted, spat \u2014 write lines that sound good barked, with hard consonants and blunt one-syllable hits the voice can land like punches, not vowels a crooner would hold.",
+            "Keep it real and specific, never cartoon rebellion: the actual grievance, the actual target, the user's real anger \u2014 an invented, generic anti-everything pose reads as costume, and this room only works when the rebellion is true.",
+            "Let the gang answer: build the shout-back moment where a crowd of voices barks the slogan or finishes the line, because punk's chorus is a room shouting together, not a lead singer performing at them.",
+            "Cross-genre firewall: power chords driven fast and clean-toned-to-crunchy with a shouted human vocal make it Hard Rock / Punk, not Metal \u2014 there are no down-tuned chugs, no double-kick blast, no screamed or growled vocal; this room is fast and mean but it is still a song a crowd shouts, not a wall of extremity."
+          ],
+          "rendering": "Raw, fast, aggressive rock band \u2014 hammered power chords driving the whole song, distorted rhythm guitar up front, driving bass following the chords, hard-hitting live drums pushing the tempo, minimal polish. Snarled, shouted lead vocal spitting the words with a gang shout barking the chorus back, short and lean and loud \u2014 garage-live energy, rough edges left in, the roar of a band that plugged in and hit record.",
+          "storyFit": "Best for: rebellion, anger at a system or a hypocrite, defiance, outsider fury, a fast blast of raw energy, refusing to back down. Poor fit: a big unifying arena singalong \u2014 that is Classic; a quiet self-aware interior confession \u2014 that is Alternative; a slow ballad or anything that needs tenderness or space.",
+          "parodyTraps": "Cartoon anti-authority posing the user never meant \u2014 generic anarchy slogans as costume; a slow, pretty, or over-produced take that kills the raw speed; a chorus too wordy or too melodic for a gang to bark; explaining or apologizing for the anger instead of just landing it; down-tuning and screaming toward Metal when this room is fast, mean, and still sung.",
+          "performance": {
+            "prose": "Density heavy; min adlibs 3; delivery tags [Shout] [Breakdown] [Build Up] [Guitar Solo]. This room performs like a band and a crowd shouting the same slogan \u2014 a snarled lead spitting the verses and a gang shout barking the chorus back, the energy flat-out and the guitars driving. Signature: the gang shout-back \u2014 the lead spits a line and a room full of voices barks the slogan or finishes it, the crowd answer landing on the chorus and the hardest turns so the record sounds like the pit it is for. Placement: verses stay lead-forward and fast; the gang [Shout] hits the chorus and the biggest lines; a short [Guitar Solo] can rip a quick break rather than a long showcase; a [Build Up] or a [Breakdown] snaps the band tight before it slams back in. Tag identity: a snarling lead and a shouting gang \u2014 the crowd barking the slogan back on the chorus, hard blunt hits landed like punches, a fast rough solo if any at all. All delivery stays raw energy and attitude in plain English \u2014 snarl, spit, bark \u2014 never a scripted slogan the user did not bring.",
+            "adlibDensity": "heavy",
+            "minAdlibs": 3,
+            "deliveryTags": [
+              "[Shout]",
+              "[Breakdown]",
+              "[Build Up]",
+              "[Guitar Solo]"
+            ]
+          },
+          "builder": {
+            "instruments": [
+              "power chords",
+              "electric guitars",
+              "live drums",
+              "driving bass"
+            ],
+            "themes": [
+              "Rebellion",
+              "Feeling like an outsider",
+              "Standing back up",
+              "Loss"
+            ],
+            "purposes": [
+              "Raw energy",
+              "Anthem / fists up",
+              "Drive music"
+            ]
+          }
+        }
+      ],
+      "cues": [
+        {
+          "cue": "arena rock",
+          "strength": "strong",
+          "roomId": "classic"
+        },
+        {
+          "cue": "classic rock",
+          "strength": "strong",
+          "roomId": "classic"
+        },
+        {
+          "cue": "anthem",
+          "strength": "strong",
+          "roomId": "classic"
+        },
+        {
+          "cue": "stadium",
+          "strength": "weak",
+          "roomId": "classic"
+        },
+        {
+          "cue": "fists up",
+          "strength": "weak",
+          "roomId": "classic"
+        },
+        {
+          "cue": "singalong",
+          "strength": "weak",
+          "roomId": "classic"
+        },
+        {
+          "cue": "hometown",
+          "strength": "weak",
+          "roomId": "classic"
+        },
+        {
+          "cue": "riff",
+          "strength": "weak",
+          "roomId": "classic"
+        },
+        {
+          "cue": "road trip",
+          "strength": "weak",
+          "roomId": "classic"
+        },
+        {
+          "cue": "standing back up",
+          "strength": "weak",
+          "roomId": "classic"
+        },
+        {
+          "cue": "alternative rock",
+          "strength": "strong",
+          "roomId": "alternative"
+        },
+        {
+          "cue": "indie rock",
+          "strength": "strong",
+          "roomId": "alternative"
+        },
+        {
+          "cue": "grunge",
+          "strength": "strong",
+          "roomId": "alternative"
+        },
+        {
+          "cue": "alt",
+          "strength": "weak",
+          "roomId": "alternative"
+        },
+        {
+          "cue": "outsider",
+          "strength": "weak",
+          "roomId": "alternative"
+        },
+        {
+          "cue": "alienation",
+          "strength": "weak",
+          "roomId": "alternative"
+        },
+        {
+          "cue": "quiet loud",
+          "strength": "weak",
+          "roomId": "alternative"
+        },
+        {
+          "cue": "introspective",
+          "strength": "weak",
+          "roomId": "alternative"
+        },
+        {
+          "cue": "self-aware",
+          "strength": "weak",
+          "roomId": "alternative"
+        },
+        {
+          "cue": "shoegaze",
+          "strength": "weak",
+          "roomId": "alternative"
+        },
+        {
+          "cue": "punk",
+          "strength": "strong",
+          "roomId": "hard-rock"
+        },
+        {
+          "cue": "hard rock",
+          "strength": "strong",
+          "roomId": "hard-rock"
+        },
+        {
+          "cue": "punk rock",
+          "strength": "strong",
+          "roomId": "hard-rock"
+        },
+        {
+          "cue": "aggressive",
+          "strength": "weak",
+          "roomId": "hard-rock"
+        },
+        {
+          "cue": "rebellion",
+          "strength": "weak",
+          "roomId": "hard-rock"
+        },
+        {
+          "cue": "fast",
+          "strength": "weak",
+          "roomId": "hard-rock"
+        },
+        {
+          "cue": "raw",
+          "strength": "weak",
+          "roomId": "hard-rock"
+        },
+        {
+          "cue": "mosh",
+          "strength": "weak",
+          "roomId": "hard-rock"
+        },
+        {
+          "cue": "middle finger",
+          "strength": "weak",
+          "roomId": "hard-rock"
+        },
+        {
+          "cue": "garage",
+          "strength": "weak",
+          "roomId": "hard-rock"
+        }
+      ]
+    },
+    "soul": {
+      "id": "soul",
+      "name": "Soul",
+      "aliases": [
+        "soul music",
+        "motown",
+        "neo-soul",
+        "neo soul",
+        "deep soul",
+        "southern soul"
+      ],
+      "profileText": "A soul writer starts with the feeling worn at full sincerity and the voice that carries it \u2014 a gospel-trained lead over a live band, with a backing trio answering as a second character. Soul is not cool; irony and guardedness belong to other genres. The song is aimed at someone real \u2014 a lover, an ex, a family member, the room, the God-shaped ache behind the love \u2014 and every line should survive being sung to that face with the chest open. The subjects overlap heavily \u2014 love, devotion, heartache, grief, joy \u2014 so the subject can never tell you how to write; the dials do.\n\nThe genre's oldest habit is leaving room for the voice and the answer. The lead is the lead instrument, and the words must get out of its way: key lines end on open vowels the voice can hold, bend, and break on, and the backing trio needs gaps to answer into. Where the space goes is the room's call \u2014 snapped short for a horn stab, stretched long for a moan, or opened into a Rhodes pocket \u2014 but a lyric that leaves no space anywhere has already failed as soul. Call-and-response is structural, not decoration: plan the trio's answers into the lyric, and plan the outro vamp where the hook loops and the lead preaches freely over it.\n\nRepetition is a feature, and it escalates or deepens rather than merely repeating \u2014 the same hook returns hotter or truer each pass, so hook words must be simple and honest enough to survive many rounds. Rhyme runs on a spectrum the room sets: clean perfect rhyme reads as timeless in the vintage rooms and as an outsider's tell in the neo-soul one. The genre-wide law is smaller and firmer: the honest word outranks the rhyming word, every time, and plain words carry big feeling.\n\nThe gospel-rooted double meaning \u2014 the beloved described in near-worship language so one lyric serves altar and bedroom \u2014 is soul's birthright; use it when the user's story offers a true second meaning, never as decoration, and never announce it. Delivery is directed as feeling, register, and phrasing in plain English \u2014 the moan, the testify, the drift, the breath \u2014 never as an accent or a phonetic spelling, and never a craft term. Rendering protects three things in every room: space for the voice, a live human band and low end the phrasing was written to sit on, and the backing trio treated as its own instrument. Every dial bends to the user's story; none may change what the song is about.",
+      "defaultRoomId": "classic-soul",
+      "rooms": [
+        {
+          "id": "classic-soul",
+          "name": "Classic Soul",
+          "oneLine": "The Motown-and-Stax foundation \u2014 live band, horn stabs, a backing trio answering, songs that punch on the beat and lift a room whether the news is joy or heartache.",
+          "tempoGroove": "Uptempo Motown-and-Stax grooves roughly 110-135 BPM with a driving backbeat and tambourine; mid-tempo and ballad numbers 70-100, some in a rolling 6/8 sway. Word density is moderate and even, and the words sit ON the beat more than any other room \u2014 punchy symmetrical phrases whose stressed syllables lock where the snare hits, short enough for a horn section to stab between them.",
+          "writingDials": [
+            "Lock the words to the beat: write tight, symmetrical phrases whose stressed syllables land on the backbeat and end a hair early, so the horns can throw a stab into the gap \u2014 a wordy line the horns cannot punch around is pitched wrong for this room.",
+            "Plain words, big feeling: the vocabulary stays simple and universal; the craft lives in stress placement and escalating repetition, not clever wordplay \u2014 one true plain line outweighs a decorated one.",
+            "Call-and-response is written into the lyric: plan short answer phrases and echo hooks for the backing trio in both verse and chorus, so the trio is a second character, not decoration.",
+            "The register is testimony sung at full voice \u2014 love sworn, lost, begged for, or celebrated with full sincerity; irony, cool distance, and guardedness have no place, and even a heartache is sung open-chested.",
+            "Repetition escalates: the same chorus words return hotter each pass, and the outro loops the hook while the lead preaches and improvises over the trio.",
+            "The address is allowed to widen: what begins sung to one person can open to the whole room by the last chorus, testimony becoming celebration \u2014 the one soul room where the I turns to everybody listening.",
+            "Rhyme is clean and confident \u2014 simple perfect rhymes read as timeless here, where the same rhymes would sound childish in a modern room; still, the honest word outranks the rhyming one.",
+            "Cross-genre firewall: the live rhythm section with horn stabs and an on-beat backing trio make it Classic Soul, not modern R&B \u2014 no programmed 808 bounce, no drum machine leading; the band is human and the words snap to a played backbeat, not a sequenced one."
+          ],
+          "rendering": "A live rhythm section \u2014 real drums, electric bass, chanking rhythm guitar (short choppy strums right on the beat), piano or organ \u2014 with horn stabs and string sweetening, tambourine on the backbeat for the uptempo numbers. Raw, gospel-fired lead vocal with a backing trio answering line for line; 1960s-70s Motown-and-Stax analog warmth, real room sound, no modern vocal effects.",
+          "storyFit": "Best for: milestone celebrations, tributes, songs for parents and grandparents, timeless full-hearted declarations of love, drink-in-hand heartache sung proud, joyful dance-along family songs. Poor fit: guarded modern situationship nuance, meditative reflection that needs stillness \u2014 that is Neo-Soul; a slow-burning wound wailed wide open \u2014 that is Deep Soul.",
+          "parodyTraps": "Fake-vintage slang and era name-dropping \u2014 the period lives in the band, the chords, and the phrasing, never in the vocabulary; over-sweetening into jingle territory; wordy verses a horn section cannot punch around; imitation-oldies pastiche instead of sincere testimony built from the user's own story.",
+          "performance": {
+            "prose": "Density heavy; min adlibs 7; delivery tags [Call and Response] [Horns] [Harmonies] [Ad-Lib Section]. This room performs like a live band with a backing trio in the room, so it leans on adlibs hard and on delivery tags moderately \u2014 the trio answering and the testifying ad-lib carry most of the energy. Signature: the trio answered \u2014 the lead throws a call and the backing trio punches a short on-beat response in the gap, and the outro becomes a hook-loop vamp where the trio holds the repeated hook and the lead preaches freely over the top, the address opening from one person to the whole room. Placement: verses carry real trio answers, not just chorus ones \u2014 short on-beat responses and echoed line-ends kept punchy so the words stay locked to the backbeat; horn stabs fall where the vocal steps aside; an [Ad-Lib Section] hands the lead a preaching stretch over the final vamp. Tag identity: a lead and a backing trio as one church-born room \u2014 the trio's short (response phrases) written after the lead's calls, group harmony swelling on the final chorus, a testifying run reserved for the outro where the trio loops the hook. No lone star, no programmed stack \u2014 the room itself sings, in the user's own plain words.",
+            "adlibDensity": "heavy",
+            "minAdlibs": 7,
+            "deliveryTags": [
+              "[Call and Response]",
+              "[Horns]",
+              "[Harmonies]",
+              "[Ad-Lib Section]"
+            ]
+          },
+          "builder": {
+            "instruments": [
+              "horns",
+              "live bass",
+              "tambourine",
+              "organ",
+              "piano",
+              "backing trio"
+            ],
+            "themes": [
+              "Celebration of love",
+              "Pride & respect",
+              "Devotion",
+              "Remembering someone",
+              "Heartache"
+            ],
+            "purposes": [
+              "Celebrate",
+              "Slow dance",
+              "Testify my love",
+              "Cry it out"
+            ]
+          }
+        },
+        {
+          "id": "southern",
+          "name": "Southern / Deep Soul",
+          "oneLine": "The raw, gospel-rooted, slow-burning heart of the genre \u2014 Aretha, Al Green, Percy Sledge \u2014 one lead moaning and preaching a wound wide open over organ, slow drums, and a swelling backing trio, no dignity held back.",
+          "tempoGroove": "60-85 BPM in 4/4, or a slow 6/8 felt around 60-75 dotted-quarter \u2014 slow, unhurried, and churchy \u2014 a Hammond organ, live drums with a heavy behind-feel backbeat, and a bass that walks warm underneath while the trio swells. Word density is low: short lines with real air after them and long holds on the peaks, because the lead moans and preaches into the gaps and the words must leave room to break.",
+          "writingDials": [
+            "Leave room for the moan: end feeling-lines on open vowels the voice can hold, stretch, and break on, and leave the bar's tail empty \u2014 a crowded line gives the lead nothing to preach into, and the moan is half the feeling here.",
+            "Wear the wound undefended: this room is the raw, church-born confession \u2014 devotion begged, a heartache aired, grief sung with the pride still in it but the guard gone. Self-exposure is the register, not a flaw.",
+            "Testify, do not narrate coolly: the lead is a preacher of the feeling, so build lines that escalate and repeat hotter each pass, the way a testimony rises \u2014 plainspoken, sincere, aimed straight at the one who is gone or the God-shaped ache behind them.",
+            "Keep the language plain and exposed: with the arrangement this bare, the words carry everything, so one true detail from the user's own life \u2014 the actual name, the actual last thing said \u2014 outweighs any ornament, and understatement is the wrong instinct; this room says the whole hurt.",
+            "The backing trio and organ are the amen corner: plan swells and answering ooohs under the peaks, a trio that lifts the lead rather than trading fast \u2014 the response here is warmth rising, not a snappy punch.",
+            "Repetition is devotional: a short aching hook re-sung more times than composure allows, gathering grief or gratitude each round instead of resolving, and an outro vamp where the lead improvises over the looping trio.",
+            "Sensuality and worship share one breath: the beloved can be described in near-worship language so one lyric serves both the altar and the bedroom \u2014 the gospel-rooted double meaning, sustained, never spelled out.",
+            "Cross-genre firewall: the slow live organ-and-drums bed with a moaning gospel lead and a swelling trio make it Deep Soul, not the Blues \u2014 there is no 12-bar turnaround, no slide guitar or harmonica trading the moan; the ache rises through the church, not through a blues lick, and the organ, not a bottleneck, is the second voice."
+          ],
+          "rendering": "Slow live band \u2014 Hammond organ holding long chords, warm walking electric bass, live drums with a heavy behind-the-beat backbeat, a churchy 6/8 sway, a backing trio swelling under the peaks, tasteful horns or strings sweetening the choruses. Raw, gospel-fired lead vocal moaning and preaching, close and undefended, pushed to the edge of breaking; 1960s-70s Southern deep-soul analog warmth, real room, no modern effects.",
+          "storyFit": "Best for: devotion begged at full voice, heartache worn open, grief and remembrance, a love sworn through hard times, a slow-dance ache, longing that aches to the floor. Poor fit: bright party celebration and up-tempo dance joy \u2014 that is Classic Soul; cool, guarded, jazz-tinged reflection held at a meditative distance \u2014 that is Neo-Soul.",
+          "parodyTraps": "Any slang or vintage costume the user never wrote; a moan faked as a vocal tic instead of earned by a real wound; greeting-card sorrow with no specific person in it; keeping a cool composed distance when the whole point is the guard coming down; filling the holds and gaps so the lead cannot break; pasting a blues slide-and-shuffle over it until the church is gone.",
+          "performance": {
+            "prose": "Density heavy; min adlibs 7; delivery tags [Call and Response] [Harmonies] [Ad-Lib Section] [Spoken]. This room performs like a lead testifying to a room that already feels it \u2014 one raw voice moaning and preaching, the backing trio and organ swelling behind, the ad-lib doing the deepest emotional work of any soul room. Signature: the testifying ad-lib \u2014 the lead breaks a held line into a moan, a repeated word, or a spoken aside in the gap the phrasing leaves, while the trio answers with a warm rising ooh, so the wound is stated twice, once in words and once in the break. Placement: verses stay bare so the moan carries them, with the trio's swells arriving under the peaks; the floor of ad-libs lives in the choruses and the outro vamp, where the lead preaches over the looping trio and a [Spoken] aside can drop where the guard breaks fully; harmonies rise on the final chorus rather than snapping between lines. Tag identity: a moaning lead and a swelling backing trio as the amen corner \u2014 warm rising (trio oohs) under the peaks, the testifying moan and repeated word in the gaps, one spoken confession where the guard drops, harmonies gathering on the outro. No snappy trade, no crowd chant \u2014 one voice broken open and a room rising behind it, every word from the user's own sheet.",
+            "adlibDensity": "heavy",
+            "minAdlibs": 7,
+            "deliveryTags": [
+              "[Call and Response]",
+              "[Harmonies]",
+              "[Ad-Lib Section]",
+              "[Spoken]"
+            ]
+          },
+          "builder": {
+            "instruments": [
+              "organ",
+              "live bass",
+              "backing trio",
+              "horns",
+              "strings",
+              "piano"
+            ],
+            "themes": [
+              "Devotion",
+              "Heartache",
+              "Longing",
+              "Remembering someone",
+              "Pride & respect"
+            ],
+            "purposes": [
+              "Testify my love",
+              "Cry it out",
+              "Slow dance",
+              "Celebrate"
+            ]
+          }
+        },
+        {
+          "id": "neo-soul",
+          "name": "Neo-Soul",
+          "oneLine": "The laid-back, jazz-tinged modern lane \u2014 D'Angelo, Erykah Badu, Maxwell \u2014 Fender Rhodes and behind-the-beat grooves, lyrics that read like spoken poetry about love and self, the feeling meditated instead of belted.",
+          "tempoGroove": "60-95 BPM with a heavily behind-the-beat, slightly drunken swing \u2014 the live drums drag on purpose and the voice floats over the bar line, a Fender Rhodes and warm bass holding extended jazz chords underneath. Word density is flexible: lines can be talky and dense or stretch one thought across four bars; either way the phrasing never sits squarely on the grid, and long instrumental pockets are left open.",
+          "writingDials": [
+            "Float the phrasing behind the beat: start lines late, let them cross bar lines, and resolve where natural speech would \u2014 write for a voice that treats the beat as a suggestion, the exact opposite of Classic Soul's on-the-beat punch.",
+            "Imagery does the heavy lifting: turn abstract feeling into physical pictures built from the user's own world \u2014 a place, a body, a meal, the weather they actually live in \u2014 never pulled from a stock shelf; this is the most metaphor-rich soul room.",
+            "Widen the subject past romance: self-knowledge, spirit, roots, growth \u2014 a neo-soul love song is always also about who the narrator is becoming, so let the reflection be part of the point.",
+            "Rhyme loosens and moves inside the line: vowel echoes and internal rhyme carry the musicality, and a forced end-rhyme flattens the poetry and marks the writer as an outsider \u2014 the room where clean perfect rhyme is the wrong instinct.",
+            "Meditate, do not belt: vulnerability sounds like reflection turned over quietly, not a begged confession or a testimony aired at full voice \u2014 the coolness and the drift are the feeling.",
+            "Repetition works as mantra: a phrase returns with small changes until it deepens, and the closing vamp is allowed to circle at one level rather than lift \u2014 choruses can meditate instead of climbing.",
+            "Write fewer words than feel necessary and leave long instrumental pockets \u2014 the Rhodes, the hum, and the silence are co-writers, and the band talking is part of the song.",
+            "Cross-genre firewall: the live behind-the-beat band with a Fender Rhodes and jazz chords make it Neo-Soul, not modern programmed R&B \u2014 there is no clipped 808 bounce and no quantized grid; the drums are human and drag, and the run drifts loose rather than showing off on a sequenced pocket."
+          ],
+          "rendering": "Fender Rhodes with extended jazz chords, warm live bass, dusty in-the-pocket drums that drag a hair behind, muted guitar licks, optional horns. Vocals layered loose and human \u2014 hummed ad-libs, spoken asides, minimal pitch correction \u2014 with a late-90s-to-now organic, analog warmth and long pockets of room to breathe; unquantized, nobody performing at anyone.",
+          "storyFit": "Best for: reflective stories \u2014 personal growth, self-love, gratitude, long-term love seen from altitude, roots and family lineage, spiritual searching, a quiet devotion turned over slow. Poor fit: bright up-tempo party celebration and belted anthems \u2014 that is Classic Soul; a wound wailed wide open at full voice \u2014 that is Deep Soul; urgent drama or anything that needs to hit hard on the beat.",
+          "parodyTraps": "Fake-deep word salad with no concrete story underneath; mystical props stacked as decoration; imitating vocal scatting or filler syllables on the page; poeticness with zero specific detail from the user's actual life \u2014 the poetry must be built FROM their story, not draped over it; forcing neat end-rhyme where the room wants drift.",
+          "performance": {
+            "prose": "Density moderate; min adlibs 5; delivery tags [Rhodes] [Spoken] [Harmonies] [Instrumental Break]. Neo-Soul performs loose and human, not staged \u2014 the hums, the spoken asides, and the drifting run do the work, not a group belt. Signature: the closing vamp circles as a flat mantra instead of building \u2014 the chorus phrase repeats with small changes at the same dynamic level top to bottom while hums, a spoken aside, and a drifting (not peak) run wander over a long instrumental pocket. Placement: the adlib floor is back-heavy \u2014 most of the required adlibs live in the closing vamp, verses get at most one, and the bridge is near-zero, a loaded outro over near-empty verses rather than echoes sprinkled evenly under every hook; an [Instrumental Break] hands the Rhodes and band a stretch to talk. Tag identity: a loose live room \u2014 hummed (mmm) drifting anywhere in a line, (spoken: low observation) asides on their own lines, soft harmonies arriving loose rather than snapped, and instrumental-breathing headers where the band talks. Human and unquantized, every image built from the user's own sheet.",
+            "adlibDensity": "moderate",
+            "minAdlibs": 5,
+            "deliveryTags": [
+              "[Rhodes]",
+              "[Spoken]",
+              "[Harmonies]",
+              "[Instrumental Break]"
+            ]
+          },
+          "builder": {
+            "instruments": [
+              "Rhodes piano",
+              "live bass",
+              "organ",
+              "horns",
+              "backing trio",
+              "strings"
+            ],
+            "themes": [
+              "Devotion",
+              "Longing",
+              "Pride & respect",
+              "Remembering someone",
+              "Celebration of love"
+            ],
+            "purposes": [
+              "Testify my love",
+              "Slow dance",
+              "Cry it out",
+              "Celebrate"
+            ]
+          }
+        }
+      ],
+      "cues": [
+        {
+          "cue": "motown",
+          "strength": "strong",
+          "roomId": "classic-soul"
+        },
+        {
+          "cue": "stax",
+          "strength": "strong",
+          "roomId": "classic-soul"
+        },
+        {
+          "cue": "old school",
+          "strength": "weak",
+          "roomId": "classic-soul"
+        },
+        {
+          "cue": "throwback",
+          "strength": "weak",
+          "roomId": "classic-soul"
+        },
+        {
+          "cue": "tribute",
+          "strength": "weak",
+          "roomId": "classic-soul"
+        },
+        {
+          "cue": "milestone",
+          "strength": "weak",
+          "roomId": "classic-soul"
+        },
+        {
+          "cue": "celebration",
+          "strength": "weak",
+          "roomId": "classic-soul"
+        },
+        {
+          "cue": "grandparents",
+          "strength": "weak",
+          "roomId": "classic-soul"
+        },
+        {
+          "cue": "for my parents",
+          "strength": "weak",
+          "roomId": "classic-soul"
+        },
+        {
+          "cue": "deep soul",
+          "strength": "strong",
+          "roomId": "southern"
+        },
+        {
+          "cue": "southern soul",
+          "strength": "strong",
+          "roomId": "southern"
+        },
+        {
+          "cue": "gospel-rooted",
+          "strength": "weak",
+          "roomId": "southern"
+        },
+        {
+          "cue": "testify",
+          "strength": "weak",
+          "roomId": "southern"
+        },
+        {
+          "cue": "moan",
+          "strength": "weak",
+          "roomId": "southern"
+        },
+        {
+          "cue": "grief",
+          "strength": "weak",
+          "roomId": "southern"
+        },
+        {
+          "cue": "begging",
+          "strength": "weak",
+          "roomId": "southern"
+        },
+        {
+          "cue": "heartache",
+          "strength": "weak",
+          "roomId": "southern"
+        },
+        {
+          "cue": "slow burn",
+          "strength": "weak",
+          "roomId": "southern"
+        },
+        {
+          "cue": "neo-soul",
+          "strength": "strong",
+          "roomId": "neo-soul"
+        },
+        {
+          "cue": "neo soul",
+          "strength": "strong",
+          "roomId": "neo-soul"
+        },
+        {
+          "cue": "rhodes",
+          "strength": "weak",
+          "roomId": "neo-soul"
+        },
+        {
+          "cue": "jazzy",
+          "strength": "weak",
+          "roomId": "neo-soul"
+        },
+        {
+          "cue": "growth",
+          "strength": "weak",
+          "roomId": "neo-soul"
+        },
+        {
+          "cue": "self-love",
+          "strength": "weak",
+          "roomId": "neo-soul"
+        },
+        {
+          "cue": "spirit",
+          "strength": "weak",
+          "roomId": "neo-soul"
+        },
+        {
+          "cue": "roots",
+          "strength": "weak",
+          "roomId": "neo-soul"
+        },
+        {
+          "cue": "reflection",
+          "strength": "weak",
+          "roomId": "neo-soul"
+        }
+      ]
+    },
+    "blues": {
+      "id": "blues",
+      "name": "Blues",
+      "aliases": [
+        "blues music",
+        "delta blues",
+        "chicago blues",
+        "electric blues"
+      ],
+      "profileText": "A blues writer starts with the twelve-bar AAB stanza \u2014 the skeleton the whole genre hangs on. A line states the trouble, the same line comes again with a small turn or a deepened word, and a rhyming third line answers it and lands the point. That repeat is not filler; it is the form breathing, giving the feeling a second pass before the answer arrives. A verse that skips the repeat, or a chorus-and-riff shape with no stated-then-answered line, is not blues \u2014 it has borrowed the costume and lost the bones. And the AAB rides the blues harmony: the I-IV-V changes move under it (the IV arriving around bar five, the V turning it home), and the melody bends the flatted blue notes \u2014 the lowered third, fifth, and seventh. An AAB sung over plain major changes with no blue notes is a folk song in three-line clothing, not blues; the harmony and the bend are half the fingerprint.\n\nThe second law is the answering voice. The guitar or the harp is a second singer, and it gets the last word. The writing job is to leave it room \u2014 end phrases early, let the bar hang, and hand the gap to the bottleneck, the harmonica, or the single crying guitar note that answers the emotion of the line. The ache gets stated twice: once in words, once in steel or reed. A blues sheet packed wall-to-wall, no air after the lines, has silenced the instrument that defines the genre and failed before its first word is judged.\n\nThe third law is the specific hard-luck truth told plain. Blues lives on the actual road, the actual debt, the real name and the real wound \u2014 one bitter concrete detail from the user's own life, said in everyday words a plain voice can half-sing and half-moan. Understatement bites harder than melodrama, and the honest word outranks the clever rhyme. The cardinal failure is woke-up-this-morning autopilot: stacking generic misery and stock cliches the user never lived, mistaking blues vocabulary for having something true to say.\n\nThe rooms bend all of this. Delta strips it to one voice and one bottleneck, rubato and raw, superstitious and close to the bone. Chicago plugs the same trouble into a band and a hard shuffle and lets a harp holler it back, loud and citified and cocky. Soul-blues dresses it in horns and a stinging single-string guitar and sings the AAB grown, in full voice \u2014 dignified heartache, testimony about love more than a field holler. The law above every dial holds: English is the song's language, blues idiom and slang appear only if the user wrote them, and craft words \u2014 AAB, the twelve-bar, the turnaround, call-and-answer \u2014 are the writer's tools, never the song's, never entering the lyrics, adlibs, or render notes. Delivery is directed as feel and phrasing in plain English \u2014 the moan, the crack, the shout, the swing \u2014 never as an accent, and the user's own people and places always outrank stock crossroads scenery.",
+      "defaultRoomId": "delta",
+      "rooms": [
+        {
+          "id": "delta",
+          "name": "Delta / Country Blues",
+          "oneLine": "The porch-and-crossroads root \u2014 one voice, one bottleneck or resonator, hard-luck truth told raw and superstitious, the Robert Johnson and Son House lane.",
+          "tempoGroove": "60-120 BPM \u2014 the crying-on-the-porch lament runs loose and rubato, but the hill-country boogie and up-tempo juke side (Charley Patton, uptempo Son House) keeps a hard, steady, danceable groove; the twelve bars stretch and snap back to the singer's breath, not a click; foot-stomp and a droning bass string keep time under a shuffling or drop-thumb picked pattern. Low word density: short spoken-length phrases with real air after them, because the slide answers the voice at the end of nearly every line and the singer needs room to moan.",
+          "writingDials": [
+            "Write the twelve-bar AAB straight: state the trouble in the first line, sing it again with a small turn or a deepened word, then answer it with a rhyming third line that lands the point \u2014 this stanza is the form, and a verse that skips the repeat is not blues.",
+            "Slide-first: the bottleneck or resonator is the second voice and it gets the last word, so end phrases early and leave the bar hanging for the guitar to cry the answer \u2014 a sheet that fills every beat has silenced the instrument that defines the room.",
+            "Tell the specific hard-luck truth plain: the actual road, the actual debt, the actual name \u2014 one real bitter detail from the user's own life carries more than any stack of generic misery, and understatement bites harder than melodrama.",
+            "Let it get superstitious and close to the bone: the crossroads, the black cat, the hoodoo, the mojo belong here when the user reaches for them \u2014 the Delta lives on omens and the devil at your heels, not tidy modern reflection.",
+            "Keep the language spoken and unadorned: everyday words a plain voice half-talks and half-moans, plain near-rhyme over any clever scheme; the point is the truth landing rough, not the craft showing.",
+            "First person, alone, addressing the trouble or the one who caused it \u2014 no crowd, no band to hide in; the whole weight sits on one voice and the guitar answering it.",
+            "Cross-genre firewall: What makes it Delta and not folk or singer-songwriter is the AAB stanza and the bottleneck answering each line \u2014 folk narrates in verses and chorus over strummed chords with no call-and-answer and no repeated blues line; this room moans the AAB and hands every gap to the slide."
+          ],
+          "rendering": "Solo country blues \u2014 one raw resonator or bottleneck slide guitar answering every vocal line, a droning bass string and foot-stomp keeping loose time, no drum kit and no band. Weathered lead vocal half-sung and half-moaned, pushed to a cracked growl at the peaks, dry and close like a porch recording; 1920s-30s Delta field-recording rawness, warm and un-gloss.",
+          "storyFit": "Best for: hard-luck told plain, a love that did you wrong, the road and rambling, a deal at the crossroads, poverty and back-breaking work, a haunted lonesome confession. Poor fit: band-driven shuffle celebration \u2014 that is Chicago; polished grown heartache with horns \u2014 that is soul-blues; any story that wants a crowd or a groove to dance to.",
+          "parodyTraps": "Woke-up-this-morning autopilot with no real trouble under it; sprinkled blues cliches the user never lived; filling the slide's answer gaps with words; skipping the AAB repeat and calling it blues; a clean modern polish or a full band where the whole point is one raw voice and its guitar.",
+          "performance": {
+            "prose": "Density sparse; min adlibs 2; delivery tags [Guitar Solo] [Slide Guitar] [Moan] [Spoken]. This room performs like one person crying to an empty porch \u2014 a lone weathered voice and the bottleneck answering it like a second mourner, no band, no crowd, no polish. Signature: the slide answer \u2014 the guitar cries back the emotion of the line in the gap the phrasing leaves, so the ache is stated twice, once in words and once in steel, and a low moan or hummed note fills where words run out. Placement: the slide answers land at the line-ends the singer leaves open, roughly one per line through the AAB, and a [Guitar Solo] takes a whole twelve-bar turn where the words stop and the bottleneck carries the grief; a rough moan can trail the third line, and the final verse cracks hardest. Tag identity: a lone hard-luck voice and its answering slide \u2014 the guitar as the second mourner, a bare moan where words fail, the solo marked as its own twelve-bar cry. No band, no hype, no room full of people \u2014 one person, one guitar answering, every sung word plain language from the user's own sheet.",
+            "adlibDensity": "sparse",
+            "minAdlibs": 2,
+            "deliveryTags": [
+              "[Guitar Solo]",
+              "[Slide Guitar]",
+              "[Moan]",
+              "[Spoken]"
+            ]
+          },
+          "builder": {
+            "instruments": [
+              "resonator guitar",
+              "slide guitar",
+              "harmonica"
+            ],
+            "themes": [
+              "Hard times",
+              "Love done me wrong",
+              "The road",
+              "Regret & redemption",
+              "Working for nothing"
+            ],
+            "purposes": [
+              "Moan it out",
+              "Tell it straight",
+              "Shuffle / dance"
+            ]
+          }
+        },
+        {
+          "id": "chicago",
+          "name": "Chicago / Electric Blues",
+          "oneLine": "The plugged-in city sound \u2014 full band, wailing harp and electric slide, a hard shuffle built to move a room, the Muddy Waters and Howlin' Wolf lane.",
+          "tempoGroove": "90-130 BPM locked to a driving shuffle or a slow twelve-bar grind \u2014 the AAB stays tight to the groove, no rubato, because the band and the floor are keeping time now. Low-to-moderate word density: punchy phrases that ride the shuffle and stop early, leaving the bar open for the harp or the slide to holler back between lines.",
+          "writingDials": [
+            "Keep the twelve-bar AAB but lock it to the shuffle: state the line, repeat it with a turn on the groove, answer it with the rhyming third \u2014 the form is the same as the Delta, but now it snaps to the band instead of stretching to the breath.",
+            "The harp and electric slide are the answering voices: end lines early and plan the gaps where the harmonica wails back and the guitar stings the response, and mark the instrumental turn where the harp takes a whole chorus alone.",
+            "Carry the trouble loud and citified: this is the Delta's hard-luck moved to the South Side and plugged in \u2014 the same betrayal or hard road, but cocky, defiant, worn with swagger instead of naked despair.",
+            "Write for a voice that shouts over a band: strong open vowels at the line-ends and phrase peaks a singer can push and holler, because Chicago vocals ride on top of an amplified band, never murmur under it.",
+            "Direct and boastful address is at home: bragging on yourself, warning a rival, calling out the one who did you wrong \u2014 first person with attitude, aimed straight across the room.",
+            "Rhyme clean and sturdy on the third line so the answer lands square with the groove \u2014 plain perfect or near-rhyme the room hears coming, the honest word still outranking the clever one.",
+            "Cross-genre firewall: What makes it Chicago blues and not blues-rock is the AAB stanza and the harp-and-slide answering the vocal over a shuffle \u2014 blues-rock builds on a repeated riff and a sung chorus with no AAB and no call-and-answer; this room keeps the twelve-bar form and hands every gap to the harp, never to a riff."
+          ],
+          "rendering": "Full electric Chicago band \u2014 amplified harmonica wailing back at the vocal, electric slide and lead guitar stinging the answers, piano comping, walking electric bass, drum kit driving a hard shuffle. Gritty commanding lead vocal shouted over the band with a cupped-mic edge, harp taking full choruses; 1950s Chess Records amplified warmth, live and hot, no modern gloss.",
+          "storyFit": "Best for: hard trouble carried with swagger, a love that did you wrong answered with defiance, the road and the move to the city, boasting and warning a rival, a Saturday-night shuffle for a room. Poor fit: a naked solo porch confession \u2014 that is Delta; smooth polished grown heartache with horns \u2014 that is soul-blues; anything that needs stillness and no band.",
+          "parodyTraps": "Woke-up-this-morning filler with no real story under it; blues costume and slang the user never wrote; burying the harp and slide under wall-to-wall vocals; dropping the AAB for a rock riff and chorus; a thin under-sung delivery that fights the shouting band.",
+          "performance": {
+            "prose": "Density moderate; min adlibs 3; delivery tags [Harmonica Solo] [Guitar Solo] [Call and Response] [Shout]. This room performs like a hot electric band with the harp hollering back \u2014 one commanding shouted lead over a full shuffle band, and the harp and slide trading calls with the voice is the whole signature. Signature: the harp answer \u2014 the harmonica wails back the emotion of each line in the gap the voice leaves and the electric slide stings its own reply, so the AAB gets answered by the band every stanza. Placement: the harp and slide answers fall at the line-ends where the vocal steps aside, one per line through the verses; a [Harmonica Solo] hands the harp a full twelve-bar chorus and a [Guitar Solo] gives the slide its own, and a rough shout tops the biggest turns. Tag identity: a shouting lead and an answering band \u2014 the harp hollering in the gaps, the slide stinging its reply, a rough defiant shout thrown over the peaks. Every shout is energy in plain English, never a scripted foreign exclamation the user never wrote.",
+            "adlibDensity": "moderate",
+            "minAdlibs": 3,
+            "deliveryTags": [
+              "[Harmonica Solo]",
+              "[Guitar Solo]",
+              "[Call and Response]",
+              "[Shout]"
+            ]
+          },
+          "builder": {
+            "instruments": [
+              "harmonica",
+              "electric slide guitar",
+              "barrelhouse piano",
+              "electric bass",
+              "drum kit"
+            ],
+            "themes": [
+              "Love done me wrong",
+              "Hard times",
+              "The road",
+              "Working for nothing",
+              "Regret & redemption"
+            ],
+            "purposes": [
+              "Shuffle / dance",
+              "Tell it straight",
+              "Moan it out"
+            ]
+          }
+        },
+        {
+          "id": "soul-blues",
+          "name": "Soul-Blues / Contemporary",
+          "oneLine": "The grown, horn-dressed lane \u2014 polished band, a single-string guitar stinging between lines, dignified heartache sung in full voice, the B.B. King and Bobby Bland lane.",
+          "tempoGroove": "70-110 BPM over a smooth twelve-bar or a slow soulful grind, a horn section and organ cushioning the groove and a tight kit keeping it warm. Moderate word density: fuller sung lines with a gospel-schooled control that still break early to leave the guitar its single-string answer, carrying real feeling per line.",
+          "writingDials": [
+            "Keep the twelve-bar AAB but sing it grown: state the line, repeat it with a deepened turn, answer it with the rhyming third \u2014 the blues form holds, but it is sung in full controlled voice, not moaned, closer to a testimony about love than a field holler.",
+            "The guitar stings back single-string: leave the gap at each line-end for one crying held note or a short lead phrase to answer the voice, and plan the instrumental chorus where the guitar sings alone \u2014 sparse and vocal, never a wall of notes.",
+            "Write dignified heartache, not raw despair: this room testifies about a love that hurt with pride and composure intact \u2014 the ache is grown and self-possessed, delivered by someone who has survived it and can name it clearly.",
+            "Write for a full soulful voice: end feeling-lines on open vowels the singer can hold, swell, and lift, because soul-blues carries melisma and gospel-trained power the Delta and Chicago rooms keep plain.",
+            "Leave real holes for the horns and the guitar even in the fuller arrangement: a soul-blues sheet that buries the single-string answer and the horn swells under nonstop vocals has lost the lane's spine.",
+            "First person to one person, adult and specific: devotion, a proud reckoning, a heartache owned with dignity \u2014 one detail only the two of them would know keeps it off the greeting-card shelf.",
+            "Cross-genre firewall: What makes it soul-blues and not soul is the twelve-bar AAB and the single-string guitar answering each line \u2014 soul testifies in verses and a big chorus with gospel backing and horns but no AAB stanza and no answering blues guitar; this room keeps the twelve-bar form and hands the gaps to the crying guitar, not to a backing choir."
+          ],
+          "rendering": "Polished soul-blues band \u2014 a warm horn section swelling behind the voice, organ and piano cushioning, a single crying lead guitar stinging held-note answers between lines, round bass and a tight smooth kit. Rich full-voiced lead with gospel-trained control and tasteful melisma, subtle backing harmonies on the peaks, a warm produced sheen; 1960s-to-now soul-blues warmth, clean but never cold.",
+          "storyFit": "Best for: grown dignified heartache, a love done wrong owned with pride, devotion through hard times, a proud reckoning with an ex, a slow soulful lament for a room. Poor fit: a raw solo porch moan \u2014 that is Delta; a loud cocky shuffle for the floor \u2014 that is Chicago; anything needing rawness over polish or a crowd to dance.",
+          "parodyTraps": "Woke-up-this-morning cliche with no real grown story under it; blues or soul costume the user never wrote; burying the guitar's single-string answer under a wall of horns and vocals; dropping the AAB for a straight soul chorus; a raw un-schooled delivery where the room asks for controlled grown power.",
+          "performance": {
+            "prose": "Density moderate; min adlibs 3; delivery tags [Guitar Solo] [Call and Response] [Harmonies] [Instrumental Break]. This room performs like a grown singer with a crying guitar for a partner \u2014 one full soulful lead, a warm horn section behind, and the single-string guitar answering and trading with the voice. Signature: the guitar sting \u2014 a single crying held note or a short lead phrase answers each sung line in the gap the voice leaves, a call-and-answer between the singer and the guitar that carries the ache between the words. Placement: the guitar answers sit in the gaps at line-ends and a full [Guitar Solo] takes the instrumental chorus; horn swells and light harmonies lift the hook, and an [Instrumental Break] hands a stretch to the band on the biggest turn. Tag identity: a grown lead and his crying guitar \u2014 the single-string answer in the gaps, horn swells and soft harmonies on the peaks, one held solo reserved for the instrumental chorus. No porch, no shouting band, no crowd \u2014 a grown voice and the guitar that answers it, every sung word from the user's own sheet.",
+            "adlibDensity": "moderate",
+            "minAdlibs": 3,
+            "deliveryTags": [
+              "[Guitar Solo]",
+              "[Call and Response]",
+              "[Harmonies]",
+              "[Instrumental Break]"
+            ]
+          },
+          "builder": {
+            "instruments": [
+              "single-string electric lead guitar",
+              "organ",
+              "piano",
+              "electric bass",
+              "drum kit",
+              "horn section"
+            ],
+            "themes": [
+              "Love done me wrong",
+              "Regret & redemption",
+              "Hard times",
+              "Working for nothing",
+              "The road"
+            ],
+            "purposes": [
+              "Tell it straight",
+              "Moan it out",
+              "Shuffle / dance"
+            ]
+          }
+        }
+      ],
+      "cues": [
+        {
+          "cue": "delta blues",
+          "strength": "strong",
+          "roomId": "delta"
+        },
+        {
+          "cue": "country blues",
+          "strength": "strong",
+          "roomId": "delta"
+        },
+        {
+          "cue": "robert johnson",
+          "strength": "strong",
+          "roomId": "delta"
+        },
+        {
+          "cue": "crossroads",
+          "strength": "strong",
+          "roomId": "delta"
+        },
+        {
+          "cue": "acoustic",
+          "strength": "weak",
+          "roomId": "delta"
+        },
+        {
+          "cue": "resonator",
+          "strength": "weak",
+          "roomId": "delta"
+        },
+        {
+          "cue": "hoodoo",
+          "strength": "weak",
+          "roomId": "delta"
+        },
+        {
+          "cue": "hard luck",
+          "strength": "weak",
+          "roomId": "delta"
+        },
+        {
+          "cue": "chicago blues",
+          "strength": "strong",
+          "roomId": "chicago"
+        },
+        {
+          "cue": "electric blues",
+          "strength": "strong",
+          "roomId": "chicago"
+        },
+        {
+          "cue": "muddy waters",
+          "strength": "strong",
+          "roomId": "chicago"
+        },
+        {
+          "cue": "harmonica",
+          "strength": "strong",
+          "roomId": "chicago"
+        },
+        {
+          "cue": "shuffle",
+          "strength": "weak",
+          "roomId": "chicago"
+        },
+        {
+          "cue": "south side",
+          "strength": "weak",
+          "roomId": "chicago"
+        },
+        {
+          "cue": "full band",
+          "strength": "weak",
+          "roomId": "chicago"
+        },
+        {
+          "cue": "swagger",
+          "strength": "weak",
+          "roomId": "chicago"
+        },
+        {
+          "cue": "soul blues",
+          "strength": "strong",
+          "roomId": "soul-blues"
+        },
+        {
+          "cue": "b.b. king",
+          "strength": "strong",
+          "roomId": "soul-blues"
+        },
+        {
+          "cue": "bobby bland",
+          "strength": "strong",
+          "roomId": "soul-blues"
+        },
+        {
+          "cue": "horns",
+          "strength": "strong",
+          "roomId": "soul-blues"
+        },
+        {
+          "cue": "polished",
+          "strength": "weak",
+          "roomId": "soul-blues"
+        },
+        {
+          "cue": "grown",
+          "strength": "weak",
+          "roomId": "soul-blues"
+        },
+        {
+          "cue": "organ",
+          "strength": "weak",
+          "roomId": "soul-blues"
+        },
+        {
+          "cue": "heartache",
+          "strength": "weak",
+          "roomId": "soul-blues"
+        }
+      ]
+    },
+    "jazz": {
+      "id": "jazz",
+      "name": "Jazz",
+      "aliases": [
+        "jazz music",
+        "vocal jazz",
+        "swing",
+        "bebop"
+      ],
+      "profileText": "A jazz writer starts from the standard \u2014 the song-shape the whole tradition is built on, most often AABA across thirty-two bars: an eight-bar phrase, its repeat, a bridge that lifts and turns the harmony, then the last A come home changed. The title tends to land at the top or tail of the A and to name the whole feeling in a breath; the bridge is where the writing earns its keep, moving the emotion somewhere the A could not reach before handing it back. So the craft is architectural before it is verbal \u2014 build the frame, place the turn, and leave the melody room to be sung, not crammed. A lyric packed wall-to-wall, with no air for the phrasing to lag and no chorus left for a solo, has failed before its first image is judged.\n\nThe second thing a jazz writer knows is that phrasing sits behind the beat. The voice does not march the barline; it leans back, drags the phrase, holds a vowel late and lets it trail \u2014 the swing and the ache both live in that lag. So feeling-lines end on open vowels a singer can stretch, and the last beat or two of a phrase stays open, because something answers there. That answer is the third law: the instrumental solo is a real section, not an interlude. A chorus \u2014 often the bridge \u2014 is handed to the muted trumpet, the tenor sax, or the piano to state the melody and improvise over the changes, and in the up-tempo lane the voice and the horn trade fours like sparring partners. The page cannot script the improvisation, but it must build the room for it \u2014 the written gap, the solo chorus, the trade.\n\nAnd the words themselves are sophisticated \u2014 interior imagery, one precise adult detail turned slowly, interior and slant rhyme surfacing on the second listen, understatement over announcement. The rooms bend all of this. The ballad slows toward rubato and croons one ache close, a muted horn answering. Swing springs up-tempo, scats, and trades fours, witty and worldly. Cool drops to a smoky 3 a.m. hush and says the least it can, phrases floating late over the widest air. The law above every dial holds: lyrics are English, and the writer's craft words \u2014 swing, changes, bridge, scat, modal, behind the beat \u2014 are tools, never the song; they never enter the lyrics, adlibs, or render notes. Delivery is directed as phrasing, tone, and swing in plain English \u2014 lean it back, hold it, let it trail \u2014 and the user's own people, places, and words outrank every stock lounge trope.",
+      "defaultRoomId": "vocal-ballad",
+      "rooms": [
+        {
+          "id": "vocal-ballad",
+          "name": "Vocal Ballad / Torch Song",
+          "oneLine": "The Great American Songbook croon \u2014 a slow standard sung close and sophisticated, one ache carried on a long behind-the-beat line, the Billie / Sinatra / Ella ballad lane.",
+          "tempoGroove": "55-75 BPM, a slow four often loosened toward rubato at phrase-edges, brushed drums whispering and the upright walking soft under a piano trio; the muted trumpet or tenor breathes in the gaps. Low word density: long sung phrases with open vowels held across the bar, real air after each line, because the voice sits far behind the beat and a muted horn answers the ache at nearly every turn.",
+          "writingDials": [
+            "Write the standard shape: think AABA thirty-two bars, an eight-bar phrase repeated, then a bridge that lifts and turns the feeling before the last A returns \u2014 the title usually lands at the top or the tail of the A, and the bridge earns the difference.",
+            "Phrase behind the beat: end feeling-lines on open vowels the voice can lean on and stretch late, and leave the last beat or two of a phrase open so the singer can drag it and the horn can answer \u2014 a line packed to the barline gives the croon nowhere to sit.",
+            "Sophisticated interior imagery, not lounge clich\xE9: one precise image from the user's own life turned slowly, adult and specific \u2014 the ache is shown through a concrete detail and understatement, never announced with moon-and-cocktail postcard furniture.",
+            "Interior and slant rhyme reward the ear: internal rhyme woven inside the long line and a gentle near-rhyme at the phrase-end read as craft here, where a hammered perfect rhyme can flatten the mood \u2014 the rhyme should surface on the second listen.",
+            "Keep the world at one table: this is confession to a single person or to the self at close distance \u2014 devotion, longing, a bittersweet memory, a torch still carried; never widen to a crowd or a message.",
+            "The bridge is the turn, not more of the same: the B section must move the feeling somewhere the A could not go \u2014 a doubt, an admission, a memory that reframes the ache \u2014 then hand the last A back changed.",
+            "The solo is a written section: plan a chorus (or the bridge) where the words stop and the muted trumpet or tenor sax takes the melody and improvises the ache \u2014 the lyric is built around that instrumental cry, not over it.",
+            "Cross-genre firewall: the AABA standard shape and the behind-the-beat croon over a brushed piano trio make it jazz, not a blues \u2014 there is no twelve-bar AAB and no moaned three-line stanza here; the ache is carried in sophisticated harmony and a held sophisticated line, not a field holler, and a real horn chorus, not a guitar break, answers it."
+          ],
+          "rendering": "Warm piano trio \u2014 felt-hammer piano comping soft voicings, upright bass walking gentle behind the beat, brushed drums barely there \u2014 with a muted trumpet or tenor sax answering the vocal in the gaps and taking the solo chorus. Intimate close-miked lead vocal, dry and warm with natural breath, sung far behind the beat with a long held sustain and at most a soft harmony shadow; late-night supper-club sound, timeless 1950s-60s vocal-jazz warmth, no synths.",
+          "storyFit": "Best for: late-night romance, longing, a bittersweet memory, a torch carried for someone gone, devotion sung close, a slow-burn confession. Poor fit: up-tempo joy and wit that wants to swing \u2014 that is the swing room; a bare oblique 3 a.m. murmur \u2014 that is cool; anything needing a crowd, a message, or backbeat drive.",
+          "parodyTraps": "Moon-June-cocktail lounge clich\xE9 standing in for the user's real ache; a lyric packed wall-to-wall so the croon cannot lag and the horn cannot answer; naming the craft \u2014 swing, changes, bridge \u2014 inside the words; a belted delivery that fights the intimacy; skipping the solo chorus so the standard has no instrumental section.",
+          "performance": {
+            "prose": "Density sparse; min adlibs 2; delivery tags [Crooning] [Soft] [Trumpet Solo] [Sax Solo]. This room performs at one small table \u2014 a single crooner far behind the beat with at most a soft harmony shadow, and the muted horn as the answering voice, no crowd and no trade. Signature: the horn's answer \u2014 the muted trumpet or tenor sax replies in the open space the lagging phrase leaves, stating the ache a second time in brass the way the voice just stated it in words, then takes a whole chorus alone. Placement: the crooner carries the verses nearly bare; the horn answers at the line-ends where the phrase drags, and the [Trumpet Solo] or [Sax Solo] owns a full chorus (often the bridge) where the words stop entirely; a soft harmony can shadow the title's last word, and the final line holds longest. Tag identity: a lone behind-the-beat crooner and an answering muted horn \u2014 a [Soft] intimacy throughout, a bare harmony shadow on the title only, the solo chorus marked as its own instrumental section. No band trading, no scat, no crowd \u2014 one voice, one horn answering it, every sung word from the user's own sheet.",
+            "adlibDensity": "sparse",
+            "minAdlibs": 2,
+            "deliveryTags": [
+              "[Crooning]",
+              "[Soft]",
+              "[Trumpet Solo]",
+              "[Sax Solo]"
+            ]
+          },
+          "builder": {
+            "instruments": [
+              "piano trio",
+              "muted trumpet",
+              "tenor sax",
+              "upright bass",
+              "brushed drums",
+              "comping guitar"
+            ],
+            "themes": [
+              "Late-night romance",
+              "Longing",
+              "Bittersweet memory",
+              "New flame"
+            ],
+            "purposes": [
+              "Croon it close",
+              "Slow burn"
+            ]
+          }
+        },
+        {
+          "id": "swing",
+          "name": "Swing / Uptempo",
+          "oneLine": "The swinging bebop-tinged standard \u2014 an up-tempo number that springs to its feet, trades fours with the soloist, and lets the voice scat like a horn.",
+          "tempoGroove": "140-300 BPM (the genuine bebop burners run 260-300, where the scat and trade-fours pay off), a bright swung four riding the cymbal, the upright walking hard and the brushes or sticks driving the pocket while the piano trio comps and a horn spars with the voice. Medium word density with clipped, bouncing phrases that lock to the ride and leave gaps for the answer \u2014 the syllables ride the swing like another horn, so mouth-feel and pocket matter as much as sense, and phrase-ends open for a trade.",
+          "writingDials": [
+            "Keep the standard shape but play it up: AABA at speed, the title snapping in on the A, the bridge turning the harmony and the wit before the last A \u2014 the form is the springboard the swing bounces off.",
+            "Write for the swing bounce: clip syllables to land on and around the ride cymbal, favor short punchy words and internal rhyme that skips across the beat, and phrase behind it just enough to swing rather than march \u2014 the line should feel like it is being played, not read.",
+            "Wit and worldliness are the register: quick, clever, urbane \u2014 a light touch, a turned phrase, a knowing joke about love or the city from the user's own life; the up-tempo standard smiles even when the news is rueful, and the cleverness is the charm.",
+            "Leave room to trade fours: end phrases open so the horn or piano can answer for a bar, then the voice comes back \u2014 build the verse as call-and-answer with the soloist, gaps written in for the trade.",
+            "The voice can scat like a horn: mark a passage where the singer improvises on syllables in place of words, trading with the solo \u2014 plan where the scat lives, but the words around it stay the user's plain language.",
+            "Internal rhyme and playful perfect rhyme drive it: hammering a bright rhyme sound across a few lines builds momentum here, where the ballad would soften it; the rhyme is part of the swing's engine.",
+            "The solo section is the peak: hand a full chorus to the tenor sax, trumpet, or piano to blow over the changes, and plan the trade-fours stretch \u2014 the instrumental is the event the arrangement drives toward, not a break.",
+            "Cross-genre firewall: the swung four, the AABA standard, the scat and the trade-fours over a walking upright make it jazz, not soul or pop \u2014 there is no straight backbeat, no gospel-testimony horn section riffing behind the singer, no four-on-the-floor; the horns spar and solo over swinging changes, they do not stack a groove."
+          ],
+          "rendering": "Swinging piano trio driving hard \u2014 walking upright bass, ride-cymbal swing with brushes or sticks, piano comping bright \u2014 with a tenor sax or trumpet trading fours with the voice and blowing a full solo chorus over the changes. Lively confident lead vocal that swings behind the beat and scats where marked, at most a tight harmony hit; live, warm, up-tempo big-band-small-group sound, hot and bouncing but never rushed, no synths.",
+          "storyFit": "Best for: swing / dance, wit and worldly charm, a rueful love turned light, city nights, a new flame played for fun, celebration with a knowing smile. Poor fit: a slow torch ache that wants to be held \u2014 that is the ballad; a bare smoky 3 a.m. murmur \u2014 that is cool; grief or heavy weight the bounce cannot carry.",
+          "parodyTraps": "Generic finger-snapping lounge patter with no real wit under it; cramming every beat so nothing swings and no trade can happen; naming the craft \u2014 scat, trade fours, changes \u2014 inside the words; a dragged or straight delivery that kills the swing; skipping the solo chorus and the trade so the up-tempo standard has no instrumental peak.",
+          "performance": {
+            "prose": "Density moderate; min adlibs 3; delivery tags [Scat] [Sax Solo] [Trumpet Solo] [Piano Solo]. This room performs like a small group swinging on its feet \u2014 a confident lead trading with the soloist and scatting like another horn, the call-and-answer between voice and band the whole signature. Signature: the trade \u2014 the voice fires a phrase and the sax, trumpet, or piano answers for a bar in the gap, the two sparring back and forth, and a scat passage lets the singer improvise on syllables and trade fours with the horn. Placement: the verses stay lead-forward with the horn answering at the open line-ends; a [Scat] passage lets the voice blow, and a [Sax Solo], [Trumpet Solo], or [Piano Solo] takes a full chorus over the changes (often into trade-fours) as the peak; a tight harmony hit can punch the title. Tag identity: a swinging lead and a sparring band \u2014 the horn trading fours in the gaps, a [Scat] where the voice turns horn, a full solo chorus handed to the tenor, trumpet, or piano. No lone crooner and no crowd chant \u2014 a voice and a band trading, every sung word the user's own plain language.",
+            "adlibDensity": "moderate",
+            "minAdlibs": 3,
+            "deliveryTags": [
+              "[Scat]",
+              "[Sax Solo]",
+              "[Trumpet Solo]",
+              "[Piano Solo]"
+            ]
+          },
+          "builder": {
+            "instruments": [
+              "piano trio",
+              "tenor sax",
+              "muted trumpet",
+              "upright bass",
+              "brushed drums",
+              "comping guitar"
+            ],
+            "themes": [
+              "City nights",
+              "New flame",
+              "Late-night romance",
+              "Longing"
+            ],
+            "purposes": [
+              "Swing / dance",
+              "Croon it close"
+            ]
+          }
+        },
+        {
+          "id": "cool",
+          "name": "Cool / Late-Night",
+          "oneLine": "The smoky, modal, sparse lane \u2014 a slow-to-mid standard that says the least it can, phrases floating late over a hushed trio, the Chet Baker / Miles-adjacent 3 a.m. sound.",
+          "tempoGroove": "70-110 BPM, an unhurried understated pulse \u2014 soft walking upright, brushes barely there, a piano trio comping sparse open voicings, a muted trumpet exhaling in the wide gaps. Low word density: a spare line floated late, with a lot of held air the trio and horn fill \u2014 the restraint is the sound, so leave real silence around the words and let the space carry the mood.",
+          "writingDials": [
+            "Underplay everything: the least-said room \u2014 a spare oblique line that trusts the space, no runs, no scatting, no belting; one plain phrase and a lot of air says more than a full lyric, so cut to the bone.",
+            "Float the phrase late: enter after the beat, let the line hang unhurried and end on an open vowel that trails into the silence the horn answers \u2014 the lateness and the air are the phrasing, so write short lines with long gaps written in.",
+            "Oblique, understated imagery: a private thought half-said, a detail from the user's own late hour left to imply the feeling \u2014 the cool room suggests and withholds; the meaning surfaces in what is not spelled out, never in a declared emotion.",
+            "Keep it AABA but bare: hold the standard shape lightly, the bridge a small tonal shift rather than a big turn, the title dropped once and quiet \u2014 the form is a frame the sparseness hangs in, not a structure to fill.",
+            "The world is one overheard 3 a.m. thought: intimate, interior, at whisper distance \u2014 a mood, a small ache, a city window at night; never widen to a crowd, a message, or a big emotional peak.",
+            "Slant and unresolved rhyme over neat closure: a near-rhyme that half-lands or a line left unrhymed suits the mood where a tidy perfect rhyme feels too bright; let some lines hang open the way the phrasing does.",
+            "The solo is a mood, not a showcase: hand a chorus to the muted trumpet or tenor to play spare and low over modal or slow changes \u2014 the instrumental keeps the hush and deepens it, never a hot blowing chorus.",
+            "Cross-genre firewall: the hush, the late-floated phrasing, and the spare modal trio make it cool jazz, not a soul slow-jam or a torch ballad \u2014 no backbeat, no gospel melisma, and unlike the ballad it does not croon a big held ache; it underplays, leaves the most air, and lets a muted horn exhale into the silence."
+          ],
+          "rendering": "Spare hushed late-night trio \u2014 sparse open-voiced piano, soft walking upright, brushes barely there \u2014 with a muted trumpet or tenor sax exhaling low in the wide gaps and taking a spare solo chorus over modal or slow changes. Intimate understated close-miked lead vocal, cool and unhurried, floated late with lots of air and no runs, dry and low; smoky 3 a.m. cool-jazz sound, no synths.",
+          "storyFit": "Best for: late-night romance held at a distance, city nights, longing left unsaid, a bittersweet memory turned over quietly, a slow-burn mood at the smallest hours. Poor fit: an up-tempo swinger with wit and trade \u2014 that is swing; a big held torch ache sung out \u2014 that is the ballad; anything loud, crowded, or emotionally declared.",
+          "parodyTraps": "Filling the silence the room is built on with wall-to-wall words; overstating a feeling the room insists on withholding; smoky-bar postcard clich\xE9 instead of the user's real late hour; naming the craft \u2014 modal, changes, behind the beat \u2014 inside the words; a hot showy solo or a belted line that breaks the hush; skipping the solo chorus so the standard loses its instrumental section.",
+          "performance": {
+            "prose": "Density sparse; min adlibs 2; delivery tags [Soft] [Trumpet Solo] [Sax Solo] [Instrumental Break]. This room performs at 3 a.m. with almost nobody in it \u2014 one cool understated voice floated late, and a muted horn exhaling into the wide silence, no crowd, no trade, no scat. Signature: the exhale in the gap \u2014 the muted trumpet or tenor sax breathes one spare low answer into the held air the phrasing leaves, restraint answering restraint, then takes a whole chorus low over the changes. Placement: the voice floats the verses bare with long gaps written in; the muted horn exhales into those gaps, and a [Trumpet Solo], [Sax Solo], or [Instrumental Break] hands a full chorus to the trio kept spare and hushed; the title drops once, quiet, the last line trailing into silence. Tag identity: a cool late-floated voice and an exhaling muted horn \u2014 a [Soft] hush throughout, one spare horn answer in the wide gaps, the solo chorus kept low and modal as its own section. No belting, no scat, no crowd \u2014 one voice, a lot of air, and a muted horn breathing in it, every word the user's own.",
+            "adlibDensity": "sparse",
+            "minAdlibs": 2,
+            "deliveryTags": [
+              "[Soft]",
+              "[Trumpet Solo]",
+              "[Sax Solo]",
+              "[Instrumental Break]"
+            ]
+          },
+          "builder": {
+            "instruments": [
+              "muted trumpet",
+              "piano trio",
+              "upright bass",
+              "brushed drums",
+              "tenor sax",
+              "comping guitar"
+            ],
+            "themes": [
+              "City nights",
+              "Late-night romance",
+              "Longing",
+              "Bittersweet memory"
+            ],
+            "purposes": [
+              "Slow burn",
+              "Croon it close"
+            ]
+          }
+        }
+      ],
+      "cues": [
+        {
+          "cue": "torch song",
+          "strength": "strong",
+          "roomId": "vocal-ballad"
+        },
+        {
+          "cue": "standard",
+          "strength": "strong",
+          "roomId": "vocal-ballad"
+        },
+        {
+          "cue": "crooner",
+          "strength": "strong",
+          "roomId": "vocal-ballad"
+        },
+        {
+          "cue": "ballad",
+          "strength": "strong",
+          "roomId": "vocal-ballad"
+        },
+        {
+          "cue": "sinatra",
+          "strength": "weak",
+          "roomId": "vocal-ballad"
+        },
+        {
+          "cue": "ella",
+          "strength": "weak",
+          "roomId": "vocal-ballad"
+        },
+        {
+          "cue": "billie",
+          "strength": "weak",
+          "roomId": "vocal-ballad"
+        },
+        {
+          "cue": "late night",
+          "strength": "weak",
+          "roomId": "vocal-ballad"
+        },
+        {
+          "cue": "longing",
+          "strength": "weak",
+          "roomId": "vocal-ballad"
+        },
+        {
+          "cue": "swing",
+          "strength": "strong",
+          "roomId": "swing"
+        },
+        {
+          "cue": "bebop",
+          "strength": "strong",
+          "roomId": "swing"
+        },
+        {
+          "cue": "scat",
+          "strength": "strong",
+          "roomId": "swing"
+        },
+        {
+          "cue": "uptempo",
+          "strength": "strong",
+          "roomId": "swing"
+        },
+        {
+          "cue": "big band",
+          "strength": "weak",
+          "roomId": "swing"
+        },
+        {
+          "cue": "trade fours",
+          "strength": "weak",
+          "roomId": "swing"
+        },
+        {
+          "cue": "dancing",
+          "strength": "weak",
+          "roomId": "swing"
+        },
+        {
+          "cue": "upbeat",
+          "strength": "weak",
+          "roomId": "swing"
+        },
+        {
+          "cue": "cool jazz",
+          "strength": "strong",
+          "roomId": "cool"
+        },
+        {
+          "cue": "modal",
+          "strength": "strong",
+          "roomId": "cool"
+        },
+        {
+          "cue": "chet baker",
+          "strength": "strong",
+          "roomId": "cool"
+        },
+        {
+          "cue": "miles",
+          "strength": "strong",
+          "roomId": "cool"
+        },
+        {
+          "cue": "smoky",
+          "strength": "weak",
+          "roomId": "cool"
+        },
+        {
+          "cue": "late-night",
+          "strength": "weak",
+          "roomId": "cool"
+        },
+        {
+          "cue": "after hours",
+          "strength": "weak",
+          "roomId": "cool"
+        },
+        {
+          "cue": "understated",
+          "strength": "weak",
+          "roomId": "cool"
+        }
+      ]
+    },
+    "folk": {
+      "id": "folk",
+      "name": "Folk",
+      "aliases": [
+        "folk music",
+        "singer-songwriter",
+        "singer songwriter",
+        "folk-rock",
+        "folk rock"
+      ],
+      "profileText": "A folk writer starts with a true thing to say and says it plain. The song is a story or a plainspoken feeling before it is a groove \u2014 a real road, a real person, a home, a wrong that needs naming \u2014 and the writing job is to carry that truth in everyday words a stranger follows on the first hearing. The drama comes from the events and the exact detail, never from ornament: the specific object, the real name, the actual light. A folk line that reaches for a big poetic declaration when a small plain one would land harder has already lost the tradition. Understatement and the concrete image do the work; the plainspoken true detail outranks the clever one every time.\n\nUnder the words runs the second law: the song is carried by a voice and a guitar, and the strings are a second voice. The acoustic guitar, banjo, or fiddle answers the singer at phrase-ends and takes turnarounds between verses, so lines end open and hand off to them \u2014 a sheet packed wall-to-wall has silenced the players who carry the tune. And the melody is built to be sung by an ordinary voice: singable, memorable, shaped so a person can carry it without straining. Whether a whole room joins in or one voice keeps it, the tune must sit where a real throat lives.\n\nWhat the writer chooses is who the song is sung to, and that is the room. Traditional Folk tells it outward to a community and its record \u2014 the story-ballad and the protest song, a chorus a room already half-knows and lifts on the first pass, the I widening into a we. Contemporary Singer-Songwriter confides it inward at whisper distance \u2014 one voice, longer image-dense lines over fingerpicked guitar, a chorus meant for no crowd. Folk-Rock / Americana swells the same plain story into a stomped, sung catharsis a band and a crowd lift at full volume. Same true story, same voice-and-strings spine; different distance, different lift.\n\nThe law above every dial is plainspoken truth. Lyrics are in English; the writer works in plain English craft instruction and never costumes the song with faux-antique diction \u2014 thee, hark, gather-round scenery \u2014 or slang the user did not write; only the user's own words survive. Craft terms the writer thinks with \u2014 ballad, refrain, turnaround, drop-and-build \u2014 stay out of the lyrics, adlibs, and render notes unless the user wrote them. And the postcard is not folk: quaint antique costume standing in for the user's real road, work, and people is the parody the founder rejects. The plainspoken true detail from the user's life is the song.",
+      "defaultRoomId": "traditional-folk",
+      "rooms": [
+        {
+          "id": "traditional-folk",
+          "name": "Traditional Folk",
+          "oneLine": "The story-ballad and the protest song \u2014 roots, community, and a plainspoken record, the Guthrie / Seeger / Carter Family lane where a whole room already half-knows the chorus.",
+          "tempoGroove": "90-130 BPM in a plain, walking common time or a lilting 3/4 waltz, the acoustic guitar or banjo keeping a steady strum a room can clap to; a march feel for the protest numbers, an easy sway for the ballads. Low-to-medium word density: short, sturdy lines with room at the ends for a fiddle or banjo to answer and for a crowd to breathe before the next.",
+          "writingDials": [
+            "Tell it plain and in order: this room narrates \u2014 a story with a beginning and an end, or a wrong named straight out \u2014 in everyday words a stranger follows on the first hearing, the drama coming from the events and not from ornament.",
+            "Write a chorus the room can lift on the first pass: a short, sturdy refrain, four to seven words, plain enough to be sung back by people who have never heard it, returning the same each time so it gathers voices rather than surprising them.",
+            "Keep the I ready to widen into we: the singer speaks for more than themselves here \u2014 a town, the working people, the marchers \u2014 so a personal line can open outward to a shared one by the last verse.",
+            "Build the verses from concrete, ordinary detail the user actually brought \u2014 the real road, the real work, the real name \u2014 never quaint antique scenery or a gather-round costume; the plainspoken specific is the whole credibility.",
+            "Rhyme clean and sturdy in couplets or a ballad quatrain: solid perfect rhyme the room hears coming, so the story stays easy to follow and easy to join; a clear line beats a clever one every time.",
+            "Leave the instruments their answer: end phrases a beat early so the fiddle, banjo, or harmonica can fill the gap and take a turnaround between verses \u2014 a sheet packed wall-to-wall has silenced the players who carry the tune.",
+            "Registers are the record and the rally: a story worth keeping, a person honored, a home remembered, or an injustice named to raise a crowd \u2014 carried with conviction, never irony.",
+            "Cross-genre firewall: What makes it Traditional Folk and not Country is the plainspoken acoustic strum with fiddle and banjo answering and a chorus built for a room to join \u2014 no pedal steel, no telecaster twang, no honky-tonk swing and no radio-polished hook; the song serves the story and the sing-along, not the airplay."
+          ],
+          "rendering": "Acoustic guitar or banjo strumming a steady walking rhythm, fiddle and harmonica answering the vocal at phrase-ends and taking turnarounds, upright bass walking underneath, spare and live. Plain conversational lead vocal more told than belted, a two- or three-voice harmony joining the chorus like a room singing along; warm dry roots recording, no drums or light brushed kit only, no synths, timeless string-band feel.",
+          "storyFit": "Best for: telling one true story, naming an injustice to raise a crowd, honoring a person or a home, a hard road, remembering the fallen, a song built to be sung together. Poor fit: a private confession at whisper distance \u2014 that is Singer-Songwriter; a big band-driven catharsis \u2014 that is Folk-Rock; club energy or radio polish, which this plainspoken room has no register for.",
+          "parodyTraps": "Gather-round, faux-antique costume \u2014 thee, hark, ye olde scenery the user never wrote; a chorus too wordy or too clever for a room to sing back; inventing hardship or a cause the user's story never held; filling every bar so the fiddle and banjo have nothing to answer; a radio-slick hook that turns the record into pop with a banjo pasted on.",
+          "performance": {
+            "prose": "Density sparse; min adlibs 2; delivery tags [Harmonies] [Instrumental Break] [Fingerpicking]. This room performs like one voice with a guitar and a room ready to join \u2014 a plain lead carrying the story, a harmony voice or two arriving on the chorus like neighbors leaning in, and the fiddle or banjo answering between the lines. Signature: the sing-along chorus and the string answer \u2014 the harmony voices swell on the repeated refrain so the same line gathers people each round, while the fiddle or banjo fills the gap at phrase-ends and takes an [Instrumental Break] turnaround between verses. Placement: verses stay lead-forward and nearly bare so the story lands; harmonies come in on the chorus and the final verse where the I becomes we; the instrumental turnaround marks the passage between story beats. Tag identity: a lone singer and a room joining in \u2014 a plain lead, harmony voices swelling on the chorus like a gathering, the fiddle and banjo answering in the holes, an instrumental break handed to the players between verses. Every joined word is plain language from the user's own sheet, never a scripted antique exclamation.",
+            "adlibDensity": "sparse",
+            "minAdlibs": 2,
+            "deliveryTags": [
+              "[Harmonies]",
+              "[Instrumental Break]",
+              "[Fingerpicking]"
+            ]
+          },
+          "builder": {
+            "instruments": [
+              "acoustic guitar",
+              "banjo",
+              "fiddle",
+              "harmonica",
+              "upright bass"
+            ],
+            "themes": [
+              "Home & roots",
+              "Protest & justice",
+              "A person's story",
+              "Passing time"
+            ],
+            "purposes": [
+              "Tell a story",
+              "Protest",
+              "Sing together"
+            ]
+          }
+        },
+        {
+          "id": "contemporary-singer-songwriter",
+          "name": "Contemporary Singer-Songwriter",
+          "oneLine": "Confessional and intimate \u2014 one voice confided to you at close range, the Joni Mitchell / Nick Drake through Bon Iver / Gillian Welch lane where the chorus is a private line nobody is meant to shout back.",
+          "tempoGroove": "60-100 BPM, unhurried and often loose at the edges, a fingerpicked acoustic guitar breathing with the singer rather than driving; rubato welcome, the pulse felt more than counted. Medium word density with longer image-dense lines: the picking leaves space between phrases, and nothing is handed to a crowd.",
+          "writingDials": [
+            "Confide inward, not outward: this room is one person telling you something true at close distance \u2014 first-person and intimate, the confession aimed at you or worked through aloud, never testimony raised for a room.",
+            "Carry the weight in one small exact detail: the specific object, the exact light, the thing only the two of them would recognize from the user's own life \u2014 the image does the feeling, so a true small detail outranks any large declaration.",
+            "Write a chorus for one voice alone: a private line that returns and deepens rather than a refrain built to be sung back \u2014 it can be quiet, unresolved, a question; nobody is meant to lift it in a room.",
+            "Let the lines run longer and lean: the fingerpicked guitar breathes between phrases, so a line can spill past the bar, drag, or trail \u2014 end feeling-lines where the voice can soften and the picking can answer underneath.",
+            "Say less than the feeling and trust the gap: understatement is the instinct here, the room where what is left unsaid carries \u2014 restraint and a plain true line beat a big emotional reach.",
+            "Advance the interior, not the plot: each verse turns the feeling or the reckoning a little further \u2014 a new angle, an admission, a second thought \u2014 rather than looping one mood or narrating events blow by blow.",
+            "Rhyme loose and half-hidden: near-rhyme, internal rhyme, or barely any, so the line reads like real speech confided quietly and never like a sturdy chorus a crowd hears coming.",
+            "Cross-genre firewall: What makes it Singer-Songwriter and not Traditional Folk is the inward confession over fingerpicked guitar with a chorus meant for one voice \u2014 no room-lifting sing-along refrain, no I widening into a marching we, no crowd on the receiving end; the song is confided, not testified."
+          ],
+          "rendering": "Fingerpicked acoustic guitar breathing under the voice, occasional soft fiddle or a low held note for color, upright bass sparse if present, mostly just voice and strings with real air around them. Intimate close-mic lead vocal, plain and unforced, a soft harmony double only where the feeling peaks, light natural reverb; hushed contemporary folk recording, no drums, no polish, the breath audible.",
+          "storyFit": "Best for: a private grief or reckoning, plain-spoken love confided close, a memory turned over quietly, longing, a hard truth told to one person, the interior of a passing season. Poor fit: a crowd meant to sing along \u2014 that is Traditional; a band-lifted catharsis \u2014 that is Folk-Rock; a marching protest or any register that needs to be raised loud.",
+          "parodyTraps": "A big sing-along chorus where the room insists on a private line; reaching for a huge declaration instead of trusting one small true detail; borrowed poetic scenery with no specific real person or moment in it; overstuffing the lines so the guitar has no air to breathe; a polished radio lift that trades the confided intimacy for a hook.",
+          "performance": {
+            "prose": "Density sparse; min adlibs 2; delivery tags [Soft] [Fingerpicking] [Harmonies]. This room performs at close distance \u2014 one intimate voice and a fingerpicked guitar, nobody else in the room, a soft harmony arriving only where the feeling peaks. Signature: the breath and the picked answer \u2014 the fingerpicked guitar breathes in the gaps the long lines leave, and a soft harmony double shadows the last words of a peak line the way a confession leans closer, never a crowd. Placement: verses stay nearly bare so the intimacy carries them; the [Fingerpicking] holds the whole song underneath; a single [Soft] harmony shadows the chorus or the bridge where the feeling turns; a held or hummed note can close the outro. Tag identity: one confiding voice and its guitar \u2014 a plain intimate lead, fingerpicking breathing between the lines, a soft harmony double saved for the closest moment. No sing-along, no band, no crowd \u2014 one person and the strings, every word plain language from the user's own sheet.",
+            "adlibDensity": "sparse",
+            "minAdlibs": 2,
+            "deliveryTags": [
+              "[Soft]",
+              "[Fingerpicking]",
+              "[Harmonies]"
+            ]
+          },
+          "builder": {
+            "instruments": [
+              "acoustic guitar",
+              "fiddle",
+              "upright bass",
+              "harmonica"
+            ],
+            "themes": [
+              "Plain-spoken love",
+              "Passing time",
+              "A person's story",
+              "Nature & seasons"
+            ],
+            "purposes": [
+              "Comfort",
+              "Tell a story"
+            ]
+          }
+        },
+        {
+          "id": "folk-rock",
+          "name": "Folk-Rock / Americana",
+          "oneLine": "The fuller band, driving and communal \u2014 the Mumford / Lumineers / Fleet Foxes lane where the same plain story swells into a stomped, sung catharsis a crowd lifts at full volume.",
+          "tempoGroove": "100-140 BPM with a driving, foot-stomping feel, a full band behind the acoustic core \u2014 strummed guitar and banjo up front, a kick-and-stomp pulse, the build the whole point. Medium word density: plain lines that ride the drive and open wide at the chorus for a band and a crowd to lift together.",
+          "writingDials": [
+            "Build to a communal lift: this room grows \u2014 quiet verse to full-band chorus \u2014 so write toward a peak, a hook meant to be stomped and sung by a crowd at full volume, the dynamics carrying the feeling as much as the words.",
+            "Keep the story plain but open the chorus wide: verses hold the specific true detail from the user's life, then the chorus opens outward into a line a whole room shouts back, big and singable and returning the same each time.",
+            "Write for the stomp: short, sturdy, rhythmic lines that ride a driving strum and a kick-drum pulse, the phrasing punchy enough to feel the momentum build under it.",
+            "Leave the band its swell and its breaks: end phrases so the banjo, fiddle, and drums can answer and surge, and plan the drop and the build \u2014 a stripped bar before the full-band chorus crashes back \u2014 because the dynamic turn is part of the writing.",
+            "Rhyme clean and anthemic: strong end-rhyme the crowd hears coming, so the big chorus lands square and singable at full lift; this is not the room for buried near-rhyme.",
+            "Register is catharsis: heartbreak, hope, a hard road, a homecoming, a reckoning \u2014 the same plain folk story, but delivered as release, the feeling swelling into something a room lets out together.",
+            "Guard the roots under the drive: keep the acoustic core and the true plain detail even at full volume \u2014 the moment the banjo and the story vanish under the drums, the room has become generic anthem-rock, not Americana.",
+            "Cross-genre firewall: What makes it Folk-Rock / Americana and not Rock is the acoustic core \u2014 strummed guitar and banjo and fiddle driving the build, the story plainspoken and rootsy \u2014 never an electric-guitar-led attack; the drive serves a communal folk catharsis, not a riff."
+          ],
+          "rendering": "Strummed acoustic guitar and banjo driving up front, fiddle and mandolin surging on the lift, upright or electric bass, a kick-and-stomp drum build with hand claps and foot stomps swelling into the chorus. Earnest lead vocal opening into a full gang-vocal chorus a crowd shouts together, big harmonies on the peak; live, dynamic, roots-anthem production, acoustic core kept audible under the swell, the drop-and-build the centerpiece.",
+          "storyFit": "Best for: a hard road turned to hope, a homecoming, heartbreak released loud, a reckoning that swells into catharsis, a story built to lift a whole room together. Poor fit: a private confession at whisper distance \u2014 that is Singer-Songwriter; a spare plainspoken record \u2014 that is Traditional; anything that needs stillness or intimacy over a big communal build.",
+          "parodyTraps": "Losing the acoustic core and the banjo under the drums so it becomes generic stadium anthem-rock; a hollow oh-oh chorus with no real story or true detail under the lift; a whispered delivery that fights the driving build; forcing catharsis onto a story that wanted stillness; radio-slick polish that sands off the rootsy grain.",
+          "performance": {
+            "prose": "Density moderate; min adlibs 3; delivery tags [Harmonies] [Instrumental Break] [Hand Claps]. This room performs like a band and a crowd lifting together \u2014 an earnest lead through the verses, a full gang-vocal chorus everyone shouts, and the banjo, fiddle, and stomp surging on the build. Signature: the swell and the stomped chorus \u2014 the band drops back for a bar and crashes into a full-harmony chorus a crowd sings at full volume, hand claps and foot stomps driving the lift, the banjo and fiddle taking an [Instrumental Break] on the biggest turn. Placement: verses stay leaner and lead-forward; the gang harmonies and claps flood the chorus and the final lift; the drop-and-build marks the turn into the big chorus, and the instrumental break hands the peak to the players. Tag identity: a lead and a crowd rising together \u2014 an earnest verse voice opening into a stomped gang-vocal chorus, hand claps and foot stomps driving the swell, the banjo and fiddle surging on the break. Every shouted word is plain language from the user's own sheet, the roots kept audible under the drive.",
+            "adlibDensity": "moderate",
+            "minAdlibs": 3,
+            "deliveryTags": [
+              "[Harmonies]",
+              "[Instrumental Break]",
+              "[Hand Claps]"
+            ]
+          },
+          "builder": {
+            "instruments": [
+              "acoustic guitar",
+              "banjo",
+              "fiddle",
+              "mandolin",
+              "upright bass"
+            ],
+            "themes": [
+              "Home & roots",
+              "Passing time",
+              "A person's story",
+              "Nature & seasons"
+            ],
+            "purposes": [
+              "Sing together",
+              "Comfort",
+              "Tell a story"
+            ]
+          }
+        }
+      ],
+      "cues": [
+        {
+          "cue": "folk",
+          "strength": "strong",
+          "roomId": "traditional-folk"
+        },
+        {
+          "cue": "protest song",
+          "strength": "strong",
+          "roomId": "traditional-folk"
+        },
+        {
+          "cue": "ballad",
+          "strength": "strong",
+          "roomId": "traditional-folk"
+        },
+        {
+          "cue": "woody guthrie",
+          "strength": "strong",
+          "roomId": "traditional-folk"
+        },
+        {
+          "cue": "pete seeger",
+          "strength": "strong",
+          "roomId": "traditional-folk"
+        },
+        {
+          "cue": "sing together",
+          "strength": "weak",
+          "roomId": "traditional-folk"
+        },
+        {
+          "cue": "protest",
+          "strength": "weak",
+          "roomId": "traditional-folk"
+        },
+        {
+          "cue": "justice",
+          "strength": "weak",
+          "roomId": "traditional-folk"
+        },
+        {
+          "cue": "tell a story",
+          "strength": "weak",
+          "roomId": "traditional-folk"
+        },
+        {
+          "cue": "old-time",
+          "strength": "weak",
+          "roomId": "traditional-folk"
+        },
+        {
+          "cue": "roots",
+          "strength": "weak",
+          "roomId": "traditional-folk"
+        },
+        {
+          "cue": "union",
+          "strength": "weak",
+          "roomId": "traditional-folk"
+        },
+        {
+          "cue": "singer-songwriter",
+          "strength": "strong",
+          "roomId": "contemporary-singer-songwriter"
+        },
+        {
+          "cue": "confessional",
+          "strength": "strong",
+          "roomId": "contemporary-singer-songwriter"
+        },
+        {
+          "cue": "joni mitchell",
+          "strength": "strong",
+          "roomId": "contemporary-singer-songwriter"
+        },
+        {
+          "cue": "bon iver",
+          "strength": "strong",
+          "roomId": "contemporary-singer-songwriter"
+        },
+        {
+          "cue": "intimate",
+          "strength": "weak",
+          "roomId": "contemporary-singer-songwriter"
+        },
+        {
+          "cue": "fingerpicking",
+          "strength": "weak",
+          "roomId": "contemporary-singer-songwriter"
+        },
+        {
+          "cue": "whisper",
+          "strength": "weak",
+          "roomId": "contemporary-singer-songwriter"
+        },
+        {
+          "cue": "diary",
+          "strength": "weak",
+          "roomId": "contemporary-singer-songwriter"
+        },
+        {
+          "cue": "quiet",
+          "strength": "weak",
+          "roomId": "contemporary-singer-songwriter"
+        },
+        {
+          "cue": "heartbreak",
+          "strength": "weak",
+          "roomId": "contemporary-singer-songwriter"
+        },
+        {
+          "cue": "folk-rock",
+          "strength": "strong",
+          "roomId": "folk-rock"
+        },
+        {
+          "cue": "americana",
+          "strength": "strong",
+          "roomId": "folk-rock"
+        },
+        {
+          "cue": "indie folk",
+          "strength": "strong",
+          "roomId": "folk-rock"
+        },
+        {
+          "cue": "mumford",
+          "strength": "strong",
+          "roomId": "folk-rock"
+        },
+        {
+          "cue": "lumineers",
+          "strength": "strong",
+          "roomId": "folk-rock"
+        },
+        {
+          "cue": "stomp",
+          "strength": "weak",
+          "roomId": "folk-rock"
+        },
+        {
+          "cue": "sing-along",
+          "strength": "weak",
+          "roomId": "folk-rock"
+        },
+        {
+          "cue": "anthem",
+          "strength": "weak",
+          "roomId": "folk-rock"
+        },
+        {
+          "cue": "hopeful",
+          "strength": "weak",
+          "roomId": "folk-rock"
+        },
+        {
+          "cue": "band",
+          "strength": "weak",
+          "roomId": "folk-rock"
+        }
+      ]
+    },
+    "edm": {
+      "id": "edm",
+      "name": "EDM",
+      "aliases": [
+        "electronic",
+        "electronic dance music",
+        "house",
+        "techno",
+        "dubstep",
+        "edm music"
+      ],
+      "profileText": "An EDM writer is a producer first, and the song is not a lyric sheet \u2014 it is a topline. The structure rules everything: a build that loads tension and a drop that pays it off. The whole writing job is a hook that soars into the drop and a spare verse that builds the tension leading there. Word density is low on purpose. The vocal is another instrument in the arrangement, not the star reading a story \u2014 so the writer thinks in short, chantable, repeated phrases, not verses packed wall-to-wall. A topline that arrives dense, with paragraphs of lyric competing with the track, has failed before the drop lands.\n\nThe drop is the payoff, and often it has no words at all \u2014 it is instrumental, or a single chopped or chanted syllable turned into a rhythmic hook. So the writer never writes over the drop; the writer writes toward it. The pre-drop hook is the launch: strip the words thin through the build, lift the melody, and land the last syllable high and open on the downbeat where the riser peaks and the low end cuts, so the drop erupts under a held note instead of a sentence. End launch lines on open vowels a producer can hold, chop, stretch, and pitch, because the drop frequently takes that vowel and makes it the melody. Repetition is a feature \u2014 the hook returns bigger or richer each pass, and sameness is what lets a crowd own it, so the writer resists varying the line for interest.\n\nUnder all the machinery sits one law heavier than any dial: one real feeling anchors even the sparsest topline. A drop soars for nothing if there is no true ache or release under it, and the fastest way to make an EDM song empty is generic hands-up filler \u2014 a phrase about the night, the crowd, the lights that could belong to any track and means nothing the first time it is sung. The single true detail or person from the user's story is what earns the tenth repeat of the hook. The rooms bend the rest. House loops a warm phrase inside an unbroken groove that never stops moving. Big-Room strips the topline to one soaring anthem line thrown to a field and leaves the drop to the supersaws. Melodic anchors a real emotional ache and lets the hook soar into a lush chopped-vocal wave that swells more than slams. The laws above every dial hold everywhere: English is the song's language, delivery is directed as energy and euphoria in plain words, never as an accent or a scripted exclamation, and the user's own moment always outranks any stock rave scenery.",
+      "defaultRoomId": "house",
+      "rooms": [
+        {
+          "id": "house",
+          "name": "House",
+          "oneLine": "The four-on-the-floor body-lane \u2014 warm vocal house that grooves all night, the hook looping inside the pocket, the drop a groove that keeps moving rather than an explosion.",
+          "tempoGroove": "120-128 BPM, a steady four-on-the-floor kick with an open hi-hat on the offbeat and a sidechained bassline breathing under every kick \u2014 the body pulse never stops. Low word density: the topline is a short warm phrase that loops as part of the groove, sung and looped like an instrument, with real air between repeats so the pocket and the plucks can move.",
+          "writingDials": [
+            "Write the hook as a loop, not a chorus: a short warm phrase of a few words that repeats and rides the groove, gaining hypnotic pull each pass rather than building to a peak \u2014 house is about the body staying in motion, so the hook is felt more than delivered.",
+            "Build the verse to breathe tension in, not to narrate: keep it spare and rhythmic, a filtered line or two that the producer can strip back and roll a riser under, so the pre-drop lift feels like the groove opening up rather than a story pausing.",
+            "The hook soars into the drop by opening the filter, not by screaming: write the pre-drop line to land on an open vowel that can hold while the low end cuts and the sidechain pumps back in \u2014 the payoff is the groove dropping back in under the held note.",
+            "Keep the vocal a texture: chop-friendly phrasing, syllables that survive being looped, cut, and stuttered, because the drop often takes the vocal and turns it into a rhythmic hook rather than singing new words.",
+            "One real feeling anchors the loop: a specific late-night moment or person from the user's story keeps the repeated phrase from becoming generic dancefloor filler \u2014 the loop must mean something the first time to earn its tenth.",
+            "Sensual and nocturnal register, warm not frantic: house is a groove you sink into, so favor ease, heat, and release over urgency; the phrase invites rather than commands.",
+            "Rhyme stays loose and singable: a soft internal echo or a repeated key word beats a hard scheme; the point is the phrase sitting in the pocket, not the craft showing.",
+            "Cross-genre firewall: the warm looping groove-vocal over an unbroken four-on-the-floor with a breathing sidechain is what makes it House, not Big-Room's stadium build-and-detonate \u2014 house drops back into motion where big-room drops into an explosion, and the body never stops to throw its hands up."
+          ],
+          "rendering": "Steady four-on-the-floor kick with an offbeat open hi-hat, deep sidechained bass pumping under every kick, warm plucks and stabs, a filtered pad, and a looped vocal hook treated as a rhythmic element. Warm soulful lead vocal, close and easy, chopped and stuttered into the groove; a [Build Up] with a riser and filter-open lifting into a [Drop] that grooves rather than explodes, [Vocal Chop] textures threaded through \u2014 clean modern vocal-house sheen.",
+          "storyFit": "Best for: a warm all-night groove, sensual release, losing yourself on the floor, a nocturnal love, easy euphoria that moves the body. Poor fit: a hands-to-the-sky festival anthem that needs a stadium detonation \u2014 that is Big-Room; a tender emotional sunrise that soars and aches \u2014 that is Melodic; anything wanting dense verses or a story told in full.",
+          "parodyTraps": "Generic hands-up dancefloor filler with no real person or moment under the loop; cramming the verse with words so the groove cannot breathe; a hook too wordy to loop and chop; forcing a stadium scream onto a warm groove vocal; treating the drop like an explosion instead of the groove dropping back in.",
+          "performance": {
+            "prose": "Density sparse; min adlibs 2; delivery tags [Build Up] [Drop] [Vocal Chop] [Breakdown]. The cast is a single warm topline vocal and the groove it loops inside \u2014 the drop is a groove, not a crowd, so the vocal chop is the whole signature. Signature: [Build Up] into [Drop] \u2014 the filtered vocal and a riser lift through the build, then the sidechained groove drops back in under the held hook while the voice is chopped into a rhythmic figure. Placement: the looped hook rides the verse and pre-drop; the [Vocal Chop] figure carries the drop where new words would clutter it; a [Breakdown] strips the groove back before the final build. Tag identity: one warm topline and its chopped double as a percussion voice \u2014 the looping hook, the filter-open lift, the vocal cut into the drop, every looped word from the user's own sheet. No crowd, no field, no scream \u2014 a body, a groove, and a voice moving inside it.",
+            "adlibDensity": "sparse",
+            "minAdlibs": 2,
+            "deliveryTags": [
+              "[Build Up]",
+              "[Drop]",
+              "[Vocal Chop]",
+              "[Breakdown]"
+            ]
+          },
+          "builder": {
+            "instruments": [
+              "four-on-the-floor kick",
+              "sidechained bass",
+              "plucks",
+              "supersaw synths",
+              "risers",
+              "vocal chops"
+            ],
+            "themes": [
+              "Lost in the night",
+              "Love rush",
+              "Freedom"
+            ],
+            "purposes": [
+              "The drop / rave",
+              "Sunrise chill",
+              "Festival anthem"
+            ]
+          }
+        },
+        {
+          "id": "big-room",
+          "name": "Big-Room / Festival & Progressive",
+          "oneLine": "The mainstage lane \u2014 huge slow-loading builds and a euphoric detonation, the topline a single soaring anthem line thrown to a field, the drop often instrumental or one chanted word.",
+          "tempoGroove": "126-132 BPM, a four-on-the-floor kick that drops out through a long build and slams back on the drop; the progressive side layers supersaws that widen bar by bar under a rising riser and a snare roll. The lowest word density of the three: one soaring pre-drop hook line and near-silence in the drop itself, the vocal stripped to its single most anthemic phrase so a whole field can catch it.",
+          "writingDials": [
+            "Write one anthem line and protect it: the entire topline points at a single euphoric hook thrown right before the drop \u2014 a short, open, shoutable phrase a field can sing back on first hearing, and everything else clears the runway for it.",
+            "The build is the writing job: the pre-drop must load tension \u2014 thin the words, lift the melody stepwise, land the last syllable high and open on the downbeat where the riser peaks, so the hook launches the drop rather than trailing into it.",
+            "Leave the drop to the machine: the drop is instrumental or a single chopped or chanted word \u2014 do not write lyrics over it; the payoff is the supersaw and the kick, and words flooding the drop kill the release the build promised.",
+            "Keep the verse a spare tension-builder: a sparse filtered line or two that holds back energy, existing only to make the build feel like a takeoff \u2014 never a narrative that competes with the drop.",
+            "Euphoric and communal register, but anchored: the feeling is hands-to-the-sky release, yet one real detail or person from the user's story keeps the anthem from being empty uplift \u2014 the field sings a phrase that actually means something.",
+            "Melody over cleverness: big-room lives on a simple, huge, singable melodic shape \u2014 a stepwise rising line beats an intricate lyric, and the hook must survive being screamed slightly off-key by ten thousand people.",
+            "Repetition is the point: the anthem line returns before each drop, bigger each time; do not vary it for interest \u2014 sameness is what lets the crowd own it.",
+            "Cross-genre firewall: the long tension-loading build detonating into a euphoric instrumental or one-word-chant drop is what makes it Big-Room, not Pop \u2014 pop sings a full chorus as its event, but here the chorus is a single anthem line that launches a drop the crowd erupts into, the topline sparse and the payoff wordless."
+          ],
+          "rendering": "Wide stacked supersaw synths, a four-on-the-floor kick dropping out through the build and slamming back on the drop, a long riser and snare roll loading the pre-drop, huge sidechained bass, a single soaring anthem vocal launching into a mostly instrumental drop with a chanted or chopped one-word hook. Big festival-loud mastering, euphoric and wide; mainstage progressive-house energy \u2014 a [Build Up] with [Riser] into a massive [Drop], then a [Breakdown].",
+          "storyFit": "Best for: a hands-to-the-sky festival anthem, euphoric release, freedom and triumph, a communal peak moment, losing yourself in a crowd. Poor fit: a warm all-night body groove that never explodes \u2014 that is House; an intimate aching sunrise \u2014 that is Melodic; any story needing full verses or fine detail, which the field-scale anthem cannot carry.",
+          "parodyTraps": "Empty uplift with no real detail under the anthem line; writing lyrics over the drop instead of leaving it to the supersaws; a hook too wordy or too clever for a field to sing back; a busy verse that competes with the build; generic hands-up filler standing in for the user's actual peak moment.",
+          "performance": {
+            "prose": "Density sparse; min adlibs 2; delivery tags [Build Up] [Riser] [Drop] [Breakdown]. The cast is a single anthem vocal and the mainstage machine it launches \u2014 the drop is a euphoric instrumental, so the build-into-drop is the entire signature. Signature: [Build Up] into [Drop] \u2014 the riser and snare roll load under the stripped vocal, the anthem line launches high on the downbeat, and the supersaw drop erupts wordless or on one chanted word. Placement: the anthem hook lands right before each drop and returns bigger every time; the [Drop] stays instrumental or a single [Vocal Chop] word; a [Breakdown] pulls everything back before the final build. Tag identity: one soaring anthem line and a wordless euphoric drop \u2014 the tension-loading build, the launch on the peak downbeat, the field owning the repeated phrase, every sung word from the user's own sheet. No busy verses, no lyrics over the drop \u2014 one line, one riser, one detonation.",
+            "adlibDensity": "sparse",
+            "minAdlibs": 2,
+            "deliveryTags": [
+              "[Build Up]",
+              "[Riser]",
+              "[Drop]",
+              "[Breakdown]"
+            ]
+          },
+          "builder": {
+            "instruments": [
+              "supersaw synths",
+              "four-on-the-floor kick",
+              "risers",
+              "sidechained bass",
+              "vocal chops",
+              "plucks"
+            ],
+            "themes": [
+              "Euphoria",
+              "Freedom",
+              "Letting go"
+            ],
+            "purposes": [
+              "Festival anthem",
+              "The drop / rave",
+              "Sunrise chill"
+            ]
+          }
+        },
+        {
+          "id": "melodic",
+          "name": "Melodic / Future Bass & Chill",
+          "oneLine": "The emotional ODESZA / Illenium / melodic lane \u2014 a real feeling carried by a soaring hook into a lush, chopped-vocal drop, or a sunrise that glows and never slams at all.",
+          "tempoGroove": "140-150 BPM felt in half-time (future bass and melodic-dubstep territory \u2014 the snare lands on the 3, so it moves at ~70-75 while the grid runs 140-150), the drop hitting on a heavy half-time snare under detuned supersaw chords; the chill / sunrise variant sits slower at ~80-100 and never fully detonates, gliding instead of dropping. Low-to-moderate word density: the verse gets a little more room to ache than in the other rooms, but the hook stays spare and the drop is carried by chopped-vocal and supersaw waves, not new lyrics.",
+          "writingDials": [
+            "Anchor the whole topline to one real feeling: this is the emotional lane, so a single true loss, longing, or release from the user's story is the spine \u2014 the soar means nothing without a real ache under it, and generic uplift is the failure mode here.",
+            "Write the hook to soar into the drop: the pre-drop hook lifts on an open, held vowel that the drop can chop, stretch, and pitch into its lush wave \u2014 so end the launch line on a sound that survives being turned into the drop's melodic texture.",
+            "Give the verse room to ache before it lifts: a few spare, sincere lines that set the feeling and build quiet tension, so the hook's rise and the drop's release land as catharsis rather than spectacle \u2014 still spare, but the most breathing room of the three rooms.",
+            "Let the drop be a wave, not a slam: the future-bass drop soars and swells more than it explodes, often a chopped vocal and detuned chords carrying the melody \u2014 write for the voice to become that wave, not to sing over it.",
+            "Sincere and open register: melodic EDM wears its heart out \u2014 earnestness beats irony, and one plain true image outweighs a clever line; the emotion is the point and the polish serves it.",
+            "For the chill / sunrise variant, never detonate: keep it a glowing glide with a soft hook and no hard drop \u2014 a warm, downtempo release for a sunrise, where the build resolves gently instead of slamming.",
+            "Repetition deepens the feeling: the hook returns richer each pass as the drop swells around it \u2014 repeat to intensify the ache and the release, not merely to fill.",
+            "Cross-genre firewall: a soaring emotional hook lifting into a lush chopped-vocal-and-supersaw wave, anchored to one real feeling, is what makes it Melodic \u2014 not House's warm body-groove that keeps moving, and not Big-Room's euphoric field detonation; here the drop soars and aches at half-time rather than pumping a groove or exploding a stadium."
+          ],
+          "rendering": "Lush detuned supersaw chords, a heavy half-time snare on the drop, deep sidechained sub, warm piano or plucks in the intro, a chopped and pitched vocal carrying the drop's melody, glowing pads and reverb. Sincere emotional lead vocal soaring into the lift; a [Build Up] into a swelling [Drop] built on [Vocal Chop] and supersaws, or for the chill variant a soft [Breakdown]-led glide with no hard drop \u2014 cinematic ODESZA / Illenium melodic sheen.",
+          "storyFit": "Best for: an emotional release, longing, letting go, a bittersweet sunrise, catharsis after loss, a feeling too big for words. Poor fit: a warm all-night body groove \u2014 that is House; a chest-out festival scream with no ache under it \u2014 that is Big-Room; a detached mood with no real feeling to anchor the soar.",
+          "parodyTraps": "Generic uplift with no real loss or longing under the soar; a busy lyric flooding the drop instead of letting the chopped vocal wave carry it; a hook that cannot survive being pitched and stretched; forcing a hard slam where the feeling wants a glide; borrowing an emotional cliche the user's story never contained.",
+          "performance": {
+            "prose": "Density moderate; min adlibs 2; delivery tags [Build Up] [Drop] [Vocal Chop] [Breakdown]. The cast is one sincere topline vocal and the lush wave it soars into \u2014 the drop is a chopped-vocal swell, so the soar-and-chop is the signature. Signature: [Build Up] into [Drop] \u2014 the verse aches quiet, the hook lifts on a held open vowel, and the drop chops and pitches that vowel into a supersaw wave that swells rather than slams. Placement: the hook soars into each drop and returns richer as the wave swells; the [Drop] rides a [Vocal Chop] of the launch vowel; a [Breakdown] gives the sunrise variant its soft glide with no hard hit. Tag identity: one sincere lead and its chopped, pitched echo as the drop's melody \u2014 the aching verse, the soaring lift, the vocal becoming the wave, every sung word from the user's own sheet. No stadium scream, no unbroken groove \u2014 one feeling, one soar, one swelling release.",
+            "adlibDensity": "moderate",
+            "minAdlibs": 2,
+            "deliveryTags": [
+              "[Build Up]",
+              "[Drop]",
+              "[Vocal Chop]",
+              "[Breakdown]"
+            ]
+          },
+          "builder": {
+            "instruments": [
+              "supersaw synths",
+              "vocal chops",
+              "sidechained bass",
+              "plucks",
+              "risers"
+            ],
+            "themes": [
+              "Letting go",
+              "Euphoria",
+              "Love rush"
+            ],
+            "purposes": [
+              "Sunrise chill",
+              "The drop / rave",
+              "Festival anthem"
+            ]
+          }
+        }
+      ],
+      "cues": [
+        {
+          "cue": "house",
+          "strength": "strong",
+          "roomId": "house"
+        },
+        {
+          "cue": "vocal house",
+          "strength": "strong",
+          "roomId": "house"
+        },
+        {
+          "cue": "deep house",
+          "strength": "strong",
+          "roomId": "house"
+        },
+        {
+          "cue": "four-on-the-floor",
+          "strength": "strong",
+          "roomId": "house"
+        },
+        {
+          "cue": "all night",
+          "strength": "weak",
+          "roomId": "house"
+        },
+        {
+          "cue": "groove",
+          "strength": "weak",
+          "roomId": "house"
+        },
+        {
+          "cue": "dancefloor",
+          "strength": "weak",
+          "roomId": "house"
+        },
+        {
+          "cue": "club",
+          "strength": "weak",
+          "roomId": "house"
+        },
+        {
+          "cue": "big-room",
+          "strength": "strong",
+          "roomId": "big-room"
+        },
+        {
+          "cue": "festival anthem",
+          "strength": "strong",
+          "roomId": "big-room"
+        },
+        {
+          "cue": "progressive house",
+          "strength": "strong",
+          "roomId": "big-room"
+        },
+        {
+          "cue": "mainstage",
+          "strength": "strong",
+          "roomId": "big-room"
+        },
+        {
+          "cue": "hands up",
+          "strength": "weak",
+          "roomId": "big-room"
+        },
+        {
+          "cue": "euphoria",
+          "strength": "weak",
+          "roomId": "big-room"
+        },
+        {
+          "cue": "drop",
+          "strength": "weak",
+          "roomId": "big-room"
+        },
+        {
+          "cue": "crowd",
+          "strength": "weak",
+          "roomId": "big-room"
+        },
+        {
+          "cue": "future bass",
+          "strength": "strong",
+          "roomId": "melodic"
+        },
+        {
+          "cue": "melodic",
+          "strength": "strong",
+          "roomId": "melodic"
+        },
+        {
+          "cue": "odesza",
+          "strength": "strong",
+          "roomId": "melodic"
+        },
+        {
+          "cue": "illenium",
+          "strength": "strong",
+          "roomId": "melodic"
+        },
+        {
+          "cue": "chill",
+          "strength": "weak",
+          "roomId": "melodic"
+        },
+        {
+          "cue": "sunrise",
+          "strength": "weak",
+          "roomId": "melodic"
+        },
+        {
+          "cue": "letting go",
+          "strength": "weak",
+          "roomId": "melodic"
+        },
+        {
+          "cue": "emotional",
+          "strength": "weak",
+          "roomId": "melodic"
+        }
+      ]
+    },
+    "metal": {
+      "id": "metal",
+      "name": "Metal",
+      "aliases": [
+        "metal music",
+        "heavy metal",
+        "thrash",
+        "metalcore",
+        "death metal"
+      ],
+      "profileText": "A metal writer starts with the riff and the breakdown, not the melody. The heavy palm-muted riff is the hook (down- or drop-tuned in the modern rooms, standard or Eb-tuned in classic thrash) \u2014 the guitar states the song, the double-kick drives it, and the words ride the riff's rhythm like another percussion line. So the writing job is rhythmic and physical before it is verbal: lock the stressed syllables to the chug, leave the gaps where the riff gallops or blasts alone, and build the whole song toward the breakdown \u2014 the half-time drop where the riff crushes and the room moves. A metal sheet packed wall-to-wall, with no air for the riff to hit and no breakdown to land on, has failed before a word is judged.\n\nThe second decision is the voice, and it is a writing AND performance choice: clean versus harsh. Screamed, growled, or sung \u2014 the register is directed through tags ([Scream] [Growl] [Clean Vocals]), but the words underneath stay the English the user brought. The rooms turn on this. Thrash / Groove rides the riff with a hard sung-or-shouted voice, a scream saved for a peak, defiance you can move to. Melodic Metalcore splits the song on purpose \u2014 a screamed verse spitting the wound, a clean chorus soaring it into a melody a room sings back; the contrast IS the song. Death / Extreme goes all the way down \u2014 a growl or shriek nearly throughout, blast beats, the voice an instrument of weight and texture where another room would put a hook.\n\nThe law above every dial: metal's darkness is catharsis and metaphor, and it is the user's own. The rage, the grief, the demons, the war \u2014 these serve the user's real fury, loss, defiance, or struggle, said at full force or turned to metaphor. The writer never invents a real atrocity, a named victim, or a specific harm the user did not bring; the darkness is theirs to roar, not the writer's to manufacture. Craft words \u2014 riff, breakdown, blast beat, tremolo, palm-mute \u2014 are the writer's tools, never the song's, and never enter the lyrics, adlibs, or render notes. Delivery is directed as energy, attack, and register \u2014 scream, growl, clean, the fist and the crush \u2014 in plain English, never as a scripted foreign syllable, and the user's own enemies, wounds, and words always outrank any stock cartoon-darkness.",
+      "defaultRoomId": "thrash",
+      "rooms": [
+        {
+          "id": "thrash",
+          "name": "Thrash / Groove",
+          "oneLine": "The Metallica, Pantera, and Lamb of God lane \u2014 riff-driven aggression and defiance, mostly sung-or-shouted hard over a galloping riff (standard-tuned thrash to down-tuned groove), built to move a pit.",
+          "tempoGroove": "120-200 BPM \u2014 the thrash end gallops 160-200 on palm-muted downpicking, the groove-metal end stomps 120-150 in a half-time swagger; the riff is the engine and the double-kick drives under it, opening into a half-time breakdown stomp. Medium word density: tight, rhythmic, punchy lines that lock to the riff and break so the guitar can gallop \u2014 never wall-to-wall, the riff needs the air.",
+          "writingDials": [
+            "Riff-first: the guitar riff is the hook, not the vocal melody \u2014 write lines that ride the riff's rhythm and phrasing, lock the stressed syllables to the palm-muted chug, and leave the gaps where the riff gallops alone; a sheet that buries the riff under nonstop words has silenced the thing that defines the room.",
+            "The vocal decision is mostly-sung-or-shouted with grit: this room lives in a hard, forward, mid-range delivery \u2014 shouted, half-sung, aggressive \u2014 with a full scream saved for a peak line, not the whole song; clean singing is allowed but stays hard-edged and defiant, never soft.",
+            "Write for defiance and momentum: the register is rage, resistance, standing your ground, calling something out \u2014 deliver it plain and forceful, present-tense, the fist already in the air; the honest hard word outranks the clever one.",
+            "The chorus is a chant a pit shouts back: a short, blunt, repeatable phrase built to be roared by a room, gaining weight each return \u2014 if it could not be shouted by a crowd with fists up, it is pitched wrong for this room.",
+            "Build a breakdown and write into it: plan the half-time stomp where the riff drops to a crushing chug and the pit moves \u2014 leave a blunt gang-shouted line or a held roar to land on it, the lyric built around that drop, not over it.",
+            "Rhyme blunt and driving: hard, hammering end-rhyme and repeated key words that hit square with the riff \u2014 this is not the room for subtle slant-rhyme; the rhyme lands like a downstroke.",
+            "Keep the darkness the user's own catharsis: real rage, real defiance, a real enemy or struggle from the user's life or metaphor \u2014 never an invented war, atrocity, or named victim the story did not contain.",
+            "Cross-genre firewall: the palm-muted metal riff, the double-kick gallop, and the half-time breakdown make it metal thrash, not hard rock \u2014 rock rides a lighter, mostly-clean riff-and-chorus with no down-tuned chug, no double-kick gallop, and no breakdown; this room hits heavier and moves a pit, not a crowd swaying."
+          ],
+          "rendering": "Palm-muted rhythm guitars galloping tight (standard or Eb-tuned for the thrash end, down-tuned for the groove end), a lead guitar throwing fast fills and a shredding solo, double-kick drums driving under a cracking snare, growling distorted bass locked to the riff, dropping into a half-time breakdown chug. Aggressive forward mid-range lead vocal \u2014 shouted and half-sung with grit, a scream on the peaks \u2014 gang vocals shouting the chant, dry punchy modern-metal mix with real low-end weight.",
+          "storyFit": "Best for: rage and defiance, standing your ground, calling out betrayal, survival and resistance, a fist-in-the-air anthem, controlled fury with a target. Poor fit: the deliberate clean-chorus-vs-scream emotional swing \u2014 that is metalcore; a wall-to-wall growl and blast \u2014 that is death; tender reflection or anything that needs no aggression at all.",
+          "parodyTraps": "Generic cartoon-Satan or edgelord darkness with no real feeling under it; a chorus too wordy for a pit to shout; burying the riff under nonstop lyrics; a soft crooned delivery that fights the aggression; inventing a war or atrocity the user never lived instead of serving their real rage.",
+          "performance": {
+            "prose": "Density moderate; min adlibs 4; delivery tags [Scream] [Gang Vocals] [Breakdown] [Guitar Solo] [Double Kick]. This room performs like a frontman and a pit shouting back \u2014 one aggressive lead voice mostly shouting-and-singing hard, gang vocals cracking the chant, and a scream thrown on the peaks. Signature: the gang-shout chant \u2014 the room shouts the blunt hook line back with the lead, fists up, the same line landing harder each return, and a scream punches the biggest turn. Placement: verses stay lead-forward locked to the riff with light doubles; the gang vocals hit the chorus and the breakdown, a [Scream] lands on a peak line, and a [Guitar Solo] takes the instrumental section between verses. Tag identity: an aggressive lead and a pit answering as gang vocals \u2014 shouted-back chant on the hook and the breakdown, a scream thrown on the biggest line, the solo marked as its own break. Every shout is energy in plain English \u2014 the user's own defiance, never a scripted growl of words the user did not write.",
+            "adlibDensity": "moderate",
+            "minAdlibs": 4,
+            "deliveryTags": [
+              "[Scream]",
+              "[Gang Vocals]",
+              "[Breakdown]",
+              "[Guitar Solo]",
+              "[Double Kick]"
+            ]
+          },
+          "builder": {
+            "instruments": [
+              "down-tuned guitars",
+              "double-kick drums",
+              "growling bass",
+              "orchestral hits"
+            ],
+            "themes": [
+              "Rage & defiance",
+              "Survival",
+              "Betrayal"
+            ],
+            "purposes": [
+              "Mosh",
+              "Scream it out",
+              "Epic saga"
+            ]
+          }
+        },
+        {
+          "id": "melodic-metalcore",
+          "name": "Melodic Metalcore",
+          "oneLine": "The Killswitch Engage, Architects, and Bring Me the Horizon lane \u2014 the screamed verse against the sung clean chorus, anthemic and emotional, the wound roared and then lifted into a melody.",
+          "tempoGroove": "120-180 BPM with a driving double-kick verse and a half-time breakdown, often a wide open feel under the clean chorus; the riff carries the verse and the chorus opens melodic. Medium word density: screamed verses that spit tight rhythmic lines locked to the riff, then a clean chorus that opens wide with fewer words and held vowels the sung voice can lift.",
+          "writingDials": [
+            "The vocal decision IS the structure: write the verse to be screamed and the chorus to be sung clean \u2014 the contrast between the harsh roar and the soaring melody is the whole point of the room, so build the two halves as opposites and plan exactly where the voice switches.",
+            "Write screamed verses that spit: tight, rhythmic, urgent lines packed into the verse that ride the riff and hit hard on consonants \u2014 this is the raw, roared, unguarded half, the wound said at full force.",
+            "Write a clean chorus that soars: a short, melodic, anthemic hook on open vowels the sung voice can hold and lift, emotional and singable \u2014 this is the release, the catharsis, the line a room sings back with the lights up.",
+            "The chorus is the emotional payoff, not a plot: the verse says the pain and the chorus lifts it into the feeling everyone shares \u2014 devotion, grief, defiance, hope out of darkness \u2014 so make the clean hook the headline the scream was building toward.",
+            "Build the breakdown as the floor beneath the release: plan the half-time drop where the riff crushes and the voice roars \u2014 often right after or under the clean chorus \u2014 and leave a screamed or gang-shouted line to land on it, the lyric built around that drop.",
+            "Emotional register, not just anger: metalcore carries grief, betrayal, inner demons, the fight to survive them \u2014 the harsh voice roars the struggle and the clean voice reaches for the way through; keep it the user's own real wound, never an invented tragedy.",
+            "Keep the two voices one story: the scream and the clean sing are the same person \u2014 the verse and chorus must be the same wound seen from rage and from hope, never two unrelated ideas stitched together.",
+            "Cross-genre firewall: the deliberate screamed-verse-into-clean-chorus split and the breakdown make it metalcore, not thrash \u2014 thrash stays mostly one hard sung-or-shouted register with harshness an accent and never trades a screamed verse for a soaring sung chorus as its central move; here the clean/harsh swing is the song's spine."
+          ],
+          "rendering": "Down-tuned riffing guitars with a bright melodic lead, driving double-kick drums dropping into a half-time breakdown, growling bass, atmospheric pads or strings swelling under the clean chorus. A screamed lead vocal on the verses and a soaring clean sung vocal on the chorus, harsh and melodic layered on the biggest hook, gang vocals on the breakdown, a polished modern-metalcore mix with weight and lift.",
+          "storyFit": "Best for: grief and survival, inner demons fought and named, betrayal turned to defiance, hope clawed out of darkness, an emotional anthem with a roar and a release. Poor fit: pure riff-and-pit aggression with no clean release \u2014 that is thrash; a wall-to-wall growl with no melody \u2014 that is death; anything that wants one steady register with no clean-vs-harsh swing.",
+          "parodyTraps": "A clean chorus and a screamed verse that are two unrelated songs bolted together; generic melodramatic darkness with no real wound under it; a chorus too wordy or too low to soar; forcing a scream where the story wants the clean lift; inventing a tragedy the user never lived instead of roaring their real grief.",
+          "performance": {
+            "prose": "Density heavy; min adlibs 6; delivery tags [Scream] [Growl] [Clean Vocals] [Breakdown] [Gang Vocals]. This room performs on the clean-vs-harsh split \u2014 with the iconic low [Growl] roar available on the breakdown, not only the high scream \u2014 a screamed lead roaring the verse, a clean sung lead soaring the chorus, and the two layered on the biggest hook. Signature: the harsh-into-clean turn \u2014 the screamed verse hands off to the clean sung chorus and lifts the wound into a melody, then a screamed or gang-shouted line drops onto the breakdown, the same clean hook landing bigger and often layered with a roar underneath each return. Placement: [Scream] marks the verses, [Clean Vocals] marks the chorus, the switch written where the voice changes; gang vocals and a scream hit the [Breakdown], and the final chorus stacks the clean lead over a harsh layer. Tag identity: two voices as one person \u2014 a [Scream] roaring the verse, [Clean Vocals] soaring the chorus, gang vocals cracking the breakdown, harsh and clean layered on the last hook. Every roared and sung word is the user's own wound in plain English, never a scripted harsh syllable the user did not write.",
+            "adlibDensity": "heavy",
+            "minAdlibs": 6,
+            "deliveryTags": [
+              "[Scream]",
+              "[Growl]",
+              "[Clean Vocals]",
+              "[Breakdown]",
+              "[Gang Vocals]"
+            ]
+          },
+          "builder": {
+            "instruments": [
+              "down-tuned guitars",
+              "double-kick drums",
+              "growling bass",
+              "orchestral hits"
+            ],
+            "themes": [
+              "Inner demons",
+              "Survival",
+              "Betrayal"
+            ],
+            "purposes": [
+              "Scream it out",
+              "Mosh",
+              "Epic saga"
+            ]
+          }
+        },
+        {
+          "id": "death",
+          "name": "Death / Extreme",
+          "oneLine": "The death-and-black-metal lane \u2014 growled or shrieked, brutal and dark, blast beats and tremolo-picked riffs, the vocal an instrument of pure weight and texture.",
+          "tempoGroove": "60-260 BPM \u2014 blast beats and tremolo riffs tear at 180-260, the crushing grooves and doom-slow breakdowns drop to 60-100; the double-kick and blast beats drive under down-tuned tremolo-picked and chugging riffs. Medium-to-high word density: dense, guttural, consonant-heavy lines that ride the blast and the pick-work, meaning carried by weight and rhythm more than melody \u2014 with a gap left for the riff to blast alone and for the slow crushing breakdown.",
+          "writingDials": [
+            "The vocal decision is harsh nearly wall-to-wall: write for a growl or a shriek \u2014 a low guttural roar or a high rasp \u2014 as the constant voice; clean singing is rare here and used only as a stark contrast on one passage if at all, so the words are carried by weight, not tune.",
+            "Write for the growl's mouth-feel: hard consonants, dense syllables, and rhythmic weight matter more than open singable vowels \u2014 the guttural voice rides the riff as another percussion line, so pocket and impact outrank neat melody.",
+            "The register is darkness as catharsis and metaphor: death, war, demons, decay, rage, the abyss \u2014 deliver it dense and brutal, but keep it the user's own real fury, grief, or metaphorical darkness, and never invent a real-world atrocity or a named person's harm the user did not write.",
+            "Meaning is carried by weight and texture, not a hook: this room does not build to a singable chorus \u2014 a repeated growled phrase or a title roared on the heaviest drop stands in for one, so write lines that hit hard and dark, not lines that must be sung back.",
+            "Build the breakdown as pure crush: plan the slowest, heaviest drop or the fastest blast as the song's climax \u2014 leave a growled title or a held guttural roar to land on the crushing breakdown, the lyric built around that act of violence in sound.",
+            "Ride the blast and the tremolo: lock the phrasing to the blast beats and the tremolo-picked riff, dense and relentless through the fast sections, then let the words thin as the riff blasts alone and the breakdown crushes.",
+            "Rhyme is optional and weight is not: internal consonance and hammering repetition serve more than clean end-rhyme; a dark, heavy, true line outranks a rhymed one, and the darkness stays the user's own.",
+            "Cross-genre firewall: the wall-to-wall growl or shriek, the blast beats, and the pure-crush breakdown make it death / extreme, not metalcore \u2014 metalcore trades its scream for a soaring clean chorus as its central move, while this room stays harsh almost throughout and builds to brutality, not a sung release; the guttural voice and the blast are the spine."
+          ],
+          "rendering": "Down-tuned tremolo-picked and chugging guitars, blast beats and relentless double-kick under a snare crack, deep growling distorted bass, dropping into a slow crushing doom-heavy breakdown or a full-speed blast. A low guttural growl or a high shriek as the lead vocal nearly throughout, layered harsh vocals on the heaviest drops, orchestral hits or dark ambience for atmosphere, a heavy brutal extreme-metal mix with crushing low-end.",
+          "storyFit": "Best for: pure catharsis, rage at its most extreme, grief turned to darkness, war and death as metaphor, inner demons at full brutality, the abyss stared down. Poor fit: a soaring clean-chorus anthem \u2014 that is metalcore; a fist-in-the-air pit chant \u2014 that is thrash; anything that needs a singable melody or a clean register to carry it.",
+          "parodyTraps": "Cartoon gore or edgelord shock with no real feeling under it; inventing a real atrocity or a named victim the user never wrote \u2014 the single hardest law here; forcing a clean singable chorus this room does not want; thinning the density into a light rock lyric; darkness worn as costume instead of the user's own catharsis or metaphor.",
+          "performance": {
+            "prose": "Density heavy; min adlibs 4; delivery tags [Growl] [Scream] [Breakdown] [Blast Beats] [Double Kick]. This room performs like a wall of guttural sound \u2014 a low growl or high shriek nearly throughout, layered harsh vocals on the heaviest drops, no clean crowd-chant. Signature: the layered growl on the crush \u2014 the guttural roar rides the blast dense and relentless, then a growled title or a stacked harsh layer lands on the slow crushing breakdown, the weight the payoff where another room would put a hook. Placement: the growl carries the verses nearly unbroken over the blast; a [Blast Beats] or [Double Kick] section lets the riff tear alone, and layered harsh vocals crack the [Breakdown] where the song drops to its heaviest. Tag identity: a guttural lead as texture and weight \u2014 a [Growl] or [Scream] nearly throughout, layered harsh vocals on the crush, the breakdown marked as pure heaviness, no clean sing and no crowd. Every growled word is the user's own darkness in plain English, never an invented atrocity or a scripted guttural phrase the user did not write.",
+            "adlibDensity": "heavy",
+            "minAdlibs": 4,
+            "deliveryTags": [
+              "[Growl]",
+              "[Scream]",
+              "[Breakdown]",
+              "[Blast Beats]",
+              "[Double Kick]"
+            ]
+          },
+          "builder": {
+            "instruments": [
+              "down-tuned guitars",
+              "blast beats",
+              "double-kick drums",
+              "growling bass",
+              "orchestral hits"
+            ],
+            "themes": [
+              "War & darkness",
+              "Inner demons",
+              "Rage & defiance"
+            ],
+            "purposes": [
+              "Scream it out",
+              "Mosh",
+              "Epic saga"
+            ]
+          }
+        }
+      ],
+      "cues": [
+        {
+          "cue": "thrash",
+          "strength": "strong",
+          "roomId": "thrash"
+        },
+        {
+          "cue": "groove metal",
+          "strength": "strong",
+          "roomId": "thrash"
+        },
+        {
+          "cue": "metallica",
+          "strength": "strong",
+          "roomId": "thrash"
+        },
+        {
+          "cue": "pantera",
+          "strength": "strong",
+          "roomId": "thrash"
+        },
+        {
+          "cue": "mosh",
+          "strength": "weak",
+          "roomId": "thrash"
+        },
+        {
+          "cue": "riff",
+          "strength": "weak",
+          "roomId": "thrash"
+        },
+        {
+          "cue": "fist in the air",
+          "strength": "weak",
+          "roomId": "thrash"
+        },
+        {
+          "cue": "defiance",
+          "strength": "weak",
+          "roomId": "thrash"
+        },
+        {
+          "cue": "metalcore",
+          "strength": "strong",
+          "roomId": "melodic-metalcore"
+        },
+        {
+          "cue": "clean chorus",
+          "strength": "strong",
+          "roomId": "melodic-metalcore"
+        },
+        {
+          "cue": "screamed verse",
+          "strength": "strong",
+          "roomId": "melodic-metalcore"
+        },
+        {
+          "cue": "killswitch",
+          "strength": "strong",
+          "roomId": "melodic-metalcore"
+        },
+        {
+          "cue": "breakdown",
+          "strength": "weak",
+          "roomId": "melodic-metalcore"
+        },
+        {
+          "cue": "anthemic",
+          "strength": "weak",
+          "roomId": "melodic-metalcore"
+        },
+        {
+          "cue": "grief",
+          "strength": "weak",
+          "roomId": "melodic-metalcore"
+        },
+        {
+          "cue": "inner demons",
+          "strength": "weak",
+          "roomId": "melodic-metalcore"
+        },
+        {
+          "cue": "death metal",
+          "strength": "strong",
+          "roomId": "death"
+        },
+        {
+          "cue": "black metal",
+          "strength": "strong",
+          "roomId": "death"
+        },
+        {
+          "cue": "growl",
+          "strength": "strong",
+          "roomId": "death"
+        },
+        {
+          "cue": "blast beats",
+          "strength": "strong",
+          "roomId": "death"
+        },
+        {
+          "cue": "brutal",
+          "strength": "weak",
+          "roomId": "death"
+        },
+        {
+          "cue": "guttural",
+          "strength": "weak",
+          "roomId": "death"
+        },
+        {
+          "cue": "the abyss",
+          "strength": "weak",
+          "roomId": "death"
+        },
+        {
+          "cue": "extreme",
+          "strength": "weak",
+          "roomId": "death"
+        }
+      ]
     }
   },
-  "hash": "710ca4e4c8ed",
+  "hash": "27e16d87f6bc",
   "approxTokens": {
     "core": 1794,
     "largestSlice": 3774

@@ -135,6 +135,46 @@ const GENRE_PACKS = [
     aliases: ["flamenco", "rumba", "rumba flamenca", "rumba catalana", "nuevo flamenco"],
     profileFile: "SONGWRITING_PROFILE_FLAMENCORUMBA.md",
   },
+  {
+    section: "Country", id: "country", name: "Country",
+    aliases: ["country music", "honky-tonk", "honky tonk", "americana", "outlaw country"],
+    profileFile: "SONGWRITING_PROFILE_COUNTRY.md",
+  },
+  {
+    section: "Rock", id: "rock", name: "Rock",
+    aliases: ["rock music", "rock and roll", "rock n roll", "classic rock", "hard rock", "alternative rock", "indie rock", "punk"],
+    profileFile: "SONGWRITING_PROFILE_ROCK.md",
+  },
+  {
+    section: "Soul", id: "soul", name: "Soul",
+    aliases: ["soul music", "motown", "neo-soul", "neo soul", "deep soul", "southern soul"],
+    profileFile: "SONGWRITING_PROFILE_SOUL.md",
+  },
+  {
+    section: "Blues", id: "blues", name: "Blues",
+    aliases: ["blues music", "delta blues", "chicago blues", "electric blues"],
+    profileFile: "SONGWRITING_PROFILE_BLUES.md",
+  },
+  {
+    section: "Jazz", id: "jazz", name: "Jazz",
+    aliases: ["jazz music", "vocal jazz", "swing", "bebop"],
+    profileFile: "SONGWRITING_PROFILE_JAZZ.md",
+  },
+  {
+    section: "Folk", id: "folk", name: "Folk",
+    aliases: ["folk music", "singer-songwriter", "singer songwriter", "folk-rock", "folk rock"],
+    profileFile: "SONGWRITING_PROFILE_FOLK.md",
+  },
+  {
+    section: "EDM", id: "edm", name: "EDM",
+    aliases: ["electronic", "electronic dance music", "house", "techno", "dubstep", "edm music"],
+    profileFile: "SONGWRITING_PROFILE_EDM.md",
+  },
+  {
+    section: "Metal", id: "metal", name: "Metal",
+    aliases: ["metal music", "heavy metal", "thrash", "metalcore", "death metal"],
+    profileFile: "SONGWRITING_PROFILE_METAL.md",
+  },
 ];
 
 // The plan's build check: no quoted lyric lines anywhere in compiled writer text.
