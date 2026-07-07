@@ -12601,7 +12601,7 @@ function runChecks(draft, opts) {
       const avgVerse = verseCounts.reduce((a, b) => a + b, 0) / verseCounts.length;
       const minVerse = Math.min(...verseCounts);
       const chorusLen = Math.max(...choruses.map(contentCount));
-      const ok = minVerse >= 4 && avgVerse >= chorusLen - 1;
+      const ok = minVerse >= 3 && avgVerse >= chorusLen - 1;
       checks.push({
         id: "verse-substance",
         severity: "fail",
