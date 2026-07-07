@@ -7901,6 +7901,10 @@ ${picks.join("\n")}
 function briefPrompt(story, card, inputs, imageFeedback = "") {
   const storyBlock = story ? `THE STORY (the user's own words):
 ${story}` : `No story details were given \u2014 build the brief from the choices alone. Keep it universal but concrete, and NEVER invent fake personal details (no invented names, streets, dates, or events pretending to be the user's).`;
+  const lang = String(inputs.language || "English").trim();
+  const langNote = /^english$/i.test(lang) ? "" : `
+
+LANGUAGE: this song's lyrics will be written in ${lang}. The "centralImage" field MUST be written in ${lang} \u2014 the exact plain word or short phrase a ${lang} lyric would sing for that real object (e.g. the ${lang} words for the mug, the jacket, the kitchen table), because the song returns to this image IN ${lang} and it is checked against the ${lang} lyrics. Keep it a concrete photographable thing, just named in ${lang}. Every other field stays in English.`;
   return `You are planning a song. Do not write any lyrics. Read the story and return ONLY a JSON object.
 
 THE ROOM this song lives in: ${card.name} \u2014 ${card.oneLine}
@@ -7908,7 +7912,7 @@ Its tempo & groove: ${card.tempoGroove}
 ${picksBlock(inputs)}
 ${storyBlock}${imageFeedback ? `
 
-IMPORTANT \u2014 fix your central image: ${imageFeedback}` : ""}
+IMPORTANT \u2014 fix your central image: ${imageFeedback}` : ""}${langNote}
 
 Return JSON with exactly these string fields:
 {
