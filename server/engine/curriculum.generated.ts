@@ -83,6 +83,7 @@ export const CURRICULUM: CompiledCurriculum = {
         "Lift the congregation",
         "Comfort in grief",
         "Celebrate",
+        "Encourage / motivate",
         "Altar call"
       ],
       "instruments": [
@@ -102,14 +103,20 @@ export const CURRICULUM: CompiledCurriculum = {
         "Praise & spirituality",
         "Romance (lovers rock)",
         "Freedom & justice",
-        "Celebration"
+        "Celebration",
+        "Missing someone",
+        "Confidence & swagger",
+        "Proving them wrong"
       ],
       "purposes": [
         "Uplift the people",
         "Protest",
         "Romance",
+        "Slow dance",
         "Skank / dance",
-        "Give thanks"
+        "Give thanks",
+        "Party / celebrate",
+        "Flex / celebrate"
       ],
       "instruments": [
         "one-drop drums",
@@ -1860,11 +1867,1859 @@ export const CURRICULUM: CompiledCurriculum = {
           "roomId": "southern-bounce"
         }
       ]
+    },
+    "gospel": {
+      "id": "gospel",
+      "name": "Gospel",
+      "aliases": [
+        "gospel music",
+        "praise",
+        "worship music"
+      ],
+      "profileText": "A gospel writer starts with direction: who is the song facing? Some songs testify — they face people and tell them what God did. Some songs worship — they face God and say it to Him straight. Some songs trade — a leader calls and a room answers. That one choice rewrites every line, because a congregation cannot sing a soloist's winding sentences, and a soloist wastes a room-sized chorus. Gospel also allows a pivot most genres forbid: a verse may testify in first person and the chorus may widen to we or turn to You, so the whole room can claim the words. The tradition wins over the one-voice rule — but the pivot is planned, never drift, and the worship lane never pivots at all.\n\nThe second decision is the ascent. A gospel song must end higher than it began — that is the job. Every room climbs its own ladder: the choir stacks a vamp and changes key; worship repeats one declaration over a growing build until it weighs more; the quartet strips to one anchor phrase and drives; the contemporary soloist climbs a bridge into a lifted final chorus; the urban cut drops the beat away and floods it back. The writer picks the ladder early and writes toward it, because the ending is the most important part of a gospel song.\n\nRepetition is craft here, not laziness. Gospel is the tradition where the same phrase returns hotter each time, so the writer's test is blunt: is this phrase true enough, and short enough, to be worth twenty repeats? Worship may replace new verse information with repetition that deepens — that bend is sanctioned, and even there the approach verse plants a real detail from the user's story first. Everywhere else the verses carry the substance: the scenes, the specifics, the before. The repeated phrase is the truth those verses earned.\n\nCall-and-response is gospel's native grammar — the tradition the other genres borrowed it from. The writer puts both layers on the page: the lead's freer lines, and the short fixed answer the other voices give, learnable in one pass. Who answers is the room's call — a mass choir, a praise team with a congregation, a small polished stack, a quartet's named parts, or a modern lead layering its own voice — and the answer is planned in the writing.\n\nThe language stays the user's own. Scripture-rooted images and familiar turns of thought are welcome — but folded into the user's plain speech, never pasted on as costume, and never faked as personal history the user did not give. The testimony keeps its mess: the before must be as vivid as the after, because a scrubbed struggle is a false witness. The user's real diagnosis, real habit, real year of silence is what makes the praise believable.\n\nRendering protects three things in every room. The voice out front — raw or polished as the room decides, but human and leading. The church's instruments — organ, piano, live drums, tambourine, and voices treated as the biggest instrument of all. And the arc — a sparse start, a real quiet before the biggest lift, the fullest sound saved for the end. The dials bend to the story; the story never bends to the room.",
+      "defaultRoomId": "contemporary-gospel",
+      "rooms": [
+        {
+          "id": "traditional-gospel",
+          "name": "Traditional Gospel / Choir",
+          "oneLine": "The big-choir church sound — a leader out front, a wall of voices answering, and an ending that climbs higher than the beginning.",
+          "tempoGroove": "Two lanes: slow burn at 60-75 BPM in a 12/8 feel (a triplet sway — the classic slow-church rock), and uptempo praise at 100-126 BPM, straight or lightly shuffled with claps on 2 and 4. Word density is low-to-medium: every choir line must be short enough for forty voices to hit together. Slow songs stretch few words over long bars; uptempo songs use punchy call phrases.",
+          "writingDials": [
+            "Write two layers at once: the LEAD's lines (freer, testimony-flavored, can stretch and repeat) and the CHOIR's answer (short, fixed, 3-7 words a room can lock onto). Every section should say which layer carries it.",
+            "Build the vamp on paper — the vamp is the repeated ending section. The craft is choosing THE one short phrase worth repeating 8-16 times while intensity climbs, plus a second short phrase (the 'special') that stacks on top of or answers it near the peak.",
+            "Rhyme density is low. Repetition and parallel structure (matching line shapes) do the work rhyme does in other genres; a choir anthem can rhyme almost nothing and still land.",
+            "POV convention: the verse may testify in 'I,' but the chorus widens to 'we' or turns to 'You/He' — the whole room has to be able to claim the chorus words as their own.",
+            "Scripture allusion is welcome and expected — folded in as borrowed images and familiar turns of thought, never chapter-and-verse citations dropped mid-line.",
+            "The section plan is different from pop: verse → chorus → vamp → (often) key change → reprise (the chorus comes back one more time). The vamp usually replaces the bridge; if a bridge exists, its job is to set up the key change.",
+            "Keep lines metrically square (even, landing on the beat) and predictable — a choir cannot syncopate loosely the way a soloist can. Put the surprise in harmony and dynamics, not in rhythm.",
+            "Write the dynamics into the lyric arc: place the softest, most confessional line right before the biggest lift — it should be NEW information, carried by the lead voice alone, giving the director a near-whisper to climb from."
+          ],
+          "rendering": "Full mass choir in three-part harmony behind a powerhouse lead vocalist, Hammond B3 organ with Leslie speaker (classic church organ), grand piano, live bass and drums, tambourine on uptempo numbers. Slow songs in a 12/8 sway with big choir swells; uptempo with handclaps on 2 and 4. Call for a key change into the final vamp and a drum-led drive ending. Era marker: rooted in the 1970s-90s mass-choir tradition and still recorded live today — live church-recording energy, warm and roomy, not polished pop.",
+          "storyFit": "Best for church celebrations (anniversaries, pastor appreciation), big communal gratitude, deliverance stories meant to be shared by a congregation, and homegoing services. Bad for intimate private confession and stories built on lots of specific narrative detail — the choir format compresses detail out, and whatever specifics survive must live in the lead's verse lines only.",
+          "parodyTraps": "Cramming long wordy lines into choir parts (a real choir cannot sing a paragraph together). Stuffing in fake old-church vocabulary the user never wrote. Skipping the vamp — a traditional choir song that simply ends after the second chorus sounds like an unfinished demo. Starting loud and staying loud, leaving the ending nowhere to ascend to.",
+          "performance": {
+            "prose": "Density heavy; min adlibs 8; delivery tags [Call and Response] [Choir enters] [Belting] [Vocal Run] [Crescendo] [Final Vamp]. This room performs like a full service with the church on its feet — one lead out front and a wall of voices behind, and the performance is built to climb: light early, fuller each section, heaviest at the vamp. Signature: the two-layer conversation the writing already planned — the lead calls in freer testimony lines and the mass choir answers with its short fixed phrase, together, on time, every time; at the vamp the choir holds the one repeated phrase through the key change while the lead breaks loose over it, and the special stacks on near the peak. Placement: verses keep the choir at line-end answers only; the chorus brings the full wall under a [Choir enters] header; the soft confessional line before the biggest lift stands completely bare — the lead alone, no answers; then the vamp is the heaviest adlib zone in gospel, lead calls and choir answers landing on every pass, run cues riding the key change. Tag identity: a lead and a mass choir — line-start Lead: calls with the choir's (fixed short answer) behind them, (choir swells) direction lines, a [Choir enters] chorus header, and a [Final Vamp] header where the special stacks over the loop. Forty voices move as ONE voice: the choir answers and swells together, never as scattered solo echoes — that wall-of-one grammar is what no other gospel room shares.",
+            "adlibDensity": "heavy",
+            "minAdlibs": 8,
+            "deliveryTags": [
+              "[Call and Response]",
+              "[Choir enters]",
+              "[Belting]",
+              "[Vocal Run]",
+              "[Crescendo]",
+              "[Final Vamp]"
+            ]
+          },
+          "builder": {
+            "instruments": [
+              "Hammond B3 organ",
+              "grand piano",
+              "live bass",
+              "gospel drums",
+              "tambourine",
+              "handclaps"
+            ],
+            "themes": [
+              "For the congregation",
+              "Celebration of His love",
+              "Deliverance",
+              "Gratitude"
+            ],
+            "purposes": [
+              "Lift the congregation",
+              "Celebrate",
+              "Comfort in grief",
+              "Worship / exalt"
+            ]
+          }
+        },
+        {
+          "id": "contemporary-gospel",
+          "name": "Contemporary Gospel",
+          "oneLine": "Modern radio gospel — a soloist's personal testimony with pop/R&B polish, a big singable chorus, and a bridge that lifts the whole song.",
+          "tempoGroove": "Ballads 58-72 BPM (often in 6/8 — a rolling, waltz-like sway — or a half-time feel, where the drums move at half speed), mid-tempos 84-104 BPM with an R&B-leaning pocket, celebratory uptempos 108-126 BPM. Word density is medium: verses conversational and specific, choruses tightened into short parallel lines. Phrasing sits between choir writing and urban gospel — some push and pull against the beat, but the melody stays the star.",
+          "writingDials": [
+            "Testimony 'I' carries the whole song more than in any other gospel lane except quartet — the singer's specific story IS the song; the chorus universalizes the feeling without abandoning first person.",
+            "Split the specificity: verses hold whatever hard specifics the user actually wrote — put those in, unsoftened; the chorus states the resolved truth in plain, singable words, with one short echoable phrase inside it that background voices can lift and answer. Specific verse, universal chorus.",
+            "Rhyme density medium and mostly slant (near-rhyme) — perfect rhymes reserved for chorus landing lines; in the verses, honesty outranks rhyme.",
+            "The bridge is load-bearing: it holds the turn (the moment faith kicked in, the decision, the answered prayer) and typically climbs melodically into a final key-lifted or re-voiced (sung a new way) chorus.",
+            "Leave run room: end key phrases on open vowels and leave a beat or two of air at line ends for the vocalist to fill — but less ad-lib room (ad-libs are short unscripted vocal extras) than urban gospel takes.",
+            "A late-song vamp is optional and shorter than a choir vamp — usually the chorus's single strongest phrase, isolated and repeated 4-8 times with ad-libs floating over it.",
+            "Scripture allusion is lighter-touch here: a familiar biblical image folded into modern everyday speech, not quoted phrasing."
+          ],
+          "rendering": "Polished modern production: piano or keys-led, live-feeling drums, electric bass, clean guitar swells, string or pad beds, and tight stacked background vocals (a small polished stack, not a mass choir) entering at the chorus. Lead is a featured soloist with gospel runs. Ballads big and cinematic with a key lift near the end; mid-tempos with an R&B-informed pocket and lush extended church chords. Era marker: 2000s-2020s gospel radio — clean, warm, contemporary sheen over church harmony.",
+          "storyFit": "The widest lane in gospel. Best for personal testimony of any kind (health scares, grief, recovery, new beginnings, gratitude), encouragement songs aimed at one struggling listener, and milestone tributes carrying a faith frame. Weak for purely corporate worship moments (a room singing to God belongs in Praise & Worship) and for stories that want grit and street texture (urban gospel serves those better).",
+          "parodyTraps": "Stacking greeting-card faith clichés with zero personal detail. Choruses so wordy nobody could sing along by the second listen. Skipping the turn — a testimony with no before-and-after is just a mood, not a testimony. Forcing churchy vocabulary onto a user who wrote their story in plain modern speech.",
+          "performance": {
+            "prose": "Density moderate; min adlibs 5; delivery tags [Vocal Run] [Harmonies] [Soft] [Build] [Big Finish]. This room performs like a featured soloist on a gospel-radio single — one testifying voice out front with a small polished background stack, and the stack is backup, never a congregation: it lifts the lead's own words instead of answering with new ones. Signature: the lifted echo — the chorus carries one short echoable phrase, and on every return the stack lifts and answers exactly that phrase while the lead spends its runs in the line-end air the writing left on open vowels; the bridge climbs through a [Build] into the key-lifted final chorus, where the biggest run of the song finally lands. Placement: the floor of 5 is met without ever crowding the testimony — verses stay nearly bare under a [Soft] header (at most one softly answered phrase where the story turns), roughly 2 stack-lifts across the chorus returns, 1 run cue at the bridge peak, and the rest in the optional short vamp, where the strongest chorus phrase repeats 4-8 times with adlibs floating over it. Tag identity: a soloist and a small polished stack — (background: lift of the chorus phrase) on hook returns, run cues at phrase ends, one [Soft] confessional verse header, one [Big Finish] on the key-lifted last chorus. No mass choir and no room answering back — one witness with tasteful backup, radio-clean.",
+            "adlibDensity": "moderate",
+            "minAdlibs": 5,
+            "deliveryTags": [
+              "[Vocal Run]",
+              "[Harmonies]",
+              "[Soft]",
+              "[Build]",
+              "[Big Finish]"
+            ]
+          },
+          "builder": {
+            "instruments": [
+              "grand piano",
+              "warm keys",
+              "live-feel drums",
+              "electric bass",
+              "clean guitar swells",
+              "string pads"
+            ],
+            "themes": [
+              "Testimony / what God brought me through",
+              "Faith through the storm",
+              "Gratitude",
+              "Deliverance"
+            ],
+            "purposes": [
+              "Testify",
+              "Comfort in grief",
+              "Encourage / motivate",
+              "Celebrate",
+              "Altar call"
+            ]
+          }
+        },
+        {
+          "id": "praise-n-worship",
+          "name": "Praise & Worship",
+          "oneLine": "Songs a whole room sings straight TO God — simple enough to learn in one pass, deep enough to repeat for ten minutes.",
+          "tempoGroove": "Worship ballads 60-76 BPM with a straight feel and long sustained phrases; anthemic builds 72-84 BPM; uptempo corporate praise 100-128 BPM straight-ahead. Word density is the LOWEST in gospel: few words, long notes, lots of air. A congregation learning the song in real time cannot process dense lines.",
+          "writingDials": [
+            "POV is vertical and constant: second person TO God ('You') dominates, with 'we/us' for the room. Personal 'I' appears only as the doorway into 'You.' This is the one gospel lane where you do NOT pivot POV mid-song — switching from talking TO God to talking ABOUT God breaks the room.",
+            "Write for instant singability: phrases of roughly 4-8 syllables, repeated exactly, easy to pitch. A first-time listener should be singing by the second chorus. Predictability is a feature here, not a flaw.",
+            "Depth comes from repetition that deepens, not from new information: the same phrase means more the fifth time because the build and the room have grown around it. Choose phrases that can bear repetition — declarative, present-tense statements about who God is that stay true every time they're sung, not one-time narrative events. The bend keeps a floor: the approach verse still plants a real detail or two from the user's own story before the repeats take over — compressed, never erased.",
+            "Rhyme density is very low — heavy rhyme can even feel manipulative in worship. Parallel phrasing and repetition replace it.",
+            "Structure convention: low, personal verse (the approach) → chorus (the declaration) → a bridge or tag that becomes THE moment — in modern worship that short escalating bridge is often the most-remembered part of the song; design it as the peak, not an afterthought.",
+            "Pick ONE attribute of God that the user's actual story points at — provider, healer, protector, comfort — and stay on it the whole song. Listing many attributes flattens all of them.",
+            "Write a line that can survive being whispered: the standard arc includes a near-silent breakdown (voice plus one instrument) before the final full-band chorus. Unlike the choir lane, where that quiet moment is a NEW confessional line, the exposed line here is the SAME declaration the room has been repeating, proving it still holds with nothing behind it."
+          ],
+          "rendering": "Two textures live in this one lane. The default is gospel worship: piano and Hammond organ leading, rich church-chord harmony, choir-flavored group vocals swelling behind a lead who runs freely — warm, live sanctuary energy. Switch to the ambient worship-band texture — warm synth pads, delay-and-reverb electric guitars, a steady kick-driven build, roomy congregation-style group vocals, a close and plain lead that barely runs — only when the user's language or references point there. Either way, keep the long dynamic arc: sparse first verse, near-silent drop-down, huge layered final choruses. Era marker: 2010s-2020s live-recorded worship, spacious, builds over flash.",
+          "storyFit": "Best for stories written as prayer or thanks addressed to God, congregational moments (services, baptisms, a worship moment inside a wedding), and seasons of surrender, awe, or waiting. Bad for detailed personal narratives (worship compresses story into a single posture toward God), tribute songs to people, and any request where the user's specific events are the point — this lane trades specificity for a room full of voices.",
+          "parodyTraps": "Vague stock nature imagery stacked with no anchor in the user's actual story. Wordy verses nobody could sing on first hearing. Pivoting mid-song from addressing God to describing God. Building a huge emotional swell around a line that isn't worth repeating — the build must be earned by the phrase at its center.",
+          "performance": {
+            "prose": "Density sparse; min adlibs 3; delivery tags [Quiet] [Soft] [Build] [Harmonies] [Crescendo]. This room performs by repetition, not decoration — the cast is the room itself: a worship leader and a praise team out front, a congregation singing every word, all facing one direction, so the work adlibs do elsewhere is done here by the same phrase returning bigger. Signature: the leader's short lifted call — a repeated word from the declaration or a brief sung invitation floated over the room just before the next section — while the praise team's harmonies swell under the repeats and the congregation carries the phrase itself. Placement: the floor of 3 lives at the seams, never inside a phrase the room is learning: one leader call at the turn into the chorus, one breathed or hummed moment in the near-silent breakdown where the bare declaration stands with one instrument under a [Quiet] header, and one swelling group answer as the final chorus rebuilds through a [Crescendo]; verses stay bare, and the long arc from near-silence to full room is carried by [Build] headers more than by adlib count. Tag identity: a leader, a praise team, and a congregation — (leader: short call into the next section) lines, (congregation swells) and (praise team harmonies rise) direction lines, group harmonies blooming only as the song grows. Nobody performs AT anyone: every voice faces God, and the leader's calls serve the room's singing, never a solo spotlight — the exact opposite of the choir room's staged lead-and-wall drama.",
+            "adlibDensity": "sparse",
+            "minAdlibs": 3,
+            "deliveryTags": [
+              "[Quiet]",
+              "[Soft]",
+              "[Build]",
+              "[Harmonies]",
+              "[Crescendo]"
+            ]
+          },
+          "builder": {
+            "instruments": [
+              "piano",
+              "Hammond organ",
+              "warm synth pads",
+              "delay-and-reverb electric guitars",
+              "steady kick-driven drums",
+              "acoustic guitar"
+            ],
+            "themes": [
+              "Praise & worship",
+              "Gratitude",
+              "Celebration of His love",
+              "Faith through the storm"
+            ],
+            "purposes": [
+              "Worship / exalt",
+              "Lift the congregation",
+              "Altar call"
+            ]
+          }
+        },
+        {
+          "id": "urban-gospel",
+          "name": "Urban Gospel / Inspirational R&B & Trap",
+          "oneLine": "Faith with today's sound — gospel truth over R&B and trap production, written in the user's everyday voice.",
+          "tempoGroove": "R&B-leaning cuts 60-80 BPM with a half-time bounce and deep pocket; trap-influenced tracks written at 130-150 BPM but felt in half-time (so they groove like 65-75); mid-tempo bounce 88-100 BPM. Word density is the highest in gospel — conversational, syncopated phrasing with more syllables per bar than any sibling lane, but still leaving pockets of air for ad-libs.",
+          "writingDials": [
+            "Write in the user's actual speech register: modern, casual, plain. Church vocabulary appears only where the user's own story already lives there — the faith is in the content, never in costume word choice.",
+            "Testimony 'I' with the mess left in: whatever hard specifics the user actually wrote go into the verses unsoftened. The before must be as vivid as the after — sanitizing the struggle kills this lane.",
+            "Syncopation is the engine: start phrases off the beat, tuck extra syllables, land early or late. The words should bounce like an R&B or hip-hop melody line, not sit square like a hymn — this is the one gospel lane where square phrasing is the mistake.",
+            "Rhyme density is the highest in gospel: internal rhyme and multi-syllable slant (near-rhyme) borrowed from hip-hop are welcome — but conversational flow still outranks rhyme when they conflict.",
+            "Hooks behave like R&B hooks: short, rhythmic, repeated — often an everyday phrase flipped so it carries a second, sacred meaning at the same time. Double meanings are at home here in a way they are nowhere else in gospel.",
+            "Leave ad-lib real estate: pockets at line ends for stacked ad-libs, spoken asides, and breathy runs — the space IS part of the writing.",
+            "The ascent is a production move, not a key change: write one nakedly honest lyric moment specifically for the beat drop-out before the final hook, where the voice stands alone.",
+            "The bridge may be spoken or rapped — a talking-to-yourself or under-the-breath prayer moment reads authentic here where it would break the other gospel lanes.",
+            "Cross-genre firewall: R&B's Trap-Soul and hip-hop's Melodic Rap run the same drums and tempo as this one — the dial that makes it Urban Gospel is testimony, a before-and-after with an ascent at the end."
+          ],
+          "rendering": "808 bass, trap hi-hats with rolls and stutters or smooth R&B drum programming, dark-to-warm keys and pads, pitched vocal chops, tight modern vocal stacks with heavy ad-lib layering. Lead vocal intimate and close-mic'd; light saturation or melodic autotune texture acceptable as a style choice. Half-time bounce with a beat drop-out before the final hook. Era marker: mid-2010s to 2020s gospel-R&B and Christian trap crossover — playlist-ready, mixed like mainstream R&B/hip-hop, church chords hidden inside the production.",
+          "storyFit": "Best for younger voices, testimonies with rough edges (streets, recovery, anxiety, hustle seasons), encouragement for people who don't sit in pews, and faith-rooted motivation. Bad for congregational singing (no room sings a syncopated melody together), church-service moments, and older-generation tributes where the production choice itself would read as disrespectful.",
+          "parodyTraps": "Renting slang the user never wrote — borrowed slang ages in a week and reads fake instantly. Preaching down at the listener over a trap beat — this lane talks WITH people, never at them. Scrubbing the struggle until the song is all victory lap. Porting church clichés onto modern production without translating the language.",
+          "performance": {
+            "prose": "Density moderate; min adlibs 6; delivery tags [Spoken] [Whispered] [Vocal Run] [Harmonies] [Drop]. This room performs like testimony with 808s — one modern voice and its own stacked second track, the same two-voice grammar trap and trap-soul run, except the second voice answers the witness, not the flex. Signature: the testimony punctuation — a line lands, and in the pocket the syncopation left, the lead's own stack answers with an echoed key word, a breathy run, or a low murmured agreement; under each hook return the stack thickens, so the everyday phrase carrying the second sacred meaning lands doubled by the end. Placement: adlibs live only in the line-end pockets the writing left — roughly one every two bars in the verses, doubled under the hook — and the spoken or rapped bridge runs as an under-the-breath prayer on its own [Spoken] or [Whispered] lines; the one bare zone is the beat drop-out before the final hook, where the nakedly honest line stands completely alone, then the stack floods back with the last hook behind a [Drop]. Tag identity: the lead and its own layered self — (echo of the key word) and (breathy run) at pocket ends, a low (murmured agreement) under the hook, prayer-close [Whispered] headers at the bridge. Never a choir, never a congregation: the church chords hide in the production while one voice testifies over them.",
+            "adlibDensity": "moderate",
+            "minAdlibs": 6,
+            "deliveryTags": [
+              "[Spoken]",
+              "[Whispered]",
+              "[Vocal Run]",
+              "[Harmonies]",
+              "[Drop]"
+            ]
+          },
+          "builder": {
+            "instruments": [
+              "808 sub-bass",
+              "rolling trap hi-hats",
+              "smooth R&B drum programming",
+              "warm keys",
+              "airy pads",
+              "pitched vocal chops"
+            ],
+            "themes": [
+              "Testimony / what God brought me through",
+              "Faith through the storm",
+              "Deliverance"
+            ],
+            "purposes": [
+              "Testify",
+              "Encourage / motivate",
+              "Celebrate"
+            ]
+          }
+        },
+        {
+          "id": "quartet-style",
+          "name": "Quartet-Style (Southern Soul Gospel)",
+          "oneLine": "The old-school quartet sound — a gritty lead telling a story while the group answers behind them, driving harder until the church is on its feet.",
+          "tempoGroove": "Slow-burn story songs 66-84 BPM with a heavy swung backbeat. The drive (the intensifying ending push) often pushes the tempo forward — though some drives hold tempo and climb through dynamics and the lead's density alone. Almost always swung, never stiff. Word density splits: lead verses are medium-dense and narrative — nearly talked — while the group's answer lines are tiny, 2-5 words hammered on the same beat every time.",
+          "writingDials": [
+            "Write it as a story with scenes: quartet verses are narrative — a specific day, a specific place, what happened, who said what. This is the most story-forward lane in gospel; the user's concrete details go IN, not compressed out. This engine — God's act inside a narrated story, told through scenes, a drive, and one anchor phrase — is also what separates the lane from R&B's Classic Soul, which is secular love and celebration borrowing worship language.",
+            "Put two voices on the page: the lead's lines (long, conversational, preacher-adjacent phrasing that can stretch and repeat at will) and the background answer (ONE short fixed phrase the group repeats identically — choose it early, because it anchors the whole song).",
+            "The DRIVE is the ascent: the final section strips down to the anchor phrase while the lead escalates over it. Write the anchor plus three or four escalation ideas — turns and intensifying restatements of the same thought — instead of new verses.",
+            "Repetition-as-preaching is the craft: the lead repeating one line three or four times with growing intensity is the style working, not lazy writing.",
+            "Rhyme is loose and optional; the storytelling cadence and the call-and-response lock (leader calls, group answers on time) matter far more than rhyme.",
+            "POV: testimony 'I' or third-person parable — telling somebody else's story to make the point — are both traditional. Direct-to-God 'You' address is rare in this lane.",
+            "Physical, lived-in, and concrete beats abstract: pull the two or three most touchable details out of the user's own story and build scenes around those.",
+            "A spoken or half-sung opening is a legitimate section: the lead 'talking' the audience into the song before it fully starts is part of the tradition."
+          ],
+          "rendering": "Electric guitar with twang and tremolo, bass and drums with a heavy swung backbeat, Hammond organ or piano stabs, four- or five-voice harmony backgrounds behind a rough-edged lead vocal — grit, rasp, and shouts welcome. The arrangement must build to a drive: tempo and intensity climbing, backgrounds chugging one phrase, lead ad-libbing over the top, hard hits and holds at the finish. Era marker: 1950s-70s quartet tradition, alive on today's Southern soul circuit — live, raw, church-floor energy over studio polish.",
+          "storyFit": "Best for narrative testimonies told start to finish, tributes to elders and mothers and fathers, songs for older congregations, homegoing services, and long-road stories spanning years of struggle or family history. Bad for abstract feelings with no events, youth-targeted songs, and quiet intimate confessions — this format is public and communal, built for a room, not headphones.",
+          "parodyTraps": "Faking country-church grammar or spelling out an accent the user never wrote — the rhythm and phrasing carry the tradition in standard English. Writing polished, symmetrical pop lines for the lead, who should read like heightened speech. Skipping the drive and ending like a pop record. Making the group's answer a full sentence — if the background phrase can't fit on a church fan, it's too long.",
+          "performance": {
+            "prose": "Density heavy; min adlibs 7; delivery tags [Call and Response] [Spoken] [Harmonies] [Belting] [Crescendo] [Big Finish]. This room performs like the oldest cast in gospel on a church floor — four named parts: the lead out front, free to stretch and repeat, the tenor riding high, the baritone filling the middle, the bass walking the bottom, the group hammering the ONE anchor phrase the writing chose early (the render may thicken it with a fifth voice). Signature: the lock — the lead calls loose and preacher-adjacent, the group answers with the same tiny fixed phrase on the same beat every time, tenor on top, bass underneath; in the drive the group strips to that anchor and chugs it while the lead escalates over it in repeats, rasp, and shouts, into the hard hits and holds of the [Big Finish]. Placement: the spoken opening runs on its own [Spoken] lines — the lead talking the room into the song; verses carry the group's answer at the end of every call; the drive is the heaviest zone — the anchor looping under a [Crescendo] while the lead ad-libs over the top — and most of the floor of 7 lives there and in the verse answers, never scattered mid-phrase. Tag identity: a lead and a named four-part group — line-start Lead: calls with the group's (fixed anchor answer) behind them, (bass walks down) and (tenor lifts above the lead) direction lines, and a drive header where the anchor chugs and the lead preaches over it. Four parts, one phrase, one direction: up.",
+            "adlibDensity": "heavy",
+            "minAdlibs": 7,
+            "deliveryTags": [
+              "[Call and Response]",
+              "[Spoken]",
+              "[Harmonies]",
+              "[Belting]",
+              "[Crescendo]",
+              "[Big Finish]"
+            ]
+          },
+          "builder": {
+            "instruments": [
+              "tremolo electric guitar",
+              "live bass",
+              "heavy swung backbeat drums",
+              "Hammond organ",
+              "piano stabs",
+              "handclaps"
+            ],
+            "themes": [
+              "Testimony / what God brought me through",
+              "Deliverance",
+              "Faith through the storm",
+              "For the congregation"
+            ],
+            "purposes": [
+              "Testify",
+              "Comfort in grief",
+              "Lift the congregation",
+              "Celebrate"
+            ]
+          }
+        }
+      ],
+      "cues": [
+        {
+          "cue": "choir",
+          "strength": "strong",
+          "roomId": "traditional-gospel"
+        },
+        {
+          "cue": "pastor appreciation",
+          "strength": "strong",
+          "roomId": "traditional-gospel"
+        },
+        {
+          "cue": "church anniversary",
+          "strength": "strong",
+          "roomId": "traditional-gospel"
+        },
+        {
+          "cue": "hymn",
+          "strength": "strong",
+          "roomId": "traditional-gospel"
+        },
+        {
+          "cue": "praise break",
+          "strength": "strong",
+          "roomId": "traditional-gospel"
+        },
+        {
+          "cue": "church",
+          "strength": "weak",
+          "roomId": "traditional-gospel"
+        },
+        {
+          "cue": "congregation",
+          "strength": "weak",
+          "roomId": "traditional-gospel"
+        },
+        {
+          "cue": "homegoing",
+          "strength": "weak",
+          "roomId": "traditional-gospel"
+        },
+        {
+          "cue": "sunday morning",
+          "strength": "weak",
+          "roomId": "traditional-gospel"
+        },
+        {
+          "cue": "testimony",
+          "strength": "strong",
+          "roomId": "contemporary-gospel"
+        },
+        {
+          "cue": "brought me through",
+          "strength": "weak",
+          "roomId": "contemporary-gospel"
+        },
+        {
+          "cue": "recovery",
+          "strength": "weak",
+          "roomId": "contemporary-gospel"
+        },
+        {
+          "cue": "healed",
+          "strength": "weak",
+          "roomId": "contemporary-gospel"
+        },
+        {
+          "cue": "healing",
+          "strength": "weak",
+          "roomId": "contemporary-gospel"
+        },
+        {
+          "cue": "encourage",
+          "strength": "weak",
+          "roomId": "contemporary-gospel"
+        },
+        {
+          "cue": "funeral",
+          "strength": "weak",
+          "roomId": "contemporary-gospel"
+        },
+        {
+          "cue": "passed away",
+          "strength": "weak",
+          "roomId": "contemporary-gospel"
+        },
+        {
+          "cue": "praise team",
+          "strength": "strong",
+          "roomId": "praise-n-worship"
+        },
+        {
+          "cue": "worship",
+          "strength": "strong",
+          "roomId": "praise-n-worship"
+        },
+        {
+          "cue": "thank you lord",
+          "strength": "strong",
+          "roomId": "praise-n-worship"
+        },
+        {
+          "cue": "prayer",
+          "strength": "weak",
+          "roomId": "praise-n-worship"
+        },
+        {
+          "cue": "surrender",
+          "strength": "weak",
+          "roomId": "praise-n-worship"
+        },
+        {
+          "cue": "baptism",
+          "strength": "weak",
+          "roomId": "praise-n-worship"
+        },
+        {
+          "cue": "altar call",
+          "strength": "weak",
+          "roomId": "praise-n-worship"
+        },
+        {
+          "cue": "gospel trap",
+          "strength": "strong",
+          "roomId": "urban-gospel"
+        },
+        {
+          "cue": "christian trap",
+          "strength": "strong",
+          "roomId": "urban-gospel"
+        },
+        {
+          "cue": "gospel r&b",
+          "strength": "strong",
+          "roomId": "urban-gospel"
+        },
+        {
+          "cue": "trap",
+          "strength": "strong",
+          "roomId": "urban-gospel"
+        },
+        {
+          "cue": "808s",
+          "strength": "weak",
+          "roomId": "urban-gospel"
+        },
+        {
+          "cue": "808",
+          "strength": "weak",
+          "roomId": "urban-gospel"
+        },
+        {
+          "cue": "rap",
+          "strength": "weak",
+          "roomId": "urban-gospel"
+        },
+        {
+          "cue": "streets",
+          "strength": "weak",
+          "roomId": "urban-gospel"
+        },
+        {
+          "cue": "anxiety",
+          "strength": "weak",
+          "roomId": "urban-gospel"
+        },
+        {
+          "cue": "relapse",
+          "strength": "weak",
+          "roomId": "urban-gospel"
+        },
+        {
+          "cue": "quartet",
+          "strength": "strong",
+          "roomId": "quartet-style"
+        },
+        {
+          "cue": "southern soul",
+          "strength": "strong",
+          "roomId": "quartet-style"
+        },
+        {
+          "cue": "grandma",
+          "strength": "weak",
+          "roomId": "quartet-style"
+        },
+        {
+          "cue": "grandmother",
+          "strength": "weak",
+          "roomId": "quartet-style"
+        },
+        {
+          "cue": "grandpa",
+          "strength": "weak",
+          "roomId": "quartet-style"
+        },
+        {
+          "cue": "grandfather",
+          "strength": "weak",
+          "roomId": "quartet-style"
+        },
+        {
+          "cue": "elders",
+          "strength": "weak",
+          "roomId": "quartet-style"
+        },
+        {
+          "cue": "country church",
+          "strength": "weak",
+          "roomId": "quartet-style"
+        },
+        {
+          "cue": "old school",
+          "strength": "weak",
+          "roomId": "quartet-style"
+        },
+        {
+          "cue": "homegoing",
+          "strength": "weak",
+          "roomId": "quartet-style"
+        }
+      ]
+    },
+    "reggae": {
+      "id": "reggae",
+      "name": "Reggae",
+      "aliases": [
+        "reggae music",
+        "roots reggae",
+        "lovers rock",
+        "dancehall"
+      ],
+      "profileText": "A reggae writer starts with the riddim — the drum-and-bass foundation the words will live on — and treats the words as guests on it. The genre's heartbeat is the one-drop: the kick and the rim land together on beat three, and beat one is left empty, so the groove breathes exactly where most genres stomp. That open first beat IS the identity. The offbeat guitar skank marks the spaces between the beats, and the bass, mixed up front and carrying the melody, does the talking between phrases. So the writing job is spatial before it is verbal: phrases start just after the downbeat and stop before the bar ends, lines stay short enough that the gaps remain audible, and a lyric sheet with no holes in it has failed before its first word is judged. The writer plans where the words are NOT.\n\nRepetition is a feature, never a failure. A reggae hook is a short, chantable phrase repeated more times than feels polite on paper, and it gains power each round — the same words land heavier the fifth time because the groove and the people around them have grown. Rhyme stays loose almost everywhere: repeating a key word beats a clever rhyme, slant rhyme and no rhyme are normal, and a showy scheme reads as another genre. Dancehall is the one exception — dense internal rhyme, one end-sound ridden hard for lines at a time — because momentum is its whole job.\n\nThree registers cover nearly everything the genre says: sufferation (struggle, injustice, endurance told plainly), uplift (faith, gratitude, good news, reassurance), and romance. The same groove carries all three, and the writer always knows who the song is for — a whole people, where the singer's I stands for we (roots); one person at whisper distance (lovers rock); or the party in front of the deejay right now (dancehall). That single question — who is this for — moves more dials than any other: it sets the point of view, the hook's shape, and how personal the details get.\n\nThe law above every dial is dialect. Patois appears ONLY if the user wrote it in their own story — in the lyrics, the adlibs, the delivery directions, and the render notes alike. Rhythm and phrasing carry the identity in standard English: where the phrase starts, where it stops, what the bass answers. The craft terms these pages teach with — riddim, skank, one-drop, deejay, dub, sufferation, bashment — are the writer's working vocabulary, never the song's: they stay out of the lyrics, adlibs, and render notes too unless the user wrote them first, and delivery is directed as rhythm and energy in plain English — cadence, bounce, punch — never as an accent or a nationality. Generated patois, accent spellings, or island slang read as parody — a costume — and in this genre the costume is worse than being boring. The same goes for the postcard: beaches, palm trees, and cocktails are not reggae; the user's own places, work, weather, and people are.\n\nRendering, in any room, protects three things. The space: beat one stays open and the instruments leave the gaps the writing planned. The foundation: deep bass up front and the skank clearly audible — reggae mixes are built from the bottom. The voice as a person: warm and human, answered by whichever cast the room declares — a harmony group, soft doubles, or a crowd — never an added accent. Every dial above bends to the user's story; none of it may ever change what the song is about.",
+      "defaultRoomId": "roots-reggae",
+      "rooms": [
+        {
+          "id": "roots-reggae",
+          "name": "Roots Reggae",
+          "oneLine": "The classic 1970s reggae of faith, struggle, and uplift — slow, deep, and sung like a message to a whole people, whether the news is heavy or good.",
+          "tempoGroove": "60-90 BPM (most classics sit in the 70s) in a one-drop feel — the kick and rim land together on beat three and beat ONE is left empty, so the groove breathes exactly where other genres stomp — with swung offbeat guitar skank marking the spaces between beats. Word density is low-to-medium: short phrases with real air between them so the bass melody and the offbeat stay audible.",
+          "writingDials": [
+            "Riddim-first: the words are guests on the drum-and-bass foundation. Start phrases just after the downbeat and stop before the bar ends so the bass and the skank get the spotlight between phrases — a sheet that fills every beat has failed the genre before a single word is judged.",
+            "Widen the story: the singer's personal pain or hope is treated as everyone's — a lost job becomes a song about a system, one person's good news becomes everyone's reason to smile. Keep the user's specific details in the verses, but let the chorus speak for more than one person.",
+            "The hook is a chant: a short rallying phrase of roughly three to six words, built for a crowd to sing together, repeated more times than feels polite on paper. It gains power each round — repetition is the feature, never the failure.",
+            "Rhyme loose: repeating a key word beats a clever rhyme; slant rhyme and no-rhyme are normal; a tight, showy rhyme scheme reads as the wrong genre.",
+            "Imagery is big and physical — pulled from the nature, weather, work, and places in the user's OWN story, never from a stock reggae image bank. It may lean scriptural only if the user's own story carries faith. Never postcard island scenery.",
+            "Sections: verses may run long and preach a little; the bridge is often replaced by a stripped-down instrumental stretch (a dub drop) where the words stop entirely — plan the lyric around that silence.",
+            "Point of view: an I that stands for we, or direct address to the powerful or to the people. Second-person confrontation is fully at home here.",
+            "Two registers, one voice: sufferation and uplift ride the same groove — heavy news and good news are both delivered warm and communal, so the words can turn dark without the song ever turning cold."
+          ],
+          "rendering": "One-drop drums with kick and rim landing together on beat three, deep melodic bass mixed up front, offbeat guitar skank, bubbling organ, horn-section stabs, spring-reverb echo trails. Either 1970s analog tape warmth or the cleaner modern roots-revival sound. Lead vocal answered by a small harmony group singing the responses — response words stay in the song's own plain English, never an added accent.",
+          "storyFit": "Best for: struggle, injustice, faith, endurance, homeland, family legacy, warnings and hope — and just as naturally the light side: easy communal joy, gratitude, good news, a carefree day, reassurance for someone who is worried. Roots carries heavy and light with the same warm, communal voice. Poor fit: flirty club stories, petty gossip, luxury bragging — those belong to dancehall; and a private two-person romance at whisper distance — that is lovers rock's lane, never kept here by default.",
+          "parodyTraps": "Any patois spelling the user did not write themselves; marijuana references the user never mentioned; religious names or slogans inserted uninvited; postcard island imagery (beaches, palm trees, cocktails); borrowing famous reggae hook phrases; making the chorus clever instead of chantable.",
+          "performance": {
+            "prose": "Density moderate; min adlibs 5; delivery tags [Call and Response] [Harmonies] [Instrumental Break] [Breakdown] [Groove]. This room performs like a message meeting its people — one lead voice with a small harmony group answering as a congregation of the people, and the band itself given whole stretches to speak. Signature: the congregation response — the harmony group answers the chant hook's last words in the gaps the phrasing leaves, and each return of the chant gathers voices, so the same words land heavier every round. Placement: responses live on the chant hook and at the verse line-ends that ask for witness — roughly one response every other line in the chorus, verses lighter; the dub drop gets an [Instrumental Break] or [Breakdown] header on its own line where the words stop entirely, and the final rounds of the chant stack the fullest. Tag identity: the people in the room — a small harmony group singing short (response phrases) to the lead's call like a congregation of the people, group voices swelling on each chant repeat, direction lines marking the dub drop. No solo showing off, no club hype — the crowd answers as one, and every response is plain-language words from the song's own sheet, never an added accent.",
+            "adlibDensity": "moderate",
+            "minAdlibs": 5,
+            "deliveryTags": [
+              "[Call and Response]",
+              "[Harmonies]",
+              "[Instrumental Break]",
+              "[Breakdown]",
+              "[Groove]"
+            ]
+          },
+          "builder": {
+            "instruments": [
+              "one-drop drums",
+              "deep melodic bass",
+              "skanking offbeat guitar",
+              "organ bubble",
+              "horn stabs",
+              "melodica",
+              "spring-reverb echo"
+            ],
+            "themes": [
+              "Sufferation & struggle",
+              "Freedom & justice",
+              "One love / unity",
+              "Praise & spirituality",
+              "Celebration"
+            ],
+            "purposes": [
+              "Uplift the people",
+              "Protest",
+              "Give thanks",
+              "Skank / dance"
+            ]
+          }
+        },
+        {
+          "id": "lovers-rock",
+          "name": "Lovers Rock",
+          "oneLine": "Reggae's tender love-song lane — the smoother UK sound born in mid-1970s South London, soft, romantic, and sung close, carried by Jamaica's crooners too.",
+          "tempoGroove": "65-80 BPM, a gentle swung one-drop with every edge softened — the space on beat one stays, but the room is a bedroom, not a rally. Low word density with long held notes at line-ends; the singer croons, so lines must leave room to stretch and bend.",
+          "writingDials": [
+            "Keep the world small: one room, two people. Never widen to community or message — that is roots territory. The whole song is a private conversation.",
+            "The verses are a real conversation moving forward: verse two must advance the story of these two specific people — an answer, a memory, a next step — never re-circle verse one's feeling.",
+            "Write for a crooner: end the lines that carry the feeling on open vowels a voice can hold and slide; avoid hard consonant endings there.",
+            "Couplets that resolve: gentle perfect or near-perfect rhymes that close sweetly feel romantic here, where roots deliberately leaves lines hanging open.",
+            "The hook is a promise or a question aimed at one specific person — intimate, never a crowd chant. If a stadium could shout it, it is wrong for this lane.",
+            "Answer vocals are part of the writing: soft backing voices echo the last words of lines, so write line-endings worth echoing — and the gaps of the one-drop still belong to the bass and the skank, even this close.",
+            "The bridge earns its place with a confession or a doubt — the one moment the sweetness admits a crack, which makes the final chorus land harder.",
+            "Point of view: first person to you, and that you must feel like the real person from the user's story — include one detail only they would recognize."
+          ],
+          "rendering": "Soft one-drop drums with a rimshot instead of a full snare, warm round bass, silky offbeat guitar, electric-piano chords, lush strings or pads, a sax or melodica fill answering the voice. Tender lead vocal with airy doubled harmonies and generous reverb; late-70s/80s London-studio warmth.",
+          "storyFit": "Best for: love letters, anniversaries, apologies, new crushes, missing a partner, devotion through hard times. Poor fit: protest, party bangers, boasting, explicit heat — lovers rock suggests, it never spells out; that heat belongs to dancehall.",
+          "parodyTraps": "Confusing tenderness with beach-bar island-romance clichés; getting sexually explicit; machine-added patois pet names; a chorus that behaves like a crowd chant instead of a whisper; strings-and-roses greeting-card lines with no specific person in them.",
+          "performance": {
+            "prose": "Density sparse; min adlibs 3; delivery tags [Soft] [Crooning] [Harmonies] [Falsetto] [Sax Solo]. This room performs at whisper distance — one tender lead voice with its own soft harmony doubles, and nobody else in the room. Signature: the soft echo — an airy doubled harmony repeating the last words of a line the way a lover repeats a promise back, close and breathy, never a group answering and never a crowd. Placement: the floor of 3 sits where the tenderness peaks — roughly one soft echo under the hook's last words, one at the line where the bridge admits its crack, and one hummed or breathed note in the outro; verses stay nearly bare so the crooning carries them, and a [Sax Solo] or melodica answer can take a whole section instead of any vocal show. Tag identity: an intimate solo voice with soft self-harmonies — airy (echo of the last words) doubles, a [Falsetto] lift saved for the final chorus, a [Soft] header where the song pulls closest. No congregation, no deejay, no crowd — two people and a slow groove, and every echoed word comes from the song's own sheet.",
+            "adlibDensity": "sparse",
+            "minAdlibs": 3,
+            "deliveryTags": [
+              "[Soft]",
+              "[Crooning]",
+              "[Harmonies]",
+              "[Falsetto]",
+              "[Sax Solo]"
+            ]
+          },
+          "builder": {
+            "instruments": [
+              "soft rimshot one-drop drums",
+              "warm round bass",
+              "silky offbeat guitar",
+              "electric piano",
+              "lush strings",
+              "saxophone",
+              "melodica"
+            ],
+            "themes": [
+              "Romance (lovers rock)",
+              "Missing someone",
+              "Celebration"
+            ],
+            "purposes": [
+              "Romance",
+              "Slow dance",
+              "Give thanks"
+            ]
+          }
+        },
+        {
+          "id": "dancehall",
+          "name": "Dancehall",
+          "oneLine": "Jamaica's high-energy party and boast music — born in the late 1970s, defined by the mid-80s digital era, running to today's chart crossovers: punchy digital riddims and rapid rhythm-riding vocals.",
+          "tempoGroove": "95-110 BPM with the signature syncopated bounce (kick hits grouped 3+3+2 across the bar — a long-long-short bounce). Verses are word-dense and rap-adjacent; hooks are short chants or commands. The groove bounces, so the words must bounce with it.",
+          "writingDials": [
+            "Verses ride the riddim (the instrumental backing track): near-rap cadence with dense internal rhyme locked to the bounce — the highest word density anywhere in the reggae family.",
+            "Ride one rhyme sound for four or more lines on purpose: hammering the same end-sound builds momentum here, where in most genres it would read as lazy.",
+            "The hook is a command or a catchphrase: tell the floor what to do or state the boast flat. Two short alternating lines trading back and forth make a legitimate hook.",
+            "Write punch-and-pause: land a hard phrase, then leave a beat of silence for the crowd's reaction — the space after the punch is part of the lyric, this room's version of the genre's riddim-first gaps.",
+            "Present tense only: the song happens NOW, in the party or on the road. No backstory, no reflection — energy over narrative, always.",
+            "Sections contrast by flow, not by chords: riddim culture builds many songs on one shared, named riddim, so the voice IS the song — switch the vocal rhythm between sections instead. Verses run 8-12 bars and the hook returns often; the pre-chorus is usually skipped. Short never means thin: at this density an eight-bar verse still out-words the hook, and every verse must land fresh boasts and details from the user's own story, never the hook restated.",
+            "Boasts are stated, never explained — the moment a boast gets justified, it dies.",
+            "Cross-genre firewall: hip-hop's Trap and Southern Bounce share the boasts and the party job — the dial that makes it Dancehall is the 3+3+2 bounce carrying the phrasing, with the deejay's rhythm-riding cadence written in the user's own plain English; American rap phrasing pasted over the riddim loses the bounce entirely."
+          ],
+          "rendering": "Hard digital drums with the 3+3+2 syncopated kick, cracking snare or clap, heavy sub bass, one dark minor-key synth riff doing most of the melodic work, sparse arrangement with hype vocal doubles on the punch words. Delivery is rhythmic deejay talk-singing (dancehall's rhythm-riding vocal style, the ancestor of rap's flow) more than melodic singing — deejay names the RHYTHM of the delivery, and rhythm is all a render note may ask of the voice: cadence, bounce, and punch in plain English, never an accent, a nationality, or patois vocalization beyond what the user's own sheet contains; modern versions may add trap-style hi-hats.",
+          "storyFit": "Best for: party anthems, confidence and swagger, dance, bold flirtation, rivalry and winning, hustle pride. Poor fit: grief, worship, tender apology, slow reflection — the groove has no patience for them.",
+          "parodyTraps": "Machine-written patois is the single fastest way to make it fake; American rap phrasing pasted over the beat (loses the bounce entirely); long storytelling verses; explaining or softening the boast; hooks with too many words for a crowd to shout back.",
+          "performance": {
+            "prose": "Density heavy; min adlibs 8; delivery tags [Spoken] [Call and Response] [Ad-Lib Section] [Build Up] [Drop]. This room performs like a deejay working a packed dancefloor — the lead rides the riddim and the crowd is the second instrument, with hype doubles cracking on the punch words. Signature: the answered punch — a hard phrase lands, and the written beat of silence gets the crowd's short shouted response or a hype double of the punch word, one answer per gap, so the record sounds like the party it is for. Placement: doubles hit the punch words the verse rhymes hammer; crowd responses fill the pauses after them and thicken on every hook return — the command hook earns a response on every pass, a [Build Up] and [Drop] can frame the hook's arrival, and the one place to stay bare is the two bars before the drop, where the riddim alone builds the pressure. Tag identity: a deejay and the crowd — hype (double of the punch word) on the hard lines, short (crowd: shouted response) answers in the written gaps, two-line hooks traded between lead and crowd. All delivery direction stays rhythm-and-energy language in plain English — cadence, bounce, punch — never a request for patois, accent, or island vocalization beyond words the user's own sheet already contains.",
+            "adlibDensity": "heavy",
+            "minAdlibs": 8,
+            "deliveryTags": [
+              "[Spoken]",
+              "[Call and Response]",
+              "[Ad-Lib Section]",
+              "[Build Up]",
+              "[Drop]"
+            ]
+          },
+          "builder": {
+            "instruments": [
+              "hard digital drums",
+              "heavy sub bass",
+              "dark minor-key synth riff",
+              "cracking snare claps",
+              "trap-style hi-hats"
+            ],
+            "themes": [
+              "Celebration",
+              "Confidence & swagger",
+              "Proving them wrong"
+            ],
+            "purposes": [
+              "Skank / dance",
+              "Flex / celebrate",
+              "Party / celebrate"
+            ]
+          }
+        }
+      ],
+      "cues": [
+        {
+          "cue": "roots reggae",
+          "strength": "strong",
+          "roomId": "roots-reggae"
+        },
+        {
+          "cue": "one drop",
+          "strength": "strong",
+          "roomId": "roots-reggae"
+        },
+        {
+          "cue": "sufferation",
+          "strength": "strong",
+          "roomId": "roots-reggae"
+        },
+        {
+          "cue": "struggle",
+          "strength": "weak",
+          "roomId": "roots-reggae"
+        },
+        {
+          "cue": "injustice",
+          "strength": "weak",
+          "roomId": "roots-reggae"
+        },
+        {
+          "cue": "protest",
+          "strength": "weak",
+          "roomId": "roots-reggae"
+        },
+        {
+          "cue": "uplift",
+          "strength": "weak",
+          "roomId": "roots-reggae"
+        },
+        {
+          "cue": "give thanks",
+          "strength": "weak",
+          "roomId": "roots-reggae"
+        },
+        {
+          "cue": "faith",
+          "strength": "weak",
+          "roomId": "roots-reggae"
+        },
+        {
+          "cue": "gratitude",
+          "strength": "weak",
+          "roomId": "roots-reggae"
+        },
+        {
+          "cue": "lovers rock",
+          "strength": "strong",
+          "roomId": "lovers-rock"
+        },
+        {
+          "cue": "anniversary",
+          "strength": "strong",
+          "roomId": "lovers-rock"
+        },
+        {
+          "cue": "romance",
+          "strength": "strong",
+          "roomId": "lovers-rock"
+        },
+        {
+          "cue": "romantic",
+          "strength": "strong",
+          "roomId": "lovers-rock"
+        },
+        {
+          "cue": "first dance",
+          "strength": "strong",
+          "roomId": "lovers-rock"
+        },
+        {
+          "cue": "love song",
+          "strength": "weak",
+          "roomId": "lovers-rock"
+        },
+        {
+          "cue": "slow dance",
+          "strength": "weak",
+          "roomId": "lovers-rock"
+        },
+        {
+          "cue": "my wife",
+          "strength": "weak",
+          "roomId": "lovers-rock"
+        },
+        {
+          "cue": "my husband",
+          "strength": "weak",
+          "roomId": "lovers-rock"
+        },
+        {
+          "cue": "my girlfriend",
+          "strength": "weak",
+          "roomId": "lovers-rock"
+        },
+        {
+          "cue": "my boyfriend",
+          "strength": "weak",
+          "roomId": "lovers-rock"
+        },
+        {
+          "cue": "wedding",
+          "strength": "weak",
+          "roomId": "lovers-rock"
+        },
+        {
+          "cue": "apology",
+          "strength": "weak",
+          "roomId": "lovers-rock"
+        },
+        {
+          "cue": "crush",
+          "strength": "weak",
+          "roomId": "lovers-rock"
+        },
+        {
+          "cue": "dancehall",
+          "strength": "strong",
+          "roomId": "dancehall"
+        },
+        {
+          "cue": "bashment",
+          "strength": "strong",
+          "roomId": "dancehall"
+        },
+        {
+          "cue": "party",
+          "strength": "weak",
+          "roomId": "dancehall"
+        },
+        {
+          "cue": "club",
+          "strength": "weak",
+          "roomId": "dancehall"
+        },
+        {
+          "cue": "dance",
+          "strength": "weak",
+          "roomId": "dancehall"
+        },
+        {
+          "cue": "flirt",
+          "strength": "weak",
+          "roomId": "dancehall"
+        },
+        {
+          "cue": "flirting",
+          "strength": "weak",
+          "roomId": "dancehall"
+        },
+        {
+          "cue": "swagger",
+          "strength": "weak",
+          "roomId": "dancehall"
+        }
+      ]
+    },
+    "afrobeats": {
+      "id": "afrobeats",
+      "name": "Afrobeats",
+      "aliases": [
+        "afrobeat",
+        "afro beats",
+        "afro-fusion",
+        "afropop"
+      ],
+      "profileText": "An Afrobeats writer starts with the groove, not the sentence. The percussion is already talking before the first word arrives — the swung kick, the shakers, the space between them — and the writer's job is to find where the words dance on that pattern. Every line gets read aloud against the drums: stressed syllables land with the percussion hits, and the voice sits slightly behind the beat, relaxed, never chasing. A line that fights the groove is not fixed by singing it harder; it is recut until it dances. The melody and the drums are co-writers here, and words are chosen as much for how the mouth rides them as for what they say.\n\nEconomy is the second instinct. Phrases run short — a few strong words that survive being sung four times in a row — and they end early, leaving the last beats of the bar to the shakers, the answers, and the air. The gap is written property: the room decides who lives there (a communal chant answer, the singer's own hazy layer, or the log drum itself), but the writer cuts the hole on purpose. Open vowels and soft consonants carry the sweetness; a plain line that glides beats a clever line that crowds the mouth.\n\nRepetition is architecture, not a failure — this genre holds the curriculum's sanctioned bend. The hook can be half the song; verse two may deepen the same feeling instead of advancing a plot; freshness comes from how the melody bends on each return, how the voices stack, and what gets subtracted underneath. But the bend has a floor: the verses still carry the user's real details — the actual name, the actual blessing, the actual city — because repetition deepens a real story; it never replaces one. A loop with nothing true under it is a jingle.\n\nThe home registers are celebration, desire, and hustle-blessings, and they mix freely: gratitude sits inside a love song, blessings inside a success song, and thankfulness never clashes with wanting. The address stays simple and direct — a lover, God, life itself, or the room — and the chosen room sets how communal or interior it gets: one lane keeps the feeling sweet and universal with a crowd invited to answer, one turns inward to the awkward private detail, one compresses everything to the feeling of a single night on the floor.\n\nPerformance is planned on the page, and every room fields a different cast: mainline writes gaps for communal chant answers, alté layers the singer's own voice into a haze, amapiano leaves space so the log drum can answer instead of a voice. Ad-libs obey the dialect law like everything else: sounds, hums, chants, and short honest answers in the song's own plain voice.\n\nIdentity is carried by rhythm, phrasing, and melodic shape in standard English — a law, not a preference. Pidgin appears only if the user wrote it in their own story; generated dialect, borrowed exclamations, and postcard-Africa scenery read as costume, and in this genre a costume is worse than a dull song. Rendering protects the same values: percussion mixed up where it can talk, a warm rounded low end, air between elements, and the voice silky and unhurried on top.",
+      "defaultRoomId": "afrobeats",
+      "rooms": [
+        {
+          "id": "afrobeats",
+          "name": "Afrobeats",
+          "oneLine": "The melodic West African pop sound of the last fifteen years — sweet, groove-heavy, low word count, built for repeat listening and dancing.",
+          "tempoGroove": "95-115 BPM (most hits sit 100-110), a swung off-beat percussion pocket with the vocal sitting slightly behind the beat, relaxed. Very low word density: short melodic phrases, heavy repetition, and open space in every bar for the percussion to talk.",
+          "writingDials": [
+            "Groove-first economy: melody-led phrases of roughly three to seven words, each strong enough to be sung four times in a row without boring anyone. Fewer, better words — the line is finished when nothing can be cut.",
+            "The words dance ON the percussion: scan every line aloud against the swung kick and the shakers — stressed syllables land with the percussion hits and the voice stays relaxed, slightly behind the beat. A line that fights the groove gets recut, never forced.",
+            "Repetition is the architecture, not a failure — this genre carries the curriculum's sanctioned bend: the hook can be half the song, and verse two may deepen the same feeling instead of adding plot. The bend has a floor: verses still carry the user's real details (the actual person, the actual blessing, the actual city), because repetition deepens a real story — it never replaces one.",
+            "End phrases early: leave the last beat or two of each bar empty — that gap belongs to the shakers, the echo answers, and the groove. A full bar of words is a mistake here.",
+            "Choose words for sweetness of sound: open vowels, soft consonants, words that glide. A plain line that sings smooth beats a clever line that crowds the mouth.",
+            "The home registers are celebration, desire, and hustle-blessings — and they mix freely: gratitude sits naturally inside love songs, blessings inside success songs; thankfulness is a home register, never a clash.",
+            "Wordless melodic syllables are legitimate hook material as texture the story rides on — but they are sounds, never dialect or borrowed exclamations, and they can never replace the user's actual story.",
+            "Sections blend at similar energy: verse, pre, and chorus flow into each other, and the chorus lifts through melody and stacked answering voices, not by getting louder or wordier — the lift is a widening, not a jump.",
+            "Point of view: simple and direct — first person to a lover, to God, or to life itself. Keep the address uncomplicated; complexity belongs to alté."
+          ],
+          "rendering": "Mid-tempo swung drums with a syncopated kick, tight shakers, rim and woodblock percussion, talking drum accents, warm rounded bass, airy plucked guitar or bell-tone synth riffs, wide soft pads. Silky lead vocal with a light modern tuning sheen, stacked harmonies and communal echo answers arriving on the hook; current Lagos pop polish — warm, open, never busy.",
+          "storyFit": "Best for love and desire, celebration, gratitude, weddings, glow-ups and hustle rewarded with blessings, missing someone across distance, soft-life joy. Serves badly: dense storytelling, anger, protest detail, any story that needs a complicated plot — the word budget is too small.",
+          "parodyTraps": "Machine-written pidgin is the number-one killer — rhythm and phrasing carry the identity in standard English; overstuffed lines that smother the groove; fake African-language exclamations dropped in for flavor; rewriting every repeat as if repetition were a flaw; safari or jungle imagery (an offensive cliché, not local color).",
+          "performance": {
+            "prose": "Density heavy; min adlibs 7; delivery tags [Call and Response] [Harmonies] [Groove] [Build] [Outro Vamp]. This room performs like a warm crowd gathered around one silky lead — the words are few, so the communal answers are most of the performance. Signature: the communal chant answer — the lead sings the melodic hook phrase and a warm stack of voices answers in the written gap with a short chant or an echo of the phrase's last words, the answer gaining a layer on each repeat so the same words come back deeper every round. Placement: answers live ONLY in the gaps the phrasing leaves at bar ends — never over the lead's words — thin in verse one, doubling on each hook return, fullest at the closing vamp where the hook loops and the whole room carries it; the percussion keeps at least half the gaps for itself, so the floor of 7 is met on hook repeats and the vamp, never by crowding the verses. Tag identity: a lead voice plus a communal answer stack — short (chant answers) and (echo of the hook's last words) from a warm group, a [Groove] or [Build] header where the percussion swells, an [Outro Vamp] where lead and crowd trade the hook to the fade. The cast is a celebration: many voices, one feeling — never a lone layered self, never empty space.",
+            "adlibDensity": "heavy",
+            "minAdlibs": 7,
+            "deliveryTags": [
+              "[Call and Response]",
+              "[Harmonies]",
+              "[Groove]",
+              "[Build]",
+              "[Outro Vamp]"
+            ]
+          },
+          "builder": {
+            "instruments": [
+              "talking drum",
+              "tight shakers",
+              "rim and woodblock percussion",
+              "syncopated swung kick",
+              "warm rounded bass",
+              "plucked guitar licks",
+              "bell-tone synth riffs",
+              "wide soft pads"
+            ],
+            "themes": [
+              "Love & desire",
+              "Celebration of life",
+              "Hustle & blessings",
+              "Gratitude",
+              "Dance & good vibes",
+              "Homeland pride"
+            ],
+            "purposes": [
+              "Dance",
+              "Celebrate",
+              "Romance",
+              "Give thanks",
+              "Summer anthem"
+            ]
+          }
+        },
+        {
+          "id": "afro-fusion",
+          "name": "Afro-fusion / Alté",
+          "oneLine": "The moodier, more personal cousin of afrobeats — alté is Lagos slang for 'alternative' — blending African rhythm with R&B, dancehall, and indie feeling, made for night drives and complicated emotions.",
+          "tempoGroove": "80-110 BPM with freer feels — half-time moods (drums feel half speed), dancehall-leaning bounces, and slow R&B burns are all allowed. Word density is medium and deliberately shifts between sections; phrasing is looser and more conversational than mainline afrobeats.",
+          "writingDials": [
+            "Interior over communal: sing the specific private feeling even when it is awkward or contradictory — where mainline afrobeats keeps things sweet and universal, this room rewards the odd true detail.",
+            "Conversational phrasing: lines can run long and land off the grid like a thought spoken out loud; symmetry between lines is optional, not required — but the words still ride the percussion, just looser in the saddle.",
+            "One strange, true image per section: a specific sensory detail from the user's story — a place, an object, a time of night — does more than any pretty generality.",
+            "Flow-switch between sections on purpose: a verse can move like dancehall while the chorus floats like R&B. Write the sections at different word densities to force that switch — the density shift IS the drama here.",
+            "Hooks can be moods, not chants: a hushed repeated phrase works fine here; it never needs crowd energy — if a whole room could shout it, it probably belongs in the mainline room.",
+            "Rhyme relaxed and slanted; honesty outranks rhyme every single time in this room.",
+            "Ambition and its cost is a home subject: wanting more and what the wanting takes from you — a register mainline afrobeats rarely touches; faith and doubt are allowed to share one verse.",
+            "The mood is a lens, never a substitute: verses still carry the user's real details, and a hazy song with no concrete story underneath has failed this room, not honored it."
+          ],
+          "rendering": "Hybrid production: afrobeats percussion softened under R&B chords, hazy guitars or lo-fi synth textures, a dancehall-tinted bounce or half-time trap-touched drums, air and space in the mix. Intimate close-mic vocal with light tuning, self-layered doubles and falsetto drifts, moody reverb, late-night atmosphere; the feel of the Lagos alternative scene from the mid-2010s to now.",
+          "storyFit": "Best for complicated love, self-discovery, homesickness, grief that still grooves, ambition versus peace, faith and doubt. Serves badly: straight-ahead party anthems, wedding-crowd singalongs, message music for a community.",
+          "parodyTraps": "Mistaking moody for vague — it still needs one concrete story; machine-written pidgin; pasting sunshine afrobeats clichés into what should be a night song; endless atmosphere-words with no specific feeling underneath them; letting the percussion stop mattering — if the groove is gone, this is generic international R&B, not alté.",
+          "performance": {
+            "prose": "Density moderate; min adlibs 4; delivery tags [Falsetto] [Harmonies] [Soft] [Spoken] [Crooning]. This room performs like one person alone with their own voice multiplied — nothing communal, nothing answering from outside the singer. Signature: the hazy self-layer — the lead's own voice returns as a soft falsetto drift or a hummed shadow behind the line, layers stacking loosely so the mix blurs at the edges; the feeling thickens by self-echo, never by a crowd. Placement: verses stay nearly bare so the odd true detail reads clean — at most one hum or breathed double — then the self-layers bloom on the hook and thicken at the outro, and one (spoken: low aside) on its own line can carry the bridge where the guard slips; the written density shift between sections must be performed too, not just written. Tag identity: the lead's own layered self — hummed (mmm) drifts anywhere in a line, soft falsetto doubles behind the hook, one low spoken aside. No chant answers, no crowd, no group stack — the cast is one person and their own haze, and a communal answer would break the privacy the room is built on.",
+            "adlibDensity": "moderate",
+            "minAdlibs": 4,
+            "deliveryTags": [
+              "[Falsetto]",
+              "[Harmonies]",
+              "[Soft]",
+              "[Spoken]",
+              "[Crooning]"
+            ]
+          },
+          "builder": {
+            "instruments": [
+              "softened afro percussion",
+              "hazy electric guitar",
+              "lo-fi synth textures",
+              "R&B keys",
+              "half-time trap-touched drums",
+              "dancehall-tinted bounce kit",
+              "moody pads"
+            ],
+            "themes": [
+              "Love & desire",
+              "Homeland pride",
+              "Hustle & blessings",
+              "Gratitude",
+              "Growth / finding myself"
+            ],
+            "purposes": [
+              "Romance",
+              "Night drive",
+              "Say what I never said",
+              "Give thanks"
+            ]
+          }
+        },
+        {
+          "id": "amapiano-influenced",
+          "name": "Amapiano-influenced (Afro-piano)",
+          "oneLine": "The South African dance sound, now pan-African, built on the deep bouncing log drum — hypnotic, spacious, and chant-driven rather than verse-driven.",
+          "tempoGroove": "108-118 BPM (most songs sit 110-115), rolling and hypnotic with long builds. The lowest word density in the genre: short chant phrases, call-and-response cells, and long stretches where the voice steps aside completely.",
+          "writingDials": [
+            "Write chants, not verses: one- and two-line cells designed to loop, stack, and layer. A whole song may need only a handful of distinct lines used many different ways.",
+            "The drop belongs to the log drum (the deep, bouncy signature bass): plan sections where the vocal thins to a single repeated word — or full silence — when the bassline takes over, and hand those bars over on paper.",
+            "Build call-and-response into the writing itself: a lead phrase, then a gap sized for a group answer — and write the answer line too, never leave it to chance.",
+            "Pick percussive words: consonant attacks that lock with the shakers. The lyric works as another drum, so mouth-feel outranks meaning-density here.",
+            "Structure is a slow build, not a verse-chorus seesaw: the main hook may arrive late; energy accumulates over minutes — write for patience, not for a quick payoff.",
+            "Keep sung phrases short and clipped; long vocal runs fight the groove. One soulful line floating over the top is a feature; three is a traffic jam.",
+            "Compress the user's story to its emotional core — one victory, one feeling, one name — and put THOSE real details inside the chant cells: there is no room for plot, but the night must still be unmistakably this user's.",
+            "Repetition deepens by accumulation: the same cell means more each return because the build has grown around it — freshness comes from layering and subtraction, never from new words."
+          ],
+          "rendering": "Rolling groove built on the signature log drum bass, soft jazzy piano chords, tight shakers and crisp hi-hats, airy pads, long filtered builds and breakdowns. Sparse lead vocal chants with one written group-answer cell and an occasional soulful sung phrase floating over the groove; South African house lineage, 2020s club sound, with the space mixed as an instrument.",
+          "storyFit": "Best for celebration, victory laps, dance-floor release, friendship and crew love, shaking off stress, gratitude in motion. Serves badly: heartbreak ballads, detailed storytelling, confessional intimacy — there are simply too few words available for a complex tale.",
+          "parodyTraps": "Delivering a full, dense lyric sheet (instantly wrong); fake South African-language exclamations; treating it as afrobeats at a different tempo — the space rules are much stricter; leaving no room for the instrumental drop; hooks too wordy for a crowd to chant back.",
+          "performance": {
+            "prose": "Density sparse; min adlibs 3; delivery tags [Call and Response] [Drop] [Build] [Groove] [Quiet]. This room performs by subtraction — the log drum is the co-star, and the boldest performance move is the voice stepping aside. Signature: one hook phrase in log-drum space — a single chanted phrase loops while the groove swells around it, answered by the one written group-answer cell, then the vocal thins to a single word or full silence as the [Drop] hands the floor to the log drum. Placement: the few vocal events sit exactly where the writing cut their holes — the group answer in its gap after the lead's chant, one repeated word riding the [Build], nothing at all during the drop; headers do the arranging ([Build] into [Drop], a [Quiet] breakdown before the last swell) while the adlib count stays low enough to count on one hand. Tag identity: a chant lead, one group-answer cell, and the log drum treated as the answering voice — the sparsest cast in the genre: no harmony stacks, no self-layered haze, no free runs. One phrase, one answer, and space — if the page fills the space, the room is gone.",
+            "adlibDensity": "sparse",
+            "minAdlibs": 3,
+            "deliveryTags": [
+              "[Call and Response]",
+              "[Drop]",
+              "[Build]",
+              "[Groove]",
+              "[Quiet]"
+            ]
+          },
+          "builder": {
+            "instruments": [
+              "log drum bass",
+              "soft jazzy piano chords",
+              "tight shakers",
+              "crisp hi-hats",
+              "airy pads",
+              "long filtered builds"
+            ],
+            "themes": [
+              "Dance & good vibes",
+              "Celebration of life",
+              "Gratitude",
+              "Friendship & crew love"
+            ],
+            "purposes": [
+              "Dance",
+              "Celebrate",
+              "Summer anthem"
+            ]
+          }
+        }
+      ],
+      "cues": [
+        {
+          "cue": "afropop",
+          "strength": "strong",
+          "roomId": "afrobeats"
+        },
+        {
+          "cue": "wedding",
+          "strength": "weak",
+          "roomId": "afrobeats"
+        },
+        {
+          "cue": "celebration",
+          "strength": "weak",
+          "roomId": "afrobeats"
+        },
+        {
+          "cue": "blessings",
+          "strength": "weak",
+          "roomId": "afrobeats"
+        },
+        {
+          "cue": "gratitude",
+          "strength": "weak",
+          "roomId": "afrobeats"
+        },
+        {
+          "cue": "glow-up",
+          "strength": "weak",
+          "roomId": "afrobeats"
+        },
+        {
+          "cue": "glow up",
+          "strength": "weak",
+          "roomId": "afrobeats"
+        },
+        {
+          "cue": "in love",
+          "strength": "weak",
+          "roomId": "afrobeats"
+        },
+        {
+          "cue": "soft life",
+          "strength": "weak",
+          "roomId": "afrobeats"
+        },
+        {
+          "cue": "alté",
+          "strength": "strong",
+          "roomId": "afro-fusion"
+        },
+        {
+          "cue": "alte",
+          "strength": "strong",
+          "roomId": "afro-fusion"
+        },
+        {
+          "cue": "afro-fusion",
+          "strength": "strong",
+          "roomId": "afro-fusion"
+        },
+        {
+          "cue": "afro fusion",
+          "strength": "strong",
+          "roomId": "afro-fusion"
+        },
+        {
+          "cue": "afroswing",
+          "strength": "strong",
+          "roomId": "afro-fusion"
+        },
+        {
+          "cue": "night drive",
+          "strength": "weak",
+          "roomId": "afro-fusion"
+        },
+        {
+          "cue": "homesick",
+          "strength": "weak",
+          "roomId": "afro-fusion"
+        },
+        {
+          "cue": "mixed feelings",
+          "strength": "weak",
+          "roomId": "afro-fusion"
+        },
+        {
+          "cue": "amapiano",
+          "strength": "strong",
+          "roomId": "amapiano-influenced"
+        },
+        {
+          "cue": "log drum",
+          "strength": "strong",
+          "roomId": "amapiano-influenced"
+        },
+        {
+          "cue": "yanos",
+          "strength": "strong",
+          "roomId": "amapiano-influenced"
+        },
+        {
+          "cue": "afro house",
+          "strength": "strong",
+          "roomId": "amapiano-influenced"
+        },
+        {
+          "cue": "dance floor",
+          "strength": "weak",
+          "roomId": "amapiano-influenced"
+        },
+        {
+          "cue": "victory lap",
+          "strength": "weak",
+          "roomId": "amapiano-influenced"
+        },
+        {
+          "cue": "crew",
+          "strength": "weak",
+          "roomId": "amapiano-influenced"
+        },
+        {
+          "cue": "club",
+          "strength": "weak",
+          "roomId": "amapiano-influenced"
+        }
+      ]
+    },
+    "pop": {
+      "id": "pop",
+      "name": "Pop",
+      "aliases": [
+        "pop music"
+      ],
+      "profileText": "A pop writer starts with the title. The title is the contract: it names the one feeling the song exists to deliver, and every section is built to make that phrase land harder each time it returns. Where it sits is the room's call — announced as the chorus opens, earned late on a held note, or hidden mid-chorus like something let slip — but in every room the writer knows the title before line one and writes toward it.\n\nEconomy is the craft underneath everything. Pop carries fewer words per line than almost any genre, so every word must earn its place out loud. Chorus lines are metrically parallel — repeated lines matching in syllable count and stress — because that parallel, more than any other single choice, is what makes a melody stick after one listen. Key words land on open vowels the voice can hold. If a line can lose a word and still mean the same thing, it loses the word.\n\nBut the hook being king does not shrink the verses — it raises their price. The verses are where the story lives: each verse adds new information, verse two is never verse one reworded, and a verse thinner than its chorus has starved the song into a jingle. The chorus is the feeling; the verses are why the feeling is true. Pop economy means the verse says more with fewer words — it never means the verse says less.\n\nThe trap pop falls into more than any other genre is abstraction. Pop believes universal means general, and that is exactly backwards: the songs whole rooms sing along to are about one person's exact night, one street, one dress, one message never answered. The concrete-image law bites hardest here — every pop song is built around one thing you could photograph, and the feelings attach to that thing instead of floating free. The writer takes the user's single most specific detail and trusts strangers to recognize themselves in it. That trust is the entire trick of pop universality.\n\nThe pre-chorus is a tool, not a fixture, and its job changes by room: a physical ramp that quickens the body, an emotional narrowing that gets quieter so the chorus can bloom, a four-bar sprint at shout volume, a lean-in close to the ear — or nothing at all, cut because the room blurs its sections on purpose. The writer decides what the lift needs before deciding whether a ramp exists.\n\nLast, a pop song is written to be performed, and each room keeps its own cast: a party stack singing the hook over handclaps, one exposed voice with harmonies swelling late, a machine-distanced echo, a self-double an inch from the mic, a kept breath in a bare room, a shouted gang answer, a second voice flirting back. Some rooms lawfully circle instead of lift — the repetition bend, where the same words return gathering weight — but even there the verses keep adding facts. Polish is pop's finish, never its substance: the pulse stays human, the story stays the user's, and every dial above bends to the story without ever changing what the song is about.",
+      "defaultRoomId": "dance-pop",
+      "rooms": [
+        {
+          "id": "dance-pop",
+          "name": "Dance-Pop",
+          "oneLine": "The big-night-out pop song — built to move bodies first and hearts second.",
+          "tempoGroove": "100-128 BPM, kick drum on every beat, straight feel. Low word density: short punchy phrases with real air between them so the beat can carry. Verses are lean; choruses are leaner.",
+          "writingDials": [
+            "Hook economy is extreme: the chorus must be singable after ONE hearing. The title opens the chorus and usually closes it too — announced, not arrived at.",
+            "Phrasing runs short (roughly four to seven syllables a line) with gaps; a single repeated word can legitimately be a whole line here — a license shared elsewhere in pop only by the Latin room's trance.",
+            "The pre-chorus is a physical ramp, not an emotional one: lines get shorter and the word-pace quickens as it climbs, so the body feels the lift coming.",
+            "Rhyme is clean, bright, and mostly perfect, landing on open vowels — the mouth has to land easy at speed. Clever slant rhymes read as drag here.",
+            "Subject treatment compresses time: present tense, tonight, this room, this moment. The backstory gets one line, never a verse. If the story needs a timeline, this is the wrong lane.",
+            "Lean verses still carry the story — the verse substance law at pop speed: verse one names the real who and where in a handful of words, verse two adds what changed tonight, never verse one reshuffled. Compression means keeping only the strongest details, not deleting them all — a verse thinner than the chorus has starved the song.",
+            "The one-photograph rule holds on the dance floor: the song stands on one physical thing from the user's actual night — the shoes, the car, the kitchen turned dance floor — and the joy attaches to it. A chorus built only of floating feeling-words is the exact parody this lane is famous for.",
+            "Plan the post-chorus (the section after the chorus where the beat pays off): it needs its own tiny vocal idea — one short phrase or a wordless singable shape — decided at the writing stage, not left to production.",
+            "Point of view is first person to a 'you' who is physically present; direct address and short, simple command verbs aimed at someone in the room feel natural here — teach the verb type from the user's own story, never a stock list."
+          ],
+          "rendering": "Four-on-the-floor kick (kick drum hitting on every beat) with sidechained synth bass (bass that ducks each time the kick hits), bright plucked synths, claps, and risers into every chorus. Polished lead vocal with tight doubles and shiny stacked backgrounds. Modern club-pop sheen (2010s to now), or add disco strings and octave bass for a retro flavor. For celebration stories that want a live band instead of a club, flex to a funk flavor — live drums, popping bass, choppy rhythm guitar, horn stabs — with the same writing dials.",
+          "storyFit": "Best for celebrations, birthdays, nights out, confidence anthems, new-crush excitement, and the dance-floor moment of a wedding. Serves badly: grief, apologies, complicated histories — anything that asks the listener to sit still and follow a story.",
+          "parodyTraps": "Cramming a full narrative into the verses; stacking party-scene cliché props instead of the user's own moment; writing a chorus of long clever sentences (dance-pop choruses die of cleverness); forgetting the post-chorus so the drop arrives with no vocal hook on it.",
+          "performance": {
+            "prose": "Density heavy; min adlibs 7; delivery tags [Build Up] [Drop] [Harmonies] [Post-Chorus]. This room performs like the best night of the year — one polished lead riding the beat while a party of stacked voices and handclaps waits for the hook to arrive. Signature: the party-stack hook — the chorus lands with the whole stack singing the short lines together over claps, then the beat pays off into a post-chorus where the stack chants the one tiny vocal idea the writing planned, bigger on every return. Placement: verses stay clean and nearly bare — at most one echoed word — so the stack hits harder when it arrives; a [Build Up] header frames every chorus arrival and a [Drop] or [Post-Chorus] header frames the payoff; the floor of 7 is met on hooks and post-choruses alone (stack echoes of the title, (claps) direction lines, one short group shout), never by decorating the verses. Tag identity: a polished lead plus a full party stack — sung stacked doubles on every chorus line, handclap direction lines, stack echoes of the title on the post-chorus, one crowd shout at the final chorus. The stack sings tuned and polished — shouting belongs to pop-punk. The stack only exists at the lift; the verses belong to one voice.",
+            "adlibDensity": "heavy",
+            "minAdlibs": 7,
+            "deliveryTags": [
+              "[Build Up]",
+              "[Drop]",
+              "[Harmonies]",
+              "[Post-Chorus]"
+            ]
+          },
+          "builder": {
+            "instruments": [
+              "four-on-the-floor kick",
+              "sidechained synth bass",
+              "bright plucked synths",
+              "handclaps",
+              "risers",
+              "disco strings"
+            ],
+            "themes": [
+              "Night out / freedom",
+              "Self-empowerment",
+              "New love",
+              "Friendship"
+            ],
+            "purposes": [
+              "Dance",
+              "Celebrate",
+              "Sing along",
+              "Empower"
+            ]
+          }
+        },
+        {
+          "id": "pop-ballad",
+          "name": "Pop Ballad",
+          "oneLine": "The slow, big-feeling pop song — the one that plays at the wedding or makes the whole room go quiet.",
+          "tempoGroove": "60-80 BPM, straight feel or a gentle 6/8 sway; drums often enter late and in half-time (hitting half as often, so everything feels bigger). Moderate word density: the slow tempo buys longer lines, but the peak moments must be left open for held notes.",
+          "writingDials": [
+            "The title leans toward landing late — at the end of the chorus or on its held peak, earned by the lines before it — where dance-pop leans toward announcing it up front. This is a lean, not a law: if the user's own key phrase wants to open the chorus, let it lead. What matters is that the title feels arrived at, not chanted.",
+            "Verses are storytelling rooms: full sentences, longer lines, and more concrete detail from the user's story than any other polished-pop lane allows.",
+            "Verse two is the second act: a new scene or a new understanding, never verse one slowed down — the held-note chorus only earns its size if each verse buys it new meaning. The verse substance law matters most in the genre's biggest room.",
+            "The pre-chorus works emotionally, not physically: it names the stakes and often gets QUIETER — instruments drop out rather than pile on — so the chorus can bloom.",
+            "Dynamics are the architecture: verse one nearly spoken, chorus one restrained, final chorus wide open. Write chorus lines that survive being sung both whispered and huge, because they will be.",
+            "The bridge is load-bearing: the confession, the decision, or the turn lives there. A ballad whose bridge just restates the chorus louder is a loop, not a journey.",
+            "Rhyme relaxes: slant rhyme (close-but-not-exact) is welcome and an honest unrhymed line beats a forced perfect one — at this speed the melody covers the seams.",
+            "Plan the money note: end the key chorus lines on open vowels (ah, oh, ay) because the singer will hold them for bars. Do not pack so many words into the peak that there is no room to hold and bend a note.",
+            "The ceremony needs an anchor you could photograph: one physical thing from the user's story — the hospital bracelet, the kitchen table, the borrowed dress — that the big feeling stays tied to. Sky-and-weather abstraction is the greeting-card failure this lane slides into fastest, and here it is forbidden, not just discouraged."
+          ],
+          "rendering": "Piano or clean guitar foundation; strings or warm pads swell in by the second chorus; drums arrive late with big half-time weight. Intimate close-mic vocal early, stacked harmonies late, and optionally a final-chorus key lift. Timeless adult-pop palette — 90s diva ballad through modern piano-pop.",
+          "storyFit": "Best for love declarations, weddings, grief and tributes, apologies, parent-and-child songs, anniversaries — any heavy or ceremonial feeling. Serves badly: jokes, hype, casual fun; ballad treatment makes small feelings sound overblown and insincere. Routing tiebreaker with Acoustic/Singer-Songwriter: if the user gave a detailed timeline they want heard word-for-word, send it there; if the feeling is bigger than its details and wants a held-note ceremonial moment, it belongs here.",
+          "parodyTraps": "Every line at maximum emotion so there is no arc left to climb; greeting-card abstractions replacing the user's one concrete scene; a bridge that adds volume but no new information; burying the held-note moments under piles of syllables.",
+          "performance": {
+            "prose": "Density sparse; min adlibs 3; delivery tags [Soft] [Belting] [Harmonies] [Crescendo] [Big Finish]. This room performs like one voice alone in a big quiet space that slowly fills. Signature: the staged swell — verse one nearly spoken and completely bare, harmonies arriving soft under chorus two, then the final chorus opening wide: the lead belts the held money note while stacked harmonies swell underneath — one singer growing, never a crowd joining. Placement: keep the verses and the bridge stripped to the lead (breaths kept in are part of the record); the sparse floor lives late — a soft harmony entrance on chorus two, an echoed last word into the bridge, and the full swell under the [Big Finish]; a [Crescendo] header belongs only at the hand-off into the final chorus. Tag identity: a solo lead with swelling harmonies — the harmonies are the same singer multiplied, entering in stages and blooming at the peak; no gang, no claps, no answer voice. The drama is one voice and how much air it finally takes up.",
+            "adlibDensity": "sparse",
+            "minAdlibs": 3,
+            "deliveryTags": [
+              "[Soft]",
+              "[Belting]",
+              "[Harmonies]",
+              "[Crescendo]",
+              "[Big Finish]"
+            ]
+          },
+          "builder": {
+            "instruments": [
+              "grand piano",
+              "clean electric guitar",
+              "swelling strings",
+              "warm pads",
+              "late half-time drums"
+            ],
+            "themes": [
+              "Missing someone",
+              "Heartbreak",
+              "New love",
+              "Deep love / devotion"
+            ],
+            "purposes": [
+              "Cry it out",
+              "Sing along",
+              "Bring happy tears"
+            ]
+          }
+        },
+        {
+          "id": "synth-pop",
+          "name": "Synth-Pop / Retro-Wave",
+          "oneLine": "80s-flavored pop — moody synths, a driving pulse, and feelings watched through a windshield at night.",
+          "tempoGroove": "85-125 BPM — the lane spans moody-slow to driving, and the steady even grid from the synths and drum machine, not the number, is what defines it. The groove is a steady grid, not a bounce. Medium-low word density: even, measured phrases that ride the grid — hypnotic and controlled rather than pushed and pulled.",
+          "writingDials": [
+            "Mood outranks plot: take the single strongest image or feeling in the user's story and circle it for the whole song, instead of walking through events in order. This is the one pop lane where NOT advancing the story much is correct.",
+            "The circled image obeys the one-photograph rule: a real object or place from the user's story — the actual car, the actual street, the jacket left behind — never stock night-and-city atmosphere. The cool surface only reads as feeling when something real sits under it.",
+            "Circling is not stalling: each verse must add one new fact about the same image — what happened there, what is missing now — so the mood deepens for a reason. This room carries the sanctioned repetition bend: the chorus may return unchanged and gather weight, but that bend never excuses a verse that only re-decorates the last one.",
+            "Phrasing is even and gridded: lines of matching length delivered coolly on the pulse; the ragged conversational spill that works in bedroom pop breaks the trance here.",
+            "Understatement is the emotional engine: the surface stays cool and the ache lives in what is held back. Belting (singing it big and loud) is a lane violation — restraint IS the feeling.",
+            "The chorus can be a short repeated phrase — usually the title — that returns like a chant and gathers weight each pass rather than lifting; dance-pop would demand more shape here, and a ballad more payoff.",
+            "The pre-chorus barely exists here: when used, it is two gridded lines that tighten the pattern — same cool delivery, shorter phrases — never a rising ramp; the lift into the chorus is a texture change, not a vocal event.",
+            "Rhyme is moderate and often slant (close-but-not-exact); hard, clever, snappy rhymes puncture the atmosphere.",
+            "Point of view is first person reflective, speaking to an absent 'you' — the person is in the memory, not in the room. That distance is the sub-genre's signature and should shape verb tense: lean past and conditional (would, could) over present."
+          ],
+          "rendering": "Repeating analog-style synth bass pattern, 80s drum-machine character with a big gated snare (that huge chopped-off drum sound), shimmering pads and arpeggios (chord notes played one at a time), optional chorused electric guitar. Vocal sits back in space with reverb, delivered cool. Aim at a 1983-1986 palette or its modern retro-wave gloss.",
+          "storyFit": "Best for nostalgia, longing for someone far away or long gone, bittersweet memories, late-night solitude, and stylish self-possession. Serves badly: warm cozy domestic stories, comedy, and any story that needs a detailed sequence of events told in order.",
+          "parodyTraps": "Name-checking the decade — listing 80s props and references instead of sounding like the era; overheated belting that breaks the cool; cramming syllables against the steady grid; letting stock neon-and-midnight boilerplate stand in for the user's own images.",
+          "performance": {
+            "prose": "Density sparse; min adlibs 3; delivery tags [Soft] [Quiet] [Harmonies] [Instrumental Break]. This room performs like a voice heard from the far side of a windshield — cool, even, deliberately distant, with the machines doing the feeling the singer refuses to show. Signature: the cold echo — the chant-chorus title phrase trails a distant, reverb-washed repeat of its own last words, returning identical each pass and gathering weight precisely because it never changes. Placement: verses stay dry and single-voiced on the grid; the echo lives only on the chorus chant and the outro; soft gridded harmonies may thicken the final passes without ever lifting the volume; one [Instrumental Break] header gives the synths a section of their own — the only place the song is allowed to open up. Tag identity: the lead and its own machine-distanced reflection — a distant echo of the chant's last words, cool pad-like harmonies late, no belting anywhere, no human answer voice, no crowd. Restraint is the cast: one person, one machine, one memory.",
+            "adlibDensity": "sparse",
+            "minAdlibs": 3,
+            "deliveryTags": [
+              "[Soft]",
+              "[Quiet]",
+              "[Harmonies]",
+              "[Instrumental Break]"
+            ]
+          },
+          "builder": {
+            "instruments": [
+              "analog synth bass",
+              "gated-snare drum machine",
+              "shimmering pads",
+              "arpeggiated synths",
+              "chorused electric guitar"
+            ],
+            "themes": [
+              "Nostalgia",
+              "Missing someone",
+              "Heartbreak",
+              "Night out / freedom"
+            ],
+            "purposes": [
+              "Windows-down driving",
+              "Cry it out",
+              "Sing along"
+            ]
+          }
+        },
+        {
+          "id": "indie",
+          "name": "Indie / Bedroom Pop",
+          "oneLine": "Small-sounding, personal pop — like a voice memo from someone you have a crush on.",
+          "tempoGroove": "70-105 BPM, laid-back straight or lightly swung feel, sitting slightly behind the beat. Conversational word density: lines can run long and spill over like real speech, then land hard on a short one — the unevenness is the style.",
+          "writingDials": [
+            "Lead with the user's smallest, most particular true detail — inside the first two lines, not saved for the bridge — and let that one detail carry the emotion a ballad would hand to a key change. Understatement is law: the biggest feeling gets the plainest line, and this lane rewards the user's oddest true detail more than any other pop sub-genre.",
+            "Stay inside ONE scene from the user's story — one afternoon, one hallway, one unsent message — because universality here comes from the specific crush and the specific kitchen, never from writing about feelings at large. Zooming out to the big abstract statement is the fastest way to break this room.",
+            "Phrasing mimics talk: uneven line lengths, run-on thoughts, mid-line pauses. Metrically perfect matched lines — mandatory in dance-pop — read as fake here.",
+            "The hook is an off-hand phrase, not a banner: it should sound discovered, like something actually said, and the title often hides mid-chorus instead of opening or closing it.",
+            "Rhyme density is the lowest in pop: mostly slant (close-but-not-exact) or none. An obvious locked rhyme scheme reads as trying too hard in this room.",
+            "Sections blur on purpose: the pre-chorus is often skipped, the chorus may be barely bigger than the verse, and the whole song can sit on two chords — so the words alone must create the shape and the turn.",
+            "Small does not mean static: each verse adds one new fact or one honest correction, because the chorus here is barely bigger than the verse and there is no production lift to hide a repeated thought behind — the words alone carry the verse substance law.",
+            "Point of view is first person and self-aware; dry humor and correcting yourself mid-line feel natural here. Address the 'you' like a text message, never like a proclamation."
+          ],
+          "rendering": "Soft drum machine or lazy live kit, warm round bass, jangly or lo-fi guitar and keys; tape hiss and wobble are welcome, not flaws. Intimate close vocal with minimal tuning sheen and light doubling. The production should feel homemade on purpose — the 2015-to-now bedroom aesthetic or 2000s indie-pop warmth.",
+          "storyFit": "Best for crushes, quiet heartbreaks, friendship, anxiety and self-talk, and small everyday moments the user wants made meaningful. Serves badly: grand declarations, ceremonies, and hype — big-occasion energy collapses this small room.",
+          "parodyTraps": "Performative quirkiness (random odd objects inserted for quirk's sake instead of drawn from the user's story); vague mumbly lines with no actual detail — lo-fi is a sound, not an excuse to say nothing; bolting on a big polished chorus lift that belongs in dance-pop; stacking sad-kid clichés instead of one honest specific.",
+          "performance": {
+            "prose": "Density moderate; min adlibs 4; delivery tags [Spoken] [Soft] [Whispered]. This room performs like a voice memo made at 1 a.m. an inch from the mic — one person, their own quiet double, and the sound of the room left in. Signature: the close self-double — a second track of the same voice sliding in mid-line on the phrase that matters most, hugging the lead for a few words, then dropping away; plus one spoken aside where the writer catches themselves mid-thought. Placement: doubles cluster on the off-hand hook and the very last line of the song; the (spoken: quiet aside) sits on its own line where the lyric corrects itself; a soft hum can close the outro; verses otherwise stay one voice — crowding this room with answers breaks it instantly. Tag identity: close self-doubles and murmured asides — the lead harmonizing with itself at whisper distance, a soft hum, a mid-line double on the load-bearing phrase. No stack, no gang, no polish: the second voice is the same person, just closer.",
+            "adlibDensity": "moderate",
+            "minAdlibs": 4,
+            "deliveryTags": [
+              "[Spoken]",
+              "[Soft]",
+              "[Whispered]"
+            ]
+          },
+          "builder": {
+            "instruments": [
+              "soft drum machine",
+              "lazy live kit",
+              "warm round bass",
+              "jangly guitar",
+              "lo-fi keys",
+              "tape hiss texture"
+            ],
+            "themes": [
+              "New love",
+              "Heartbreak",
+              "Friendship",
+              "Missing someone"
+            ],
+            "purposes": [
+              "Cry it out",
+              "Sing along",
+              "Make them feel seen"
+            ]
+          }
+        },
+        {
+          "id": "acoustic",
+          "name": "Acoustic / Singer-Songwriter Pop",
+          "oneLine": "One voice, one guitar or piano, one true story told straight — the coffeehouse confessional that can still fill a stadium.",
+          "tempoGroove": "70-110 BPM, straight or gently swung, with the strum or fingerpicking pattern carrying the groove itself. Highest word density in pop: the lyric IS the production, so lines hold more detail and more syllables per bar than any sibling lane.",
+          "writingDials": [
+            "Narrative is the spine: verses move through time — then to now — with scenes, people, and places. This is the ONE pop lane where a story with a beginning, middle, and turn genuinely fits; use the user's timeline instead of compressing it.",
+            "Every line is exposed: with no production to hide behind, a filler line that would slide by in dance-pop stands out naked. Cut anything that only exists to reach the rhyme.",
+            "The title is a meaning-shifter: the same chorus words should land differently each time because the verses in between changed what they mean. That re-lighting trick is this lane's signature move — and it is the verse substance law made audible: if verse two adds nothing, the chorus cannot change its meaning.",
+            "Rhyme is craftsmanlike and noticed: internal rhyme and tight schemes are welcome here, because listeners in this lane hear rhyme skill as care — the opposite of bedroom pop's allergy to it.",
+            "Let plain-spoken lines outnumber the image lines: the plain talk is what makes the images land. Wall-to-wall imagery reads as a poetry exercise, not a song.",
+            "Build the dynamics into the words: since no synth stack will lift the chorus, write chorus lines that shorten and quicken to create lift, and let the bridge go QUIETEST — the near-whispered admission before the last chorus — rather than biggest.",
+            "The pre-chorus, when it exists at all, is a hinge: one or two lines that tilt the verse's scene toward the chorus's meaning — never a volume ramp, because there is no wall of sound to ramp into.",
+            "Keep every feeling within arm's reach of a thing: this lane already runs on scenes, so the discipline is attachment — each feeling line sits next to something you could photograph (the truck, the porch, the phone face-down on the table), and three abstract lines in a row is a lane violation.",
+            "Address is across-the-kitchen-table: second person to a real, named-in-the-writer's-mind person; the more the app knows who is being spoken to, the better this lane writes."
+          ],
+          "rendering": "Acoustic guitar (fingerpicked or strummed) or felt piano front and center; brushed drums, soft bass, maybe light strings arriving late. Dry, present lead vocal with minimal effects — natural breaths kept in. Timeless palette: it could pass for 1971 or 2024.",
+          "storyFit": "Best for tributes, family stories, life milestones, gratitude, honest heartbreak, and any story where the user gave rich detail they want heard word-for-word. Serves badly: party energy, dance moments, and swagger — this lane cannot fake adrenaline. Routing tiebreaker with Pop Ballad: a detailed timeline the user wants heard word-for-word belongs here; a feeling bigger than its details, built for a held-note ceremonial moment, belongs in the ballad.",
+          "parodyTraps": "Greeting-card sincerity — abstract virtues instead of the user's actual scenes; rhyming so densely it turns sing-song; nonstop imagery with no plain-spoken landing lines; adding drops or post-choruses that betray the intimacy the arrangement promised.",
+          "performance": {
+            "prose": "Density sparse; min adlibs 2; delivery tags [Quiet] [Soft] [Harmonies] [Instrumental Break]. This room performs like a kitchen-table telling — the barest room in pop, where the instrument is the second performer and the silence is kept honest. Signature: the instrumental answer and the late friend — the guitar or piano takes a short turn after the verse's heaviest line, and a single harmony voice joins only at the final chorus, re-lighting the title the verses just changed. Placement: the two required adlibs are quiet ones — a kept breath or low hum on its own line before the bridge, and the soft harmony entrance at the last chorus; heavy lines always stand alone, and no echo ever chases the title; one [Instrumental Break] header marks the instrument's answer. Tag identity: one dry, present voice with kept breaths, an answering instrument, and ONE late harmony — never a stack, never a doubled sheen, never a crowd. If a second voice shows up before the last chorus, the room has been broken.",
+            "adlibDensity": "sparse",
+            "minAdlibs": 2,
+            "deliveryTags": [
+              "[Quiet]",
+              "[Soft]",
+              "[Harmonies]",
+              "[Instrumental Break]"
+            ]
+          },
+          "builder": {
+            "instruments": [
+              "fingerpicked acoustic guitar",
+              "felt piano",
+              "brushed drums",
+              "soft bass",
+              "light strings"
+            ],
+            "themes": [
+              "Nostalgia",
+              "Friendship",
+              "Missing someone",
+              "Heartbreak",
+              "Deep love / devotion"
+            ],
+            "purposes": [
+              "Cry it out",
+              "Bring happy tears",
+              "Sing along"
+            ]
+          }
+        },
+        {
+          "id": "pop-punk",
+          "name": "Pop-Punk / Pop-Rock Anthem",
+          "oneLine": "Loud, fast, grinning pop with guitars — the shout-along for feelings that need volume.",
+          "tempoGroove": "150-190 BPM for pop-punk (verses sometimes feel half-time — drums hitting half as often), 120-140 BPM for the pop-rock anthem end. Driving straight eighth-notes (a fast, even chug) with a hard backbeat (the snare cracking on beats 2 and 4). Word density flips by section: rapid-fire wordy verses, then a chorus that drops to short shoutable chunks.",
+          "writingDials": [
+            "The chorus must survive being yelled by a crowd: short declarative lines, simple enough for a room to catch on first listen. All nuance gets exiled to the verses — the reverse of the ballad, where the chorus holds the deepest line.",
+            "Verses are motormouth: fast, wordy, hyper-specific, often funny or self-deprecating. The speed of detail is the charm; slow scenic description kills the engine.",
+            "The motormouth verses are where the user's story actually lives — the real boss, the real ex's car, the real town, named fast and specific — and verse two escalates with the next grievance or the next chapter, never a re-run. The chorus gets to shout the feeling only because the verses already showed what happened.",
+            "Attitude is a writing ingredient: exaggeration, sarcasm, and blunt honesty are natural here. The bridge is usually where this style drops the joke and lets the real feeling show for a few lines before the last chorus — but that is the lane's habit, not a rule: if the user's story leads with sincerity, the writing follows the story.",
+            "Rhyme runs punchy and dense: snapping couplets with hard end rhymes; at this speed even simple rhymes feel athletic, and slant-rhyme subtlety just sounds like a miss.",
+            "Write the gang-vocal moments in: plan which word gets echoed by the group and which line gets answered (call-and-response — one voice states, many voices reply). That is a lyric decision, not a production afterthought.",
+            "The pre-chorus is a four-bar sprint: drums double, lines shorten toward shouts, and the last line hangs unresolved so the chorus lands like a kicked-open door — it works on the body like dance-pop's ramp, just at guitar volume.",
+            "Leave one passage nearly wordless for the crowd-shout melody moment this lane expects — plan where it goes, but never let wordless filler BE the hook.",
+            "Subject treatment converts pain to defiance: the breakup becomes a victory lap, the anxiety becomes a battle cry. If the user's story stays sad with no fight in it, route it to a ballad instead — this lane at this speed makes plain sadness sound sarcastic."
+          ],
+          "rendering": "Distorted power-chord guitars, driving live drums with a big cracking snare, melodic bass runs. Energetic, slightly raspy lead vocal with gang vocals answering on the chorus. Either 2000s pop-punk crunch or modern pop-rock polish with a few synth touches.",
+          "storyFit": "Best for breakups the user is over, quitting the bad job, underdog wins, friendship anthems, growing-up nostalgia, and funny revenge energy. Serves badly: tender tributes, fresh grief, and romance still in progress — volume flattens tenderness.",
+          "parodyTraps": "Faking teen-angst vocabulary when the user's story is clearly adult; stacking generic rebellion props instead of the user's real grievance; choruses built of complex sentences nobody can shout; playing genuinely sad material straight at 170 BPM so it accidentally reads as mockery.",
+          "performance": {
+            "prose": "Density heavy; min adlibs 8; delivery tags [Call and Response] [Belting] [Build] [Big Finish]. This room performs like a packed van with the windows down — the lead shouting the story while a gang of friends answers on cue, because the writing already marked which words they own. Signature: the shouted group response — the lead states the chorus line and the gang yells the answer or echoes the last words a half-beat later, rowdy and tight at once, plus one nearly wordless crowd-melody passage on open vowels that a whole room can carry without knowing the words. Placement: gang answers live on the chorus and on the echo words the verses marked; the motormouth verses stay lead-only except one hype shout at the turn into the pre-chorus sprint, which a [Build] header frames; the wordless crowd passage lands after the bridge, and the [Big Finish] stacks every voice at once. Tag identity: a raspy lead plus a shouted gang — (gang: shouted response) lines, short (hey!) punches on the backbeat, group echoes of the chorus tails, everybody in by the end. The gang never harmonizes prettily; it shouts in tune.",
+            "adlibDensity": "heavy",
+            "minAdlibs": 8,
+            "deliveryTags": [
+              "[Call and Response]",
+              "[Belting]",
+              "[Build]",
+              "[Big Finish]"
+            ]
+          },
+          "builder": {
+            "instruments": [
+              "distorted power-chord guitars",
+              "driving live drums",
+              "big cracking snare",
+              "melodic bass",
+              "light synth touches"
+            ],
+            "themes": [
+              "Self-empowerment",
+              "Heartbreak",
+              "Friendship",
+              "Nostalgia"
+            ],
+            "purposes": [
+              "Empower",
+              "Sing along",
+              "Celebrate",
+              "Windows-down driving"
+            ]
+          }
+        },
+        {
+          "id": "latin",
+          "name": "Latin / Tropical Pop",
+          "oneLine": "Warm, swaying pop with a rolling Latin groove — made for dancing close, not jumping.",
+          "tempoGroove": "88-105 BPM over a dembow rhythm (the rolling boom-chick drum pattern under most reggaeton) or a lighter tropical bounce. The groove leans off the beat rather than landing square on it. Medium word density: phrases ride the syncopation (notes landing between the beats), with real space left for the rhythm to answer back.",
+          "writingDials": [
+            "Phrases push and pull against the beat instead of landing on it: write lines that invite the singer to lean in early or drag late, where dance-pop wants the words square on the grid.",
+            "The hook is a loop, not an announcement: a short phrase that circles back again and again, gathering heat each pass — closer to a chant you sway to than a banner you shout. Dance-pop announces its title; this lane circles it.",
+            "Repetition is welcome at a level no other pop lane allows: repeating one line or even one word several times in a row builds the trance here, where most other pop lanes would call it lazy.",
+            "The pre-chorus is a lean-in, not a ramp: the beat thins, phrases shorten and come closer to the ear, the voice drops nearer to speech for two bars — then the hook loop returns and the sway gets bigger.",
+            "Subject treatment is sensual slow-motion: the song lingers on one person, one dance, one night, noticing small physical details from the user's story — the opposite of a story that travels through time. Romance and flirtation are the home keys; warm joy and celebration fit too.",
+            "The verses still move the night forward, in slow motion: verse one sets the place and the person, verse two moves closer — what was said, what almost happened — new information each pass even while the hook circles, and every line stays tied to a physical detail from the user's story (the dress, the balcony, the drink going warm). Borrowed beach-and-cocktail props are this lane's abstraction failure.",
+            "Rhyme leans on repeated vowel sounds more than hard end rhymes: the same open vowel ringing at the ends of lines (assonance — vowel rhyme) suits the melody's roll better than snapping consonants.",
+            "Plan the second voice: which words get echoed and which lines get answered (call-and-response — one voice states, another replies) is a lyric decision made at the writing stage, and here the answer voice flirts rather than shouts.",
+            "Language law: Spanish — or any language beyond English — appears ONLY if the user wrote it in their own story. The groove and the syncopated phrasing carry the flavor in standard English; sprinkled borrowed words the user never said read as costume, not identity."
+          ],
+          "rendering": "Dembow drum pattern or a soft tropical kit, warm deep bass, syncopated piano or guitar stabs, marimba- or steel-drum-flavored synth plucks, airy pads. Smooth melodic lead vocal with light echo answers and a second voice replying on the hook. Modern tropical-pop or reggaeton-pop polish, 2015 to now.",
+          "storyFit": "Best for romance, anniversaries, honeymoon and vacation memories, flirtation, and warm celebrations that want sway instead of jump. Serves badly: grief, anger, and stories that need a detailed timeline — this groove's job is to hold one moment, not to travel through events.",
+          "parodyTraps": "Sprinkling Spanish words the user never wrote (the fastest way to sound like a costume); stacking beach-and-cocktail props instead of the user's own moment; writing square on-the-beat lines that fight the groove; treating the lane as dance-pop with different drums — the phrasing must actually swing off the beat.",
+          "performance": {
+            "prose": "Density moderate; min adlibs 5; delivery tags [Call and Response] [Harmonies] [Groove] [Soft]. This room performs like two people dancing close while the rhythm listens in — a duet-shaped record even when only one name is on it. Signature: the flirting reply — a second voice answering the open ends of lines in the syncopated gaps the writing left, and echoing the looping hook a beat late, teasing instead of shouting, a little warmer on every pass. Placement: replies sit only in the written gaps — never on top of the lead — roughly one answer every few lines in the verses, with the echoes thickening as the hook circles; a [Groove] header can hand the rhythm the last word for a bar, and the pre-chorus lean-in stays reply-free so the return of the loop feels bigger. Tag identity: the lead plus one flirting answer voice — soft replies at phrase ends, hook echoes a beat behind, light harmonies on the loop's final passes, a percussion-breath direction line where the beat answers instead. A conversation for two — never a crowd, never a stack.",
+            "adlibDensity": "moderate",
+            "minAdlibs": 5,
+            "deliveryTags": [
+              "[Call and Response]",
+              "[Harmonies]",
+              "[Groove]",
+              "[Soft]"
+            ]
+          },
+          "builder": {
+            "instruments": [
+              "dembow drums",
+              "warm deep bass",
+              "syncopated piano stabs",
+              "marimba-flavored synth plucks",
+              "steel-drum synth",
+              "airy pads"
+            ],
+            "themes": [
+              "New love",
+              "Deep love / devotion",
+              "Night out / freedom"
+            ],
+            "purposes": [
+              "Dance",
+              "Celebrate",
+              "Sing along"
+            ]
+          }
+        }
+      ],
+      "cues": [
+        {
+          "cue": "night out",
+          "strength": "strong",
+          "roomId": "dance-pop"
+        },
+        {
+          "cue": "club",
+          "strength": "strong",
+          "roomId": "dance-pop"
+        },
+        {
+          "cue": "dance floor",
+          "strength": "strong",
+          "roomId": "dance-pop"
+        },
+        {
+          "cue": "party",
+          "strength": "weak",
+          "roomId": "dance-pop"
+        },
+        {
+          "cue": "birthday",
+          "strength": "weak",
+          "roomId": "dance-pop"
+        },
+        {
+          "cue": "celebrate",
+          "strength": "weak",
+          "roomId": "dance-pop"
+        },
+        {
+          "cue": "celebration",
+          "strength": "weak",
+          "roomId": "dance-pop"
+        },
+        {
+          "cue": "confidence",
+          "strength": "weak",
+          "roomId": "dance-pop"
+        },
+        {
+          "cue": "dance",
+          "strength": "weak",
+          "roomId": "dance-pop"
+        },
+        {
+          "cue": "dancing",
+          "strength": "weak",
+          "roomId": "dance-pop"
+        },
+        {
+          "cue": "wedding",
+          "strength": "strong",
+          "roomId": "pop-ballad"
+        },
+        {
+          "cue": "vows",
+          "strength": "strong",
+          "roomId": "pop-ballad"
+        },
+        {
+          "cue": "vow renewal",
+          "strength": "strong",
+          "roomId": "pop-ballad"
+        },
+        {
+          "cue": "first dance",
+          "strength": "strong",
+          "roomId": "pop-ballad"
+        },
+        {
+          "cue": "in memory",
+          "strength": "strong",
+          "roomId": "pop-ballad"
+        },
+        {
+          "cue": "in loving memory",
+          "strength": "strong",
+          "roomId": "pop-ballad"
+        },
+        {
+          "cue": "passed away",
+          "strength": "strong",
+          "roomId": "pop-ballad"
+        },
+        {
+          "cue": "rest in peace",
+          "strength": "strong",
+          "roomId": "pop-ballad"
+        },
+        {
+          "cue": "funeral",
+          "strength": "strong",
+          "roomId": "pop-ballad"
+        },
+        {
+          "cue": "celebration of life",
+          "strength": "strong",
+          "roomId": "pop-ballad"
+        },
+        {
+          "cue": "tribute",
+          "strength": "weak",
+          "roomId": "pop-ballad"
+        },
+        {
+          "cue": "anniversary",
+          "strength": "weak",
+          "roomId": "pop-ballad"
+        },
+        {
+          "cue": "apology",
+          "strength": "weak",
+          "roomId": "pop-ballad"
+        },
+        {
+          "cue": "grief",
+          "strength": "weak",
+          "roomId": "pop-ballad"
+        },
+        {
+          "cue": "grieving",
+          "strength": "weak",
+          "roomId": "pop-ballad"
+        },
+        {
+          "cue": "memorial",
+          "strength": "weak",
+          "roomId": "pop-ballad"
+        },
+        {
+          "cue": "heaven",
+          "strength": "weak",
+          "roomId": "pop-ballad"
+        },
+        {
+          "cue": "synthwave",
+          "strength": "strong",
+          "roomId": "synth-pop"
+        },
+        {
+          "cue": "retrowave",
+          "strength": "strong",
+          "roomId": "synth-pop"
+        },
+        {
+          "cue": "80s",
+          "strength": "weak",
+          "roomId": "synth-pop"
+        },
+        {
+          "cue": "eighties",
+          "strength": "weak",
+          "roomId": "synth-pop"
+        },
+        {
+          "cue": "retro",
+          "strength": "weak",
+          "roomId": "synth-pop"
+        },
+        {
+          "cue": "nostalgia",
+          "strength": "weak",
+          "roomId": "synth-pop"
+        },
+        {
+          "cue": "nostalgic",
+          "strength": "weak",
+          "roomId": "synth-pop"
+        },
+        {
+          "cue": "late night",
+          "strength": "weak",
+          "roomId": "synth-pop"
+        },
+        {
+          "cue": "night drive",
+          "strength": "weak",
+          "roomId": "synth-pop"
+        },
+        {
+          "cue": "bedroom pop",
+          "strength": "strong",
+          "roomId": "indie"
+        },
+        {
+          "cue": "indie",
+          "strength": "strong",
+          "roomId": "indie"
+        },
+        {
+          "cue": "lo-fi",
+          "strength": "strong",
+          "roomId": "indie"
+        },
+        {
+          "cue": "lofi",
+          "strength": "strong",
+          "roomId": "indie"
+        },
+        {
+          "cue": "crush",
+          "strength": "weak",
+          "roomId": "indie"
+        },
+        {
+          "cue": "shy",
+          "strength": "weak",
+          "roomId": "indie"
+        },
+        {
+          "cue": "overthinking",
+          "strength": "weak",
+          "roomId": "indie"
+        },
+        {
+          "cue": "texting",
+          "strength": "weak",
+          "roomId": "indie"
+        },
+        {
+          "cue": "acoustic",
+          "strength": "strong",
+          "roomId": "acoustic"
+        },
+        {
+          "cue": "singer-songwriter",
+          "strength": "strong",
+          "roomId": "acoustic"
+        },
+        {
+          "cue": "singer songwriter",
+          "strength": "strong",
+          "roomId": "acoustic"
+        },
+        {
+          "cue": "life story",
+          "strength": "weak",
+          "roomId": "acoustic"
+        },
+        {
+          "cue": "family",
+          "strength": "weak",
+          "roomId": "acoustic"
+        },
+        {
+          "cue": "gratitude",
+          "strength": "weak",
+          "roomId": "acoustic"
+        },
+        {
+          "cue": "grateful",
+          "strength": "weak",
+          "roomId": "acoustic"
+        },
+        {
+          "cue": "pop punk",
+          "strength": "strong",
+          "roomId": "pop-punk"
+        },
+        {
+          "cue": "pop-punk",
+          "strength": "strong",
+          "roomId": "pop-punk"
+        },
+        {
+          "cue": "quit my job",
+          "strength": "strong",
+          "roomId": "pop-punk"
+        },
+        {
+          "cue": "revenge",
+          "strength": "weak",
+          "roomId": "pop-punk"
+        },
+        {
+          "cue": "fed up",
+          "strength": "weak",
+          "roomId": "pop-punk"
+        },
+        {
+          "cue": "over it",
+          "strength": "weak",
+          "roomId": "pop-punk"
+        },
+        {
+          "cue": "shout",
+          "strength": "weak",
+          "roomId": "pop-punk"
+        },
+        {
+          "cue": "underdog",
+          "strength": "weak",
+          "roomId": "pop-punk"
+        },
+        {
+          "cue": "reggaeton",
+          "strength": "strong",
+          "roomId": "latin"
+        },
+        {
+          "cue": "dembow",
+          "strength": "strong",
+          "roomId": "latin"
+        },
+        {
+          "cue": "tropical",
+          "strength": "strong",
+          "roomId": "latin"
+        },
+        {
+          "cue": "latin",
+          "strength": "strong",
+          "roomId": "latin"
+        },
+        {
+          "cue": "vacation",
+          "strength": "weak",
+          "roomId": "latin"
+        },
+        {
+          "cue": "honeymoon",
+          "strength": "weak",
+          "roomId": "latin"
+        },
+        {
+          "cue": "island",
+          "strength": "weak",
+          "roomId": "latin"
+        },
+        {
+          "cue": "beach",
+          "strength": "weak",
+          "roomId": "latin"
+        }
+      ]
     }
   },
-  "hash": "a93f759df8e5",
+  "hash": "de01399a840b",
   "approxTokens": {
     "core": 1794,
-    "largestSlice": 3667
+    "largestSlice": 3774
   }
 };
