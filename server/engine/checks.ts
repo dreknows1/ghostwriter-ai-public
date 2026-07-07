@@ -600,11 +600,12 @@ export function runChecks(
       const avgVerse = verseCounts.reduce((a, b) => a + b, 0) / verseCounts.length;
       const minVerse = Math.min(...verseCounts);
       const chorusLen = Math.max(...choruses.map(contentCount));
-      // Absolute floor of 2 lines admits legitimate short-stanza and topline forms
-      // (blues AAB is 3, an EDM/topline verse is 2). The real anti-starvation guard
-      // is the relative rule: verses must not run shorter than the chorus
-      // (avg >= chorusLen - 1) — which still catches a thin verse under a fat chorus.
-      const ok = minVerse >= 2 && avgVerse >= chorusLen - 1;
+      // verse-substance only bites when a SUBSTANTIAL chorus (>=4 lines) could
+      // starve thinner verses — that is the anti-starvation intent. A short hook
+      // cannot starve anything, so short-hook forms (EDM/dance toplines, blues AAB,
+      // fado/bossa refrains) pass. When the chorus is fat, enforce the relative rule
+      // (verses at least as long as the chorus, minus one) plus a 2-line floor.
+      const ok = chorusLen < 4 || (minVerse >= 2 && avgVerse >= chorusLen - 1);
       checks.push({
         id: "verse-substance",
         severity: "fail",
