@@ -95,6 +95,46 @@ const GENRE_PACKS = [
     aliases: ["corridos tumbados", "tumbado", "tumbados", "corrido belico", "corrido bélico", "corridos belicos", "trap corrido", "corridos"],
     profileFile: "SONGWRITING_PROFILE_CORRIDOTUMBADO.md",
   },
+  {
+    section: "Cumbia", id: "cumbia", name: "Cumbia",
+    aliases: ["cumbia music", "cumbia colombiana", "cumbia sonidera", "cumbia norteña", "cumbia nortena"],
+    profileFile: "SONGWRITING_PROFILE_CUMBIA.md",
+  },
+  {
+    section: "Merengue", id: "merengue", name: "Merengue",
+    aliases: ["merengue music", "merengue tipico", "merengue típico", "perico ripiao"],
+    profileFile: "SONGWRITING_PROFILE_MERENGUE.md",
+  },
+  {
+    section: "Vallenato", id: "vallenato", name: "Vallenato",
+    aliases: ["vallenato music", "vallenato paseo"],
+    profileFile: "SONGWRITING_PROFILE_VALLENATO.md",
+  },
+  {
+    section: "Mariachi / Ranchera", id: "mariachiranchera", name: "Mariachi / Ranchera",
+    aliases: ["mariachi", "ranchera", "rancheras", "mariachi ranchera", "bolero ranchero"],
+    profileFile: "SONGWRITING_PROFILE_MARIACHIRANCHERA.md",
+  },
+  {
+    section: "Balada / Bolero", id: "baladabolero", name: "Balada / Bolero",
+    aliases: ["balada", "bolero", "balada romantica", "balada romántica", "bolero clasico", "bolero clásico"],
+    profileFile: "SONGWRITING_PROFILE_BALADABOLERO.md",
+  },
+  {
+    section: "Pop Latino", id: "poplatino", name: "Pop Latino",
+    aliases: ["latin pop", "pop en español", "pop en espanol"],
+    profileFile: "SONGWRITING_PROFILE_POPLATINO.md",
+  },
+  {
+    section: "Latin Trap / Trap Latino", id: "latintrap", name: "Latin Trap / Trap Latino",
+    aliases: ["latin trap", "trap latino", "traplatino", "trap en español", "trap en espanol"],
+    profileFile: "SONGWRITING_PROFILE_LATINTRAP.md",
+  },
+  {
+    section: "Flamenco / Rumba", id: "flamencorumba", name: "Flamenco / Rumba",
+    aliases: ["flamenco", "rumba", "rumba flamenca", "rumba catalana", "nuevo flamenco"],
+    profileFile: "SONGWRITING_PROFILE_FLAMENCORUMBA.md",
+  },
 ];
 
 // The plan's build check: no quoted lyric lines anywhere in compiled writer text.

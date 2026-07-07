@@ -6812,9 +6812,2442 @@ export const CURRICULUM: CompiledCurriculum = {
           "roomId": "tumbado-flex"
         }
       ]
+    },
+    "cumbia": {
+      "id": "cumbia",
+      "name": "Cumbia",
+      "aliases": [
+        "cumbia music",
+        "cumbia colombiana",
+        "cumbia sonidera",
+        "cumbia norteña",
+        "cumbia nortena"
+      ],
+      "profileText": "A cumbia writer starts with the clip-clop and the scrape. The groove is a mid-tempo two-step that no room ever rushes — the guacharaca or güira scraping the offbeat, the drums knocking a swaying pulse hips move to before minds do — and above it a melodic instrument answers the singer at the ends of phrases. So the writing job is spatial before it is verbal: lines end early and leave the pocket open so the accordion or the keyboard riff can reply in the gap and take the turnarounds, and a sheet packed wall-to-wall has smothered the instrument that colors the genre before its first word is judged. The writer plans where the words are NOT, because that space belongs to the answering instrument and the sway. And the tempo stays mid — a cumbia is danceable and unhurried; speed it into a burst or crowd out its air and the clip-clop that names the genre is gone.\n\nThe rooms bend all of this, and choosing the room is choosing the pocket and who the song faces. Cumbia Colombiana is the earthy root — accordion and guacharaca over the classic clip-clop, the gaita crying in the turnarounds, a village-fiesta groove sung warm and communal to a whole dancing circle. Cumbia Sonidera pulls the tempo down heavy and hypnotic, sometimes into the outright rebajada drag, keyboard-led and low, a barrio and its sound-system night where a dedication gets shouted over the slow sway. Cumbia Tropical / Pop keeps it bright, upright, and radio-clean, a polished keyboard-and-brass sheen carrying one hooky chorus a wide crowd can lift at once. Same clip-clop, same scrape; different pocket, different melody-lead, different distance to the listener — an earthy circle, a slow low barrio, or a bright wide crowd.\n\nThe law above every dial is language. Spanish is the song's native tongue here — the lyrics are written in Spanish by a later layer — but the writer works in plain English craft instruction and never invents slang, endearments, or accent flavor to costume the song; only words the user wrote survive, and the identity is carried by rhythm, pocket, and the answering instrument, never by sprinkled vocabulary. And the two neighbors are not cumbia: vallenato is a wordy narrative SONG-form on caja and accordion — a danceable communal sway is not that — and salsa runs on the clave with a piano montuno and a brass mambo, which cumbia never has. The postcard is not cumbia either: beaches, palm trees, sombreros, and generic tropical-party scenery are the tourist parody the founder rejects; the user's own pueblo, block, name, and night are the song.",
+      "defaultRoomId": "cumbia-colombiana",
+      "rooms": [
+        {
+          "id": "cumbia-colombiana",
+          "name": "Cumbia Colombiana",
+          "oneLine": "The earthy Colombian root — accordion and guacharaca over the classic clip-clop, the gaita cry in its bones, a village-fiesta groove that sways a whole circle.",
+          "tempoGroove": "90-110 BPM in the signature cumbia clip-clop — a mid-tempo two-step no faster, the guacharaca scraping steady offbeats and the tambora and llamador knocking the swaying pulse while the accordion breathes on top. Medium word density: singable phrases with real air after them, because the accordion answers the voice at line-ends and the groove needs room to sway, never wall-to-wall.",
+          "writingDials": [
+            "The accordion is the second voice: end phrases early and leave the line hanging so the accordion can answer in the gap and take whole turnarounds between verses — a sheet that fills every bar smothers the instrument that colors the genre.",
+            "Write it earthy and communal on the user's real story: cumbia colombiana is a pueblo dancing in a circle, so the chorus opens outward for a crowd to lift while the verses keep the specific names, places, and details the user brought.",
+            "The hook is a chantable communal refrain of roughly three to six words, easy to sing back on the second pass and sturdy enough to return many times — the pueblo's line on the night, not a clever turn.",
+            "Rhyme plain and sturdy: clean end-rhyme the circle hears coming beats a slant-rhyme subtlety, landing square with the sway so the singalong stays effortless.",
+            "Keep the language plainspoken and warm — everyday words, a true image over ornament; the joy or the ache rides the groove, and a plain line the whole floor can carry outranks a pretty one.",
+            "Registers are fiesta joy, simple love, hometown pride, and the everyday: a village celebration, a plain devoted love, a pride of the barrio, a scene of ordinary life — delivered warm and danceable even when the feeling turns wistful.",
+            "Plan the accordion turnaround as a written space: mark the stretch between verses where the words stop and the accordion and gaita carry the sway — the lyric is built around that instrumental cry, not over it.",
+            "Cross-genre firewall: the mid-tempo clip-clop with the guacharaca scrape and the accordion answering is what makes it cumbia, not vallenato — vallenato is a story SONG-form driven hard on the caja and accordion, wordier and narrative; this room stays a danceable communal sway, feeling over saga, air over words."
+          ],
+          "rendering": "Accordion leading the melody and answering every vocal line, guacharaca scraping steady offbeats, tambora and llamador knocking the clip-clop, a gaita or caña de millo cry threading the turnarounds, upright-toned bass walking the sway, congas warm underneath. Warm communal lead vocal, often a two-voice harmony on the chorus; live earthy Colombian mix, cantina-and-plaza feel, no synths, no gloss.",
+          "storyFit": "Best for: village celebration and fiesta, plain devoted love, hometown and barrio pride, everyday life, a warm wistful ache that still dances. Poor fit: a slow smoky sound-system crawl with a synth hook — that is Sonidera; a glossy wide-radio singalong — that is Tropical / Pop; anything wanting club polish or a rebajada drag, which this earthy room has no register for.",
+          "parodyTraps": "Fake Colombian slang or accent spelling the user never wrote; sombrero-and-palm-tree postcard scenery standing in for a real story; a wall-to-wall lyric that leaves the accordion no gap to answer; polishing the earthy live sound into synth gloss; a hook made clever instead of chantable; dragging the clip-clop into a slow crawl it does not belong in.",
+          "performance": {
+            "prose": "Density moderate; min adlibs 4; delivery tags [Instrumental Break] [Harmonies] [Shout] [Call and Response]. This room performs like a small live band and a dancing circle — one warm lead, a second harmony voice on the chorus, and the accordion as the answering instrument, with the players throwing an occasional joyful shout. Signature: the accordion answer and turnaround — the squeezebox echoes the vocal at line-ends and takes the instrumental break alone, the gaita crying under it, and a joyful shout from the players tops a big line or kicks off the break. Placement: the harmony voice comes in on the chorus and the emotional peaks; the accordion fills the gaps at line-ends and owns the [Instrumental Break]; a joyful shout marks the turn into the break or the last chorus, and the circle can answer the hook back on its returns. Tag identity: a lead and a harmony partner over an answering accordion — a second voice on the hook, the accordion and gaita singing in the holes, a joyful shout thrown by the players as release. Any shout is plain-English energy, never a scripted foreign exclamation the user did not bring, and every sung word is from the user's own sheet.",
+            "adlibDensity": "moderate",
+            "minAdlibs": 4,
+            "deliveryTags": [
+              "[Instrumental Break]",
+              "[Harmonies]",
+              "[Shout]",
+              "[Call and Response]"
+            ]
+          },
+          "builder": {
+            "instruments": [
+              "acordeón",
+              "guacharaca",
+              "congas",
+              "timbal",
+              "bajo",
+              "guitarra"
+            ],
+            "themes": [
+              "El baile y la fiesta del pueblo",
+              "Amor sencillo",
+              "Alegría popular",
+              "Orgullo del barrio",
+              "La vida cotidiana"
+            ],
+            "purposes": [
+              "Bailar en la fiesta",
+              "Alegrar la reunión",
+              "Prender el bailongo"
+            ]
+          }
+        },
+        {
+          "id": "cumbia-sonidera",
+          "name": "Cumbia Sonidera / Rebajada",
+          "oneLine": "The Mexican sound-system lane — keyboard-led and pulled slow into the hypnotic rebajada drag, dedications shouted over a low heavy sway in a barrio dancehall.",
+          "tempoGroove": "95-112 BPM in a heavy, hypnotic keyboard-led clip-clop — the base sonidera groove sits mid-tempo, not slow, and the sonidero can then drag the playback down into the rebajada, a woozy pitched-down ~70-85 BPM crawl (a turntable slow-down effect on the record itself, never the song's native tempo) — the guacharaca scraping the offbeat over a deep low end and a keyboard riff hooking on top. Medium-low word density: lines sit back in the slow pocket and leave real space, because the keyboard riff carries between them and the sway is unhurried.",
+          "writingDials": [
+            "The keyboard riff is the hook engine: a synth organ or teclado line answers the vocal and owns the turnarounds, so write line-ends that hand off to it and plan the riff to breathe between phrases — the melody lives as much in the keys as in the voice.",
+            "Sit the words back in a slow heavy pocket: the rebajada drag wants unhurried phrasing, so write lines that stretch and settle into the low sway rather than crowd it — the space and the weight are the feel, not a gap to fill.",
+            "This room is a barrio and its sound-system night: write for the neighborhood dancehall — a dedication, a shout to the block, a name called into the low end — and keep the chorus a phrase the barrio re-sings over the hypnotic sway, not a wide-radio lift.",
+            "Registers are barrio pride, nostalgia and migration, a love with grit, the cantina and the trago: the streetwise warmth of the sonidero world — a pride of the block, a longing for a hometown far away, a plain love, a hard night with a drink — delivered close and real.",
+            "Keep the language plainspoken and rooted: everyday barrio words and one true detail carry further than ornament here, and the sincerity rides the slow groove — a real image outweighs a pretty generality.",
+            "Repetition is architecture: the hook and the keyboard riff can loop and deepen the same feeling rather than add plot, but the verses still carry the user's real block, real name, real night — repetition deepens a real thing, it never invents one.",
+            "Let the low end lead the mood: write to a deep, heavy, slightly woozy atmosphere, so favor lines that brood and sway over bright bouncing ones — the darkness and drag are the room, and a peppy radio cadence fights it.",
+            "Cross-genre firewall: the heavy hypnotic keyboard-led sway pulled toward the rebajada drag is what makes it Sonidera, not the bright upright Tropical / Pop cumbia — Tropical is clean, fast, and radio-lifted; this room is slow, low, and sound-system rooted, the synth keys and the drag carrying it where Tropical would brighten and speed up."
+          ],
+          "rendering": "Keyboard-led cumbia sonidera — a synth organ or teclado tropical riff hooking over the melody and answering the vocal, güira scraping the offbeat, deep heavy bass, congas and timbal knocking a slow hypnotic clip-clop sometimes dragged into the rebajada, sparse woozy pitched atmosphere. Close warm streetwise lead vocal with a sound-system feel, room for a shouted dedication; low, heavy, hypnotic barrio-dancehall mix, the low end mixed to sway a body slow.",
+          "storyFit": "Best for: barrio pride and the block, nostalgia and migration, a love with grit, the cantina and a hard night, a sound-system dedication. Poor fit: an earthy live accordion village groove — that is Colombiana; a bright glossy wide-radio singalong — that is Tropical / Pop; anything that needs speed, brightness, or a plaza-band shine, which this slow low room has no register for.",
+          "parodyTraps": "Machine-faked barrio slang or accent spelling the user never wrote; postcard tropical scenery standing in for the real block; a bright peppy radio cadence fighting the heavy slow drag; burying the keyboard riff under wall-to-wall vocals; a hook too wordy or too polished for a sound-system crowd; inventing a barrio the user's story never named.",
+          "performance": {
+            "prose": "Density sparse; min adlibs 3; delivery tags [Instrumental Break] [Shout] [Drop]. This room performs like a sonidero working a slow low dancehall — one close streetwise lead over the heavy keyboard sway, the synth riff answering, and a shouted dedication stamping the night, no crowd stack. Signature: the answered dedication — the vocal line lands and the written space gets a shouted call to the block or a keyboard riff snapping back, one answer per pocket, so the record sounds like the sound-system it runs on. Placement: the keyboard riff fills the gaps at line-ends and owns the [Instrumental Break]; a shouted dedication tops the intro and the biggest turns; the low end can drop bare for a bar before the sway re-enters so the drag alone loads the weight. Tag identity: a streetwise lead and an answering keyboard, the block called in the gaps — a shouted (dedication to the barrio) stamping the turns, the synth riff snapping back in the holes, the slow low end swaying underneath. All direction stays rhythm-and-energy in plain English — sway, weight, drag — never a request for an accent or slang beyond words the user's own sheet already holds.",
+            "adlibDensity": "sparse",
+            "minAdlibs": 3,
+            "deliveryTags": [
+              "[Instrumental Break]",
+              "[Shout]",
+              "[Drop]"
+            ]
+          },
+          "builder": {
+            "instruments": [
+              "teclado tropical",
+              "güira",
+              "congas",
+              "timbal",
+              "bajo",
+              "guacharaca"
+            ],
+            "themes": [
+              "Orgullo del barrio",
+              "Nostalgia y migración",
+              "La cantina y el trago",
+              "Amor sencillo",
+              "Desamor con sabor"
+            ],
+            "purposes": [
+              "Prender el bailongo",
+              "Cantar en la cantina",
+              "Bailar en la fiesta",
+              "Enamorar"
+            ]
+          }
+        },
+        {
+          "id": "cumbia-tropical",
+          "name": "Cumbia Tropical / Pop",
+          "oneLine": "The bright modern radio lane — clean, upright, and hooky, keyboard and light brass over a crisp clip-clop, a cumbia built for a wide crowd to sing at once.",
+          "tempoGroove": "100-120 BPM in a bright, upright, crisp clip-clop — still the mid-tempo cumbia sway, never a fast burst, the güira scraping clean offbeats over a bouncing bass and a polished keyboard-and-brass sheen. Medium word density: singable modern phrasing that lifts into the chorus, verses tidy and forward, still leaving the keyboard and brass room to answer between lines.",
+          "writingDials": [
+            "Write for the wide singalong: this room is radio-clean and built for a big crowd, so the chorus is the centerpiece — a bright, hooky, memorable phrase that lifts and returns, pitched so a whole room can sing it back on first hearing.",
+            "Keep the keyboard and brass their answers: even in the polished production, end phrases so the clean keyboard riff or a light brass stab can reply in the gap — a bright cumbia that buries the answer under wall-to-wall vocals loses the genre's call-and-sway.",
+            "Verses tidy and forward: keep the phrasing clean and modern with a clear hook setup, the verse building toward the chorus lift rather than crowding it, and one true detail from the user's story anchoring the shine.",
+            "Registers are fiesta joy, simple love, popular cheer, and a danceable ache: a bright celebration, a sweet radio love, a wide-crowd cheer, or a heartbreak with sabor that still dances — delivered clean and warm, the feeling lifted rather than roughened.",
+            "Rhyme clean and satisfying: solid end-rhyme that resolves sweetly and lands the hook, so the singalong stays easy and the chorus sticks on the first pass.",
+            "Mind the bright bounce: this lane trades the earthy grit for polish, so write to an upright, crisp, celebratory feel with an open easy melody — the brightness is the room, and a heavy woozy drag belongs to Sonidera, not here.",
+            "Cross-genre firewall: the bright clean upright clip-clop with the polished keyboard-and-brass sheen is what makes it Tropical / Pop, not salsa — this room has no clave, no piano montuno, no brass mambo, just the cumbia sway and a bright radio hook, and if a montuno or a horn mambo takes over, the room is gone."
+          ],
+          "rendering": "Clean bright cumbia pop — polished keyboard tropical riff and light brass stabs answering the vocal, güira scraping crisp offbeats, bouncing rounded bass, congas and timbal driving an upright clip-clop, a modern radio sheen with air and lift. Warm clear lead vocal with tidy harmonies on the chorus and a bright singalong lift; contemporary tropical-pop mix, crisp and celebratory, the hook mixed to carry a wide crowd.",
+          "storyFit": "Best for: a bright celebration or fiesta, a sweet radio love, wide-crowd cheer, a danceable heartbreak with sabor, an upbeat singalong. Poor fit: an earthy live accordion village groove — that is Colombiana; a slow heavy sound-system crawl — that is Sonidera; anything wanting a smoky rebajada drag or a raw campo grit, which this bright polished room has no register for.",
+          "parodyTraps": "Sprinkled Spanish phrases the user never wrote; beach-and-cocktail postcard scenery instead of the user's real details; a montuno or a brass mambo section pulling it toward salsa; burying the keyboard and brass answers under nonstop vocals; a hook too busy for a wide crowd to catch on first hearing.",
+          "performance": {
+            "prose": "Density moderate; min adlibs 3; delivery tags [Instrumental Break] [Harmonies] [Call and Response] [Shout]. This room performs like a polished modern band lifting a wide crowd — one clear bright lead, tidy harmonies on the chorus, and the keyboard-and-brass answering, with the crowd invited to sing the hook back. Signature: the bright answer and lift — the clean keyboard riff or a light brass stab replies to the sung line in the gap, and the crowd lifts the hook on its returns, the chorus opening wider each pass. Placement: harmony voices thicken the chorus and the peaks; the keyboard and brass fill the gaps at line-ends and own the [Instrumental Break]; a joyful shout tops the biggest turn and the crowd answers the hook back. Tag identity: a bright lead and its harmonies over an answering keyboard-and-brass — tidy doubles on the chorus, the riff and stabs replying in the holes, a joyful shout thrown as release and the crowd lifting the hook. Any shout is plain-English energy, never a scripted foreign exclamation the user did not write, and every sung word is from the user's own sheet.",
+            "adlibDensity": "moderate",
+            "minAdlibs": 3,
+            "deliveryTags": [
+              "[Instrumental Break]",
+              "[Harmonies]",
+              "[Call and Response]",
+              "[Shout]"
+            ]
+          },
+          "builder": {
+            "instruments": [
+              "teclado tropical",
+              "güira",
+              "congas",
+              "timbal",
+              "bajo",
+              "acordeón"
+            ],
+            "themes": [
+              "El baile y la fiesta del pueblo",
+              "Amor sencillo",
+              "Alegría popular",
+              "Desamor con sabor",
+              "La vida cotidiana"
+            ],
+            "purposes": [
+              "Bailar en la fiesta",
+              "Alegrar la reunión",
+              "Enamorar",
+              "Prender el bailongo"
+            ]
+          }
+        }
+      ],
+      "cues": [
+        {
+          "cue": "cumbia colombiana",
+          "strength": "strong",
+          "roomId": "cumbia-colombiana"
+        },
+        {
+          "cue": "acordeón",
+          "strength": "strong",
+          "roomId": "cumbia-colombiana"
+        },
+        {
+          "cue": "guacharaca",
+          "strength": "strong",
+          "roomId": "cumbia-colombiana"
+        },
+        {
+          "cue": "gaita",
+          "strength": "strong",
+          "roomId": "cumbia-colombiana"
+        },
+        {
+          "cue": "fiesta del pueblo",
+          "strength": "weak",
+          "roomId": "cumbia-colombiana"
+        },
+        {
+          "cue": "baile",
+          "strength": "weak",
+          "roomId": "cumbia-colombiana"
+        },
+        {
+          "cue": "amor sencillo",
+          "strength": "weak",
+          "roomId": "cumbia-colombiana"
+        },
+        {
+          "cue": "village",
+          "strength": "weak",
+          "roomId": "cumbia-colombiana"
+        },
+        {
+          "cue": "folk",
+          "strength": "weak",
+          "roomId": "cumbia-colombiana"
+        },
+        {
+          "cue": "sonidera",
+          "strength": "strong",
+          "roomId": "cumbia-sonidera"
+        },
+        {
+          "cue": "sonidero",
+          "strength": "strong",
+          "roomId": "cumbia-sonidera"
+        },
+        {
+          "cue": "rebajada",
+          "strength": "strong",
+          "roomId": "cumbia-sonidera"
+        },
+        {
+          "cue": "cumbia mexicana",
+          "strength": "strong",
+          "roomId": "cumbia-sonidera"
+        },
+        {
+          "cue": "barrio",
+          "strength": "weak",
+          "roomId": "cumbia-sonidera"
+        },
+        {
+          "cue": "nostalgia",
+          "strength": "weak",
+          "roomId": "cumbia-sonidera"
+        },
+        {
+          "cue": "migración",
+          "strength": "weak",
+          "roomId": "cumbia-sonidera"
+        },
+        {
+          "cue": "dedication",
+          "strength": "weak",
+          "roomId": "cumbia-sonidera"
+        },
+        {
+          "cue": "sound system",
+          "strength": "weak",
+          "roomId": "cumbia-sonidera"
+        },
+        {
+          "cue": "cumbia pop",
+          "strength": "strong",
+          "roomId": "cumbia-tropical"
+        },
+        {
+          "cue": "cumbia tropical",
+          "strength": "strong",
+          "roomId": "cumbia-tropical"
+        },
+        {
+          "cue": "radio cumbia",
+          "strength": "strong",
+          "roomId": "cumbia-tropical"
+        },
+        {
+          "cue": "alegría",
+          "strength": "weak",
+          "roomId": "cumbia-tropical"
+        },
+        {
+          "cue": "singalong",
+          "strength": "weak",
+          "roomId": "cumbia-tropical"
+        },
+        {
+          "cue": "crossover",
+          "strength": "weak",
+          "roomId": "cumbia-tropical"
+        },
+        {
+          "cue": "upbeat",
+          "strength": "weak",
+          "roomId": "cumbia-tropical"
+        }
+      ]
+    },
+    "merengue": {
+      "id": "merengue",
+      "name": "Merengue",
+      "aliases": [
+        "merengue music",
+        "merengue tipico",
+        "merengue típico",
+        "perico ripiao"
+      ],
+      "profileText": "A merengue writer starts with the two-beat — the fast, relentless maco pulse the tambora and güira drive, felt in a hard 2 that never lets up. Everything is written to sit inside that gallop: scan each line against the two-beat, land the stressed syllables on the pulse, and keep the phrasing quick and buoyant, because merengue is body-first party music before it is anything else. The tempo is high, so the words must be sturdy and singable at speed — a line that reads clever but blurs when the tambora is flying has already failed. And merengue is joy in motion even when the story is sad: heartbreak here is danced through, shrugged off, thrown back with a wink, never wallowed in. A merengue that stops the floor to brood has left the genre.\n\nThe song is built around the jaleo — the open call section where the instruments take over and the singer works the crowd. This is the payoff every merengue drives toward: the verses set it up, and the jaleo lets the accordion, the sax section, or the beat-and-crowd break loose while the singer fires short repeatable calls over the top. The writer plans both halves on purpose — verses tight and specific, then a jaleo whose calls are simple enough to shout back and ride on every return. Leave the instruments their holes: end phrases a hair early so the accordion can answer, the horns can punch, or the hook can detonate. A merengue packed wall-to-wall, with no gap for the answer, has smothered the thing that makes it swing.\n\nThe rooms bend all of this. Perico ripiao writes quick, dense, mischievous picardía from the campo, trading with the accordion and a raspy sax. Merengue de orquesta writes cleaner belted phrases for a ballroom, spaced for an arranged saxophone-and-brass jaleo. Merengue de calle writes the shortest, hardest chants over a programmed tambora, cold and present-tense, the crowd itself as the answer. The law above every dial is the same as everywhere: Spanish is the song's language, but slang, accent spellings, and island or street costume appear only if the user wrote them. Delivery is directed as rhythm and energy in plain English — gallop, punch, swagger — never as an accent, and the user's own people, places, and wins always outrank any stock tropical scenery. The picardía is a wink built from their situation, never a crude template pasted on.",
+      "defaultRoomId": "perico-ripiao",
+      "rooms": [
+        {
+          "id": "perico-ripiao",
+          "name": "Perico Ripiao / Merengue Típico",
+          "oneLine": "The rootsy campo sound of the Cibao — accordion, tambora, and güira running hot and fast, a mischievous singer trading with the box and the sax over a relentless two-beat.",
+          "tempoGroove": "~145-175 BPM felt in a hard driving 2 (the maco end runs hottest — a merengue típico can gallop; the apambichao is the slower, syncopated lilt the same band drops into, never the fast end), the tambora locking the two-beat and the güira scraping constant sixteenths under it. High word density: quick, dense, playful phrases that ride the gallop, but leaving line-end gaps for the accordion to answer and the sax to rasp back — never wall-to-wall.",
+          "writingDials": [
+            "Ride the gallop dense but leave the accordion its turn: pack the verse with quick playful syllables that lock to the two-beat, then end phrases a hair early so the accordion can fire its answering riff — a sheet that fills every beat silences the box that defines the room.",
+            "Write picardía, not innuendo pasted on: the campo register is sly, teasing, double-meaning wit — a wink the fiesta already knows how to read — built from the user's own situation, never a stock naughty template.",
+            "Build toward the jaleo as the payoff: plan the open section where the accordion and sax trade hot and the singer works short calls over them — keep the calls simple and repeatable so the crowd rides each return.",
+            "Keep the hook a quick chantable phrase of roughly three to six words, re-sung faster and looser each pass, gathering mischief rather than resolving — if a fiesta could not shout it back mid-gallop, it is pitched wrong.",
+            "Rhyme plain, fast, and sturdy: easy perfect rhyme and a repeated key word land square on the two-beat and survive the speed; clever slant-rhyme blurs at this tempo.",
+            "Stay concrete to the user's campo or barrio life — the real town, the real name, the real dance — never generic tropical postcard scenery.",
+            "The saxophone rasp is a second wisecrack: leave it room to answer a punchline, so write phrase-ends open enough for the sax to bark back after the joke lands.",
+            "Cross-genre firewall: the accordion trading with tambora and güira over a galloping two-beat makes it típico, not norteño or vallenato — there is no bajo sexto two-step and no cumbia lilt under it; the pulse is the fast Dominican maco, and if the accordion answer and the scraper vanish the room is gone."
+          ],
+          "rendering": "Diatonic button accordion leading and answering in fast riffs, tambora driving the two-beat with sharp rim-and-head hits, güira scraping constant sixteenths, marimba or upright-toned bass walking under it, a raspy saxophone barking responses, building into an accordion-and-sax jaleo. Bright agile lead vocal, playful and forward, small group answers on the hook; live hot Cibao típico mix, no gloss, no synths.",
+          "storyFit": "Best for: a fast fiesta, campo pride, sly flirtation and double-meaning teasing, dancing till dawn, hometown swagger, heartbreak shrugged off with a joke. Poor fit: a polished ballroom romance that wants a horn section (that is orquesta), cold street-hard swagger over programmed drums (that is calle), or anything solemn and still — the gallop has no patience for it.",
+          "parodyTraps": "Machine-written Dominican slang or accent spelling the user never wrote; generic tropical-postcard scenery standing in for the real campo detail; a wall-to-wall lyric that leaves the accordion and sax nothing to answer; forcing clever rhymes that blur at the tempo; picardía turned crude and explicit where the room wants the sly wink.",
+          "performance": {
+            "prose": "Density heavy; min adlibs 6; delivery tags [Call and Response] [Instrumental Break] [Harmonies] [Shout]. This room performs like a hot campo trio working a packed patio — one agile lead, the accordion as the answering wisecrack, and a small group snapping the hook back, the players throwing joyful gritos. Signature: the accordion-and-sax answer — the box fires a riff into the gap the singer leaves and the sax rasps back after a punchline, so every joke lands twice, once in words and once in reeds. Placement: accordion answers fall at line-ends through the verses; an [Instrumental Break] hands the jaleo to the accordion and sax to trade; a joyful shout tops the hot turns and kicks the jaleo; small group answers snap the hook back. Tag identity: a lead and his answering accordion — the box wisecracking in the holes, the sax barking after the punchlines, a small group shouting the hook and the players throwing a joyful grito. Every shout is energy in plain English, never a scripted Dominican exclamation the user did not write.",
+            "adlibDensity": "heavy",
+            "minAdlibs": 6,
+            "deliveryTags": [
+              "[Call and Response]",
+              "[Instrumental Break]",
+              "[Harmonies]",
+              "[Shout]"
+            ]
+          },
+          "builder": {
+            "instruments": [
+              "acordeón",
+              "tambora",
+              "güira",
+              "saxofón",
+              "bajo"
+            ],
+            "themes": [
+              "Fiesta y desenfreno",
+              "Picardía y doble sentido",
+              "Orgullo dominicano",
+              "Sabrosura",
+              "Desamor con humor"
+            ],
+            "purposes": [
+              "Bailar rápido",
+              "Prender la fiesta",
+              "Coquetear",
+              "Reír y gozar"
+            ]
+          }
+        },
+        {
+          "id": "merengue-de-orquesta",
+          "name": "Merengue de Orquesta",
+          "oneLine": "The gleaming 80s-and-90s big-band sound — a full sax section and brass swinging an arranged jaleo, piano and bass locked tight, a belting lead working a whole ballroom.",
+          "tempoGroove": "~130-165 BPM in a driving 2, the tambora and bass locking the two-beat while the piano comps clean under a full horn section. Medium word density: cleaner, belted phrases with strong open vowels at the peaks, spaced so the saxophone jaleo and brass can punch their arranged hits between vocal lines — leave the horns their holes.",
+          "writingDials": [
+            "Write for the horns to answer: end vocal phrases a beat early and leave the hole where the sax section and brass throw their arranged jaleo hit — the horn response is part of the line, so a sheet that fills every beat smothers the section that defines this room.",
+            "Build the saxophone jaleo as the centerpiece: plan the open section where the saxes swing their signature riff and the singer fires short calls over it — the jaleo is where an orquesta merengue peaks, so write toward it, not past it.",
+            "Melody rides high and declamatory: write lines a singer belts near the top of the range with open vowels at the peaks, because the vocal is pushed out over a wall of brass, never crooned under it.",
+            "Chorus is a raised toast the ballroom lifts: a short, hooky, repeatable phrase built for a whole floor to sing — if it could not carry across a packed dance hall with the horns blazing, it is pitched wrong.",
+            "Register spans celebration and heartbreak-you-still-dance-to: a flat-out fiesta, hometown or national pride, a proud love, or a breakup delivered at full chest over an up-tempo groove — the feeling can be sad while the body still moves.",
+            "Rhyme clean and sturdy so the crowd hears it coming: solid perfect end-rhyme landing square on the two-beat, not slant-rhyme subtlety the horns would bury.",
+            "Keep the verses specific to the user's real story — the real person, place, and occasion — while the chorus opens outward for the crowd; the arrangement is big, but the details stay theirs.",
+            "Cross-genre firewall: the fast two-beat tambora-and-güira groove under an arranged saxophone-and-brass jaleo makes it merengue de orquesta, not salsa — there is no clave, no piano montuno pattern, and no sonero-and-coro trade; the horns swing a jaleo over a maco two-beat, not mambo stabs over a clave."
+          ],
+          "rendering": "Full horn section — stacked saxophones swinging the jaleo with trumpets and trombones punching arranged hits, clean comping piano, tight electric bass locked to the two-beat, tambora driving with sharp rim-and-head hits, güira scraping steady sixteenths. Lead vocal belted high and forward with a group answering the hook; big, live, ballroom-loud brass mix, polished late-80s-through-90s orquesta sheen.",
+          "storyFit": "Best for: a big celebration, a wedding or quinceañera, hometown or national pride, a proud declared love, or a heartbreak sung defiant over a dancing groove. Poor fit: a rootsy accordion campo track (that is típico), cold street swagger over programmed drums (that is calle), or a quiet still ballad the wall of brass would trample.",
+          "parodyTraps": "Machine-added Dominican slang the user never wrote; sombrero-and-cocktail tropical clichés standing in for the real occasion; a thin lyric that gives the horns nothing to answer; an under-sung mumble that fights the wall of brass; cramming every beat so the jaleo cannot breathe.",
+          "performance": {
+            "prose": "Density moderate; min adlibs 4; delivery tags [Call and Response] [Brass] [Instrumental Break] [Shout]. This room performs like a full orchestra around one belting lead — the sax section and brass throw the answers and the arranged jaleo is the whole signature, a group lifting each chorus. Signature: the horn answer and the jaleo — the saxes and brass punch an arranged hit into the hole the singer leaves and swing the open jaleo section, the lead firing short calls over the top. Placement: horn responses fall at verse and chorus line-ends where the vocal steps aside; an [Instrumental Break] hands the jaleo to the sax section; a joyful shout tops the biggest turns and kicks the jaleo; group voices thicken the final choruses. Tag identity: a brass orquesta and its belting lead — the sax section swinging the jaleo and punching the gaps, a joyful shout thrown over the peaks, a group swelling the hook. Every shout is energy in plain English, never a scripted foreign exclamation the user did not bring.",
+            "adlibDensity": "moderate",
+            "minAdlibs": 4,
+            "deliveryTags": [
+              "[Call and Response]",
+              "[Brass]",
+              "[Instrumental Break]",
+              "[Shout]"
+            ]
+          },
+          "builder": {
+            "instruments": [
+              "saxofón",
+              "metales",
+              "piano",
+              "tambora",
+              "güira",
+              "bajo"
+            ],
+            "themes": [
+              "Fiesta y desenfreno",
+              "Celebración sin parar",
+              "Orgullo dominicano",
+              "Amor y coqueteo",
+              "Desamor con humor"
+            ],
+            "purposes": [
+              "Prender la fiesta",
+              "Bailar rápido",
+              "Encender el ambiente",
+              "Coquetear"
+            ]
+          }
+        },
+        {
+          "id": "merengue-de-calle",
+          "name": "Merengue de Calle / Urbano",
+          "oneLine": "The modern street descendant — leaner, harder, and colder, a programmed tambora and synth-and-sample stack under short chanted hooks and flat, present-tense swagger.",
+          "tempoGroove": "~150-180 BPM in a hard two, a programmed or heavily processed tambora hitting sharp with the güira looped tight and 808-weighted low end under it. Word density is punchy and chant-hard: the shortest lines of the three, with the widest gaps left for a hook to detonate and the crowd to snap back — punch and pause, not a dense gallop.",
+          "writingDials": [
+            "Write punch-and-pause for the drop: land a short hard phrase, then leave a wide gap where the hook detonates and the crowd snaps back — the gap after the punch is part of the lyric, and the room lives on that hook landing, not on filling the bar.",
+            "Keep the hook a blunt chant of a few words, built to shout back on the second pass: two alternating chant lines trading back and forth make a legitimate hook here, where the típico gallop wants a quicker denser phrase.",
+            "Present tense and cocky: the song happens now, on the block or on the floor — swagger, flirtation, hustle pride stated flat and never explained; a boast that gets justified dies.",
+            "Ride one rhyme sound across several short lines on purpose: hammering the same end-sound builds momentum at this tempo, where a busier scheme would blur.",
+            "The jaleo becomes the beat-and-crowd break: instead of an accordion or horn trade, plan a stripped drop where the programmed tambora and the chant carry it and the crowd is the answer — write the call short enough to survive the loop.",
+            "Keep the boasts and the flirtation the user's real ones — their block, their win, their line — never stock luxury or borrowed street costume.",
+            "Register is edgier and colder than the older rooms: the mischief hardens into swagger, so state the claim plain and let the beat carry the attitude rather than a wink.",
+            "Cross-genre firewall: the fast merengue two-beat — the programmed tambora and looped güira driving a hard maco pulse — under the chant makes it merengue de calle, not reggaetón; there is no dembow boom-ch-boom-chick, the pulse stays the fast merengue two, and if the tambora two-beat flips to dembow the room is gone."
+          ],
+          "rendering": "Programmed or heavily processed tambora hitting sharp and hard, güira looped tight, deep 808-weighted bass, synth stabs and vocal-chop samples, a stripped drop where the drums and chant carry it. Confident talk-sung lead riding the two-beat with hard doubled hooks and gang-style group shouts cracking on the punch words; modern urbano mix, cold and loud, club-ready.",
+          "storyFit": "Best for: street swagger, present-tense flirtation, hustle and neighborhood pride, a club anthem, a hard flex or a callout. Poor fit: a rootsy accordion campo fiesta (that is típico), a polished big-band celebration or heartbreak (that is orquesta), or any tender still ballad the cold beat would flatten.",
+          "parodyTraps": "Machine-written street slang the user never wrote; borrowed luxury or gun costume pasted onto a story that never had it; flipping the tambora two-beat into a dembow so it stops being merengue; over-explaining or softening the boast; hooks with too many words for a crowd to snap back over the loop.",
+          "performance": {
+            "prose": "Density heavy; min adlibs 6; delivery tags [Call and Response] [Drop] [Shout] [Ad-Lib Section]. This room performs like an artist working a packed club over a hard beat — a confident lead riding the two-beat, hard doubled hooks, and gang-style group shouts as the answer, the crowd itself snapping back. Signature: the answered chant — a hard phrase lands and the written gap gets the group's short shouted snap-back or a doubled crack on the punch word, one answer per gap, so the record sounds like the floor it is for. Placement: the verses stay lead-forward and short; the shouts and hooks flood the drop, where the group answers every pass and a [Drop] header strips the track to drums and chant; hard doubles crack on the punch words. Tag identity: a lead and a snapping crew — gang-style group shouts answering the chant, doubled cracks on the punch words, two-line chant hooks traded between lead and crew. All delivery stays rhythm-and-energy language in the user's own plain words — cadence, punch, swagger — never a request for slang or accent beyond what the user wrote.",
+            "adlibDensity": "heavy",
+            "minAdlibs": 6,
+            "deliveryTags": [
+              "[Call and Response]",
+              "[Drop]",
+              "[Shout]",
+              "[Ad-Lib Section]"
+            ]
+          },
+          "builder": {
+            "instruments": [
+              "tambora",
+              "güira",
+              "bajo",
+              "piano",
+              "saxofón"
+            ],
+            "themes": [
+              "La calle y el ambiente",
+              "Fiesta y desenfreno",
+              "Amor y coqueteo",
+              "Orgullo dominicano",
+              "Sabrosura"
+            ],
+            "purposes": [
+              "Prender la fiesta",
+              "Bailar rápido",
+              "Encender el ambiente",
+              "Coquetear"
+            ]
+          }
+        }
+      ],
+      "cues": [
+        {
+          "cue": "perico ripiao",
+          "strength": "strong",
+          "roomId": "perico-ripiao"
+        },
+        {
+          "cue": "merengue típico",
+          "strength": "strong",
+          "roomId": "perico-ripiao"
+        },
+        {
+          "cue": "acordeón",
+          "strength": "strong",
+          "roomId": "perico-ripiao"
+        },
+        {
+          "cue": "el cibao",
+          "strength": "strong",
+          "roomId": "perico-ripiao"
+        },
+        {
+          "cue": "campo",
+          "strength": "weak",
+          "roomId": "perico-ripiao"
+        },
+        {
+          "cue": "picardía",
+          "strength": "weak",
+          "roomId": "perico-ripiao"
+        },
+        {
+          "cue": "fiesta",
+          "strength": "weak",
+          "roomId": "perico-ripiao"
+        },
+        {
+          "cue": "doble sentido",
+          "strength": "weak",
+          "roomId": "perico-ripiao"
+        },
+        {
+          "cue": "merengue de orquesta",
+          "strength": "strong",
+          "roomId": "merengue-de-orquesta"
+        },
+        {
+          "cue": "big band",
+          "strength": "strong",
+          "roomId": "merengue-de-orquesta"
+        },
+        {
+          "cue": "sección de saxofones",
+          "strength": "strong",
+          "roomId": "merengue-de-orquesta"
+        },
+        {
+          "cue": "el jaleo de saxo",
+          "strength": "strong",
+          "roomId": "merengue-de-orquesta"
+        },
+        {
+          "cue": "metales",
+          "strength": "weak",
+          "roomId": "merengue-de-orquesta"
+        },
+        {
+          "cue": "boda",
+          "strength": "weak",
+          "roomId": "merengue-de-orquesta"
+        },
+        {
+          "cue": "orgullo",
+          "strength": "weak",
+          "roomId": "merengue-de-orquesta"
+        },
+        {
+          "cue": "celebración",
+          "strength": "weak",
+          "roomId": "merengue-de-orquesta"
+        },
+        {
+          "cue": "merengue de calle",
+          "strength": "strong",
+          "roomId": "merengue-de-calle"
+        },
+        {
+          "cue": "merengue urbano",
+          "strength": "strong",
+          "roomId": "merengue-de-calle"
+        },
+        {
+          "cue": "la calle",
+          "strength": "strong",
+          "roomId": "merengue-de-calle"
+        },
+        {
+          "cue": "tambora programada",
+          "strength": "weak",
+          "roomId": "merengue-de-calle"
+        },
+        {
+          "cue": "swagger",
+          "strength": "weak",
+          "roomId": "merengue-de-calle"
+        },
+        {
+          "cue": "coqueteo",
+          "strength": "weak",
+          "roomId": "merengue-de-calle"
+        },
+        {
+          "cue": "discoteca",
+          "strength": "weak",
+          "roomId": "merengue-de-calle"
+        }
+      ]
+    },
+    "vallenato": {
+      "id": "vallenato",
+      "name": "Vallenato",
+      "aliases": [
+        "vallenato music",
+        "vallenato paseo"
+      ],
+      "profileText": "A vallenato writer is a juglar first — a teller of vivencias, lived experiences set to the accordion trio. The song is a story before it is a groove, so the writing job is narrative: carry a real thing that happened — a love, a leaving, a friendship, a piece of the region's life — and move it forward, verse by verse, in plain conversational Spanish sung close to speech. Under the story runs the second law: the accordion is a second voice. The diatonic accordion answers the singer at every phrase-turn and takes whole instrumental turnarounds, so phrases end open and hand off to it, and the caja vallenata and guacharaca keep the aire's pulse underneath. A sheet packed wall-to-wall has silenced the instrument that defines the genre. The writer plans where the words stop, because that space belongs to the accordion.\n\nWhat the writer chooses is the aire — the rhythmic pattern the story is played through — and the aire is the room. Paseo walks the vivencia at a storyteller's mid-tempo, romantic or narrative, the most common home and the default. Son slows and darkens it, minor-key and grave, the accordion's low bass reeds leading a settled sorrow — the aire of serious desamor and loss, carried, not shouted. Merengue vallenato lifts it into a fast, bouncing 6/8 for the parranda among friends — a Colombian aire, and never the Dominican merengue genre, which is a different music on saxophone and tambora. Puya runs fastest, an instrumental showcase where the accordion and guacharaca race and the words thin to almost nothing. Same story engine, same trio; different speed, weight, and how much the words carry.\n\nThe law above every dial is language and truth. Spanish is the song's native tongue — the lyrics are written in Spanish by a later layer — but the writer works in plain English craft instruction and never invents coastal slang, endearments, or accent flavor to costume the song; only the user's own words survive, and the identity is carried by the story, the aire, and the accordion's answer. Craft terms the writer thinks with — aire, paseo, son, merengue, puya, bajos, caja, guacharaca — are working vocabulary and stay out of the lyrics, adlibs, and render notes unless the user wrote them first. And the postcard is not vallenato: generic tropical scenery, beaches, and party clichés are the tourist parody the founder rejects. The real river, the real town, the real name from the user's life is the song.",
+      "defaultRoomId": "paseo",
+      "rooms": [
+        {
+          "id": "paseo",
+          "name": "Paseo",
+          "oneLine": "The heart of vallenato — the mid-tempo aire the story lives in, romantic or narrative, the accordion answering the singer as he tells a lived tale end to end.",
+          "tempoGroove": "85-115 BPM in a walking 2/4 or 4/4 that never rushes the tale, the caja marking a steady pulse with rolls into each phrase-turn and the guacharaca scraping even subdivisions; the accordion answers between vocal lines and takes the instrumental turnaround. Word density is medium-to-high — this is a narrative aire that carries a long vivencia, but phrases still break at line-ends for the accordion to fill, so leave the turns open.",
+          "writingDials": [
+            "The accordion is the second voice: it answers at phrase-ends and takes whole solo turnarounds, so write lines that hand off to it and plan the instrumental break where the accordion sings alone between verses.",
+            "Tell a real vivencia in order: the paseo narrates something that happened to the singer — a love, a leaving, a piece of the region's life — moving forward verse by verse, so build the story from the actual who, where, and when the user brought.",
+            "Two home registers, one aire: the romantic paseo (devotion, courtship, longing, an amor imposible) and the storytelling paseo (a life, a friendship, a farewell) — decide which the user's story is before choosing point of view.",
+            "Sit the vocal near speech, warm and plainspoken: the paseo is sung close to conversation, more told than belted, so write phrases a natural voice carries without strain and let the feeling come from the true detail, not from ornament.",
+            "Rhyme steady and singable: clean end-rhyme in couplets or quatrains keeps the long story easy to follow, and a plain honest word outranks a clever one.",
+            "The refrain lands the tale's emotional headline: a short repeatable line the accordion then echoes — plain enough to sing back, true enough to mean.",
+            "Keep the world the user's own: the real name, the real town, the real river or road — vallenato earns belief through concrete regional detail, never through postcard tropical scenery.",
+            "Cross-genre firewall: the accordion answering the voice over caja and guacharaca while the singer tells one lived story is what makes it vallenato and not cumbia — cumbia is a dance groove built on gaita and tambora that circles a feeling, where the paseo is a narrator walking a tale through the accordion trio."
+          ],
+          "rendering": "Diatonic vallenato accordion leading and answering the vocal with runs at every phrase-turn, caja vallenata (small hand drum) keeping the 2/4 pulse with repique rolls, guacharaca scraping steady subdivisions, upright or electric bass walking underneath, light guitar and a second harmony voice on the refrain. Warm conversational lead vocal, more narrated than belted; tight live-trio Valledupar mix, accordion out front, no synths.",
+          "storyFit": "Best for: a lived story told end to end, courtship and devotion, longing, a farewell, an amor imposible, honoring a friend or the region in narrative. Poor fit: a fast party number (that is merengue vallenato), a heavy minor-key lament (that is son), an instrumental showcase (that is puya).",
+          "parodyTraps": "Generated Colombian or coastal slang the user never wrote; postcard tropical scenery standing in for the user's real town and river; a wall-to-wall lyric that leaves the accordion no phrase-turn to answer or solo; a belted anthem delivery that fights the conversational voice; skipping the story to loop a hook.",
+          "performance": {
+            "prose": "Density moderate; min adlibs 3; delivery tags [Instrumental Break] [Harmonies] [Shout]. This room performs like a small accordion trio telling a story to a listening room — one warm conversational lead, a second harmony voice on the refrain, and the accordion as the answering instrument, with the players throwing an occasional joyful shout. Signature: the accordion answer and turnaround — the squeezebox echoes the vocal at phrase-ends and takes the instrumental break alone, and a joyful shout from the players tops a big line or kicks off the solo. Placement: the harmony voice comes in on the refrain and the emotional peaks; the accordion fills the gaps at line-ends and owns the [Instrumental Break] turnaround between verses; a joyful shout marks the turn into the solo or the last refrain. Tag identity: a lead and a harmony partner over an answering accordion — a second voice on the refrain, the accordion singing in the holes, a joyful shout thrown by the players as release. Any shout is plain-English energy, never a scripted exclamation the user did not bring.",
+            "adlibDensity": "moderate",
+            "minAdlibs": 3,
+            "deliveryTags": [
+              "[Instrumental Break]",
+              "[Harmonies]",
+              "[Shout]"
+            ]
+          },
+          "builder": {
+            "instruments": [
+              "acordeón",
+              "caja vallenata",
+              "guacharaca",
+              "bajo",
+              "guitarra",
+              "coros"
+            ],
+            "themes": [
+              "Amor y despecho",
+              "Vivencias y anécdotas",
+              "La tierra y el campo",
+              "Amor imposible",
+              "El río y el pueblo"
+            ],
+            "purposes": [
+              "Enamorar",
+              "Contar una vivencia",
+              "Recordar la tierra",
+              "Llorar el desamor"
+            ]
+          }
+        },
+        {
+          "id": "son",
+          "name": "Son",
+          "oneLine": "The slow, dark aire — minor-key and heavy-hearted, the accordion's bass notes leading a wounded confession, the most difficult of the aires to sing and the most sorrowful to write.",
+          "tempoGroove": "60-85 BPM in a slow, deliberate 2/4, usually minor, the caja soft and unhurried and the guacharaca scraping a patient subdivision; the accordion leads with its bajos — the low bass reeds — carrying the melancholy under and between the lines. Word density is medium and spacious — the son breathes, so write phrases with real air after them and let the low accordion answer the sorrow in the gaps.",
+          "writingDials": [
+            "Lead with the accordion's bass: the son turns on the bajos — the low reeds — so leave the phrase-ends open for that dark answer to rise, and plan the turnaround where the low accordion carries the grief alone.",
+            "Write the wound plainly and heavily: the son is the aire of desamor and loss worn seriously — not the drunk collapse of a barroom, but a grave, settled sorrow — so favor a true quiet detail over any big gesture, and let the minor key hold the weight.",
+            "Let the tempo breathe: the son sits back and rushes nothing, so write phrases that can stretch and settle rather than lock hard to a dance grid — the space is where the ache lives.",
+            "Keep the story bodily and specific to the user's own life — the actual person, the actual leaving, the actual place — narrated with the composure of someone who has carried it a while, not shouted.",
+            "Rhyme plain and grave: steady, unadorned end-rhyme that keeps the sorrow clear and singable; the drama comes from the events and the minor melody, not from clever turns.",
+            "The refrain is a settled lament: a short heavy line the low accordion echoes, returning richer as the verses deepen the loss — sung back, never chanted.",
+            "Point of view is first person carrying a weight: address to the one who left, or a reckoning said out loud to no one, plainspoken and heavy rather than theatrical.",
+            "Cross-genre firewall: the minor-key accordion basses leading a grave lament over the caja-and-guacharaca son pulse is what makes it vallenato and not bolero — bolero broods in orchestral rubato with strings and no scraper, where the son aches on the trio's steady low pulse with the accordion, not violins, carrying the sorrow."
+          ],
+          "rendering": "Minor-key vallenato accordion leading with its low bass reeds (bajos) answering the vocal darkly at every turn, caja vallenata soft and unhurried, guacharaca scraping a patient subdivision, upright bass low and warm, spare guitar. Grave, controlled lead vocal, more carried than belted, close and heavy; dry warm live-trio mix with real air around the lines, no synths, the low accordion out front.",
+          "storyFit": "Best for: desamor worn seriously, the woman who left, a grave loss, longing that has settled, an amor imposible mourned with composure, a heavy farewell. Poor fit: bright party energy (that is merengue vallenato), a brisk narrative walk (that is paseo), an instrumental showcase (that is puya), or any joy the minor aire cannot hold.",
+          "parodyTraps": "Spanish endearments or slang the user never wrote pasted in as flavor; postcard tropical romance with no real wound under it; filling the low accordion's answer gaps with words until the son cannot breathe; an over-belted or theatrical delivery that breaks the grave composure; forcing a major-key brightness the aire refuses.",
+          "performance": {
+            "prose": "Density sparse; min adlibs 2; delivery tags [Instrumental Break] [Harmonies] [Melancholy]. This room performs like a man carrying a settled sorrow to a quiet room — one grave lead voice and the low accordion answering him like a second mourner, no crowd and no hype. Signature: the bass-reed answer — the accordion's low bajos rise in the gap the phrasing leaves and echo the weight of the line, so the ache is stated twice, once in words and once in the dark reeds. Placement: the accordion basses answer at the phrase-ends the singer leaves open and own the [Instrumental Break] turnaround where the low reeds carry the grief alone; a thin harmony can shadow the refrain's last words at a peak; verses stay spacious so the sorrow reads. Tag identity: a grave solo voice and its answering low accordion — a bare harmony shadow on the refrain only, the bass reeds mourning in the holes, the break marked as its own low instrumental lament. No group, no party, no hype — one man, the trio breathing under him, and every sung word is plain language from the user's own sheet.",
+            "adlibDensity": "sparse",
+            "minAdlibs": 2,
+            "deliveryTags": [
+              "[Instrumental Break]",
+              "[Harmonies]",
+              "[Melancholy]"
+            ]
+          },
+          "builder": {
+            "instruments": [
+              "acordeón",
+              "caja vallenata",
+              "guacharaca",
+              "bajo",
+              "guitarra",
+              "coros"
+            ],
+            "themes": [
+              "Amor y despecho",
+              "La mujer que se fue",
+              "Amor imposible",
+              "Nostalgia del terruño"
+            ],
+            "purposes": [
+              "Llorar el desamor",
+              "Contar una vivencia",
+              "Recordar la tierra"
+            ]
+          }
+        },
+        {
+          "id": "merengue-vallenato",
+          "name": "Merengue Vallenato",
+          "oneLine": "The fast, lively aire for the parranda — a bouncing Colombian rhythm, not the Dominican merengue genre, where the words thin and the accordion dances its answer for the party.",
+          "tempoGroove": "90-120 BPM in a fast, bouncing 6/8 that swings — the Colombian merengue vallenato aire, distinct from Dominican merengue, driven by the caja's lively roll and the guacharaca's quick scrape while the accordion dances between lines. Word density is medium and light on its feet — the lilt must stay buoyant, so keep phrases short and springy and leave the accordion room to bounce its answer.",
+          "writingDials": [
+            "Keep it buoyant: the merengue vallenato aire swings in a fast 6/8, so write short springy phrases that ride the bounce and never clog it — a line too dense drags the lilt the aire is built for.",
+            "Write for the parranda: this is the celebratory, among-friends aire, so favor an upbeat vivencia, a warm boast, a courtship in good spirits, or the joy of the gathering itself over heavy sorrow.",
+            "The accordion dances its answer: leave the phrase-ends open for a quick lively fill and plan the turnaround where the accordion runs bright between verses — the response is part of the bounce.",
+            "Keep the story the user's own and specific, but lift its spirit: the real friends, the real town, the real occasion, carried at the pace of a party rather than a lament.",
+            "Rhyme clean and catchy: bright singable end-rhyme the group can catch and sing back, matched to the swing so the syllables land on the lilt.",
+            "The refrain is a raised, repeatable line: short and hooky enough for the parranda to lift on and the accordion to echo — if it could not be sung back over a lively floor, it is pitched wrong for this aire.",
+            "Point of view can widen to the gathering: first person among friends, a courtship in company, or a warm communal lift — but it stays a vallenato vivencia carried by the trio, not a generic party chant.",
+            "Cross-genre firewall: the fast Colombian 6/8 accordion-trio swing carrying a vivencia is what makes it merengue vallenato and not Dominican merengue — the Dominican genre is a different music entirely, saxophone-and-tambora at a straight fast clip; this is the vallenato aire on accordion, caja, and guacharaca, and the sheet keeps it there."
+          ],
+          "rendering": "Bright diatonic vallenato accordion dancing lively fills and answers, caja vallenata rolling a fast buoyant 6/8, guacharaca scraping a quick swing subdivision, bass bouncing underneath, guitar and coros lifting the refrain. Warm energetic lead vocal riding the swing with a two-voice harmony on the hook; lively live-parranda mix, accordion out front, no synths, unmistakably the Colombian aire.",
+          "storyFit": "Best for: a parranda among friends, an upbeat courtship, a warm boast or celebration, the joy of the gathering, a good-spirited vivencia. Poor fit: a grave lament (that is son), a slow narrative walk (that is paseo), an instrumental showcase (that is puya), or heavy sorrow the buoyant lilt cannot hold.",
+          "parodyTraps": "Writing it as Dominican merengue — a saxophone-and-tambora arrangement instead of the accordion trio; generated coastal slang the user never wrote; postcard party clichés instead of the real gathering; a dense lyric that clogs the bounce; a hook that behaves like a generic chant rather than a sung parranda refrain.",
+          "performance": {
+            "prose": "Density moderate; min adlibs 3; delivery tags [Instrumental Break] [Harmonies] [Shout]. This room performs like an accordion trio lifting a parranda — one warm energetic lead, a two-voice harmony on the refrain, and the accordion dancing the answer, with the players throwing joyful shouts across the swing. Signature: the danced accordion answer — the squeezebox bounces a bright fill into the gap at each phrase-end and a joyful shout from the players lands on the lift, the whole trio pushing each refrain. Placement: harmony voices thicken the refrain and the peaks; the accordion runs its lively fills in the line-end gaps and owns the [Instrumental Break] between verses; joyful shouts mark the big turns and the kick into the solo. Tag identity: a lead and a harmony partner over a dancing accordion — coros lifting the hook, the accordion bouncing in the holes, joyful shouts thrown by the players as release. Every shout is plain-English party energy, never a scripted foreign exclamation the user did not write.",
+            "adlibDensity": "moderate",
+            "minAdlibs": 3,
+            "deliveryTags": [
+              "[Instrumental Break]",
+              "[Harmonies]",
+              "[Shout]"
+            ]
+          },
+          "builder": {
+            "instruments": [
+              "acordeón",
+              "caja vallenata",
+              "guacharaca",
+              "bajo",
+              "guitarra",
+              "coros"
+            ],
+            "themes": [
+              "La parranda entre amigos",
+              "Amor y despecho",
+              "Vivencias y anécdotas",
+              "La tierra y el campo"
+            ],
+            "purposes": [
+              "Parrandear con los amigos",
+              "Enamorar",
+              "Contar una vivencia"
+            ]
+          }
+        },
+        {
+          "id": "puya",
+          "name": "Puya",
+          "oneLine": "The fastest aire — a driving instrumental showcase where the accordion and guacharaca run at full speed and the words thin to almost nothing, the trio's virtuosity on display.",
+          "tempoGroove": "130-170 BPM in a fast, hard-driving binary 2/4 (a rapid straight two — this is what separates the puya from the merengue vallenato's 6/8 swing), the oldest and most rhythmic of the aires — the guacharaca scrapes a rapid insistent pattern and the caja rolls fast while the accordion runs virtuosic lines almost continuously. Word density is low — the puya is carried by the playing, so keep the vocal spare and built around the instrumental runs, leaving long stretches for the accordion and scraper to take the song.",
+          "writingDials": [
+            "Write for the players, not the singer: the puya is an instrumental showcase, so keep the words few and pointed and plan long passages where the accordion and guacharaca run alone — the lyric frames the playing rather than filling over it.",
+            "Keep phrases short and rhythmic: what vocal there is rides the fast drive as another percussion line, so favor tight, punchy lines with mouth-feel over long sentences, and land them on the pulse.",
+            "Leave the showcase its room: mark the stretches where the vocal drops out entirely and the accordion takes a virtuosic run over the racing guacharaca — the instrumental break is the point of the aire, not a gap between verses.",
+            "Serve a spare, spirited vivencia or a boast if there are words at all: a fast bragging line, a snapshot of the region, a call to the players — kept light and few so the drive stays clear.",
+            "Rhyme tight and repetitive: short repeated end-sounds and a chantable fragment beat any elaborate scheme, because the words are a rhythmic accent, not a narrative.",
+            "Keep it the user's own and concrete: the real place or name in a spare fast line, never a generic party filler, and never invented scenery — the puya is brief, so every word must be true.",
+            "Point of view stays outward and energetic: a shout to the floor, pride in the playing, a snapshot — present-tense and spirited, never a slow inward confession the racing aire cannot hold.",
+            "Cross-genre firewall: the fast binary 2/4 drive carrying only a spare vocal is what makes it a puya and not a merengue vallenato — the merengue swings in a bouncing 6/8 with a sung parranda refrain out front, where the puya drives straight in two, thins the words to almost nothing, and hands the song to the trio's fastest playing."
+          ],
+          "rendering": "Virtuosic diatonic vallenato accordion running fast continuous lines, guacharaca scraping a rapid insistent pattern high in the mix, caja vallenata rolling a hard fast 2/4, bass driving underneath, coros shouting a short fragment. Spare energetic lead vocal used as an accent between long instrumental runs; hot live-trio mix built around the accordion showcase, no synths, the scraper and accordion out front.",
+          "storyFit": "Best for: an instrumental showcase, a fast spirited boast, pride in the playing or the region, a short punchy snapshot, a call to the floor. Poor fit: a long narrative (that is paseo), a grave lament (that is son), a sung party refrain out front (that is merengue vallenato), or anything that needs many words.",
+          "parodyTraps": "Cramming the puya with words until the instrumental showcase has no room; generated slang the user never wrote thrown in as filler; postcard scenery instead of a real fast detail; a slow inward lyric that fights the racing drive; burying the accordion-and-guacharaca run under nonstop vocals.",
+          "performance": {
+            "prose": "Density sparse; min adlibs 2; delivery tags [Instrumental Break] [Shout]. This room performs like a trio showing off at full speed — a spare lead used as an accent and the accordion and guacharaca running the song, with the players throwing shouts on the peaks. Signature: the instrumental run — the accordion tears a virtuosic line over the racing guacharaca while the vocal steps aside, and a joyful shout from the players kicks off or tops the run, the playing carrying most of the energy. Placement: the sparse vocal lands as short accents between passages; the [Instrumental Break] hands long stretches to the accordion and scraper; joyful shouts mark the peaks and the turns into each run. Tag identity: a fast trio and a spare accenting lead — the accordion and guacharaca running the song, coros shouting a short fragment, joyful shouts thrown by the players as release. Every shout is plain-English energy, never a scripted exclamation the user did not bring.",
+            "adlibDensity": "sparse",
+            "minAdlibs": 2,
+            "deliveryTags": [
+              "[Instrumental Break]",
+              "[Shout]"
+            ]
+          },
+          "builder": {
+            "instruments": [
+              "acordeón",
+              "caja vallenata",
+              "guacharaca",
+              "bajo",
+              "guitarra",
+              "coros"
+            ],
+            "themes": [
+              "La parranda entre amigos",
+              "Vivencias y anécdotas",
+              "La tierra y el campo",
+              "El río y el pueblo"
+            ],
+            "purposes": [
+              "Parrandear con los amigos",
+              "Contar una vivencia",
+              "Recordar la tierra"
+            ]
+          }
+        }
+      ],
+      "cues": [
+        {
+          "cue": "paseo",
+          "strength": "strong",
+          "roomId": "paseo"
+        },
+        {
+          "cue": "vivencia",
+          "strength": "strong",
+          "roomId": "paseo"
+        },
+        {
+          "cue": "contar una historia",
+          "strength": "strong",
+          "roomId": "paseo"
+        },
+        {
+          "cue": "amor",
+          "strength": "weak",
+          "roomId": "paseo"
+        },
+        {
+          "cue": "devoción",
+          "strength": "weak",
+          "roomId": "paseo"
+        },
+        {
+          "cue": "cortejo",
+          "strength": "weak",
+          "roomId": "paseo"
+        },
+        {
+          "cue": "el pueblo",
+          "strength": "weak",
+          "roomId": "paseo"
+        },
+        {
+          "cue": "el río",
+          "strength": "weak",
+          "roomId": "paseo"
+        },
+        {
+          "cue": "despedida",
+          "strength": "weak",
+          "roomId": "paseo"
+        },
+        {
+          "cue": "storytelling",
+          "strength": "weak",
+          "roomId": "paseo"
+        },
+        {
+          "cue": "son vallenato",
+          "strength": "strong",
+          "roomId": "son"
+        },
+        {
+          "cue": "desamor",
+          "strength": "strong",
+          "roomId": "son"
+        },
+        {
+          "cue": "la mujer que se fue",
+          "strength": "strong",
+          "roomId": "son"
+        },
+        {
+          "cue": "pena",
+          "strength": "weak",
+          "roomId": "son"
+        },
+        {
+          "cue": "tristeza",
+          "strength": "weak",
+          "roomId": "son"
+        },
+        {
+          "cue": "tono menor",
+          "strength": "weak",
+          "roomId": "son"
+        },
+        {
+          "cue": "pérdida",
+          "strength": "weak",
+          "roomId": "son"
+        },
+        {
+          "cue": "amor imposible",
+          "strength": "weak",
+          "roomId": "son"
+        },
+        {
+          "cue": "duelo",
+          "strength": "weak",
+          "roomId": "son"
+        },
+        {
+          "cue": "merengue vallenato",
+          "strength": "strong",
+          "roomId": "merengue-vallenato"
+        },
+        {
+          "cue": "parranda",
+          "strength": "strong",
+          "roomId": "merengue-vallenato"
+        },
+        {
+          "cue": "fiesta entre amigos",
+          "strength": "strong",
+          "roomId": "merengue-vallenato"
+        },
+        {
+          "cue": "rumba",
+          "strength": "weak",
+          "roomId": "merengue-vallenato"
+        },
+        {
+          "cue": "alegría",
+          "strength": "weak",
+          "roomId": "merengue-vallenato"
+        },
+        {
+          "cue": "celebración",
+          "strength": "weak",
+          "roomId": "merengue-vallenato"
+        },
+        {
+          "cue": "parrandear",
+          "strength": "weak",
+          "roomId": "merengue-vallenato"
+        },
+        {
+          "cue": "puya",
+          "strength": "strong",
+          "roomId": "puya"
+        },
+        {
+          "cue": "muestra del acordeón",
+          "strength": "strong",
+          "roomId": "puya"
+        },
+        {
+          "cue": "instrumental",
+          "strength": "strong",
+          "roomId": "puya"
+        },
+        {
+          "cue": "virtuosismo",
+          "strength": "weak",
+          "roomId": "puya"
+        },
+        {
+          "cue": "rápido",
+          "strength": "weak",
+          "roomId": "puya"
+        },
+        {
+          "cue": "acordeonero",
+          "strength": "weak",
+          "roomId": "puya"
+        }
+      ]
+    },
+    "mariachiranchera": {
+      "id": "mariachiranchera",
+      "name": "Mariachi / Ranchera",
+      "aliases": [
+        "mariachi",
+        "ranchera",
+        "rancheras",
+        "mariachi ranchera",
+        "bolero ranchero"
+      ],
+      "profileText": "A mariachi writer starts from one truth: this is emotional first-person song. The singer stands and declares a feeling straight from the chest — a love, a heartbreak, a pride, a defiance — and stays inside it to the last note. It is not a ballad that narrates someone else's story in the third person; that is the corrido's job, a separate genre. So the writing question is never what happened to them but what does this person feel, right now, out loud. Pride and pain are allowed to share one breath: even the drunk despecho keeps its dignity and never grovels. The wound is worn openly, the crack in the voice is the register, not a flaw — but the singer stays standing.\n\nThe second instinct is the ensemble as second voice. Trumpets, violins, vihuela, guitarrón, guitar, sometimes harp — the mariachi answers the singer at the turns and swells under the peaks, so the sheet is planned around its silences. End phrases a beat early and leave the gap where the trumpets and violins reply; a lyric packed wall-to-wall smothers the swell that defines the sound. The whole song is built to arrive at one held, swelling note where the ensemble lifts under a breaking voice — the final note is the event, so it gets room. Language stays plain and sturdy, clean end-rhyme the ear hears coming, because the honest word outranks the clever one and the feeling has to land, not the craft.\n\nThe rooms bend all of this. Ranchera stands and declares the feeling at full chest to the whole cantina, the voice breaking on purpose over a broad rubato pulse. Bolero ranchero lowers it to a confided croon for one beloved, slow and tender, the strings muted and warm. Son/huapango turns the feeling outward to a stamping room on a fast 6/8, the falsetto flying and the ensemble trading quick flourishes. The law above every dial is the same as everywhere: Spanish is the song's language, but slang, accent spellings, and sombrero-and-tequila costume appear only if the user wrote them. Craft words — grito, mariachi, huapango, son, vihuela, guitarrón, falsete — are the writer's tools, never the song's, and never enter the lyrics, adlibs, or render notes. The grito is legit released energy directed in plain English — a joyful, defiant shout — never a phonetic spelling, and the user's own people and places always outrank any stock fiesta scenery.",
+      "defaultRoomId": "ranchera",
+      "rooms": [
+        {
+          "id": "ranchera",
+          "name": "Ranchera",
+          "oneLine": "The José Alfredo Jiménez heart — a proud, wounded first-person feeling stood up and sung with the soul over full mariachi, the voice breaking on purpose.",
+          "tempoGroove": "Broad and unhurried, ~70-110 BPM in a walking 2/4 (the ranchera's home meter), or the swaying ¾ vals of the ranchera valseada, the guitarrón and vihuela laying a steady pulse the singer is free to pull against and hold — rubato at the phrase-ends is the whole point. Low-to-moderate word density: short declarative phrases with real air after them, because the trumpets and violins answer the voice at the turns and the singer needs room to swell and break.",
+          "writingDials": [
+            "Feeling first, not plot: this room does not narrate a story about someone — it stands up and declares one emotion straight from the chest (a heartbreak, a pride, a defiance) in the first person, and stays inside that feeling to the last note.",
+            "Wear it at full chest and let the voice break: ranchera is the undefended declaration — sung big, proud, and openly wounded at once; the crack in the voice is the register, not a flaw, so write peaks that earn a held, breaking note.",
+            "Leave the turns open for the ensemble: end phrases a beat early so the trumpets and violins can answer in the gap — a sheet packed wall-to-wall smothers the swell that defines the sound.",
+            "The hook is a declaration the room already feels: a short, plain phrase of roughly four to eight words, re-sung and gathering weight rather than resolving — a line a whole cantina could lift, stating the feeling flat and proud.",
+            "Pride and pain live together: even the drunk despecho keeps its dignity and its defiance — the singer is wounded but never grovels; write the ache and the pride in the same breath, one refusing to cancel the other.",
+            "Direct and plain: first person aimed at the one who left, at the room, or at fate itself; everyday words and clean, sturdy end-rhyme the ear hears coming beat any clever scheme — the honest word outranks the ornament.",
+            "Build to the last note: plan the whole song to arrive at one held, swelling peak where the trumpets and violins lift under a breaking voice — the final note is the event, so leave it room.",
+            "Cross-genre firewall: the full mariachi swell answering a proud, breaking first-person voice makes it ranchera, not a Regional Mexicano corrido — there is no accordion, no banda oom-pah, no narrated third-person story here; ranchera feels one emotion out loud where the corrido reports events, and the trumpets are mariachi, never a brass band."
+          ],
+          "rendering": "Full mariachi — bright paired trumpets and a violin section answering the vocal at the phrase-ends and swelling under the peaks, vihuela strumming the offbeat, guitarrón walking the deep bass, guitar filling the middle, optional harp runs. A single impassioned lead vocal pushed to the edge of breaking, rubato and free at the turns, minimal doubling, warm live-room sound; classic golden-age ranchera in the José Alfredo Jiménez and Vicente Fernández tradition.",
+          "storyFit": "Best for: heartbreak worn openly, drunken despecho with its dignity intact, defiant pride, love for the mother or the homeland, an amor eterno declared, the strength to carry on. Poor fit: a slow close-distance seduction — that is bolero ranchero; festive stamping celebration — that is son/huapango; a narrated third-person story of events, which belongs to a corrido, not here.",
+          "parodyTraps": "Any Spanish endearment or slang the writer sprinkled that the user never said; sombrero-and-tequila postcard clichés standing in for a real feeling; narrating a story where the room wants one declared emotion; making the hook clever instead of declarable; filling the ensemble's answer gaps with words; groveling with no pride left, when despecho here stays defiant.",
+          "performance": {
+            "prose": "Density moderate; min adlibs 4; delivery tags [Instrumental Break] [Harmonies] [Shout] [Melancholy]. This room performs like one proud voice testifying to a room that already feels it, the mariachi swelling behind — a single impassioned lead and the trumpets and violins answering as its second voice, no crowd stack. Signature: the grito — a joyful defiant shout thrown by the singer or the players at a peak or a turn, pure released energy directed in plain English, never a scripted foreign exclamation or phonetic spelling. Placement: the trumpet-and-violin answers land at the line-ends the voice leaves open, roughly one per turn through the verses; an [Instrumental Break] hands a stretch to the mariachi between verses; a grito tops the biggest peaks and the final held note, and a thin harmony can shadow the hook's last words. Tag identity: a lone proud lead and its answering mariachi — trumpets and violins swelling in the gaps, a bare harmony shadow on the hook only, a grito as released feeling at the peaks. No group chant, no club — one voice, the ensemble answering it, and every sung word is plain language from the user's own sheet.",
+            "adlibDensity": "moderate",
+            "minAdlibs": 4,
+            "deliveryTags": [
+              "[Instrumental Break]",
+              "[Harmonies]",
+              "[Shout]",
+              "[Melancholy]"
+            ]
+          },
+          "builder": {
+            "instruments": [
+              "trompetas",
+              "violines",
+              "vihuela",
+              "guitarrón",
+              "guitarra",
+              "arpa"
+            ],
+            "themes": [
+              "Amor y desamor",
+              "Borrachera de despecho",
+              "Orgullo mexicano",
+              "La madre y la familia",
+              "Traición",
+              "Fuerza para seguir"
+            ],
+            "purposes": [
+              "Cantar con el alma",
+              "Ahogar las penas",
+              "Honrar a alguien",
+              "Recordar la tierra"
+            ]
+          }
+        },
+        {
+          "id": "bolero-ranchero",
+          "name": "Bolero Ranchero",
+          "oneLine": "The slow romantic mariachi bolero — devotion and dedication sung close and tender over swaying strings, the ache lowered to a confided murmur.",
+          "tempoGroove": "Slow and swaying, ~60-90 BPM in the bolero's rocking pulse, the guitarrón and vihuela relaxed and rounded, the violins legato and the trumpets muted and warm rather than bright. Low word density with long breathed phrases and held open vowels; the singer croons close to the mic, so lines must leave room to soften, sustain, and slide into the strings' reply.",
+          "writingDials": [
+            "Keep the world close and tender: one beloved, one confided feeling — devotion, a dedication, longing, gratitude — sung at close distance, never widened to a standing cantina declaration; this room confides where ranchera proclaims.",
+            "Write for a crooner: end the feeling-lines on open vowels the voice can hold and slide, avoid hard consonant endings on the peaks, and let phrases trail so the violins and muted trumpet can answer warm underneath.",
+            "The romance is sincere and grand without shouting: bolero ranchero is unashamed devotion — write it earnest and heartfelt, the grandeur carried in the sweep of the strings and the held note, not in volume.",
+            "Sensuality is adult and suggested: one warm image that turns romantic on the second listen carries the heat — the closeness, a hand, a look from the user's own moment — never spelled out or made explicit.",
+            "The hook is a tender vow, not a chant: a short repeated promise or dedication aimed at one person, re-sung softer and closer each pass, intimate enough that a crowd would never shout it back.",
+            "Point of view is first person to a you who must feel like the real person from the user's story — one detail only the two of them would recognize keeps it off the greeting-card rack.",
+            "Let the strings carry the swell: plan the peak as a legato violin rise and a warm muted-trumpet answer under a held vocal, the ensemble breathing with the singer rather than punching against them.",
+            "Cross-genre firewall: the muted warm mariachi confiding under an intimate croon makes it bolero ranchero, not standing ranchera — here the ensemble sways and answers soft where ranchera swells and breaks big, and the coro-vow is a lover's private promise, never a cantina's proud declaration."
+          ],
+          "rendering": "Warm mariachi bolero — legato violin section and soft muted trumpets answering the vocal tenderly, vihuela and guitar strumming the gentle bolero rock, guitarrón rounding the low end, optional harp arpeggios and light air for intimacy. A smooth, controlled close-miked lead vocal with soft harmony doubles and a warm held sustain, polished and low; golden-age bolero ranchero in the tradition of the great mariachi romantic singers.",
+          "storyFit": "Best for: a love letter, an anniversary, a dedication to a partner, devotion through hard times, tender longing, an amor eterno confided. Poor fit: a proud standing despecho at full chest — that is ranchera; festive stamping celebration — that is son/huapango; protest, boasting, or party energy, which this hushed romantic room has no register for.",
+          "parodyTraps": "Machine-added Spanish pet names the user never wrote; running the seduction-cliché checklist instead of the couple's real details; getting explicit where the room insists on suggestion; a vow that behaves like a crowd chant instead of a private promise; strings-and-roses greeting-card lines with no specific real person in them; belting big where the room asks for a confided croon.",
+          "performance": {
+            "prose": "Density sparse; min adlibs 3; delivery tags [Soft] [Harmonies] [Crooning] [Romantic]. This room performs at close distance — one tender lead voice with soft harmony doubles and the muted mariachi confiding warm behind, nobody else in the room. Signature: the strings' warm answer — the legato violins and soft muted trumpet reply under the gap the phrasing leaves, close and unhurried, echoing the vow the way a body leans nearer, never a crowd. Placement: the floor of 3 sits where the closeness peaks — one soft harmony under the hook's last words, one warm string-and-trumpet answer where the phrase trails at the bridge, one held or hummed sustain in the outro; verses stay nearly bare so the breath carries them, and the strings can take a whole passage instead of any vocal show. Tag identity: an intimate solo voice with soft self-harmonies and a confiding muted mariachi — a breathed harmony on the vow, a warm sustained note saved for the closest moment, a [Soft] passage where the song pulls nearest. No crowd, no cantina swell — two people and a slow sway, every echoed word from the user's own sheet.",
+            "adlibDensity": "sparse",
+            "minAdlibs": 3,
+            "deliveryTags": [
+              "[Soft]",
+              "[Harmonies]",
+              "[Crooning]",
+              "[Romantic]"
+            ]
+          },
+          "builder": {
+            "instruments": [
+              "violines",
+              "trompetas",
+              "vihuela",
+              "guitarrón",
+              "guitarra",
+              "arpa"
+            ],
+            "themes": [
+              "Amor y desamor",
+              "Amor eterno",
+              "Nostalgia del pueblo",
+              "La madre y la familia"
+            ],
+            "purposes": [
+              "Dedicar a un amor",
+              "Cantar con el alma",
+              "Honrar a alguien",
+              "Recordar la tierra"
+            ]
+          }
+        },
+        {
+          "id": "son",
+          "name": "Son / Huapango",
+          "oneLine": "The festive, fast 6/8 lane — stamping feet, flying falsetto flourishes, and full mariachi celebration, the emotion turned outward to a joyful room.",
+          "tempoGroove": "Bright and fast, ~120-180 BPM in a driving 6/8 that cross-accents against 3/4 (the sesquiáltera lilt), the vihuela and guitarrón snapping the offbeat for stamping feet and the violins and trumpets trading quick figures. Moderate word density, rhythmic and springy: crisp phrases that ride the lilt and leave punch-and-answer gaps for the ensemble and the falsetto to flourish, never wall-to-wall.",
+          "writingDials": [
+            "Turn the feeling outward: this room celebrates to a room — joy, hometown pride, courtship, defiant high spirits — sung up and out for a floor that is stamping, where ranchera declares inward-facing pain and bolero confides; the energy points at the party.",
+            "Ride the 6/8 lilt: write springy, rhythmic phrases whose stresses lock to the cross-accented pulse so the words dance with the stamping — mouth-feel and bounce outrank long solemn lines here.",
+            "Leave gaps for the flourish: land a phrase, then leave a beat for the violin-and-trumpet figure or the falsetto leap to answer — the gap after the line is part of it, so end phrases open and never fill every beat.",
+            "Write the hook for lift, not lament: a short, bright, repeatable phrase the room can catch and answer, stated with a grin or a defiant tilt, gaining energy each return — if it could not be lifted over stamping feet, it is pitched wrong.",
+            "Court, boast, or celebrate plainly and specifically: keep the wit and the pride tied to the user's real people and place — a real town, a real name — never generic fiesta scenery, and let the falsetto flights carry the release the words leave open.",
+            "Keep the language plain and sturdy: clean end-rhyme that lands square with the stamp, everyday words, a clear line over a clever one — the drama is in the lift and the footwork, not in ornament.",
+            "Match the meter to the dance: the 6/8 huapango stamp is the body of this room, so pick the pulse first and write the syllable count to sit springy inside it rather than fighting it.",
+            "Cross-genre firewall: the fast 6/8 stamping lilt with the flying falsetto over full mariachi makes it son/huapango, not a banda fiesta or a norteño polka — there is no oom-pah wind band and no accordion two-step; the celebration rides violins, trumpets, vihuela, and guitarrón, and the signature release is the falsetto leap and the grito, never a brass-band fanfare."
+          ],
+          "rendering": "Bright fast mariachi son — violins and paired trumpets trading quick flourishes over a snapping vihuela and guitarrón driving the 6/8 sesquiáltera, guitar filling the middle, optional harp runs sparkling on top. An energetic lead vocal with soaring falsetto leaps and a two- or three-voice harmony catching the hook, joyful and forward, live plaza feel; festive son jalisciense and huapango in the full mariachi tradition.",
+          "storyFit": "Best for: celebration and fiesta, hometown and Mexican pride, courtship and flirtation, a wedding or a quinceañera, defiant high spirits, honoring someone with joy. Poor fit: a proud standing heartbreak at the mic — that is ranchera; a tender close dedication — that is bolero ranchero; quiet grief or slow reflection, which this stamping room has no patience for.",
+          "parodyTraps": "Fake regional slang or accent spelling the user never wrote; sombrero-and-tequila postcard fiesta clichés instead of the user's real town and people; a wall-to-wall lyric that leaves the violins and falsetto no room to flourish; solemn lament forced over a stamping 6/8; a hook too wordy for the room to catch; borrowed festive filler with no specific real detail under it.",
+          "performance": {
+            "prose": "Density moderate; min adlibs 4; delivery tags [Instrumental Break] [Harmonies] [Shout] [Call and Response]. This room performs like a full mariachi working a stamping floor — an energetic lead with a harmony chorus catching the hook, the violins and trumpets trading figures, and the players lifting each turn. Signature: the falsetto leap and the grito — the voice flies up into a bright falsetto flourish at the peaks and a joyful defiant shout tops the biggest turns, pure released energy directed in plain English, never a scripted foreign exclamation or phonetic spelling. Placement: the violin-and-trumpet flourishes fall in the gaps at phrase-ends where the vocal steps aside; an [Instrumental Break] hands a stretch to the ensemble between verses; a falsetto leap lifts the peaks and a grito tops the chorus and the biggest figures, harmony voices catching the hook. Tag identity: an energetic lead and a full mariachi celebrating — trumpets and violins trading in the gaps, a falsetto flourish and a grito as released joy at the peaks, a harmony chorus swelling on the hook. Every shout is energy in plain English, never a scripted exclamation the user did not write.",
+            "adlibDensity": "moderate",
+            "minAdlibs": 4,
+            "deliveryTags": [
+              "[Instrumental Break]",
+              "[Harmonies]",
+              "[Shout]",
+              "[Call and Response]"
+            ]
+          },
+          "builder": {
+            "instruments": [
+              "violines",
+              "trompetas",
+              "vihuela",
+              "guitarrón",
+              "guitarra",
+              "arpa"
+            ],
+            "themes": [
+              "Orgullo mexicano",
+              "Nostalgia del pueblo",
+              "La madre y la familia",
+              "Amor y desamor"
+            ],
+            "purposes": [
+              "Celebrar con mariachi",
+              "Cantar con el alma",
+              "Honrar a alguien",
+              "Recordar la tierra"
+            ]
+          }
+        }
+      ],
+      "cues": [
+        {
+          "cue": "ranchera",
+          "strength": "strong",
+          "roomId": "ranchera"
+        },
+        {
+          "cue": "josé alfredo jiménez",
+          "strength": "strong",
+          "roomId": "ranchera"
+        },
+        {
+          "cue": "vicente fernández",
+          "strength": "strong",
+          "roomId": "ranchera"
+        },
+        {
+          "cue": "despecho",
+          "strength": "weak",
+          "roomId": "ranchera"
+        },
+        {
+          "cue": "con el alma",
+          "strength": "weak",
+          "roomId": "ranchera"
+        },
+        {
+          "cue": "orgullo",
+          "strength": "weak",
+          "roomId": "ranchera"
+        },
+        {
+          "cue": "heartbreak",
+          "strength": "weak",
+          "roomId": "ranchera"
+        },
+        {
+          "cue": "borrachera",
+          "strength": "weak",
+          "roomId": "ranchera"
+        },
+        {
+          "cue": "bolero ranchero",
+          "strength": "strong",
+          "roomId": "bolero-ranchero"
+        },
+        {
+          "cue": "dedicatoria",
+          "strength": "strong",
+          "roomId": "bolero-ranchero"
+        },
+        {
+          "cue": "aniversario",
+          "strength": "strong",
+          "roomId": "bolero-ranchero"
+        },
+        {
+          "cue": "amor eterno",
+          "strength": "weak",
+          "roomId": "bolero-ranchero"
+        },
+        {
+          "cue": "romántico",
+          "strength": "weak",
+          "roomId": "bolero-ranchero"
+        },
+        {
+          "cue": "love letter",
+          "strength": "weak",
+          "roomId": "bolero-ranchero"
+        },
+        {
+          "cue": "devoción",
+          "strength": "weak",
+          "roomId": "bolero-ranchero"
+        },
+        {
+          "cue": "mi amor",
+          "strength": "weak",
+          "roomId": "bolero-ranchero"
+        },
+        {
+          "cue": "huapango",
+          "strength": "strong",
+          "roomId": "son"
+        },
+        {
+          "cue": "son jalisciense",
+          "strength": "strong",
+          "roomId": "son"
+        },
+        {
+          "cue": "falsete",
+          "strength": "strong",
+          "roomId": "son"
+        },
+        {
+          "cue": "fiesta",
+          "strength": "weak",
+          "roomId": "son"
+        },
+        {
+          "cue": "celebración",
+          "strength": "weak",
+          "roomId": "son"
+        },
+        {
+          "cue": "courtship",
+          "strength": "weak",
+          "roomId": "son"
+        },
+        {
+          "cue": "zapateado",
+          "strength": "weak",
+          "roomId": "son"
+        },
+        {
+          "cue": "pueblo",
+          "strength": "weak",
+          "roomId": "son"
+        }
+      ]
+    },
+    "baladabolero": {
+      "id": "baladabolero",
+      "name": "Balada / Bolero",
+      "aliases": [
+        "balada",
+        "bolero",
+        "balada romantica",
+        "balada romántica",
+        "bolero clasico",
+        "bolero clásico"
+      ],
+      "profileText": "A balada writer starts with a refusal: this music suggests and swells, it never dances. There is no clave, no dembow, no güira to answer to — instead there is rubato, the freedom to lean on a word and let a note ring, and the whole craft is built on space and dynamics rather than a groove. So the writing job is shaped by breath and arc before it is verbal: leave air after the lines, end feeling-phrases on open vowels a voice can hold, and plan where the emotion sits low and where it opens up. A balada packed wall-to-wall, with no room to hold a note or let the arrangement breathe, has failed before its first word is judged. The song always faces one person at close distance — a declaration, a plea, a farewell — and never widens to a crowd.\n\nThe emotional root the genre carries is romantic feeling worn without irony — eternal love, heartbreak, longing, remembrance — and the three rooms wear it three different ways, so choosing the room is choosing the scale of the feeling and how the emotion is delivered. Bolero Clásico holds it with dignity: two or three players in a small room, the requinto guitar answering as a second voice, poetic and formal diction, devotion or heartbreak stated with old-world restraint and never wailed. Balada Romántica lets it overflow: a lone voice climbing a piano-and-strings arrangement from a hushed verse to a chorus that breaks wide open — the Camilo Sesto and Rocío Dúrcal power ballad, built on its dynamic arc, grand and unashamed at the peaks. Bolero Moderno / Balada Pop underplays it: the same rubato heart produced spare and current, conversational and understated, a small swell reading as large. Same feeling; different scale, different restraint kept.\n\nThe law above every dial is language. Spanish is the song's native tongue here — the lyrics are written in Spanish by a later layer — but the writer works in plain English craft instruction and never invents endearments, slang, or accent flavor to costume the song; only words the user wrote survive, and identity is carried by rubato, restraint, and the arc of the feeling, never by sprinkled vocabulary. Craft terms the writer thinks with — requinto, rubato, the swell, the trio — are working vocabulary and stay out of the lyrics, adlibs, and render notes unless the user wrote them first. And the postcard is not a bolero: generic Latin-lover romance, roses, and moonlight are the greeting-card parody the founder rejects; the user's own name, parting, and promise are the song.",
+      "defaultRoomId": "bolero-cl-sico",
+      "rooms": [
+        {
+          "id": "bolero-cl-sico",
+          "name": "Bolero Clásico",
+          "oneLine": "The classic guitar-trio and requinto romantic bolero — the Los Panchos feel, intimate and formal, two or three players in a small room and the lead guitar crying back at every line.",
+          "tempoGroove": "60-90 BPM, slow and rubato at the edges, a small acoustic trio breathing with the singer rather than a fixed dance pulse — the bolero suggests and never marches, so there is no danceable groove to lock to. Low-to-medium word density: short, poetic, breathing phrases with real air after them, because the requinto answers the voice at the end of nearly every line and the singer needs room to let a held note ring.",
+          "writingDials": [
+            "Requinto as second voice: the lead nylon-string guitar answers the singer in the gap at line-ends and takes a delicate solo turnaround — write phrases that end early and hand off, and plan the instrumental break where the requinto sings alone; a sheet packed wall-to-wall silences the instrument that defines the room.",
+            "Feeling held with dignity: this is devotion or heartbreak worn with old-world restraint, not wailed — the emotion is enormous but the delivery is composed and formal, so understatement and a poised line carry further than any collapse.",
+            "Poetic, elevated register: the bolero tradition writes in imagery and a slightly formal, timeless diction — metaphor over blunt statement, the beloved addressed with reverence, so favor the graceful figure over the plain report.",
+            "Direct address to one person, present and close: first person to a you at intimate distance — a declaration, a plea, a farewell said face to face — never widened to a crowd, never a public scene.",
+            "Rhyme clean and singable: the classic bolero leans on graceful perfect or near-perfect rhyme that a voice can hold, often in couplets — the craft is elegant but never showy, the sung line always winning over the clever one.",
+            "The chorus is a returning vow, not a shout: a short melodic phrase re-sung with the same tenderness each pass, deepening rather than escalating — this room does not build to a belt, it circles a single held feeling.",
+            "Keep the story specific to the user's own life inside the poetry — the real name, the real parting, the real promise — so the elevated diction dresses a true wound and never floats into greeting-card abstraction.",
+            "Cross-genre firewall: the rubato acoustic trio with the requinto crying its tender fill in the gaps makes it a bolero, not a bachata — there is no güira scraping sixteenths and no bongó driving a danceable lilt under it, and the requinto here is a gentle answering voice, never bachata's driving answer-machine over a dance groove."
+          ],
+          "rendering": "Spare romantic trio — warm nylon-string requinto answering the vocal with delicate crying runs and a solo turnaround, a second rhythm guitar (guitarra española) strumming softly, upright bass walking gentle underneath, brushed or barely-there soft percussion holding the rubato. Intimate close-miked lead vocal, tender and dignified, sometimes a single close harmony voice; dry, warm, vintage bolero room with real air around everything, no orchestral wall and no dance drums — 1950s-through-70s Los Panchos trio feel.",
+          "storyFit": "Best for: a timeless declaration of eternal love, a dignified heartbreak, a formal farewell, longing worn with restraint, a serenade to one person, remembering a great love with grace. Poor fit: a huge overflowing power-ballad climax — that is Romántica; a stripped modern conversational intimacy — that is Moderno; anything danceable, communal, or plainspoken-casual, which this poised trio has no register for.",
+          "parodyTraps": "Any Spanish endearment or slang the writer sprinkled that the user never said; generic Latin-lover postcard romance with no real wound under it; filling the requinto's answer gaps with words; a belted, escalating delivery that breaks the room's composure; modern casual diction that flattens the elevated bolero voice; a güira or dance groove pasted under it, which turns it into bachata.",
+          "performance": {
+            "prose": "Density sparse; min adlibs 2; delivery tags [Guitar Solo] [Harmonies] [Soft] [Melancholy]. This room performs like two or three players close together in a small room — one dignified lead voice, sometimes a single warm harmony, and the requinto as the answering partner, no crowd and no wall of sound. Signature: the requinto answer — the lead nylon-string guitar cries a tender reply into the space the phrasing leaves at line-ends and takes a delicate solo turnaround between verses, the whole trio breathing with the singer. Placement: a single harmony voice slips in on the emotional peaks only; the requinto fills the gaps the sparse writing leaves and owns the [Guitar Solo] turnaround; verses stay nearly bare so the closeness and the poetry read, and the final line holds soft rather than loud. Tag identity: a small acoustic trio and an intimate dignified lead — the requinto answering in the holes as a second mourner, an occasional close harmony at the peaks, a [Soft] header where the song pulls nearest. No crowd, no orchestral swell, no belt — a few players and the air between them, and every sung word is plain language from the user's own sheet.",
+            "adlibDensity": "sparse",
+            "minAdlibs": 2,
+            "deliveryTags": [
+              "[Guitar Solo]",
+              "[Harmonies]",
+              "[Soft]",
+              "[Melancholy]"
+            ]
+          },
+          "builder": {
+            "instruments": [
+              "requinto",
+              "guitarra española",
+              "contrabajo",
+              "percusión suave",
+              "bajo"
+            ],
+            "themes": [
+              "Amor eterno",
+              "Recuerdos de un gran amor",
+              "Amor prohibido",
+              "Nostalgia",
+              "Entrega total al amor"
+            ],
+            "purposes": [
+              "Dedicar a un amor",
+              "Enamorar despacio",
+              "Recordar a alguien"
+            ]
+          }
+        },
+        {
+          "id": "balada-rom-ntica",
+          "name": "Balada Romántica",
+          "oneLine": "The 70s-through-90s piano-and-strings power ballad — the Camilo Sesto and Rocío Dúrcal lane, a lone voice climbing from a hushed verse to a chorus that breaks wide open and overflows.",
+          "tempoGroove": "55-80 BPM, slow and free, built on rubato and a dynamic arc rather than a dance pulse — the arrangement swells, it does not groove. Low word density in the verse rising to fuller phrases at the peak: leave open vowels at line-ends the voice can hold, stretch, and belt, because this room is sung for maximum dynamic range and every big line must land on a note the singer can pour out.",
+          "writingDials": [
+            "Write the climb: the song lives on its dynamic arc — a hushed, close verse that opens into an enormous chorus and a bridge that lifts higher still — so structure the lyric to start small and restrained and to break open exactly at the chorus, the emotion escalating with the arrangement.",
+            "Let the feeling overflow: where Clásico holds the wound with dignity, Romántica lets it pour — the chorus is an unguarded, full-chested outpouring, so the big lines are allowed to be grand, direct, and unashamedly emotional.",
+            "The verse advances, the chorus detonates: verse two must move the story of these two people forward — an answer, a memory, a turn — while the chorus stays the fixed emotional headline the whole song has been climbing toward and returns to intact.",
+            "Write for a belter on the peaks: end the chorus and bridge feeling-lines on open, held vowels a big voice can sustain and swell; avoid hard consonant endings on the climaxes where the singer needs to open the throat and let go.",
+            "The bridge is the highest window: plan a bridge that shifts the angle or raises the stakes and sets up the final, biggest chorus — often a key change or the loudest lift of the song, so write it to reach past everything before it.",
+            "Rhyme full and satisfying: clean, resolved perfect rhyme that the ear hears coming and that lands square on the big beats — this is not the room for slant subtlety, the rhyme should feel as sure as the swell.",
+            "Keep one true, specific image at the center of the user's own story so the grandeur has something real to be grand about — the actual person, the actual loss — because a huge chorus wrapped around a generic abstraction is exactly how this room becomes a parody.",
+            "Cross-genre firewall: the swelling piano-and-strings arrangement carrying a lone voice up a dynamic arc from murmur to belt makes it a balada, not a bolero trio or a bachata — there is no requinto running call-and-answer as a second voice and no dance groove under it; the drama comes from orchestral dynamics and one singer opening up, not from a guitar answering or a floor to move."
+          ],
+          "rendering": "Grand romantic ballad — piano leading the harmony, a lush string section swelling underneath and blooming at the chorus, warm bass, tasteful soft drums entering to lift the big sections, occasional acoustic guitar color. Emotive lead vocal with a wide dynamic range, intimate and restrained in the verses and belting open on the choruses, backed by soaring harmony stacks at the peaks and a possible key change into the final chorus; polished, cinematic, 1970s-through-90s Spanish-language power-ballad production.",
+          "storyFit": "Best for: a grand declaration of eternal love, a devastating heartbreak, an overwhelming longing, an apology poured out, a love worth a stadium-sized chorus, missing someone with everything. Poor fit: an intimate poised trio confession — that is Clásico; an understated modern conversational ballad — that is Moderno; anything danceable, casual, or emotionally guarded, which this overflowing room cannot hold.",
+          "parodyTraps": "Machine-added Spanish pet names the user never wrote; running the seduction-or-heartbreak cliche checklist instead of the couple's real details; a huge chorus wrapped around a generic abstraction with no specific person in it; a flat, even delivery that refuses the climb the whole room is built on; keeping a dignified restraint where the chorus is supposed to break open; strings-and-roses greeting-card grandeur with no true wound under it.",
+          "performance": {
+            "prose": "Density moderate; min adlibs 3; delivery tags [Harmonies] [Belt] [Key Change] [Emotional]. This room performs like one big voice climbing an orchestral swell — a solo lead carrying a wide dynamic arc, with harmony stacks arriving to lift the biggest moments, no crowd and no call-and-answer partner. Signature: the swell answered — the arrangement and the harmony stacks bloom underneath the voice as it opens up, so the peak lines are lifted by strings and stacked voices rather than by any traded response, the same chorus landing bigger each return. Placement: verses stay bare and close so the restraint reads, the first big harmony stack arrives on the first full chorus, the [Belt] lands where the voice finally lets go, and a [Key Change] can lift the final chorus higher than everything before it. Tag identity: a solo belter and a blooming orchestra — harmony stacks swelling on the choruses, a held belted peak where the feeling overflows, a key change reserved for the last chorus. No trio trade, no dance floor — one voice and the swell behind it, and every sung word is plain language from the user's own sheet.",
+            "adlibDensity": "moderate",
+            "minAdlibs": 3,
+            "deliveryTags": [
+              "[Harmonies]",
+              "[Belt]",
+              "[Key Change]",
+              "[Emotional]"
+            ]
+          },
+          "builder": {
+            "instruments": [
+              "piano",
+              "cuerdas",
+              "bajo",
+              "percusión suave",
+              "guitarra española"
+            ],
+            "themes": [
+              "Amor eterno",
+              "Desamor y pérdida",
+              "Soledad",
+              "Arrepentimiento",
+              "Entrega total al amor"
+            ],
+            "purposes": [
+              "Dedicar a un amor",
+              "Llorar la pérdida",
+              "Pedir perdón"
+            ]
+          }
+        },
+        {
+          "id": "bolero-moderno",
+          "name": "Bolero Moderno / Balada Pop",
+          "oneLine": "The contemporary romantic ballad — the rubato bolero heart produced clean and current, sparser and more conversational, a plain modern line trusted over any grand gesture.",
+          "tempoGroove": "60-85 BPM, still rubato and free with no dance pulse, but built on a spare modern frame — often just piano or a lone guitar with subtle contemporary production, a small swell reading as large because so little sits around it. Low word density with a conversational, understated shape: leave air and let the plain lines breathe, because the room trusts intimacy and restraint over density or a big arrangement.",
+          "writingDials": [
+            "Underplay it: this room states the feeling plainly and close, conversational rather than grand or poetic — trust a simple, true modern line over an elevated figure or an overflowing chorus, and let the restraint itself carry the weight.",
+            "Keep the frame spare: write for piano or a single guitar with room around it, so the words are exposed and every one has to be honest — one real, understated image outweighs any ornament here.",
+            "A small swell reads as large: the room can lift, but subtly — a modest rise into the chorus lands big precisely because the verses stayed so bare, so plan a gentle build rather than a stadium climax.",
+            "Modern, natural diction: contemporary everyday language sung close to speech, sincere and unironic — this is the bolero feeling in a current voice, so avoid both the archaic formality of Clásico and the belted grandeur of Romántica.",
+            "Direct and present to one person: first person to a you at close conversational distance, saying the true thing simply — a plain confession, a quiet apology, a real goodbye, none of it dressed up.",
+            "The hook is an understated returning line: a short, plain, memorable phrase re-sung with quiet feeling, deepening on each return rather than escalating — intimate, never a crowd chant or a belted climax.",
+            "Anchor it in one specific, real detail from the user's own story so the modern plainness stays intimate and true and never slides into a faceless, generic contemporary ballad.",
+            "Cross-genre firewall: the rubato ballad with no dance groove, produced spare and modern around the voice, makes it a bolero-descended balada, not a bachata or reggaeton — there is no güira, no bongó, and no dembow boom-chick under it; if a dance groove appears, the room is gone, because this lane suggests and breathes and never moves a floor."
+          ],
+          "rendering": "Clean contemporary ballad — intimate piano or a single warm guitar leading, spare and modern, with subtle pads, light room, and maybe a soft understated beat or brushed percussion entering low; restrained modern bass. Close, natural lead vocal sung near to speech with tasteful light harmonies and a controlled, unforced delivery, a small dynamic lift into the chorus rather than a belt; polished, current, minimal production — the modern romantic-ballad sound, warm and uncluttered.",
+          "storyFit": "Best for: a quiet contemporary love song, an understated heartbreak, a plain honest apology, a modern devotion, missing someone said simply, a real goodbye at close distance. Poor fit: an ornate formal trio bolero — that is Clásico; a huge overflowing power-ballad climax — that is Romántica; anything danceable, communal, or grand, which this spare modern room deliberately refuses.",
+          "parodyTraps": "Sprinkled Spanish phrases the user never wrote; a plain line mistaken for a lazy one — understatement still needs one true, specific detail; over-producing the spare frame until the intimacy is gone; forcing a belted climax the room is built to avoid; borrowing a famous ballad hook the user's story never contained; a faceless generic modern-ballad mood with no real person in it.",
+          "performance": {
+            "prose": "Density sparse; min adlibs 2; delivery tags [Soft] [Harmonies] [Intimate] [Emotional]. This room performs at close conversational distance — one natural, understated lead voice with tasteful light harmonies, a spare modern frame around it, no crowd, no belt, and no answering partner. Signature: the intimate lift — the voice stays close and plain and the arrangement gives a small, subtle swell into the chorus, so a modest rise reads as large against verses that stayed nearly bare, the understated hook deepening each return. Placement: verses sit almost unadorned so the plainness carries them; a light harmony double slips under the hook's last words, a soft header marks the closest moment, and the small lift into the final chorus is the biggest the song ever gets. Tag identity: an intimate modern lead with light self-harmonies — a soft harmony shadow on the hook, an [Intimate] header where the song pulls nearest, one gentle lift saved for the last chorus. No trio trade, no orchestral wall, no dance floor — one close voice and a spare frame, and every sung word is plain language from the user's own sheet.",
+            "adlibDensity": "sparse",
+            "minAdlibs": 2,
+            "deliveryTags": [
+              "[Soft]",
+              "[Harmonies]",
+              "[Intimate]",
+              "[Emotional]"
+            ]
+          },
+          "builder": {
+            "instruments": [
+              "piano",
+              "guitarra española",
+              "requinto",
+              "bajo",
+              "percusión suave"
+            ],
+            "themes": [
+              "Desamor y pérdida",
+              "Nostalgia",
+              "Soledad",
+              "Arrepentimiento",
+              "Recuerdos de un gran amor"
+            ],
+            "purposes": [
+              "Enamorar despacio",
+              "Recordar a alguien",
+              "Pedir perdón"
+            ]
+          }
+        }
+      ],
+      "cues": [
+        {
+          "cue": "bolero",
+          "strength": "strong",
+          "roomId": "bolero-cl-sico"
+        },
+        {
+          "cue": "trío",
+          "strength": "strong",
+          "roomId": "bolero-cl-sico"
+        },
+        {
+          "cue": "requinto",
+          "strength": "strong",
+          "roomId": "bolero-cl-sico"
+        },
+        {
+          "cue": "los panchos",
+          "strength": "strong",
+          "roomId": "bolero-cl-sico"
+        },
+        {
+          "cue": "amor eterno",
+          "strength": "weak",
+          "roomId": "bolero-cl-sico"
+        },
+        {
+          "cue": "serenata",
+          "strength": "weak",
+          "roomId": "bolero-cl-sico"
+        },
+        {
+          "cue": "romántico",
+          "strength": "weak",
+          "roomId": "bolero-cl-sico"
+        },
+        {
+          "cue": "despedida",
+          "strength": "weak",
+          "roomId": "bolero-cl-sico"
+        },
+        {
+          "cue": "nostalgia",
+          "strength": "weak",
+          "roomId": "bolero-cl-sico"
+        },
+        {
+          "cue": "balada",
+          "strength": "strong",
+          "roomId": "balada-rom-ntica"
+        },
+        {
+          "cue": "power ballad",
+          "strength": "strong",
+          "roomId": "balada-rom-ntica"
+        },
+        {
+          "cue": "camilo sesto",
+          "strength": "strong",
+          "roomId": "balada-rom-ntica"
+        },
+        {
+          "cue": "rocío dúrcal",
+          "strength": "strong",
+          "roomId": "balada-rom-ntica"
+        },
+        {
+          "cue": "juan gabriel",
+          "strength": "strong",
+          "roomId": "balada-rom-ntica"
+        },
+        {
+          "cue": "desamor",
+          "strength": "weak",
+          "roomId": "balada-rom-ntica"
+        },
+        {
+          "cue": "heartbreak",
+          "strength": "weak",
+          "roomId": "balada-rom-ntica"
+        },
+        {
+          "cue": "llorar",
+          "strength": "weak",
+          "roomId": "balada-rom-ntica"
+        },
+        {
+          "cue": "pedir perdón",
+          "strength": "weak",
+          "roomId": "balada-rom-ntica"
+        },
+        {
+          "cue": "balada pop",
+          "strength": "strong",
+          "roomId": "bolero-moderno"
+        },
+        {
+          "cue": "bolero moderno",
+          "strength": "strong",
+          "roomId": "bolero-moderno"
+        },
+        {
+          "cue": "acústico",
+          "strength": "strong",
+          "roomId": "bolero-moderno"
+        },
+        {
+          "cue": "modern ballad",
+          "strength": "weak",
+          "roomId": "bolero-moderno"
+        },
+        {
+          "cue": "stripped",
+          "strength": "weak",
+          "roomId": "bolero-moderno"
+        },
+        {
+          "cue": "íntimo",
+          "strength": "weak",
+          "roomId": "bolero-moderno"
+        },
+        {
+          "cue": "contemporáneo",
+          "strength": "weak",
+          "roomId": "bolero-moderno"
+        }
+      ]
+    },
+    "poplatino": {
+      "id": "poplatino",
+      "name": "Pop Latino",
+      "aliases": [
+        "latin pop",
+        "pop en español",
+        "pop en espanol"
+      ],
+      "profileText": "A pop latino writer starts from the chorus, because the coro is the event — the singalong a room already knows by the second pass, the thing the whole song is built to arrive at. Melody and hook come first; the verses exist to load the coro and pay it off, and a song whose chorus is not the high point of the writing has missed the genre before a word is judged. So the writing job is to protect the arrival: keep the verses lean enough to lift, leave the peak open enough to sing, and make the hook land as something you catch, not a sentence you decode.\n\nThe room is how the coro arrives, and choosing it is choosing the temperature of the story. Pop Latino Radial runs bright and up-tempo and lands the feeling on a group singalong at the top of the chorus. Balada Pop drops to mid-tempo, drives on piano, and lets one held note carry an empowerment or a heartbreak that climbs. Pop Urbano rides a leaning, off-the-beat groove with an 808 kept as flavor and lands the hook in the pocket, teased by a second voice. That one choice moves more dials than any other — tempo, word density, what carries the track, and who sings the chorus back — and topic alone can never pick it, because love, heartbreak turned to strength, summer, and missing someone run through all three.\n\nThe law above every dial is the voice. The lyrics are written in Spanish by the language layer later; this page writes craft in English and never fakes the flavor. Slang, endearments, and accent spellings appear only if the user wrote them in their own story — in the lyrics, adlibs, delivery directions, and render notes alike — and the Latin flavor is carried by melody, the leaning phrasing, and the groove, never by sprinkled vocabulary. The craft terms these pages teach with — coro, hook, dembow, urbano, singalong, half-time — are the writer's working tools, never the song's, and delivery is directed as energy, register, and phrasing in plain English, never as an accent or a nationality. And the postcard is not pop latino: beaches, palm trees, cocktails, and the Latin-lover cliché are the tourist parody the founder rejects — the user's own street, summer, person, and want are the song. Every dial bends to the user's story; none may change what it is about.",
+      "defaultRoomId": "pop-latino-radial",
+      "rooms": [
+        {
+          "id": "pop-latino-radial",
+          "name": "Pop Latino Radial",
+          "oneLine": "The mainstream radio lane — bright, up-tempo, and built so a room sings the coro back on the first pass.",
+          "tempoGroove": "100-120 BPM, a driving pop kit with the kick pushing the song forward and a straight-to-lightly-syncopated feel, bright and open. Low-to-medium word density: verses stay lean and the chorus leaner, short phrases with real air so the singalong lands clean and a crowd can catch it fast.",
+          "writingDials": [
+            "The chorus is the whole event: write it to be singable after one hearing, the title landing at or near the top of the coro so the room knows where to come in — announced, gathered into, never buried.",
+            "Phrases run short and open with gaps the melody rings through; a single repeated word or a short vocal shape can legitimately be a whole line in the coro, because the hook is a thing you sing along to, not a sentence you decode.",
+            "The pre-chorus is a lift: lines shorten and the pace quickens as it climbs so the body feels the coro coming — a ramp, not a new plot beat.",
+            "Rhyme is clean and mostly perfect, landing on open vowels the mouth catches easily at speed; clever slant rhyme reads as drag in a lane built for the first-listen singalong.",
+            "Lean verses still carry the real story: verse one names the actual who and where from the user's own life in a handful of words, verse two adds what changed — a next step, a turn — never verse one reshuffled. Compression keeps the strongest details, it does not delete them; a verse thinner than the chorus has starved the song.",
+            "The song stands on one real thing from the user's story — the specific street, the specific song on the radio, the specific summer — and the bright feeling attaches to it; a coro of floating feeling-words with nothing under it is this lane's exact parody.",
+            "Plan the post-chorus payoff: one short vocal idea or a wordless singable shape decided at the writing stage, bigger each return, so the drop has a hook on it and is not left to production.",
+            "Point of view is first person to a you who is present and named in the writer's mind; direct address and simple bright verbs feel natural — draw the verb type from the user's own story, never a stock list.",
+            "Cross-genre firewall: the bright driving pop kit and a group singalong coro make it Radial, not Pop Urbano — Radial rides square-to-light on a pop drum, where Pop Urbano leans off the beat over a softened urbano bounce with an 808 under it; if the groove starts to grind and lean, the room has moved."
+          ],
+          "rendering": "Driving pop kit with a pushing kick, bright layered synthesizers and plucked hooks, piano under the chords, palmas lifting the choruses, light percusión latina warming the groove. Polished melodic lead with tight doubles and a full stack of coros on the chorus and post-chorus; modern crossover radio-pop sheen, bright and wide, 2010s to now.",
+          "storyFit": "Best for: singalong celebrations, new love and summer highs, confidence anthems, friendship, freedom — anything bright a room can shout back. Poor fit: heavy grief or ceremony that needs a held note and space to swell, which belongs to Balada Pop; a sensual leaning slow-groove moment, which is Pop Urbano.",
+          "parodyTraps": "Cramming a full timeline into the verses; stacking generic party-scene props instead of the user's real moment; a coro of long clever sentences that dies of cleverness; forgetting the post-chorus so the drop lands with no vocal hook; any Spanish slang or endearment the user never wrote pasted on as flavor.",
+          "performance": {
+            "prose": "Density heavy; min adlibs 6; delivery tags [Build Up] [Drop] [Harmonies] [Post-Chorus]. This room performs like the whole radio singing at once — one polished lead riding the beat while a bright stack of coros waits for the hook to arrive. Signature: the singalong stack — the coro lands with the full stack singing the short lines together, then the post-chorus pays off into the one planned vocal idea, gathering voices and getting bigger on every return. Placement: verses stay clean and nearly bare, at most one echoed word, so the stack hits harder when it arrives; a [Build Up] header frames every chorus lift and a [Drop] or [Post-Chorus] header frames the payoff; the floor of 6 is met on hooks and post-choruses alone — stack echoes of the title, palmas direction lines, one short group shout — never by decorating the verses. Tag identity: a polished lead plus a bright singalong stack — sung stacked coros on every chorus line, palmas direction lines, stack echoes of the title on the post-chorus, one crowd singalong at the final coro. The stack sings tuned and bright, the verses belong to one voice, and every sung word is plain language from the user's own sheet.",
+            "adlibDensity": "heavy",
+            "minAdlibs": 6,
+            "deliveryTags": [
+              "[Build Up]",
+              "[Drop]",
+              "[Harmonies]",
+              "[Post-Chorus]"
+            ]
+          },
+          "builder": {
+            "instruments": [
+              "sintetizadores brillantes",
+              "batería pop",
+              "piano",
+              "palmas",
+              "percusión latina",
+              "coros"
+            ],
+            "themes": [
+              "Amor nuevo",
+              "Amor de verano",
+              "Sentirse libre",
+              "Amistad"
+            ],
+            "purposes": [
+              "Cantar a coro",
+              "Celebrar",
+              "Enamorar"
+            ]
+          }
+        },
+        {
+          "id": "balada-pop",
+          "name": "Balada Pop",
+          "oneLine": "The emotional mid-tempo lane — piano-driven, built to swell, where empowerment and heartbreak both climb to a held note.",
+          "tempoGroove": "72-92 BPM, straight feel or a gentle sway, drums often entering late and in half-time so the arrival feels bigger. Moderate word density: the slower tempo buys longer lines, but the peak moments stay open so the singer can hold and bend a note.",
+          "writingDials": [
+            "The chorus is still the event, but the title leans toward landing on the held peak — earned by the lines before it — where Radial announces it up front; if the user's own key phrase wants to open the coro, let it lead, so long as it feels arrived at, not chanted.",
+            "Verses are storytelling rooms: fuller sentences, longer lines, more concrete detail from the user's story than the bright lane allows — the swell only earns its size if each verse buys it new meaning.",
+            "Verse two is the second act: a new scene or a new understanding, never verse one slowed down; a ballad whose second verse only re-feels the first has no arc to climb.",
+            "The pre-chorus works emotionally, not physically: it names the stakes and often goes quieter, instruments dropping out rather than piling on, so the coro can bloom.",
+            "Dynamics are the architecture: verse one nearly spoken, chorus one restrained, final chorus wide open — write coro lines that survive being sung both whispered and huge, because they will be.",
+            "The bridge is load-bearing: the confession, the decision, the turn toward strength lives there; a bridge that only restates the chorus louder is a loop, not a journey — and empowerment especially needs the bridge where the singer chooses herself.",
+            "Plan the money note: end the key coro lines on open vowels the singer will hold for bars, and do not pack the peak so full of syllables that there is no room to hold and bend.",
+            "Keep the big feeling tied to one thing you could photograph from the user's story — the specific door, the ring, the letter — because sky-and-weather abstraction is the greeting-card failure this lane slides into fastest, and here it is forbidden, not just discouraged.",
+            "Cross-genre firewall: the piano foundation and a lead that swells alone to a held note make it Balada Pop, not the orchestral rubato bolero — this room is contemporary and hook-driven, the coro a modern singable event on a steady mid-tempo pulse, never a free-time bolero with a guitar and no chorus to build to."
+          ],
+          "rendering": "Piano foundation carrying the chords, guitarra eléctrica arriving clean for color, swelling strings or warm pads by the second chorus, batería pop entering late with big half-time weight. Intimate close-mic lead early, stacked coros as harmonies late, and optionally a final-chorus key lift; timeless adult crossover-pop palette, 90s-diva-ballad warmth through modern piano-pop.",
+          "storyFit": "Best for: love declarations, empowerment and self-worth, heartbreak and getting over a rupture, missing someone, tributes and anniversaries — any heavy or rising feeling that wants a held-note climb. Poor fit: bright party energy and casual fun, which belong to Radial; a sensual slow-groove sway, which is Pop Urbano.",
+          "parodyTraps": "Every line at maximum emotion so there is no arc left to climb; greeting-card abstractions replacing the user's one concrete scene; a bridge that adds volume but no new information or no real turn; burying the held-note moments under piles of syllables; sprinkled Spanish endearments the user never wrote.",
+          "performance": {
+            "prose": "Density sparse; min adlibs 3; delivery tags [Soft] [Belting] [Harmonies] [Crescendo] [Big Finish]. This room performs like one voice in a big quiet space that slowly fills — the drama is one singer and how much air she finally takes up. Signature: the staged swell — verse one nearly spoken and bare, harmony coros arriving soft under chorus two, then the final chorus opening wide as the lead belts the held money note while stacked harmonies swell underneath, one singer growing, never a crowd joining. Placement: keep the verses and the bridge stripped to the lead, breaths kept in as part of the record; the sparse floor lives late — a soft harmony entrance on chorus two, an echoed last word into the bridge, the full swell under the [Big Finish]; a [Crescendo] header belongs only at the hand-off into the final chorus. Tag identity: a solo lead with swelling harmony coros — the harmonies are the same singer multiplied, entering in stages and blooming at the peak, no gang, no palmas, no answer voice; every sung word is plain language from the user's own sheet.",
+            "adlibDensity": "sparse",
+            "minAdlibs": 3,
+            "deliveryTags": [
+              "[Soft]",
+              "[Belting]",
+              "[Harmonies]",
+              "[Crescendo]",
+              "[Big Finish]"
+            ]
+          },
+          "builder": {
+            "instruments": [
+              "piano",
+              "guitarra eléctrica",
+              "batería pop",
+              "coros",
+              "percusión latina"
+            ],
+            "themes": [
+              "Empoderamiento",
+              "Desamor y superación",
+              "Amor nuevo",
+              "Extrañar a alguien",
+              "Nostalgia"
+            ],
+            "purposes": [
+              "Superar una ruptura",
+              "Sentirse fuerte",
+              "Enamorar"
+            ]
+          }
+        },
+        {
+          "id": "pop-urbano",
+          "name": "Pop Urbano",
+          "oneLine": "The crossover lane with urbano flavor — a leaning mid-tempo groove and 808-tinged warmth, kept pop because the chorus is still the event.",
+          "tempoGroove": "90-105 BPM over a softened urbano bounce — a leaning, off-the-beat feel with a warm 808-tinged low end, but never the full dembow club floor. Medium word density: phrases ride the syncopation, pushing early or dragging late, with real space left for the pocket and the answer to breathe.",
+          "writingDials": [
+            "The chorus is still the event, but it lands in the pocket: write a looping hook that circles back gathering heat each pass, closer to a sung chant you sway to than a banner you shout — pop keeps the hook melodic and central, urbano flavor keeps it leaning.",
+            "Phrases push and pull against the beat instead of landing square: write lines that invite the singer to lean in early or drag late, where Radial wants the words on the grid.",
+            "Repetition is welcome at a level the bright lane would call lazy: repeating one line or one word several times builds the trance here, so long as the coro stays the melodic payoff and does not collapse into a bare grind command.",
+            "The pre-chorus is a lean-in, not a ramp: the beat thins, phrases shorten and come closer to the ear, the voice drops nearer to speech for two bars, then the hook loop returns and the sway gets bigger.",
+            "Subject treatment lingers in slow motion: the song holds one person, one night, one feeling and notices small physical detail from the user's story, verse two moving closer rather than traveling through time — new information each pass while the hook circles, every line tied to something real (the jacket, the balcony, the text left on read).",
+            "Rhyme leans on repeated vowel sounds more than hard end rhymes: the same open vowel ringing at line-ends suits the roll of the groove better than snapping consonants.",
+            "Plan the second voice: which words get echoed and which lines get answered is a writing decision, and here the answer voice flirts and warms rather than shouts.",
+            "Point of view is first person to a present you; keep the register confident and close, and let the flavor live in the phrasing and the pocket, never in vocabulary the user did not reach for.",
+            "Cross-genre firewall: the softened bounce with the 808 kept as flavor and a melodic sung coro make it Pop Urbano, not reggaetón — the full dembow floor never takes over, the hook stays a pop singalong rather than a grind command, and the groove serves the chorus instead of the chorus serving the floor."
+          ],
+          "rendering": "Softened urbano bounce with a warm 808-tinged bass, syncopated piano or guitarra eléctrica stabs, bright synthesizer plucks, light percusión latina, airy pads. Smooth melodic lead with light echo answers and a second voice replying on the hook; modern urbano-tinged crossover-pop polish, 2015 to now, kept bright and radio-clean rather than dark club.",
+          "storyFit": "Best for: romance and flirtation that sways, summer warmth, missing someone at close distance, a confident close-dance celebration. Poor fit: a bright jump-and-shout party, which is Radial; a heavy held-note swell of grief or empowerment, which is Balada Pop; a full club grind, which routes out to reggaetón.",
+          "parodyTraps": "Sprinkling Spanish slang the user never wrote, the fastest way to sound like a costume; stacking beach-and-cocktail props instead of the user's own moment; writing square on-the-beat lines that fight the groove; letting the beat take over so the hook becomes a bare grind command and the pop chorus disappears; treating the lane as Radial with different drums when the phrasing must actually lean.",
+          "performance": {
+            "prose": "Density moderate; min adlibs 4; delivery tags [Call and Response] [Harmonies] [Groove] [Soft]. This room performs like two people swaying close while the rhythm listens in — a duet-shaped record even when only one name is on it. Signature: the flirting reply — a second voice answering the open ends of lines in the syncopated gaps the writing left, and echoing the looping hook a beat late, teasing and warm instead of shouting, a little hotter on every pass. Placement: replies sit only in the written gaps, never on top of the lead, roughly one answer every few lines in the verses, with the echoes thickening as the hook circles; a [Groove] header can hand the pocket the last word for a bar, and the pre-chorus lean-in stays reply-free so the return of the loop feels bigger. Tag identity: the lead plus one flirting answer voice — soft replies at phrase ends, hook echoes a beat behind, light harmony coros on the loop's final passes, a percussion-breath direction line where the groove answers instead. A conversation for two, never a crowd, never a full stack, every echoed word from the user's own sheet.",
+            "adlibDensity": "moderate",
+            "minAdlibs": 4,
+            "deliveryTags": [
+              "[Call and Response]",
+              "[Harmonies]",
+              "[Groove]",
+              "[Soft]"
+            ]
+          },
+          "builder": {
+            "instruments": [
+              "percusión latina",
+              "guitarra eléctrica",
+              "piano",
+              "sintetizadores brillantes",
+              "coros",
+              "batería pop"
+            ],
+            "themes": [
+              "Amor nuevo",
+              "Amor de verano",
+              "Extrañar a alguien",
+              "Sentirse libre"
+            ],
+            "purposes": [
+              "Bailar",
+              "Enamorar",
+              "Celebrar"
+            ]
+          }
+        }
+      ],
+      "cues": [
+        {
+          "cue": "pop latino",
+          "strength": "strong",
+          "roomId": "pop-latino-radial"
+        },
+        {
+          "cue": "radial",
+          "strength": "strong",
+          "roomId": "pop-latino-radial"
+        },
+        {
+          "cue": "coro pegajoso",
+          "strength": "strong",
+          "roomId": "pop-latino-radial"
+        },
+        {
+          "cue": "singalong",
+          "strength": "weak",
+          "roomId": "pop-latino-radial"
+        },
+        {
+          "cue": "cantar a coro",
+          "strength": "weak",
+          "roomId": "pop-latino-radial"
+        },
+        {
+          "cue": "fiesta",
+          "strength": "weak",
+          "roomId": "pop-latino-radial"
+        },
+        {
+          "cue": "verano",
+          "strength": "weak",
+          "roomId": "pop-latino-radial"
+        },
+        {
+          "cue": "upbeat",
+          "strength": "weak",
+          "roomId": "pop-latino-radial"
+        },
+        {
+          "cue": "balada pop",
+          "strength": "strong",
+          "roomId": "balada-pop"
+        },
+        {
+          "cue": "empoderamiento",
+          "strength": "strong",
+          "roomId": "balada-pop"
+        },
+        {
+          "cue": "superación",
+          "strength": "strong",
+          "roomId": "balada-pop"
+        },
+        {
+          "cue": "desamor",
+          "strength": "weak",
+          "roomId": "balada-pop"
+        },
+        {
+          "cue": "heartbreak",
+          "strength": "weak",
+          "roomId": "balada-pop"
+        },
+        {
+          "cue": "balada",
+          "strength": "weak",
+          "roomId": "balada-pop"
+        },
+        {
+          "cue": "extrañar",
+          "strength": "weak",
+          "roomId": "balada-pop"
+        },
+        {
+          "cue": "fuerza",
+          "strength": "weak",
+          "roomId": "balada-pop"
+        },
+        {
+          "cue": "pop urbano",
+          "strength": "strong",
+          "roomId": "pop-urbano"
+        },
+        {
+          "cue": "urbano",
+          "strength": "strong",
+          "roomId": "pop-urbano"
+        },
+        {
+          "cue": "flow",
+          "strength": "strong",
+          "roomId": "pop-urbano"
+        },
+        {
+          "cue": "perreo suave",
+          "strength": "weak",
+          "roomId": "pop-urbano"
+        },
+        {
+          "cue": "sensual",
+          "strength": "weak",
+          "roomId": "pop-urbano"
+        },
+        {
+          "cue": "bailar pegado",
+          "strength": "weak",
+          "roomId": "pop-urbano"
+        },
+        {
+          "cue": "groove",
+          "strength": "weak",
+          "roomId": "pop-urbano"
+        }
+      ]
+    },
+    "latintrap": {
+      "id": "latintrap",
+      "name": "Latin Trap / Trap Latino",
+      "aliases": [
+        "latin trap",
+        "trap latino",
+        "traplatino",
+        "trap en español",
+        "trap en espanol"
+      ],
+      "profileText": "A Latin trap writer starts with the low end — a deep 808 sliding under a half-time crawl, hi-hats rolling in tresillos, the tempo felt slow and heavy even when the count is fast. The 808 and the tresillo, not the dembow, are the identity: this is a crawl, not a bounce, and the writing job is rhythmic before it is verbal. Scan every line against that half-time pocket, ride just behind the beat, and leave the gaps where the 808 slides and the ad-lib stabs — filling every bar kills the drag that makes it trap. The space is the cold.\n\nThe delivery is the room. Trap de Calle raps the street cold and hard, the block and the pride stated flat over air. Trap Melódico / Romántico sings the ache through autotune, thinning the verses so a melodic hook lifts on held vowels — the toxic-love crossover. Trap Flow / Flex packs the densest bars and boasts the come-up as fact, the crew snapping the hook back. That one choice — rapped-cold, sung-wounded, or bars-forward — moves more dials than any other: it sets density, how much melody rides, whether the hook hammers or soars, and who answers on top of the 808. Topic alone never picks it, because the block, the money, and a toxic love run through all three.\n\nThe law above every dial is the story, and the hardest law is what the song may not add. The lyrics are written in Spanish by the language layer later — this page writes craft in English, and it never fakes the dialect. Slang, calle vocabulary, and accent spellings appear ONLY if the user wrote them, in lyrics, adlibs, delivery directions, and render notes alike. The craft terms these pages teach with — trap, 808, tresillo, flow, flex, ad-lib — stay out of the song unless the user reached for them first, and delivery is directed as cold, menace, bounce, and swagger in plain English, never as an accent, a nationality, or manufactured slang. Latin trap can carry a hard, cold, streetwise flex — but the craft is the flow and the swagger serving the user's real story: a come-up, ambition, a toxic love, proving them wrong. If the user brought no darkness, the song has none. Inventing guns, drugs, or crime the user never wrote is the cardinal sin — the fastest way to make the record a lie.",
+      "defaultRoomId": "trap-de-calle",
+      "rooms": [
+        {
+          "id": "trap-de-calle",
+          "name": "Trap de Calle",
+          "oneLine": "The hard street core — cold bars over a deep 808, the block, the stare, pride and menace stated flat, the Anuel-and-Bryant-Myers lane where the trap is a stone face.",
+          "tempoGroove": "128-142 BPM felt in a heavy half-time crawl — the count is fast but the pocket drags heaviest of the three rooms, a deep 808 sliding under hi-hats rolling in tresillos, the snare or clap landing slow on the backbeat. Word density is medium and menacing: hard economical phrases that ride just behind the beat, then air where the ad-lib or the 808 answers — never wall-to-wall, because the space is the cold.",
+          "writingDials": [
+            "Bars lead, told cold: this room states the street plain — the block that raised you, the pride, the desconfianza, the loyalty and the betrayal — flat and unbothered as fact, never explained. The moment a hard line gets justified it goes soft.",
+            "Write in the crawl, leave the gaps: land a short hard phrase and stop, because the gap is where the 808 slides and the ad-lib stabs — filling every bar breaks the half-time drag that makes it trap.",
+            "NEVER invent violence, weapons, drugs, or crime the user did not write. Trap de Calle names the cold ENERGY and the street stare, not a subject requirement — the craft is the menace in the flow and the swagger in the restraint. If the user brought no darkness, the song has none; a hungry come-up or a cold kiss-off, told with full street weight, is exactly this room.",
+            "Point of view is a real person who has seen it: first person, present or past, direct — name the block, the people, the debt, the ones who doubted, specific to whoever the user actually stood with.",
+            "Menace is understatement: the threat that reads coldest is the one stated quietest and left unfinished — the room trusts the low end and the stare to carry the weight, so a line that shouts loses more than it gains.",
+            "Hammer one rhyme sound across a run of lines on purpose: riding the same end-sound in the crawl builds pressure and cold, where a busy scheme would scatter it.",
+            "The hook is a short cold line the crew can mutter back, not a sung lift: a blunt phrase of a few words, repeated until it lands like a fact, gaining weight each round rather than resolving.",
+            "Cross-genre firewall: what makes it THIS room and not Reggaetón is the deep 808 and the tresillo hats in a half-time crawl, NOT the dembow's boom-ch-boom-chick with the snare on the offbeat — the moment the bounce turns into a four-count perreo snap the room is gone. And the low end is the 808, not corrido tumbado's tuba, with no requinto or acoustic strings anywhere near it."
+          ],
+          "rendering": "Deep sliding 808 sub carrying the low end, hi-hats rolling in tresillos with fast stutter rolls, slow hard snare or clap on the backbeat, dark minor synth lead and oscuro pads, half-time trap crawl, sparse and heavy. Cold up-front male lead rapped just behind the beat with a hard ad-lib track stabbing the gaps and light autotune edge; modern Latin trap production, low end mixed to press, no dembow, no acoustic strings.",
+          "storyFit": "Best for: the block and the street, cold pride, desconfianza, loyalty and betrayal, a hard-eyed come-up, proving them wrong, a kiss-off with no warmth in it. Poor fit: tender heartbreak and longing (that is Melódico), pure party lift, worship — the crawl wants cold nerve, not a sweet melody or a plot to walk through.",
+          "parodyTraps": "Invented guns, drugs, or crime the user never wrote — the number-one tell; a dembow bounce or a perreo snap pasted under it; a requinto, tuba, or any acoustic string, which drags it toward tumbado; brand-name shopping-list flexes with no real detail; a sung stadium hook where a cold muttered line belongs; confusing loud with hard — real menace is quiet and economical.",
+          "performance": {
+            "prose": "Density heavy; min adlibs 4; delivery tags [Spoken] [Ad-Lib Section] [Drop] [Shout]. This room performs like a lead and his own second self behind him — the rapper states it cold and his ad-lib track answers, no crowd, no hype circus. Signature: the stabbed ad-lib — a hard line lands and in the gap the second track answers with a short echo of the key word or a low cold burst, exact and unbothered, never stepping on the next bar. Placement: ad-libs live in the gaps the crawl leaves and thicken under the hook's returns; a low spoken aside can open the record or drop where the stare hardens; a [Drop] frames the 808 sliding back in under the hook. Tag identity: the lead and his own ad-lib track — a cold echo of the key word after bars, a low sharp burst on the hardest lines, a muttered doubled hook. Every ad-lib and shout is menace and energy in plain English — a cold burst, a hard echo — never phonetic spelling and never an invented accent or slang beyond what the user wrote.",
+            "adlibDensity": "heavy",
+            "minAdlibs": 4,
+            "deliveryTags": [
+              "[Spoken]",
+              "[Ad-Lib Section]",
+              "[Drop]",
+              "[Shout]"
+            ]
+          },
+          "builder": {
+            "instruments": [
+              "808 profundo",
+              "hi-hats en tresillos",
+              "pads oscuros",
+              "sintetizador melancólico",
+              "efectos y ad-libs",
+              "piano sombrío"
+            ],
+            "themes": [
+              "La calle y el bloque",
+              "Lealtad y traición",
+              "Desconfianza",
+              "Vicios y noche"
+            ],
+            "purposes": [
+              "Desahogar la calle",
+              "Encarar a alguien",
+              "Contar mi historia",
+              "Flexear el logro"
+            ]
+          }
+        },
+        {
+          "id": "trap-mel-dico",
+          "name": "Trap Melódico / Romántico",
+          "oneLine": "The sung, autotuned crossover — deep 808 under real feeling, the toxic love and heartbreak lane where the melody leads and the ache is bent through tune, the early-Bad-Bunny melodic wave.",
+          "tempoGroove": "130-145 BPM in the same half-time crawl but felt softer — the 808 stays deep, the tresillo hats stay, but the snare eases and a dark melodic synth opens so a sung line can ride on top. Low-to-medium word density: verses thin and the hook breathes with sung, autotuned lines that hold and bend, so the chorus lifts on open vowels instead of hammering.",
+          "writingDials": [
+            "Feeling leads, sung through tune: this room carries the ache — a toxic love, a heartbreak, missing someone who was bad for you, wanting them back knowing better. The 808 still crawls, but the song is about one person and how they wreck the singer, not a threat to the block.",
+            "Write a melodic hook that lifts, not a cold line that hammers: the chorus is a sung ache built to soar on autotuned held vowels — end the feeling-lines on sounds a voice can slide and bend, and let the melody and the tune do the lifting, not the word-count.",
+            "Thin the verses so the chorus can breathe: verses sit lower and more spoken-melodic to set up the lift; the density drop between verse and hook IS the drama, the opposite of Calle's flat cold crawl.",
+            "Verse two must move the story of these two people forward — a memory, an answer, a turn, the next night it fell apart — never re-circle verse one's feeling; the melody repeats, the story advances.",
+            "Toxic is the register, not cruelty: this lane lives in the push-pull — pride and need in one breath, blaming her and still calling, cold and wrecked at once. Let the contradiction stand; do not sand it into pure sweetness or pure spite.",
+            "NEVER invent drugs, vice, or self-destruction the user did not write — do not reach for drowning-the-heartbreak imagery the user never brought. If the loss is a person, a distance, a toxic on-and-off, that is the whole of it.",
+            "Keep one detail only the real person would recognize: the melodic trap dies as autotuned greeting-card sweetness the second it stops being about a specific someone from the user's story.",
+            "Cross-genre firewall: the dial that keeps it Latin trap and not Reggaetón Romántico is the half-time 808 crawl and the tresillo hats under the melody — NOT a softened dembow bounce; a sung love song riding the boom-ch-boom-chick is romántico reggaetón, not this room. And there is no requinto and no acoustic guitar, which would pull it into corrido sad — the melody is a dark synth over the 808."
+          ],
+          "rendering": "Deep 808 sub in a softened half-time crawl, hi-hats in tresillos eased back, dark melodic synth lead and lush oscuro pads opening the top, gentle synth arpeggios or sombrío piano under the hook. Melodic male lead sung through visible autotune, stacked harmony doubles lifting the chorus and generous air, a falsetto edge on the peaks; modern melodic-trap polish — deep, moody, the crawl still felt but never harsh, no dembow, no acoustic strings.",
+          "storyFit": "Best for: toxic love, heartbreak, missing an ex who was bad for you, an on-and-off, longing, an apology with an edge, wanting them back against your own pride. Poor fit: hard street menace (that is Calle), pure boasting, party commands — the feeling needs room the cold crawl and the flex will not give it.",
+          "parodyTraps": "Adding vice or drug melancholy the user never wrote; deleting the 808 crawl for a dembow bounce or a piano ballad bed; greeting-card devotion with no specific person in it; a hook that mutters cold like a street line instead of soaring; faked slang dropped into a tender song; a belted power chorus where an autotuned ache belongs.",
+          "performance": {
+            "prose": "Density moderate; min adlibs 4; delivery tags [Melodic] [Harmonies] [Drop] [Falsetto]. This room performs like one melodic lead multiplied by his own harmonies over a deep crawl — warmer and closer than Calle, with soft doubles instead of a cold ad-lib stab. Signature: the harmony lift — the lead sings the hook and stacked self-harmonies swell under the last words, thickening the ache through tune rather than a crowd. Placement: verses stay nearly bare with at most a breathed double so the story reads clean, then the harmonies bloom on the pre-hook and stack fullest on the chorus lift; a [Drop] can mark the 808 opening back up under the first chorus, and a [Falsetto] rise is saved for the final chorus where the feeling peaks. Tag identity: a melodic lead and his own harmony stack — soft echoes of the hook's last words, a saved [Falsetto] lift, warm autotuned ad-libs answering the melody; no crowd, no cold stab, and every echoed word comes from the song's own sheet, directed as feeling and melody in plain English, never as an accent or faked slang.",
+            "adlibDensity": "moderate",
+            "minAdlibs": 4,
+            "deliveryTags": [
+              "[Melodic]",
+              "[Harmonies]",
+              "[Drop]",
+              "[Falsetto]"
+            ]
+          },
+          "builder": {
+            "instruments": [
+              "808 profundo",
+              "sintetizador melancólico",
+              "pads oscuros",
+              "hi-hats en tresillos",
+              "piano sombrío",
+              "efectos y ad-libs"
+            ],
+            "themes": [
+              "Amor tóxico",
+              "Desconfianza",
+              "Lealtad y traición",
+              "Vicios y noche"
+            ],
+            "purposes": [
+              "Contar mi historia",
+              "Desahogar la calle",
+              "Encarar a alguien",
+              "Prender el ambiente"
+            ]
+          }
+        },
+        {
+          "id": "trap-flow",
+          "name": "Trap Flow / Flex",
+          "oneLine": "The bars-and-boasts come-up lane — the densest flow over the 808, the flex of having made it out told cold and confident, the crew shouting the hook back, the hustle-pride room.",
+          "tempoGroove": "140-152 BPM felt in the half-time bounce — the 808 slides hard, the tresillo hats run fast with stutter rolls, the pocket bounces highest and brightest where Calle drags. Word density is medium-high and bursty: dense punchy bars with swagger, then a beat of air where the ad-lib or the 808 answers, built so the flow rides just off the beat and the hook lands as a chant.",
+          "writingDials": [
+            "Flex leads, told cold: this room boasts the come-up — money made, the hunger it took, the doubt proved wrong, the block that raised you — stated flat and confident as fact, never explained. The moment a flex gets justified it dies.",
+            "Write dense bars, then leave the gap: pack the flow with internal rhyme and swagger, but land the punch and stop so the ad-lib or the crew can crack the space — filling every bar buries both the hook and the bounce.",
+            "Ride one rhyme sound through a run on purpose: hammering the same end-sound builds momentum and cocky pressure here, where most lanes would read it as lazy.",
+            "The detail is the user's OWN: swagger only lands when the work, the win, the come-up, the name are real and specific — generic luxury inventory is how two users end up with the same song, which is failure. No brand-name shopping lists.",
+            "NEVER invent drugs, weapons, or crime the user did not write — this room's hard edge is the flex of the come-up and the cold confidence of proving them wrong, not a crime résumé. A clean flex told with full swagger is exactly the room; imported darkness is parody and worse.",
+            "The hook is the simplest chant in the song: a short blunt boast the crew shouts back and it returns often — momentum comes from the hook coming back, not from a build, so keep it short enough to snap back on the second pass.",
+            "Present tense and cocky: the win is happening NOW — the come-up stated as a standing fact, swagger and hustle-pride flat and unbothered, a boast that gets softened or explained already dead.",
+            "Cross-genre firewall: what makes it THIS room and not Tumbado Flex is that the 808 and the tresillo hats run the whole floor — there is no requinto and no walking tuba, no acoustic strings leading in Spanish tumbado phrasing; the moment a requinto answers the flow or a tuba walks the bass it has left Latin trap for corrido. And the pocket is the half-time trap bounce, not the dembow's boom-ch-boom-chick."
+          ],
+          "rendering": "Hard sliding 808 sub, fast tresillo hi-hats with stutter rolls, punchy trap snare and claps, dark synth stabs and oscuro pads, half-time bounce, hard and confident. Modern male lead rapping dense bars just off the beat, dry and up-front with a stacked ad-lib track echoing key words and a crew shouting the hook; modern Latin trap flex production, low end mixed to hit, no acoustic strings, no dembow.",
+          "storyFit": "Best for: the come-up flexed, money and ambition, the hunger and the hustle, proving them wrong, pride in the block, a glow-up stated cold, hyping the grind. Poor fit: tender heartbreak (that is Melódico), cold quiet street menace held still (that leans Calle), worship — the bounce wants confident bars, not ache or a slow stare.",
+          "parodyTraps": "Inventing drugs, guns, or crime the user never wrote — the number-one tell; brand-name shopping-list flexes with no real detail; a requinto or tuba creeping in, which crosses it into tumbado; writing ad-libs into every line like punctuation; forcing triplets onto every bar; a dembow bounce under the flow; confusing loud with confident — real flex is cold and economical.",
+          "performance": {
+            "prose": "Density heavy; min adlibs 4; delivery tags [Ad-Lib Section] [Shout] [Drop] [Spoken]. This room performs as a lead and his own hype behind him, with the crew close by — the rapper drops the flex and his ad-lib track answers, the crew snapping the hook back. Signature: the punctuation ad-lib — a burst lands and in the gap the second track answers with an echo of the key word or a sharp hype burst, cold and exact, never stepping on the next phrase. Placement: ad-libs live in the gaps the bursts leave and thicken under the hook's returns; crew shouts crack the hardest flex lines and snap the chant back on every hook return; a [Drop] can frame the hook slamming in, and a low spoken aside can open the record. Tag identity: the lead, his own second self, and the crew — an echo of the key word after bursts, sharp hype shouts on the flex lines, a crew-shouted chant hook. Every ad-lib and shout is energy and swagger in plain English — a burst of hype, a hard echo — never phonetic spelling and never an invented accent or slang beyond what the user wrote.",
+            "adlibDensity": "heavy",
+            "minAdlibs": 4,
+            "deliveryTags": [
+              "[Ad-Lib Section]",
+              "[Shout]",
+              "[Drop]",
+              "[Spoken]"
+            ]
+          },
+          "builder": {
+            "instruments": [
+              "808 profundo",
+              "hi-hats en tresillos",
+              "sintetizador melancólico",
+              "pads oscuros",
+              "efectos y ad-libs",
+              "piano sombrío"
+            ],
+            "themes": [
+              "Dinero y ambición",
+              "La lucha y el hambre",
+              "Presumir lo conseguido",
+              "La calle y el bloque"
+            ],
+            "purposes": [
+              "Flexear el logro",
+              "Motivar al que lucha",
+              "Contar mi historia",
+              "Prender el ambiente"
+            ]
+          }
+        }
+      ],
+      "cues": [
+        {
+          "cue": "trap de calle",
+          "strength": "strong",
+          "roomId": "trap-de-calle"
+        },
+        {
+          "cue": "la calle",
+          "strength": "strong",
+          "roomId": "trap-de-calle"
+        },
+        {
+          "cue": "el bloque",
+          "strength": "strong",
+          "roomId": "trap-de-calle"
+        },
+        {
+          "cue": "frío",
+          "strength": "weak",
+          "roomId": "trap-de-calle"
+        },
+        {
+          "cue": "lealtad",
+          "strength": "weak",
+          "roomId": "trap-de-calle"
+        },
+        {
+          "cue": "desconfianza",
+          "strength": "weak",
+          "roomId": "trap-de-calle"
+        },
+        {
+          "cue": "come-up",
+          "strength": "weak",
+          "roomId": "trap-de-calle"
+        },
+        {
+          "cue": "cold",
+          "strength": "weak",
+          "roomId": "trap-de-calle"
+        },
+        {
+          "cue": "trap melódico",
+          "strength": "strong",
+          "roomId": "trap-mel-dico"
+        },
+        {
+          "cue": "amor tóxico",
+          "strength": "strong",
+          "roomId": "trap-mel-dico"
+        },
+        {
+          "cue": "desamor",
+          "strength": "strong",
+          "roomId": "trap-mel-dico"
+        },
+        {
+          "cue": "autotune",
+          "strength": "weak",
+          "roomId": "trap-mel-dico"
+        },
+        {
+          "cue": "corazón",
+          "strength": "weak",
+          "roomId": "trap-mel-dico"
+        },
+        {
+          "cue": "te extraño",
+          "strength": "weak",
+          "roomId": "trap-mel-dico"
+        },
+        {
+          "cue": "toxic",
+          "strength": "weak",
+          "roomId": "trap-mel-dico"
+        },
+        {
+          "cue": "heartbreak",
+          "strength": "weak",
+          "roomId": "trap-mel-dico"
+        },
+        {
+          "cue": "flex",
+          "strength": "strong",
+          "roomId": "trap-flow"
+        },
+        {
+          "cue": "trap flow",
+          "strength": "strong",
+          "roomId": "trap-flow"
+        },
+        {
+          "cue": "dinero",
+          "strength": "strong",
+          "roomId": "trap-flow"
+        },
+        {
+          "cue": "ambición",
+          "strength": "weak",
+          "roomId": "trap-flow"
+        },
+        {
+          "cue": "el hambre",
+          "strength": "weak",
+          "roomId": "trap-flow"
+        },
+        {
+          "cue": "presumir",
+          "strength": "weak",
+          "roomId": "trap-flow"
+        },
+        {
+          "cue": "glow-up",
+          "strength": "weak",
+          "roomId": "trap-flow"
+        },
+        {
+          "cue": "hustle",
+          "strength": "weak",
+          "roomId": "trap-flow"
+        }
+      ]
+    },
+    "flamencorumba": {
+      "id": "flamencorumba",
+      "name": "Flamenco / Rumba",
+      "aliases": [
+        "flamenco",
+        "rumba",
+        "rumba flamenca",
+        "rumba catalana",
+        "nuevo flamenco"
+      ],
+      "profileText": "A flamenco writer starts with the compás — the rhythmic cycle, often twelve beats, counted not by a click but by clapping palmas, and everything answers to it. The cante rides that cycle over the flamenco guitar, and the writing job is rhythmic and spatial before it is verbal: scan each line against the compás, land the stressed syllables where the cycle wants them, and end phrases early so the guitar can cry its reply in the gap. A sheet packed wall-to-wall, with no air for the guitar to answer and no room for the voice to hold and break, has failed before its first word is judged. The palmas are the pulse the whole song sits inside; lose them and the flamenco is gone.\n\nThe tradition the genre was built to carry is the quejío — the cry, the wound of grief, exile, or a ruined love worn open in the voice. That is the emotional root, but the three rooms wear it three different ways, and choosing the room is choosing how nakedly the cry shows and to whom. Puro cries it wide open — the deep song, cante jondo, on a slow elastic cycle where a line hangs on a held note and the guitar answers like a second mourner, no dignity kept and no crowd to please. Rumba turns the cycle festive and four-square and hands the feeling to a clapping circle — the Gipsy Kings party lane, warmth and joy sung outward, the guitars and palmas driving a fiesta. Fusión keeps a real compás under a modern beat and styles the cry into a contemporary hook — the Rosalía-adjacent lane, composure and attitude over a flamenco root, the melisma carried into a pop shape. Not one cycle but a family of compases carrying the same cante; different amount of grief shown, different distance to the listener.\n\nThe law above every dial is language and voice. The lyrics are written in Spanish later; the writer works in plain English and never invents accent spellings, gitano slang, or Andalusian flavor to costume the song — only the user's own words survive, and the identity is carried by the compás, the phrasing, and the guitar's answer, never by sprinkled vocabulary. Faked phonetics are the cardinal sin. The jaleo — the encouraging shouts a room throws to lift the cante — is legitimate energy, but directed as emotion and support in plain English, never as phonetic costume. Craft words the writer thinks with — compás, palo, quejío, jaleo, soleá, bulería, cante jondo, palmas — stay out of the lyrics, adlibs, and render notes unless the user wrote them first. And the postcard is not flamenco: castanets, roses, swirling dresses, and generic Spanish-guitar romance are the tourist parody the founder rejects; the user's own grief, fiesta, name, and place are the song.",
+      "defaultRoomId": "flamenco-puro",
+      "rooms": [
+        {
+          "id": "flamenco-puro",
+          "name": "Flamenco Puro",
+          "oneLine": "The deep song of the Andalusian gitano tradition — cante jondo cried open over the flamenco guitar, the rawest grief with no groove to soften it, sung to the few who understand rather than a crowd to please.",
+          "tempoGroove": "Slow and elastic, the compás stretched and held rather than counted fast — many palos sit rubato, the singer bending time so a line can hang on a single held note; sparse dark palmas mark the cycle where they land at all. Low word density: short cried phrases with long air after them, because the guitar answers the voice in the gap and the singer needs room to break and hold — a sheet packed wall-to-wall has smothered the cry that defines the form.",
+          "writingDials": [
+            "The guitar is the second voice and it answers the cry: end phrases early and leave the line hanging so the guitar can reply in the open space, and plan the stretch where the voice holds one note and the strings carry underneath — the lyric is built around that space, not over it.",
+            "Cry it wide open with no dignity kept: this room is the deepest grief worn undefended — death, exile, a love that ruined you, the weight of a whole life — sung plainly and to the edge of breaking. Restraint is the wrong instinct here; the deep song says the whole wound.",
+            "Write short and exposed: with so little holding the song up, every word is naked, so one true image outweighs a pretty generality and a plain line cried straight outranks any clever turn.",
+            "Repetition is grief gathering, not a chorus: a short heartbroken phrase returns and returns, each pass heavier with the same wound rather than resolving it — the form re-cries a line the way mourning circles back.",
+            "Let the melody bend and hold: write feeling-lines that end on open vowels the voice can stretch, ornament, and break on, because the deep song lives in the held note and the melisma, never in a tidy rhyme landing square.",
+            "Serve the darkest register the user actually brought — real loss, real longing, real pride carried through pain: the deep song is the voice of a people's endurance, so honor the weight, and never manufacture a suffering the story never held.",
+            "Address is inward or to one who is gone: mourning to oneself, calling to the absent, remembering out loud — a first person collapsing in the open, not a performance aimed at a room.",
+            "Cross-genre firewall: the slow elastic compás with sparse palmas and the raw cried cante over flamenco guitar is what makes it Puro, not a generic Spanish-guitar romance — that lane is pretty, metered, and pleasant; this room is a grief cried open on an unhurried cycle, wound over melody, air over words."
+          ],
+          "rendering": "Usually solo flamenco guitar answering every vocal line with dark falseta runs and picado (single-note lines) plus rasgueado, sparse hand palmas sordas marking the cycle low and dry, an occasional cajón felt rather than driving — but the rawest jondo (martinete, toná, saeta) is sung a palo seco, voice alone with palmas or a hammer and no guitar at all, and this room allows that too. Raw impassioned lead vocal pushed to the edge of breaking, heavy ornamentation and held notes, no doubling, dry intimate room sound; deep traditional Andalusian cante feel, no gloss, no synths.",
+          "storyFit": "Best for: deep grief, mourning the dead, exile and longing for home, a love that ruined you, pride carried through suffering, the weight of a hard life. Poor fit: celebration and party joy of any kind — that is Rumba; a modern styled hook — that is Fusión; light flirtation or easy contentment, which this room has no register for.",
+          "parodyTraps": "Castanets, roses, and swirling-dress tourist scenery standing in for real grief; any Spanish word the user never wrote pasted in as flavor; making the cry pretty and tidy instead of raw; filling the guitar's answer gaps with words; keeping a composed dignified distance when the whole point is the wound cried open.",
+          "performance": {
+            "prose": "Density sparse; min adlibs 3; delivery tags [Guitar Solo] [Instrumental Break] [Soft] [Melancholy]. This room performs like one soul crying to a room that understands — a single raw lead voice and the flamenco guitar answering it like a second mourner, no crowd, no polish. Signature: the guitar answer — the strings cry back the emotion of the line in the space the phrasing leaves, so the grief is stated twice, once in words and once in the guitar, and a low encouraging shout from the few present can rise where the cry peaks. Placement: the guitar answers land at the line-ends the singer leaves open, roughly one per phrase; a [Guitar Solo] or [Instrumental Break] header takes the stretch where the words stop and the guitar carries the grief; the final cries push hardest and hold longest. Tag identity: a lone grieving voice and its answering guitar — the strings as the second mourner, sparse dark palmas marking the cycle, a quiet encouraging shout of support from the few who understand, directed as raw energy in plain English. No group, no hype, no fiesta — one soul, one guitar answering it, and any sung word is plain language from the user's own sheet.",
+            "adlibDensity": "sparse",
+            "minAdlibs": 3,
+            "deliveryTags": [
+              "[Guitar Solo]",
+              "[Instrumental Break]",
+              "[Soft]",
+              "[Melancholy]"
+            ]
+          },
+          "builder": {
+            "instruments": [
+              "guitarra flamenca",
+              "palmas",
+              "cajón",
+              "jaleo y coros"
+            ],
+            "themes": [
+              "El quejío y el dolor",
+              "Pena y desengaño",
+              "Orgullo y raíces",
+              "La vida gitana"
+            ],
+            "purposes": [
+              "Sentir el quejío",
+              "Desahogar la pena"
+            ]
+          }
+        },
+        {
+          "id": "rumba-flamenca",
+          "name": "Rumba Flamenca / Catalana",
+          "oneLine": "The festive offshoot — the Gipsy Kings and Peret party cycle, a bright four-square rumba built to clap, dance, and lift a whole room with an open heart.",
+          "tempoGroove": "~100-130 BPM in a bright, steady four-square rumba pulse — the festive squared cousin of the flamenco compás, driven by the ventilador strumming pattern and clapping palmas a room can join without counting. Medium word density: warm singable phrases with real air after them, because the guitar and palmas answer between lines and the groove needs room to clap, never wall-to-wall.",
+          "writingDials": [
+            "Write it to clap and dance: rumba is a fiesta in a circle, so the chorus opens outward for a crowd to lift and clap while the verses keep the specific names, places, and details the user brought.",
+            "Keep the guitar its answer inside the party: end phrases a touch early so the rasgueado and palmas can fire back in the gap and take turnarounds between verses — a sheet that fills every bar smothers the drive that colors the room.",
+            "The hook is a warm chantable refrain of roughly three to six words, easy to sing back on the second pass and sturdy enough to return many times, gathering warmth and voices each round rather than resolving — the room's line on the night.",
+            "Rhyme plain and sturdy: clean end-rhyme the circle hears coming lands square on the clap and survives the tempo; slant-rhyme subtlety blurs at a party.",
+            "Registers are celebration, warm love, hometown and family pride, and open-hearted joy: a wedding, a devoted love sung bright, a pride of roots and people, a flat-out fiesta — delivered warm and danceable, and even a wistful line rides the joy of the groove.",
+            "Keep the language plainspoken and warm — everyday words, one true image over ornament; the joy rides the pulse, and a plain line the whole floor can carry outranks a clever one.",
+            "Address the room and the loved: sung outward to the fiesta, or to one person with the whole circle clapping behind it — never an inward private collapse; this room faces the crowd.",
+            "Cross-genre firewall: the bright four-square rumba pulse with the ventilador strum and clapping palmas is what makes it rumba, not a Latin-American genre — there is no clave, no montuno, no dembow under it; if the flamenco guitar drive and the palmas vanish, the room is gone."
+          ],
+          "rendering": "Bright flamenco guitars strumming the ventilador rumba pattern with rasgueado flourishes answering the vocal, clapping hand palmas driving the four-square pulse, cajón and light percussion knocking the groove, warm bass walking underneath, festive backing coros. Warm open lead vocal, often a group answering on the chorus; live celebratory Gipsy-Kings rumba mix, hands and guitars out front, no synths.",
+          "storyFit": "Best for: celebration and fiesta, weddings, warm devoted love, pride in roots and family, honoring someone, an open-hearted good time. Poor fit: the deepest private grief — that is Puro; a modern styled crossover hook — that is Fusión; anything wanting stillness, intimacy, or low volume.",
+          "parodyTraps": "Castanets-and-roses tourist postcard scenery instead of the user's real fiesta; any Spanish word the user never wrote sprinkled as flavor; a thin lyric that gives the guitars and palmas nothing to answer; cramming every beat so the room cannot clap; a limp under-sung delivery that fights the festive drive.",
+          "performance": {
+            "prose": "Density moderate; min adlibs 4; delivery tags [Call and Response] [Harmonies] [Guitar Solo] [Groove]. This room performs like a fiesta clapping in a circle — a warm lead over driving guitars and hand palmas, with the crowd answering and the encouraging shouts of the party carrying much of the energy. Signature: the clapped answer — the guitars and palmas throw a flourish into the gap the singer leaves and the circle claps the pulse, while encouraging shouts of the fiesta land on the peaks and lift each chorus. Placement: the guitar-and-palmas answers fall at verse and chorus line-ends where the vocal steps aside; encouraging shouts top the chorus and the biggest turns; a [Guitar Solo] hands a stretch to the flamenco guitar between verses, and group harmonies thicken the final choruses. Tag identity: a lead and a clapping circle — driving guitars and palmas answering in the gaps, warm encouraging shouts thrown by the fiesta over the peaks, a group coro swelling on the hook. Every shout is celebration directed as energy in plain English, never a scripted foreign exclamation the user did not write.",
+            "adlibDensity": "moderate",
+            "minAdlibs": 4,
+            "deliveryTags": [
+              "[Call and Response]",
+              "[Harmonies]",
+              "[Guitar Solo]",
+              "[Groove]"
+            ]
+          },
+          "builder": {
+            "instruments": [
+              "guitarra flamenca",
+              "palmas",
+              "cajón",
+              "jaleo y coros",
+              "bajo"
+            ],
+            "themes": [
+              "La fiesta y la juerga",
+              "Amor y pasión",
+              "Orgullo y raíces",
+              "La tierra y el pueblo"
+            ],
+            "purposes": [
+              "Prender la fiesta",
+              "Palmear y bailar",
+              "Enamorar con arte"
+            ]
+          }
+        },
+        {
+          "id": "nuevo-flamenco",
+          "name": "Nuevo Flamenco / Fusión",
+          "oneLine": "The modern crossover — the Rosalía-adjacent lane, flamenco phrasing and a real compás pulled over contemporary production, cooler and more styled without losing the root.",
+          "tempoGroove": "~90-115 BPM with a real flamenco compás kept under a modern beat — programmed percussion, palmas, and cajón sitting inside the cycle rather than a squared pop four, neither fully free nor fully party-locked. Medium word density: contemporary phrasing that leans and syncopates against the compás, still leaving the guitar and palmas their answer but carrying a modern hook — never wall-to-wall.",
+          "writingDials": [
+            "Keep a real compás under the modern surface: the flamenco cycle and the palmas still run the song, so write to the clap and leave the guitar its gap even as programmed percussion, bass, or pads color the track — a fusion that squares into a plain pop four has lost the root.",
+            "Style the feeling into a hook without cooling it dead: this room holds a composed, contemporary poise — the quejío is present, shaped into a modern refrain and phrasing, felt rather than cried wide open, but it must still be a real feeling and not a pose.",
+            "Write for phrasing that bends and repeats: lines can lean, drag, and syncopate against the compás the way a modern vocal bends flamenco, and melisma on held vowels is welcome — end feeling-lines on vowels the voice can ornament and slide.",
+            "The hook is a styled modern refrain, memorable and engineered to return, that deepens as the track builds rather than only repeating — carry the flamenco melisma into it so the root shows even in the pop shape.",
+            "Keep the guitar and palmas answering inside the production: leave them real gaps at line-ends and plan a turnaround where they surface. A fusion that buries the flamenco guitar and the clap under wall-to-wall production has lost the lane's spine.",
+            "Point of view is confident and specific: first person with room for wit, irony, attitude, or an unexpected modern angle a pure deep song would never pause for — but grounded in the user's real story, never a stock aesthetic.",
+            "Register can widen past pure grief — attitude, desire, defiance, pride, a styled heartbreak — but it stays flamenco-rooted, and the compás and the guitar stay the song's second voice.",
+            "Cross-genre firewall: the real flamenco compás and palmas with the flamenco guitar and cante melisma still running the song is what makes it Fusión, not generic modern pop with a Spanish coat of paint — the modern flavor lives in the production and phrasing, never in squaring the cycle into a plain four or removing the flamenco guitar and clap."
+          ],
+          "rendering": "Modern flamenco-fusion production — flamenco guitar and rasgueado answering the vocal, palmas and cajón kept inside a real compás, programmed percussion and a rounded modern bass, atmospheric pads and light reverb, occasional handclap-driven drops. Styled contemporary lead vocal carrying real flamenco melisma and ornament, tasteful doubles and harmonies, a polished modern sheen over a traditional root; Rosalia-adjacent nuevo-flamenco sound, now.",
+          "storyFit": "Best for: a styled modern heartbreak, attitude and defiance, desire, pride reframed with a cooler head, a contemporary take on a traditional feeling. Poor fit: a raw undignified grief cried wide open — that is Puro; a straight-ahead clapping fiesta — that is Rumba; anything that needs the cycle squared into plain pop, which drops the root the lane is built on.",
+          "parodyTraps": "Squaring the compás into a generic pop four until the flamenco is only decoration; any Spanish word the user never wrote pasted in as aesthetic flavor; a styled pose with no real feeling under the cool; burying the flamenco guitar and palmas under nonstop production; borrowing a famous artist's signature line the user's story never contained.",
+          "performance": {
+            "prose": "Density moderate; min adlibs 3; delivery tags [Guitar Solo] [Harmonies] [Ad-Lib Section] [Soft]. This room performs like a styled modern lead with the flamenco guitar and palmas as the root under the production — one composed voice carrying real melisma, tasteful self-harmonies, and the guitar and clap answering inside the modern beat. Signature: the compás answer — the flamenco guitar and palmas reply to the sung line in the gap and surface for a turnaround, the clap threading the modern production so the root shows through the sheen, and an encouraging shout can lift a peak where a pure cry would not sit. Placement: the guitar-and-palmas answers sit at line-ends and a [Guitar Solo] takes the instrumental section; light harmony doubles thicken the hook, and a short ad-lib run can lift the last chorus; an encouraging shout marks a turn or a drop. Tag identity: a styled lead over a flamenco root — self-harmonies on the refrain, the guitar and palmas answering across the verses, one flamenco run reserved for the hook, an encouraging shout as a modern accent directed as energy in plain English. No fiesta circle and no lone mourner — a modern voice and the compás that grounds it, every sung word from the user's own sheet.",
+            "adlibDensity": "moderate",
+            "minAdlibs": 3,
+            "deliveryTags": [
+              "[Guitar Solo]",
+              "[Harmonies]",
+              "[Ad-Lib Section]",
+              "[Soft]"
+            ]
+          },
+          "builder": {
+            "instruments": [
+              "guitarra flamenca",
+              "palmas",
+              "cajón",
+              "bajo",
+              "jaleo y coros",
+              "taconeo"
+            ],
+            "themes": [
+              "Amor y pasión",
+              "Pena y desengaño",
+              "Libertad",
+              "Orgullo y raíces"
+            ],
+            "purposes": [
+              "Enamorar con arte",
+              "Desahogar la pena",
+              "Sentir el quejío"
+            ]
+          }
+        }
+      ],
+      "cues": [
+        {
+          "cue": "cante jondo",
+          "strength": "strong",
+          "roomId": "flamenco-puro"
+        },
+        {
+          "cue": "quejío",
+          "strength": "strong",
+          "roomId": "flamenco-puro"
+        },
+        {
+          "cue": "soleá",
+          "strength": "strong",
+          "roomId": "flamenco-puro"
+        },
+        {
+          "cue": "seguiriya",
+          "strength": "strong",
+          "roomId": "flamenco-puro"
+        },
+        {
+          "cue": "duelo",
+          "strength": "weak",
+          "roomId": "flamenco-puro"
+        },
+        {
+          "cue": "pena",
+          "strength": "weak",
+          "roomId": "flamenco-puro"
+        },
+        {
+          "cue": "desgarro",
+          "strength": "weak",
+          "roomId": "flamenco-puro"
+        },
+        {
+          "cue": "grief",
+          "strength": "weak",
+          "roomId": "flamenco-puro"
+        },
+        {
+          "cue": "exilio",
+          "strength": "weak",
+          "roomId": "flamenco-puro"
+        },
+        {
+          "cue": "llorar",
+          "strength": "weak",
+          "roomId": "flamenco-puro"
+        },
+        {
+          "cue": "rumba",
+          "strength": "strong",
+          "roomId": "rumba-flamenca"
+        },
+        {
+          "cue": "gipsy kings",
+          "strength": "strong",
+          "roomId": "rumba-flamenca"
+        },
+        {
+          "cue": "peret",
+          "strength": "strong",
+          "roomId": "rumba-flamenca"
+        },
+        {
+          "cue": "rumba catalana",
+          "strength": "strong",
+          "roomId": "rumba-flamenca"
+        },
+        {
+          "cue": "bulería",
+          "strength": "weak",
+          "roomId": "rumba-flamenca"
+        },
+        {
+          "cue": "fiesta",
+          "strength": "weak",
+          "roomId": "rumba-flamenca"
+        },
+        {
+          "cue": "juerga",
+          "strength": "weak",
+          "roomId": "rumba-flamenca"
+        },
+        {
+          "cue": "boda",
+          "strength": "weak",
+          "roomId": "rumba-flamenca"
+        },
+        {
+          "cue": "palmas",
+          "strength": "weak",
+          "roomId": "rumba-flamenca"
+        },
+        {
+          "cue": "celebración",
+          "strength": "weak",
+          "roomId": "rumba-flamenca"
+        },
+        {
+          "cue": "nuevo flamenco",
+          "strength": "strong",
+          "roomId": "nuevo-flamenco"
+        },
+        {
+          "cue": "fusión",
+          "strength": "strong",
+          "roomId": "nuevo-flamenco"
+        },
+        {
+          "cue": "rosalía",
+          "strength": "strong",
+          "roomId": "nuevo-flamenco"
+        },
+        {
+          "cue": "crossover",
+          "strength": "weak",
+          "roomId": "nuevo-flamenco"
+        },
+        {
+          "cue": "moderno",
+          "strength": "weak",
+          "roomId": "nuevo-flamenco"
+        },
+        {
+          "cue": "actitud",
+          "strength": "weak",
+          "roomId": "nuevo-flamenco"
+        },
+        {
+          "cue": "urbano",
+          "strength": "weak",
+          "roomId": "nuevo-flamenco"
+        }
+      ]
     }
   },
-  "hash": "20cdf83cfe46",
+  "hash": "710ca4e4c8ed",
   "approxTokens": {
     "core": 1794,
     "largestSlice": 3774
