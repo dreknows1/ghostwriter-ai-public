@@ -175,6 +175,36 @@ const GENRE_PACKS = [
     aliases: ["metal music", "heavy metal", "thrash", "metalcore", "death metal"],
     profileFile: "SONGWRITING_PROFILE_METAL.md",
   },
+  {
+    section: "MPB", id: "mpb", name: "MPB",
+    aliases: ["musica popular brasileira", "música popular brasileira", "mpb brasileira"],
+    profileFile: "SONGWRITING_PROFILE_MPB.md",
+  },
+  {
+    section: "Bossa Nova", id: "bossanova", name: "Bossa Nova",
+    aliases: ["bossa", "bossanova", "bossa-nova"],
+    profileFile: "SONGWRITING_PROFILE_BOSSANOVA.md",
+  },
+  {
+    section: "Sertanejo", id: "sertanejo", name: "Sertanejo",
+    aliases: ["sertanejo universitario", "sertanejo universitário", "sofrencia", "sofrência", "moda de viola", "sertanejo raiz"],
+    profileFile: "SONGWRITING_PROFILE_SERTANEJO.md",
+  },
+  {
+    section: "Samba", id: "samba", name: "Samba",
+    aliases: ["samba de raiz", "samba enredo", "samba-enredo", "partido alto", "partido-alto", "samba cancao", "samba canção"],
+    profileFile: "SONGWRITING_PROFILE_SAMBA.md",
+  },
+  {
+    section: "Pagode", id: "pagode", name: "Pagode",
+    aliases: ["pagode romantico", "pagode romântico", "pagode 90", "pagode anos 90"],
+    profileFile: "SONGWRITING_PROFILE_PAGODE.md",
+  },
+  {
+    section: "Funk Carioca", id: "funkcarioca", name: "Funk Carioca",
+    aliases: ["funk brasileiro", "baile funk", "funk ostentacao", "funk ostentação", "funk melody", "mandelao", "mandelão", "brazilian funk"],
+    profileFile: "SONGWRITING_PROFILE_FUNKCARIOCA.md",
+  },
 ];
 
 // The plan's build check: no quoted lyric lines anywhere in compiled writer text.
