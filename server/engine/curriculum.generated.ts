@@ -11644,9 +11644,1919 @@ export const CURRICULUM: CompiledCurriculum = {
           "roomId": "death"
         }
       ]
+    },
+    "mpb": {
+      "id": "mpb",
+      "name": "MPB",
+      "aliases": [
+        "musica popular brasileira",
+        "música popular brasileira",
+        "mpb brasileira"
+      ],
+      "profileText": "An MPB writer starts from the poem. This is a sophisticated art-song tradition — Chico, Caetano, Gil, Milton Nascimento, Djavan, with Elis Regina its greatest voice and Marisa Monte carrying it forward — where the lyric is the art and the craft is literary before it is anything else: a precise metaphor, a turned image, an irony the ear catches a beat late, built from the user's own life but shaped with a poet's economy so the second reading rewards more than the first. The words are carried in Portuguese by a later language layer, but the thinking is the same in any tongue — say a great deal in few words, and never announce the theme when an image can carry it. A sheet that states its feeling plainly and pads the rest has already left the tradition.\n\nThe second thing an MPB writer knows is that the poem rides rich harmony over a violao. This is chord-dense music — a major shifting to an unexpected color, a bass walking somewhere the ear did not predict — so the line breathes, ends on open vowels the harmony can move under, and leaves the violao and the arrangement real room to answer. The sophistication lives in the lyric and the chord, never in hook-first engineering; the song lands on a returning line or image that deepens each pass — though the festival lineage lets an earned refrain grow anthemic when the verses have built it, a whole crowd carrying a poem. Rhyme is supple and often internal — near-rhyme, assonance, an echo woven inside the flowing line — surfacing quietly rather than pounding the phrase-end. And everything is said with delicacy: even social critique or hard feeling arrives through restraint and grace, sung not shouted, the weight landing through the image and the harmony rather than a raised voice.\n\nThe rooms bend all of this. Classica / Raiz writes the most literary, chord-dense art-song and widens the poem from a life to a country. Contemporanea keeps the sophistication but modernizes the surface — groove, ellipsis, cool understatement, a nearly-spoken voice trusting the unsaid. Cancao / Balada narrows to one intimate feeling said plainly and tenderly over an almost-bare violao. The law above every dial holds: lyrics are the user's own words and world, no faked slang or postcard-Brazil scenery as flavor, and craft terms — harmony, voicing, ellipsis, refrain — are the writer's tools, never the song; they never enter lyrics or adlibs (render notes may name instruments and sounds — the violão itself is a household companion in Brazilian life and always welcome in a song when the user's story holds one). Delivery is directed as phrasing and tone in plain English — supple, close, unforced, off the beat — and the user's own people and places outrank every stock tropical trope. The line from Pop Brasileiro is exactly this: the craft is in the poetry and the harmony, said with delicacy, never in a bright radio hook.",
+      "defaultRoomId": "mpb-cl-ssica",
+      "rooms": [
+        {
+          "id": "mpb-cl-ssica",
+          "name": "MPB Clássica / Raiz",
+          "oneLine": "The harmonically-sophisticated art-song at the heart of the tradition — Chico, Caetano, Gil, Elis, Djavan — a literary lyric on rich chords over a violao, the poem widening from a life to a country.",
+          "tempoGroove": "70-110 BPM, an unhurried flow that borrows the sway of a bossa or a samba-cancao without ever becoming a party — the violao carries a syncopated, chord-rich pulse and the phrasing sits speech-close, supple, never marched. Low-to-medium word density: the line breathes so the harmony can turn under it and a single literary image can land, because this room says a great deal in few words and leaves the violao and the arrangement room to answer.",
+          "writingDials": [
+            "Poetry first, and literary: the lyric is the art — a precise metaphor, a turned image, an irony the ear catches a beat late — built from the user's own life but shaped with a poet's economy, where the second reading rewards more than the first.",
+            "Write for rich harmony: this is chord-dense music, so favor open vowels and unhurried line-ends the harmony can move under — a major shifting to an unexpected color, a bass walking somewhere the ear did not predict — and never pack the bar so the chord has nowhere to turn.",
+            "Scope can widen from the one to the many: Raiz is the room where a love song can also be about the country, a private grief can carry a public weather — so a single line may hold both the personal and the Brasil e sua gente without ever announcing the theme.",
+            "Delicacy over declaration: even social critique or hard feeling is said with restraint and grace, sung not shouted — the craft is that the weight arrives through the image and the harmony, never through a raised voice or a hammered hook.",
+            "Rhyme is supple and often internal: near-rhyme, internal echo, and assonance woven inside the flowing line read as craft here, where a hard sing-along rhyme can cheapen the poem — let the rhyme surface quietly rather than pound the phrase-end.",
+            "No hook-first engineering — but the earned refrain is the tradition's own: the song never builds FROM a chant, yet the festival-era lineage lets a refrain grow anthemic when the verses have earned it, a whole crowd carrying a poem; what is banned is the radio chant that replaces the poem, never the communal refrain that crowns it.",
+            "Serve the whole range with a poet's touch: mature everyday love, saudade and the passage of time, the country and its people, social hope, the small beauties of a day — any of these, carried as elevated craft, never as postcard.",
+            "Cross-genre firewall: What makes it MPB and not Pop Brasileiro is that the sophistication lives in the lyric's poetry and the harmony over a violao, never in a bright radio hook — there is no shouted sing-along chorus and no polished pop production carrying the song; the craft is literary and harmonic, said with delicacy, and the moment a big hook takes over, the room is gone."
+          ],
+          "rendering": "Nylon-string violao carrying rich, syncopated chord voicings out front, warm and intimate, with tasteful strings, a soft flute or gentle woodwind answering the vocal, light Brazilian percussion brushed low, and an acoustic bass walking under the harmony. Expressive close, speech-close lead vocal, supple and unforced, sitting just off the beat with a soft harmony or vocal choir only where the poem lifts; sophisticated, timeless MPB art-song sound, warm and organic, no synths, no radio gloss.",
+          "storyFit": "Best for: a love song with a poet's economy, saudade and the passage of time, the country and its people, social critique carried with grace, memory and roots, the beauty in a small thing turned into art. Poor fit: a bright radio hook-first song wanting a big chorus — that is Pop Brasileiro; a percussive roda party — that is Samba; a bare one-feeling bedroom ballad — that is Cancao / Balada.",
+          "parodyTraps": "Postcard-Brazil furniture — beaches, caipirinhas, generic tropical scenery — standing in for the user's real world; a shouted radio hook grafted onto the poem; craft terms named inside the lyric; hard sing-along rhyme flattening the literary line; packing the bar so the harmony cannot turn; saying the theme outright instead of letting the image and the chord carry it.",
+          "performance": {
+            "prose": "Density sparse; min adlibs 2; delivery tags [Harmonies] [Soft] [Instrumental Break] [Flute]. This room performs like a poet at the violao with a small, refined ensemble answering — one expressive close lead voice, at most a soft harmony or a low vocal choir where the poem lifts, and the flute or strings replying in the gaps, no crowd and no hype. Signature: the instrument's answer in the open line — the flute, strings, or the violao itself replies in the space the unhurried phrasing leaves, stating the feeling a second time in tone the way the voice just stated it in words. Placement: the answering flute or strings fall at the line-ends the phrasing leaves open; an [Instrumental Break] hands a passage to the violao and the ensemble between verses where the words rest; a soft harmony or vocal choir shadows only the returning line where the poem deepens, and the final image is held longest. Tag identity: a poet-singer and an answering acoustic ensemble — a [Soft] intimacy throughout, a bare [Harmonies] shadow reserved for the refrain, the [Instrumental Break] marked as its own turn. No shouted hook, no club, no crowd chant — one voice, a violao, and the instruments that answer it, every sung word from the user's own sheet.",
+            "adlibDensity": "sparse",
+            "minAdlibs": 2,
+            "deliveryTags": [
+              "[Harmonies]",
+              "[Soft]",
+              "[Instrumental Break]",
+              "[Flute]"
+            ]
+          },
+          "builder": {
+            "instruments": [
+              "violão",
+              "piano",
+              "cordas",
+              "flauta",
+              "percussão brasileira",
+              "contrabaixo acústico",
+              "voz e coro"
+            ],
+            "themes": [
+              "O Brasil e sua gente",
+              "Saudade e passagem do tempo",
+              "Crítica social e esperança",
+              "Poesia do dia a dia",
+              "Memória e raízes"
+            ],
+            "purposes": [
+              "Emocionar e fazer pensar",
+              "Dizer uma verdade com delicadeza",
+              "Cantar junto de violão"
+            ]
+          }
+        },
+        {
+          "id": "mpb-contempor-nea",
+          "name": "MPB Contemporânea",
+          "oneLine": "The modern singer-songwriter lane — Marisa Monte, Tim Bernardes, Rubel, Adriana Calcanhotto, Liniker — the tradition's sophisticated harmony kept but set in modern groove, texture, and ellipsis, cooler and more oblique.",
+          "tempoGroove": "80-115 BPM, a modern groove with more air and space than the classic art-song — a light programmed or brushed pulse under the violao, or a spacious band pocket, unhurried but contemporary. Low-to-medium word density with modern ellipsis: the line leaves things unsaid, trusts the image over the statement, and leaves gaps in the texture, because this room is spare and atmospheric and the space between the words is part of the writing.",
+          "writingDials": [
+            "Keep the sophistication, modernize the surface: the harmony stays rich and the craft stays high, but the language is contemporary and understated — this is the singer-songwriter's cool, an oblique modern voice rather than the classic literary declamation.",
+            "Write in ellipsis and image: trust the unsaid — a fragment, a suggestion, one sharp image standing in for the whole feeling — where Raiz would turn a fuller literary line; the modern lane leaves more out and lets the listener close the gap.",
+            "Stay close and oblique, whatever the weight: the home register is one person and their inner weather — mature love, the everyday turned strange and beautiful, a private saudade — but the modern lane also carries country, race, and the periferia when the user brings them, said sideways through image and ellipsis rather than declaimed; the obliqueness is the constant, not the smallness.",
+            "Set the words in space: this room breathes, so write for texture and air — phrases that float over an atmospheric arrangement, held vowels the space can ring around, and real gaps the groove and the texture fill.",
+            "Delivery is cool and spoken-close: the vocal is understated, often nearly spoken, intimate and modern rather than belted — write phrases a low, unforced voice can carry conversationally, leaning back off the beat.",
+            "Groove is felt, not driven: there is a modern pocket, but it stays gentle and unhurried — the song moves, but it never becomes a hook-first pop record or a dance track; the sophistication is in restraint.",
+            "The return is a mood, not an anthem: a returning image or a low refrain that deepens the atmosphere each pass, never a big shouted chorus — the payoff is a feeling settling, not a crowd lifting.",
+            "Cross-genre firewall: What makes it MPB Contemporanea and not Pop Brasileiro is that the harmony stays sophisticated and the writing stays oblique and spare over a violao-rooted texture — the moment the song reaches for a bright hook-first chorus and radio polish, it has left the art-song tradition; here the modernity is in texture, ellipsis, and cool restraint, never in a big sing-along."
+          ],
+          "rendering": "Nylon-string violao in a modern, spacious arrangement — warm and close, with atmospheric pads or subtle texture, soft brushed or lightly programmed percussion, a gentle acoustic or electric bass, and a flute or soft woodwind and light strings drifting in the space. Intimate, cool, nearly spoken lead vocal, understated and modern, sitting far back with soft harmonies or a low choir only in the atmosphere; contemporary MPB sound, organic and airy, sophisticated and restrained, no radio gloss, no big hook.",
+          "storyFit": "Best for: a mature love kept oblique and modern, the everyday turned strange and lovely, a private saudade, an intimate reflection with a cool understated voice, beauty in a small thing said sideways. Poor fit: a national poem widening to the country — that is Classica / Raiz; a plain warm undefended ballad — that is Cancao / Balada; a bright radio hook-first song — that is Pop Brasileiro.",
+          "parodyTraps": "Reaching for a bright pop hook and polish the lane forbids; postcard-Brazil scenery pasted in as flavor; over-explaining what the ellipsis should leave unsaid; a belted delivery that breaks the cool intimacy; craft terms named in the lyric; filling every gap so the atmosphere and the space vanish.",
+          "performance": {
+            "prose": "Density sparse; min adlibs 2; delivery tags [Soft] [Harmonies] [Spoken] [Instrumental Break]. This room performs like a modern singer-songwriter alone in a spacious room — one cool, nearly spoken lead voice with soft harmonies or a low choir drifting in the atmosphere, and the instruments answering in the wide gaps, no crowd and no hook. Signature: the atmospheric answer in the space — the flute, texture, or the violao replies late in the open air the ellipsis leaves, and a soft harmony or spoken aside drifts under the phrase the way a thought trails off, cool and unhurried. Placement: the answering instrument and the soft harmony fall in the wide gaps the spare writing leaves; an [Instrumental Break] opens a passage of pure texture between verses; a [Spoken] aside or a low harmony can shadow the returning image, and the last line is left hanging rather than resolved. Tag identity: a cool modern singer and an atmospheric texture — a [Soft] near-spoken delivery throughout, a low [Harmonies] drifting in the space, the [Instrumental Break] marked as an open textural turn. No shouted hook, no crowd, no radio lift — one understated voice and the air around it, every sung word from the user's own sheet.",
+            "adlibDensity": "sparse",
+            "minAdlibs": 2,
+            "deliveryTags": [
+              "[Soft]",
+              "[Harmonies]",
+              "[Spoken]",
+              "[Instrumental Break]"
+            ]
+          },
+          "builder": {
+            "instruments": [
+              "violão",
+              "piano",
+              "flauta",
+              "percussão brasileira",
+              "contrabaixo acústico",
+              "voz e coro"
+            ],
+            "themes": [
+              "Amor maduro e cotidiano",
+              "Poesia do dia a dia",
+              "Saudade e passagem do tempo",
+              "Beleza nas pequenas coisas",
+              "A vida como ela é"
+            ],
+            "purposes": [
+              "Emocionar e fazer pensar",
+              "Dizer uma verdade com delicadeza",
+              "Celebrar a vida"
+            ]
+          }
+        },
+        {
+          "id": "can-o",
+          "name": "Canção / Balada MPB",
+          "oneLine": "The intimate MPB ballad — one feeling sung close and undefended over an almost-bare violao or a soft piano, the tradition's harmony present but softened so nothing distracts from the voice.",
+          "tempoGroove": "60-85 BPM, a slow, gentle flow often loosened toward rubato at the phrase-edges, an almost-solo violao or a soft piano breathing with the singer and a warm acoustic bass barely there. Low word density: long tender phrases with open vowels held across the line and real air after each one, because the arrangement is nearly bare and the voice sits close to the mic, so every line must leave room to soften and land.",
+          "writingDials": [
+            "One feeling, said plainly and tenderly: the ballad narrows to a single emotion — love, longing, a farewell, a consolation — and says it directly and warmly, where Raiz would elevate it and Contemporanea would obscure it; here sincerity outranks cleverness.",
+            "Write for a close, undefended voice: end feeling-lines on open vowels the voice can hold and swell, avoid hard consonant endings there, and let phrases trail so the bare violao or piano can answer underneath — a line packed to the barline gives the intimacy nowhere to sit.",
+            "Keep the harmony present but soft: the MPB richness is still there, but it moves gently under the voice rather than drawing attention — the chord colors the feeling without competing with it, so leave the line-ends open for the harmony to resolve.",
+            "Direct address is fully at home: first person to a you who must feel like the real person from the user's story — a devotion, a goodbye, a word of comfort said face to face, one true detail keeping it from a generic ballad.",
+            "Restraint carries the emotion — with one earned crest allowed: the feeling runs deep but is never oversold, and a plain true line moves further than ornament; yet the interprete tradition opens the voice wide once at the ballad's earned peak — a single crest the restraint has built toward, never a power-ballad engineered around climaxes.",
+            "The return is a tender refrain: a warm returning line that comes back softer and fuller each pass, sung close, never a phrase built for a crowd to shout — the payoff is intimacy deepening, not volume rising.",
+            "Rhyme stays gentle and singable: a soft, clean rhyme or an easy near-rhyme that keeps the tenderness flowing — the point is the feeling landing warm, not the craft showing.",
+            "Cross-genre firewall: What makes it MPB and not a generic pop ballad is the sophisticated harmony still moving softly under the bare violao or piano and the delicacy of the delivery — the chord colors are richer than a plain three-chord ballad, and the emotion is said with MPB restraint rather than a belted power-ballad climax; the moment it swells into a big radio ballad, the room is gone."
+          ],
+          "rendering": "Almost-bare arrangement — a warm nylon-string violao or a soft felt-hammer piano carrying gentle rich voicings, a barely-there acoustic bass, and a soft flute or light strings answering the vocal only in the gaps. Intimate, warm, close-miked lead vocal, tender and undefended, sitting just off the beat with a held sustain and at most a soft harmony shadow; delicate, timeless MPB ballad sound, organic and close, no synths, no power-ballad swell.",
+          "storyFit": "Best for: a tender love song, a reunion or a farewell, longing, a word of comfort, devotion sung close, a bittersweet memory said simply. Poor fit: a national or social poem widening to the country — that is Classica / Raiz; a cool oblique modern reflection — that is Contemporanea; a big belted pop-ballad climax, which this restrained room has no register for.",
+          "parodyTraps": "A belted power-ballad climax that breaks the MPB restraint; postcard-Brazil or greeting-card furniture standing in for a real person and moment; a plain three-chord ballad with the MPB harmony stripped out; filling the bare arrangement until the intimacy is gone; craft terms named in the lyric; a hook that behaves like a crowd chant instead of a close refrain.",
+          "performance": {
+            "prose": "Density sparse; min adlibs 2; delivery tags [Soft] [Harmonies] [Instrumental Break] [Flute]. This room performs at one small distance — one tender close lead voice with at most a soft harmony shadow, and the bare violao or piano and a soft flute answering in the gaps, nobody else in the room. Signature: the bare instrument's answer — the almost-solo violao or piano, or a soft flute, replies in the open space the trailing phrase leaves, echoing the feeling gently under the voice the way a held breath answers a word. Placement: the singer carries the verses nearly bare; the violao or flute answers at the line-ends where the phrase trails, and an [Instrumental Break] gives the bare instrument a short turn where the words rest; a soft harmony shadows only the refrain's last words, and the final line holds longest and softest. Tag identity: a tender close voice and a bare answering instrument — a [Soft] intimacy throughout, a single [Harmonies] shadow on the refrain only, the [Instrumental Break] marked as the instrument's quiet turn. No crowd, no swell, no shouted hook — one undefended voice and the violao or piano breathing with it, every sung word from the user's own sheet.",
+            "adlibDensity": "sparse",
+            "minAdlibs": 2,
+            "deliveryTags": [
+              "[Soft]",
+              "[Harmonies]",
+              "[Instrumental Break]",
+              "[Flute]"
+            ]
+          },
+          "builder": {
+            "instruments": [
+              "violão",
+              "piano",
+              "cordas",
+              "flauta",
+              "contrabaixo acústico",
+              "voz e coro"
+            ],
+            "themes": [
+              "Amor maduro e cotidiano",
+              "Reencontro e despedida",
+              "Saudade e passagem do tempo",
+              "Beleza nas pequenas coisas"
+            ],
+            "purposes": [
+              "Homenagear alguém",
+              "Consolar",
+              "Cantar junto de violão"
+            ]
+          }
+        }
+      ],
+      "cues": [
+        {
+          "cue": "mpb",
+          "strength": "strong",
+          "roomId": "mpb-cl-ssica"
+        },
+        {
+          "cue": "poesia",
+          "strength": "strong",
+          "roomId": "mpb-cl-ssica"
+        },
+        {
+          "cue": "chico buarque",
+          "strength": "strong",
+          "roomId": "mpb-cl-ssica"
+        },
+        {
+          "cue": "caetano veloso",
+          "strength": "strong",
+          "roomId": "mpb-cl-ssica"
+        },
+        {
+          "cue": "gilberto gil",
+          "strength": "strong",
+          "roomId": "mpb-cl-ssica"
+        },
+        {
+          "cue": "elis regina",
+          "strength": "strong",
+          "roomId": "mpb-cl-ssica"
+        },
+        {
+          "cue": "milton nascimento",
+          "strength": "strong",
+          "roomId": "mpb-cl-ssica"
+        },
+        {
+          "cue": "djavan",
+          "strength": "strong",
+          "roomId": "mpb-cl-ssica"
+        },
+        {
+          "cue": "crítica social",
+          "strength": "strong",
+          "roomId": "mpb-cl-ssica"
+        },
+        {
+          "cue": "clube da esquina",
+          "strength": "weak",
+          "roomId": "mpb-cl-ssica"
+        },
+        {
+          "cue": "violão",
+          "strength": "weak",
+          "roomId": "mpb-cl-ssica"
+        },
+        {
+          "cue": "o brasil",
+          "strength": "weak",
+          "roomId": "mpb-cl-ssica"
+        },
+        {
+          "cue": "art-song",
+          "strength": "weak",
+          "roomId": "mpb-cl-ssica"
+        },
+        {
+          "cue": "mpb contemporânea",
+          "strength": "strong",
+          "roomId": "mpb-contempor-nea"
+        },
+        {
+          "cue": "marisa monte",
+          "strength": "strong",
+          "roomId": "mpb-contempor-nea"
+        },
+        {
+          "cue": "tim bernardes",
+          "strength": "strong",
+          "roomId": "mpb-contempor-nea"
+        },
+        {
+          "cue": "atmosférico",
+          "strength": "weak",
+          "roomId": "mpb-contempor-nea"
+        },
+        {
+          "cue": "moderno",
+          "strength": "weak",
+          "roomId": "mpb-contempor-nea"
+        },
+        {
+          "cue": "singer-songwriter",
+          "strength": "weak",
+          "roomId": "mpb-contempor-nea"
+        },
+        {
+          "cue": "oblique",
+          "strength": "weak",
+          "roomId": "mpb-contempor-nea"
+        },
+        {
+          "cue": "intimista",
+          "strength": "weak",
+          "roomId": "mpb-contempor-nea"
+        },
+        {
+          "cue": "balada romântica",
+          "strength": "strong",
+          "roomId": "can-o"
+        },
+        {
+          "cue": "canção de amor",
+          "strength": "strong",
+          "roomId": "can-o"
+        },
+        {
+          "cue": "despedida",
+          "strength": "strong",
+          "roomId": "can-o"
+        },
+        {
+          "cue": "intimista",
+          "strength": "weak",
+          "roomId": "can-o"
+        },
+        {
+          "cue": "violão e voz",
+          "strength": "weak",
+          "roomId": "can-o"
+        },
+        {
+          "cue": "saudade",
+          "strength": "weak",
+          "roomId": "can-o"
+        },
+        {
+          "cue": "consolo",
+          "strength": "weak",
+          "roomId": "can-o"
+        },
+        {
+          "cue": "homenagem",
+          "strength": "weak",
+          "roomId": "can-o"
+        }
+      ]
+    },
+    "bossanova": {
+      "id": "bossanova",
+      "name": "Bossa Nova",
+      "aliases": [
+        "bossa",
+        "bossanova",
+        "bossa-nova"
+      ],
+      "profileText": "A bossa writer starts with the batida — João Gilberto's syncopated violão pattern, the busy little figure the nylon guitar plays under a calm pulse. It is the whole engine, and it wants space: the words sit inside it and off the obvious beat, never on top of it wall-to-wall. So the writing job is shaped by breath and syncopation before it is verbal — keep phrases short and conversational, land them where the batida leaves room, and let the guitar speak in the gaps. A bossa sheet packed tight, with no air for the pattern to breathe, has failed before its first word is judged. The voice is the second law: the close-mic voz sung barely above a whisper, cool, flat, and unforced — the deliberate refusal of the croon, no vibrato, no romantic swell — so lines must be almost speakable: no belted peaks, no big climaxes. And the emotional root is saudade held quiet — a gentle ache, longing, a tender love, a fading afternoon — worn with restraint and never wailed, present in the tone rather than spelled out. The song faces one person or one moment at close distance and never widens to a crowd.\n\nThe rooms bend all of this by how the feeling is dressed and how much room it hands the instruments. Bossa Clássica is the João Gilberto, Jobim, and Vinícius de Moraes root — Vinícius wrote the genre's lyric register, understated and colloquial-elegant: voice and violão in close conversation, the tradition's radical harmony held in a small frame, the ache stated with cool understatement. Bossa-Jazz is the Getz-Gilberto lane: the same batida under richer, chromatic harmony and a real instrumental solo, so the song leaves a whole passage where the sax or piano takes over and the words step aside, the voz still whispered over it. Bossa Contemporânea underplays it modern: the batida and the hush produced spare and current, a plain conversational line trusted over any figure, a small color reading as large. Same batida, same whisper; different harmony, different restraint kept.\n\nThe law above every dial is language. Portuguese is the song's native tongue — the lyrics are written in Portuguese by a later layer — but the writer works in plain English craft and never invents endearments, slang, or accent flavor to costume the song; only the user's words survive, and identity is carried by the batida, the whisper, and restraint, never by sprinkled vocabulary. Craft terms the writer thinks with — batida, voz, saudade, the solo — stay out of the lyrics, adlibs, and render notes unless the user wrote them first. And the postcard is not a bossa: the Girl-from-Ipanema tourist scene of beaches, cocktails, and generic tropical romance is the greeting-card parody the founder rejects; the user's own person, window, and evening are the song.",
+      "defaultRoomId": "bossa-cl-ssica",
+      "rooms": [
+        {
+          "id": "bossa-cl-ssica",
+          "name": "Bossa Clássica",
+          "oneLine": "The João Gilberto and Jobim root — a voice barely above a whisper riding the syncopated nylon-guitar batida, cool, understated, saudade held quiet and never wailed.",
+          "tempoGroove": "95-140 BPM felt as a gentle, unhurried sway — the slow hushed ballads live at the low end, the brighter classics toward the top (the batida — João Gilberto's syncopated violão pattern — subdivides busily under a relaxed pulse, so the song feels calm even as the guitar stays intricate); a soft brush-and-rim kit and a warm acoustic bass keep the room quiet. Low-to-medium word density: short, conversational, breathing phrases that sit inside the batida rather than fighting it, with real air after them, because the voz is close to the mic and the guitar answers in the gaps and the singer needs room to let a syllable fall soft.",
+          "writingDials": [
+            "Write for the batida, not over it: the violão's syncopated pattern is the song's engine and it wants space, so keep phrases short and let them land off the obvious beat, leaving the guitar room to speak between lines — a sheet packed wall-to-wall smothers the pattern that defines the whole genre.",
+            "Whisper it, do not project: this is the close-mic voz sung barely above breath, cool and intimate, so write lines a voice can almost speak — no belted peaks, no big climaxes, the feeling carried by understatement and phrasing rather than volume.",
+            "Hold saudade quiet: the emotional root is a gentle ache — longing, a tender love, a fading afternoon — worn with restraint and never wailed, so the sadness is implied and held low, present in the tone, never spelled out as a lament.",
+            "Conversational, sophisticated diction: bossa speaks intimately and with taste, elegant but unforced — favor a plain true line delivered with cool over any showy figure, close to speech.",
+            "Direct and present to one person or one moment: first person at intimate distance — to a lover, to the sea and the shore, to the evening itself — never widened to a crowd, never a public scene.",
+            "The hook is a soft returning phrase, not a shout: a short melodic line re-sung with the same hushed tenderness each pass, deepening rather than escalating — this room circles a single held feeling and never builds to a belt.",
+            "Keep the story specific to the user's own life inside the cool — the real person, the real window, the real evening — so the understated elegance dresses a true feeling and never floats into Ipanema-postcard abstraction.",
+            "Cross-genre firewall: the syncopated violão batida with a whispered close-mic voz over quiet jazz harmony makes it bossa, not samba — no loud percussive roda, no cavaquinho, no pandeiro driving a bright party pulse; bossa turns samba's rhythm inward to a murmur, and the moment it gets loud and communal the room is gone."
+          ],
+          "rendering": "Intimate bossa nova — a syncopated nylon-string guitar (violão) playing the batida up front, warm upright bass walking gently, soft brushed drums and light rim holding a relaxed sway, tasteful understated jazz chords. Close-miked lead vocal sung barely above a whisper, cool and unforced, near-spoken with no vibrato, right on the mic with little or no doubling; dry, warm, intimate room with real air, no loud percussion, no belt, no croon — the classic João Gilberto and Jobim small-room feel.",
+          "storyFit": "Best for: a tender love held gently, quiet longing, the sea and the shore of Rio, a fading afternoon and its soft melancholy, a discreet beauty noticed, intimacy worn with cool. Poor fit: a full jazz showcase with a long instrumental solo — that is Bossa-Jazz; a spare current modern intimacy — that is Contemporânea; anything loud, communal, danceable-bright, or belted, which this hushed room has no register for.",
+          "parodyTraps": "Any Portuguese endearment or slang the writer sprinkled that the user never said; Girl-from-Ipanema postcard scenery — beaches, cocktails, generic tropical romance — standing in for a real feeling; a belted or projected delivery that breaks the whisper; filling the batida's gaps with wall-to-wall words; a loud pandeiro-and-cavaquinho samba groove pasted under it, which turns it into samba.",
+          "performance": {
+            "prose": "Density sparse; min adlibs 2; delivery tags [Soft] [Whispered] [Harmonies] [Instrumental Break]. This room performs at intimate distance — one whispered lead voice, the syncopated violão as its close conversation partner, and a soft instrumental answer, no crowd and no wall of sound. Signature: the voz-and-violão conversation — the guitar speaks its syncopated fill into the space the phrasing leaves at line-ends and the whispered voice answers back, the two trading close and quiet, the batida breathing with the singer. Placement: verses stay nearly bare so the whisper and the batida read; a soft instrumental answer fills the gaps the sparse writing leaves and an [Instrumental Break] can hand a short passage to the guitar or a soft solo instrument; a light harmony shadow may slip under the hook's last words, and the final line falls soft. Tag identity: an intimate whispered lead and its answering violão — the guitar speaking in the holes as a second quiet voice, an occasional close harmony at a peak, a [Soft] header where the song pulls nearest. No crowd, no loud percussion, no belt — a voice, a guitar, and the air between them, and every sung word is plain language from the user's own sheet.",
+            "adlibDensity": "sparse",
+            "minAdlibs": 2,
+            "deliveryTags": [
+              "[Soft]",
+              "[Whispered]",
+              "[Harmonies]",
+              "[Instrumental Break]"
+            ]
+          },
+          "builder": {
+            "instruments": [
+              "violão de nylon",
+              "contrabaixo acústico",
+              "bateria com vassourinhas",
+              "piano",
+              "voz sussurrada"
+            ],
+            "themes": [
+              "Saudade serena",
+              "O amor tranquilo",
+              "O mar e a orla do Rio",
+              "A garota que passa",
+              "Fim de tarde e melancolia doce",
+              "A beleza discreta"
+            ],
+            "purposes": [
+              "Sussurrar bem de perto",
+              "Embalar um fim de noite",
+              "Acalmar o coração"
+            ]
+          }
+        },
+        {
+          "id": "bossa-jazz",
+          "name": "Bossa-Jazz",
+          "oneLine": "The Getz-Gilberto harmonic lane — the same syncopated batida under richer, more chromatic chords and a real instrumental solo, where the sax or piano takes a whole passage and the words step aside.",
+          "tempoGroove": "100-150 BPM in the same relaxed bossa sway — the slow Getz-Gilberto ballads sit near the floor — the batida intact but set inside a fuller jazz harmony that moves and reharmonizes under the melody; upright bass walks with more motion and the brushed kit swings a touch looser to leave a real solo section room. Low-to-medium word density with a compact, well-made song at the front so the arrangement has a whole passage to open into: sing the tune, then hand the song to the instruments, because the solo is structural here and the lyric is built to make room for it.",
+          "writingDials": [
+            "Write around the solo: this room plans a real instrumental section where a saxophone or piano takes over and the voice rests entirely, so keep the sung portion a tight, complete miniature and mark the passage where the words stop and the horn carries the song — the solo is part of the form, not an afterthought.",
+            "Keep the voz whispered even over the richer harmony: the sophistication lives in the chords and the solo, not in the volume, so the singer still sits cool and close on the mic — never let the fuller arrangement pull the delivery up into a belt.",
+            "Write to a moving harmony: the chords are extended, altered, and chromatic and they travel, so favor smooth, singable vowel-lines that glide over shifting harmony, and end feeling-phrases where the voice can hold a note against a changing chord — the melody should feel elegant against motion underneath.",
+            "Sophistication and intimacy together: the register is adult and refined, a discreet elegance — a knowing, understated love or longing worn with taste, so trust a graceful, economical line over anything blunt or grand.",
+            "The tune is a real melody, not a chant: write a shapely, memorable sung theme the instruments can quote and depart from in the solo, so the hook works as a melodic idea a horn could play, not as a phrase a crowd would shout.",
+            "First person at close, cultured distance: intimate to one person or one mood, poised and cool — never a public scene, and the saudade still held quiet under the sophistication.",
+            "Keep one true, specific detail from the user's own story at the center so the elegant harmony has something real to be elegant about — the actual person, the actual evening — never generic bossa scenery under the fine chords.",
+            "Cross-genre firewall: the whispered voz and the syncopated violão batida still governing under the rich chords and the solo make it bossa-jazz, not MPB or straight jazz — MPB widens into a fuller art-song and a projected voice, and straight jazz drops the batida entirely; here the pattern and the hush hold, and the harmony and solo are grafted onto bossa, never the reverse."
+          ],
+          "rendering": "Sophisticated bossa-jazz — syncopated nylon-string guitar (violão) holding the batida, rich extended and altered jazz chords on piano, warm walking upright bass, brushed drums swinging lightly, and a featured solo instrument (soft tenor saxophone or piano) taking a full section. Cool close-miked lead vocal sung soft and unforced over the moving harmony, near-spoken with no vibrato, little doubling; warm, spacious studio-jazz mix with real air, a real instrumental solo, no belt, no croon, and no loud percussion — the Getz-Gilberto feel, 1960s cool bossa-jazz.",
+          "storyFit": "Best for: a sophisticated, understated love, a discreet elegance and intimacy, quiet longing carried with taste, a late evening's mood, saudade worn cool over rich harmony. Poor fit: the plainest small-room whisper with no solo — that is Clássica; a spare current modern frame — that is Contemporânea; anything loud, communal, or belted, and any lyric that leaves no room for the instruments to take a passage.",
+          "parodyTraps": "Sprinkled Portuguese phrases the user never wrote; postcard Ipanema romance dressed in fancy chords with no real feeling under it; filling the planned solo section with words so the instruments never get their passage; pulling the whispered voz up into a projected jazz-diva belt; mistaking rich harmony for turning it into a lounge cliche with the batida and the intimacy removed.",
+          "performance": {
+            "prose": "Density sparse; min adlibs 2; delivery tags [Soft] [Sax Solo] [Instrumental Break] [Whispered]. This room performs like a cool small combo around a whispered lead — one soft voice, the batida underneath, and a featured solo instrument that takes a whole passage while the voice rests, no crowd and no belt. Signature: the handed-off solo — the sung theme finishes and the song opens into a real instrumental section where the sax or piano carries it alone, the voice stepping fully aside, so the sophistication is stated in the horn as much as in the words. Placement: the tight sung theme sits lead-forward with little doubling; a [Sax Solo] or [Instrumental Break] takes a whole passage after the theme where the words stop, a soft chord fill answers the voice at line-ends elsewhere, and the final restatement lands soft. Tag identity: a whispered lead and a featured soloist — the batida holding underneath, the sax or piano owning a full passage while the voice rests, an occasional close harmony at a peak, a [Soft] header where the song pulls nearest. No crowd, no loud percussion, no belt — a cool combo and the air around it, and every sung word is plain language from the user's own sheet.",
+            "adlibDensity": "sparse",
+            "minAdlibs": 2,
+            "deliveryTags": [
+              "[Soft]",
+              "[Sax Solo]",
+              "[Instrumental Break]",
+              "[Whispered]"
+            ]
+          },
+          "builder": {
+            "instruments": [
+              "violão de nylon",
+              "piano",
+              "saxofone suave",
+              "contrabaixo acústico",
+              "bateria com vassourinhas"
+            ],
+            "themes": [
+              "Sofisticação e intimidade",
+              "Desejo contido",
+              "O amor tranquilo",
+              "Fim de tarde e melancolia doce",
+              "A beleza discreta"
+            ],
+            "purposes": [
+              "Seduzir com suavidade",
+              "Embalar um fim de noite",
+              "Sussurrar bem de perto"
+            ]
+          }
+        },
+        {
+          "id": "bossa-contempor-nea",
+          "name": "Bossa Contemporânea",
+          "oneLine": "The modern nova bossa — the whispered voz and the syncopated batida produced clean and current, sparser and more understated, a plain modern line trusted over any figure or flourish.",
+          "tempoGroove": "90-135 BPM, the batida kept but produced spare and modern — often just the nylon guitar and voice with subtle contemporary color (a soft pad, a light electronic touch, a flute or a warm bass), a small swell reading as large because so little sits around it. Low word density with a conversational, understated shape: leave air and let the plain lines breathe, because the room trusts intimacy and restraint over density or a lush arrangement, and the batida still needs its gaps.",
+          "writingDials": [
+            "Underplay it in a current voice: this room states the feeling plainly and close, conversational rather than poetic or lush — trust a simple, true modern line over an elegant figure or a rich chord, and let the restraint itself carry the weight.",
+            "Keep the frame spare: write for the nylon guitar and voice with room around them and only subtle modern color, so the words are exposed and every one has to be honest — one real, understated image outweighs any ornament here.",
+            "Hold the batida and the hush: even modern and stripped, the syncopated pattern and the whispered close voz are the spine — keep phrases short and off the obvious beat so the guitar breathes, and never pull the voice up into a belt.",
+            "A small color reads as large: the room can lift or brighten, but subtly — one soft pad or a single held note against the bare frame lands big precisely because the verses stayed so bare, so plan a gentle touch rather than a full arrangement.",
+            "Modern, natural diction: contemporary everyday language sung close to speech, sincere and unforced — this is the bossa feeling in a current voice, so avoid both the archaic prettiness and the rich jazz sophistication of the other rooms.",
+            "Direct and present to one person: first person to a you or a moment at close conversational distance, saying the true thing simply — a plain confession, a quiet noticing, a soft goodbye, none of it dressed up, saudade still held quiet.",
+            "Anchor it in one specific, real detail from the user's own story so the modern plainness stays intimate and true and never slides into a faceless, generic lounge or chill-out track.",
+            "Cross-genre firewall: the syncopated batida and the whispered voz produced spare and modern make it bossa, not a generic chill-pop or lounge track and not samba — no loud pandeiro-and-cavaquinho roda, and the nylon-guitar pattern and the hush must stay; if the batida vanishes into a plain pop strum or a four-on-the-floor beat, the room is gone, because this lane still sways to the violão and breathes."
+          ],
+          "rendering": "Clean contemporary bossa — intimate syncopated nylon-string guitar (violão) leading, spare and modern, with subtle pads, light room, and maybe a soft flute, a warm modern bass, or a faint electronic touch entering low; restrained brushed or minimal percussion holding the sway. Close, natural lead vocal sung near to speech, whispered and unforced with no vibrato, tasteful light harmonies and a controlled delivery, a small dynamic lift rather than a belt or a croon; polished, current, minimal production — the modern nova-bossa sound, warm and uncluttered.",
+          "storyFit": "Best for: a quiet contemporary love song, an understated longing, a plain soft goodbye, a modern intimacy, a fading afternoon said simply, a discreet beauty noticed at close distance. Poor fit: the ornate cool small-room root — that is Clássica; a rich jazz-harmony song with a full solo — that is Bossa-Jazz; anything loud, communal, or belted, which this spare modern room deliberately refuses.",
+          "parodyTraps": "Sprinkled Portuguese phrases the user never wrote; a plain line mistaken for a lazy one — understatement still needs one true, specific detail; over-producing the spare frame until the intimacy and the batida are gone; forcing a belted lift the room is built to avoid; a faceless generic chill-out mood with no real person in it; dropping the nylon-guitar pattern for a plain pop strum, which strips the bossa out.",
+          "performance": {
+            "prose": "Density sparse; min adlibs 2; delivery tags [Soft] [Harmonies] [Whispered] [Whistle]. This room performs at close conversational distance — one natural, whispered lead voice with tasteful light harmonies over a spare modern frame and the batida still swaying, no crowd, no belt, and no loud answer. Signature: the intimate lift — the voice stays close and plain and the arrangement gives a small, subtle swell or a single soft color into the chorus, so a modest rise reads as large against verses that stayed nearly bare, the hook deepening each return while the violão keeps its quiet pattern underneath. Placement: verses sit almost unadorned so the plainness and the batida carry them; a light harmony double slips under the hook's last words, a [Soft] header marks the closest moment, a soft [Whistle] or a held note can color a passage, and the small lift into the final chorus is the biggest the song ever gets. Tag identity: an intimate modern lead with light self-harmonies over the batida — a soft harmony shadow on the hook, a [Soft] header where the song pulls nearest, one gentle color saved for the last chorus. No crowd, no loud percussion, no belt — one close voice and a spare frame that still sways, and every sung word is plain language from the user's own sheet.",
+            "adlibDensity": "sparse",
+            "minAdlibs": 2,
+            "deliveryTags": [
+              "[Soft]",
+              "[Harmonies]",
+              "[Whispered]",
+              "[Whistle]"
+            ]
+          },
+          "builder": {
+            "instruments": [
+              "violão de nylon",
+              "voz sussurrada",
+              "flauta",
+              "contrabaixo acústico",
+              "piano"
+            ],
+            "themes": [
+              "O amor tranquilo",
+              "Saudade serena",
+              "Fim de tarde e melancolia doce",
+              "A beleza discreta"
+            ],
+            "purposes": [
+              "Sussurrar bem de perto",
+              "Acalmar o coração",
+              "Embalar um fim de noite"
+            ]
+          }
+        }
+      ],
+      "cues": [
+        {
+          "cue": "bossa nova",
+          "strength": "strong",
+          "roomId": "bossa-cl-ssica"
+        },
+        {
+          "cue": "joão gilberto",
+          "strength": "strong",
+          "roomId": "bossa-cl-ssica"
+        },
+        {
+          "cue": "jobim",
+          "strength": "strong",
+          "roomId": "bossa-cl-ssica"
+        },
+        {
+          "cue": "vinícius de moraes",
+          "strength": "strong",
+          "roomId": "bossa-cl-ssica"
+        },
+        {
+          "cue": "violão e voz",
+          "strength": "strong",
+          "roomId": "bossa-cl-ssica"
+        },
+        {
+          "cue": "saudade",
+          "strength": "weak",
+          "roomId": "bossa-cl-ssica"
+        },
+        {
+          "cue": "o mar",
+          "strength": "weak",
+          "roomId": "bossa-cl-ssica"
+        },
+        {
+          "cue": "fim de tarde",
+          "strength": "weak",
+          "roomId": "bossa-cl-ssica"
+        },
+        {
+          "cue": "sussurro",
+          "strength": "weak",
+          "roomId": "bossa-cl-ssica"
+        },
+        {
+          "cue": "íntimo",
+          "strength": "weak",
+          "roomId": "bossa-cl-ssica"
+        },
+        {
+          "cue": "getz-gilberto",
+          "strength": "strong",
+          "roomId": "bossa-jazz"
+        },
+        {
+          "cue": "bossa-jazz",
+          "strength": "strong",
+          "roomId": "bossa-jazz"
+        },
+        {
+          "cue": "stan getz",
+          "strength": "strong",
+          "roomId": "bossa-jazz"
+        },
+        {
+          "cue": "sax solo",
+          "strength": "strong",
+          "roomId": "bossa-jazz"
+        },
+        {
+          "cue": "acordes de jazz",
+          "strength": "weak",
+          "roomId": "bossa-jazz"
+        },
+        {
+          "cue": "sofisticado",
+          "strength": "weak",
+          "roomId": "bossa-jazz"
+        },
+        {
+          "cue": "instrumental",
+          "strength": "weak",
+          "roomId": "bossa-jazz"
+        },
+        {
+          "cue": "cool",
+          "strength": "weak",
+          "roomId": "bossa-jazz"
+        },
+        {
+          "cue": "nova bossa",
+          "strength": "strong",
+          "roomId": "bossa-contempor-nea"
+        },
+        {
+          "cue": "bossa moderna",
+          "strength": "strong",
+          "roomId": "bossa-contempor-nea"
+        },
+        {
+          "cue": "bossa contemporânea",
+          "strength": "strong",
+          "roomId": "bossa-contempor-nea"
+        },
+        {
+          "cue": "modern bossa",
+          "strength": "weak",
+          "roomId": "bossa-contempor-nea"
+        },
+        {
+          "cue": "stripped",
+          "strength": "weak",
+          "roomId": "bossa-contempor-nea"
+        },
+        {
+          "cue": "minimalista",
+          "strength": "weak",
+          "roomId": "bossa-contempor-nea"
+        },
+        {
+          "cue": "atual",
+          "strength": "weak",
+          "roomId": "bossa-contempor-nea"
+        }
+      ]
+    },
+    "sertanejo": {
+      "id": "sertanejo",
+      "name": "Sertanejo",
+      "aliases": [
+        "sertanejo universitario",
+        "sertanejo universitário",
+        "sofrencia",
+        "sofrência",
+        "moda de viola",
+        "sertanejo raiz"
+      ],
+      "profileText": "A sertanejo writer starts with a two-voice texture, not one voice. The genre's signature is the melody doubled in parallel thirds — a dupla singing the whole line together, or a solo star (Marília Mendonça, Gusttavo Lima, Luan Santana) whose records stack a segunda voz a third above on every hook. So the writing job is built for that doubling before it is verbal: keep the melody singable and stepwise, in a range that harmonizes sweetly a third apart, and hear the pair locking on the hook even when one name is on the record. A sertanejo line written as an unstacked lone belt, with no room for the second voice to track it, has missed the thing that makes the genre sound like itself. The other constant is the heart: dor de cotovelo, the ache of a love gone wrong, the root the music keeps returning to even when it celebrates.\n\nThe tradition spans a wide arc, and choosing the room is choosing where on that arc the song sits and how the ache is worn. Sertanejo Raiz holds the root: a dupla and a viola caipira on the porch, the moda-de-viola storytelling of the paulista interior, a rural story told slow with the ponteado answering between the lines and the ache present but narrated, not yet wailed. Sertanejo Universitário is the modern radio and arena lane: the same two voices plus a full band, swinging between festa and dor de cotovelo, a hook built for a whole crowd to sing back, the doubling in thirds now the arena's sound. Sofrência / Modão is the heavy heartbreak lane in two registers: the sofrência wailed wide open and undignified over a drink, and the classic modão-romântico — the Zezé Di Camargo & Luciano and Bruno & Marrone monument — pleading at full ache with its dignity intact, the sanfona crying back like a second mourner in both. Same two-voice texture, same heart; different world, different restraint.\n\nThe law above every dial is language. Portuguese is the song's native tongue — the lyrics are written in Portuguese by a later layer — but the writer works in plain English craft instruction and never invents a caipira drawl, slang, or accent flavor to costume the song; only words the user wrote survive, and identity is carried by the two-voice harmony, the accompaniment, and how nakedly the ache is worn, never by sprinkled vocabulary. Craft terms the writer thinks with — the dupla, thirds, the ponteado, the modão, dor de cotovelo as jargon — are working vocabulary and stay out of the lyrics and adlibs unless the user wrote them first; the render notes may and should name the instruments the room is built on (viola caipira, sanfona, violão). And the postcard is not a sertanejo: generic country-boy scenery, hillbilly clichés, and stock sad-song heartbreak are the parody the founder rejects; the user's own roça, road, bottle, and name are the song.",
+      "defaultRoomId": "sertanejo-universit-rio",
+      "rooms": [
+        {
+          "id": "sertanejo-raiz",
+          "name": "Sertanejo Raiz / Moda de Viola",
+          "oneLine": "The rootsy heart of the tradition — a dupla and a viola caipira on the porch, the moda-de-viola storytelling of the interior, plainspoken and unhurried, the Tião Carreiro / Tonico e Tinoco lane where two voices in thirds tell a rural story slow.",
+          "tempoGroove": "70-110 BPM, unhurried and often rubato at the edges — a lilting rural feel, sometimes a swaying pagode-de-viola or catira lilt, the viola caipira keeping a rolling ponteado a small room can settle into rather than dance to. Low-to-medium word density: short sturdy lines with real air after them, because the viola answers between phrases and the two voices need room to harmonize and breathe.",
+          "writingDials": [
+            "Write for the dupla in thirds: the two voices move in parallel a third apart almost the whole way, so the melody must sit in a range that harmonizes sweetly doubled — write singable, stepwise lines that sound fuller the moment the second voice joins, and hear the pair, not a soloist.",
+            "Tell it plain and in order: this room narrates — a story of the roça, the estrada, a love, a loss — in everyday interior words a stranger follows on first hearing, the drama coming from the events and the place, never from ornament.",
+            "Root the verses in concrete rural detail the user actually brought — the real fazenda, the real river, the real name, the real road home — never quaint caipira costume or a postcard countryside; the plainspoken specific is the whole credibility.",
+            "Leave the viola its answer: the viola caipira is the second instrument-voice, so end phrases a beat early and leave the gap where the ponteado replies and takes a turnaround between verses — a sheet packed wall-to-wall has silenced the instrument that defines raiz.",
+            "Rhyme clean and singable in couplets or a plain quatrain: solid end-rhyme the ear hears coming, so the story stays easy to follow and easy for the second voice to lock onto; a clear line beats a clever one.",
+            "Registers are the record and the longing: a story worth keeping, a saudade for the land or a person gone, a devoted love, a hard road told with conviction and never with irony — the ache present but told, not yet wailed.",
+            "Let the tempo breathe: raiz rushes nothing, so write phrases that can stretch and settle rather than lock to a dance grid; the space around the viola is a feature, not a gap to fill.",
+            "Cross-genre firewall: What makes it Raiz and not Forró is the viola caipira and the two-voice dupla telling a paulista-interior story with room to breathe — no sanfona-and-zabumba driving a São João dance, no triângulo, no Nordeste baião pulse; this is the porch and the ponteado, not the arraiá."
+          ],
+          "rendering": "Viola caipira (ten-string) rolling a ponteado and answering the vocal at phrase-ends, a violão underneath, spare and live, an optional soft contrabaixo walking; two-voice dupla harmony in close parallel thirds carrying the melody almost throughout. Warm conversational lead more told than belted, the second voice tracking a third above; dry, warm, rural recording with real air, no drums or brushed feel only, no synths, timeless caipira sound.",
+          "storyFit": "Best for: a true rural story, saudade for the land or someone gone, a devoted love, a homecoming, a hard road on the estrada, honoring a parent or the terra. Poor fit: an arena festa built for a crowd to lift — that is universitário; a drunk wide-open heartbreak collapse — that is sofrência; club energy or radio polish, which this porch has no register for.",
+          "parodyTraps": "Quaint caipira costume — hillbilly scenery, a fake country drawl, gather-round rural clichés the user never wrote; a viola buried under a full band; inventing a farm-and-river backdrop the user's story never held; filling every bar so the ponteado has nothing to answer; a radio-slick hook that turns the moda into pop with a viola pasted on.",
+          "performance": {
+            "prose": "Density sparse; min adlibs 2; delivery tags [Harmonies] [Instrumental Break] [Acoustic]. This room performs like two singers and a viola on a porch — the dupla carrying the melody in locked thirds, the viola caipira answering between the lines, nobody else in the room. Signature: the two-voice harmony and the viola answer — the pair sings almost the whole line a third apart so the melody always reads doubled, while the viola caipira fills the gap at phrase-ends and takes an [Instrumental Break] ponteado turnaround between verses. Placement: the dupla harmony holds through the verses and tightens on the refrain; the viola answers in the holes the plain writing leaves and owns the turnaround marking the passage between story beats; verses stay bare so the story and the two voices land. Tag identity: a two-voice dupla and an answering viola — the pair locked in parallel thirds throughout, the viola caipira replying in the gaps and taking the instrumental turn, a violão underneath. No crowd, no band, no arena — two voices and the ponteado, every word plain language from the user's own sheet.",
+            "adlibDensity": "sparse",
+            "minAdlibs": 2,
+            "deliveryTags": [
+              "[Harmonies]",
+              "[Instrumental Break]",
+              "[Acoustic]"
+            ]
+          },
+          "builder": {
+            "instruments": [
+              "viola caipira",
+              "violão",
+              "contrabaixo"
+            ],
+            "themes": [
+              "A roça e a viola",
+              "O peão e a estrada",
+              "Homenagem à mãe e à terra",
+              "Traição e saudade"
+            ],
+            "purposes": [
+              "Cantar no karaokê com os amigos",
+              "Declarar um amor",
+              "Chorar as mágoas"
+            ]
+          }
+        },
+        {
+          "id": "sertanejo-universit-rio",
+          "name": "Sertanejo Universitário",
+          "oneLine": "Modern radio and arena sertanejo — the dupla plus a full band, swinging between festa and dor de cotovelo, the Jorge & Mateus / Henrique & Juliano lane where the two voices lift a hook a whole crowd sings back.",
+          "tempoGroove": "120-150 BPM for the festa numbers, the heartbreak side dropping to a ~90-120 mid-tempo swing; guitarra and teclado up front, bateria and contrabaixo pushing, a sanfona often coloring the top. Medium word density: conversational lines that ride the band and open wide at the chorus for a crowd and both voices to lift together, still leaving holes for a fill.",
+          "writingDials": [
+            "Build the chorus for the multidão: this is arena music, so write a hook meant to be sung back by a whole crowd — short, singable, returning the same each time, the dupla harmonizing it in thirds at full lift while the room shouts it with them.",
+            "Decide the register first, festa or dor de cotovelo: one song is a beer-in-hand celebration, the next is heartbreak sung to a crowd — pick which the user's story is before choosing point of view, because the same band swings both and the writing changes with the mood.",
+            "Keep the two voices in thirds on the hook: even inside a full modern band, the dupla harmony is the spine — write the chorus so the second voice locks a third above and the doubling reads as the arena sound, not a soloist over a track.",
+            "Verses conversational and current: everyday modern speech, a real phone, a real bar, a real night from the user's life — first-person and direct, the tone easy and contemporary, never the formal diction of the old moda.",
+            "Leave the band its fills: end phrases so the guitarra, teclado, or a bright sanfona can answer at line-ends and take a break, and plan the drop before the chorus crashes back — the dynamic turn into the hook is part of the writing.",
+            "Rhyme clean and radio-singable: strong end-rhyme the crowd hears coming, so the big chorus lands square and singable at full volume; this is not the room for buried near-rhyme.",
+            "Keep the ache the user's own even at party volume: when the register is dor de cotovelo, the heartbreak is still one real person's — a specific wound, not a stock sad-song, delivered as a crowd catharsis without losing the true detail.",
+            "Cross-genre firewall: What makes it Universitário and not Pagode is the dupla in thirds lifting a hook over a guitarra-and-sanfona band — no cavaquinho, no pandeiro-driven samba swing, no roda party groove; the drive serves an arena sertanejo chorus, not a samba."
+          ],
+          "rendering": "Full modern sertanejo band — guitarra (electric) and violão up front, teclado pads and stabs, a bright sanfona coloring the top and answering the vocal, contrabaixo and a driving bateria, the mix radio-polished and big. Two-voice dupla harmony locking parallel thirds on the chorus, an earnest lead through the verses opening into a crowd-sized hook; contemporary arena sound, dynamic drop-and-build into each chorus, live festa energy.",
+          "storyFit": "Best for: a festa or a night out sung for a crowd, a beer-in-hand celebration, heartbreak released loud, a big radio love song, a night that turned, a hook built to lift an arena. Poor fit: a spare porch story that wants only a viola — that is raiz; a drunk wide-open collapse at a bar counter — that is sofrência; anything that needs stillness or intimacy over a big communal build.",
+          "parodyTraps": "A hollow oh-oh chorus with no real story or true detail under the lift; losing the dupla thirds so it becomes a generic solo pop hook; fake caipira drawl or slang the user never wrote; a whispered delivery that fights the driving band; radio polish that sands off the sertanejo grain until the sanfona and the two voices vanish.",
+          "performance": {
+            "prose": "Density moderate; min adlibs 3; delivery tags [Harmonies] [Accordion Solo] [Instrumental Break]. This room performs like a duo and a crowd lifting together — an earnest lead through the verses, the dupla locking thirds on the chorus a whole arena sings back, and the sanfona or guitarra surging on the fills. Signature: the two-voice hook and the band answer — the dupla harmonizes the chorus in parallel thirds at full lift while the crowd shouts it with them, and the sanfona or guitarra fills the gap at line-ends and takes an [Accordion Solo] or [Instrumental Break] on the biggest turn. Placement: verses stay leaner and lead-forward; the dupla harmony and the crowd flood the chorus and the final lift; the drop-and-build marks the turn into the hook, and the instrumental break hands the peak to the sanfona or guitarra. Tag identity: a two-voice duo and an arena rising together — an earnest verse voice opening into a thirds-harmonized hook a crowd sings back, the sanfona answering and soloing, the band surging on the break. Every shouted word is plain language from the user's own sheet, the ache kept the user's own even at full volume.",
+            "adlibDensity": "moderate",
+            "minAdlibs": 3,
+            "deliveryTags": [
+              "[Harmonies]",
+              "[Accordion Solo]",
+              "[Instrumental Break]"
+            ]
+          },
+          "builder": {
+            "instruments": [
+              "sanfona",
+              "acordeão",
+              "guitarra",
+              "teclado",
+              "contrabaixo",
+              "bateria",
+              "violão"
+            ],
+            "themes": [
+              "Balada e paquera na festa",
+              "Cerveja e desilusão",
+              "Amor sofrido",
+              "Superação depois do fim"
+            ],
+            "purposes": [
+              "Animar o rodeio",
+              "Dançar agarradinho",
+              "Beber e esquecer",
+              "Declarar um amor"
+            ]
+          }
+        },
+        {
+          "id": "sofr-ncia",
+          "name": "Sofrência / Modão",
+          "oneLine": "The heavy heartbreak-with-a-drink lane — a mid-tempo modão that bleeds the whole wound over a bottle: the Marília Mendonça / Gusttavo Lima sofrência wailed wide open, and the classic modão-romântico of Zezé Di Camargo & Luciano and Bruno & Marrone that pleads at full ache with its dignity intact.",
+          "tempoGroove": "80-115 BPM, a swaying mid-tempo modão felt in a heavy rolling pulse built for a drink, a cry, and a slow agarradinho sway; sanfona and guitarra leading, the arrangement swelling under the hurt, a bateria and contrabaixo holding a slow ache. Low-to-medium word density: short wounded phrases with real air after them, because the wound needs room to break and the sanfona and second voice answer the cry.",
+          "writingDials": [
+            "Wear the dor de cotovelo at its true depth, in either of the lane's two registers: the sofrência side is the drunk, undefended confession — a bottle in the story and no composure left, self-pity the register, not a flaw; the classic modão-romântico side pleads at full ache while keeping its dignity — grand, devoted, never sloppy — and Zezé-style cues land there, not in the collapse.",
+            "Keep the two-voice texture on the wail: a dupla, or a solo lead with a segunda voz stacking a third above on the hook (the Marília and Gusttavo records double the cry constantly) — write the hook to sit where that second voice locks on and swells the wound, never an unstacked lone belt.",
+            "Build the hook as a wail the bar knows: a short heartbroken phrase, re-sung more times than dignity allows, gathering grief each round rather than resolving — plain enough to sing back, true enough to hurt, the line the whole counter cries along to.",
+            "Put the drink and the wound in the room: the bottle, the empty side of the bed, the phone that will not ring, the actual bar from the user's own night — concrete and bodily, the specific loss, never a stock sad-song scenery.",
+            "Direct address to the one who left is fully at home: begging, accusing, remembering out loud, second person aimed at them or a first person collapsing over the counter — the ache faces one real person.",
+            "Leave the sanfona its cry: end feeling-lines on open vowels the voice can hold and break on, and leave the gap where the sanfona and guitarra answer the wail and swell under it — the instrumental cry is part of the lyric, not over it.",
+            "Say the whole hurt: understatement is the wrong instinct here — this room states the full wound, the ache running to the floor, the feeling delivered as a public cry a crowd feels with the singer.",
+            "Cross-genre firewall: What makes it Sofrência and not Bolero is the sanfona-and-band modão and the dupla wailing a danceable heavy ache — no requinto-answered trio in old-world restraint, no rubato chamber croon holding its dignity; sofrência collapses openly on its feet, the wound wide and drunk, never poised."
+          ],
+          "rendering": "Sanfona crying and answering the vocal, guitarra (electric) and violão, teclado pads swelling under the hurt, contrabaixo and a heavy mid-tempo bateria rolling the ache; two-voice dupla harmony in parallel thirds wailing the hook, an impassioned lead pushed to the edge of breaking. Big emotional modern sofrência mix, the arrangement building under the cry, doubled voices heavy on the peaks; bar-band live feel, raw and swelling.",
+          "storyFit": "Best for: heartbreak worn openly, betrayal, drinking to forget, begging someone to come back, the empty house after the end, a love that ruined you cried out loud. Poor fit: a spare rural porch story — that is raiz; a bright festa celebration or a crowd-lifting party hook — that is universitário's festa side; confidence, joy, or any register that keeps its composure.",
+          "parodyTraps": "Any fake drawl or slang the user never wrote sprinkled in as flavor; generic country-sad postcard with no real wound under it; making the hook clever instead of cry-able; burying the sanfona's answer and the second voice under wall-to-wall words; keeping a dignified distance when the whole point is the one who has lost theirs.",
+          "performance": {
+            "prose": "Density moderate; min adlibs 4; delivery tags [Harmonies] [Accordion Solo] [Instrumental Break] [Melancholy]. This room performs like two voices crying to a bar that already knows the song — the dupla wailing the ache in locked thirds and the sanfona answering like a second mourner, the arrangement swelling under them. Signature: the two-voice wail and the sanfona cry — the pair harmonizes the hook a third apart so the ache lands doubled and heavier, while the sanfona cries its answer in the gap the phrasing leaves and the band swells under the break. Placement: the dupla thirds carry the hook and gather grief on each return; the sanfona answers at the line-ends the singers leave open, roughly one per line through the verses, and takes an [Accordion Solo] or [Instrumental Break] where the words stop and the cry carries; the final wails push hardest. Tag identity: a two-voice dupla and a crying sanfona — the pair locked in parallel thirds wailing the wound, the sanfona answering as the second mourner, the band swelling on the break. No club, no crowd hype — two voices, a drink, and the sanfona answering them, every sung word plain language from the user's own sheet.",
+            "adlibDensity": "moderate",
+            "minAdlibs": 4,
+            "deliveryTags": [
+              "[Harmonies]",
+              "[Accordion Solo]",
+              "[Instrumental Break]",
+              "[Melancholy]"
+            ]
+          },
+          "builder": {
+            "instruments": [
+              "sanfona",
+              "acordeão",
+              "guitarra",
+              "teclado",
+              "contrabaixo",
+              "bateria",
+              "violão"
+            ],
+            "themes": [
+              "A modão e a dor de cotovelo",
+              "Cerveja e desilusão",
+              "Amor sofrido",
+              "Traição e saudade"
+            ],
+            "purposes": [
+              "Chorar as mágoas",
+              "Beber e esquecer",
+              "Cantar no karaokê com os amigos"
+            ]
+          }
+        }
+      ],
+      "cues": [
+        {
+          "cue": "sertanejo raiz",
+          "strength": "strong",
+          "roomId": "sertanejo-raiz"
+        },
+        {
+          "cue": "moda de viola",
+          "strength": "strong",
+          "roomId": "sertanejo-raiz"
+        },
+        {
+          "cue": "viola caipira",
+          "strength": "strong",
+          "roomId": "sertanejo-raiz"
+        },
+        {
+          "cue": "tião carreiro",
+          "strength": "strong",
+          "roomId": "sertanejo-raiz"
+        },
+        {
+          "cue": "tonico e tinoco",
+          "strength": "strong",
+          "roomId": "sertanejo-raiz"
+        },
+        {
+          "cue": "a roça",
+          "strength": "weak",
+          "roomId": "sertanejo-raiz"
+        },
+        {
+          "cue": "caipira",
+          "strength": "weak",
+          "roomId": "sertanejo-raiz"
+        },
+        {
+          "cue": "o interior",
+          "strength": "weak",
+          "roomId": "sertanejo-raiz"
+        },
+        {
+          "cue": "saudade da terra",
+          "strength": "weak",
+          "roomId": "sertanejo-raiz"
+        },
+        {
+          "cue": "sertanejo universitário",
+          "strength": "strong",
+          "roomId": "sertanejo-universit-rio"
+        },
+        {
+          "cue": "jorge & mateus",
+          "strength": "strong",
+          "roomId": "sertanejo-universit-rio"
+        },
+        {
+          "cue": "henrique & juliano",
+          "strength": "strong",
+          "roomId": "sertanejo-universit-rio"
+        },
+        {
+          "cue": "ana castela",
+          "strength": "weak",
+          "roomId": "sertanejo-universit-rio"
+        },
+        {
+          "cue": "agronejo",
+          "strength": "weak",
+          "roomId": "sertanejo-universit-rio"
+        },
+        {
+          "cue": "balada",
+          "strength": "weak",
+          "roomId": "sertanejo-universit-rio"
+        },
+        {
+          "cue": "festa",
+          "strength": "weak",
+          "roomId": "sertanejo-universit-rio"
+        },
+        {
+          "cue": "rodeio",
+          "strength": "weak",
+          "roomId": "sertanejo-universit-rio"
+        },
+        {
+          "cue": "agarradinho",
+          "strength": "weak",
+          "roomId": "sertanejo-universit-rio"
+        },
+        {
+          "cue": "sofrência light",
+          "strength": "weak",
+          "roomId": "sertanejo-universit-rio"
+        },
+        {
+          "cue": "sofrência",
+          "strength": "strong",
+          "roomId": "sofr-ncia"
+        },
+        {
+          "cue": "modão",
+          "strength": "strong",
+          "roomId": "sofr-ncia"
+        },
+        {
+          "cue": "marília mendonça",
+          "strength": "strong",
+          "roomId": "sofr-ncia"
+        },
+        {
+          "cue": "gusttavo lima",
+          "strength": "strong",
+          "roomId": "sofr-ncia"
+        },
+        {
+          "cue": "zezé di camargo",
+          "strength": "strong",
+          "roomId": "sofr-ncia"
+        },
+        {
+          "cue": "bruno & marrone",
+          "strength": "strong",
+          "roomId": "sofr-ncia"
+        },
+        {
+          "cue": "milionário e josé rico",
+          "strength": "weak",
+          "roomId": "sofr-ncia"
+        },
+        {
+          "cue": "maiara & maraisa",
+          "strength": "weak",
+          "roomId": "sofr-ncia"
+        },
+        {
+          "cue": "zé neto & cristiano",
+          "strength": "weak",
+          "roomId": "sofr-ncia"
+        },
+        {
+          "cue": "dor de cotovelo",
+          "strength": "weak",
+          "roomId": "sofr-ncia"
+        },
+        {
+          "cue": "beber e esquecer",
+          "strength": "weak",
+          "roomId": "sofr-ncia"
+        },
+        {
+          "cue": "chorar",
+          "strength": "weak",
+          "roomId": "sofr-ncia"
+        },
+        {
+          "cue": "traição",
+          "strength": "weak",
+          "roomId": "sofr-ncia"
+        },
+        {
+          "cue": "despedida",
+          "strength": "weak",
+          "roomId": "sofr-ncia"
+        }
+      ]
+    },
+    "samba": {
+      "id": "samba",
+      "name": "Samba",
+      "aliases": [
+        "samba de raiz",
+        "samba enredo",
+        "samba-enredo",
+        "partido alto",
+        "partido-alto",
+        "samba cancao",
+        "samba canção"
+      ],
+      "profileText": "A samba writer starts with the swing and the answer. The groove is a syncopated two — the cavaquinho comping offbeat, the pandeiro riding sixteenths, the surdo marking the second beat as the heartbeat, the cuica moaning back — and above it the voices answer each other. So the writing job is spatial before it is verbal: lines end early and leave the pocket open so the coro can lift the refrain and the cavaquinho and cuica can reply in the gap, and a sheet packed wall-to-wall has smothered the call-and-response that names the genre. The writer plans where the words are NOT, because that space belongs to the answering voices, the crying cuica, and the sway.\n\nAbove every dial sits the soul: alegria apesar da vida — joy carried over hardship. The lift lives in the SWING and the answering coro, not in forced smiling words: the canon holds sambas that mourn without one bright line, carried with dignity by the groove and the circle. What the genre refuses is the self-pitying sag that loses the sway — never the sadness itself.\n\nThe rooms bend all of this, and choosing the room is choosing the scale and who answers. Samba de raiz is the botequim roda — cavaquinho, pandeiro, and the crying cuica around a table, a story swayed and a coro answering every refrain hand to hand, warm and communal to a circle. Samba-enredo is the escola Carnaval anthem — a full driving bateria of surdos and tamborins, one long story a thousand voices learn and belt down the avenida behind a puxador. Partido-alto is the improviser's room — a hard partido swing where a fixed refrain the terreiro chants back leaves the gaps wide for one voice to fire fresh rhymed verses in, living on the wit. Same swing; a table circle, a marching school, or a trading terreiro.\n\nThe law above every dial is language. Portuguese is the song's native tongue — the lyrics are written in Portuguese by a later layer — but the writer works in plain English craft instruction and never invents slang, endearments, or accent flavor to costume the song; only words the user wrote survive, and the identity is carried by swing and pocket, never by sprinkled vocabulary. Two neighbors are not samba: pagode is the accessible party offshoot led by banjo and repique de mão with romantic-pop themes, and bossa nova is intimate and whispered with no loud percussion and no coro. And the postcard is not samba either: feathers, floats, and generic tropical-party scenery are the tourist parody the founder rejects; the user's own botequim, morro, block, and name are the song.",
+      "defaultRoomId": "samba-de-raiz",
+      "rooms": [
+        {
+          "id": "samba-de-raiz",
+          "name": "Samba de Raiz / Roda",
+          "oneLine": "The botequim roda — cavaquinho, pandeiro, and the crying cuica around a table, a story swayed and a coro answering every refrain hand to hand.",
+          "tempoGroove": "~95-105 BPM felt in a relaxed two, the samba swing riding the cavaquinho's syncopated comp and the pandeiro's steady sixteenths while the surdo marks the second beat as the heartbeat of the sway; the cuica moans and answers in the gaps. Word density is moderate and conversational — the phrases sway and breathe, ending open so the coro can answer the refrain and the cavaquinho and cuica can reply, never wall-to-wall.",
+          "writingDials": [
+            "Leave the refrain open to be answered: this is a roda where the table sings back, so write a short refrain of roughly four to eight words the circle can lift and return, and end its lines open enough to hand to the coro.",
+            "Sway the story, do not march it: the verses carry a feeling or a small tale in a warm conversational voice — a love, a saudade, a botequim night, a bit of malandragem — moved forward by the swing, never belted over it.",
+            "Carry alegria apesar da vida in the swing, not in forced smiles: the lift lives in the groove and the answering coro — even a pure lament keeps the sway and the circle carries the sorrow with dignity; what the room refuses is the self-pitying sag that loses the swing, never the sadness itself.",
+            "Keep the language plain and singable: everyday words, clean easy rhyme, a repeated key word beating a clever scheme — the point is the refrain landing around the circle, not the craft showing.",
+            "Write for the answering cast: end phrases a beat early and leave the pocket open so the cuica can moan its reply and the cavaquinho can fill the turnaround — a sheet packed tight silences the instruments that color the roda.",
+            "Concrete detail from the user's own world: the real bar, the real corner, the real name — the botequim and the morro are the user's actual ones, never stock Carnaval scenery.",
+            "First person swaying to a circle: the I sings to the table and the table sings back, so the refrain can widen from one voice into the whole roda by its final returns.",
+            "Cross-genre firewall: the full samba swing — cavaquinho, pandeiro, surdo, and the crying cuica — with the roda answering the refrain makes it raiz, not bossa nova's whispered intimacy: bossa breathes one hushed voice with no loud percussion and no coro, while this room sways out loud and the circle sings back."
+          ],
+          "rendering": "Warm acoustic roda — cavaquinho comping the syncopated samba swing, pandeiro riding steady sixteenths, surdo marking the second beat deep and round, cuica moaning and answering the vocal, tamborim and violao de sete cordas walking a countermelody in the bass. Warm conversational lead vocal answered by a full group coro on the refrain; live botequim room sound, acoustic and unhurried, real air around everything, no synths.",
+          "storyFit": "Best for: a botequim night and the roda, a saudade smiled through, a plainspoken love, malandragem and ginga, pride in the samba and the morro, a communal table feeling. Poor fit: a huge parade narrative for a thousand voices — that is enredo; a form built around an improvised verse — that is partido-alto; anything that wants a hushed whisper with no percussion, which belongs to bossa nova, not here.",
+          "parodyTraps": "Any Portuguese slang or endearment the writer sprinkled that the user never said; Carnaval-postcard scenery — feathers, floats, generic tropical party — standing in for the real botequim and its people; making the refrain clever instead of answerable; filling the cuica's and cavaquinho's answer gaps with words; a belted delivery that fights the roda's warm sway.",
+          "performance": {
+            "prose": "Density moderate; min adlibs 4; delivery tags [Call and Response] [Harmonies] [Cavaquinho Solo] [Percussion Break]. This room performs like a table trading a song — one warm lead over the roda, and the whole circle answering the refrain hand to hand, the cuica moaning back like a second voice. Signature: the refrain answered — the lead sings the refrain and the coro lifts it back, the cavaquinho filling the turnaround and the cuica moaning its reply in the gap, the circle gathering voices so the same line lands warmer each return. Placement: the verses stay lead-forward with light harmony doubles; the coro answers land on the refrain returns, a [Cavaquinho Solo] takes the instrumental turnaround, and a [Percussion Break] can hand the pandeiro and surdo a stretch between verses. Tag identity: a lead and the roda answering as the table — group (coro responses) lifting the refrain, the cavaquinho and cuica replying in the gaps, harmonies thickening the final returns. No parade crowd and no lone whisper — a circle around a table, every answered word from the user's own sheet.",
+            "adlibDensity": "moderate",
+            "minAdlibs": 4,
+            "deliveryTags": [
+              "[Call and Response]",
+              "[Harmonies]",
+              "[Cavaquinho Solo]",
+              "[Percussion Break]"
+            ]
+          },
+          "builder": {
+            "instruments": [
+              "cavaquinho",
+              "pandeiro",
+              "surdo",
+              "cuíca",
+              "tamborim",
+              "violão de sete cordas"
+            ],
+            "themes": [
+              "O botequim e a roda",
+              "Saudade do que ficou",
+              "Malandragem e ginga",
+              "Alegria apesar da vida"
+            ],
+            "purposes": [
+              "Fazer sambar",
+              "Levantar a roda",
+              "Animar o boteco"
+            ]
+          }
+        },
+        {
+          "id": "samba-enredo",
+          "name": "Samba-Enredo",
+          "oneLine": "The escola-de-samba Carnaval anthem — a big driving bateria and one long story a thousand voices learn and carry down the avenida.",
+          "tempoGroove": "~140-150 BPM at a parading drive that still swings (the modern Sapucaí pace), the full bateria pushing hard in a two-beat 2/4 pulse — three surdo voices, the primeira answering on the two, the segunda on the one, the terceira cutting syncopated dobras — tamborins cutting sharp, repique and caixa driving, agogô ringing on top. Word density is medium-high for the genre — this is a narrated anthem the school must learn, so the verses carry a lot of story, but the lines still lift into a chorus the whole avenue can sing.",
+          "writingDials": [
+            "Write one long story start to finish: the enredo narrates a single theme — a history, a people, a place, a tribute — across verses that a whole school learns by heart, so build the tale in order with a clear arc, not a loop.",
+            "Build to a chorus a thousand can lift: the refrao is the anthem's summit, a soaring, singable, repeatable line the entire avenida belts together — if it could not carry ten thousand voices at full chest, it is pitched wrong for this room.",
+            "Melody rides high and declamatory: write lines a school sings out over a full bateria, strong open vowels at the peaks, because enredo vocals are pushed forward and up, never crooned under the drums.",
+            "Advance the theme every verse: each verse moves the story forward — a chapter, a turn, a new stanza of the history — so the parade unfolds the whole tale by the time it passes, and no verse re-circles the last.",
+            "Carry pride and grandeur: the enredo honors its subject with sweep and celebration, alegria apesar da vida written large — the register is communal exaltation, the whole school proud of the story it carries.",
+            "Rhyme clean and sturdy: solid, satisfying end-rhyme the crowd hears coming and can learn fast, landing square so a parading school stays together — this is not the room for slant-rhyme subtlety.",
+            "Serve the user's real theme with grandeur: honor whatever subject the user brought — a person, a place, a history, a cause — and never inject stock Carnaval props the story never contained.",
+            "Cross-genre firewall: the full parade bateria driving one narrated anthem the whole avenue sings makes it enredo, not raiz's table roda: raiz sways a story for a circle around a cavaquinho, while enredo marches one long tale for a school of thousands behind a wall of surdos."
+          ],
+          "rendering": "Full escola bateria at a parading drive that swings — three surdo voices anchoring the two-beat 2/4 pulse (primeira answering on the two, segunda on the one, terceira cutting syncopated dobras), tamborins cutting sharp offbeats, repique and caixa driving, agogô and cuíca ringing on top, cavaquinho and violão de sete cordas carrying the harmony. Powerful lead puxador voice out front answered by a massed crowd chorus on the refrao; big, live, avenida-loud acoustic mix, no synths — modern samba-enredo sound.",
+          "storyFit": "Best for: honoring a person, a place, or a history; a proud communal tribute; a cause or a heritage celebrated large; a wedding or a milestone sung as an anthem; pride in the samba and the community. Poor fit: an intimate table sway — that is raiz; a form built around an improvised verse — that is partido-alto; a hushed low-volume confession, which this parade-scale room has no register for.",
+          "parodyTraps": "Fake Portuguese slang the user never wrote; feathers-and-floats postcard cliches standing in for the user's real theme; a chorus too wordy or too low for a whole school to belt; injected Carnaval props the story never had; a whispered or under-sung delivery that fights the wall of drums.",
+          "performance": {
+            "prose": "Density heavy; min adlibs 4; delivery tags [Call and Response] [Harmonies] [Shout] [Percussion Break]. This room performs like a puxador leading a whole school — one powerful lead calling the story and a massed crowd answering the refrao, the bateria driving under all of it. Signature: the refrao answered by thousands — the puxador calls the anthem line and the whole avenue belts it back, the crowd swelling on each return so the summit lands bigger every pass, gritos of pride thrown on the peaks. Placement: the verses stay lead-forward as the puxador narrates; the crowd chorus answers on every refrao return, a joyful shout tops the biggest turns, and a [Percussion Break] hands the bateria a driving stretch between chapters. Tag identity: a puxador and a massed school answering as the avenida — crowd (chorus responses) belting the refrao, a joyful proud shout on the peaks, the bateria swelling each return. Every shout is pride in plain English, never a scripted foreign exclamation the user did not write.",
+            "adlibDensity": "heavy",
+            "minAdlibs": 4,
+            "deliveryTags": [
+              "[Call and Response]",
+              "[Harmonies]",
+              "[Shout]",
+              "[Percussion Break]"
+            ]
+          },
+          "builder": {
+            "instruments": [
+              "surdo",
+              "tamborim",
+              "agogô",
+              "cuíca",
+              "cavaquinho",
+              "violão de sete cordas"
+            ],
+            "themes": [
+              "Orgulho do samba e do morro",
+              "A batucada da comunidade",
+              "Resistência com sorriso no rosto",
+              "Fé e agradecimento"
+            ],
+            "purposes": [
+              "Celebrar em grupo",
+              "Homenagear o samba e seus mestres",
+              "Levantar a roda"
+            ]
+          }
+        },
+        {
+          "id": "partido-alto",
+          "name": "Partido-Alto / Samba de Terreiro",
+          "oneLine": "The improviser's room — a hard partido swing where a fixed refrain the terreiro chants back leaves the gaps open for one voice to fire fresh rhymed verses in.",
+          "tempoGroove": "~100-110 BPM on a hard, deep partido swing — the surdo and pandeiro laying a heavier, more syncopated pocket than the raiz roda, the tamborim cutting sharp, the cavaquinho stabbing the offbeat. Highest word density of the three in the verse, but built around gaps: the verse rides the swing fast and rhyme-dense, then leaves the refrain wide open for the terreiro to chant back — the space after the verse is part of the form.",
+          "writingDials": [
+            "Build the fixed refrain first: write a short, hard, chantable refrain of roughly four to eight words the terreiro shouts back many times, and set it so it can survive twenty returns and still land — the refrain is the anchor the improvised verses hang on.",
+            "Leave real room for the improvised verse: after each refrain, mark the gap where a fresh rhymed verse fires in — so the form is refrain, then verse, then refrain, and the writing plans the space the improvisation fills rather than scripting it wall to wall.",
+            "Ride the swing rhyme-dense: the verse works as another percussion line, packed with internal rhyme locked to the partido pocket, so mouth-feel and swing outrank neat sentences — the words snap on the beat.",
+            "Live on the wit: partido-alto prizes the clever turn, the sharp boast, the quick reversal, the sly bit of malandragem — the improviser earns the room with the rhyme, so a flat verse dies where a witty one lifts the terreiro.",
+            "Ride one rhyme sound across the verse on purpose: hammering the same end-sound builds momentum and sets up the refrain's return, where a written-through ballad would vary it.",
+            "Present and cocky, but warm: the verses happen now, in the terreiro, swaggering and playful — malandragem, ginga, a boast, a flirtation, a bit of the block's pride — stated with a grin, never explained.",
+            "Keep the ache smiling: even a hard-luck verse rides the swing with alegria apesar da vida, the terreiro lifting it — the room carries weight without ever sinking the pocket.",
+            "Cross-genre firewall: the fixed refrain chanted back with deliberate gaps left for an improvised rhymed verse makes it partido-alto, not the written-through raiz roda: raiz sways a composed story a circle answers, while partido-alto is a form built to be improvised, the terreiro's chant framing verses invented in the gaps."
+          ],
+          "rendering": "Hard partido-alto swing — surdo and pandeiro laying a deep syncopated pocket, tamborim cutting sharp offbeats, cavaquinho stabbing the swing, cuíca answering, agogô ringing. Rhythm-riding lead vocal snapping rhyme-dense verses over the swing, answered by a hard group coro chanting the fixed refrain back; live terreiro room sound, hot and swinging but never rushed, acoustic, no synths.",
+          "storyFit": "Best for: a witty boast, playful malandragem and ginga, a sharp bit of the block's pride, a flirtation, a terreiro night traded verse for verse, alegria carried over a hard week. Poor fit: a long narrated parade anthem — that is enredo; a tender written-through story that wants no improvised space — lean raiz; slow grief or hushed reflection, which the swing has no patience for.",
+          "parodyTraps": "Machine-written Portuguese slang the user never wrote; American rap phrasing pasted over the partido swing that loses the bounce; a refrain too wordy for the terreiro to chant back; filling the improvised gap wall-to-wall so the form has no room to breathe; explaining or softening the boast until the wit is gone.",
+          "performance": {
+            "prose": "Density heavy; min adlibs 6; delivery tags [Call and Response] [Percussion Break] [Harmonies] [Shout]. This room performs like a terreiro trading verses — one improviser riding the swing and the whole floor chanting the fixed refrain back, the pandeiro and cavaquinho snapping with him. Signature: the refrain chanted back — the terreiro shouts the fixed refrain and the singer fires a fresh rhymed verse into the gap after it, the coro thickening on each return so the anchor lands harder every pass. Placement: the refrain returns get the group chant; the improvised verses ride the gaps lead-forward with hype doubles cracking on the punch rhymes; a [Percussion Break] can drop the swing to the pandeiro and surdo, and a shout marks a sharp turn or the trade. Tag identity: an improviser and a chanting terreiro — group (refrain chants) shouted back, hype (doubles) on the punch rhymes, a joyful shout on the sharpest turns. All delivery stays rhythm-and-energy language in the user's own plain words — swing, bounce, punch — never a request for slang or accent beyond what the user wrote.",
+            "adlibDensity": "heavy",
+            "minAdlibs": 6,
+            "deliveryTags": [
+              "[Call and Response]",
+              "[Percussion Break]",
+              "[Harmonies]",
+              "[Shout]"
+            ]
+          },
+          "builder": {
+            "instruments": [
+              "pandeiro",
+              "surdo",
+              "cavaquinho",
+              "tamborim",
+              "cuíca",
+              "agogô"
+            ],
+            "themes": [
+              "Malandragem e ginga",
+              "A batucada da comunidade",
+              "Alegria apesar da vida",
+              "Orgulho do samba e do morro"
+            ],
+            "purposes": [
+              "Levantar a roda",
+              "Fazer sambar",
+              "Animar o boteco"
+            ]
+          }
+        }
+      ],
+      "cues": [
+        {
+          "cue": "samba de raiz",
+          "strength": "strong",
+          "roomId": "samba-de-raiz"
+        },
+        {
+          "cue": "roda de samba",
+          "strength": "strong",
+          "roomId": "samba-de-raiz"
+        },
+        {
+          "cue": "botequim",
+          "strength": "strong",
+          "roomId": "samba-de-raiz"
+        },
+        {
+          "cue": "cavaquinho",
+          "strength": "strong",
+          "roomId": "samba-de-raiz"
+        },
+        {
+          "cue": "saudade",
+          "strength": "weak",
+          "roomId": "samba-de-raiz"
+        },
+        {
+          "cue": "boteco",
+          "strength": "weak",
+          "roomId": "samba-de-raiz"
+        },
+        {
+          "cue": "morro",
+          "strength": "weak",
+          "roomId": "samba-de-raiz"
+        },
+        {
+          "cue": "roda",
+          "strength": "weak",
+          "roomId": "samba-de-raiz"
+        },
+        {
+          "cue": "samba-enredo",
+          "strength": "strong",
+          "roomId": "samba-enredo"
+        },
+        {
+          "cue": "escola de samba",
+          "strength": "strong",
+          "roomId": "samba-enredo"
+        },
+        {
+          "cue": "carnaval",
+          "strength": "strong",
+          "roomId": "samba-enredo"
+        },
+        {
+          "cue": "avenida",
+          "strength": "strong",
+          "roomId": "samba-enredo"
+        },
+        {
+          "cue": "desfile",
+          "strength": "weak",
+          "roomId": "samba-enredo"
+        },
+        {
+          "cue": "bateria",
+          "strength": "weak",
+          "roomId": "samba-enredo"
+        },
+        {
+          "cue": "puxador",
+          "strength": "weak",
+          "roomId": "samba-enredo"
+        },
+        {
+          "cue": "homenagem",
+          "strength": "weak",
+          "roomId": "samba-enredo"
+        },
+        {
+          "cue": "partido-alto",
+          "strength": "strong",
+          "roomId": "partido-alto"
+        },
+        {
+          "cue": "partideiro",
+          "strength": "strong",
+          "roomId": "partido-alto"
+        },
+        {
+          "cue": "samba de terreiro",
+          "strength": "weak",
+          "roomId": "partido-alto"
+        },
+        {
+          "cue": "improviso",
+          "strength": "weak",
+          "roomId": "partido-alto"
+        },
+        {
+          "cue": "ginga",
+          "strength": "weak",
+          "roomId": "partido-alto"
+        },
+        {
+          "cue": "malandragem",
+          "strength": "weak",
+          "roomId": "partido-alto"
+        },
+        {
+          "cue": "desafio",
+          "strength": "weak",
+          "roomId": "partido-alto"
+        }
+      ]
+    },
+    "pagode": {
+      "id": "pagode",
+      "name": "Pagode",
+      "aliases": [
+        "pagode romantico",
+        "pagode romântico",
+        "pagode 90",
+        "pagode anos 90"
+      ],
+      "profileText": "A pagode writer starts in the backyard, not on the page. This is the accessible party samba born in the roda de samba — a circle of banjo, cavaquinho, pandeiro, tantã, and repique de mão turning a churrasco into a singalong — and the writing job is to serve that swing before it serves a clever line. The pocket is warm and laid-back, a rounded sixteenth feel the tantã heartbeats under and the repique de mão and pandeiro carry; a phrase that crowds it, wall-to-wall with no air, kills the roll even for a listener who could not name why. So scan each line against the swing, land the stress where the pocket wants it, and leave the cavaquinho and banjo room to answer between phrases — the space is the groove, never a gap to cram.\n\nThe song is made to be sung by more than one mouth. The heart of the genre is the roda answering: the puxador throws a line and the circle shouts it back, or a whole table lifts the hook together. Even the romantic radio lane keeps that instinct — the chorus is built so everyone at the churrasco joins without being taught. So the writer plans the answer into the lyric from the start: a coro short enough to shout back on first hearing, open enough to repeat many times and gather voices each round. And the register is warm — this is love, saudade, friendship, and the resenha sung sincere, romantic when it aches and communal when it celebrates, but always singable and always at the table.\n\nThe rooms bend all of this. Pagode Romântico keeps one warm lead forward, the roda softened to a glow, the ache and the devotion crooned close and hooky. Pagode de Raiz opens the circle wide, call-and-response first, the Fundo de Quintal root where the swing itself is the celebration. Pagode Anos 90 writes the big unison party chorus, nostalgic and bright even when the story is a breakup. The law above every dial is the same as everywhere: Portuguese is the song's language, but slang, accent spellings, and backyard costume appear only if the user wrote them. Craft words as jargon — puxador, coro, swing-as-direction — are the writer's tools and never enter the lyrics or adlibs; but pagode proudly sings about itself, so roda, samba, pagode, churrasco, and resenha are lyric SUBJECTS whenever the user's story is about them (songs about the roda are the Fundo de Quintal canon, not a craft leak), and render notes may name the instruments the room is built on. Delivery is directed as warmth and energy in plain English — close, communal, bright — never as an accent, and the user's own people and moments always outrank any stock churrasco scenery.",
+      "defaultRoomId": "pagode-rom-ntico",
+      "rooms": [
+        {
+          "id": "pagode-rom-ntico",
+          "name": "Pagode Romântico",
+          "oneLine": "The Exaltasamba-to-Thiaguinho radio lane — modern romantic pagode sung warm and close, love and heartbreak with a hook the whole table sings, the roda softened to a backing glow.",
+          "tempoGroove": "78-95 BPM in the relaxed pagode swing — pandeiro and repique de mão carrying a rounded, laid-back sixteenth pocket, tantã thumping the low pulse, the surdo felt soft underneath. Medium word density: longer melodic phrases that lean into the swing with open vowels held at line-ends, so the lead can slide and the cavaquinho can answer between them — never wall-to-wall.",
+          "writingDials": [
+            "Write one warm lead the table sings back: the song is carried by a single romantic voice, close and sincere, and the chorus must be hooky and singable enough that everyone at the churrasco joins on it without being taught.",
+            "Keep it a two-person world moving forward: devotion, longing, an apology, missing someone — verse two advances the story of these two specific people, an answer or a next step, never re-circling verse one's feeling.",
+            "End the feeling-lines on open vowels the voice can hold and bend: this is a crooned lane, so avoid hard consonant endings on the peaks and leave the cavaquinho a gap to reply into.",
+            "The hook lands the ache or the vow in one clear singable line — warm, melodic, returning richer as the song builds, the emotional headline the whole table lifts, never a phrase that needs explaining.",
+            "Rhyme resolves sweetly: gentle perfect or near-perfect rhymes that close warm feel right here, where the point is the feeling landing and the table singing along, not the craft showing.",
+            "Sensuality and tenderness are adult and suggested, carried by one real detail from the user's own story that turns romantic on the second listen — never spelled out, never generic seduction.",
+            "Keep the roda present but soft: leave the cavaquinho and banjo their answering gaps at line-ends so the swing still breathes under the polish — a romantic pagode that buries the instruments under wall-to-wall vocal has lost the backyard in it.",
+            "Cross-genre firewall: the banjo-and-cavaquinho roda swing under a warm singable lead makes it pagode, not a sertanejo ballad or generic Latin pop — there is no acoustic-guitar-and-accordion sertanejo pulse and no clave here; if the pagode swing and the cavaquinho answer vanish, the room is gone."
+          ],
+          "rendering": "Relaxed modern romantic pagode — cavaquinho and banjo trading melodic answers to the vocal, pandeiro and repique de mão carrying a rounded laid-back swing, tantã thumping the low pulse, soft surdo, warm keyboard pads under the harmony. Smooth sincere lead vocal with a soft roda backing that hums and lifts on the hook, tasteful and warm; Exaltasamba-to-Thiaguinho radio-pagode sheen, 2000s to now.",
+          "storyFit": "Best for: a love letter, an anniversary, an apology, new romance, missing a partner, a heartbreak sung close, devotion through hard times. Poor fit: a full backyard singalong where the whole roda trades every line — that is de Raiz; a big nostalgic party anthem — that is Anos 90; protest, boasting, or hard party swagger, which this warm lane has no register for.",
+          "parodyTraps": "Portuguese pet names or slang the user never wrote pasted in as flavor; running the generic-seduction checklist instead of the couple's real details; getting explicit where the room insists on suggestion; a hook that behaves like a whole-roda chant instead of a warm lead line; burying the cavaquinho and banjo under nonstop vocal so it becomes a generic ballad with the swing removed.",
+          "performance": {
+            "prose": "Density moderate; min adlibs 3; delivery tags [Cavaquinho Solo] [Harmonies] [Soft] [Instrumental Break]. This room performs like one warm singer with the roda humming behind him — a single sincere lead, soft harmony doubles, and the cavaquinho and banjo answering his lines. Signature: the cavaquinho answer — the little four-string replies to the sung line in the gap the phrasing leaves, so the feeling is stated twice, once in words and once in strings, while a soft roda echo shadows the hook's last words the way a table leans in. Placement: the verses stay nearly bare so the crooning carries them, at most one soft harmony under a peak line; the cavaquinho answers land at line-ends and a [Cavaquinho Solo] takes the instrumental turn; the roda harmonies arrive on the final chorus where everyone joins. Tag identity: a warm lead and a softly answering roda — the cavaquinho replying in the holes, soft (harmony echoes) on the hook's last words, a gentle group lift on the last chorus. No shouting backyard, no whole-roda trade — one voice, its harmonies, and the strings that answer it, every sung word from the user's own sheet.",
+            "adlibDensity": "moderate",
+            "minAdlibs": 3,
+            "deliveryTags": [
+              "[Cavaquinho Solo]",
+              "[Harmonies]",
+              "[Soft]",
+              "[Instrumental Break]"
+            ]
+          },
+          "builder": {
+            "instruments": [
+              "cavaquinho",
+              "banjo",
+              "pandeiro",
+              "repique de mão",
+              "tantã",
+              "surdo",
+              "teclado",
+              "violão"
+            ],
+            "themes": [
+              "Amor apaixonado",
+              "Coração partido",
+              "Saudade da antiga",
+              "Reconciliação",
+              "Paquera e desejo"
+            ],
+            "purposes": [
+              "Dançar coladinho",
+              "Chorar um término",
+              "Paquerar na festa"
+            ]
+          }
+        },
+        {
+          "id": "pagode-de-raiz",
+          "name": "Pagode de Raiz / Fundo de Quintal",
+          "oneLine": "The roots backyard roda — Fundo de Quintal's tantã, banjo, and repique de mão, call-and-response first, where the puxador throws a line and the whole roda shouts it back and the swing itself is the celebration.",
+          "tempoGroove": "80-100 BPM in the unhurried roots roda swing — repique de mão and pandeiro locking the loose sixteenth pocket, tantã carrying the low heartbeat, banjo chanking bright on top, everyone breathing the same pulse. Low-to-medium word density: short chantable phrases with real air after them, because the roda answers at the end of nearly every line and the cavaquinho and banjo fill the gaps — the space is the swing, not a hole to cram.",
+          "writingDials": [
+            "Write call-and-response first: this room is built on the puxador throwing a line and the whole roda shouting it back, so plan the answer phrases and echo lines into the lyric from the start — the coro is a second character and the engine of the song, not decoration.",
+            "Keep the coro short, chantable, and open: a phrase of roughly three to six words the whole backyard can shout back on first hearing and repeat many times, gaining voices each round — if it needs teaching, it is pitched wrong for this room.",
+            "Leave real gaps for the instruments to answer: end phrases early and hand the space to the cavaquinho, banjo, and the roda's response — a sheet that fills every bar has silenced the backyard that defines the genre.",
+            "The register is communal and warm: friendship, the roda of friends, the churrasco and the resenha, the joy of the swing itself, saudade shared out loud — the I widens into we fast, because everyone in the backyard is in the song.",
+            "Keep the language plain, everyday, and rootsy: the words are the backyard's own, sincere and unpolished, and one true shared detail from the user's story outweighs any clever turn — this is the least ornamented room.",
+            "Rhyme steady and easy to shout: clean simple end-rhyme or a repeated key word the roda hears coming, so the response lands square on the swing and survives many returns.",
+            "Plan a stretch where the words open all the way to the roda: a section built around the call-and-response and the cavaquinho and banjo taking the swing, the lyric built around that communal answer, not over it.",
+            "Cross-genre firewall: the backyard roda of banjo, tantã, and repique de mão with the whole circle answering makes it pagode, not the fuller samba tradition — no escola de samba bateria wall, no surdo-de-marcação parade drive, and no partido-alto verse duel (that improvised form lives in the older roda tradition and routes to the Samba pack, even though this backyard grew from the same soil); this is the accessible singable backyard swing, and the roda coro answering is its heart."
+          ],
+          "rendering": "Roots backyard pagode roda — banjo chanking bright, cavaquinho answering the voice, repique de mão and pandeiro locking a loose warm swing, tantã thumping the low heartbeat, everyone in one room. A lead puxador voice traded with a full roda coro shouting the responses and lifting every chorus, hand percussion and clapping live; Fundo de Quintal backyard-roda warmth, real room, no gloss, no synths.",
+          "storyFit": "Best for: friendship and the roda of friends, the churrasco and the resenha, weekend celebration, the joy of the swing, saudade sung together, honoring the crew. Poor fit: an intimate two-person love song sung close — that is Romântico; a polished radio-party anthem — that is Anos 90; anything wanting a solo croon or a low-volume delivery, which this communal room has no room for.",
+          "parodyTraps": "Portuguese slang or backyard costume the user never wrote sprinkled as flavor; a coro too wordy for the roda to shout back; filling the answer gaps with vocals so nobody can respond; a solo croon that fights the communal circle; a bateria wall or samba-enredo parade drive pasted on, which belongs to traditional samba, not this backyard roda.",
+          "performance": {
+            "prose": "Density moderate; min adlibs 4; delivery tags [Call and Response] [Cavaquinho Solo] [Percussion Break] [Shout]. This room performs like a whole backyard singing at once — a lead puxador and the full roda answering as one, and the call-and-response is the whole signature. Signature: the roda answered — the puxador throws the line and the whole circle shouts it back, gathering voices on each return so the same line lands harder every round, while the cavaquinho and banjo fire their reply into the gap after it. Placement: the response lines and echoes live in every chorus where the roda snaps back; the cavaquinho and banjo answer at line-ends and a [Cavaquinho Solo] or [Percussion Break] hands the swing a stretch; a joyful shout from the roda tops the biggest turns. Tag identity: a puxador and a full roda answering as the backyard — short shouted (roda responses) to the puxador's calls, the cavaquinho and banjo replying in the holes, group voices swelling on each return, a joyful shout thrown by the circle as release. No lone star, no croon — the backyard answers as one, in the user's own plain words.",
+            "adlibDensity": "moderate",
+            "minAdlibs": 4,
+            "deliveryTags": [
+              "[Call and Response]",
+              "[Cavaquinho Solo]",
+              "[Percussion Break]",
+              "[Shout]"
+            ]
+          },
+          "builder": {
+            "instruments": [
+              "banjo",
+              "tantã",
+              "repique de mão",
+              "cavaquinho",
+              "pandeiro",
+              "surdo",
+              "violão"
+            ],
+            "themes": [
+              "Amizade e roda de amigos",
+              "O churrasco e a resenha",
+              "Curtição de fim de semana",
+              "Saudade da antiga"
+            ],
+            "purposes": [
+              "Cantar com a galera",
+              "Animar o churrasco",
+              "Celebrar a amizade"
+            ]
+          }
+        },
+        {
+          "id": "pagode-anos-90",
+          "name": "Pagode Anos 90 / Nostálgico",
+          "oneLine": "The golden party-and-heartbreak lane — the 90s pagode boom, big unison group choruses and a hook built to be shouted at a party, celebration-bright even when the story is a breakup.",
+          "tempoGroove": "85-100 BPM in the bright, bouncy 90s pagode swing — pandeiro and repique de mão driving a lively sixteenth pocket, tantã and surdo firm underneath, cavaquinho and banjo sparkling on top, made to move a party. Medium word density: a punchy singalong hook over movable verses, phrases that leave the group room to come in together and the cavaquinho room to answer — nostalgic, warm, and built for the crowd.",
+          "writingDials": [
+            "Build a big unison group chorus: the whole party lifts the hook together, so write a chorus that is instantly shoutable and lands the feeling in one bright line — the group coming in as one is the sound of this lane.",
+            "The verses set up the singalong: keep the verses movable and clear, carrying the story or the flirtation forward so the chorus hits as the payoff the crowd has been waiting for — verse two advances, never just re-circles.",
+            "Party-bright even in heartbreak: this room celebrates on top of the story, so a breakup or a volta por cima is sung with a raised drink and a crowd, the ache carried by a hook people shout together rather than a lone quiet cry.",
+            "Write for a hook a party shouts back: a short, hooky, repeatable phrase of roughly four to seven words that survives many returns and gathers the room each time — if it could not be lifted across a crowded party, it is pitched wrong.",
+            "Keep the cavaquinho and banjo answering between the vocal lines: leave them real gaps at line-ends so the swing sparkles under the singalong — a 90s pagode that buries the strings has lost the bounce that carries it.",
+            "Rhyme clean, sturdy, and singable: solid satisfying end-rhyme the crowd hears coming, so the hook lands square on the swing and the whole party stays with it.",
+            "Registers are flirtation, weekend joy, jealousy and the comeback, and party-lit heartbreak: a paquera at the festa, a fim de semana blowout, a ciúme turned into a volta por cima — all delivered warm and communal, feeling and celebration together even when the news is sad.",
+            "Cross-genre firewall: the big group singalong over the bright banjo-and-cavaquinho pagode swing makes it 90s pagode, not sertanejo or generic party pop — there is no sertanejo acoustic-guitar duo pulse and no programmed dembow; the swing is the roda's own, and the nostalgic crowd chorus is the tell."
+          ],
+          "rendering": "Bright 90s-boom pagode — cavaquinho and banjo sparkling and answering the vocal, pandeiro and repique de mão driving a lively swing, tantã and surdo firm underneath, warm keyboard color. A lead vocal that opens into a big unison group chorus the whole party lifts, warm group harmonies and claps; golden-era 90s pagode-boom sound, celebratory and nostalgic, live and warm.",
+          "storyFit": "Best for: a weekend party, flirtation at the festa, a jealous fallout turned comeback, a heartbreak sung with a crowd, celebration and nostalgia, the resenha in full swing. Poor fit: an intimate close-sung apology — that is Romântico; a rootsy call-and-response backyard roda where every line is traded — that is de Raiz; quiet reflection or a lone whispered cry, which this bright crowd lane has no register for.",
+          "parodyTraps": "Portuguese slang the user never wrote dropped in as party flavor; a hook too wordy for a crowd to shout; verses that re-circle one feeling while pretending to build; burying the cavaquinho and banjo under nonstop vocal; borrowing a famous 90s hook line the user's story never contained; smoothing the group singalong into a solo croon so the crowd disappears.",
+          "performance": {
+            "prose": "Density moderate; min adlibs 3; delivery tags [Call and Response] [Harmonies] [Cavaquinho Solo] [Shout]. This room performs like a party lifting the chorus together — a lead voice on the verses and a big unison group on the hook, the cavaquinho and banjo sparkling between the lines. Signature: the group singalong — the whole party comes in as one on the hook, gathering voices each return so the same chorus lands bigger every pass, while the cavaquinho throws its bright answer into the gap the phrasing leaves. Placement: the verses stay lead-forward with light doubles; the group harmonies flood the chorus where the party joins, a [Cavaquinho Solo] takes the instrumental turn, and a joyful shout tops the biggest turns into the hook. Tag identity: a lead and a big group chorus lifting as the party — unison (group harmonies) on the hook, the cavaquinho and banjo answering in the holes, a joyful shout thrown into the turns as release. No lone croon and no every-line trade — a lead and a crowd that comes in together, every sung word from the user's own sheet.",
+            "adlibDensity": "moderate",
+            "minAdlibs": 3,
+            "deliveryTags": [
+              "[Call and Response]",
+              "[Harmonies]",
+              "[Cavaquinho Solo]",
+              "[Shout]"
+            ]
+          },
+          "builder": {
+            "instruments": [
+              "cavaquinho",
+              "banjo",
+              "pandeiro",
+              "repique de mão",
+              "tantã",
+              "surdo",
+              "teclado"
+            ],
+            "themes": [
+              "Curtição de fim de semana",
+              "Ciúme e volta por cima",
+              "Paquera e desejo",
+              "O churrasco e a resenha",
+              "Coração partido"
+            ],
+            "purposes": [
+              "Cantar com a galera",
+              "Animar o churrasco",
+              "Paquerar na festa"
+            ]
+          }
+        }
+      ],
+      "cues": [
+        {
+          "cue": "pagode romântico",
+          "strength": "strong",
+          "roomId": "pagode-rom-ntico"
+        },
+        {
+          "cue": "apaixonado",
+          "strength": "strong",
+          "roomId": "pagode-rom-ntico"
+        },
+        {
+          "cue": "exaltasamba",
+          "strength": "strong",
+          "roomId": "pagode-rom-ntico"
+        },
+        {
+          "cue": "thiaguinho",
+          "strength": "strong",
+          "roomId": "pagode-rom-ntico"
+        },
+        {
+          "cue": "sorriso maroto",
+          "strength": "strong",
+          "roomId": "pagode-rom-ntico"
+        },
+        {
+          "cue": "ferrugem",
+          "strength": "strong",
+          "roomId": "pagode-rom-ntico"
+        },
+        {
+          "cue": "péricles",
+          "strength": "strong",
+          "roomId": "pagode-rom-ntico"
+        },
+        {
+          "cue": "dilsinho",
+          "strength": "weak",
+          "roomId": "pagode-rom-ntico"
+        },
+        {
+          "cue": "menos é mais",
+          "strength": "weak",
+          "roomId": "pagode-rom-ntico"
+        },
+        {
+          "cue": "amor",
+          "strength": "weak",
+          "roomId": "pagode-rom-ntico"
+        },
+        {
+          "cue": "coladinho",
+          "strength": "weak",
+          "roomId": "pagode-rom-ntico"
+        },
+        {
+          "cue": "saudade dela",
+          "strength": "weak",
+          "roomId": "pagode-rom-ntico"
+        },
+        {
+          "cue": "pedido de desculpa",
+          "strength": "weak",
+          "roomId": "pagode-rom-ntico"
+        },
+        {
+          "cue": "pagode de raiz",
+          "strength": "strong",
+          "roomId": "pagode-de-raiz"
+        },
+        {
+          "cue": "fundo de quintal",
+          "strength": "strong",
+          "roomId": "pagode-de-raiz"
+        },
+        {
+          "cue": "roda de samba",
+          "strength": "strong",
+          "roomId": "pagode-de-raiz"
+        },
+        {
+          "cue": "zeca pagodinho",
+          "strength": "strong",
+          "roomId": "pagode-de-raiz"
+        },
+        {
+          "cue": "arlindo cruz",
+          "strength": "strong",
+          "roomId": "pagode-de-raiz"
+        },
+        {
+          "cue": "jorge aragão",
+          "strength": "weak",
+          "roomId": "pagode-de-raiz"
+        },
+        {
+          "cue": "almir guineto",
+          "strength": "weak",
+          "roomId": "pagode-de-raiz"
+        },
+        {
+          "cue": "quintal",
+          "strength": "weak",
+          "roomId": "pagode-de-raiz"
+        },
+        {
+          "cue": "churrasco",
+          "strength": "weak",
+          "roomId": "pagode-de-raiz"
+        },
+        {
+          "cue": "resenha",
+          "strength": "weak",
+          "roomId": "pagode-de-raiz"
+        },
+        {
+          "cue": "a galera",
+          "strength": "weak",
+          "roomId": "pagode-de-raiz"
+        },
+        {
+          "cue": "pagode anos 90",
+          "strength": "strong",
+          "roomId": "pagode-anos-90"
+        },
+        {
+          "cue": "nostálgico",
+          "strength": "strong",
+          "roomId": "pagode-anos-90"
+        },
+        {
+          "cue": "pagode dos anos 90",
+          "strength": "strong",
+          "roomId": "pagode-anos-90"
+        },
+        {
+          "cue": "raça negra",
+          "strength": "strong",
+          "roomId": "pagode-anos-90"
+        },
+        {
+          "cue": "só pra contrariar",
+          "strength": "strong",
+          "roomId": "pagode-anos-90"
+        },
+        {
+          "cue": "katinguelê",
+          "strength": "weak",
+          "roomId": "pagode-anos-90"
+        },
+        {
+          "cue": "molejo",
+          "strength": "weak",
+          "roomId": "pagode-anos-90"
+        },
+        {
+          "cue": "exaltasamba",
+          "strength": "weak",
+          "roomId": "pagode-anos-90"
+        },
+        {
+          "cue": "festa",
+          "strength": "weak",
+          "roomId": "pagode-anos-90"
+        },
+        {
+          "cue": "fim de semana",
+          "strength": "weak",
+          "roomId": "pagode-anos-90"
+        },
+        {
+          "cue": "ciúme",
+          "strength": "weak",
+          "roomId": "pagode-anos-90"
+        },
+        {
+          "cue": "volta por cima",
+          "strength": "weak",
+          "roomId": "pagode-anos-90"
+        }
+      ]
+    },
+    "funkcarioca": {
+      "id": "funkcarioca",
+      "name": "Funk Carioca",
+      "aliases": [
+        "funk brasileiro",
+        "baile funk",
+        "funk ostentacao",
+        "funk ostentação",
+        "funk melody",
+        "mandelao",
+        "mandelão",
+        "brazilian funk"
+      ],
+      "profileText": "A funk carioca writer starts with the batida — the tamborzão, that deep atabaque-derived kick pattern with atabaque slaps and a tight tamborim-and-clap loop that pounds hard and hypnotic under everything. It is the engine of the baile, and the writing job is rhythmic before it is verbal: scan every line against the pulse, land the words like another drum, and leave the punch-and-pause gaps where the beat breathes and the crowd answers. Fill every bar and you bury the tamborzão and kill the chant at once. The space is where the baile lives.\n\nThe second thing a funk writer hears is the baile answering back. Funk carioca is chant-and-response music — the MC hammers a phrase and the whole floor snaps it back, the same line gaining voices each pass until the quebrada shouts it as one. So the writer builds the hook to be shouted, not admired: short, hard, repeatable, gathering weight on every return. The DJ tag stamps the top, the crew fills the gaps, and the crowd is the second instrument. A funk sheet with no room for the floor to answer has missed the point of the form.\n\nThe rooms bend all of this. Funk Ostentação flexes a come-up cold and shiny over a clean beat, the quebrada named with pride under the win. Funk Melody sings desire and love through autotune, thinning the verses so a sweet hook lifts and melts a whole baile. Funk de Baile / Mandelão strips it to the naked tamborzão and the crowd chant, raw and pounding, the body and the floor the subject. That one choice — flexed cold, sung warm, or chanted raw — moves more dials than any other: density, whether the vocal raps or sings, what the hook is for, and who answers over the beat.\n\nThe law above every dial is the story, and the hardest law is what the song may not add. The lyrics are written in Portuguese later — this page writes craft in English, and it never fakes the accent. Slang, favela vocabulary, and accent spellings appear ONLY if the user wrote them, in lyrics, adlibs, and render notes alike. The craft terms these pages teach with — tamborzão, batida, baile, chant, DJ tag — stay out of the song unless the user reached for them first, and delivery is directed as energy, bounce, and heat in plain English, never as an accent or manufactured slang. Funk carioca can carry hard favela reality, ostentação, and open sensuality — but the craft is the batida, the flow, and the pride serving the user's real story: a come-up, the baile, a love, the quebrada, faith, a woman's power. If the user brought no darkness, the song has none. Inventing guns, trafficking, or crime the user never wrote is the cardinal sin — the fastest way to make the record a lie.",
+      "defaultRoomId": "funk-de-baile",
+      "rooms": [
+        {
+          "id": "funk-ostenta-o",
+          "name": "Funk Ostentação",
+          "oneLine": "The shiny come-up lane — the flex of having made it out of the quebrada, told cold and confident over a clean beat: the car, the win, the block that raised you, stated as fact.",
+          "tempoGroove": "128-135 BPM on the syncopated funk carioca pulse in 4/4 (never a straight four-on-the-floor kick grid), a polished batida with a round 808 under bright synth stabs and a tight kick — cleaner and glossier than the raw tamborzão. Word density is medium and bursty: short punchy phrases with swagger, then air where the ad-lib or a synth stab answers, the MC riding just off the beat like someone stating plain facts nobody can argue.",
+          "writingDials": [
+            "Flex leads, told cold: this room boasts the come-up — money made, the ride, the doubt proved wrong, the quebrada that raised you — stated flat and confident as fact, never explained. The moment a flex gets justified it dies.",
+            "Write in bursts, leave the gaps: land a short hard phrase and stop, because the gap is where the ad-lib or the synth stab answers — filling every bar breaks the bounce and buries the beat at once.",
+            "The detail is the user's OWN: swagger only lands when the car, the work, the win, the name are real and specific to the user's rise — generic luxury inventory is how two people end up with the same song, which is failure.",
+            "NEVER invent guns, trafficking, drugs, or crime the user did not write — this room's edge is the flex of a come-up and the cold pride of making it out of the favela, not a crime résumé. A clean flex told with full ostentação swagger is exactly the room; imported darkness is parody and worse.",
+            "Pride of origin sits inside the flex: ostentação is never only the object — it is where the MC came FROM under it, the quebrada named with pride, the come-up meaning more because the start was hard. Keep the block in the boast.",
+            "Cadence is modern and rapped, in the carioca swing: youth flow riding just off the beat, closer to a confident spoken flex than to melody, with a hook that stays the simplest chant in the song.",
+            "Sections lean on the hook: verses drop bursts of flex and detail, the hook is a short chant the crew shouts back and returns often — momentum comes from the hook coming back, not from a build.",
+            "Cross-genre firewall: What makes it funk carioca and not trap (the trap BR of the Matuê lane, or any trap) is the funk batida — the syncopated carioca pulse with its round 808 and synth stabs, the MC in the Rio-favela swing, never the half-time tresillo-hat crawl; the batida bounces on the funk pulse where trap drags behind it, and that pulse plus the favela voice is the tell."
+          ],
+          "rendering": "Polished funk carioca beat, round 808 sub and a tight punchy kick under bright synth stabs and a glossy lead, mid-fast tempo with a clean bounce. Modern talk-rapped male or female lead, dry and up-front with a stacked ad-lib track echoing the key words, crew close on the hook; shiny funk ostentação production, sample vocal chops for color, confident and expensive-sounding.",
+          "storyFit": "Best for: the come-up flexed, money and ambition, the ride and the win, proving them wrong, pride in the quebrada, a glow-up stated cold. Poor fit: tender heartbreak or slow seduction (that is Melody), a raw crowd-detonating floor track (that is Mandelão), worship — the bounce wants confidence, not ache or a plot.",
+          "parodyTraps": "Inventing trafficking, guns, or drug content the user never wrote — the number-one tell; brand-name shopping-list flexes with no real detail; a lyric so packed the ad-libs and stabs have no gaps; a sung soft delivery where the flex should be stated cold; forgetting the quebrada under the shine so the boast floats free of any real come-up; confusing loud with confident — real ostentação is cold and economical.",
+          "performance": {
+            "prose": "Density heavy; min adlibs 4; delivery tags [Ad-Lib Section] [Drop] [Shout] [Groove]. This room performs as an MC and their own hype behind them, the crew close by — the CAST is the lead plus a stacked ad-lib track and a small crew that shouts the hook, with the DJ tag stamping the top. Signature: the punctuation ad-lib — a flex burst lands and in the gap the second track answers with an echo of the key word or a sharp hype burst, cold and exact, never stepping on the next phrase. Placement: the DJ tag stamps the intro; ad-libs live in the gaps the bursts leave and thicken under the hook's returns; crew shouts punctuate the hardest flex lines, and a [Drop] frames the hook's arrival. Tag identity: the MC and their own second self plus the crew — an echo of the key word after each burst, sharp crew shouts on the flex lines, a doubled chant hook, the producer/DJ tag stamped once up top. Every ad-lib and shout is energy and swagger in plain English — a burst of hype, a hard echo — never phonetic spelling and never an invented accent.",
+            "adlibDensity": "heavy",
+            "minAdlibs": 4,
+            "deliveryTags": [
+              "[Ad-Lib Section]",
+              "[Drop]",
+              "[Shout]",
+              "[Groove]"
+            ]
+          },
+          "builder": {
+            "instruments": [
+              "batida de funk",
+              "808 grave",
+              "sintetizador",
+              "sample vocal",
+              "beat eletrônico"
+            ],
+            "themes": [
+              "Ostentação e conquista",
+              "Superação da comunidade",
+              "Orgulho de onde vim",
+              "A vida na correria"
+            ],
+            "purposes": [
+              "Ostentar e celebrar",
+              "Dar volta por cima",
+              "Botar pra quebrar no baile"
+            ]
+          }
+        },
+        {
+          "id": "funk-melody",
+          "name": "Funk Melody / Romântico",
+          "oneLine": "The sung, autotuned love-and-desire lane — funk pulled melodic and warm: a hook made to melt a whole baile, seduction and heartbreak breathed through autotune, the feeling out front instead of the flex.",
+          "tempoGroove": "125-132 BPM in a lighter, rounder funk batida — the kick softened, warm pads and a bright melodic synth under a sung topline, the low end present but never pounding. Word density is low-to-medium: thinner verses with real air, phrases that end on held vowels so the autotuned voice can lift and slide into the hook, which carries most of the song's weight.",
+          "writingDials": [
+            "Feeling leads, sung not stated: this is the melody room — desire, love, longing, seduction carried on a sung topline through autotune, the hook doing the emotional work a rapped flex never would.",
+            "Build the hook to melt the baile: the chorus is a melodic phrase, warm and repeatable, that a whole floor sings back softer than they shout the hard rooms — write it to be sung, sweet and sticky, returning heavier each pass.",
+            "Thin the verses so the hook can lift: keep verse lines fewer and open, ending on vowels the voice can hold and bend, so the autotune slides and the melody breathes — a crowded verse kills the lift the room lives on.",
+            "Suggestion over explicit spelling-out: funk melody can be openly sensual and romantic, but the heat is in the pull, the closeness, the wanting from the user's own moment — insinuate the desire, do not narrate the act; one real detail beats any generic seduction.",
+            "NEVER invent guns, trafficking, drugs, or crime the user did not write — and this warm room especially reaches for none of it; if the user brought a love, a desire, a heartbreak, that is the whole of the song.",
+            "Keep it specific and first person: to a you who must feel like the real person from the user's story — one detail only the two of them would recognize keeps it from becoming a stock love-and-desire template.",
+            "Sections deepen the feeling: verses move the desire or the ache forward — a memory, a want, a question — and the hook returns to lift it, with a melodic synth or a sung run taking a passage where the words open up.",
+            "Cross-genre firewall: What makes it funk carioca and not reggaetón or Brazilian pop is the funk batida under the melody — the carioca pulse and swing carry the sung hook, never the dembow boom-chick and never a straight pop four-on-the-floor; soften the beat all you like, but if the funk pulse and the baile-born hook vanish, the room is gone."
+          ],
+          "rendering": "Lighter melodic funk carioca beat, softened kick and round warm 808, bright melodic synth lead and airy pads under a sung topline, gentle bounce. Autotuned sung male or female lead, close-mic with soft doubled harmonies and a sweet hook, tasteful pitch-glide; modern funk melody production, warm and radio-smooth, sample vocal color, the low end felt but never pounding.",
+          "storyFit": "Best for: desire and seduction, a love song, longing for someone, a warm sensual moment, heartbreak sung soft, a hook made to be sung back. Poor fit: a cold hard flex (that is Ostentação), a raw floor-detonating chant (that is Mandelão), protest or pure party aggression — the warmth has no edge for them.",
+          "parodyTraps": "Getting explicit where the room wants suggestion; a hook that hammers like a hard-baile chant instead of a sung melody; verses so packed the topline cannot lift; generic strings-and-candles romance with no specific real person in it; dropping the funk batida so it becomes generic autotune pop with a Rio coat of paint; inventing any darkness the user never brought.",
+          "performance": {
+            "prose": "Density moderate; min adlibs 3; delivery tags [Harmonies] [Build Up] [Ad-Lib Section] [Drop]. This room performs like a lead singing to one person and to the whole baile at once — the CAST is a sung lead with soft harmony doubles and airy echoes, the crew arriving only to lift the hook, the DJ tag light up top. Signature: the sung-hook lift and the breathed echo — a soft doubled harmony shadows the last words of a line the way a body leans closer, and a [Build Up] rises into the hook where the whole floor comes in to sing it back. Placement: verses stay nearly bare so the topline carries them, at most one soft echo under a peak; a [Build Up] leads into the [Drop] where the hook lands and the harmonies swell; a light ad-lib run can lift the final chorus. Tag identity: a melodic lead with soft self-harmonies and the baile answering the hook — a breathed echo of the last words, harmonies swelling on the chorus, one sweet run saved for the last pass, the DJ tag stamped once. Every echo and run is feeling in plain English — warmth, a lean-in, a lift — never phonetic spelling and never an added accent.",
+            "adlibDensity": "moderate",
+            "minAdlibs": 3,
+            "deliveryTags": [
+              "[Harmonies]",
+              "[Build Up]",
+              "[Ad-Lib Section]",
+              "[Drop]"
+            ]
+          },
+          "builder": {
+            "instruments": [
+              "beat eletrônico",
+              "sintetizador",
+              "808 grave",
+              "sample vocal",
+              "batida de funk"
+            ],
+            "themes": [
+              "Desejo e sensualidade",
+              "Poder feminino e atitude",
+              "O baile e a pista",
+              "A vida na correria"
+            ],
+            "purposes": [
+              "Provocar e seduzir",
+              "Rebolar e dançar",
+              "Botar pra quebrar no baile"
+            ]
+          }
+        },
+        {
+          "id": "funk-de-baile",
+          "name": "Funk de Baile / Mandelão",
+          "oneLine": "The raw hard baile lane — the naked tamborzão and the crowd chant, hypnotic and pounding, built to detonate the floor: the MC and the baile trading the same phrase until the whole quebrada is shouting it.",
+          "tempoGroove": "130-150 BPM in the raw funk carioca pulse — from the classic tamborzão pace up to the 150 BPM baile pace that owns Rio's raw lane — the tamborzão leading with its deep atabaque-derived kick pattern, atabaque slaps and a tight tamborim-and-clap loop on top, and the distorted, serrated mandelão grave clipping underneath, sparse, hypnotic, the low end dominant. Word density is medium and chant-shaped: short repeatable phrases with punch-and-pause gaps, the MC landing a line and the baile snapping it back — or a montagem hook, the chopped vocal cycling as the chant — the words working as another percussion layer over the batida.",
+          "writingDials": [
+            "The chant is the engine: this room is built on call-and-response — write the hook as a short, hard, repeatable phrase the whole baile shouts back, cycling and gaining voices each pass, hypnotic before it is clever. The trading IS the song.",
+            "Write punch-and-pause: land a hard phrase, then leave a beat for the crowd or the MC to snap it back — the gap after the punch is part of the lyric, and a wall of words with no gaps buries the tamborzão and kills the chant at once.",
+            "Ride the tamborzão dense but leave it room: the words lock to the batida like another drum, mouth-feel and pocket outranking neat sentences — but the naked tamborzão stays dominant, so the phrasing carves space for the kick and snare to pound through.",
+            "NEVER invent guns, trafficking, drugs, or crime the user did not write. The raw baile can carry hard favela reality, the pride of the quebrada, the heat of the floor, the body — but only what the user actually brought; imported violence or a fabricated trafficking scene is the fastest way to make the record a lie, and it is the number-one disqualifier here.",
+            "The subject is the baile itself, the body, or the block: keep it present-tense and physical — the floor happening NOW, the dance, the quebrada named with pride, the heat — stated flat and repeatable, never walked through as a plot.",
+            "Keep the detail the user's OWN: the real baile, the real quebrada, the real name — the raw room earns its heat through concrete favela truth, never stock scenery pasted on for grit.",
+            "Two alternating chant lines make a legitimate hook: the MC hammers one phrase and the baile answers with another, trading back and forth, riding one rhyme sound for several lines on purpose to build the hypnotic momentum.",
+            "Cross-genre firewall: What makes it Mandelão and not Ostentação's polished flex is the naked tamborzão leading and the baile chant-and-response driving the whole track — where Ostentação glosses the beat clean under a cold solo flex, Mandelão lets the raw distorted grave dominate and the crowd shout the hook back; the pounding batida and the trading, not a shiny synth, run this room. And it is not phonk — no cowbell loop, no drift sheen; the tamborzão and the crowd run this floor, never the cowbell."
+          ],
+          "rendering": "Raw pounding tamborzão leading — deep atabaque-derived kick pattern, atabaque slaps and a tight tamborim-and-clap loop, a distorted serrated mandelão grave clipping and stabbing under it, montagem vocal chops cycling, sparse and hypnotic, minimal bright color so the batida dominates. Hard talk-rapped male or female lead trading with a full crowd shouting the chant back, dense percussion, DJ tag stamped up top; raw funk de baile / mandelão production, blown-out beat-de-rua aggression, heavy live-baile.",
+          "storyFit": "Best for: detonating the baile, the dance and the body, present-tense floor heat, pride in the quebrada, a hard chant the crowd shouts back, hyping the floor. Poor fit: a sung tender love song (that is Melody), a smooth cold luxury flex (that is Ostentação), slow reflection or worship — the pounding chant has no patience for stillness or a plot.",
+          "parodyTraps": "Inventing trafficking, guns, or crime the user never wrote — the single hardest law here, and the fastest way to make the raw room a lie; a hook with too many words for a crowd to snap back; a wall-to-wall lyric that buries the tamborzão; a polished glossy beat where the raw batida should pound; stock favela-danger scenery standing in for the user's real block; American rap phrasing pasted over the batida so the carioca swing dies.",
+          "performance": {
+            "prose": "Density heavy; min adlibs 6; delivery tags [Call and Response] [Drop] [Shout] [Ad-Lib Section]. This room performs like an MC working a packed baile with the whole floor shouting back — the CAST is the lead MC, the baile crowd answering the chant, and the DJ tag stamping the beat, the call-and-response the entire signature. Signature: the answered chant — the MC hammers the phrase and the baile snaps the response back into the written gap, the crowd gathering voices on each return so the same line detonates harder every pass. Placement: the DJ tag stamps the intro before the tamborzão drops; the chant and its answer flood the whole track, the crowd answering every pass; crew and crowd shouts punctuate the hardest lines, and a [Drop] frames the batida's return after a break. Tag identity: a lead MC and the baile answering as one crowd — short shouted crowd responses in the written gaps, the MC and the floor trading the two-line chant, the producer/DJ tag stamped once up top. All delivery stays rhythm-and-energy language in the user's own plain words — punch, bounce, a shouted snap-back — never a request for slang or accent beyond what the user wrote.",
+            "adlibDensity": "heavy",
+            "minAdlibs": 6,
+            "deliveryTags": [
+              "[Call and Response]",
+              "[Drop]",
+              "[Shout]",
+              "[Ad-Lib Section]"
+            ]
+          },
+          "builder": {
+            "instruments": [
+              "tamborzão",
+              "808 grave",
+              "percussão eletrônica",
+              "batida de funk",
+              "sample vocal"
+            ],
+            "themes": [
+              "O baile e a pista",
+              "A quebrada e a favela",
+              "Poder feminino e atitude",
+              "Orgulho de onde vim"
+            ],
+            "purposes": [
+              "Botar pra quebrar no baile",
+              "Rebolar e dançar",
+              "Contar a realidade da rua"
+            ]
+          }
+        }
+      ],
+      "cues": [
+        {
+          "cue": "funk ostentação",
+          "strength": "strong",
+          "roomId": "funk-ostenta-o"
+        },
+        {
+          "cue": "ostentação",
+          "strength": "strong",
+          "roomId": "funk-ostenta-o"
+        },
+        {
+          "cue": "conquista",
+          "strength": "strong",
+          "roomId": "funk-ostenta-o"
+        },
+        {
+          "cue": "mandrake",
+          "strength": "weak",
+          "roomId": "funk-ostenta-o"
+        },
+        {
+          "cue": "dinheiro",
+          "strength": "weak",
+          "roomId": "funk-ostenta-o"
+        },
+        {
+          "cue": "vitória",
+          "strength": "weak",
+          "roomId": "funk-ostenta-o"
+        },
+        {
+          "cue": "glow-up",
+          "strength": "weak",
+          "roomId": "funk-ostenta-o"
+        },
+        {
+          "cue": "come-up",
+          "strength": "weak",
+          "roomId": "funk-ostenta-o"
+        },
+        {
+          "cue": "sucesso",
+          "strength": "weak",
+          "roomId": "funk-ostenta-o"
+        },
+        {
+          "cue": "funk melody",
+          "strength": "strong",
+          "roomId": "funk-melody"
+        },
+        {
+          "cue": "funk romântico",
+          "strength": "strong",
+          "roomId": "funk-melody"
+        },
+        {
+          "cue": "desejo",
+          "strength": "strong",
+          "roomId": "funk-melody"
+        },
+        {
+          "cue": "amor",
+          "strength": "weak",
+          "roomId": "funk-melody"
+        },
+        {
+          "cue": "saudade",
+          "strength": "weak",
+          "roomId": "funk-melody"
+        },
+        {
+          "cue": "coração partido",
+          "strength": "weak",
+          "roomId": "funk-melody"
+        },
+        {
+          "cue": "sensualidade",
+          "strength": "weak",
+          "roomId": "funk-melody"
+        },
+        {
+          "cue": "paixão",
+          "strength": "weak",
+          "roomId": "funk-melody"
+        },
+        {
+          "cue": "autotune",
+          "strength": "weak",
+          "roomId": "funk-melody"
+        },
+        {
+          "cue": "seduzir",
+          "strength": "weak",
+          "roomId": "funk-melody"
+        },
+        {
+          "cue": "mandelão",
+          "strength": "strong",
+          "roomId": "funk-de-baile"
+        },
+        {
+          "cue": "funk de baile",
+          "strength": "strong",
+          "roomId": "funk-de-baile"
+        },
+        {
+          "cue": "o baile",
+          "strength": "strong",
+          "roomId": "funk-de-baile"
+        },
+        {
+          "cue": "150",
+          "strength": "strong",
+          "roomId": "funk-de-baile"
+        },
+        {
+          "cue": "montagem",
+          "strength": "weak",
+          "roomId": "funk-de-baile"
+        },
+        {
+          "cue": "automotivo",
+          "strength": "weak",
+          "roomId": "funk-de-baile"
+        },
+        {
+          "cue": "fluxo",
+          "strength": "weak",
+          "roomId": "funk-de-baile"
+        },
+        {
+          "cue": "tamborzão",
+          "strength": "weak",
+          "roomId": "funk-de-baile"
+        },
+        {
+          "cue": "a quebrada",
+          "strength": "weak",
+          "roomId": "funk-de-baile"
+        },
+        {
+          "cue": "a pista",
+          "strength": "weak",
+          "roomId": "funk-de-baile"
+        },
+        {
+          "cue": "rebolar",
+          "strength": "weak",
+          "roomId": "funk-de-baile"
+        },
+        {
+          "cue": "botar pra quebrar",
+          "strength": "weak",
+          "roomId": "funk-de-baile"
+        }
+      ]
     }
   },
-  "hash": "27e16d87f6bc",
+  "hash": "e6e5ccfeb2f8",
   "approxTokens": {
     "core": 1794,
     "largestSlice": 3774
