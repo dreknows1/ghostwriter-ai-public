@@ -1122,9 +1122,9 @@ export const CURRICULUM: CompiledCurriculum = {
         ],
         "purposes": [
           "Raconter une histoire",
-          "Émouvoir jusqu aux larmes",
+          "Émouvoir jusqu'aux larmes",
           "Dénoncer une injustice",
-          "Rendre hommage à quelqu un",
+          "Rendre hommage à quelqu'un",
           "Faire réfléchir",
           "Chanter la vie"
         ],
@@ -1239,7 +1239,7 @@ export const CURRICULUM: CompiledCurriculum = {
           "La fierté du continent",
           "La femme",
           "La réussite",
-          "Danser jusqu au bout de la nuit",
+          "Danser jusqu'au bout de la nuit",
           "La joie communicative"
         ],
         "purposes": [
@@ -1303,7 +1303,7 @@ export const CURRICULUM: CompiledCurriculum = {
           "L'espoir d'un retour"
         ],
         "purposes": [
-          "Émouvoir jusqu aux larmes",
+          "Émouvoir jusqu'aux larmes",
           "Déclarer sa flamme",
           "Danser un slow",
           "Consoler",
@@ -1339,6 +1339,7 @@ export const CURRICULUM: CompiledCurriculum = {
         "instruments": [
           "synthés filtrés",
           "basse funky",
+          "basse distordue",
           "boîte à rythmes house",
           "nappes analogiques",
           "samples disco",
@@ -1393,7 +1394,7 @@ export const CURRICULUM: CompiledCurriculum = {
           "Vider son cœur",
           "Se sentir compris",
           "Ambiancer la nuit",
-          "Reconquérir quelqu un"
+          "Reconquérir quelqu'un"
         ],
         "instruments": [
           "claviers doux",
@@ -1594,6 +1595,7 @@ export const CURRICULUM: CompiledCurriculum = {
           "A quebrada e a favela",
           "Ostentação e conquista",
           "Desejo e sensualidade",
+          "Amor e coração partido",
           "Fé e agradecimento a Deus",
           "Superação da comunidade",
           "Poder feminino e atitude",
@@ -13334,6 +13336,7 @@ export const CURRICULUM: CompiledCurriculum = {
               "batida de funk"
             ],
             "themes": [
+              "Amor e coração partido",
               "Desejo e sensualidade",
               "Poder feminino e atitude",
               "O baile e a pista",
@@ -15670,7 +15673,7 @@ export const CURRICULUM: CompiledCurriculum = {
               "Raconter une histoire",
               "Faire réfléchir",
               "Dénoncer une injustice",
-              "Rendre hommage à quelqu un"
+              "Rendre hommage à quelqu'un"
             ]
           }
         },
@@ -15721,7 +15724,7 @@ export const CURRICULUM: CompiledCurriculum = {
               "La mort et l'absence"
             ],
             "purposes": [
-              "Émouvoir jusqu aux larmes",
+              "Émouvoir jusqu'aux larmes",
               "Raconter une histoire",
               "Chanter la vie"
             ]
@@ -15776,7 +15779,7 @@ export const CURRICULUM: CompiledCurriculum = {
             "purposes": [
               "Chanter la vie",
               "Faire réfléchir",
-              "Émouvoir jusqu aux larmes"
+              "Émouvoir jusqu'aux larmes"
             ]
           }
         }
@@ -17410,7 +17413,7 @@ export const CURRICULUM: CompiledCurriculum = {
             "themes": [
               "La fête et l'ambiance",
               "La joie communicative",
-              "Danser jusqu au bout de la nuit",
+              "Danser jusqu'au bout de la nuit",
               "La débrouille et les bénédictions"
             ],
             "purposes": [
@@ -18160,7 +18163,7 @@ export const CURRICULUM: CompiledCurriculum = {
             ],
             "purposes": [
               "Consoler",
-              "Émouvoir jusqu aux larmes",
+              "Émouvoir jusqu'aux larmes",
               "Rendre hommage"
             ]
           }
@@ -18212,7 +18215,7 @@ export const CURRICULUM: CompiledCurriculum = {
             ],
             "purposes": [
               "Déclarer sa flamme",
-              "Émouvoir jusqu aux larmes",
+              "Émouvoir jusqu'aux larmes",
               "Rendre hommage"
             ]
           }
@@ -19319,7 +19322,7 @@ export const CURRICULUM: CompiledCurriculum = {
             "purposes": [
               "Vider son cœur",
               "Se sentir compris",
-              "Reconquérir quelqu un"
+              "Reconquérir quelqu'un"
             ]
           }
         },
@@ -19422,7 +19425,7 @@ export const CURRICULUM: CompiledCurriculum = {
             "purposes": [
               "Danser un slow",
               "Séduire",
-              "Reconquérir quelqu un"
+              "Reconquérir quelqu'un"
             ]
           }
         }
@@ -20080,7 +20083,7 @@ export const CURRICULUM: CompiledCurriculum = {
       ]
     }
   },
-  "hash": "a048d74b77d6",
+  "hash": "c291a3cebc73",
   "approxTokens": {
     "core": 1794,
     "largestSlice": 3808

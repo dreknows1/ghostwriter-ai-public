@@ -2,7 +2,7 @@
 
 ## Chanson Française
 - **Themes:** L'amour et ses vertiges; La mélancolie et le spleen; Paris et ses rues; La condition humaine; L'engagement et la révolte; Le temps qui passe; La nostalgie de l'enfance; La liberté; Les gens ordinaires; La mort et l'absence
-- **Purposes:** Raconter une histoire; Émouvoir jusqu aux larmes; Dénoncer une injustice; Rendre hommage à quelqu un; Faire réfléchir; Chanter la vie
+- **Purposes:** Raconter une histoire; Émouvoir jusqu'aux larmes; Dénoncer une injustice; Rendre hommage à quelqu'un; Faire réfléchir; Chanter la vie
 - **Instrumentation options:** guitare sèche; piano; accordéon; contrebasse; cordes; clarinette; balais sur batterie
 
 ## Variété Française
@@ -21,7 +21,7 @@
 - **Instrumentation options:** ti-bwa; tambour ka; boîte à rythmes; synthé chaud; guitare rythmique; basse ronde; cuivres; congas
 
 ## Afro
-- **Themes:** La fête et l'ambiance; L'amour et le désir; La débrouille et les bénédictions; La fierté du continent; La femme; La réussite; Danser jusqu au bout de la nuit; La joie communicative
+- **Themes:** La fête et l'ambiance; L'amour et le désir; La débrouille et les bénédictions; La fierté du continent; La femme; La réussite; Danser jusqu'au bout de la nuit; La joie communicative
 - **Purposes:** Danser; Ambiancer le dancefloor; Séduire; Célébrer; Remercier Dieu; Faire l'anthème de l'été
 - **Instrumentation options:** percussions afro; djembé; shakers; guitare highlife; synthé chaud; basse profonde; boîte à rythmes; congas
 
@@ -32,13 +32,13 @@
 
 ## Ballade Française
 - **Themes:** L'amour profond; Le manque de l'être aimé; La rupture et le regret; Le souvenir tendre; La promesse; La solitude; Le pardon; L'espoir d'un retour
-- **Purposes:** Émouvoir jusqu aux larmes; Déclarer sa flamme; Danser un slow; Consoler; Rendre hommage
+- **Purposes:** Émouvoir jusqu'aux larmes; Déclarer sa flamme; Danser un slow; Consoler; Rendre hommage
 - **Instrumentation options:** piano; cordes; guitare sèche; nappes de synthé; basse douce; batterie feutrée; violoncelle
 
 ## French Touch
 - **Themes:** L'euphorie de la nuit; L'amour électrique; La liberté; La nostalgie douce; Se perdre dans la fête; Le rush du dancefloor; Paris la nuit
 - **Purposes:** Danser toute la nuit; Faire l'anthème de club; Planer au lever du soleil; Se lâcher; Ambiancer un festival
-- **Instrumentation options:** synthés filtrés; basse funky; boîte à rythmes house; nappes analogiques; samples disco; vocoder; claps; four-on-the-floor
+- **Instrumentation options:** synthés filtrés; basse funky; basse distordue; boîte à rythmes house; nappes analogiques; samples disco; vocoder; claps; four-on-the-floor
 
 ## Slam
 - **Themes:** La condition humaine; L'injustice sociale; Les origines et l'identité; La ville et ses oubliés; L'amour et la perte; L'enfance; La révolte; La quête de sens
@@ -47,7 +47,7 @@
 
 ## RnB Français
 - **Themes:** L'amour naissant; L'amour compliqué; Le manque et la distance; La sensualité; La trahison; La nuit et les sentiments; Grandir et s'affirmer; La famille
-- **Purposes:** Danser un slow; Séduire; Vider son cœur; Se sentir compris; Ambiancer la nuit; Reconquérir quelqu un
+- **Purposes:** Danser un slow; Séduire; Vider son cœur; Se sentir compris; Ambiancer la nuit; Reconquérir quelqu'un
 - **Instrumentation options:** claviers doux; 808 sub-bass; Rhodes; nappes de synthé; guitare feutrée; cordes; boîte à rythmes; basse live
 
 ## Musette
