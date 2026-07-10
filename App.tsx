@@ -655,6 +655,34 @@ export const App: React.FC = () => {
   // Paste / Import State
   const [isPasteMode, setIsPasteMode] = useState(false);
   const [pasteContent, setPasteContent] = useState('');
+  // Catalog for the paste/import genre + room pickers (mirrors SongBuilder's /api/ai fetch,
+  // so an import carries a real room/genre the curriculum engine can structure it into).
+  const [importRoomPacks, setImportRoomPacks] = useState<RoomPacks | null>(null);
+  const [importGenresByLang, setImportGenresByLang] = useState<Record<string, Record<string, GenreWorld>> | null>(null);
+  useEffect(() => {
+    let cancelled = false;
+    (async () => {
+      try {
+        const res = await fetch('/api/ai');
+        if (!res.ok) return;
+        const json = await res.json();
+        if (cancelled) return;
+        if (json?.rooms && typeof json.rooms === 'object') setImportRoomPacks(json.rooms as RoomPacks);
+        if (json?.genreBuilderByLang && typeof json.genreBuilderByLang === 'object') {
+          setImportGenresByLang(json.genreBuilderByLang as Record<string, Record<string, GenreWorld>>);
+        }
+      } catch { /* pickers fall back to the English genre list */ }
+    })();
+    return () => { cancelled = true; };
+  }, []);
+  // Options for the paste-modal pickers, derived from the chosen language + genre.
+  const importLang = inputs.language || 'English';
+  const importGenreChips: string[] = (() => {
+    const cat = importGenresByLang?.[importLang] || importGenresByLang?.['English'];
+    const keys = cat ? Object.keys(cat) : [];
+    return keys.length ? keys : ENGLISH_GENRES;
+  })();
+  const importRooms = roomsForGenre(importRoomPacks, inputs.genre || '');
 
   const resetGenerationTelemetry = (initialMessage: string) => {
     setLoadingMessage(initialMessage);
@@ -1371,9 +1399,45 @@ export const App: React.FC = () => {
              {isPasteMode ? (
                  <div className="glass-panel-strong relative z-10 w-full max-w-2xl p-6 md:p-8 rounded-[2rem] md:rounded-[3rem] animate-fade-in shadow-emerald-900/20">
                      <h2 className="text-2xl font-black text-white tracking-tight mb-2">Import & Structure Session</h2>
-                     <p className="text-slate-500 text-sm font-black uppercase tracking-widest mb-6">Paste lyrics, choruses, verses, or just an idea. The AI will format and complete the song structure.</p>
-                     
-                     <textarea 
+                     <p className="text-slate-500 text-sm font-black uppercase tracking-widest mb-6">Paste lyrics, choruses, verses, or just an idea — pick a genre and room, and we structure it into that style while keeping your words.</p>
+
+                     <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 mb-6">
+                         <label className="flex flex-col gap-1.5">
+                             <span className="text-[10px] font-black uppercase tracking-widest text-slate-500">Language</span>
+                             <select
+                                 value={inputs.language || 'English'}
+                                 onChange={(e) => setInputs(prev => ({ ...prev, language: e.target.value, genre: '', subGenre: '' }))}
+                                 className="bg-[#161030] border border-slate-800 rounded-2xl px-4 py-3 text-slate-200 focus:border-emerald-500 outline-none text-sm"
+                             >
+                                 {LANGUAGE_OPTIONS.map((l) => <option key={l} value={l}>{l}</option>)}
+                             </select>
+                         </label>
+                         <label className="flex flex-col gap-1.5">
+                             <span className="text-[10px] font-black uppercase tracking-widest text-slate-500">Genre</span>
+                             <select
+                                 value={inputs.genre || ''}
+                                 onChange={(e) => setInputs(prev => ({ ...prev, genre: e.target.value, subGenre: '' }))}
+                                 className="bg-[#161030] border border-slate-800 rounded-2xl px-4 py-3 text-slate-200 focus:border-emerald-500 outline-none text-sm"
+                             >
+                                 <option value="">Auto / no genre</option>
+                                 {importGenreChips.map((g) => <option key={g} value={g}>{g}</option>)}
+                             </select>
+                         </label>
+                         <label className="flex flex-col gap-1.5">
+                             <span className="text-[10px] font-black uppercase tracking-widest text-slate-500">Room{importRooms.length ? '' : ' (pick a genre)'}</span>
+                             <select
+                                 value={inputs.subGenre || ''}
+                                 disabled={!importRooms.length}
+                                 onChange={(e) => setInputs(prev => ({ ...prev, subGenre: e.target.value }))}
+                                 className="bg-[#161030] border border-slate-800 rounded-2xl px-4 py-3 text-slate-200 focus:border-emerald-500 outline-none text-sm disabled:opacity-40"
+                             >
+                                 <option value="">Auto (best room)</option>
+                                 {importRooms.map((r) => <option key={r.name} value={r.name}>{r.name}</option>)}
+                             </select>
+                         </label>
+                     </div>
+
+                     <textarea
                         className="w-full h-64 bg-[#161030] border border-slate-800 rounded-3xl p-6 text-slate-300 focus:border-emerald-500 outline-none resize-none mb-6 font-mono text-sm shadow-inner"
                         placeholder="Paste your lyrics or raw ideas here..."
                         value={pasteContent}

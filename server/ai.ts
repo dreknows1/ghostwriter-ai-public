@@ -15,6 +15,7 @@ import {
   runTitleIdeas,
   type EngineGenerate,
 } from "./engine/pipeline";
+import { landRoom } from "./engine/landing";
 
 
 const ASK_ANDRE_AUDIT_CONTEXT = `
@@ -917,14 +918,24 @@ ${String(originalSong || "").trim()}`;
   return { text };
 }
 
+// The client sends the paste as `rawText`; older callers used `pastedContent`. Read both
+// so the writer's words actually reach the model (reading only `pastedContent` silently
+// structured an EMPTY song). `pastedText` also normalizes it for the V3 path below.
+function pastedText(payload: any): string {
+  return String(payload?.rawText ?? payload?.pastedContent ?? "").trim();
+}
+
 async function structureImportedSongInterim(payload: any) {
-  const { pastedContent, inputs } = payload || {};
-  const genre = String(inputs?.genre || "").trim();
-  const prompt = `Structure the pasted lyrics/ideas below into a complete song${genre ? ` (${genre})` : ""} with section tags like [Verse] [Chorus] [Bridge]. Preserve the writer's own words wherever possible.
+  const { inputs } = payload || {};
+  const source = pastedText(payload);
+  if (!source) throw Object.assign(new Error("No pasted content received."), { status: 422, code: "empty_import" });
+  const style = [String(inputs?.genre || "").trim(), String(inputs?.subGenre || "").trim()].filter(Boolean).join(" / ");
+  const lang = String(inputs?.language || "").trim();
+  const prompt = `Structure the pasted lyrics/ideas below into a complete song${style ? ` (${style})` : ""} with section tags like [Verse] [Chorus] [Bridge]. Preserve the writer's own words wherever possible.
 
 ${PERFORMANCE_TAGS_INSTRUCTION}
 
-Also write a 40-70 word Suno production prompt describing how the track should sound.
+Also write a 40-70 word Suno production prompt describing how the track should sound.${lang ? `\n\nThe song's language is ${lang}: keep the writer's words in their language and write any added lines in ${lang}.` : ""}
 
 Return exactly this format:
 Title: ...
@@ -934,12 +945,67 @@ Title: ...
 ...
 
 PASTED CONTENT:
-${String(pastedContent || "").trim()}`;
+${source}`;
   const text = await generateDraft(prompt);
   if (isCreativeRefusal(text)) {
     throw Object.assign(new Error("Import failed — try cleaning up the pasted text."), { status: 422, code: "creative_refusal" });
   }
   return { text };
+}
+
+// Curriculum-aware import: structure the writer's OWN pasted words into their chosen
+// room's shape, delivery tags, and Suno sound — preserving their lines, not rewriting.
+// Founder-gated exactly like generateSong; the dispatch falls back to the interim
+// structurer when the genre is not a curriculum pack.
+async function structureImportedSongV3(payload: any) {
+  const source = pastedText(payload);
+  if (!source) throw Object.assign(new Error("No pasted content received."), { status: 422, code: "empty_import" });
+  const inputs = engineInputs(payload);
+  const pack = resolveGenre(CURRICULUM, inputs.genre);
+  if (!pack) throw new EngineNotAvailable(`genre "${inputs.genre}" not in curriculum`);
+  // The writer's own explicit room pick wins; otherwise the pasted lyrics themselves
+  // supply the cue text landRoom scans, and a genre with no clear cue falls to its default.
+  const landing = landRoom(pack, source, inputs.subGenre);
+  const card = pack.rooms.find((r) => r.id === landing.roomId);
+  if (!card) throw new EngineNotAvailable(`room "${landing.roomId}" missing from pack`);
+
+  const tags = (card.performance.deliveryTags || []).join(" ");
+  const lang = String(inputs.language || "").trim();
+  const prompt = `You are finishing a ${pack.name} song in the "${card.name}" style for a writer who pasted their own words below. STRUCTURE and lightly finish their lyrics — do NOT rewrite them. Preserve the writer's exact words, lines, and story wherever they already work; only add what a bare paste is missing: section tags, a hook if there is none, and small connective lines in their own voice.
+
+Room feel: ${card.oneLine}
+Tempo & groove: ${card.tempoGroove}
+
+Shape it into clear sections with tags like [Intro] [Verse] [Pre-Chorus] [Chorus] [Bridge] [Outro] as the song needs. Include at least ${card.performance.minAdlibs} performance adlibs, and use this room's delivery tags where they fit the moment: ${tags}
+
+${PERFORMANCE_TAGS_INSTRUCTION}
+
+Then write a 40-70 word Suno production prompt in THIS room's sound: ${card.rendering}${lang ? `\n\nThe song's language is ${lang}: keep the writer's words in their language and write any added lines in ${lang}.` : ""}
+
+Return exactly this format:
+Title: ...
+### SUNO Prompt
+...
+### Lyrics
+...
+
+PASTED CONTENT:
+${source}`;
+  const text = await generateDraft(prompt);
+  if (isCreativeRefusal(text)) {
+    throw Object.assign(new Error("Import failed — try cleaning up the pasted text."), { status: 422, code: "creative_refusal" });
+  }
+  return {
+    text,
+    meta: {
+      engineVersion: ENGINE_VERSION,
+      curriculumHash: CURRICULUM.hash,
+      imported: true,
+      landing: { roomId: card.id, rule: landing.rule, firedCues: landing.firedCues, notYetDeep: landing.notYetDeep },
+      landingNote: `Structured into ${pack.name}: ${card.name}.`,
+      room: card.name,
+    },
+  };
 }
 
 // ═══════════════════ CURRICULUM ENGINE (Phase 1 — R&B, founder-gated) ═══════════════════
@@ -1123,8 +1189,20 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
         return res.status(200).json(await suggestTitles(payload, email));
       case "editSong":
         return res.status(200).json(await editSongInterim(payload));
-      case "structureImportedSong":
+      case "structureImportedSong": {
+        const wantsV3 =
+          engineAllowed(email) &&
+          payload?.engine !== "interim" &&
+          resolveGenre(CURRICULUM, String(payload?.inputs?.genre || "")) !== null;
+        if (wantsV3) {
+          try {
+            return res.status(200).json(await structureImportedSongV3(payload));
+          } catch (e: any) {
+            if (!(e instanceof EngineNotAvailable)) throw e; // creative_refusal (422) surfaces via catch-all
+          }
+        }
         return res.status(200).json(await structureImportedSongInterim(payload));
+      }
       case "generateAlbumArt":
         return res.status(200).json(await generateAlbumArt({ ...(payload || {}), email }));
       case "generateSocialPack":

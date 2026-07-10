@@ -22252,14 +22252,22 @@ ${String(originalSong || "").trim()}`;
   }
   return { text };
 }
+function pastedText(payload) {
+  return String(payload?.rawText ?? payload?.pastedContent ?? "").trim();
+}
 async function structureImportedSongInterim(payload) {
-  const { pastedContent, inputs } = payload || {};
-  const genre = String(inputs?.genre || "").trim();
-  const prompt = `Structure the pasted lyrics/ideas below into a complete song${genre ? ` (${genre})` : ""} with section tags like [Verse] [Chorus] [Bridge]. Preserve the writer's own words wherever possible.
+  const { inputs } = payload || {};
+  const source = pastedText(payload);
+  if (!source) throw Object.assign(new Error("No pasted content received."), { status: 422, code: "empty_import" });
+  const style = [String(inputs?.genre || "").trim(), String(inputs?.subGenre || "").trim()].filter(Boolean).join(" / ");
+  const lang = String(inputs?.language || "").trim();
+  const prompt = `Structure the pasted lyrics/ideas below into a complete song${style ? ` (${style})` : ""} with section tags like [Verse] [Chorus] [Bridge]. Preserve the writer's own words wherever possible.
 
 ${PERFORMANCE_TAGS_INSTRUCTION}
 
-Also write a 40-70 word Suno production prompt describing how the track should sound.
+Also write a 40-70 word Suno production prompt describing how the track should sound.${lang ? `
+
+The song's language is ${lang}: keep the writer's words in their language and write any added lines in ${lang}.` : ""}
 
 Return exactly this format:
 Title: ...
@@ -22269,12 +22277,61 @@ Title: ...
 ...
 
 PASTED CONTENT:
-${String(pastedContent || "").trim()}`;
+${source}`;
   const text = await generateDraft(prompt);
   if (isCreativeRefusal(text)) {
     throw Object.assign(new Error("Import failed \u2014 try cleaning up the pasted text."), { status: 422, code: "creative_refusal" });
   }
   return { text };
+}
+async function structureImportedSongV3(payload) {
+  const source = pastedText(payload);
+  if (!source) throw Object.assign(new Error("No pasted content received."), { status: 422, code: "empty_import" });
+  const inputs = engineInputs(payload);
+  const pack = resolveGenre(CURRICULUM, inputs.genre);
+  if (!pack) throw new EngineNotAvailable(`genre "${inputs.genre}" not in curriculum`);
+  const landing = landRoom(pack, source, inputs.subGenre);
+  const card = pack.rooms.find((r) => r.id === landing.roomId);
+  if (!card) throw new EngineNotAvailable(`room "${landing.roomId}" missing from pack`);
+  const tags = (card.performance.deliveryTags || []).join(" ");
+  const lang = String(inputs.language || "").trim();
+  const prompt = `You are finishing a ${pack.name} song in the "${card.name}" style for a writer who pasted their own words below. STRUCTURE and lightly finish their lyrics \u2014 do NOT rewrite them. Preserve the writer's exact words, lines, and story wherever they already work; only add what a bare paste is missing: section tags, a hook if there is none, and small connective lines in their own voice.
+
+Room feel: ${card.oneLine}
+Tempo & groove: ${card.tempoGroove}
+
+Shape it into clear sections with tags like [Intro] [Verse] [Pre-Chorus] [Chorus] [Bridge] [Outro] as the song needs. Include at least ${card.performance.minAdlibs} performance adlibs, and use this room's delivery tags where they fit the moment: ${tags}
+
+${PERFORMANCE_TAGS_INSTRUCTION}
+
+Then write a 40-70 word Suno production prompt in THIS room's sound: ${card.rendering}${lang ? `
+
+The song's language is ${lang}: keep the writer's words in their language and write any added lines in ${lang}.` : ""}
+
+Return exactly this format:
+Title: ...
+### SUNO Prompt
+...
+### Lyrics
+...
+
+PASTED CONTENT:
+${source}`;
+  const text = await generateDraft(prompt);
+  if (isCreativeRefusal(text)) {
+    throw Object.assign(new Error("Import failed \u2014 try cleaning up the pasted text."), { status: 422, code: "creative_refusal" });
+  }
+  return {
+    text,
+    meta: {
+      engineVersion: ENGINE_VERSION,
+      curriculumHash: CURRICULUM.hash,
+      imported: true,
+      landing: { roomId: card.id, rule: landing.rule, firedCues: landing.firedCues, notYetDeep: landing.notYetDeep },
+      landingNote: `Structured into ${pack.name}: ${card.name}.`,
+      room: card.name
+    }
+  };
 }
 function engineAllowed(email) {
   const list = (process.env.SONG_ENGINE_V3_EMAILS || "dreknows@gmail.com").split(",").map((e) => e.trim().toLowerCase()).filter(Boolean);
@@ -22431,8 +22488,17 @@ async function handler(req, res) {
         return res.status(200).json(await suggestTitles(payload, email));
       case "editSong":
         return res.status(200).json(await editSongInterim(payload));
-      case "structureImportedSong":
+      case "structureImportedSong": {
+        const wantsV3 = engineAllowed(email) && payload?.engine !== "interim" && resolveGenre(CURRICULUM, String(payload?.inputs?.genre || "")) !== null;
+        if (wantsV3) {
+          try {
+            return res.status(200).json(await structureImportedSongV3(payload));
+          } catch (e) {
+            if (!(e instanceof EngineNotAvailable)) throw e;
+          }
+        }
         return res.status(200).json(await structureImportedSongInterim(payload));
+      }
       case "generateAlbumArt":
         return res.status(200).json(await generateAlbumArt({ ...payload || {}, email }));
       case "generateSocialPack":
