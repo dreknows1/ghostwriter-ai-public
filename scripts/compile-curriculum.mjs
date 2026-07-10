@@ -235,6 +235,61 @@ const GENRE_PACKS = [
     aliases: ["tarraxinha", "tarraxa", "kizomba romantica", "kizomba romântica", "semba", "kizomba angolana"],
     profileFile: "SONGWRITING_PROFILE_KIZOMBA.md",
   },
+  {
+    section: "Chanson Française", id: "chanson", name: "Chanson Française",
+    aliases: ["chanson francaise", "chanson", "chanson a texte", "chanson à texte", "chanson realiste", "chanson réaliste", "nouvelle scene", "nouvelle scène", "rive gauche"],
+    profileFile: "SONGWRITING_PROFILE_CHANSON.md",
+  },
+  {
+    section: "Variété Française", id: "variete", name: "Variété Française",
+    aliases: ["variete francaise", "variété", "variete", "grande variete", "grande variété", "variété festive", "variete festive"],
+    profileFile: "SONGWRITING_PROFILE_VARIETE.md",
+  },
+  {
+    section: "Rap Français", id: "rapfr", name: "Rap Français",
+    aliases: ["rap francais", "rap fr", "rap conscient", "drill fr", "drill français", "drill francais", "rap mélo", "rap melo", "cloud rap français"],
+    profileFile: "SONGWRITING_PROFILE_RAPFR.md",
+  },
+  {
+    section: "Zouk", id: "zouk", name: "Zouk",
+    aliases: ["zouk love", "zouk beton", "zouk béton", "zouk retro", "zouk rétro", "zouk r&b", "nouveau zouk"],
+    profileFile: "SONGWRITING_PROFILE_ZOUK.md",
+  },
+  {
+    section: "Afro", id: "afro", name: "Afro",
+    aliases: ["afro trap", "afrotrap", "coupé-décalé", "coupe-decale", "coupé décalé", "zouglou", "ndombolo", "afro mélo", "afro melo", "afro pop français"],
+    profileFile: "SONGWRITING_PROFILE_AFRO.md",
+  },
+  {
+    section: "Raï", id: "rai", name: "Raï",
+    aliases: ["rai", "pop-rai", "pop-raï", "rai love", "raï love", "rai'n'b", "raï'n'b", "rain'b"],
+    profileFile: "SONGWRITING_PROFILE_RAI.md",
+  },
+  {
+    section: "Ballade Française", id: "balladefr", name: "Ballade Française",
+    aliases: ["ballade francaise", "ballade", "grande ballade", "power ballad française", "power ballad francaise", "piano-voix", "piano voix"],
+    profileFile: "SONGWRITING_PROFILE_BALLADEFR.md",
+  },
+  {
+    section: "French Touch", id: "frenchtouch", name: "French Touch",
+    aliases: ["french house", "filter house", "nu-disco", "nu disco", "electro française", "électro française", "touche française"],
+    profileFile: "SONGWRITING_PROFILE_FRENCHTOUCH.md",
+  },
+  {
+    section: "Slam", id: "slam", name: "Slam",
+    aliases: ["slam poésie", "slam poesie", "spoken word français", "spoken word francais", "slam français", "slam francais"],
+    profileFile: "SONGWRITING_PROFILE_SLAM.md",
+  },
+  {
+    section: "RnB Français", id: "rnbfr", name: "RnB Français",
+    aliases: ["rnb francais", "r&b français", "r&b francais", "rnb fr", "r&b fr", "rnb français 2000"],
+    profileFile: "SONGWRITING_PROFILE_RNBFR.md",
+  },
+  {
+    section: "Musette", id: "musette", name: "Musette",
+    aliases: ["bal musette", "valse musette", "java", "musette manouche", "accordéon musette", "accordeon musette", "guinguette"],
+    profileFile: "SONGWRITING_PROFILE_MUSETTE.md",
+  },
 ];
 
 // The plan's build check: no quoted lyric lines anywhere in compiled writer text.

@@ -15601,11 +15601,4488 @@ export const CURRICULUM: CompiledCurriculum = {
           "roomId": "tarraxinha"
         }
       ]
+    },
+    "chanson": {
+      "id": "chanson",
+      "name": "Chanson Française",
+      "aliases": [
+        "chanson francaise",
+        "chanson",
+        "chanson a texte",
+        "chanson à texte",
+        "chanson realiste",
+        "chanson réaliste",
+        "nouvelle scene",
+        "nouvelle scène",
+        "rive gauche"
+      ],
+      "profileText": "A chanson writer starts from a sentence worth saying out loud, because the genre's founding law is that the text is sovereign and the melody serves the sentence — never the reverse. The song is a short story or a portrait: one person, one scene, one turn, built so the last verse re-reads everything before it. Prosody is the discipline under everything — stressed syllables on strong beats, exact scansion, rhyme that carries meaning — and the refrain is a returning idea that deepens with each pass, never an engineered singalong. The writing is judged at cabaret distance: a listening room two meters away, where filler dies and one true concrete detail outlasts any decoration.\n\nThe lineage sets the registers. From the café-concerts and Montmartre's cabarets came the réaliste line — Fréhel, Damia, Piaf, and Aznavour's post-war music-hall — tragedy front and center, the voice as the event in front of an orchestral swell. From the post-war Rive Gauche came the poets — Brassens, Barbara, Léo Ferré, and Brel, who arrived from Brussels, because chanson is francophone, not Parisian: Belgium, Switzerland, and Québec write it as natively as France. From the 90s on, the nouvelle scène — Dominique A and Miossec first, then Bénabar, Vincent Delerm, Camille, then Pomme and Stromae — brought the everyday close-up and modern production that still obeys the text. Three registers recur across the century: irony landing on tenderness, total tragic commitment, and understatement that lets small objects carry the grief.\n\nOne line per room: Chanson à Texte / Rive Gauche writes the strophic story toward a terminal crescendo; Chanson Réaliste / Music-Hall writes lean verses and a detonating refrain for one huge voice in front of the swell; Nouvelle Scène / Chanson Moderne zooms into the user's daily details under modern coats. The language law rules them all: the lyrics will be French, written by a later layer — this writer works in plain-English craft instruction and never fakes French flavor, argot, or verlan the user did not write; craft terms like prosody, strophe, or parlando stay out of lyrics and adlibs; postcard Paris — baguette-and-Eiffel clichés — is parody; and the user's real people and places outrank every famous street in the songbook.",
+      "defaultRoomId": "chanson-texte",
+      "rooms": [
+        {
+          "id": "chanson-texte",
+          "name": "Chanson à Texte / Rive Gauche",
+          "oneLine": "The poets' room — the post-war Left Bank cabaret circuit and its long echo: Brassens, Brel arriving from Brussels, Barbara, Léo Ferré — the song as a short story or portrait, melody in service of the sentence.",
+          "tempoGroove": "60-120 BPM and speech-paced above all — a walking pulse from guitare sèche and contrebasse, piano breathing under a confession, or the Brel engine: the same strophe cycling hotter and faster toward the last verse. Time bends to the sentence, never the reverse. High word density — long literary lines, full stanzas of narrative — but every line scans exactly; the melody stays narrow so the words can carry.",
+          "writingDials": [
+            "Text is sovereign: write the story as prose worth reading aloud, then bend the melody to it — stressed syllables on strong beats, no word ever twisted to serve a tune; when sentence and melody fight, the melody loses.",
+            "Strophic architecture, no engineered chorus: verses advance a narrative and the refrain is a returning line or idea that means more each pass — the hook is what the song keeps discovering, never a singalong machine.",
+            "The song is a short story: one person, one scene, one turn — verse two must advance what verse one opened, and a verse that only restates the last one gets cut; portraits count as plots here.",
+            "Plan the terminal crescendo: intensity comes from repetition-with-escalation — the same strophe returning louder, faster, or a step higher until the final verse lands at full voice; the build is dramaturgy, not a chorus lift.",
+            "Rhyme is visible craft: exact rhyme, clean scansion, the rhyme word carrying meaning — the Brassens standard; one forced rhyme breaks a whole stanza in a room this word-forward.",
+            "Write toward the last verse: the ending re-reads the whole song — a revelation, an inversion, a delayed gut-punch; if the final strophe could be cut without loss, the song has no destination yet.",
+            "Irony and tenderness share every sheet: satire keeps its humanity — mock the institution, forgive the people inside it; contempt without affection curdles into pamphlet.",
+            "Earn abstractions with objects: death, freedom, time arrive through a named street, a coat, a café table — the user's real nouns; a song that opens on a capital-letter concept has already begun to parody itself.",
+            "Cross-genre firewall: vs Slam — parlando verses are welcome, but the phrase always resolves into sung pitch; a piece that never sings is Slam, its own genre. vs Variété Française — the tell is where craft is spent: an engineered singalong chorus with ramp verses is variété; here every verse is load-bearing and the refrain mutates. A slow love song here stays a narrative argued verse by verse — the belted piano-and-strings climax belongs to Ballade Française."
+          ],
+          "rendering": "Intimate Left Bank cabaret: guitare sèche and walking contrebasse in the Brassens format, or piano-led with discreet strings, accordion or clarinet colors, brushes barely touching the drums. One close, articulate voice — conversational to full-voice — mid-century French cabaret warmth, dry and text-forward, the words always above the arrangement, dynamics rising from near-spoken verses to a full final strophe and falling back to quiet.",
+          "storyFit": "Best for: portraits of ordinary people, satire and protest, homage and eulogy, a death told plainly, a love plea argued verse by verse, moral fables, childhood streets remembered. Poor fit: a fated tragedy needing a huge voice and orchestral swell — that is Chanson Réaliste; wry micro-detail in a modern life — that is Nouvelle Scène; a radio singalong — that is Variété Française, another genre.",
+          "parodyTraps": "Postcard Paris — berets, baguettes, the Eiffel Tower as wallpaper; philosophy with no person in it; rhyme forced until the syntax twists; a pop chorus grafted onto the strophes; faux-1950s slang the user never wrote; announcing the moral instead of letting the last verse land it.",
+          "performance": {
+            "prose": "Density sparse; min adlibs 2; delivery tags [Spoken] [Soft] [Crescendo] [Instrumental Break]. One storyteller's voice owns a listening room — no crowd, no stacked chorus, at most the instruments answering. Signature: the terminal build — early strophes lean toward [Spoken] intimacy and [Soft] delivery, each return a degree hotter, until the final verse arrives at full voice and one quiet line closes the door. Placement: a [Crescendo] rides the last two strophes; an [Instrumental Break] gives accordion or guitar one turn between chapters of the story. Tag identity: near-speech opening into song, escalation by verse, the break as the only breather. Adlibs are breaths and small spoken asides drawn from the user's own sheet, never hype.",
+            "adlibDensity": "sparse",
+            "minAdlibs": 2,
+            "deliveryTags": [
+              "[Spoken]",
+              "[Soft]",
+              "[Crescendo]",
+              "[Instrumental Break]"
+            ]
+          },
+          "builder": {
+            "instruments": [
+              "guitare sèche",
+              "contrebasse",
+              "piano",
+              "accordéon",
+              "clarinette",
+              "cordes",
+              "balais sur batterie"
+            ],
+            "themes": [
+              "La condition humaine",
+              "L'engagement et la révolte",
+              "Les gens ordinaires",
+              "La liberté",
+              "La mort et l'absence"
+            ],
+            "purposes": [
+              "Raconter une histoire",
+              "Faire réfléchir",
+              "Dénoncer une injustice",
+              "Rendre hommage à quelqu un"
+            ]
+          }
+        },
+        {
+          "id": "chanson-r-aliste",
+          "name": "Chanson Réaliste / Music-Hall",
+          "oneLine": "The torch room — the café-concerts and Montmartre's Aristide Bruant through Fréhel and Damia to Piaf commanding the Olympia: tragedy sung front and center, the voice as the event, orchestra and accordion swelling behind one fate.",
+          "tempoGroove": "55-85 BPM at the torch core — a slow held pulse that exists to frame the voice — with two inherited engines: a swirling waltz that circles like dance-hall memory, felt one-to-the-bar when it accelerates, and a defiant march that stacks verse on verse toward a final refusal. Moderate word density: lean narrative verses, then refrain lines built around open vowels a big voice can hold and detonate.",
+          "writingDials": [
+            "Write for the voice as the event: climax words must be beltable — open vowels at the peaks, consonants cleared away from the held notes; a refrain line the singer cannot detonate is a misprint in this room.",
+            "Total commitment, zero wink: tragedy is stated plainly and sung at full scale; hedging, irony, or self-aware distance breaks the contract the music-hall audience came to make.",
+            "Story verses, fate refrain: verses narrate — the meeting, the streets, the loss — and the refrain distills the fate into one returning phrase that grows until it becomes the whole song.",
+            "Build the fatal turn: place the reversal late and tell it fast, then bring the refrain back transformed; the third act is the payoff every earlier verse was quietly purchasing.",
+            "Working-class glamour: the poetry is poverty lived at full intensity — real trades, real streets, the port and the dance hall, the user's own people; scrubbing the story clean removes the genre.",
+            "Defiance is the second register: beside grief runs survival sung as triumph — the no-regrets lane; write the refusal as concrete things released and burned, not abstract resilience talk.",
+            "Ride the waltz or the march: shape line lengths to circle in three or to stack over a building pulse — the sheet leans on dance-hall memory without ever becoming dance music.",
+            "Leave room for the swell: the orchestra answers the voice — end refrain lines open so strings and accordion can surge into the gap; a wall-to-wall lyric flattens the swell that carries the tragedy.",
+            "Cross-genre firewall: vs Ballade Française — both slow, both love-struck, but the ballade is a private pop slow-dance on a verse-chorus-belt formula; réaliste is public tragedy narrated: named people, a fatal turn, one huge voice in front of an orchestral and accordion swell, often in waltz time. vs Musette — the accordion is shared, but musette's waltz exists to turn dancers at the bal; here the waltz sits under a narrated fate, never under a dance floor. The big singalong is earned by the story — engineering it first is Variété Française."
+          ],
+          "rendering": "1950s French music-hall orchestra — accordion up front, surging strings, piano, upright bass, brushed drums, a distant muted trumpet; one huge front-and-center voice with fast vibrato and total commitment, mono-era warmth, the orchestra swelling into the gaps between phrases, dynamics from a hushed near-spoken verse to a full-orchestra detonation on the final refrain.",
+          "storyFit": "Best for: doomed or all-consuming love, grief for a dead lover, a life burned at both ends, the street's people ennobled, survival and defiance after ruin, homage to a lost voice or a mother. Poor fit: wry everyday observation — that is Nouvelle Scène; a satirical fable or portrait gallery — that is Chanson à Texte; a comfortable modern breakup over piano pads — Ballade Française, another genre.",
+          "parodyTraps": "Piaf cosplay — costume tragedy the user never lived, borrowed misery as set-dressing; the accordion as café-postcard wallpaper; belting every line until the climax has nowhere left to go; postcard Montmartre; melodrama without one concrete street or name; French interjections sprinkled in that the user never wrote.",
+          "performance": {
+            "prose": "Density moderate; min adlibs 2; delivery tags [Spoken] [Soft] [Belting] [Crescendo] [Big Finish]. One voice performs alone in front of an orchestra, and the voice is the event — no duet, no crowd, the strings and accordion the only chorus. Signature: the held detonation — verses kept low and narrative in [Soft] delivery, the refrain opening into [Belting] on its key vowel, each return bigger than the last. Placement: a [Crescendo] carries the final verse into the last refrain, and the [Big Finish] lands there — voice and orchestra cresting together, then silence or one small spoken farewell. Tag identity: hush against detonation, the swell answering every held note. Adlibs are held vowels and a single spoken line into the quiet, always from the user's own sheet.",
+            "adlibDensity": "moderate",
+            "minAdlibs": 2,
+            "deliveryTags": [
+              "[Spoken]",
+              "[Soft]",
+              "[Belting]",
+              "[Crescendo]",
+              "[Big Finish]"
+            ]
+          },
+          "builder": {
+            "instruments": [
+              "accordéon",
+              "cordes",
+              "piano",
+              "contrebasse",
+              "balais sur batterie",
+              "trompette bouchée"
+            ],
+            "themes": [
+              "L'amour et ses vertiges",
+              "La mélancolie et le spleen",
+              "Paris et ses rues",
+              "La mort et l'absence"
+            ],
+            "purposes": [
+              "Émouvoir jusqu aux larmes",
+              "Raconter une histoire",
+              "Chanter la vie"
+            ]
+          }
+        },
+        {
+          "id": "nouvelle-sc-ne",
+          "name": "Nouvelle Scène / Chanson Moderne",
+          "oneLine": "The intimate modern room — the nouvelle scène Dominique A and Miossec opened in the 90s, carried into the 2000s by Bénabar, Vincent Delerm, and Camille, through Pomme and Stromae's Brussels-built text-first pop: everyday detail at kitchen distance, modern production under writing that still rules.",
+          "tempoGroove": "70-120 BPM in gentle modern pockets — piano-voix rubato, fingerpicked folk at walking pace, or a soft electro-pop pulse that can carry a dark text at dance tempo. The pulse stays conversational: the voice sits slightly ahead of or behind the beat like speech. Moderate-to-high word density — prose-like lines with asides and lists — thinning wherever the feeling spikes.",
+          "writingDials": [
+            "Zoom in until it aches: this room's poetry is the tiny verifiable detail — the object on the shelf, the message never answered, the supermarket aisle — taken from the user's actual life; generality is the first failure here.",
+            "Conversational prosody: lines scan like speech — asides, second thoughts, lists welcome — over a narrow melody that opens only where the feeling does; polish the talk instead of inflating it.",
+            "Irony must land on warmth: the deadpan observation earns one sincere turn — wry is the setup, tender is the payoff; sarcasm with nothing underneath is this room's cardinal death.",
+            "The hook is a reframing thought: modern production invites a chorus shape, so let the returning phrase change meaning each pass — a chorus enjoyable without its verses belongs to variété.",
+            "Understatement carries the grief: depression, divorce, a death enter through small objects and flat statement — say the fact plainly and let the detail ache; never announce the emotion by its name.",
+            "The bright-dark inversion is a legal dial: a danceable pulse under a dark text, the collision planned — the Stromae move; if the groove smiles, the words carry the shadow, and the contrast is the meaning.",
+            "Form may play: a list song, one scene revisited at three ages, a lyric addressed to an object or an absent name — experiments are welcome when they serve the observation, never as decoration.",
+            "Production is a coat, not the body: folk, chamber pop, or soft electro — the voice stays close, dry, and forward; any drop or wall of sound that buries a line has left the genre through the back door.",
+            "Cross-genre firewall: vs Variété Française — the closest neighbor: variété engineers the singalong and fills the verses; here the craft lives in the verse observation and the hook is a thought that reframes — if the chorus survives without its verses, it is variété. vs Slam — talk-adjacent verses are native here, but a sung melody always arrives and resolves; a piece that never sings is Slam. A filtered four-on-the-floor with the voice as texture is French Touch, not chanson."
+          ],
+          "rendering": "Close and modern — a dry, intimate lead voice over piano-voix or fingerpicked acoustic guitar, or warm minimal electro-pop with soft synth pads and a restrained beat; chamber colors — cello, clarinet, glockenspiel — and small backing harmonies; 2000s-2020s French indie sound, the text mixed above everything, dynamics from murmured verses to one open chorus and back down.",
+          "storyFit": "Best for: everyday life made luminous, growing up and growing older, quiet heartbreak and quiet love, family scenes, gentle social observation, dark feelings under a bright pulse. Poor fit: grand fated tragedy demanding a huge voice — that is Chanson Réaliste; a formal fable, protest, or classic strophic portrait — that is Chanson à Texte; a pure club anthem — French Touch or Variété Française, other genres.",
+          "parodyTraps": "Quirk without stakes — cute props and lists with no feeling underneath; irony that never turns warm; mumbled delivery hiding the very text the room exists for; recycled indie props instead of the user's real objects; a borrowed sadness aesthetic with no actual story; drops and gloss swallowing the words.",
+          "performance": {
+            "prose": "Density moderate; min adlibs 3; delivery tags [Spoken] [Whispered] [Soft] [Harmonies]. An intimate lead at kitchen distance, one or two shadow voices at most, nobody performing at anybody. Signature: the close-up turn — a [Spoken] aside or a [Whispered] line drops the song to a murmur just before the one open chorus, where soft [Harmonies] widen the room for a few bars and then leave. Placement: verses stay [Soft] and conversational; the aside sits at the end of the second verse; harmonies touch only the chorus and the last line. Tag identity: speech-adjacent intimacy, one widening, everything else close and dry. Adlibs are small human sounds — a breath, a half-laugh, a murmured repeat of the user's own words — never hype.",
+            "adlibDensity": "moderate",
+            "minAdlibs": 3,
+            "deliveryTags": [
+              "[Spoken]",
+              "[Whispered]",
+              "[Soft]",
+              "[Harmonies]"
+            ]
+          },
+          "builder": {
+            "instruments": [
+              "piano",
+              "guitare sèche",
+              "violoncelle",
+              "clarinette",
+              "nappes de synthé",
+              "boîte à rythmes",
+              "contrebasse"
+            ],
+            "themes": [
+              "Le temps qui passe",
+              "La nostalgie de l'enfance",
+              "Les gens ordinaires",
+              "L'amour et ses vertiges"
+            ],
+            "purposes": [
+              "Chanter la vie",
+              "Faire réfléchir",
+              "Émouvoir jusqu aux larmes"
+            ]
+          }
+        }
+      ],
+      "cues": [
+        {
+          "cue": "chanson à texte",
+          "strength": "strong",
+          "roomId": "chanson-texte"
+        },
+        {
+          "cue": "rive gauche",
+          "strength": "strong",
+          "roomId": "chanson-texte"
+        },
+        {
+          "cue": "jacques brel",
+          "strength": "strong",
+          "roomId": "chanson-texte"
+        },
+        {
+          "cue": "georges brassens",
+          "strength": "strong",
+          "roomId": "chanson-texte"
+        },
+        {
+          "cue": "barbara",
+          "strength": "strong",
+          "roomId": "chanson-texte"
+        },
+        {
+          "cue": "léo ferré",
+          "strength": "strong",
+          "roomId": "chanson-texte"
+        },
+        {
+          "cue": "serge gainsbourg",
+          "strength": "weak",
+          "roomId": "chanson-texte"
+        },
+        {
+          "cue": "juliette gréco",
+          "strength": "weak",
+          "roomId": "chanson-texte"
+        },
+        {
+          "cue": "jean ferrat",
+          "strength": "weak",
+          "roomId": "chanson-texte"
+        },
+        {
+          "cue": "cabaret",
+          "strength": "weak",
+          "roomId": "chanson-texte"
+        },
+        {
+          "cue": "poète",
+          "strength": "weak",
+          "roomId": "chanson-texte"
+        },
+        {
+          "cue": "portrait",
+          "strength": "weak",
+          "roomId": "chanson-texte"
+        },
+        {
+          "cue": "fable",
+          "strength": "weak",
+          "roomId": "chanson-texte"
+        },
+        {
+          "cue": "révolte",
+          "strength": "weak",
+          "roomId": "chanson-texte"
+        },
+        {
+          "cue": "hommage",
+          "strength": "weak",
+          "roomId": "chanson-texte"
+        },
+        {
+          "cue": "guitare sèche",
+          "strength": "weak",
+          "roomId": "chanson-texte"
+        },
+        {
+          "cue": "contrebasse",
+          "strength": "weak",
+          "roomId": "chanson-texte"
+        },
+        {
+          "cue": "chanson réaliste",
+          "strength": "strong",
+          "roomId": "chanson-r-aliste"
+        },
+        {
+          "cue": "édith piaf",
+          "strength": "strong",
+          "roomId": "chanson-r-aliste"
+        },
+        {
+          "cue": "charles aznavour",
+          "strength": "strong",
+          "roomId": "chanson-r-aliste"
+        },
+        {
+          "cue": "music-hall",
+          "strength": "strong",
+          "roomId": "chanson-r-aliste"
+        },
+        {
+          "cue": "fréhel",
+          "strength": "strong",
+          "roomId": "chanson-r-aliste"
+        },
+        {
+          "cue": "damia",
+          "strength": "strong",
+          "roomId": "chanson-r-aliste"
+        },
+        {
+          "cue": "la môme",
+          "strength": "weak",
+          "roomId": "chanson-r-aliste"
+        },
+        {
+          "cue": "tragédie",
+          "strength": "weak",
+          "roomId": "chanson-r-aliste"
+        },
+        {
+          "cue": "destin",
+          "strength": "weak",
+          "roomId": "chanson-r-aliste"
+        },
+        {
+          "cue": "grande voix",
+          "strength": "weak",
+          "roomId": "chanson-r-aliste"
+        },
+        {
+          "cue": "orchestre",
+          "strength": "weak",
+          "roomId": "chanson-r-aliste"
+        },
+        {
+          "cue": "faubourg",
+          "strength": "weak",
+          "roomId": "chanson-r-aliste"
+        },
+        {
+          "cue": "montmartre",
+          "strength": "weak",
+          "roomId": "chanson-r-aliste"
+        },
+        {
+          "cue": "chagrin d'amour",
+          "strength": "weak",
+          "roomId": "chanson-r-aliste"
+        },
+        {
+          "cue": "nouvelle scène",
+          "strength": "strong",
+          "roomId": "nouvelle-sc-ne"
+        },
+        {
+          "cue": "bénabar",
+          "strength": "strong",
+          "roomId": "nouvelle-sc-ne"
+        },
+        {
+          "cue": "vincent delerm",
+          "strength": "strong",
+          "roomId": "nouvelle-sc-ne"
+        },
+        {
+          "cue": "pomme",
+          "strength": "strong",
+          "roomId": "nouvelle-sc-ne"
+        },
+        {
+          "cue": "stromae",
+          "strength": "strong",
+          "roomId": "nouvelle-sc-ne"
+        },
+        {
+          "cue": "camille",
+          "strength": "strong",
+          "roomId": "nouvelle-sc-ne"
+        },
+        {
+          "cue": "dominique a",
+          "strength": "weak",
+          "roomId": "nouvelle-sc-ne"
+        },
+        {
+          "cue": "miossec",
+          "strength": "weak",
+          "roomId": "nouvelle-sc-ne"
+        },
+        {
+          "cue": "zaz",
+          "strength": "weak",
+          "roomId": "nouvelle-sc-ne"
+        },
+        {
+          "cue": "quotidien",
+          "strength": "weak",
+          "roomId": "nouvelle-sc-ne"
+        },
+        {
+          "cue": "intime",
+          "strength": "weak",
+          "roomId": "nouvelle-sc-ne"
+        },
+        {
+          "cue": "piano-voix",
+          "strength": "weak",
+          "roomId": "nouvelle-sc-ne"
+        },
+        {
+          "cue": "tranche de vie",
+          "strength": "weak",
+          "roomId": "nouvelle-sc-ne"
+        },
+        {
+          "cue": "ironie",
+          "strength": "weak",
+          "roomId": "nouvelle-sc-ne"
+        },
+        {
+          "cue": "douceur",
+          "strength": "weak",
+          "roomId": "nouvelle-sc-ne"
+        },
+        {
+          "cue": "moderne",
+          "strength": "weak",
+          "roomId": "nouvelle-sc-ne"
+        },
+        {
+          "cue": "angèle",
+          "strength": "weak",
+          "roomId": "nouvelle-sc-ne"
+        }
+      ]
+    },
+    "variete": {
+      "id": "variete",
+      "name": "Variété Française",
+      "aliases": [
+        "variete francaise",
+        "variété",
+        "variete",
+        "grande variete",
+        "grande variété",
+        "variété festive",
+        "variete festive"
+      ],
+      "profileText": "A variété writer's first move is to find the sentence the story wants to say to everyone — not the cleverest line, the most singable one — because variété engineers the refrain: the chorus is the destination, the verses exist to earn it, and the title usually stands at its front in the plainest, biggest words of the song. Before any lyric work the writer sizes that sentence — does it need a hall, a kitchen radio, or a wedding floor — then builds the ramp: verses that plant the particular, a pre-chorus that tightens and climbs, a chorus pitched above them on open vowels, and a plan for what returns bigger each pass. Melody is cut on French speech — syllabic lines, stresses where the spoken sentence puts them, pure vowels at the peaks — the genre's own DNA, never translated Anglo pop.\n\nThe lineage runs from Michel Berger's studio pop and Starmania through Goldman's arena writing, Balavoine's urgency, Sardou's anthems, and Céline Dion's French records, into the modern radio generation — Vianney, Louane, Amir, Slimane, Angèle, Clara Luciani, Julien Doré — and Kendji Girac's fiesta lane. One institution, three registers: total commitment without irony when the statement is sized for a hall — the Restos du Cœur register, solidarity and survival said out loud; understatement and wit when the song talks at close range, today's taste trusting restraint over grandeur; collective joy when the floor answers, the wedding canon where the crowd is the second vocalist. The writer moves between registers as the story demands and never mixes their temperatures inside one song.\n\nGrande Variété / Années 80-90 builds narrative verses toward a modulated arena chorus with the chœurs staged as a second character; Variété Pop Moderne talks on spoken-French rhythm under a clean short hook and grows by addition; Variété Festive / Grand Public writes the chorus first for a floor that sings back. The lyrics themselves are French, written by a later layer: this document instructs craft in plain English and never fakes French flavor — no invented slang, no accent costume. Craft terms — refrain, modulation, chœurs, pre-chorus — stay out of lyrics and adlibs. Postcard France — berets, baguettes, Paris-by-night props — is parody unless the user actually lived it. And the user's real story outranks everything: every law above bends before their names, places, and facts.",
+      "defaultRoomId": "vari-t-pop-moderne",
+      "rooms": [
+        {
+          "id": "grande-vari-t",
+          "name": "Grande Variété / Années 80-90",
+          "oneLine": "The Goldman-Berger-Balavoine arena lane — Starmania, France Gall's studio pop, Céline Dion's French records, running through its 2000s heirs Bruel, Obispo, Pagny's uptempo sides, Calogero, and the comédies musicales: narrative verses, a chorus that states the theme, the key change before the last refrain, emotion sized for a Zénith.",
+          "tempoGroove": "Two gears, one destination: the mid-tempo drive (92-138 BPM) on a frank, square-hitting kit pushing steady eighths, and the piano ballad (68-88 BPM) that grows verse by verse into the same arena chorus. Word density medium: verses carry full narrative sentences, choruses open into short plain statements with long vowels a hall can hold.",
+          "writingDials": [
+            "The refrain is a thesis stated plainly: the verse carries the particular, the chorus lifts it into one universal statement in the biggest, plainest words of the song — title at or near the front, melody a fourth or fifth above the verse, because the era's law is that everyone understands the point at once.",
+            "Verses are chapters of a three-minute screenplay: verse one plants a specific person, place, and time from the user's story; verse two moves time forward or turns the camera — never verse one re-felt; the classics of this lane are narratives, not moods.",
+            "When the song takes the era's signature lift — most in this room do — plan it at the writing stage: the last refrain lifts a half or whole tone, and one line is chosen to detonate over the lift — keep its peak on an open vowel and its syllables few, or the key change arrives carrying nothing.",
+            "The pre-chorus is repetition-and-rise: lines shorten, rhythm tightens, melody climbs stepwise so the chorus lands as inevitability — the era's ramps are audible architecture, and skipping the ramp is how a big chorus arrives unearned.",
+            "Write the chœurs as a second character: decide what the choir sings — the answered line, the echoed last word, the held pad under the lead — and when it enters, usually chorus two, because these records stage the crowd inside the arrangement before the real one arrives.",
+            "One held note per song, earned late: the money note lands in the final chorus or the coda, on the emotional keyword, on an open vowel — Céline's French records are the proof that two restrained minutes buy one unforgettable arrival.",
+            "The coda is a vamp, not an end: the refrain circles while the lead varies it in ad-libs and the chœurs hold the theme — write two or three plain variation lines for the fade, because this era rarely ends cold — the vamp-fade is the default, not a rule.",
+            "Say the big words without irony: hope, leaving, growing old, standing together — this room commits totally; a wink collapses the arena, and hedged sentiment reads as a singer who does not believe the song.",
+            "Cross-genre firewall: the engineered destination separates it from chanson française — there the sentence is sovereign and the refrain optional, here the refrain is the point and the verse exists to earn it; its piano ballads still aim the refrain at the hall — words the room sings back; a slow song whose crest is a private vow the hall only overhears, even one that climbs to a key change, routes to Ballade Française; and the melodic DNA stays French — syllabic lines on speech stress, pure-vowel peaks — so a topline needing Anglo melisma and backbeat scansion belongs to the Pop pack."
+          ],
+          "rendering": "Piano and 80s digital-era synth pads — FM electric piano, glassy pads — over big frank drums, round bass, clean electric guitar arpeggios breaking into a lyrical solo at the bridge, strings swelling from chorus two, stacked chœurs answering the lead. One committed voice recorded close but sized for a hall, a key change lifting the final chorus, long vamp-out with ad-libs over the held theme; French variété production 1980-2005, warm, wide, unashamed.",
+          "storyFit": "Best for: a rupture survived out loud, a memory carried for years, hope against the odds, growing up and growing old, a tribute meant for a full room, solidarity at Restos du Cœur scale. Poor fit: everyday tenderness, wit, or understatement — Variété Pop Moderne; a floor that wants to dance and answer — Variété Festive; a slow declaration at one temperature — Ballade Française.",
+          "parodyTraps": "A key change with nothing under it — the lift arriving before the verses have earned any height; a chorus of big abstract words over verses that never planted a person or a place; wall-to-wall belting that leaves the money note nowhere to land; gated-drum 80s costume pasted on a story that wanted a kitchen; grandeur forced onto a subject the user brought small; sentiment delivered with a smirk.",
+          "performance": {
+            "prose": "Density moderate; min adlibs 4; delivery tags [Belt] [Harmonies] [Key Change] [Big Finish]. This room performs like one committed voice filling a hall with a staged choir behind it — the lead narrates the verses alone and the record grows around the refrain. Signature: the staged lift — chorus one nearly solo, the chœurs entering on chorus two to answer and hold, the [Key Change] detonating the last refrain, the lead ad-libbing plain variations over the vamp while the choir keeps the theme. Placement: verses stay one clean narrating voice; the floor of 4 lives late — the echoed keyword into the final chorus, one belted held note on the emotional word, two vamp variations over the fade — never verse decoration. Tag identity: a solo lead plus a stacked answering choir — the chœurs are the crowd staged inside the record, and every ad-lib is a plain-language variation on the user's own words, never scat, never invented French.",
+            "adlibDensity": "moderate",
+            "minAdlibs": 4,
+            "deliveryTags": [
+              "[Belt]",
+              "[Harmonies]",
+              "[Key Change]",
+              "[Big Finish]"
+            ]
+          },
+          "builder": {
+            "instruments": [
+              "piano",
+              "synthé",
+              "guitare électrique",
+              "batterie franche",
+              "basse",
+              "cordes",
+              "chœurs"
+            ],
+            "themes": [
+              "La rupture",
+              "Le souvenir",
+              "Grandir et vieillir",
+              "L'espoir malgré tout"
+            ],
+            "purposes": [
+              "Faire vibrer un stade",
+              "Pleurer un chagrin",
+              "Réconforter",
+              "Chanter en chœur"
+            ]
+          }
+        },
+        {
+          "id": "vari-t-pop-moderne",
+          "name": "Variété Pop Moderne",
+          "oneLine": "Today's radio lane — Vianney, Louane, Amir, Slimane, Angèle, Clara Luciani, Julien Doré: conversational verses on spoken-French rhythm, clean short hooks, intimate-to-mid records that trust restraint.",
+          "tempoGroove": "72-124 BPM on a light straight pop pulse — soft programmed drums or a discreet live kit, songs often opening on guitar or piano and a close dry voice. Word density medium-high in the verses, conversational and close to speech, dropping hard at the chorus: the hook is a short plain phrase built to be hummed on first hearing.",
+          "writingDials": [
+            "Verses talk: write them at the register of a message the user could actually have sent — direct address, present tense, everyday vocabulary — because this generation's revolution was sounding like a person before sounding like a singer.",
+            "The hook stays engineered — variété law — but sized for a kitchen radio: a few plain words, often the title, repeated with small melodic variation; it needs no choir to sell it, and if it only works shouted it belongs one room over.",
+            "Melody sits on speech: small range, one note per syllable, stresses landing where spoken French lands them — then one deliberate leap saved for the line that matters most, which reads as an event because everything around it walks.",
+            "Understatement is the register: name the feeling once, plainly, then trust it — this room says less than it feels and lets the melody carry the difference; stacked superlatives read as a lie here.",
+            "Wit is legal: the Angèle-Clara lane allows irony, observational humor, a raised eyebrow inside a heartbreak — but the wit must be the user's own angle on their own story, never pasted cleverness over it.",
+            "Build by addition, not modulation: voice and one instrument first, drums at the first chorus, doubles and pads widening the second, a bridge stripped back to breath, the last chorus adding only the wordless layer — the arc is arrangement, and a key change here sounds like a costume.",
+            "Plan the wordless hook on paper: the oh-oh chain, the whistled answer, the hummed tail after the chorus — modern variété's signature — give it a shape and a place at the writing stage instead of leaving it to production.",
+            "One concrete object per section anchors the intimacy: the phone, the hallway, the coat left behind — this room lives close-up, and a verse of floating feeling-words is exactly where it dies.",
+            "Cross-genre firewall: the conversational verse flirts with chanson française, and sovereignty is the tell — chanson serves the sentence and lets the text override the hook, while this room still engineers the refrain as the destination; a slow declaration held at one temperature for its whole length routes to Ballade Française, because even this room's ballads keep the conversational verse and the clean hook; and the topline scans French speech on pure vowels — the moment it needs melisma and backbeat scansion it has left for the Pop pack, and a filtered club pulse has left for French Touch."
+          ],
+          "rendering": "Felt piano or clean guitar under a close dry voice, light programmed drums or a soft discreet kit, warm round bass, quiet synth pads, strings as color rather than carpet, small doubles and hushed chœurs widening the chorus, one whistled or oh-oh answer hook. Intimate French radio pop, 2014 to now — air in the mix, the words in front, restraint as the sound — or a bright programmed synth-pop / disco-pop palette when the story leans to the Angèle-Clara lane.",
+          "storyFit": "Best for: new love at its true size, a breakup told honestly without opera, family and what goes unsaid at its table, growing up, a small memory that still glows, comfort offered like a hand on a shoulder. Poor fit: a statement meant to fill a hall or a tribute with a held note — Grande Variété; the wedding floor and the fête — Variété Festive; a text-sovereign portrait with no hook — chanson française.",
+          "parodyTraps": "Faux-naïf cuteness — whimsy pasted over a real story until it patronizes it; the confessional overshare with no melodic engineering underneath, which is a voice memo, not a song; superlatives and sky-sized metaphors where the room asked for a phone and a hallway; oh-ohs carpeting every gap; wit that turns on the user's story instead of belonging to it; Anglo pop scansion fighting the French line.",
+          "performance": {
+            "prose": "Density sparse; min adlibs 2; delivery tags [Soft] [Whispered] [Harmonies] [Build Up]. This room performs like one person close to the mic in a small warm room — the drama is proximity, and the record never grows past mid-size. Signature: the addition arc — verse one dry and alone with the breaths kept in, a [Build Up] into the second chorus as doubles slide under the lead, the bridge dropping to a [Whispered] line, the wordless hook answering the final chorus like a friend joining in. Placement: the floor of 2 lives at the seams — one echoed last word into the bridge, the planned oh-oh or whistled answer after the last chorus; verses stay untouched, because decoration breaks the intimacy this room is built on. Tag identity: a single close voice with quiet self-doubles — the harmonies are the same person warming their own line, no gang, no staged choir, and every wordless syllable is a planned melodic shape, never a lyric substitute, never invented French.",
+            "adlibDensity": "sparse",
+            "minAdlibs": 2,
+            "deliveryTags": [
+              "[Soft]",
+              "[Whispered]",
+              "[Harmonies]",
+              "[Build Up]"
+            ]
+          },
+          "builder": {
+            "instruments": [
+              "piano",
+              "guitare électrique",
+              "synthé",
+              "basse",
+              "cordes",
+              "chœurs"
+            ],
+            "themes": [
+              "L'amour naissant",
+              "La rupture",
+              "La famille",
+              "Grandir et vieillir",
+              "Le souvenir"
+            ],
+            "purposes": [
+              "Réconforter",
+              "Pleurer un chagrin",
+              "Chanter en chœur"
+            ]
+          }
+        },
+        {
+          "id": "vari-t-festive",
+          "name": "Variété Festive / Grand Public",
+          "oneLine": "The singalong-and-dance lane — the Connemara-and-En-chantant singalong Sardou, Claude François' disco-variété, the années 80 boum classics, Kendji Girac's fiesta pop: chorus-first writing for a floor that sings back.",
+          "tempoGroove": "100-128 BPM on four-on-the-floor or a driving disco-funk pulse, frank drums with claps on the backbeat, brass riffs punching the line-ends. Word density low: verses of a few short lines, a chorus of plain shoutable words with real air around them, because the room's answer is part of the writing.",
+          "writingDials": [
+            "Write the chorus first, literally, and give it the one-in-the-morning test: a wedding floor, three generations, everyone singing it right by the second pass — if it cannot survive untrained voices and a long night, recut it until it can.",
+            "Verses are ramps: two to four short lines that set the scene or the feeling and get out — the chorus must return inside forty seconds, because nobody on this floor is waiting for chapter two.",
+            "Plan the crowd's part on paper: the echoed last word, the answered line, the la-la or oh-oh chain after the refrain — mark what the room sings and where, because this lane stages the audience as the second vocalist and the record must leave its gaps open.",
+            "Pitch the peaks where untrained voices live: mid-range, open vowels on the held words, one lift saved for the final chorus — write for the room's range, not the singer's, or the floor goes quiet at the exact bar it should erupt.",
+            "Rhyme predictably on purpose: the crowd must hear the rhyme coming to land it together — one repeated keyword beats a clever couplet, and a surprise rhyme kills the unison this room lives on.",
+            "Joy converts everything: a summer, a reunion, even a heartbreak danced through — name the feeling plainly and hand it to the beat; a grief that must stay heavy does not belong on this floor and routes out before the fête trivializes it.",
+            "The brass and the claps are punctuation: leave the line-ends open for the riff and the hands to answer — wall-to-wall words bury the band and the party with it.",
+            "The Kendji option: when the user's story genuinely carries the South, the fiesta, the gitane guitar — rumba strumming and palmas season the room; it stays seasoning over variété chorus engineering, never a flamenco costume pasted on a northern story.",
+            "Cross-genre firewall: a live-band fiesta with a sung refrain in charge separates it from French Touch — the moment filtered disco loops, side-chain pump, and a voice used as texture lead the record, it has left for the club; the accordion bal and the waltz belong to Musette, not this floor; an EDM drop with hands-up English scansion routes to the Pop pack; and nothing here is text-sovereign — a fête that keeps stopping to be literary has wandered out of variété entirely."
+          ],
+          "rendering": "Four-on-the-floor frank drums with handclaps, driving disco-funk bass, brass riffs punching between vocal lines, bright synth stabs, clean rhythm electric guitar, gang chœurs answering the lead — rumba guitar and palmas only when the story is southern. Big warm live-floor mix, French fête pop from the Cloclo era to Kendji, mixed for a room full of people rather than headphones.",
+          "storyFit": "Best for: the fête itself, a summer and its vacances, a wedding or a reunion, friendship and insouciance, a love declared with the whole table watching, family gathered and singing. Poor fit: grief that must stay heavy or a private confession — Variété Pop Moderne or Grande Variété; an all-night club trance — French Touch; the slow dance at midnight — Ballade Française.",
+          "parodyTraps": "Animation-de-camping novelty — the party-game chorus with choreography instructions where a song should be; fiesta clichés of sun, sangria, and borrowed Spanish the user never wrote; a chorus too wordy to shout; verses that ramble past their ramp; claps and brass carpeting every bar until no gap is left to answer; a wounded story ordered to party when it asked to weep.",
+          "performance": {
+            "prose": "Density heavy; min adlibs 5; delivery tags [Call and Response] [Shout] [Harmonies] [Big Finish]. This room performs like a singer working a wedding floor at one in the morning — one warm lead out front, the gang chœurs as a crowd already answering. Signature: the planned answer — the lead throws the line, the gang throws back the marked word or the echoed end, gathering voices on every return, until the [Big Finish] lifts the last chorus and one joyful [Shout] tops the re-entry. Placement: the floor of 5 lives on choruses and the outro — gang answers on the marked words, the la-la or oh-oh chain after each refrain, claps called at the lift, one crowd shout at the final return — verses stay a single inviting voice. Tag identity: a warm lead plus a gang of party voices answering as one floor — every answer, chain, and shout is joy in plain language from the user's own sheet, never a scripted exclamation, never borrowed Spanish, never invented slang.",
+            "adlibDensity": "heavy",
+            "minAdlibs": 5,
+            "deliveryTags": [
+              "[Call and Response]",
+              "[Shout]",
+              "[Harmonies]",
+              "[Big Finish]"
+            ]
+          },
+          "builder": {
+            "instruments": [
+              "cuivres",
+              "batterie franche",
+              "basse",
+              "guitare électrique",
+              "synthé",
+              "chœurs"
+            ],
+            "themes": [
+              "La fête et l'insouciance",
+              "L'été et les vacances",
+              "L'amour naissant",
+              "La famille"
+            ],
+            "purposes": [
+              "Chanter en chœur",
+              "Danser",
+              "Célébrer",
+              "Faire vibrer un stade"
+            ]
+          }
+        }
+      ],
+      "cues": [
+        {
+          "cue": "variété années 80",
+          "strength": "strong",
+          "roomId": "grande-vari-t"
+        },
+        {
+          "cue": "jean-jacques goldman — the hall's refrain; his slow private vows route to ballade française",
+          "strength": "strong",
+          "roomId": "grande-vari-t"
+        },
+        {
+          "cue": "michel berger",
+          "strength": "strong",
+          "roomId": "grande-vari-t"
+        },
+        {
+          "cue": "daniel balavoine — same split: the anthem here, the slow vow to ballade française",
+          "strength": "strong",
+          "roomId": "grande-vari-t"
+        },
+        {
+          "cue": "starmania",
+          "strength": "strong",
+          "roomId": "grande-vari-t"
+        },
+        {
+          "cue": "michel sardou",
+          "strength": "strong",
+          "roomId": "grande-vari-t"
+        },
+        {
+          "cue": "patrick bruel",
+          "strength": "strong",
+          "roomId": "grande-vari-t"
+        },
+        {
+          "cue": "les enfoirés",
+          "strength": "strong",
+          "roomId": "grande-vari-t"
+        },
+        {
+          "cue": "céline dion en français — her anthem side; her grandes ballades live in ballade française",
+          "strength": "weak",
+          "roomId": "grande-vari-t"
+        },
+        {
+          "cue": "florent pagny",
+          "strength": "weak",
+          "roomId": "grande-vari-t"
+        },
+        {
+          "cue": "calogero",
+          "strength": "weak",
+          "roomId": "grande-vari-t"
+        },
+        {
+          "cue": "pascal obispo",
+          "strength": "weak",
+          "roomId": "grande-vari-t"
+        },
+        {
+          "cue": "comédie musicale",
+          "strength": "weak",
+          "roomId": "grande-vari-t"
+        },
+        {
+          "cue": "zénith",
+          "strength": "weak",
+          "roomId": "grande-vari-t"
+        },
+        {
+          "cue": "france gall",
+          "strength": "weak",
+          "roomId": "grande-vari-t"
+        },
+        {
+          "cue": "hymne",
+          "strength": "weak",
+          "roomId": "grande-vari-t"
+        },
+        {
+          "cue": "grande émotion",
+          "strength": "weak",
+          "roomId": "grande-vari-t"
+        },
+        {
+          "cue": "tenir malgré tout",
+          "strength": "weak",
+          "roomId": "grande-vari-t"
+        },
+        {
+          "cue": "hommage",
+          "strength": "weak",
+          "roomId": "grande-vari-t"
+        },
+        {
+          "cue": "changement de tonalité",
+          "strength": "weak",
+          "roomId": "grande-vari-t"
+        },
+        {
+          "cue": "variété moderne",
+          "strength": "strong",
+          "roomId": "vari-t-pop-moderne"
+        },
+        {
+          "cue": "pop française",
+          "strength": "strong",
+          "roomId": "vari-t-pop-moderne"
+        },
+        {
+          "cue": "vianney",
+          "strength": "strong",
+          "roomId": "vari-t-pop-moderne"
+        },
+        {
+          "cue": "louane",
+          "strength": "strong",
+          "roomId": "vari-t-pop-moderne"
+        },
+        {
+          "cue": "angèle",
+          "strength": "strong",
+          "roomId": "vari-t-pop-moderne"
+        },
+        {
+          "cue": "amir",
+          "strength": "strong",
+          "roomId": "vari-t-pop-moderne"
+        },
+        {
+          "cue": "clara luciani",
+          "strength": "weak",
+          "roomId": "vari-t-pop-moderne"
+        },
+        {
+          "cue": "julien doré",
+          "strength": "weak",
+          "roomId": "vari-t-pop-moderne"
+        },
+        {
+          "cue": "slimane",
+          "strength": "weak",
+          "roomId": "vari-t-pop-moderne"
+        },
+        {
+          "cue": "santa",
+          "strength": "weak",
+          "roomId": "vari-t-pop-moderne"
+        },
+        {
+          "cue": "pierre garnier",
+          "strength": "weak",
+          "roomId": "vari-t-pop-moderne"
+        },
+        {
+          "cue": "radio d'aujourd'hui",
+          "strength": "weak",
+          "roomId": "vari-t-pop-moderne"
+        },
+        {
+          "cue": "confidence",
+          "strength": "weak",
+          "roomId": "vari-t-pop-moderne"
+        },
+        {
+          "cue": "le quotidien",
+          "strength": "weak",
+          "roomId": "vari-t-pop-moderne"
+        },
+        {
+          "cue": "douceur",
+          "strength": "weak",
+          "roomId": "vari-t-pop-moderne"
+        },
+        {
+          "cue": "sincérité",
+          "strength": "weak",
+          "roomId": "vari-t-pop-moderne"
+        },
+        {
+          "cue": "variété festive",
+          "strength": "strong",
+          "roomId": "vari-t-festive"
+        },
+        {
+          "cue": "kendji girac",
+          "strength": "strong",
+          "roomId": "vari-t-festive"
+        },
+        {
+          "cue": "les lacs du connemara",
+          "strength": "strong",
+          "roomId": "vari-t-festive"
+        },
+        {
+          "cue": "chanson de mariage",
+          "strength": "strong",
+          "roomId": "vari-t-festive"
+        },
+        {
+          "cue": "tube de l'été",
+          "strength": "strong",
+          "roomId": "vari-t-festive"
+        },
+        {
+          "cue": "en chantant",
+          "strength": "weak",
+          "roomId": "vari-t-festive"
+        },
+        {
+          "cue": "nuit de folie",
+          "strength": "weak",
+          "roomId": "vari-t-festive"
+        },
+        {
+          "cue": "les démons de minuit",
+          "strength": "weak",
+          "roomId": "vari-t-festive"
+        },
+        {
+          "cue": "gilbert montagné",
+          "strength": "weak",
+          "roomId": "vari-t-festive"
+        },
+        {
+          "cue": "la compagnie créole",
+          "strength": "weak",
+          "roomId": "vari-t-festive"
+        },
+        {
+          "cue": "claude françois",
+          "strength": "weak",
+          "roomId": "vari-t-festive"
+        },
+        {
+          "cue": "soirée années 80",
+          "strength": "weak",
+          "roomId": "vari-t-festive"
+        },
+        {
+          "cue": "faire la fête",
+          "strength": "weak",
+          "roomId": "vari-t-festive"
+        },
+        {
+          "cue": "tout le monde chante",
+          "strength": "weak",
+          "roomId": "vari-t-festive"
+        },
+        {
+          "cue": "le bal",
+          "strength": "weak",
+          "roomId": "vari-t-festive"
+        },
+        {
+          "cue": "insouciance",
+          "strength": "weak",
+          "roomId": "vari-t-festive"
+        },
+        {
+          "cue": "vacances",
+          "strength": "weak",
+          "roomId": "vari-t-festive"
+        },
+        {
+          "cue": "fiesta",
+          "strength": "weak",
+          "roomId": "vari-t-festive"
+        }
+      ]
+    },
+    "rapfr": {
+      "id": "rapfr",
+      "name": "Rap Français",
+      "aliases": [
+        "rap francais",
+        "rap fr",
+        "rap conscient",
+        "drill fr",
+        "drill français",
+        "drill francais",
+        "rap mélo",
+        "rap melo",
+        "cloud rap français"
+      ],
+      "profileText": "A rap français writer thinks in bars but hears them in French. The language is syllable-timed and lands its weight at the end of the phrase-group, so the flow school built here is its own: multisyllabic end-chains punched onto the snare, internal assonance keeping the middle of the bar alive, accelerations and flow switches doing the work dynamics do elsewhere — never a translated US stress-map forced onto French syllables. The pen is the badge. Since the golden age this scene has judged its writers on text: the constructed punchline with both meanings intended, storytelling in scenes, the clash answered with receipts, sixteen bars that each move the record forward. The hook's job changes by room — a scratched thesis, a blunt chant, the sung heart of the song — but the verse is always where the writer is judged.\n\nThe lineage sets the registers. The 90s built the text church — IAM and NTM, MC Solaar's velvet, Lunatic's darkness; the 2000s hardened and widened it — Booba, Rohff, Kery James's conscience; at the turn of the 2010s Sexion d'Assaut put sung hooks on top of the charts; PNL and Jul then broke the melodic wall; and the modern game runs every lane at once — Ninho, SCH, Damso, Nekfeu, Orelsan, Laylow, Tiakola's mélo, Gazo and Freeze Corleone's drill. Across all of it the sacred registers hold: the quartier is lived geography — real streets, real benches, named people — never a costume; la mère and le deuil d'un frère carry full weight or stay out of the song entirely; success is measured against where the writer started; and faith sits inside the music without preaching.\n\nOne line per room: Boom-Bap / Rap Conscient argues and narrates over sample-soul warmth; Trap / Drill FR spends punchlines over 808s, drill's menace waking only where the story earns it; Mélo / Cloud fuses melancholy and flexing in sung-rapped melody. The language law rules all three: the lyrics will be French, written by a later layer — this writer works in plain-English craft instruction and never fakes French flavor; verlan and argot are the scene's registers but are NEVER generated — only the user's own words enter the sheet; craft terms like flow, punchline, or egotrip stay out of lyrics and adlibs; postcard banlieue — tower-block clichés, imported menace, misery arranged as scenery — is parody; and no crime or darkness the user never brought gets invented to fill a room.",
+      "defaultRoomId": "trap",
+      "rooms": [
+        {
+          "id": "boom-bap",
+          "name": "Boom-Bap / Rap Conscient",
+          "oneLine": "The pen tradition — IAM, NTM, MC Solaar, and the Time Bomb school (Lunatic's dark pen the street-hardcore branch of the same golden age, ancestor of the trap room's lineage) through Kery James and Oxmo Puccino to Nekfeu and Orelsan: sample-soul loops, multisyllabic rhyme craft, storytelling and social truth.",
+          "tempoGroove": "85-100 BPM on the classic boom-bap grid — a swung kick-snare pocket built for the head-nod, deep round bass under a dusty loop. The genre's highest word density: full sixteen-bar verses whose sentences run the bar and land their weight at phrase ends, the multisyllabic chain punching onto the snare; the hook stays short — chanted, scratched, or barely there.",
+          "writingDials": [
+            "The verse is the star: sixteen bars is the unit of argument, and every verse must earn its length — a new angle or the story moved forward; a verse two that rewords verse one has lost the room.",
+            "Build the flow on French prosody: the language lands its stress at the end of the phrase-group, so build lines whose final syllables carry the punch onto the snare — the multisyllabic end-chain is this room's engine, internal assonance keeping the middle of the bar alive.",
+            "Storytelling runs in scenes: one narrator, real places, time moving — a life told in photographs the listener can develop; write the concrete detail that can be seen and let it argue, because a moral announced is the lane's fastest death.",
+            "Social truth without the sermon: injustice and the system are written as people with names, days, and dignity — and the writer interrogates their own side before lecturing anyone, the discipline the Kery James school made law.",
+            "Punchlines are constructed, never stacked: a setup bar, then the flip — the double meaning with both meanings intended; the clash tradition sharpens lines against a named opponent, but every hit is built from the user's own material, receipts before insults.",
+            "Technique may be the subject: the egotrip is legitimate — flow switches every four bars, accelerations, a scheme that changes mid-verse as an exhibition of pen — but even the egotrip carries the user's real wins, never rented ones.",
+            "The quartier is lived geography: the user's own streets, stairwells, lines of sight, and named friends — never postcard banlieue, the tower-block clichés and imported misery the user did not bring.",
+            "Tribute and grief land here as narrative: le deuil d'un frère told in dates, habits, the empty chair — weight carried by facts and restraint, never announced sorrow; the sacred registers get the pen's fullest discipline.",
+            "Cross-genre firewall: the language is the wall with the English-catalog Hip-Hop pack — same sample-soul church, different school: French prosody, weight landing at phrase-group ends, its own flow DNA since the early 90s — an English-language story or a translated US stress-map re-routes to that pack. Against Slam the pocket decides: here the voice obeys the grid — even a cappella the flow scans against implied drums — where slam's sentence keeps sovereignty and the bed follows the voice. A sung hook may visit; a sung core is Mélo / Cloud or RnB Français."
+          ],
+          "rendering": "A dusty filtered soul sample with its vinyl noise left in, boom-bap drums in a swung head-nod pocket, deep round bass, dark piano and strings for the heavy cuts, DJ scratches cutting a phrase for the hook. The rapped voice dry, close, and upfront with every consonant legible, a tight double on the punchline bars; 90s-2000s French rap warmth — MPC grit, no modern trap gloss, the beat serving the text.",
+          "storyFit": "Best for: a life told in scenes, injustice witnessed from inside, homage to a fallen friend that needs narrative to stand, the letter to a younger self, origins told with a chest-out pen, clash and answer records argued with receipts. Poor fit: flex economy and club heat — that is Trap / Drill FR; a feeling that wants melody to carry it — that is Mélo / Cloud; function records; any story too thin to fill sixteen bars.",
+          "parodyTraps": "Golden-age cosplay — 90s slang and era props the user never wrote; the sermon; misery tourism arranging the banlieue as scenery; rhyme chains steering sentences into nonsense; a moral explained after landing; craft vocabulary leaking into the lyric.",
+          "performance": {
+            "prose": "Density moderate; min adlibs 4; delivery tags [Rhythmic] [Spoken] [Break] [Instrumental Break]. One MC and a DJ in a small studio — the voice dry and upfront, the beat nodding, the DJ the second performer. Signature: the double-tracked punchline — a tight second voice landing with the snare on the bars that earn it, roughly one every four, plus a low spoken echo of the rhyme word at a verse hand-off. Placement: the hook slot can run as an [Instrumental Break] header where scratches cut a phrase instead of anyone singing; a bare [Break] drops the beat under the heaviest storytelling line; a [Spoken] intro or outro talks straight to the listener; [Rhythmic] steadiness holds the sixteens. Tag identity: one MC, their own double, and a DJ treated as an instrument — no crowd, no choir, no hype wall; every echoed word already sits in the user's text.",
+            "adlibDensity": "moderate",
+            "minAdlibs": 4,
+            "deliveryTags": [
+              "[Rhythmic]",
+              "[Spoken]",
+              "[Break]",
+              "[Instrumental Break]"
+            ]
+          },
+          "builder": {
+            "instruments": [
+              "sample soul",
+              "boom-bap",
+              "basse profonde",
+              "piano sombre",
+              "cordes"
+            ],
+            "themes": [
+              "La rue et le quartier",
+              "L'injustice et le système",
+              "Les origines et le pays",
+              "Le deuil d'un frère",
+              "La famille et la mère"
+            ],
+            "purposes": [
+              "Raconter mon histoire",
+              "Représenter d'où je viens",
+              "Clasher / répondre",
+              "Rendre hommage à un disparu"
+            ]
+          }
+        },
+        {
+          "id": "trap",
+          "name": "Trap / Drill FR",
+          "oneLine": "Today's street mainstream — the lane Booba opened after Lunatic, through Kaaris's Or Noir, to Ninho's run, SCH's dark elegance, Damso's cold precision, Gazo and Freeze Corleone's drill: 808-weighted, punchline economy, autotune as texture, menace only where the story earns it.",
+          "tempoGroove": "Trap written 130-150 BPM, felt 65-75 in half-time — hats rolling double and triple over the slow snare, 808s serving as bass and drum at once; drill keeps the tempo but slides its 808s in glissando and skips the hats in a colder two-step shuffle. Word density moderate and deliberate: punchline economy — short self-contained phrases that hit and stop, written air after them.",
+          "writingDials": [
+            "Punchline economy is the pen here: one image, one flip, full stop — the phrase must land inside a bar or two and survive quotation alone; the sprawling sentence belongs to the boom-bap room.",
+            "Write the gap on purpose: the silence after a line is where the second voice answers, so a verse that fills every beat has erased its own ad-lib cast — density is spent, not maxed.",
+            "Flow switches are the dynamics: a double-time burst, a half-time drop for the line that matters, a triplet run — switch the pattern every four to eight bars and let the switch mark the story's turn.",
+            "The hook can chant or sing: autotune worn as texture on a rapped cadence, or a short sung melody over the 808s — the current street mainstream hooks sung as often as chanted. The border with Mélo / Cloud is the center of gravity: here the verses stay punchline-rap and the sung hook serves them; when the melody becomes the record's heart and the verses melt into it, the song has crossed.",
+            "Money and the débrouille are told in specifics: the user's actual hustle, hours, and numbers — the real Tuesday outweighs the rented supercar; a generic brand inventory is the lane's fastest parody.",
+            "Loyalty and betrayal run the emotional core: les vrais counted on one hand, the friend who moved different named by incident, never by proverb — receipts make the coldness honest.",
+            "Drill is earned, never default: sliding bass, menace, and war vocabulary enter only where the user's story actually holds conflict — no invented opps, no imported postcode war, no darkness the user never brought; a story with no war in it stays trap.",
+            "Pride keeps a crack in it: the win told next to what it cost — the mother's worry, the sleepless years; one flat honest line in a flex verse beats eight boasts, and the Damso school makes the coldness itself the feeling.",
+            "Cross-genre firewall: same 808 grammar as the English-catalog Trap and Drill rooms, different school: French phrase-final stress and French punchline logic — a translated Atlanta or London flow, or an English-language story, re-routes to the Hip-Hop pack. The MHD border guards the Afro side: afro percussion driving the pocket under a danceable unison chant is the Afro pack's street lane — log drums route to the Afrobeats pack's amapiano-fed room and anglophone toplines to Afrobeats; here the 808 carries the pocket. The RnB Français line is decided by the core: a sung confession where the guard finally drops is RnB Moderne — this room raps even when it hums."
+          ],
+          "rendering": "Heavy sliding 808s under crisp trap hats rolling double and triple, a dark piano or bell loop, cold synth pads, space kept around the voice; for drill, glissando 808 slides, a skipping two-step hat pattern, minor-key menace. Autotuned rapped lead kept close and dry, an ad-lib track punctuating the written gaps; 2018-to-now French street rap gloss — Paris, Marseille, Brussels — modern, subterranean, bass-forward, the words never buried.",
+          "storyFit": "Best for: ambition with receipts, the hustle told in real hours and numbers, loyalty tested and answered, proving the doubters wrong, celebrating a win that cost something, head-nod records for the car. Poor fit: tender tribute and grief that wants to be sung — that is Mélo / Cloud; a life that needs scenes and chapters — that is the boom-bap room; any story that needs invented menace to fill the space.",
+          "parodyTraps": "Rented flexes and brand lists any user could receive; drill menace with no story under it — imported opps, postcode-war cosplay, weapons the user never mentioned; autotune smearing syllables until the words vanish; translated US clichés in French; the quartier reduced to decor between punchlines.",
+          "performance": {
+            "prose": "Density heavy; min adlibs 6; delivery tags [Ad-Lib Section] [Drop] [Quiet] [Spoken]. Two voices, both the lead — the main track and its own ad-lib track answering in the written gaps. Signature: the punctuation answer — a bar lands, and the second track echoes its key word or drops one cold exclamation, one answer per gap, never stepping on the next phrase. Placement: the verse floor is one echo about every two bars, doubled under hook returns; a [Drop] frames the hook's arrival; drill passages run colder — a flat low group echo lands only on phrase-final words of the heaviest bars, and a [Quiet] header takes the coldest moment; the one bare zone is the flat vulnerable line, marked [Spoken] and left untouched; an [Ad-Lib Section] may hand the outro to the second voice. Tag identity: the lead and its own cold second self — echoes and short exclamations from the user's own sheet, no hype crowd, no melody stack, nobody cheering.",
+            "adlibDensity": "heavy",
+            "minAdlibs": 6,
+            "deliveryTags": [
+              "[Ad-Lib Section]",
+              "[Drop]",
+              "[Quiet]",
+              "[Spoken]"
+            ]
+          },
+          "builder": {
+            "instruments": [
+              "808 lourdes",
+              "boîte à rythmes trap",
+              "piano sombre",
+              "nappes de synthé",
+              "basse profonde"
+            ],
+            "themes": [
+              "L'argent et la débrouille",
+              "La réussite et l'ambition",
+              "La loyauté et les vrais",
+              "Prouver aux autres",
+              "La rue et le quartier"
+            ],
+            "purposes": [
+              "Faire bouger la tête",
+              "Célébrer la réussite",
+              "Clasher / répondre"
+            ]
+          }
+        },
+        {
+          "id": "m-lo",
+          "name": "Mélo / Cloud",
+          "oneLine": "The melodic wave — PNL's cloud, Jul's Marseille marathon, Tiakola's mélo science: sung-rapped hooks over ambient pads, melancholy and flexing fused, melody carrying more feeling than the rhyme scheme.",
+          "tempoGroove": "The cloud lane floats felt 60-85 in half-time — soft rolling hats over a slow snare, 808s rounded instead of aggressive; the mélo lane sits 90-115 with a light bounce that nods rather than dances. Word density low to moderate: melodic phrases with open vowels at line-ends, repetition doing the melodic work, real air left for the pads — the rhyme scheme relaxes to assonance wherever the tune needs the vowel.",
+          "writingDials": [
+            "Melody leads and rhyme follows: build each line on a hummable contour first, and let the chain loosen to assonance where the tune wants an open vowel — the exact inverse of the boom-bap room's law.",
+            "Sung-rapped is one register, not two: the voice slides between cadence and melody mid-line, so write phrases that survive both readings and never mark a hard border the delivery would betray.",
+            "Melancholy and flexing fuse into one feeling: the win sung with homesickness inside it, the new life measured against the block at night — if the flex carries no ache, it belongs in the trap room.",
+            "The hook may be the whole point: this room bends the verse-hook balance on purpose, and verses can shrink to a few melodic phrases — but even the shortest verse carries the user's real names, streets, and dates, never humming filler.",
+            "Repetition-with-variation is the engine: one phrase returns with small melodic shifts and means more each pass — write the line that can loop before the line that can dazzle.",
+            "La mère, la foi, and le deuil d'un frère live here at close range: gratitude, faith, and grief sung plainly and carried by one real habit or one kept promise — full weight, never props: no invented dead, no rented tears.",
+            "The quartier turns nostalgic: the bench, the hall light, the friends scattered by time — geography remembered with tenderness from a distance, still the user's own map, never a postcard shot at sunset.",
+            "Autotune is the instrument, not a fix: plan held line-end notes and small bent intervals where the tuning becomes the tremble — the machine says what the guard will not, so leave it vowels to bend.",
+            "Cross-genre firewall: the RnB Français border runs through subject and scan: there a sung core confesses love at close range to one person; here even the sung phrases scan as bars and the subjects stay the street's — ambition, the crew, the mother, the missing brother — so a record that becomes a guarded love confession end to end re-routes to RnB Moderne. Against the English catalog's Melodic Rap room, same fusion but different school: French vowels and phrase-final contours, never a translated emo-rap topline. And the drum cell guards the Afro side: an afro-pop bounce pushing the hips is the Afro pack — this room floats on pads and rounded 808s; it nods, it does not dance."
+          ],
+          "rendering": "Wide ambient synth pads with a dreamy nocturnal drift, soft dark piano, rounded 808s under slow rolling hats, airy strings or choir-pad color high in the field. The lead autotuned and doubled, sung-rapped phrases with murmured self-echoes, hooks stacked in light harmony; PNL-era cloud spaciousness or Marseille mélo warmth — more sky than street, the beat breathing around the voice, melancholy living in the reverb tails.",
+          "storyFit": "Best for: motivating the ones still struggling, gratitude to the mother sung plainly, faith kept through the hard years, grief for a brother felt more than told, success with homesickness in it, the block remembered at night from far away. Poor fit: clash and answer records — no venom survives these pads; dense narrative in chapters — that is the boom-bap room; function bangers; menace of any kind.",
+          "parodyTraps": "Melancholy worn as a filter with nothing lived underneath; autotune drowning the words until the story disappears; the mother and the dead friend deployed as anthem props; the postcard block at sunset; a flex with no ache in it; filler vocal syllables where the user's words should be.",
+          "performance": {
+            "prose": "Density moderate; min adlibs 5; delivery tags [Melodic] [Falsetto] [Harmonies] [Soft]. This room performs like one voice layered into its own choir — everything added sings, nothing talks back. Signature: the sung trail — the hook's last words return behind it, higher or softer, the layers thickening on each return until the ache is the texture itself. Placement: verses keep at most one soft self-echo so the plain line reads clean; [Harmonies] bloom on the late hooks; a [Falsetto] lift takes the emotional peak; a [Soft] header takes the confession or the prayer, and [Melodic] holds the sung-rapped verses between. Tag identity: the lead's harmonized self and no one else — no crew shouts, no cold echoes, no crowd; every trailing word is the user's own, and if a voice answers here, it sings.",
+            "adlibDensity": "moderate",
+            "minAdlibs": 5,
+            "deliveryTags": [
+              "[Melodic]",
+              "[Falsetto]",
+              "[Harmonies]",
+              "[Soft]"
+            ]
+          },
+          "builder": {
+            "instruments": [
+              "nappes de synthé",
+              "808 lourdes",
+              "piano sombre",
+              "boîte à rythmes trap",
+              "cordes"
+            ],
+            "themes": [
+              "La famille et la mère",
+              "La foi",
+              "Le deuil d'un frère",
+              "La réussite et l'ambition",
+              "Les origines et le pays"
+            ],
+            "purposes": [
+              "Motiver ceux qui galèrent",
+              "Rendre hommage à un disparu",
+              "Célébrer la réussite"
+            ]
+          }
+        }
+      ],
+      "cues": [
+        {
+          "cue": "boom-bap",
+          "strength": "strong",
+          "roomId": "boom-bap"
+        },
+        {
+          "cue": "rap conscient",
+          "strength": "strong",
+          "roomId": "boom-bap"
+        },
+        {
+          "cue": "iam",
+          "strength": "strong",
+          "roomId": "boom-bap"
+        },
+        {
+          "cue": "ntm",
+          "strength": "strong",
+          "roomId": "boom-bap"
+        },
+        {
+          "cue": "kery james",
+          "strength": "strong",
+          "roomId": "boom-bap"
+        },
+        {
+          "cue": "oxmo puccino",
+          "strength": "strong",
+          "roomId": "boom-bap"
+        },
+        {
+          "cue": "mc solaar",
+          "strength": "weak",
+          "roomId": "boom-bap"
+        },
+        {
+          "cue": "nekfeu",
+          "strength": "weak",
+          "roomId": "boom-bap"
+        },
+        {
+          "cue": "orelsan",
+          "strength": "weak",
+          "roomId": "boom-bap"
+        },
+        {
+          "cue": "lunatic",
+          "strength": "weak",
+          "roomId": "boom-bap"
+        },
+        {
+          "cue": "plume",
+          "strength": "weak",
+          "roomId": "boom-bap"
+        },
+        {
+          "cue": "égotrip",
+          "strength": "weak",
+          "roomId": "boom-bap"
+        },
+        {
+          "cue": "sample soul",
+          "strength": "weak",
+          "roomId": "boom-bap"
+        },
+        {
+          "cue": "scratch",
+          "strength": "weak",
+          "roomId": "boom-bap"
+        },
+        {
+          "cue": "années 90",
+          "strength": "weak",
+          "roomId": "boom-bap"
+        },
+        {
+          "cue": "trap",
+          "strength": "strong",
+          "roomId": "trap"
+        },
+        {
+          "cue": "drill",
+          "strength": "strong",
+          "roomId": "trap"
+        },
+        {
+          "cue": "ninho",
+          "strength": "strong",
+          "roomId": "trap"
+        },
+        {
+          "cue": "sch",
+          "strength": "strong",
+          "roomId": "trap"
+        },
+        {
+          "cue": "gazo",
+          "strength": "strong",
+          "roomId": "trap"
+        },
+        {
+          "cue": "freeze corleone",
+          "strength": "strong",
+          "roomId": "trap"
+        },
+        {
+          "cue": "808",
+          "strength": "weak",
+          "roomId": "trap"
+        },
+        {
+          "cue": "punchline",
+          "strength": "weak",
+          "roomId": "trap"
+        },
+        {
+          "cue": "booba",
+          "strength": "weak",
+          "roomId": "trap"
+        },
+        {
+          "cue": "rohff",
+          "strength": "weak",
+          "roomId": "trap"
+        },
+        {
+          "cue": "kaaris",
+          "strength": "strong",
+          "roomId": "trap"
+        },
+        {
+          "cue": "ziak",
+          "strength": "strong",
+          "roomId": "trap"
+        },
+        {
+          "cue": "damso",
+          "strength": "weak",
+          "roomId": "trap"
+        },
+        {
+          "cue": "sdm",
+          "strength": "weak",
+          "roomId": "trap"
+        },
+        {
+          "cue": "werenoi",
+          "strength": "weak",
+          "roomId": "trap"
+        },
+        {
+          "cue": "niska",
+          "strength": "weak",
+          "roomId": "trap"
+        },
+        {
+          "cue": "charbon",
+          "strength": "weak",
+          "roomId": "trap"
+        },
+        {
+          "cue": "mélo",
+          "strength": "strong",
+          "roomId": "m-lo"
+        },
+        {
+          "cue": "cloud rap",
+          "strength": "strong",
+          "roomId": "m-lo"
+        },
+        {
+          "cue": "pnl",
+          "strength": "strong",
+          "roomId": "m-lo"
+        },
+        {
+          "cue": "jul",
+          "strength": "strong",
+          "roomId": "m-lo"
+        },
+        {
+          "cue": "tiakola",
+          "strength": "strong",
+          "roomId": "m-lo"
+        },
+        {
+          "cue": "autotune",
+          "strength": "weak",
+          "roomId": "m-lo"
+        },
+        {
+          "cue": "planant",
+          "strength": "weak",
+          "roomId": "m-lo"
+        },
+        {
+          "cue": "mélancolie",
+          "strength": "weak",
+          "roomId": "m-lo"
+        },
+        {
+          "cue": "refrain chanté",
+          "strength": "weak",
+          "roomId": "m-lo"
+        },
+        {
+          "cue": "nostalgie",
+          "strength": "weak",
+          "roomId": "m-lo"
+        },
+        {
+          "cue": "laylow",
+          "strength": "weak",
+          "roomId": "m-lo"
+        },
+        {
+          "cue": "qlf",
+          "strength": "strong",
+          "roomId": "m-lo"
+        },
+        {
+          "cue": "sexion d'assaut",
+          "strength": "weak",
+          "roomId": "m-lo"
+        },
+        {
+          "cue": "damso",
+          "strength": "weak",
+          "roomId": "m-lo"
+        }
+      ]
+    },
+    "zouk": {
+      "id": "zouk",
+      "name": "Zouk",
+      "aliases": [
+        "zouk love",
+        "zouk beton",
+        "zouk béton",
+        "zouk retro",
+        "zouk rétro",
+        "zouk r&b",
+        "nouveau zouk"
+      ],
+      "profileText": "A zouk writer's first move is to read the distance and the speed the story needs, because the genre's law lives in one drum cell: the ti-bwa's double knock, the tak-tak, carried from stick-on-wood into the drum machine. Before any rhyme, the writer decides who is faced and from how far — one lover at embrace distance on the slow cell, or a whole street on the doubled one — since the same subjects (desire, jealousy, the pays, the night) live in every room and only scale chooses. Then every phrase is cut to the gap: lines end before the bar so the cell and the synth can answer, because the dance is glued and a sheet with no air has already broken the embrace. The groove owns half of every bar; the words must earn the other half and hand it back.\n\nThe lineage runs from live wood to the machine, fed from two sides: gwoka in Guadeloupe and chouval bwa in Martinique kept the ka drums and the stick pattern speaking under Creole voices, while the dance bands — the Décimus brothers came up through Guadeloupe's cadence and konpa orchestras (Les Vikings de Guadeloupe), and biguine and cadence-lypso taught the genre its horns — carried the ballroom side; Kassav', founded in Paris in 1979 — Desvarieux's guitar chop, Décimus's engine, the Marthély-Béroard call — married that band lineage to the cell, built the 80s wall in Paris studios, and carried the Antilles onto world stages. Patrick Saint-Éloi opened the slow floor and the zouk love era made the tender croon the genre's biggest lane, from Zouk Machine's radio years to Slaï and Fanny J; the streaming generation — Jean-Michel Rotin and Kim first, Joé Dwèt Filé and Thayna today — wears R&B production over the same tak-tak. Three registers recur: heartbreak that keeps dancing, collective joy that carries history inside the jump, and intimacy that survives the phone screen.\n\nOne line per room: Zouk Love writes a vow or a plea to one real person that returns closer and more tender each round; Zouk Béton / Carnaval writes short-fuse verses and a chant the street throws back before it has memorized it; Zouk R&B / Nouvelle Vague writes topline-led phrases and a short melodic loop built to survive the hundredth replay. The language law rules all three: the lyrics will be French, written by a later layer — this writer works in plain-English craft instruction and never generates Creole flavor; Creole enters only when the user wrote it — and when the user does write it, it is the genre's home register, not flavor: the canon from Kassav' through zouk love sang in Kréyòl as a cultural stand, and French is this engine's working compromise, not the tradition. Craft terms like the cell, the gap, or the topline stay out of lyrics and adlibs; postcard islands — plage, cocotiers, rum-and-sunset props — are parody in every room; and the user's real people and real nights outrank every beach in the songbook.",
+      "defaultRoomId": "zouk-love",
+      "rooms": [
+        {
+          "id": "zouk-love",
+          "name": "Zouk Love",
+          "oneLine": "The slow sensual core and the genre's biggest lane — Patrick Saint-Éloi's gift, carried through the 90s radio era into the Slaï and Fanny J generation: desire and heartbreak at embrace distance.",
+          "tempoGroove": "85-105 BPM in a slow warm 4/4 — the boîte à rythmes holds a round kick while the rim clicks the ti-bwa's double-knock, the tak-tak that leans across the beat and rolls the hips; basse ronde ties itself to the kick, synthé chaud pads and bell lines answer the voice, guitare rythmique chops softly on the off, congas breathe underneath. Word density medium: full melodic phrases that end before the bar so the cell and the synth can answer — the dance is glued, and a sheet with no air has already broken the embrace.",
+          "writingDials": [
+            "Face one person at embrace distance: second person to a real lover — a desire, a plea, an apology, a jealousy confessed — and the you must carry one detail only those two would recognize, because a generic chérie is nobody and the floor can hear it.",
+            "Write to the gap: phrases end early and leave the line open for the tak-tak and the synth to answer — the couple is dancing glued and the words must leave room for the sway, so a line that fills the whole bar gets recut, never forced.",
+            "Heat by suggestion: zouk love is sensual and elegant at once — skin, breath, and the night implied through one real detail from the user's story; spelled-out sexuality breaks the register this room was built on.",
+            "Heartbreak keeps dancing: separation, manque, and jealousy are sung warm over the same slow cell — the floor is where the Antilles console a broken heart, so the voice may ache but the groove never sinks; a despair that stops the dance belongs to another genre.",
+            "The hook is a vow or a plea that returns closer: one singable line aimed at one person, peaking on open vowels the croon can hold, gaining tenderness on each return rather than volume — sung into a shoulder, never across the room.",
+            "Verse two advances the two of them: the night it broke, the call that went unanswered, the return — the account of these specific people moves forward, never re-circles verse one's feeling.",
+            "Plan the echo into the writing: choose which line-ends the backing voices double soft, because this lane carries its feeling in the answered last word as much as in the lead.",
+            "Home may enter through the love: the island evening, the departure lounge, the Atlantic between two lives — only the user's actual places, held as home; the moment the scenery turns brochure the song is a postcard, not a slow.",
+            "Cross-genre firewall: the slow embrace alone names nothing — kizomba is semba's child wearing zouk's drum machines: an Angolan, lusophone lane on a slower, ghosted-kick pulse with a Portuguese croon, not zouk slowed down — and zouk love is not kizomba sped up: this room rides the Antillean ti-bwa tak-tak under a French-Creole voice, and a lusophone ghost-kick embrace routes out however slow it sways. Kompa is Haiti's cousin and its own genre — a guitar-led gouyad engine and a Haitian voice re-route there. RnB Français shares the croon but has no ti-bwa cell: lose the cell and the song has left the islands."
+          ],
+          "rendering": "Warm slow zouk love — drum machine with the rim-click ti-bwa cell, round bass locked to a soft kick, warm 80s-to-2000s synth pads and bell melodies answering the voice, gentle rhythm-guitar chop, congas low in the mix. Close-mic French croon with airy backing harmonies echoing the line-ends, light reverb like a small hot club late at night; Antillean slow-dance sheen, Saint-Éloi-to-Fanny J lineage, no EDM gloss.",
+          "storyFit": "Best for: desire at close distance, seduction led by tenderness, jealousy confessed, separation and manque across the ocean, consoling a broken heart on a dance floor, the woman loved and told so. Poor fit: the carnival street and its chants — that is Béton; a modern situationship wanting tuned R&B sheen — that is Nouvelle Vague; protest, crude explicitness, or a wail that stops the dance.",
+          "parodyTraps": "Postcard islands — plage, cocotiers, and sunset props pasted on a story that never had them; Creole pet names or phrases the writer added that the user never said; the candles-and-satin seduction checklist instead of the couple's real details; wall-to-wall words that kill the sway; craft terms like the cell or the gap surfacing in the lyric.",
+          "performance": {
+            "prose": "Density moderate; min adlibs 4; delivery tags [Soft] [Sensual] [Harmonies] [Instrumental Break]. This room performs like one voice and its warm echoes on a small hot floor — a close-mic lead, soft backing doubles, and a synth line answering where a second singer would. Signature: the echoed last word — backing voices repeat the end of the vow soft under the cell, closer on each chorus return, the way a partner answers into a shoulder. Placement: verses stay lead-forward and nearly bare; the echoes gather under the hook and thicken on its returns; one [Instrumental Break] gives the floor a full turn where the sax, guitar, or synth carries the feeling and the couple just dances. Tag identity: an intimate lead and its own layered warmth — soft harmony echoes at the marked line-ends, a [Sensual] header where the song pulls nearest, one held last note allowed to trail. No crowd, no belt — and when the user's story carries two voices, a duet is canon: male and female leads trading lines and joining on the vow's return, the Kolé Séré lineage; otherwise one close lead and its own echoes, every echoed word from the user's own sheet.",
+            "adlibDensity": "moderate",
+            "minAdlibs": 4,
+            "deliveryTags": [
+              "[Soft]",
+              "[Sensual]",
+              "[Harmonies]",
+              "[Instrumental Break]"
+            ]
+          },
+          "builder": {
+            "instruments": [
+              "boîte à rythmes",
+              "ti-bwa",
+              "saxophone",
+              "synthé chaud",
+              "basse ronde",
+              "guitare rythmique",
+              "congas"
+            ],
+            "themes": [
+              "L'amour sensuel",
+              "La séparation et le manque",
+              "La femme aimée",
+              "La jalousie",
+              "La douceur des îles"
+            ],
+            "purposes": [
+              "Danser collé",
+              "Séduire",
+              "Consoler un cœur brisé"
+            ]
+          }
+        },
+        {
+          "id": "zouk-b-ton",
+          "name": "Zouk Béton / Carnaval",
+          "oneLine": "The fast Kassav' engine — Jacob Desvarieux's guitar chop and the Marthély-Béroard call over a wall of drums: carnival tempo, horn stabs, chant hooks, the \"An ba chen'n la\" energy.",
+          "tempoGroove": "120-140 BPM with the kick driving all four and the ti-bwa cell doubled hard across rim and hi-hat — tom fills rolling out of the mas tradition, tambour ka accents cracking through, basse ronde running an ostinato, guitare rythmique chopping the off, cuivres stabbing between phrases. Word density low: short chantable phrases with real air after them, because the horns, the drums, and the crowd's answer take the other half of every bar.",
+          "writingDials": [
+            "Write the hook as a chant: two to six words on open vowels, learnable in one hearing and throwable back — the chorus is a call the floor answers before it has memorized it, and a hook too clever to shout at carnival tempo is pitched wrong for this room.",
+            "Build the response into the sheet: decide which words the crowd throws back — a fixed short answer or the echoed line-end — because the lead-and-chorus trade is this lane's architecture, not a decoration added in the studio.",
+            "Verses are short fuses: two to four lines that set the scene from the user's own story and get out of the way — the chant is the destination and the street does not wait for exposition.",
+            "Joy is a force that can carry weight: this lane converts whatever the user brought — a hard year, chains remembered, a homecoming — into collective release; the canon carries history inside the jump, so weight is welcome and sag is not.",
+            "Celebrate the pays at street scale: the island named with pride, the diaspora coming home for carnival, the neighborhood lifted — always the user's actual places and people, never folklore props.",
+            "Write the break: band out, drums and crowd carrying the bar alone, then the horns detonate back in — the lyric is built around that release, with the drop and the re-entry planned like a second chorus.",
+            "Land stress square on the drive: belted syllables sit on the beat and peaks land on open vowels — consonant clusters and murmured subtlety die on a moving street at this tempo.",
+            "Rhyme plain enough to predict: clean end-rhyme or one repeated key word the floor hears coming — unison is the point of this room, and a clever surprise kills it.",
+            "Cross-genre firewall: the fast doubled ti-bwa cell under horn stabs and a French-Creole chant makes it zouk béton, not soca — the anglophone carnival engine next door with its own drive — and not fast kompa, Haiti's cousin riding a guitar-led gouyad engine. The roots are kin but distinct as well: gwoka and chouval bwa are live drum-and-stick traditions, and when the machine wall gives way to live ka and call-and-response roots voicing, the song routes to those traditions, not zouk. Afro — the French afro-pop lane — has no ti-bwa wall at all: swap the cell for an afrobeats bounce and the street changes continent."
+          ],
+          "rendering": "Full 80s-90s Antillean zouk béton — driving drum machine doubled by a live drum wall, tambour ka and congas cracking fills, tight horn-section stabs and synth-brass stacks, chopped rhythm guitar on the off, round running bass. Belted lead trading with a massed chorus in call-and-response, breakdowns where the drums and the crowd carry the bar alone; hot, bright, carnival-wide mix, Kassav'-school arrangement, live energy over studio gloss.",
+          "storyFit": "Best for: the carnival itself, la fête at full scale, the pays celebrated and the diaspora coming home, a hard year converted into a jump, communal joy that carries history, ambiancing a floor until sunrise. Poor fit: desire at embrace distance — that is Zouk Love; a tuned late-night confession — that is Nouvelle Vague; brooding introspection or a lament, which the street would flatten.",
+          "parodyTraps": "Tourist-carnival scenery — feathers, rum, and beach props the user never brought; scripted Creole exclamations pasted in as flavor; a hook too wordy to throw back; the wall of drums swapped for an EDM drop or a flat club grid; verses that ramble while the street waits; craft terms surfacing in the chant.",
+          "performance": {
+            "prose": "Density heavy; min adlibs 6; delivery tags [Call and Response] [Shout] [Percussion Break] [Build Up]. This room performs like a lead voice in front of a street — one belted lead, the massed chorus as the second voice, the horns as the third — or two leads trading the call Kassav'-style, a man and a woman throwing lines before the crowd throws them back. Signature: the thrown chant — the lead calls and the crowd throws the fixed answer or the echoed line-end back, gathering voices on each return so the same call lands bigger every pass. Placement: crowd answers land on every chorus return and the marked line-ends; a [Build Up] takes the ramp before the chant; a [Percussion Break] marks the breakdown where the drum wall and the crowd carry the bar alone, and the shouts hit hardest where the horns detonate back in. Tag identity: a commanding lead and a carnival answering as one voice — short crowd responses on the marked words, a joyful shout as pure release at the peaks, the wall swelling every return. Every shout and answer is joy and energy in plain English, never a scripted Creole exclamation the user did not write.",
+            "adlibDensity": "heavy",
+            "minAdlibs": 6,
+            "deliveryTags": [
+              "[Call and Response]",
+              "[Shout]",
+              "[Percussion Break]",
+              "[Build Up]"
+            ]
+          },
+          "builder": {
+            "instruments": [
+              "boîte à rythmes",
+              "tambour ka",
+              "ti-bwa",
+              "cuivres",
+              "synthé",
+              "congas",
+              "basse ronde",
+              "guitare rythmique"
+            ],
+            "themes": [
+              "La fête et le carnaval",
+              "La joie de vivre créole",
+              "Le pays natal et l'exil"
+            ],
+            "purposes": [
+              "Faire la fête",
+              "Célébrer le pays",
+              "Ambiancer la soirée"
+            ]
+          }
+        },
+        {
+          "id": "zouk-rnb",
+          "name": "Zouk R&B / Nouvelle Vague",
+          "oneLine": "The modern wave — the lane Jean-Michel Rotin and Kim opened and Joé Dwèt Filé and Thayna carry today: R&B production wearing the ti-bwa cell, a tuned French croon for the streaming era.",
+          "tempoGroove": "88-105 BPM on modern R&B programming that keeps the identity cell — soft snare, tight hats, a sub-leaning basse ronde, and the ti-bwa tak-tak clicking in the rims and percussion; airy synthé chaud pads, warm keys, light guitar color, a clean tuned vocal sheen. Word density medium: topline-led phrases that bend with R&B melisma, a short looping hook built to survive replay, air still kept at the line-ends the cell answers.",
+          "writingDials": [
+            "The situation is modern and specific: the ex who resurfaces, the message left unanswered, the almost-couple, the night that ended too early — always the user's real situation and people, because borrowed drama reads instantly as a template.",
+            "Topline leads the writing: melody first, lines that lean and slide against the cell, melisma spent on open vowels — write the last word of each feeling-line as a sound the voice can bend and hold.",
+            "The hook is a short melodic loop: a few words that return identically and often, sticky at first listen and sturdier on the tenth — a replay hook, not a floor chant and not a long vow.",
+            "Keep the cell in the sheet: phrases still end early so the tak-tak answers — the room dies the moment the writing turns wall-to-wall R&B and the gap disappears; the cell is the passport and the words must keep showing it.",
+            "Intimacy survives the screen: embrace distance carried through phones and time zones — sung close and low even when the production is clean; the addressee is one person, never an audience.",
+            "Heartbreak stays elegant: hurt, jealousy, and the ache of separation told plainly and worn with dignity — bitterness can speak but never drags the room down; this lane consoles as much as it seduces.",
+            "Verse two is the reply: the answer that came or did not, the meeting, the decision — the two-person account moves like messages exchanged, never a re-circle of verse one.",
+            "Plan the stack: doubles under the hook, one falsetto lift saved for the closest moment, one small run allowed at the final return — restraint is what keeps the tuned voice human.",
+            "Cross-genre firewall: the ti-bwa cell under the tuned croon is the whole passport — RnB Français is the same voice with no cell: strip the tak-tak and the song re-routes there by definition. Afro is the French afro-pop lane on an afrobeats bounce, a different engine wearing similar clothes. Kizomba's modern wave shares the slow closeness but rides the Angolan ghosted-kick pulse under a lusophone croon — kin through the 80s records, a different genre tonight. And the Antillean shatta club wave is dancehall-born, not zouk: its bounce routes out however local its scene."
+          ],
+          "rendering": "Modern zouk-R&B — crisp drum programming with the rim-click tak-tak kept forward, deep soft sub bass, airy warm synth pads and keys, light clean guitar color. A close-mic tuned French croon with stacked doubles, a saved falsetto lift and one tasteful run, intimate and unhurried; 2020s Paris-Antilles streaming sheen over the classic cell, polished but warm, never club-hard.",
+          "storyFit": "Best for: modern love trouble told at close range — the ex, the distance, the almost — seduction by melody, jealousy in the message era, consoling a heartbreak through a slow night, ambiancing a late-night playlist. Poor fit: the carnival street — that is Béton; a story wanting 80s synth warmth and a long-held vow — that is Zouk Love; anything explicit, crowd-scaled, or bitter past dignity.",
+          "parodyTraps": "Autotune drowning the cell until it is generic French R&B with an island name-drop; anglicisms or slang the user never wrote pasted in for modernity; the toxic-ex cliché checklist instead of the user's real thread; a hook stretched into a saga; the tak-tak mixed out — the one loss no sheen survives.",
+          "performance": {
+            "prose": "Density moderate; min adlibs 4; delivery tags [Soft] [Falsetto] [Harmonies] [Ad-Lib Section]. This room performs like one voice layered into its own late night — a tuned close lead, soft doubles, and small answering echoes where a synth line breathes. Signature: the doubled loop — the hook's few words return with a soft harmony under them, tighter and closer each pass, the modern echo of the old zouk love answer. Placement: verses stay nearly bare so the topline carries; doubles gather under the hook and thicken on its returns; the [Falsetto] lift is saved for the closest moment, and a short [Ad-Lib Section] can close the song where the loop trails out over the cell. Tag identity: an intimate tuned lead and its own stacked warmth — soft echoes of the hook's last words, one falsetto lift and one run, both earned, the cell always audible underneath. No crowd, no belt — one person, one phone-lit room, every echoed word from the user's own sheet.",
+            "adlibDensity": "moderate",
+            "minAdlibs": 4,
+            "deliveryTags": [
+              "[Soft]",
+              "[Falsetto]",
+              "[Harmonies]",
+              "[Ad-Lib Section]"
+            ]
+          },
+          "builder": {
+            "instruments": [
+              "boîte à rythmes",
+              "ti-bwa",
+              "synthé chaud",
+              "basse ronde",
+              "guitare rythmique"
+            ],
+            "themes": [
+              "L'amour sensuel",
+              "La séparation et le manque",
+              "La jalousie",
+              "La femme aimée"
+            ],
+            "purposes": [
+              "Séduire",
+              "Danser collé",
+              "Consoler un cœur brisé",
+              "Ambiancer la soirée"
+            ]
+          }
+        }
+      ],
+      "cues": [
+        {
+          "cue": "zouk love",
+          "strength": "strong",
+          "roomId": "zouk-love"
+        },
+        {
+          "cue": "patrick saint-éloi",
+          "strength": "strong",
+          "roomId": "zouk-love"
+        },
+        {
+          "cue": "slaï",
+          "strength": "strong",
+          "roomId": "zouk-love"
+        },
+        {
+          "cue": "fanny j",
+          "strength": "strong",
+          "roomId": "zouk-love"
+        },
+        {
+          "cue": "edith lefel",
+          "strength": "strong",
+          "roomId": "zouk-love"
+        },
+        {
+          "cue": "harry diboula",
+          "strength": "strong",
+          "roomId": "zouk-love"
+        },
+        {
+          "cue": "collé-serré",
+          "strength": "strong",
+          "roomId": "zouk-love"
+        },
+        {
+          "cue": "jocelyne béroard",
+          "strength": "weak",
+          "roomId": "zouk-love"
+        },
+        {
+          "cue": "zouk machine",
+          "strength": "weak",
+          "roomId": "zouk-love"
+        },
+        {
+          "cue": "danser collé",
+          "strength": "weak",
+          "roomId": "zouk-love"
+        },
+        {
+          "cue": "séduction",
+          "strength": "weak",
+          "roomId": "zouk-love"
+        },
+        {
+          "cue": "jalousie",
+          "strength": "weak",
+          "roomId": "zouk-love"
+        },
+        {
+          "cue": "manque",
+          "strength": "weak",
+          "roomId": "zouk-love"
+        },
+        {
+          "cue": "chagrin d'amour",
+          "strength": "weak",
+          "roomId": "zouk-love"
+        },
+        {
+          "cue": "sensuel",
+          "strength": "weak",
+          "roomId": "zouk-love"
+        },
+        {
+          "cue": "slow",
+          "strength": "weak",
+          "roomId": "zouk-love"
+        },
+        {
+          "cue": "doudou",
+          "strength": "weak",
+          "roomId": "zouk-love"
+        },
+        {
+          "cue": "médhy custos",
+          "strength": "weak",
+          "roomId": "zouk-love"
+        },
+        {
+          "cue": "zouk béton",
+          "strength": "strong",
+          "roomId": "zouk-b-ton"
+        },
+        {
+          "cue": "kassav'",
+          "strength": "strong",
+          "roomId": "zouk-b-ton"
+        },
+        {
+          "cue": "carnaval",
+          "strength": "strong",
+          "roomId": "zouk-b-ton"
+        },
+        {
+          "cue": "vidé",
+          "strength": "strong",
+          "roomId": "zouk-b-ton"
+        },
+        {
+          "cue": "zouk chiré",
+          "strength": "strong",
+          "roomId": "zouk-b-ton"
+        },
+        {
+          "cue": "jocelyne béroard",
+          "strength": "weak",
+          "roomId": "zouk-b-ton"
+        },
+        {
+          "cue": "jacob desvarieux",
+          "strength": "weak",
+          "roomId": "zouk-b-ton"
+        },
+        {
+          "cue": "jean-philippe marthély",
+          "strength": "weak",
+          "roomId": "zouk-b-ton"
+        },
+        {
+          "cue": "zouk machine",
+          "strength": "weak",
+          "roomId": "zouk-b-ton"
+        },
+        {
+          "cue": "faire la fête",
+          "strength": "weak",
+          "roomId": "zouk-b-ton"
+        },
+        {
+          "cue": "ambiancer",
+          "strength": "weak",
+          "roomId": "zouk-b-ton"
+        },
+        {
+          "cue": "le pays",
+          "strength": "weak",
+          "roomId": "zouk-b-ton"
+        },
+        {
+          "cue": "diaspora",
+          "strength": "weak",
+          "roomId": "zouk-b-ton"
+        },
+        {
+          "cue": "retour au pays",
+          "strength": "weak",
+          "roomId": "zouk-b-ton"
+        },
+        {
+          "cue": "zouk r&b",
+          "strength": "strong",
+          "roomId": "zouk-rnb"
+        },
+        {
+          "cue": "joé dwèt filé — his zouk side; his konpa hits route to kompa, not here",
+          "strength": "strong",
+          "roomId": "zouk-rnb"
+        },
+        {
+          "cue": "thayna",
+          "strength": "strong",
+          "roomId": "zouk-rnb"
+        },
+        {
+          "cue": "jean-michel rotin",
+          "strength": "strong",
+          "roomId": "zouk-rnb"
+        },
+        {
+          "cue": "nouveau zouk",
+          "strength": "strong",
+          "roomId": "zouk-rnb"
+        },
+        {
+          "cue": "nouvelle vague zouk",
+          "strength": "weak",
+          "roomId": "zouk-rnb"
+        },
+        {
+          "cue": "warren",
+          "strength": "weak",
+          "roomId": "zouk-rnb"
+        },
+        {
+          "cue": "perle lama",
+          "strength": "weak",
+          "roomId": "zouk-rnb"
+        },
+        {
+          "cue": "lycinaïs jean",
+          "strength": "weak",
+          "roomId": "zouk-rnb"
+        },
+        {
+          "cue": "kim",
+          "strength": "weak",
+          "roomId": "zouk-rnb"
+        },
+        {
+          "cue": "l'ex qui revient",
+          "strength": "weak",
+          "roomId": "zouk-rnb"
+        },
+        {
+          "cue": "message sans réponse",
+          "strength": "weak",
+          "roomId": "zouk-rnb"
+        },
+        {
+          "cue": "situationship",
+          "strength": "weak",
+          "roomId": "zouk-rnb"
+        },
+        {
+          "cue": "autotune",
+          "strength": "weak",
+          "roomId": "zouk-rnb"
+        },
+        {
+          "cue": "fin de soirée",
+          "strength": "weak",
+          "roomId": "zouk-rnb"
+        },
+        {
+          "cue": "paris-antilles",
+          "strength": "weak",
+          "roomId": "zouk-rnb"
+        }
+      ]
+    },
+    "afro": {
+      "id": "afro",
+      "name": "Afro",
+      "aliases": [
+        "afro trap",
+        "afrotrap",
+        "coupé-décalé",
+        "coupe-decale",
+        "coupé décalé",
+        "zouglou",
+        "ndombolo",
+        "afro mélo",
+        "afro melo",
+        "afro pop français"
+      ],
+      "profileText": "An Afro writer's first move is to read who the song faces, because subject alone can never pick the room: love, success, blessings, and the dance live in all three lanes. One person at arm's length, the whole function, or the crew and the mirror — the address decides every dial downstream, and mistaking it gives the song away before the first verse ends. Under all three rooms runs the pocket's law: the drums are sovereign. Lines are shaped to be sung or chanted on the bounce — stressed syllables locked to the kick and the congas, open vowels where the voice bends, honest air left for the percussion to answer — and a line that fights the drums gets recut, never forced. The hook's job changes by room — a quotable attitude line, a command the floor obeys, a chant the crew owns — but its obedience to the pocket never does.\n\nThe lineage runs on one axis: Paris-Abidjan-Kinshasa. Born in Paris's Ivorian diaspora clubs — Douk Saga and la Jet Set, 2002-03 — coupé-décalé made Abidjan its capital and dance-name factory: DJ Arafat's gallop, moves christened and taught from the booth; and from Abidjan's own campuses came zouglou's comic real-life storytelling that Magic System carried worldwide. From Kinshasa came rumba and ndombolo's guitar fire and the atalaku's shout-out showmanship, a presence Fally Ipupa keeps hot on French stages. Paris studios fused those engines with R&B polish and trap weight into the modern afro-pop wave — Aya Nakamura, Dadju, Tayc, MHD — and set the genre's recurring registers: hurt carried with the head high, joy as the subject itself and never a backdrop, pride and hunger danced in formation, and gratitude — God, the mother, the ones who stayed — welcome inside every register, not fenced into a bridge.\n\nOne line per room: Afro Mélo / Love croons desire, dignity, and heartbreak to one real person over the warm bounce; Afro Ambiance / Coupé-Décalé runs the function on chant cells and commands with the crowd's answers written in; Afro Trap / Rue Mélodique locks clipped verses to the congas and flips the refrain into a unison chant for the whole bloc. The language law rules them all: the lyrics will be French, written by a later layer — this writer works in plain-English craft instruction and never generates nouchi, lingala, camfranglais, or argot the user did not write; craft terms like chant cell, atalaku, or vamp stay out of lyrics and adlibs; safari-postcard Africa is parody in every room; and the user's real crew, city, and nights outrank every famous name in the catalog.",
+      "defaultRoomId": "afro-m-lo",
+      "rooms": [
+        {
+          "id": "afro-m-lo",
+          "name": "Afro Mélo / Love",
+          "oneLine": "The sung romance-and-attitude lane of the French afro wave — Aya Nakamura's head-high exits, Dadju's vows, Tayc's slow heat, Franglish's bounce; Paris-built, mid-2010s to now.",
+          "tempoGroove": "90-106 BPM on a warm afro-pop bounce — a soft swung kick with the off-beat pushing the hips, shakers and rim ticks, deep round bass, a clean guitar or warm synth answering the voice. Medium word density: full melodic phrases with an R&B bend, open vowels at line-ends, honest air left for the bounce to answer — never wall-to-wall.",
+          "writingDials": [
+            "Melody leads and the sentence follows: lines are shaped to be sung — stressed syllables on the percussion, open vowels where the voice bends — and a line that cannot carry its melody gets recut, never forced.",
+            "Heartbreak keeps its head high: hurt is stated plainly, the liar gets named, the exit is dignified, and the singer keeps the power — a groveling wail or a despair collapse re-routes out of this genre entirely.",
+            "Write the quotable line: every hook wants one clipped phrase with attitude enough to survive alone — and the hook is built so those few words land on the bounce's strongest hits.",
+            "One real you: the person addressed must be the user's actual person — one detail only the two of them would recognize keeps the vow, the seduction, or the callout from turning into a template.",
+            "Desire stays warm and implied: seduction moves through closeness, confidence, and one real detail — the lane flirts, promises, and pulls; it never spells the heat out.",
+            "Verse two advances the affair: an answer, a consequence, a decision, a next scene between these two people — re-circling verse one's feeling wastes the only plot this lane carries.",
+            "Homage is home ground: the queen, the mother, the woman who held it all — praise songs to a real woman sit at the center of this lane, under the same one-true-detail law as any love song.",
+            "Blessings sit inside the love: gratitude, self-worth, and the glow-up mix freely with desire — thanking life while wanting someone is not a clash here; it is the lane's native temperature.",
+            "Cross-genre firewall: strip the drums to test it — if the song still works as a slow jam over sub-bass and Rhodes and no afro percussion ever mattered, it is RnB Français, not this room: the afro bounce stays under the croon at all times here. No ti-bwa cell and no embrace: zouk is the Antillean couple dance at collé distance, and this lane is danced apart, facing someone across the room. And an anglophone topline or a Lagos/Accra reference world belongs to the Afrobeats pack — same continent, different catalog: this room is the francophone diaspora sound, French toplines over Paris-Abidjan-Kinshasa DNA."
+          ],
+          "rendering": "Warm modern French afro-pop — soft swung kick and off-beat shakers, deep round bass, clean highlife-tinted guitar answering the vocal, warm synth pads and small keyboard hooks. Silky close-mic French lead with a light tuning sheen, doubled harmonies lifting the hooks, tasteful R&B runs; the Paris polish of the late-2010s wave — smooth, spacious, never busy.",
+          "storyFit": "Best for: love and desire, seduction led by confidence, heartbreak walked out of with dignity, calling out a liar or a jealous ex, a vow or an anniversary, homage to a real woman, missing someone tonight, a Fally-school love rumba facing one person. Poor fit: the packed function and its commands — that is Ambiance; crew pride and the block's hunger — that is Afro Trap; despair with no self-respect left, which this lane refuses by law.",
+          "parodyTraps": "Pet names or nouchi and lingala flavor the user never wrote; the groveling ex who begs — the lane's dignity law broken; explicit heat where the room insists on implication; a seduction-cliche checklist with no real person in it; losing the bounce under R&B production until nothing beneath the croon still dances.",
+          "performance": {
+            "prose": "Density moderate; min adlibs 4; delivery tags [Harmonies] [Falsetto] [Soft] [Ad-Lib Section]. This room performs like a silky lead wrapped in its own doubles — one voice, its harmony shadows, and the bounce answering where a crowd never does. Signature: the echoed attitude line — a soft double repeats the hook's sharpest words a beat behind the lead, cooler than the lead, so the quotable phrase lands twice each pass and cuts deeper the second time. Placement: verses stay nearly bare so the melody and the one real detail carry them; harmonies gather under the hook and thicken on its returns; a [Falsetto] lift is saved for the closest or proudest moment, and one short run under an [Ad-Lib Section] header can crown the final chorus. Tag identity: an intimate lead and its stacked cool — soft (harmony echoes) of the hook's last words, one falsetto lift and one earned run, a [Soft] pass where the guard finally drops. No crowd, no chant, no function stack — one voice and its layers, every echoed word from the user's own sheet.",
+            "adlibDensity": "moderate",
+            "minAdlibs": 4,
+            "deliveryTags": [
+              "[Harmonies]",
+              "[Falsetto]",
+              "[Soft]",
+              "[Ad-Lib Section]"
+            ]
+          },
+          "builder": {
+            "instruments": [
+              "percussions afro",
+              "shakers",
+              "guitare highlife",
+              "synthé chaud",
+              "basse profonde",
+              "boîte à rythmes"
+            ],
+            "themes": [
+              "L'amour et le désir",
+              "La femme"
+            ],
+            "purposes": [
+              "Séduire",
+              "Danser"
+            ]
+          }
+        },
+        {
+          "id": "afro-ambiance",
+          "name": "Afro Ambiance / Coupé-Décalé",
+          "oneLine": "The party engine — Douk Saga's Paris jet-set spark, Magic System's zouglou-pop crossover, DJ Arafat's Abidjan drive, Fally Ipupa's Kinshasa fire, Naza and KeBlack's bonne ambiance; the function's own room.",
+          "tempoGroove": "96-135 BPM by tradition — zouglou tales lope at 96-104, the Paris bonne ambiance rolls 105-120, the Abidjan gallop and the Kinshasa fire run 125-135; a pushing kick under rolling congas, djembé accents and shakers, a bright guitar loop riding high, deep bass locked to the kick. The lowest word density in the genre: short chant cells, commands with written answers, and long stretches where the voice steps aside and the drums run the floor.",
+          "writingDials": [
+            "Write chants, not verses: two- and four-bar cells built to loop, stack, and be answered — a whole song may hold a handful of distinct lines, and each must survive being shouted by strangers on first listen.",
+            "The imperative is the home grammar: commands to the floor — dance, hands up, sing it back — are the lane's native sentence, and the crowd's answer line gets written too, never left to chance.",
+            "Dance-name culture is real here: coupé-décalé christens moves and concepts, and if the user brings a dance, a concept, or a name, the hook teaches it — but the name comes from the user or the scene, never invented by the writer (the same law holds in Afro Trap when the crew brings a move).",
+            "Joy is the subject, not the backdrop: bonne ambiance means the celebration itself carries the song — victory, gratitude, the night that refuses to end — and even the flex is joy, never menace.",
+            "The zouglou inheritance allows a story: a funny, real-life tale — the broke one laughed at, the tables turned — can live inside the party as long as every line stays a chantable cell; this is the lane's one narrative door.",
+            "Name the real ones: the atalaku instinct — shout-outs to the crew, the city, the couple getting married, the one who paid the bottles — is structural, but only real names from the user's story ever enter.",
+            "Plan the drums' turns: mark the stretches where the voice thins to a single repeated word or steps out entirely and the percussion teaches the move — those bars are written property, not leftover space.",
+            "Stamina beats the seesaw: energy accumulates in waves — build, release, vamp — and the hook may return a dozen times; freshness comes from what stacks and what drops out, never from new words.",
+            "Cross-genre firewall: the francophone chant over the Abidjan-Kinshasa engine is the tell — an anglophone party on a log-drum pocket belongs to the Afrobeats pack and its amapiano-fed room, not here. No ti-bwa: zouk's carnival lane is Antillean, and this drive is continental. And a filtered house build with cold programmed percussion is French Touch — this room's engine stays hand-hot, congas and djembé under a human chant."
+          ],
+          "rendering": "Hot francophone afro party — driving kick with rolling congas and djembé, bright looping guitar over deep locked bass, shakers pushing every bar, warm synth stabs and horn-like hooks. A commanding lead trading with a full crowd answer stack, whistles and room heat in the air; Abidjan drive fused with Paris function polish — mixed loud, bright, and alive.",
+          "storyFit": "Best for: the function, the wedding, the summer anthem, a victory to celebrate, gratitude in motion, the débrouille flex that turned into a good year, the sapeur's entrance, dancing until dawn, the comic tale the whole table retells. Poor fit: heartbreak and interior feelings — that is Mélo; the block's hunger and pride — that is Afro Trap; any story that needs quiet, plot, or a second act.",
+          "parodyTraps": "Invented nouchi or lingala exclamations pasted in as fuel; safari-postcard Africa where the user's real city should be; menace or gun-talk pasted over the joy; verses stuffed wall-to-wall until the drums cannot talk; a hook too wordy for a stranger to shout back; commands with no answer written for the crowd.",
+          "performance": {
+            "prose": "Density heavy; min adlibs 6; delivery tags [Call and Response] [Shout] [Percussion Break] [Outro Vamp]. This room performs like an ambianceur commanding a packed function — the cast is one hot lead, the whole floor answering as one voice, and the drums as the third speaker. Signature: the answered command — the lead throws the chant cell and the crowd throws the written answer back into the gap, gaining voices on every return until the room owns the hook outright. Placement: answers live only in the written gaps, never over the lead — thin on the first pass, flooding the hook's returns; crowd shouts punctuate the biggest lines; a [Percussion Break] or a guitar-led seben stretch hands the floor to the band where the dance is taught, and an [Outro Vamp] loops the hook while lead and crowd trade it to the fade. Tag identity: a commanding lead and a full room — short shouted crowd answers, echoes of the hook's last words, heat rising per return, the drums taking their marked stretch. Never a lone layered self, never a silent gap at the peak — the cast is a crowd, and every shouted word comes from the user's own sheet, energy directed in plain English, never invented slang.",
+            "adlibDensity": "heavy",
+            "minAdlibs": 6,
+            "deliveryTags": [
+              "[Call and Response]",
+              "[Shout]",
+              "[Percussion Break]",
+              "[Outro Vamp]"
+            ]
+          },
+          "builder": {
+            "instruments": [
+              "congas",
+              "djembé",
+              "percussions afro",
+              "shakers",
+              "guitare soukous (seben)",
+              "basse profonde",
+              "boîte à rythmes",
+              "synthé chaud"
+            ],
+            "themes": [
+              "La fête et l'ambiance",
+              "La joie communicative",
+              "Danser jusqu au bout de la nuit",
+              "La débrouille et les bénédictions"
+            ],
+            "purposes": [
+              "Danser",
+              "Ambiancer le dancefloor",
+              "Célébrer",
+              "Faire l'anthème de l'été"
+            ]
+          }
+        },
+        {
+          "id": "afro-trap",
+          "name": "Afro Trap / Rue Mélodique",
+          "oneLine": "MHD's school — the sound that put the bloc in formation: rap-adjacent French delivery over afro percussion, chant refrains, football joy; 4Keus and the melodic street lane after him.",
+          "tempoGroove": "96-114 BPM — congas, djembé accents and shakers driving over a trap-weight low end, the percussion swung and forward. Two densities in one song: verses run medium-heavy with clipped rap-adjacent phrasing locked to the drums; refrains drop to short unison chant cells with room around them.",
+          "writingDials": [
+            "Two gears, written on purpose: verses ride rhythmic, clipped, half-sung delivery; the refrain flips to a unison chant the whole bloc can shout — the flip is the room's architecture, so both gears go on the sheet.",
+            "The refrain is crew property: short chant lines learnable on first listen, built for many voices in unison — if one silky voice could own it, it is pitched wrong for this room.",
+            "The percussion decides the flow: stressed syllables lock with the congas and the kick — that lock is what separates this room from rap français on the same subject, so a bar that fights the drums gets recut.",
+            "The street is specific or it is wallpaper: the user's actual block, hall, pitch, and people — the concrete-image law runs at full force, because generic street imagery is this lane's fastest parody.",
+            "Pride and hunger share the verse: success announced, the débrouille respected, the doubters answered — but the register dances; this block celebrates in formation, it does not threaten.",
+            "Blessings are structural: thanking God, the mother, the ones who stayed — gratitude sits inside the flex as a home register, not a bridge-only sentiment.",
+            "The continent is the user's pride: origins named with the chest out — the country, the family line, the flag over the block — but only the user's real origins, never a borrowed one and never a postcard.",
+            "Punchlines serve the bounce: a clever line that breaks the pocket loses to a plain line that rides it — wit is welcome only at the drums' tempo.",
+            "Cross-genre firewall: the border with Rap Français runs through this room, and percussion and chant decide it — MHD sits exactly on the line: if afro percussion drives the pocket and the refrain is a danceable unison chant, it lands here; if 808s and boom-bap carry rapped verses into a rapped hook, it is Rap Français. An anglophone street-pop story re-routes to the Afrobeats pack. And if the verses melt into a full sung croon aimed at one person, the song has walked into Mélo."
+          ],
+          "rendering": "Afro trap — driving congas, djembé and shakers swung over heavy sub-bass and a trap-weight kick, dark warm synth hooks, sparse bright guitar accents. A charged half-sung French lead with a unison crew chant on every refrain, short shouted answers in the gaps; mid-2010s Paris bloc energy — percussion mixed up front, raw but bouncing.",
+          "storyFit": "Best for: success announced from the block, the débrouille that paid off, pride of origins, the crew's anthem, football joy, blessings counted out loud, proving the doubters wrong in formation. Poor fit: a love story at arm's length — that is Mélo; the function's commands — that is Ambiance; drill-cold menace or a plot-heavy street chronicle, which belong to Rap Français.",
+          "parodyTraps": "Menace pasted over the bounce — this lane dances its hunger; generic street wallpaper with no real block in it; invented nouchi or camfranglais to sound street; a refrain too long or too clever for unison; burying the congas under 808s until the afro is gone; borrowed origins worn as costume.",
+          "performance": {
+            "prose": "Density heavy; min adlibs 5; delivery tags [Call and Response] [Shout] [Spoken] [Build Up]. This room performs like one charged voice with the whole bloc behind it — a lead and a crew, never a lead alone. Signature: the unison flip — verses run lead-only and locked to the drums, then the refrain detonates into crew unison, gaining voices on each return until the block chants as one body. Placement: verses stay undecorated so the flow reads — at most one shouted answer at a bar's end; the crew floods every refrain and thickens per return; a [Build Up] strips to lead and percussion before the last refrain so the biggest unison lands; one low [Spoken] aside can open or close the song where the pride gets said plain. Tag identity: a charged lead, a crew in unison, short shouted answers in the written gaps — a block, not a choir: rough, joyful, in formation. Every chanted word comes from the user's own sheet, direction stays energy in plain English, and no slang is ever invented for the crew's mouth.",
+            "adlibDensity": "heavy",
+            "minAdlibs": 5,
+            "deliveryTags": [
+              "[Call and Response]",
+              "[Shout]",
+              "[Spoken]",
+              "[Build Up]"
+            ]
+          },
+          "builder": {
+            "instruments": [
+              "percussions afro",
+              "congas",
+              "djembé",
+              "shakers",
+              "basse profonde",
+              "boîte à rythmes",
+              "synthé chaud"
+            ],
+            "themes": [
+              "La réussite",
+              "La débrouille et les bénédictions",
+              "La fierté du continent"
+            ],
+            "purposes": [
+              "Célébrer",
+              "Remercier Dieu",
+              "Danser"
+            ]
+          }
+        }
+      ],
+      "cues": [
+        {
+          "cue": "afro mélo",
+          "strength": "strong",
+          "roomId": "afro-m-lo"
+        },
+        {
+          "cue": "aya nakamura",
+          "strength": "strong",
+          "roomId": "afro-m-lo"
+        },
+        {
+          "cue": "dadju",
+          "strength": "strong",
+          "roomId": "afro-m-lo"
+        },
+        {
+          "cue": "tayc",
+          "strength": "strong",
+          "roomId": "afro-m-lo"
+        },
+        {
+          "cue": "franglish",
+          "strength": "strong",
+          "roomId": "afro-m-lo"
+        },
+        {
+          "cue": "gims",
+          "strength": "weak",
+          "roomId": "afro-m-lo"
+        },
+        {
+          "cue": "séduction",
+          "strength": "weak",
+          "roomId": "afro-m-lo"
+        },
+        {
+          "cue": "désir",
+          "strength": "weak",
+          "roomId": "afro-m-lo"
+        },
+        {
+          "cue": "rupture la tête haute",
+          "strength": "weak",
+          "roomId": "afro-m-lo"
+        },
+        {
+          "cue": "l'ex jaloux",
+          "strength": "weak",
+          "roomId": "afro-m-lo"
+        },
+        {
+          "cue": "hommage à une femme",
+          "strength": "weak",
+          "roomId": "afro-m-lo"
+        },
+        {
+          "cue": "la reine",
+          "strength": "weak",
+          "roomId": "afro-m-lo"
+        },
+        {
+          "cue": "coupé-décalé",
+          "strength": "strong",
+          "roomId": "afro-ambiance"
+        },
+        {
+          "cue": "ndombolo",
+          "strength": "strong",
+          "roomId": "afro-ambiance"
+        },
+        {
+          "cue": "zouglou",
+          "strength": "strong",
+          "roomId": "afro-ambiance"
+        },
+        {
+          "cue": "magic system",
+          "strength": "strong",
+          "roomId": "afro-ambiance"
+        },
+        {
+          "cue": "dj arafat",
+          "strength": "strong",
+          "roomId": "afro-ambiance"
+        },
+        {
+          "cue": "douk saga",
+          "strength": "strong",
+          "roomId": "afro-ambiance"
+        },
+        {
+          "cue": "fally ipupa",
+          "strength": "strong",
+          "roomId": "afro-ambiance"
+        },
+        {
+          "cue": "rumba congolaise",
+          "strength": "weak",
+          "roomId": "afro-ambiance"
+        },
+        {
+          "cue": "la sape",
+          "strength": "weak",
+          "roomId": "afro-ambiance"
+        },
+        {
+          "cue": "travaillement",
+          "strength": "weak",
+          "roomId": "afro-ambiance"
+        },
+        {
+          "cue": "naza",
+          "strength": "weak",
+          "roomId": "afro-ambiance"
+        },
+        {
+          "cue": "keblack",
+          "strength": "weak",
+          "roomId": "afro-ambiance"
+        },
+        {
+          "cue": "bonne ambiance",
+          "strength": "weak",
+          "roomId": "afro-ambiance"
+        },
+        {
+          "cue": "ambiancer le dancefloor",
+          "strength": "weak",
+          "roomId": "afro-ambiance"
+        },
+        {
+          "cue": "mariage",
+          "strength": "weak",
+          "roomId": "afro-ambiance"
+        },
+        {
+          "cue": "hymne de l'été",
+          "strength": "weak",
+          "roomId": "afro-ambiance"
+        },
+        {
+          "cue": "danser jusqu'à l'aube",
+          "strength": "weak",
+          "roomId": "afro-ambiance"
+        },
+        {
+          "cue": "victoire à célébrer",
+          "strength": "weak",
+          "roomId": "afro-ambiance"
+        },
+        {
+          "cue": "atalaku",
+          "strength": "weak",
+          "roomId": "afro-ambiance"
+        },
+        {
+          "cue": "afro trap",
+          "strength": "strong",
+          "roomId": "afro-trap"
+        },
+        {
+          "cue": "mhd",
+          "strength": "strong",
+          "roomId": "afro-trap"
+        },
+        {
+          "cue": "4keus",
+          "strength": "strong",
+          "roomId": "afro-trap"
+        },
+        {
+          "cue": "rue mélodique",
+          "strength": "strong",
+          "roomId": "afro-trap"
+        },
+        {
+          "cue": "le bloc",
+          "strength": "strong",
+          "roomId": "afro-trap"
+        },
+        {
+          "cue": "débrouille",
+          "strength": "weak",
+          "roomId": "afro-trap"
+        },
+        {
+          "cue": "réussite",
+          "strength": "weak",
+          "roomId": "afro-trap"
+        },
+        {
+          "cue": "fierté du continent",
+          "strength": "weak",
+          "roomId": "afro-trap"
+        },
+        {
+          "cue": "remercier dieu",
+          "strength": "weak",
+          "roomId": "afro-trap"
+        },
+        {
+          "cue": "joie du football",
+          "strength": "weak",
+          "roomId": "afro-trap"
+        },
+        {
+          "cue": "le quartier",
+          "strength": "weak",
+          "roomId": "afro-trap"
+        },
+        {
+          "cue": "l'hymne du crew",
+          "strength": "weak",
+          "roomId": "afro-trap"
+        },
+        {
+          "cue": "en formation",
+          "strength": "weak",
+          "roomId": "afro-trap"
+        },
+        {
+          "cue": "chant en chœur",
+          "strength": "weak",
+          "roomId": "afro-trap"
+        }
+      ]
+    },
+    "rai": {
+      "id": "rai",
+      "name": "Raï",
+      "aliases": [
+        "rai",
+        "pop-rai",
+        "pop-raï",
+        "rai love",
+        "raï love",
+        "rai'n'b",
+        "raï'n'b",
+        "rain'b"
+      ],
+      "profileText": "A raï writer's first move is to size the sheet for the voice: decide where the long run will live, because the melisma — the curved flight on a held open vowel — is the payload, carrying what the words hold back. Phrases stay short and end open, half the bar stays empty for the voice; a lyric packed wall-to-wall silences the instrument the genre exists for. Second, the pulse: the derbouka is the motor; the writer picks its gear — full gallop for the fête, softened sway for the confession, a layer over programmed drums for the club — then plans the answers, because something always replies to this voice: an oriental synth, a crying violin, a crowd. Escalation is delivery, not new argument — a phrase returns hotter and more ornamented each pass, circling like the floor.\n\nThe lineage begins in Oran's cabarets with the cheikhas — Cheikha Rimitti singing desire, drink, and leaving as lived fact when respectable song refused to — and raï means opinion: the founding move is a singer arguing out loud with their own judgment and fate. The 80s pop-raï generation — Khaled, Cheb Mami, Cheba Zahouania — put that voice on synths and drum machines and took it to the world; Cheb Hasni opened the tender lane; exile carried raï to France, where Rachid Taha wired it to rock and the Raï'n'B Fever era set it on club production. Defiance is the genre's heart, said adult: the forbidden named plainly, with dignity, never shock as costume. The registers: the fête with joy and fatalism on one sheet; the tender confession where fate is the only consolation; the double-identity pride of the crossover.\n\nClassique / Pop-Raï Oranais is the fête engine — derbouka and oriental synth at full gallop, self-address at full voice, a crowd that answers. Love / Sentimental slows the pulse to a sway and faces one unreachable you at confession distance, the run bent down like a held-back tear. Raï'n'B / Fusion sets the sovereign raï voice on R&B and hip-hop drums, melisma compressed to curls, the hook sized for wedding hall and club. The lyrics are French, written by a later layer: this document instructs craft in plain English, and Arabic or Darija enters only if the user wrote it, never generated as flavor. Craft terms — melisma, derbouka, gallop — stay out of lyrics and adlibs. Postcard Maghreb — dunes, souks, mint tea instead of real streets — is parody. The user's real exile, real wedding, and real night outrank everything: every law bends before their names and facts.",
+      "defaultRoomId": "ra-classique",
+      "rooms": [
+        {
+          "id": "ra-classique",
+          "name": "Raï Classique / Pop-Raï Oranais",
+          "oneLine": "The Khaled engine — Oran's cabaret scaled to the world: derbouka and synthé oriental at full gallop, the big melisma voice out front; Cheb Mami and Cheba Zahouania's 80s pop-raï revolution built on Cheikha Rimitti's roots.",
+          "tempoGroove": "92-120 BPM, a driving triplet-swung gallop — a 6/8 lean riding the 4/4 — the goblet drum's deep thump lands the downbeat and rolling slap answers push the hips forward, hand claps ride the backbeat, drum machine and bass lock it tight while the oriental synth answers every sung phrase. Word density low-to-moderate: short phrases that circle and return, ends left on open vowels, half the bar kept free for the voice to run.",
+          "writingDials": [
+            "The founding move is self-address: the singer turns to their own judgment and their own fate and argues with it out loud — blaming it, consoling it, taking their own counsel — so key lines can face the singer's own mind, not only a lover or a crowd.",
+            "Short phrases, big air: lines stay brief and end on open vowels, because the long curved run on the held vowel is the emotional payload — a sheet packed wall-to-wall silences the voice this room exists for.",
+            "Repetition is the build: a phrase returns again and again, hotter and more ornamented each pass — the song circles like the dance floor, and escalation comes from delivery, not from new argument.",
+            "Joy and fatalism share one sheet: the fête carries its bruise — drink, dance, and hard fate in the same song, celebration with trouble folded inside it; a party scrubbed clean of its shadow is not this room.",
+            "Defiance said adult: raï's history is naming the forbidden plainly — desire, drink, leaving — as lived fact with dignity; only the user's own truths, never shock worn as costume.",
+            "Written to be answered: the crowd is in the room — keep hook lines short enough for the floor to throw back, and plan the gaps where the drums or the crowd take the bar.",
+            "Exile at full voice: the ferry, the phone card, the land across the water belong here when the user's story holds them — sung open-throated over the gallop, grief and groove at once; only their real crossing, never postcard Maghreb.",
+            "Verse two advances the night or the fate — a new scene, a turn, a consequence — never a re-circle of verse one's feeling in different words.",
+            "Cross-genre firewall: the derbouka gallop and the scale-colored synth answering a melisma-heavy voice make it raï and not Variété — Khaled's radio hits crossed over, but when the engine drops to piano-and-strings French pop with a straight diatonic topline, the song has left the genre; and not Afro — the French afro-pop floor bounces on log drums and rolling guitar lines with no derbouka and no oriental scale DNA; if the gallop and the ornamental line both vanish, the room is gone."
+          ],
+          "rendering": "Late-80s-to-90s Algerian pop-raï — derbouka high in the mix with hand claps, punchy drum machine, round bass, a bright oriental synth lead doubling and answering the vocal, accordion and violin stabs, brass hits on the big fête numbers. Raw powerful lead voice with long ornamental runs, recorded hot and up-front; Oran cabaret energy scaled to a world stage, no polite gloss — gasba and guellal forward with the drum machine pulled back when the story leans to the cheikhas' roots.",
+          "storyFit": "Best for: the fête at full heat, freedom claimed out loud, hard fate danced through, exile and the land left behind sung open-throated, youth pushing at the walls, a wedding party's peak hour. Poor fit: a tender private heartbreak — that is Love / Sentimental; a two-voice club duet on R&B drums — that is Raï'n'B; polite radio balladry, which this engine refuses.",
+          "parodyTraps": "Darija or Arabic phrases sprinkled in that the user never wrote; postcard Maghreb — dunes, souks, mint tea standing in for the user's real streets and seafront; shock-for-shock edginess wearing raï's defiance as costume; the gallop swapped for four-on-the-floor or an afro bounce; a wordy sheet that leaves the voice no vowel to run on; the sweat and the bruise scrubbed until only Variété remains.",
+          "performance": {
+            "prose": "Density heavy; min adlibs 5; delivery tags [Vocal Run] [Call and Response] [Percussion Break] [Shout]. This room performs like a cabaret at full heat — one huge voice out front, a floor that answers it, and drums that take over when the words stop. Signature: the long run — a held open vowel curled through ornamental turns at the end of a circling phrase, the genre's laugh and cry in one sound, flagged where the writing leaves the bar half-empty. Placement: hook lines get thrown back by the room on their returns; a [Shout] lifts the entry into a new section; a [Percussion Break] hands a full turn to the derbouka and the claps where the floor dances; the floor of 5 spreads across hook answers, run flags, and one shouted lift. Tag identity: one raw lead and a room, not a stack — crowd answers on short hook lines, run markers on held vowels, drums given whole bars; every answered word from the user's own sheet.",
+            "adlibDensity": "heavy",
+            "minAdlibs": 5,
+            "deliveryTags": [
+              "[Vocal Run]",
+              "[Call and Response]",
+              "[Percussion Break]",
+              "[Shout]"
+            ]
+          },
+          "builder": {
+            "instruments": [
+              "derbouka",
+              "synthé oriental",
+              "boîte à rythmes",
+              "accordéon",
+              "violon",
+              "cuivres",
+              "guitare",
+              "gasba",
+              "guellal"
+            ],
+            "themes": [
+              "La fête et l'ivresse",
+              "La liberté",
+              "Le destin et la vie dure",
+              "L'exil et le bled",
+              "La jeunesse"
+            ],
+            "purposes": [
+              "Faire la fête",
+              "Danser",
+              "Ambiancer"
+            ]
+          }
+        },
+        {
+          "id": "ra-love",
+          "name": "Raï Love / Sentimental",
+          "oneLine": "The Cheb Hasni lane — heartbreak and forbidden love sung tender over a slowed sway, a tenderness that cost Hasni his life in 1994, so softness here is a form of nerve; the 90s sentimental wave of Cheb Nasro and Houari Dauphin, and the young diaspora's wedding slow-dance.",
+          "tempoGroove": "68-92 BPM, the gallop softened to a slow sway — the goblet drum placed gentle under warm pads, bass round and patient, a crying violin or synth line answering the voice phrase by phrase. Word density moderate: fuller confession lines than the fête rooms, spoken-plain and unhurried, with line-ends still left on open vowels so the ache can bend them.",
+          "writingDials": [
+            "One unreachable you: the song faces a single person who cannot be reached — forbidden, gone, promised elsewhere, across the sea — in direct second person, at confession distance.",
+            "The obstacle is social and real: families, judgment, distance, money — name the user's actual wall, and keep both lovers dignified on either side of it.",
+            "Wound over war: hurt is said softly and stays tender — longing, regret, asking why — never venom, never revenge; the moment the song attacks, it has left this room.",
+            "Plain spoken confession: the everyday conversational register — the 2 a.m. phone call, not the poetry book; one real detail of the two of them outranks any borrowed image.",
+            "The run is the crying: place the feeling-words on open vowels at phrase-ends so the voice can bend them downward — the ornament carries what the words hold back.",
+            "Leave the answer gaps: the violin or synth replies to the key lines, so end phrases early and let the strings say the part that has no words.",
+            "Fate as the only consolation: what happened was already written — the song closes resigned, not resolved, and acceptance is this room's version of peace.",
+            "Keep the slow-dance alive: couples hold each other to these heartbreaks at weddings — the sway never stops, peaks stay warm rather than wailed, and the saddest line still moves.",
+            "Cross-genre firewall: the slow raï sway with a scale-colored answering line under an ornamented voice makes it raï love and not a French ballad — Variété's piano ballad has no goblet-drum pulse and a straight topline; and not an RnB Français slow jam — that room bends blue notes over trap-soul programming, where this one bends oriental-scale runs over a live-feeling sway; if the drum falls silent and the runs straighten, the song has crossed the border."
+          ],
+          "rendering": "90s Oran sentimental raï — soft drum machine with a gentle derbouka sway, warm synth pads, a lead violin or oriental synth crying the answers, clean guitar arpeggios, round bass low in the mix. Close tender lead voice with long sighing runs at phrase-ends, light reverb, cassette-era warmth; the slow-dance lane of the diaspora wedding, intimate and unhurried.",
+          "storyFit": "Best for: forbidden love, a breakup grieved gently, loving across a family wall or a sea, emptying the heart into the night, missing someone at everyone else's wedding, the love left behind in the old country. Poor fit: the full fête — that is Classique; club swagger and duets — that is Raï'n'B; anger, revenge, or a public scene, which this tender room refuses outright.",
+          "parodyTraps": "Sobbing theatrics — a collapse where the room asks for a carried ache; venom at the one who left; Darija endearments generated as flavor; postcard Orientalism wrapped around the heartbreak; a chorus pitched like a stadium chant; heartbreak with nobody real in it — stock loneliness instead of the user's actual person and their actual wall.",
+          "performance": {
+            "prose": "Density sparse; min adlibs 3; delivery tags [Soft] [Vocal Run] [Melancholy] [Instrumental Break]. This room performs at confession distance — one tender voice, an answering string line, and air. Signature: the sighed run — the last open vowel of a feeling-line bends downward like a held-back tear, flagged only where the writing planned space for it. Placement: verses stay nearly bare so the plain confession carries; one run flag sits under the hook's return where the ache peaks; a [Soft] header marks where the song pulls closest; an [Instrumental Break] gives the violin a full turn to say what the words refuse; the floor of 3 sits at the hook's return, the closing sigh, and one soft echo. Tag identity: a single intimate lead and the strings that answer it — no crowd, no stack, no belt; every sighed word from the user's own sheet.",
+            "adlibDensity": "sparse",
+            "minAdlibs": 3,
+            "deliveryTags": [
+              "[Soft]",
+              "[Vocal Run]",
+              "[Melancholy]",
+              "[Instrumental Break]"
+            ]
+          },
+          "builder": {
+            "instruments": [
+              "violon",
+              "synthé oriental",
+              "derbouka",
+              "guitare",
+              "accordéon",
+              "boîte à rythmes"
+            ],
+            "themes": [
+              "L'amour interdit",
+              "La douleur et la solitude",
+              "Le destin et la vie dure",
+              "La nostalgie du pays"
+            ],
+            "purposes": [
+              "Chanter l'amour impossible",
+              "Vider son cœur",
+              "Célébrer un mariage"
+            ]
+          }
+        },
+        {
+          "id": "ra-n-b",
+          "name": "Raï'n'B / Fusion",
+          "oneLine": "The France-side crossover — R&B and rap production under the raï voice: Faudel's pop lane to the Raï'n'B Fever era with 113, the banlieue wedding hall and the club.",
+          "tempoGroove": "84-104 BPM on programmed R&B and hip-hop drums — heavy kick and snare on the grid, deep sub bass, the derbouka riding on top as a layer rather than the motor, silky synth strings answering the hook. Word density moderate-tight: hook-sized phrases locked to the beat, verses leaner than the fête room, with space planned for a second voice to trade.",
+          "writingDials": [
+            "Two worlds, one sheet: the room is built for conversation between the raï lead and an R&B or rap register — plan trade-off sections and answer lines, all of them in the user's own words; no generated street slang, ever.",
+            "The hook is floor-sized: short, chantable, built to survive a club system and a wedding hall — one phrase a full room can throw back by the second chorus.",
+            "The melisma compresses: short signature curls at line-ends instead of long free runs — the grid tightens the voice, and the ornament becomes a stamp, not a flight.",
+            "Keep the raï voice sovereign: the topline holds its oriental scale color even over R&B chords — write held vowels where the color can show, or the song dissolves into its own production.",
+            "Both homes in the frame: the block in France and the old country share one song — the double life written concrete: the phone card, the summer return, the arrivals hall; lived migration, never brochure.",
+            "Pride, not apology: the double identity is celebrated — swagger warmed by belonging, the crew and the family in the same verse when the story holds them.",
+            "Present-tense and concrete: the message thread, the car, tonight's plan — the fête is happening now, not remembered from a distance.",
+            "The wedding and the club are one floor: write the peak for collective joy — the circle forming, the whole hall in — so the biggest line belongs to everyone in the room.",
+            "Cross-genre firewall: the fusion borrows RnB Français production wholesale, but the raï voice and its scale-colored melody stay sovereign — a plain diatonic croon with no ornamental curls is RnB Français, not raï; and not Rap Français — a rap voice may share the track, but the sung raï hook leads the song, and when bars-first writing shrinks the raï voice to a sampled garnish, it has crossed over; and not Afro — that floor bounces on log drums and a rolling afro-pop lilt with no derbouka DNA and no oriental line."
+          ],
+          "rendering": "Mid-2000s French urban raï fusion — heavy programmed kick and snare, deep sub bass, silky synth strings and keys, derbouka layered over the kit, a bright oriental synth answering the hook. Smooth raï lead with short ornamental curls, a second voice trading lines, polished radio-club mix; the Raï'n'B Fever sheen, banlieue wedding hall to club, big and warm — or, on the rock-raï lane, overdriven guitars and mandole replacing the silk, the beat kept heavy.",
+          "storyFit": "Best for: the banlieue wedding anthem, the club night, the summer return to the old country, double-identity pride, flirtation across a crowded floor, the crew's celebration, young love between two worlds. Poor fit: a raw exile lament at full voice — that is Classique; a tender private heartbreak — that is Love / Sentimental; story-dense sagas that need verses the grid will not hold.",
+          "parodyTraps": "Generated verlan, street slang, or Darija the user never wrote — the cardinal sin twice over in this room; the raï voice shrunk to an exotic sample over a beat that forgot it; oriental-kitsch synth pasted on with no groove logic; club clichés with nobody real inside them; postcard in both directions — brochure old country or cartoon banlieue.",
+          "performance": {
+            "prose": "Density moderate; min adlibs 4; delivery tags [Ad-Lib Section] [Drop] [Harmonies] [Vocal Run]. This room performs like a two-voice club record — the raï lead out front, a second register answering, and a beat built to land. Signature: the answered curl — the lead ends a hook line on a short ornamental turn and the stacked voices or the second voice throw the last words back, closer and bigger each chorus. Placement: verses stay lead-and-answer; the stack arrives under the hook and thickens on its returns; a [Drop] lands where the derbouka and the kit hit together and the floor takes it; an [Ad-Lib Section] rides the outro vamp where the wedding circle forms; the floor of 4 spreads across hook answers, calls into the drop, and the outro. Tag identity: a lead voice with its answering partner and stacked warmth — echoes on hook ends, calls before the beat lands, an outro given to the room; every traded word from the user's own sheet.",
+            "adlibDensity": "moderate",
+            "minAdlibs": 4,
+            "deliveryTags": [
+              "[Ad-Lib Section]",
+              "[Drop]",
+              "[Harmonies]",
+              "[Vocal Run]"
+            ]
+          },
+          "builder": {
+            "instruments": [
+              "boîte à rythmes",
+              "synthé oriental",
+              "derbouka",
+              "guitare",
+              "mandole",
+              "cuivres"
+            ],
+            "themes": [
+              "La jeunesse",
+              "La fête et l'ivresse",
+              "L'amour interdit",
+              "La nostalgie du pays",
+              "L'exil et le bled"
+            ],
+            "purposes": [
+              "Ambiancer",
+              "Danser",
+              "Célébrer un mariage",
+              "Faire la fête"
+            ]
+          }
+        }
+      ],
+      "cues": [
+        {
+          "cue": "raï classique",
+          "strength": "strong",
+          "roomId": "ra-classique"
+        },
+        {
+          "cue": "pop-raï oranais",
+          "strength": "strong",
+          "roomId": "ra-classique"
+        },
+        {
+          "cue": "khaled",
+          "strength": "strong",
+          "roomId": "ra-classique"
+        },
+        {
+          "cue": "cheb mami",
+          "strength": "strong",
+          "roomId": "ra-classique"
+        },
+        {
+          "cue": "cheikha rimitti",
+          "strength": "strong",
+          "roomId": "ra-classique"
+        },
+        {
+          "cue": "oran",
+          "strength": "strong",
+          "roomId": "ra-classique"
+        },
+        {
+          "cue": "cheba zahouania",
+          "strength": "weak",
+          "roomId": "ra-classique"
+        },
+        {
+          "cue": "chaba fadela",
+          "strength": "weak",
+          "roomId": "ra-classique"
+        },
+        {
+          "cue": "la fête",
+          "strength": "weak",
+          "roomId": "ra-classique"
+        },
+        {
+          "cue": "la liberté",
+          "strength": "weak",
+          "roomId": "ra-classique"
+        },
+        {
+          "cue": "le destin",
+          "strength": "weak",
+          "roomId": "ra-classique"
+        },
+        {
+          "cue": "l'exil",
+          "strength": "weak",
+          "roomId": "ra-classique"
+        },
+        {
+          "cue": "le bled",
+          "strength": "weak",
+          "roomId": "ra-classique"
+        },
+        {
+          "cue": "la jeunesse",
+          "strength": "weak",
+          "roomId": "ra-classique"
+        },
+        {
+          "cue": "ambiancer",
+          "strength": "weak",
+          "roomId": "ra-classique"
+        },
+        {
+          "cue": "raï love",
+          "strength": "strong",
+          "roomId": "ra-love"
+        },
+        {
+          "cue": "raï sentimental",
+          "strength": "strong",
+          "roomId": "ra-love"
+        },
+        {
+          "cue": "cheb hasni",
+          "strength": "strong",
+          "roomId": "ra-love"
+        },
+        {
+          "cue": "l'amour interdit",
+          "strength": "strong",
+          "roomId": "ra-love"
+        },
+        {
+          "cue": "slow de mariage",
+          "strength": "strong",
+          "roomId": "ra-love"
+        },
+        {
+          "cue": "cheb nasro",
+          "strength": "weak",
+          "roomId": "ra-love"
+        },
+        {
+          "cue": "houari dauphin",
+          "strength": "weak",
+          "roomId": "ra-love"
+        },
+        {
+          "cue": "chagrin d'amour",
+          "strength": "weak",
+          "roomId": "ra-love"
+        },
+        {
+          "cue": "rupture",
+          "strength": "weak",
+          "roomId": "ra-love"
+        },
+        {
+          "cue": "vider son cœur",
+          "strength": "weak",
+          "roomId": "ra-love"
+        },
+        {
+          "cue": "la solitude",
+          "strength": "weak",
+          "roomId": "ra-love"
+        },
+        {
+          "cue": "la nostalgie du pays",
+          "strength": "weak",
+          "roomId": "ra-love"
+        },
+        {
+          "cue": "violon",
+          "strength": "weak",
+          "roomId": "ra-love"
+        },
+        {
+          "cue": "raï'n'b",
+          "strength": "strong",
+          "roomId": "ra-n-b"
+        },
+        {
+          "cue": "raï'n'b fever",
+          "strength": "strong",
+          "roomId": "ra-n-b"
+        },
+        {
+          "cue": "faudel",
+          "strength": "strong",
+          "roomId": "ra-n-b"
+        },
+        {
+          "cue": "113",
+          "strength": "strong",
+          "roomId": "ra-n-b"
+        },
+        {
+          "cue": "rachid taha",
+          "strength": "strong",
+          "roomId": "ra-n-b"
+        },
+        {
+          "cue": "mohamed lamine",
+          "strength": "strong",
+          "roomId": "ra-n-b"
+        },
+        {
+          "cue": "reda taliani",
+          "strength": "strong",
+          "roomId": "ra-n-b"
+        },
+        {
+          "cue": "mariage en banlieue",
+          "strength": "weak",
+          "roomId": "ra-n-b"
+        },
+        {
+          "cue": "le club",
+          "strength": "weak",
+          "roomId": "ra-n-b"
+        },
+        {
+          "cue": "un duo",
+          "strength": "weak",
+          "roomId": "ra-n-b"
+        },
+        {
+          "cue": "le retour au bled l'été",
+          "strength": "weak",
+          "roomId": "ra-n-b"
+        },
+        {
+          "cue": "entre deux mondes",
+          "strength": "weak",
+          "roomId": "ra-n-b"
+        },
+        {
+          "cue": "production r&b",
+          "strength": "weak",
+          "roomId": "ra-n-b"
+        },
+        {
+          "cue": "la drague",
+          "strength": "weak",
+          "roomId": "ra-n-b"
+        },
+        {
+          "cue": "guitares rock",
+          "strength": "weak",
+          "roomId": "ra-n-b"
+        }
+      ]
+    },
+    "balladefr": {
+      "id": "balladefr",
+      "name": "Ballade Française",
+      "aliases": [
+        "ballade francaise",
+        "ballade",
+        "grande ballade",
+        "power ballad française",
+        "power ballad francaise",
+        "piano-voix",
+        "piano voix"
+      ],
+      "profileText": "A ballade writer's first move is to read the distance the feeling wants — arm's length, arena, or across the kitchen table — because in this genre scale is meaning and the wrong scale lies about the story. This is French popular music's crying room: the tempo drops, time breathes, and one feeling is engineered to land as deeply as a song can land. So the second move is architecture: map the dynamics before the words — where the hush sits, where the voice opens, where the crest arrives, what the drop after it exposes — then set the story's beats onto that staircase so feeling and volume rise together. The build is the law: verses stay small and concrete so the crest can be huge, peak lines end on open vowels a voice can pour out, and the drop after the summit, the voice suddenly nearly alone, holds the line the listener keeps.\n\nThe lineage sets the registers. Barbara's shadow lies over the piano-voix confession — one voice, one instrument, silence the second player — resurfacing in the stripped modern moments of Slimane and Vianney. Balavoine's urgency opened the arena lane in the late 70s; Goldman codified it in the late 80s and carried it to Céline Dion, who took it to the world — Lara Fabian's full voice and Hélène Ségara's ache beside her: the grande ballade makes a private vow public, one person addressed in front of thousands who overhear and cry rather than sing along. Today's radio tender lane — Slimane, Vitaa, Amir, Vianney — keeps the same slow heart at conversational distance, warmth over size, and carries the duet as the genre's living signature: two voices are two real positions in one story, never the same words split in half.\n\nOne line per room: Piano-Voix Intime circles its wound in true rubato — one late, brief rise, the ending given to the hush; Grande Ballade / Power Ballad climbs the staircase — bare verse, blooming chorus, a bridge that names the cost, key-change summit, merciful drop; Ballade Pop Moderne rides a soft steady frame with streaming-era concision, the hook a tender sentence that survives being said quietly. The language law rules them all: the lyrics will be French, written by a later layer — this writer works in plain-English craft instruction and never fakes French flavor the user did not write; craft terms like rubato, crest, or pont stay out of lyrics and adlibs; manufactured melodrama — tears engineered over a wound the user never brought — is parody in every room; and the user's real wound and real vow outrank every famous ballad in the songbook.",
+      "defaultRoomId": "ballade-pop-moderne",
+      "rooms": [
+        {
+          "id": "piano-voix-intime",
+          "name": "Piano-Voix Intime",
+          "oneLine": "One voice, one instrument, the confession at arm's length — Barbara's long shadow over the stripped modern moments of Slimane and Vianney, where silence is the second player and the room's decay keeps time.",
+          "tempoGroove": "50-75 BPM felt rather than kept — true rubato, often in 3/4, the confession waltz that is Barbara's home meter — the piano or lone acoustic guitar breathing with the singer, phrases stretching where the feeling drags and closing early where it fails; no drums, no grid, the pedal and the room's decay marking time. Low word density: short plain sentences with real air after them — the silence after a line is scored, not left over, and a packed sheet suffocates this room before its first word is judged.",
+          "writingDials": [
+            "Silence is the second instrument: end phrases early and leave the gap — the piano's small answer and the ring of the room carry what the next line would have flattened; write the pauses into the sheet as deliberately as the words.",
+            "Arm's length is the address: the confession goes to one absent person or to the singer's own reflection, overheard rather than performed — no crowd exists in this room, and any line that plays to an audience breaks the spell.",
+            "Plain words, fully exposed: at this distance ornament reads as evasion — short declarative sentences, one concrete detail from the user's real story per section, nothing decorative left standing; filler dies two meters from the listener's ear.",
+            "The melody is shaped for a voice alone: feeling-lines end on open vowels the voice can let fall or hold soft, intervals stay within reach of a tired midnight voice, and there is no arrangement anywhere to hide a weak phrase.",
+            "Circle rather than march: this room may return to its wound like a thought that will not resolve — the refrain comes back quieter or slightly changed, deepening instead of escalating; escalation belongs to the arena room.",
+            "One rise only: plan at most one opening of the voice — late, earned, brief — and come home from it; the ending belongs to the hush, often the voice alone or the piano finishing the sentence without words.",
+            "Tense and hour do heavy work: present tense at night is the room's classic stance — a memory told as if it is still happening, the empty apartment now, the unanswered message now — because immediacy at whisper scale is what makes strangers cry.",
+            "Write toward the last line: a piano-voix song is remembered by where it leaves the listener — the final line must close the confession without healing the wound, and everything above it is built so that line can land in near-silence.",
+            "Cross-genre firewall: One sung melodic line over a single breathing instrument separates it from Slam, which speaks its text; the engineered feeling separates it from Chanson — chanson is text-first, the melody serving the sentence and the story able to stand on the page, while even this whispering room shapes its melody and silences to move before it informs. And no pocket anywhere: the moment a groove leads the body, the song has left for RnB Français; a soft steady frame that merely keeps time has only changed rooms — that is Ballade Pop Moderne."
+          ],
+          "rendering": "Solo piano or lone acoustic guitar and one close-miked voice — intimate, dry, a real room with audible breath and pedal, no drums, no bass, at most a single cello line or faint string shadow entering late. Dynamics from whisper to one brief opening and back, the last line nearly unaccompanied; French piano-voix confession, Barbara-to-Slimane lineage, small-hours and unpolished on purpose.",
+          "storyFit": "Best for: solitude at night, a regret said aloud for the first time, forgiveness asked of someone gone, the tender memory of someone lost, missing a person in an empty apartment, words never said in time. Poor fit: a vow that wants a crest and a crowd — that is the Grande Ballade; a warm radio tenderness or a two-voice story — that is Ballade Pop Moderne; anything needing groove, celebration, or irony, which this naked room cannot survive.",
+          "parodyTraps": "Sad-piano wallpaper — a melancholy mood with no specific wound from the user's story under it; whisper-singing as an aesthetic draped over generic words; poetic ornament poured in to fill silences the room needs empty; a belted climax that shatters the confession; strings swelling in to supply feeling the words never earned; tears manufactured for effect — melodrama the user never brought.",
+          "performance": {
+            "prose": "Density sparse; min adlibs 2; delivery tags [Soft] [Whispered] [Piano Solo] [Crescendo]. This room performs like a confession overheard — one voice and its instrument, nobody else anywhere, the space between phrases as much a performer as either. Signature: the answered silence — the piano finishes what the phrasing leaves open at line-ends, a bar of near-nothing where the words stop and the room rings. Placement: the floor of 2 sits where the closeness peaks — a breathed echo of a last word under the refrain's return, one held soft vowel allowed to trail at the close; a [Piano Solo] takes the passage where the instrument speaks alone, a [Whispered] header marks the nearest line, and the single [Crescendo] rise is earned late and surrendered quickly, falling back to a [Soft] ending. Tag identity: one exposed voice, its breathing instrument, and scored silence — no stacks, no crowd, no runs; every breathed word is plain language from the user's own sheet.",
+            "adlibDensity": "sparse",
+            "minAdlibs": 2,
+            "deliveryTags": [
+              "[Soft]",
+              "[Whispered]",
+              "[Piano Solo]",
+              "[Crescendo]"
+            ]
+          },
+          "builder": {
+            "instruments": [
+              "piano",
+              "guitare sèche",
+              "violoncelle",
+              "cordes"
+            ],
+            "themes": [
+              "La solitude",
+              "La rupture et le regret",
+              "Le souvenir tendre",
+              "Le pardon",
+              "Le manque de l'être aimé"
+            ],
+            "purposes": [
+              "Consoler",
+              "Émouvoir jusqu aux larmes",
+              "Rendre hommage"
+            ]
+          }
+        },
+        {
+          "id": "grande-ballade",
+          "name": "Grande Ballade / Power Ballad",
+          "oneLine": "The arena lane Goldman built and Céline Dion carried to the world — Balavoine's urgency, Lara Fabian's full voice, Hélène Ségara's ache: a hush engineered into a crest, the vow declared at full voice.",
+          "tempoGroove": "55-85 BPM, slow and grand — straight time or the tradition's 6/8-12/8 lilt, whose felt pulse rides higher while the song stays slow — rubato at the verse edges over a pulse that firms as the arrangement gathers; the drums are an event, not a floor, entering soft at the first chorus and opening fully at the summit, the whole song an architecture of waves. Word density low in the verses and arching longer toward the crests: every peak line must end on an open held vowel a big voice can pour out, because the room exists for that note.",
+          "writingDials": [
+            "Map the build before the words: bare verse, first-chorus bloom, a pulled-back breath, bridge lift, key-change summit, merciful drop — then set the story's beats onto that staircase so feeling and volume rise together; words that peak before or after the arrangement read as noise.",
+            "The chorus is a declared vow: one sentence of promise, defiance, or surrender the whole song exists to earn, said at full voice and returning intact, landing bigger each pass — hedged, clever, or ironic choruses die at this scale.",
+            "Verses stay small so the crest can be huge: verse one is a close concrete scene from the user's real story, almost plain speech; verse two advances it — an answer, a turn, time passing — and the broad universal line is rationed to the chorus, where the size can hold it.",
+            "Open vowels at the summit: end the crest lines on sounds a voice can sustain, swell, and break on — a hard consonant ending chokes the very note the room was built around, and the biggest line sits where the voice is fully open.",
+            "The bridge names the cost: the pont shifts the angle — the doubt before the final vow, what keeping it will take — and hands the singer the highest window; when a key change comes, it lands out of the bridge as the story's turn made audible, never as a reflex.",
+            "Earn the drop: the bars after the summit, where the arrangement falls away and the voice stands nearly alone, are the genre's signature mercy — write one line worth that sudden nakedness, because it is the line the listener keeps.",
+            "One person, thousands of witnesses: the grande ballade makes a private vow public — intimate second person at enormous scale, the crowd overhearing, never addressed; the moment the chorus turns to the audience to sing along, the song has left for variété.",
+            "Melody outranks the sentence: this genre engineers the emotional crest, so syntax stays simple and the images broad enough to sing huge — a text that insists on its own speech rhythm against the arc has wandered into chanson and will fight the climb.",
+            "Cross-genre firewall: Variété Française shares this lane's biggest names — Goldman, Balavoine, Céline — so the artist name never decides alone: variété owns the collective statement, the refrain built for the hall's voice, solidarity sung to everyone, the anthem register; this genre owns the intimate vow at scale — one person addressed while thousands overhear — and it keeps that song even when it climbs and modulates, because the crest is this genre's engine, not variété's property. Against RnB Français the tell is the floor: the slow jam rides a groove pocket from bar one, while this room's drums arrive in waves and its time breathes. And against Chanson: here the melodic arc is engineered first and the sentence serves it, never the reverse."
+          ],
+          "rendering": "Grand French power ballad — piano foundation, a string section swelling in waves, warm soft bass, felted drums entering at the first chorus and opening at the crests, synth pads deepening the floor. One emotive lead with a wide dynamic arc from hush to full-voice belt, harmony stacks lifting the peaks, an optional key change into the final chorus and a stripped, nearly bare last line; late-80s-to-90s French arena ballad polish, Goldman-Céline-Fabian lineage, cinematic and unashamed.",
+          "storyFit": "Best for: the vow of a lifetime, a devastating parting said at full voice, love declared against every obstacle, homage to someone who shaped a life, the plea for a return, grief that needs size to be honest. Poor fit: a fragile small-hours confession — that is Piano-Voix Intime; a warm conversational tenderness or a two-sided radio duet — that is Ballade Pop Moderne; anything casual, ironic, or groove-led, which this unguarded room cannot carry.",
+          "parodyTraps": "Manufactured melodrama — a modest story inflated to arena scale until the crest has nothing real under it; belting from the first bar so no hush ever earns the summit; the key change as a reflex instead of a story turn; a huge chorus wrapped around a faceless abstraction; strings poured on like syrup over feeling the words never wrote; a singalong hook that turns the vow into a variété chorus.",
+          "performance": {
+            "prose": "Density moderate; min adlibs 3; delivery tags [Soft] [Harmonies] [Belting] [Big Finish]. This room performs like one voice climbing a rising orchestra — a solo lead carrying the whole dynamic arc, harmony stacks arriving to lift the peaks, no crowd vocals and no answering partner by default. Signature: the wave — each chorus returns larger than the last, the arrangement blooming under the voice as it opens, until the final summit and the sudden nakedness after it. Placement: verses stay bare under a [Soft] header so the restraint reads; the first [Harmonies] stack arrives with the first full chorus and thickens on each return; the [Belting] peak lands where the vow finally lets go, a key change can lift the last chorus into the [Big Finish], and the drop after it leaves the voice nearly alone for the line that matters most. As a craft option a second voice may take the second verse and join at the crest — the grand duet lane — but one voice is the default. Tag identity: a lone belter and a blooming orchestra — stacks on the choruses, one held summit, one stripped last line; every sung word is plain language from the user's own sheet.",
+            "adlibDensity": "moderate",
+            "minAdlibs": 3,
+            "deliveryTags": [
+              "[Soft]",
+              "[Harmonies]",
+              "[Belting]",
+              "[Big Finish]"
+            ]
+          },
+          "builder": {
+            "instruments": [
+              "piano",
+              "cordes",
+              "batterie feutrée",
+              "basse douce",
+              "nappes de synthé"
+            ],
+            "themes": [
+              "L'amour profond",
+              "La promesse",
+              "Le manque de l'être aimé",
+              "La rupture et le regret",
+              "L'espoir d'un retour"
+            ],
+            "purposes": [
+              "Déclarer sa flamme",
+              "Émouvoir jusqu aux larmes",
+              "Rendre hommage"
+            ]
+          }
+        },
+        {
+          "id": "ballade-pop-moderne",
+          "name": "Ballade Pop Moderne",
+          "oneLine": "Today's radio tender lane — Slimane, Amir, Vitaa, Vianney: clean pop production at ballad tempo, streaming-era concision, warmth over size, and the duet carried as the genre's living signature.",
+          "tempoGroove": "65-85 BPM on a soft steady frame — piano or muted guitar over light felted or gently programmed drums that enter early and stay low, round bass underneath, the pulse consistent enough to slow-dance to; the lift into the chorus is controlled, produced warmth rather than orchestral climb. Moderate word density with streaming-era concision: compact conversational verses, the hook landing inside the first minute, and air still left at line-ends so the production can breathe.",
+          "writingDials": [
+            "Concision is the form: short intro, first chorus early, nothing that only decorates — the streaming-era ballade wastes no bars, so every verse line either advances the two-person story or gets cut; tightness here is a craft value, not a compromise.",
+            "Conversational register: the craft instruction is plain modern speech set to melody — short natural sentences, today's diction, no archaic poetry and no grand rhetoric; the room persuades by sounding like someone actually talking to someone they love.",
+            "The hook is a tender sentence, not a summit: one plain memorable line said warmly, returning often and landing on sincerity instead of size — it should survive being said quietly across a kitchen table, because that is the scale this room trusts.",
+            "The duet is a craft option with rules: two voices mean two real positions in one story — one verse each, the chorus shared where the positions meet — every voice carrying information the other does not have; never the same words split arbitrarily, and never a default: choose it only when the user's story truly has two sides.",
+            "A small swell reads big: keep the verses low and close so the modest chorus lift feels like an event — one bar of near-silence before the chorus does more here than a string section, and the biggest moment is a warmer final chorus, rarely a key change.",
+            "Tenderness may stumble: doubt, an apology still in progress, love that admits its flaws — the register is sincere and a little vulnerable, and the polish of the production must be answered by imperfection in the feeling or the song turns to plastic.",
+            "The bridge is the turn toward resolution: short, often quieter, the line that changes how the ending reads — forgiveness offered, the decision made, the hope allowed — then the final chorus returns warmer for it.",
+            "One concrete detail per section: radio-smooth production goes faceless fast, so anchor every verse and the bridge in the user's actual story — the real message, the real morning, the real thing that happened — or the song becomes any track on the playlist.",
+            "Cross-genre firewall: Variété Française at ballad tempo still addresses the collective — the wedding sway, the crowd joining the chorus — while this room stays at you-and-me distance with intimate production; and variété's festive, uptempo pop rooms are a different animal entirely. Against RnB Français the tell is the pocket: the slow jam's beat leads the body and the melisma rides it, while this room's soft frame carries a straight-sung melody and its drums serve the build. A spoken verse routes the song to Slam, even at this tempo."
+          ],
+          "rendering": "Clean modern French pop ballad — intimate piano or soft guitar forward, warm synth pads, round soft bass, light felted drums entering early and staying gentle, subtle strings allowed on the final chorus only. One close natural lead, or two complementary leads in duet trading verses and sharing the chorus, light harmony doubles under the hook, a controlled lift and a warm ending; polished current radio mix, 2015-to-now French tender lane, the Slimane-Vitaa-Amir era.",
+          "storyFit": "Best for: a declaration kept warm and simple, a couple's story told from both sides, the slow dance at a wedding, consoling someone through a hard season, love resumed after forgiveness, hope for a return said gently. Poor fit: the naked small-hours confession — that is Piano-Voix Intime; the lifetime vow that needs an arena crest — that is the Grande Ballade; groove-led late-night sensuality, which belongs to RnB Français.",
+          "parodyTraps": "Playlist filler — polish with no actual person inside it; a hook engineered to sound tender while meaning nothing; a duet where both voices sing interchangeable words with no distinct positions; false modesty — whisper aesthetics over generic lines; arena melodrama imported into the small frame; production so clean it sands off the one imperfection that made the feeling credible.",
+          "performance": {
+            "prose": "Density moderate; min adlibs 3; delivery tags [Soft] [Harmonies] [Duet] [Build]. This room performs like a warm lead wrapped in light production — one close voice, gentle doubles, and, when the story has two sides, a second lead as an equal partner rather than a backing singer. Signature: the shared line — in solo form a soft harmony echoes the hook's last words a touch closer on each return; in duet form the two voices trade verses and meet on the chorus, and the moment they first sing together is the song's real event. Placement: verses stay nearly bare so the conversation reads; doubles gather under the hook and thicken gently on its returns; a [Build] marks the controlled lift into the final chorus, a [Soft] header the quiet bridge, and a [Duet] chorus is reserved for a story that truly has two voices in it. Tag identity: an intimate modern lead with light [Harmonies] and an optional equal partner — no belt war, no crowd, no stacked wall; every echoed word is plain language from the user's own sheet.",
+            "adlibDensity": "moderate",
+            "minAdlibs": 3,
+            "deliveryTags": [
+              "[Soft]",
+              "[Harmonies]",
+              "[Duet]",
+              "[Build]"
+            ]
+          },
+          "builder": {
+            "instruments": [
+              "piano",
+              "nappes de synthé",
+              "basse douce",
+              "batterie feutrée",
+              "guitare sèche"
+            ],
+            "themes": [
+              "L'amour profond",
+              "Le pardon",
+              "L'espoir d'un retour",
+              "Le souvenir tendre",
+              "La promesse"
+            ],
+            "purposes": [
+              "Danser un slow",
+              "Déclarer sa flamme",
+              "Consoler"
+            ]
+          }
+        }
+      ],
+      "cues": [
+        {
+          "cue": "piano-voix",
+          "strength": "strong",
+          "roomId": "piano-voix-intime"
+        },
+        {
+          "cue": "william sheller",
+          "strength": "strong",
+          "roomId": "piano-voix-intime"
+        },
+        {
+          "cue": "barbara",
+          "strength": "weak",
+          "roomId": "piano-voix-intime"
+        },
+        {
+          "cue": "confession",
+          "strength": "weak",
+          "roomId": "piano-voix-intime"
+        },
+        {
+          "cue": "une voix, un piano",
+          "strength": "strong",
+          "roomId": "piano-voix-intime"
+        },
+        {
+          "cue": "dépouillé",
+          "strength": "strong",
+          "roomId": "piano-voix-intime"
+        },
+        {
+          "cue": "solitude",
+          "strength": "weak",
+          "roomId": "piano-voix-intime"
+        },
+        {
+          "cue": "nuit",
+          "strength": "weak",
+          "roomId": "piano-voix-intime"
+        },
+        {
+          "cue": "appartement vide",
+          "strength": "weak",
+          "roomId": "piano-voix-intime"
+        },
+        {
+          "cue": "silence",
+          "strength": "weak",
+          "roomId": "piano-voix-intime"
+        },
+        {
+          "cue": "murmure",
+          "strength": "weak",
+          "roomId": "piano-voix-intime"
+        },
+        {
+          "cue": "pardon",
+          "strength": "weak",
+          "roomId": "piano-voix-intime"
+        },
+        {
+          "cue": "souvenir tendre",
+          "strength": "weak",
+          "roomId": "piano-voix-intime"
+        },
+        {
+          "cue": "guitare sèche",
+          "strength": "weak",
+          "roomId": "piano-voix-intime"
+        },
+        {
+          "cue": "grande ballade",
+          "strength": "strong",
+          "roomId": "grande-ballade"
+        },
+        {
+          "cue": "power ballad",
+          "strength": "strong",
+          "roomId": "grande-ballade"
+        },
+        {
+          "cue": "céline dion",
+          "strength": "strong",
+          "roomId": "grande-ballade"
+        },
+        {
+          "cue": "jean-jacques goldman",
+          "strength": "strong",
+          "roomId": "grande-ballade"
+        },
+        {
+          "cue": "lara fabian",
+          "strength": "strong",
+          "roomId": "grande-ballade"
+        },
+        {
+          "cue": "daniel balavoine",
+          "strength": "strong",
+          "roomId": "grande-ballade"
+        },
+        {
+          "cue": "florent pagny",
+          "strength": "strong",
+          "roomId": "grande-ballade"
+        },
+        {
+          "cue": "hélène ségara",
+          "strength": "strong",
+          "roomId": "grande-ballade"
+        },
+        {
+          "cue": "envolée",
+          "strength": "weak",
+          "roomId": "grande-ballade"
+        },
+        {
+          "cue": "montée en puissance",
+          "strength": "weak",
+          "roomId": "grande-ballade"
+        },
+        {
+          "cue": "changement de tonalité",
+          "strength": "weak",
+          "roomId": "grande-ballade"
+        },
+        {
+          "cue": "arène",
+          "strength": "weak",
+          "roomId": "grande-ballade"
+        },
+        {
+          "cue": "serment",
+          "strength": "weak",
+          "roomId": "grande-ballade"
+        },
+        {
+          "cue": "grande voix",
+          "strength": "weak",
+          "roomId": "grande-ballade"
+        },
+        {
+          "cue": "frissons",
+          "strength": "weak",
+          "roomId": "grande-ballade"
+        },
+        {
+          "cue": "adieu déchirant",
+          "strength": "weak",
+          "roomId": "grande-ballade"
+        },
+        {
+          "cue": "ballade pop",
+          "strength": "strong",
+          "roomId": "ballade-pop-moderne"
+        },
+        {
+          "cue": "slimane",
+          "strength": "strong",
+          "roomId": "ballade-pop-moderne"
+        },
+        {
+          "cue": "vitaa",
+          "strength": "strong",
+          "roomId": "ballade-pop-moderne"
+        },
+        {
+          "cue": "vitaa & slimane",
+          "strength": "strong",
+          "roomId": "ballade-pop-moderne"
+        },
+        {
+          "cue": "duo",
+          "strength": "strong",
+          "roomId": "ballade-pop-moderne"
+        },
+        {
+          "cue": "amir",
+          "strength": "weak",
+          "roomId": "ballade-pop-moderne"
+        },
+        {
+          "cue": "vianney",
+          "strength": "weak",
+          "roomId": "ballade-pop-moderne"
+        },
+        {
+          "cue": "slow",
+          "strength": "weak",
+          "roomId": "ballade-pop-moderne"
+        },
+        {
+          "cue": "mariage",
+          "strength": "weak",
+          "roomId": "ballade-pop-moderne"
+        },
+        {
+          "cue": "tendresse",
+          "strength": "weak",
+          "roomId": "ballade-pop-moderne"
+        },
+        {
+          "cue": "déclaration simple",
+          "strength": "weak",
+          "roomId": "ballade-pop-moderne"
+        },
+        {
+          "cue": "réconciliation",
+          "strength": "weak",
+          "roomId": "ballade-pop-moderne"
+        },
+        {
+          "cue": "douceur",
+          "strength": "weak",
+          "roomId": "ballade-pop-moderne"
+        },
+        {
+          "cue": "à deux voix",
+          "strength": "weak",
+          "roomId": "ballade-pop-moderne"
+        },
+        {
+          "cue": "radio",
+          "strength": "weak",
+          "roomId": "ballade-pop-moderne"
+        },
+        {
+          "cue": "espoir d'un retour",
+          "strength": "weak",
+          "roomId": "ballade-pop-moderne"
+        }
+      ]
+    },
+    "frenchtouch": {
+      "id": "frenchtouch",
+      "name": "French Touch",
+      "aliases": [
+        "french house",
+        "filter house",
+        "nu-disco",
+        "nu disco",
+        "electro française",
+        "électro française",
+        "touche française"
+      ],
+      "profileText": "A French Touch writer's first move is to find the phrase built to survive two hundred passes — short, plainspoken, body-true — because here repetition is the writing, not a placeholder for it. The sheet is a loop and one phrase returning; the craft is arranging repeats the way other genres arrange verses — when it returns, when it drops to silence, when it comes back doubled. The filter does the rewriting — muffled pass, vocoder pass, chopped stutter, full-frequency return — so the phrase is cut from open vowels and clean consonants that survive being sliced and robotized, then scanned on the pump, stresses locked to the kick or riding across it. A rewrite is rarely a new line but a decision about what the machine does to the same line; one real detail from the user's story anchors the mantra — pass forty only lifts if pass one meant it.\n\nThe lineage opens with filter house's disco DNA — Daft Punk, Stardust, Cassius, Modjo, Alan Braxe, Étienne de Crécy — a borrowed disco record looped and pumped into machine euphoria, gospel-disco gratitude at the root, melancholy carried upward. The second wave is the Ed Banger électro of Justice, SebastiAn, Kavinsky, Mr. Oizo: distorted bass riffs with a rock band's attack cut to the grid, darkness worn as playful menace. The present is nu-disco — L'Impératrice and Polo & Pan singing French, Breakbot and Myd on the same groove with English-sung hooks — sung verses over boogie and space-disco, a real song inside the groove. Three registers follow: the sincere robotized voice caught in the loop; the gang chant and noir croon, a crowd commanding itself; the soft falsetto human singing close. The writer never mixes their temperatures inside one track.\n\nFilter House / Disco writes two to six lines and lets the filter opening back onto the same loop be the drama. Électro / Dance-Rock writes shoutable chants and chop-ready syllables — the riff is the frontman, the words percussion with meaning. Nu-Disco / Indie Dance is the one room with real verses — short dreamy stanzas riding the bassline under a chorus that may still loop like a mantra. Any sung words are French — or the user's own phrase — written by a later layer: craft is instructed in plain English — no faked French flavor, invented slang, or accent costume. Craft terms — filtre, boucle, vocoder, sidechain — stay out of lyrics and adlibs. The writing is repetition architecture, not verse-chorus prose: instrumental stretches are written lines, and the user's story outranks everything.",
+      "defaultRoomId": "filter-house",
+      "rooms": [
+        {
+          "id": "filter-house",
+          "name": "Filter House / Disco",
+          "oneLine": "The Homework-to-Discovery engine (1996-2001) — looped disco samples, sidechain pump, one phrase repeated into euphoria; Daft Punk, Stardust, Cassius, Modjo, Alan Braxe & Fred Falke, Étienne de Crécy.",
+          "tempoGroove": "110-127 BPM on an unbroken four-on-the-floor, the whole mix breathing against the kick through the sidechain pump — the groove is a two-or-four-bar disco loop that never stops, only closes and opens under the filter. The most honest minimal sheet in this book: the full lyric is often two to six lines, sometimes one phrase, sung warm and looped like an instrument; the words never fill the bar — the pump does.",
+          "writingDials": [
+            "Write one phrase built to survive two hundred passes: short, plainspoken, body-true — about dancing, love, or release — a line that means something at pass one and has become a mantra by pass forty; if it wears out spoken aloud ten times, it is not the phrase. The founding mantras were English — often sampled American disco voices — so the French phrase transposes the craft (open vowels, pump scansion), not the canon's language, and a user's own English hook rides the same law.",
+            "Repetition is the writing, not a placeholder for it: the sheet is the same phrase returning, and the craft is deciding when it returns, when it drops to silence, and when it comes back doubled — the writer arranges repeats the way other genres arrange verses.",
+            "The filter does the rewriting: the phrase mutates through a closed muffled pass, a vocoder pass, a chopped stutter, a full-frequency return — so build it from open vowels and clean consonants that survive being filtered, sliced, and robotized without losing their sense.",
+            "Vocoder and talkbox are the second singer, and sincerity is their register: the robot voice is the genre's face — it makes a plain phrase universal, tender, anonymous — never a novelty effect; decide which words get robotized and why.",
+            "Gospel-disco gratitude is the emotional root: the founding records lift borrowed soul into machine euphoria, so the phrase celebrates — the night, the person, being free, being alive — and even melancholy is carried upward, never sulked.",
+            "Scan the phrase on the pump: stressed syllables locked to the kick or deliberately riding across it, short enough to breathe with the sidechain — a phrase that fights the pump gets recut until it rides.",
+            "One real detail from the user's story anchors the mantra — the specific night, person, or rush — because pass forty only lifts if pass one meant it; without that anchor the loop is dancefloor filler.",
+            "Plan the instrumental stretches as written lines: long passages belong to the loop alone, and the sheet marks where the voice sits out — a filter-house track is mostly machine, and a writer who fills it has misread the form.",
+            "Cross-genre firewall: the loop that breathes but never detonates is the border with the EDM pack — EDM house and big-room load a riser and pay off a drop as an event, while filter house has no event except the filter opening back onto the same loop; and the DNA is a disco record, not a supersaw — if the track wants a snare-roll build and a detonation, it has already left for the EDM rooms."
+          ],
+          "rendering": "Looped filtered disco sample — strings, rhythm guitar, and horns caught in a two-bar loop — over a punchy four-on-the-floor house kit, deep sidechain pump breathing the whole mix against the kick, round funky bass, claps on two and four. One warm vocal phrase looped as an instrument, passed through vocoder and filter, muffled low in the intro and opened to full frequency at the peak; French filter-house warmth, light tape saturation, no risers, no detonation — the filter sweep is the only build the track needs.",
+          "storyFit": "Best for: the euphoria of the night, love felt as electricity, losing yourself on the floor, the rush when the room peaks, dancing until sunrise, one feeling worth repeating forever. Poor fit: a story that needs verses and development — that is Nu-Disco / Indie Dance; rowdy distorted aggression — that is Électro / Dance-Rock; any narrative, confession, or protest that cannot live inside one phrase.",
+          "parodyTraps": "A phrase too clever or too wordy to loop; changing the words every repeat because the writer got bored — the mutation belongs to the filter, not the vocabulary; a festival riser-and-drop pasted onto the loop; the vocoder played as a robot joke instead of a sincere voice; disco pastiche with no real feeling under it; postcard Paris — berets and boulevards — instead of the user's actual 4 a.m.",
+          "performance": {
+            "prose": "Density sparse; min adlibs 2; delivery tags [Vocoder] [Vocal Chop] [Build Up] [Instrumental Break]. This room performs like a machine with one human phrase caught inside it — the lead is a loop, and the performance is what the production does to it. Signature: the filter-open return — the phrase runs muffled and distant through a [Build Up], then the full-frequency loop slams back with the voice suddenly present, the same words landing like a revelation because the sound finally opened. Placement: the [Vocoder] carries the phrase in its robotized form at the peaks; a [Vocal Chop] figure turns the hook into percussion where new words would clutter; long marked [Instrumental Break] stretches hand the track back to the loop. Tag identity: one warm phrase, its robot double, and its chopped ghost — every looped word from the user's own sheet; no crowd, no shout, no new words where the filter should speak.",
+            "adlibDensity": "sparse",
+            "minAdlibs": 2,
+            "deliveryTags": [
+              "[Vocoder]",
+              "[Vocal Chop]",
+              "[Build Up]",
+              "[Instrumental Break]"
+            ]
+          },
+          "builder": {
+            "instruments": [
+              "samples disco",
+              "synthés filtrés",
+              "basse funky",
+              "four-on-the-floor",
+              "vocoder",
+              "claps"
+            ],
+            "themes": [
+              "L'euphorie de la nuit",
+              "L'amour électrique",
+              "Se perdre dans la fête",
+              "Le rush du dancefloor"
+            ],
+            "purposes": [
+              "Danser toute la nuit",
+              "Faire l'anthème de club",
+              "Planer au lever du soleil"
+            ]
+          }
+        },
+        {
+          "id": "lectro",
+          "name": "Électro / Dance-Rock",
+          "oneLine": "The Justice lane — Ed Banger-era distorted basslines and rock energy cut to the grid; Justice, SebastiAn, Kavinsky, Mr. Oizo, the 2006-2009 second wave.",
+          "tempoGroove": "90-128 BPM, a four-on-the-floor stomp or a broken rock-funk grid, the low end a distorted, compressed bass riff that hits like a guitar section, sidechained hard enough to lurch. Low word density with impact phrasing: chant lines, shouted gang phrases, chopped syllables used as drum fills; the noir end of the room croons a few deep detached lines over a slower synthwave pulse — but nobody writes verses here, because the riff is the protagonist.",
+          "writingDials": [
+            "Write chants, not verses: short punchy lines built to be shouted by a room, each landing like a riff hit — the words are percussion with meaning, and a line that cannot be yelled has no seat.",
+            "Darkness stays playful: the room wears distortion, menace, and black-leather cool, but the heart is a party — write swagger and mischief, never genuine despair; if the threat stops being fun, it has left the genre.",
+            "Riff logic governs the phrase: words lock to the bassline's rhythm, hitting where it hits and cutting where it cuts — set the line's rhythm first and let the sense ride it.",
+            "Chop-ready by design: choose syllables that survive slicing — hard consonants, clean attacks — because the hook often returns as a stuttered resampled figure, and mushy phrasing dies on the edit.",
+            "The gang carries the hook: pitch the phrase for many voices at once — playground-simple, a little arrogant, owned by the crowd on first hearing and shouted back at the machine.",
+            "The noir croon is the room's second voice: for night-drive stories, a low deadpan croon, often vocoder-darkened — the Nightcall register — over the slower pulse: few words, held cool, cinematic; direct it as detachment in plain English, never as an accent.",
+            "One real image keeps the swagger honest: the user's actual night, city, or provocation under the attitude — pure pose with nothing lived beneath it is the room's emptiest failure.",
+            "Breakdowns are texture, not bridges: when the track strips down, the voice does not arrive with new prose — a repeated syllable, a filtered fragment, silence; the drama is the riff slamming back.",
+            "Cross-genre firewall: the distortion here is rock grit on a house grid, not festival scale — the EDM pack's big-room detonates a supersaw drop off a snare-roll riser, while électro's drop is the same filthy riff returning heavier; and it is not the rock catalog either — the energy is a band's but the form is a loop's: no live song form, no guitar-hero bridge, everything cut to the grid and resampled."
+          ],
+          "rendering": "Distorted, heavily compressed electro bass riff as the lead instrument, four-on-the-floor kick with a hard sidechain lurch, crunchy claps, sliced string and choir stabs, analog synth hits with bit-crushed edges. Vocals as shouted gang chants and stuttered chopped fragments — or, on the noir end, a deep detached croon over a slower synthwave pulse; Ed Banger-era loudness and grit, playful menace, the bass mixed like a rock guitar and the drop landing as the riff's heaviest return.",
+          "storyFit": "Best for: the rush of the dancefloor at its rowdiest, letting go completely, setting a festival on fire with the returning riff, Paris after midnight with the leather jackets out, a night drive with the city lights smearing. Poor fit: tenderness and dreamy romance — that is Nu-Disco / Indie Dance; warm one-phrase loop euphoria — that is Filter House / Disco; real anger or protest, because this room's menace is theatre and collapses under sincere rage.",
+          "parodyTraps": "Menace played straight until the fun dies; prose verses shoved between riff hits; an EDM festival build-and-detonation replacing the riff's return; edgy provocation with nothing lived under it; French slang or verlan the user never wrote pasted in for street credibility; the noir croon slipping into a fake accent instead of cool detachment.",
+          "performance": {
+            "prose": "Density sparse; min adlibs 3; delivery tags [Shout] [Vocal Chop] [Vocoder] [Drop] [Breakdown]. This room performs like a rock band made of machines — the riff is the frontman and the voices are the crowd it commands. Signature: the riff return — the mix strips to a [Breakdown] of filtered fragments and one repeated syllable, tension climbs, and the [Drop] is the distorted bassline slamming back under a gang [Shout], the crowd's phrase landing with it. Placement: chants ride the riff's accents through the track; a [Vocal Chop] stutter turns the hook into a drum fill at the transitions; the adlib floor sits on the riff returns, where the room yells with the bass. Tag identity: gang voices, sliced fragments, and one cool deadpan lead — every shouted word from the user's own sheet; menace worn like a costume, the machine grinning underneath.",
+            "adlibDensity": "sparse",
+            "minAdlibs": 3,
+            "deliveryTags": [
+              "[Shout]",
+              "[Vocal Chop]",
+              "[Vocoder]",
+              "[Drop]",
+              "[Breakdown]"
+            ]
+          },
+          "builder": {
+            "instruments": [
+              "basse distordue",
+              "synthés filtrés",
+              "boîte à rythmes house",
+              "four-on-the-floor",
+              "claps"
+            ],
+            "themes": [
+              "Le rush du dancefloor",
+              "Se perdre dans la fête",
+              "La liberté",
+              "Paris la nuit"
+            ],
+            "purposes": [
+              "Ambiancer un festival",
+              "Se lâcher",
+              "Faire l'anthème de club"
+            ]
+          }
+        },
+        {
+          "id": "nu-disco",
+          "name": "Nu-Disco / Indie Dance",
+          "oneLine": "The living wave — sung verses over boogie and space-disco: L'Impératrice and Polo & Pan sing French, Breakbot and Myd run the same groove with English-sung hooks — dreamy sophistication with a real song inside the groove.",
+          "tempoGroove": "100-118 BPM on a boogie or space-disco pocket — played funky bass up front, tight rhythm-guitar skank, analog pads, a lighter four-on-the-floor with disco hats, the pump softened to a glide. Moderate word density and the genre's one exception: real verses exist here — short sung French stanzas riding the bassline, a chorus that can still be a loop, honest air between phrases; half a pop sheet, never a full one, because the groove remains the spine.",
+          "writingDials": [
+            "Song form returns, but the groove still rules: verses exist to ride the bassline, not to pause it — write short stanzas whose phrasing locks to the pocket, and cut any line the groove has to wait for.",
+            "Verses are dreamy and image-led: cool, understated, a little cosmic — scenes and sensations rather than plot machinery, the feeling suggested through one precise detail and left half-unsaid.",
+            "The chorus may stay a mantra: the hybrid is the room's signature — verses that develop, then a chorus that loops one phrase like the founding wave; both writings live on one sheet.",
+            "Write for falsetto and soft head-voice: open vowels on the lifted notes, phrases that can float — the register is seduction by lightness, never belting, and the top of the melody is where the charm lives.",
+            "Understatement is the sophistication: elegance, wit, a raised eyebrow — the room charms rather than pleads, and one precise image outclasses any grand declaration.",
+            "Space-disco imagery only from the user's story: the cosmic, the tropical, and the retro-future are the room's furniture, but any sun, sea, or stars that appear must be the user's own — pasted decor reads instantly as pastiche.",
+            "Verse two advances: with real verses comes the real obligation — the second verse moves the scene, the night, or the affair forward; re-circling verse one wastes the only room that allows development.",
+            "Leave the band its turns: the bass break, the pad wash, the guitar figure are structural, and the sheet marks them — the song breathes through the groove, and a wall of words suffocates the elegance.",
+            "Cross-genre firewall: here the groove is the spine and the song decorates it — in Variété / Pop the song form leads and the arrangement follows the lyric, so a story that collapses when the groove is stripped belongs there; and RnB Français runs its groove in service of a sung confession, voice-first and narrative-deep, while this room keeps the voice one instrument among the machines — closer to the disco loop than to the confessional."
+          ],
+          "rendering": "Played boogie bass, funky and forward, tight clean rhythm guitar, warm analog string pads and synth leads, light four-on-the-floor kit with disco hi-hats and soft claps, a touch of vocoder as color. Soft close French vocal with falsetto lifts and airy stacked harmonies, verses gliding inside the pocket and the chorus looping like a mantra; space-disco sheen, retro-future warmth, golden-hour elegance — modern Parisian nu-disco, groovy and unhurried.",
+          "storyFit": "Best for: an electric love story inside the groove, soft nostalgia worn lightly, Paris at night from a lived angle, freedom that glides instead of shouting, dancing close at golden hour, seduction by elegance. Poor fit: one-phrase loop euphoria — that is Filter House / Disco; rowdy distorted chants — that is Électro / Dance-Rock; heavy confession or grief at full weight, which this room's lightness cannot honestly carry.",
+          "parodyTraps": "Verses so dense the pocket has to wait; lounge-kitsch cocktail Paris — the postcard of the postcard; cosmic decor with no user story under it; a belted diva chorus where the falsetto should float; French slang or invented cool-kid phrasing the user never wrote; drowning the played band in festival-scale production until the elegance reads as an EDM act.",
+          "performance": {
+            "prose": "Density moderate; min adlibs 3; delivery tags [Falsetto] [Harmonies] [Soft] [Instrumental Break]. This room performs like a small elegant band with a light-footed singer — the voice leads, but it is dressed as one more instrument in the groove. Signature: the falsetto lift over the loop — the chorus phrase returns and the lead floats up into [Falsetto] while airy [Harmonies] stack beneath it, the mantra suddenly weightless at the exact bar the bassline peaks. Placement: verses stay single-voiced and [Soft], gliding inside the pocket; the stacks gather on the chorus and thicken on its returns; a marked [Instrumental Break] hands a full turn to the bass and pads, because the band's figure is part of the song's argument. Tag identity: one soft lead, its falsetto ceiling, and its stacked air — every sung word from the user's own sheet; charm over force, the groove always given the last word.",
+            "adlibDensity": "moderate",
+            "minAdlibs": 3,
+            "deliveryTags": [
+              "[Falsetto]",
+              "[Harmonies]",
+              "[Soft]",
+              "[Instrumental Break]"
+            ]
+          },
+          "builder": {
+            "instruments": [
+              "basse funky",
+              "nappes analogiques",
+              "boîte à rythmes house",
+              "synthés filtrés",
+              "vocoder",
+              "claps"
+            ],
+            "themes": [
+              "L'amour électrique",
+              "La nostalgie douce",
+              "Paris la nuit",
+              "La liberté",
+              "L'euphorie de la nuit"
+            ],
+            "purposes": [
+              "Danser toute la nuit",
+              "Planer au lever du soleil",
+              "Se lâcher"
+            ]
+          }
+        }
+      ],
+      "cues": [
+        {
+          "cue": "french touch",
+          "strength": "strong",
+          "roomId": "filter-house"
+        },
+        {
+          "cue": "filter house",
+          "strength": "strong",
+          "roomId": "filter-house"
+        },
+        {
+          "cue": "daft punk",
+          "strength": "strong",
+          "roomId": "filter-house"
+        },
+        {
+          "cue": "stardust",
+          "strength": "strong",
+          "roomId": "filter-house"
+        },
+        {
+          "cue": "modjo",
+          "strength": "strong",
+          "roomId": "filter-house"
+        },
+        {
+          "cue": "cassius",
+          "strength": "strong",
+          "roomId": "filter-house"
+        },
+        {
+          "cue": "alan braxe & fred falke",
+          "strength": "weak",
+          "roomId": "filter-house"
+        },
+        {
+          "cue": "étienne de crécy",
+          "strength": "weak",
+          "roomId": "filter-house"
+        },
+        {
+          "cue": "filtre qui s'ouvre",
+          "strength": "weak",
+          "roomId": "filter-house"
+        },
+        {
+          "cue": "boucle disco",
+          "strength": "weak",
+          "roomId": "filter-house"
+        },
+        {
+          "cue": "vocoder",
+          "strength": "weak",
+          "roomId": "filter-house"
+        },
+        {
+          "cue": "l'euphorie de la nuit",
+          "strength": "weak",
+          "roomId": "filter-house"
+        },
+        {
+          "cue": "l'amour électrique",
+          "strength": "weak",
+          "roomId": "filter-house"
+        },
+        {
+          "cue": "danser jusqu'au lever du soleil",
+          "strength": "weak",
+          "roomId": "filter-house"
+        },
+        {
+          "cue": "un seul sentiment à répéter",
+          "strength": "weak",
+          "roomId": "filter-house"
+        },
+        {
+          "cue": "justice",
+          "strength": "strong",
+          "roomId": "lectro"
+        },
+        {
+          "cue": "sebastian",
+          "strength": "strong",
+          "roomId": "lectro"
+        },
+        {
+          "cue": "kavinsky",
+          "strength": "strong",
+          "roomId": "lectro"
+        },
+        {
+          "cue": "ed banger",
+          "strength": "strong",
+          "roomId": "lectro"
+        },
+        {
+          "cue": "électro française",
+          "strength": "weak",
+          "roomId": "lectro"
+        },
+        {
+          "cue": "mr. oizo",
+          "strength": "weak",
+          "roomId": "lectro"
+        },
+        {
+          "cue": "dance-rock",
+          "strength": "weak",
+          "roomId": "lectro"
+        },
+        {
+          "cue": "basse distordue",
+          "strength": "weak",
+          "roomId": "lectro"
+        },
+        {
+          "cue": "mettre le feu au festival avec le riff qui revient",
+          "strength": "weak",
+          "roomId": "lectro"
+        },
+        {
+          "cue": "virée nocturne",
+          "strength": "weak",
+          "roomId": "lectro"
+        },
+        {
+          "cue": "paris après minuit, blousons de cuir",
+          "strength": "weak",
+          "roomId": "lectro"
+        },
+        {
+          "cue": "menace joueuse",
+          "strength": "weak",
+          "roomId": "lectro"
+        },
+        {
+          "cue": "foule qui scande",
+          "strength": "weak",
+          "roomId": "lectro"
+        },
+        {
+          "cue": "nu-disco",
+          "strength": "strong",
+          "roomId": "nu-disco"
+        },
+        {
+          "cue": "indie dance",
+          "strength": "strong",
+          "roomId": "nu-disco"
+        },
+        {
+          "cue": "l'impératrice",
+          "strength": "strong",
+          "roomId": "nu-disco"
+        },
+        {
+          "cue": "polo & pan",
+          "strength": "strong",
+          "roomId": "nu-disco"
+        },
+        {
+          "cue": "breakbot",
+          "strength": "strong",
+          "roomId": "nu-disco"
+        },
+        {
+          "cue": "myd",
+          "strength": "weak",
+          "roomId": "nu-disco"
+        },
+        {
+          "cue": "space disco",
+          "strength": "weak",
+          "roomId": "nu-disco"
+        },
+        {
+          "cue": "boogie",
+          "strength": "weak",
+          "roomId": "nu-disco"
+        },
+        {
+          "cue": "la nostalgie douce",
+          "strength": "weak",
+          "roomId": "nu-disco"
+        },
+        {
+          "cue": "séduction par l'élégance",
+          "strength": "weak",
+          "roomId": "nu-disco"
+        },
+        {
+          "cue": "paris à l'heure dorée",
+          "strength": "weak",
+          "roomId": "nu-disco"
+        },
+        {
+          "cue": "une histoire qui demande des couplets",
+          "strength": "weak",
+          "roomId": "nu-disco"
+        },
+        {
+          "cue": "falsetto",
+          "strength": "weak",
+          "roomId": "nu-disco"
+        }
+      ]
+    },
+    "slam": {
+      "id": "slam",
+      "name": "Slam",
+      "aliases": [
+        "slam poésie",
+        "slam poesie",
+        "spoken word français",
+        "spoken word francais",
+        "slam français",
+        "slam francais"
+      ],
+      "profileText": "A slam writer's first move is to find the sentence worth saying to a room's face, and the chute it walks toward — the closing turn of meaning that reframes everything before it, earned by every line and announced by none. The sentence is the only clock: rhythm is built from syllable count and the groupe rythmique — French stress landing group-final — long spilling clauses snapped by clipped stops, every line tested aloud and recut where the mouth stumbles. Silence is percussion — stops planned on the sheet, a held beat after the hardest line, a breath before the turn: the stop is where the room leans in. Repetition-with-variation replaces the chorus: a returning phrase, one word changed each pass, its final variation often the chute itself. Direct address is the motor: the text speaks to someone — one listener, a city, or the room a narrator is telling a true story to — and holds that address to the last word.\n\nThe scene's roots are democratic: Marc Smith's Chicago bar competitions, imported by Pilote le Hot's first Paris sessions, the tournament circuit where Grand Corps Malade cut his teeth — anyone could sign up, one text, one mic, three minutes, no music, no props, and a said text earned a drink. That contract still governs: the text must hold, at arm's length, a bar that agreed to go quiet. From it grew registers, not schools: the bare reckoning spoken into silence; the tender narrated chapter that carried slam from Saint-Denis to French radio; the frontier oratory of Abd al Malik, Gaël Faye, and Souleymane Diamanka, trading with jazz and rap while the text stays sovereign. The subjects are shared — injustice, origins, the city and its forgotten, love and loss — so subject never chooses the room; what surrounds the voice does. And every room punishes the same two impostors: rap without a beat and poetry with attitude.\n\nOne line per room: Slam Scène / A Cappella Roots is the open-mic law, voice alone, the sentence as sole clock, planned silence the loudest event; Slam Musical is the storyteller's lane, piano and strings as punctuation under spoken chapters, the refrain allowed to lift toward simple melody; Slam Urbain / Frontière is the border country, a real jazz pulse the voice plays against — pulse-aware, never pulse-owned. The language law rules all three: the performed text will be French, written by a later layer — the writer works in plain-English craft and never invents banlieue slang, verlan, or an accent the user did not write; craft terms like chute or a cappella stay out of the performed text and adlibs; poverty tourism and preachiness are the genre's parody; and the user's real story outranks the scene's entire canon.",
+      "defaultRoomId": "slam-musical",
+      "rooms": [
+        {
+          "id": "slam-sc-ne",
+          "name": "Slam Scène / A Cappella Roots",
+          "oneLine": "The open-mic law — Pilote le Hot's first Paris sessions and the tournament circuit where Grand Corps Malade cut his teeth: one text, one mic, three minutes, no music, no props, and a bar that agrees to go quiet.",
+          "tempoGroove": "No BPM — the clock is the sentence. Delivery moves at speech pace and bends hard: long spilling clauses, clipped three-word stops, a held silence where a drummer would put a fill. Word density reads high on the page but is spent unevenly — sprints, then air — and three minutes is the form's outer wall, inherited from the rules of the scène ouverte. If any sound sits under the voice it is a faint held texture with no tempo in it.",
+          "writingDials": [
+            "Rhythm lives in the sentence, not a rhyme grid: build the pulse from syllable count and the groupe rythmique — French stress lands on group-final syllables, and the alexandrin's ghost is there to summon or break — a long running clause snapped by a short line, lengths varied on purpose; test every line aloud, and where the mouth stumbles, recut.",
+            "Internal rhyme and assonance are tools, and end rhyme is native — rimes suivies and long vowel chains are the scene's default music — but rhyme never steers the sentence: cut any cheville bent in to reach a rhyme, vary line lengths so the grid punctuates instead of metronomes, and recut wherever the rhyme, not the thought, chose the word; rhyme-driven sing-song is the room's first death.",
+            "Write the chute first: the closing turn lands like a punchline of meaning — one image or reversal that reframes everything before it. Every earlier line must earn it, and no line may announce it.",
+            "Direct address is the motor: the text speaks TO someone — the room, one person, the city itself — and holds that address to the last word; a text aimed at nobody loses the bar in thirty seconds.",
+            "Repetition-with-variation replaces the chorus: a returning phrase with one word changed each pass, the change carrying the plot forward — the return is the refrain, and its final variation often IS the chute.",
+            "Silence is percussion: plan the stops on the sheet — a held beat after the hardest line, an audible breath before the turn; the stop is where the bar leans in, and a sheet with no planned silence has no dynamics at all.",
+            "Social truth without preachiness: injustice and the street's forgotten are home subjects, written as people with names, habits, and dignity — the moment they become props for a moral, the text becomes a sermon and the room turns away.",
+            "The user's real story outranks the scene's canon: no borrowed banlieue imagery, no inherited misery, no invented slang — one true detail from the user's own life holds a bar quieter than any secondhand one.",
+            "Cross-genre firewall: vs Rap Français a cappella: rap keeps an implied pocket — the flow still scans against a beat that is not playing; slam's meter is the sentence itself, stresses falling where speech puts them, and the moment a steady grid appears under the voice the text has left this room. vs recited poetry and Chanson Française: no melody anywhere, and the address is live — a real room spoken to, not a page read out."
+          ],
+          "rendering": "One close-miked spoken voice, dry and intimate, small-room tone — a bar, not a hall. At most a near-subliminal bed: ambiances feutrées or one held nappe discrète far behind the voice, entering late if at all, never implying a tempo. No drums, no melodic hook, no chorus lift. The performance carries all dynamics itself — near-whisper, conversational level, controlled surge, hard stop — and the silences are left long enough to be felt as events.",
+          "storyFit": "Best for: a hard truth told to a listener's face — witnessed injustice, the invisible people of one street, a manifesto, a reckoning, a text that must be heard word for word. Poor fit: a feeling that wants melody, party energy, background listening, or comfort — this room strips everything but the words, and words that lean on music starve here.",
+          "parodyTraps": "A moral announced instead of earned; poverty tourism — the city's forgotten arranged as scenery for pathos; an end-rhyme grid forced until speech sing-songs; one shouted volume start to finish; a chute the text explains after landing it; street slang the user never wrote.",
+          "performance": {
+            "prose": "Density sparse; min adlibs 2; delivery tags [Spoken Word] [Whisper] [Pause] [Build]. This room performs like an open mic at the moment the bar goes quiet — one voice, no net, making its dynamics from breath alone. Signature: the counted silence — a written [Pause] after the heaviest line, held one beat past comfortable, the voice resuming lower on the far side. Placement: the sheet stays nearly bare — an audible (inhale) before the longest spill, one (under the breath: key word repeated) after the line that hurts; a [Whisper] drop takes the most exposed passage, a single [Build] takes the approach to the chute, and [Spoken Word] steadiness holds everything else. Tag identity: one human and a room's silence — no doubles, no crowd, no echo; every marked event is breath, and the loudest thing on the sheet is a stop.",
+            "adlibDensity": "sparse",
+            "minAdlibs": 2,
+            "deliveryTags": [
+              "[Spoken Word]",
+              "[Whisper]",
+              "[Pause]",
+              "[Build]"
+            ]
+          },
+          "builder": {
+            "instruments": [
+              "ambiances feutrées",
+              "nappes discrètes",
+              "percussions légères"
+            ],
+            "themes": [
+              "La condition humaine",
+              "L'injustice sociale",
+              "La révolte",
+              "La ville et ses oubliés"
+            ],
+            "purposes": [
+              "Dénoncer",
+              "Faire passer un message",
+              "Faire réfléchir"
+            ]
+          }
+        },
+        {
+          "id": "slam-musical",
+          "name": "Slam Musical",
+          "oneLine": "The Grand Corps Malade lane — Midi 20 onward: piano and strings breathing under a spoken story, refrains allowed to lift toward melody, the form that carried slam from the bars of Saint-Denis to French radio.",
+          "tempoGroove": "Beds sit roughly 60-90 BPM when they pulse at all, and often simply breathe rubato under the voice — the piano follows the sentence, never the reverse. Spoken delivery stays conversational and unhurried; moderate word density with real air at phrase ends so the strings can answer, and the story sets the clock: sections run as long as their chapter needs.",
+          "writingDials": [
+            "The text leads, the bed follows: write the story first as spoken verse, then mark where music should swell, thin, or vanish — the arrangement is punctuation for the sentences, never a grid the sentences obey.",
+            "Narrative arc is the form: a beginning, a turn, an ending that recolors the opening — verses advance chapters in order, and verse two must move time or perspective forward, never restate verse one.",
+            "The refrain may lift toward melody: a few sung or half-sung lines returning between spoken chapters — short, simple, singable by a non-singer, restating the theme with one word shifted each return so the repetition keeps earning its place.",
+            "Rhyme stays a tool: internal echoes and soft line-end assonance give the speech its music, but the honest sentence outranks the rhyming one — this lane wins by sounding like someone talking who keeps landing, almost by accident, on poetry.",
+            "Tenderness runs at full sincerity: love, childhood, loss, gratitude — this is slam's warm room; state feeling plainly and let the chute reframe it, and never let a string swell do work the text has not done.",
+            "Address is chosen and kept: either a letter's single listener — a person, a city, a younger self — or a narrator telling the room a true story; both stances are native, and whichever is chosen holds to the last word. What breaks the lane is drift — lecturing the wide audience mid-letter, or a tale that forgets who it is being told to.",
+            "Plan the silences with the band: leave phrase-end air for the piano or violoncelle to answer, and land the hardest line with the bed dropped out — the arrangement's absence is the room's loudest effect.",
+            "Specifics with dignity: names, streets, small habits from the user's story carry the chapters; the moment the story generalizes into a life lesson, cut back to a detail and let it argue instead.",
+            "Cross-genre firewall: vs Chanson Française (the chanson à texte lane) and Ballade Française: those are sung — melody carries the verses; here the verses are spoken and only the refrain may lift, so the moment verse lines acquire a tune the song has crossed the border. vs Rap Français: rap rides the pocket; here the piano follows the voice and there is no grid to ride."
+          ],
+          "rendering": "A close, warm spoken voice in front of a piano-led bed: sober piano figures, violoncelle and nappes discrètes swelling at the turns, contrebasse and brushed percussions légères entering only when the story lifts and dropping away for the hardest lines. The refrain may rise into simple sung melody with one soft double. Dynamics track the narrative — sparse opening, fuller middle, stripped ending — with clean modern acoustic production, radio-warm but text-forward: the voice always the loudest element in the mix.",
+          "storyFit": "Best for: a true story with chapters — a tribute, a childhood, a love and its loss, an illness survived, a letter never sent — told tenderly and meant to be understood by everyone in one listen. Poor fit: club energy, boasting, abstract manifesto with no narrative spine, or a text that needs confrontation-level rawness — this room's warmth sands hard edges.",
+          "parodyTraps": "Sentimental swells doing the text's job; a sung chorus so big the spoken verses become its intro; a rhyme grid sing-songing the speech; the inspirational ending that explains its own chute; tenderness generalized into greeting-card wisdom; misery imported for effect.",
+          "performance": {
+            "prose": "Density sparse; min adlibs 3; delivery tags [Spoken Word] [Melodic] [Whisper] [Build]. This room performs like a storyteller with a band that breathes when they breathe — the voice conducts and the musicians answer. Signature: the refrain lift — spoken chapters hand off to a short [Melodic] refrain with one soft sung double beneath it, then the voice steps back down into speech a shade lower than before. Placement: an (inhale) before the story's turn; a soft (sung under: last words of the refrain) as the refrain hands back to speech; a [Whisper] takes the most exposed line with the bed nearly gone, and one [Build] carries text and strings into the final chapter together, with [Spoken Word] steadiness elsewhere. Tag identity: one narrator and their own voice as the only second voice, softly sung at the refrains — no crowd, no hype, no stacked choir; every dynamic on the sheet is a chapter mark, and every echoed word already exists in the user's text.",
+            "adlibDensity": "sparse",
+            "minAdlibs": 3,
+            "deliveryTags": [
+              "[Spoken Word]",
+              "[Melodic]",
+              "[Whisper]",
+              "[Build]"
+            ]
+          },
+          "builder": {
+            "instruments": [
+              "piano",
+              "violoncelle",
+              "contrebasse",
+              "nappes discrètes",
+              "guitare sèche",
+              "percussions légères"
+            ],
+            "themes": [
+              "L'amour et la perte",
+              "L'enfance",
+              "La condition humaine",
+              "La quête de sens"
+            ],
+            "purposes": [
+              "Émouvoir",
+              "Raconter une histoire vraie",
+              "Poser des mots sur un silence"
+            ]
+          }
+        },
+        {
+          "id": "slam-urbain",
+          "name": "Slam Urbain / Frontière",
+          "oneLine": "The border country — Abd al Malik's jazz-lit oratory, Gaël Faye's sung-spoken chronicles, Souleymane Diamanka's griot cadence: where slam trades with rap and jazz and the text stays sovereign over the beat.",
+          "tempoGroove": "The beds pulse for real here — jazz and downtempo grooves roughly 70-100 BPM, walking contrebasse, brushed kit — and the voice is pulse-aware, not pulse-owned: it leans on the groove for a passage, then stretches a sentence across the bar and lets the band catch up. Word density runs moderate-to-high with rap-adjacent momentum in bursts, but phrase lengths keep breaking the grid on purpose.",
+          "writingDials": [
+            "Pulse-aware, never pulse-owned: let stressed syllables shake hands with the beat for a few lines, then break stride — the sentence that runs long across the bar is this room's signature, exactly where rap would recut it to the grid.",
+            "Origins and identity are the home subjects: exile, double belonging, a grandparent's language, the street that raised the writer — told as lived chronicle with dates, rooms, and named people, never as a position paper.",
+            "The chute still rules: momentum builds the way rap builds, but the payoff is a turn of meaning, not a punchline of dominance — the last line should reframe the story, not win an exchange.",
+            "Literary density is invited: allusion, layered metaphor, internal-rhyme chains running hotter than anywhere else in slam — the closest the genre comes to rap's engine — but the chain serves the argument, and when it starts steering the sentence, break it.",
+            "A sung hook may answer the spoken text: a melodic refrain or even a hummed line trading with speech — keep the registers distinct; the verse never half-raps, the refrain never half-talks.",
+            "Address widens to oratory: the room, the republic, the dead, a younger self — the preacher cadence is allowed if the text interrogates itself before it instructs anyone else; questions outrank verdicts.",
+            "Repetition-with-variation goes musical: a returning phrase can migrate — spoken dry, then spoken over the band, then sung — gaining a shade of meaning at each state; the migration is the build.",
+            "The dignity law runs doubled: this room lives closest to the city's forgotten, and they stay subjects with names and interior lives — the writer's own complicity gets examined on the page, because the frontier's credibility dies at the first note of sermon.",
+            "Cross-genre firewall: vs Rap Français — the decisive tell: put a trap beat under this text and let the voice lock to the pocket and it IS rap, however literary; here the band follows the voice — beds breathe, bars drop out, the groove waits — and the sentence keeps sovereignty over the beat. vs Slam Musical: there the bed is punctuation; here it is a real groove the voice plays against. vs Chanson Française: sung throughout is chanson — here melody only visits the refrain."
+          ],
+          "rendering": "A live-feeling small ensemble: walking or bowed contrebasse, jazz piano voicings, percussions légères under brushes, nappes discrètes and ambiances feutrées for depth — a groove that breathes, thins, and drops away when the voice stretches. Spoken lead with real rhythmic intent, occasionally lifting into a short sung refrain or answered by one soft sung line. Warm, organic, jazz-club-meets-studio production; no trap drums, no 808 grid, and every consonant kept legible above the band.",
+          "storyFit": "Best for: identity and origins told as chronicle — migration, a two-country childhood, faith and doubt, the neighborhood's real faces, a eulogy that needs a groove under it to stay standing. Poor fit: party records, flexing, simple love-pop, or any story that wants the beat to lead — those belong to rap and pop, not to the frontier.",
+          "parodyTraps": "The voice locking to the grid until it is rap in a jazz costume; sermonizing without self-interrogation; borrowed banlieue clichés or invented slang standing in for the user's actual origins; jazz busy-ness burying the consonants; a sung hook so dominant the spoken text becomes its introduction.",
+          "performance": {
+            "prose": "Density moderate; min adlibs 3; delivery tags [Spoken Word] [Rhythmic] [Melodic] [Build]. This room performs like a poet fronting a jazz group — the band listens, the voice conducts, and the pulse is a partner rather than a master. Signature: the stretch-and-catch — a [Rhythmic] passage rides the pulse tight for a few lines, then one sentence runs long across the bar while the band thins to let it land. Placement: a low, calm (spoken double: punch word) where momentum peaks — the rap border audible but never hyped; a soft (sung answer: refrain phrase) trading with speech at the section turns; an audible (exhale) after the longest stretch; one [Build] carries the final return with its [Melodic] lift, and [Spoken Word] holds the rest. Tag identity: one voice and a listening band — a single self-double at the peaks, one sung under-voice at the refrains, no hype shouts, no crowd; all direction stays rhythm-and-breath in plain English, never a request for an accent, a nationality, or slang the user's own sheet did not already carry.",
+            "adlibDensity": "moderate",
+            "minAdlibs": 3,
+            "deliveryTags": [
+              "[Spoken Word]",
+              "[Rhythmic]",
+              "[Melodic]",
+              "[Build]"
+            ]
+          },
+          "builder": {
+            "instruments": [
+              "contrebasse",
+              "piano",
+              "percussions légères",
+              "nappes discrètes",
+              "ambiances feutrées",
+              "pulsation électronique sobre"
+            ],
+            "themes": [
+              "Les origines et l'identité",
+              "La ville et ses oubliés",
+              "L'enfance",
+              "La quête de sens",
+              "La révolte"
+            ],
+            "purposes": [
+              "Faire passer un message",
+              "Raconter une histoire vraie",
+              "Émouvoir"
+            ]
+          }
+        }
+      ],
+      "cues": [
+        {
+          "cue": "a cappella",
+          "strength": "strong",
+          "roomId": "slam-sc-ne"
+        },
+        {
+          "cue": "voix seule / sans musique",
+          "strength": "strong",
+          "roomId": "slam-sc-ne"
+        },
+        {
+          "cue": "scène ouverte",
+          "strength": "strong",
+          "roomId": "slam-sc-ne"
+        },
+        {
+          "cue": "open mic",
+          "strength": "strong",
+          "roomId": "slam-sc-ne"
+        },
+        {
+          "cue": "pilote le hot",
+          "strength": "strong",
+          "roomId": "slam-sc-ne"
+        },
+        {
+          "cue": "manifeste",
+          "strength": "weak",
+          "roomId": "slam-sc-ne"
+        },
+        {
+          "cue": "tournoi de slam",
+          "strength": "weak",
+          "roomId": "slam-sc-ne"
+        },
+        {
+          "cue": "trois minutes",
+          "strength": "weak",
+          "roomId": "slam-sc-ne"
+        },
+        {
+          "cue": "un texte, un micro",
+          "strength": "weak",
+          "roomId": "slam-sc-ne"
+        },
+        {
+          "cue": "mot pour mot",
+          "strength": "weak",
+          "roomId": "slam-sc-ne"
+        },
+        {
+          "cue": "dénoncer",
+          "strength": "weak",
+          "roomId": "slam-sc-ne"
+        },
+        {
+          "cue": "faire réfléchir",
+          "strength": "weak",
+          "roomId": "slam-sc-ne"
+        },
+        {
+          "cue": "la révolte",
+          "strength": "weak",
+          "roomId": "slam-sc-ne"
+        },
+        {
+          "cue": "le silence",
+          "strength": "weak",
+          "roomId": "slam-sc-ne"
+        },
+        {
+          "cue": "slam musical",
+          "strength": "strong",
+          "roomId": "slam-musical"
+        },
+        {
+          "cue": "grand corps malade",
+          "strength": "strong",
+          "roomId": "slam-musical"
+        },
+        {
+          "cue": "midi 20",
+          "strength": "strong",
+          "roomId": "slam-musical"
+        },
+        {
+          "cue": "piano et cordes sous la voix",
+          "strength": "strong",
+          "roomId": "slam-musical"
+        },
+        {
+          "cue": "raconter une histoire vraie",
+          "strength": "weak",
+          "roomId": "slam-musical"
+        },
+        {
+          "cue": "émouvoir",
+          "strength": "weak",
+          "roomId": "slam-musical"
+        },
+        {
+          "cue": "hommage",
+          "strength": "weak",
+          "roomId": "slam-musical"
+        },
+        {
+          "cue": "l'enfance",
+          "strength": "weak",
+          "roomId": "slam-musical"
+        },
+        {
+          "cue": "l'amour et la perte",
+          "strength": "weak",
+          "roomId": "slam-musical"
+        },
+        {
+          "cue": "lettre jamais envoyée",
+          "strength": "weak",
+          "roomId": "slam-musical"
+        },
+        {
+          "cue": "violoncelle",
+          "strength": "weak",
+          "roomId": "slam-musical"
+        },
+        {
+          "cue": "refrain chanté",
+          "strength": "weak",
+          "roomId": "slam-musical"
+        },
+        {
+          "cue": "poser des mots sur un silence",
+          "strength": "weak",
+          "roomId": "slam-musical"
+        },
+        {
+          "cue": "abd al malik",
+          "strength": "strong",
+          "roomId": "slam-urbain"
+        },
+        {
+          "cue": "gaël faye",
+          "strength": "strong",
+          "roomId": "slam-urbain"
+        },
+        {
+          "cue": "souleymane diamanka",
+          "strength": "strong",
+          "roomId": "slam-urbain"
+        },
+        {
+          "cue": "slam urbain",
+          "strength": "strong",
+          "roomId": "slam-urbain"
+        },
+        {
+          "cue": "les origines et l'identité",
+          "strength": "strong",
+          "roomId": "slam-urbain"
+        },
+        {
+          "cue": "exil",
+          "strength": "weak",
+          "roomId": "slam-urbain"
+        },
+        {
+          "cue": "double appartenance",
+          "strength": "weak",
+          "roomId": "slam-urbain"
+        },
+        {
+          "cue": "jazz",
+          "strength": "weak",
+          "roomId": "slam-urbain"
+        },
+        {
+          "cue": "griot",
+          "strength": "weak",
+          "roomId": "slam-urbain"
+        },
+        {
+          "cue": "contrebasse",
+          "strength": "weak",
+          "roomId": "slam-urbain"
+        },
+        {
+          "cue": "foi et doute",
+          "strength": "weak",
+          "roomId": "slam-urbain"
+        },
+        {
+          "cue": "le quartier",
+          "strength": "weak",
+          "roomId": "slam-urbain"
+        },
+        {
+          "cue": "frontière",
+          "strength": "weak",
+          "roomId": "slam-urbain"
+        }
+      ]
+    },
+    "rnbfr": {
+      "id": "rnbfr",
+      "name": "RnB Français",
+      "aliases": [
+        "rnb francais",
+        "r&b français",
+        "r&b francais",
+        "rnb fr",
+        "r&b fr",
+        "rnb français 2000"
+      ],
+      "profileText": "An RnB Français writer's first move is to read the story for guard, occasion, and era — never subject — because the three rooms share almost every subject (desire, betrayal, distance, the night) and only emotional distance and era-machinery can pick the room: the same betrayal is a full-voiced confrontation in one lane, a flat admission in another, a wound already resolving in the third. Two physical laws follow. The pocket law: there is always a groove — live-feel swing, a half-time 808 grid, or a bare slow pulse a couple can dance on — the voice sits a hair behind it, and the moment the song dissolves into rubato it has left the genre. The melisma law: runs are written for, never sprinkled — end emotional lines on open vowels, leave the last beat empty at the peaks; a syllable-packed line-end kills the signature run.\n\nThe lineage is the génération Skyrock and Groove radio — Matt Houston, K-Reen, Wallen, Amel Bent, Sheryfa Luna, early M. Pokora — into the streaming rebirth: Ronisia, trap-soul, the borders Joé Dwèt Filé walks. One genre, three registers: full-voiced testimony that says its drama out loud; guarded flat honesty where the cool of the delivery is itself the feeling; and sensuality with class, suggestion carrying all the heat. Under all three runs the harmony culture: the stack is an instrument, call-and-response is structure not decoration — backing voices answer the lead line for line, bloom on the chorus, and hold the hook on the end-vamp while the lead runs free. One register per song; temperatures never mix.\n\nRnB 2000s / Classique pleads in full French sentences that stop a beat early so the voice can run, its chorus built to survive a four-voice stack. RnB Moderne / Trap-Soul drops clipped text-length phrases over a half-time 808, repetition as the hook, autotune carrying the tremble the guarded voice refuses. RnB Slow / Sensuel writes the fewest words of all, at close range for an audience of one, and spends its saved runs on the final vamp. The lyrics are French, written by a later layer: this document instructs craft in plain English and never fakes French flavor — no invented slang, no accent costume. Craft terms — melisma, vamp, 808, pre-chorus — stay out of lyrics and adlibs. The explicit inventory and the borrowed US costume are the genre's two parodies. And the user's real night and real person outrank everything: every law above bends before their names, places, facts.",
+      "defaultRoomId": "rnb-moderne",
+      "rooms": [
+        {
+          "id": "rnb-2000s",
+          "name": "RnB 2000s / Classique",
+          "oneLine": "The golden-age lane — Skyrock and Groove-radio France: Matt Houston, K-Reen, Wallen, Sheryfa Luna, early M. Pokora; live-feel drums, Rhodes warmth, and a choir behind a melisma-led voice.",
+          "tempoGroove": "Ballads 60-80 BPM, straight or lightly swung sixteenths; the heavy swing lives in the mid-tempos, 88-105 over boom-bap-warmed drums — the snare cracking on 2 and 4, the phrases settling just behind it like a head-nod; street-corner harmony numbers up to about 112. Word density moderate: full French sentences that resolve at line ends and stop a beat early so the voice can run.",
+          "writingDials": [
+            "Verses are full sincere sentences aimed at one real person — pleading, confessing, telling what happened — and verse two advances the account like a second act, never a re-circle of verse one's feeling.",
+            "Write French as French: the language lands its weight at the ends of phrase-groups, so build lines whose final syllables carry the stress onto the beat and open into the run — never force a translated US stress-map onto French words.",
+            "The chorus is built for the stack: short, parallel, declarative lines with matching syllable counts, simple enough to survive four voices in harmony and true enough to survive twenty repeats.",
+            "Run-room is a writing job: end the emotional lines on open vowels the voice can bend, and leave the last beat of the bar empty at the peaks — a syllable-packed line-end kills the era's signature melisma.",
+            "Call-and-response is structural, not decoration: write lead lines the backing voices can answer or echo, and plan the end-vamp where the choir holds the hook while the lead sings freely over it.",
+            "Drama is events said out loud: the discovery, the confrontation, the apology at full volume — this room performs its feelings where Moderne would murmur them and Slow would only imply them.",
+            "The growing-up-and-asserting song is a golden-age specialty: it starts as one person's story and earns its size — by the final chorus the address may widen from the lover to everyone listening.",
+            "The era lives in the chords, the stack, and the swing — never in the vocabulary: no dated slang, no 2000s props, no nostalgia costume unless the user's story actually holds them.",
+            "Cross-genre firewall: the French melodic school separates it from the English-catalog R&B pack — phrase-final stress bending into the runs, never a translated US topline; a rapped guest verse may visit, but if the core of the song raps it is Rap Français — features cross over, the room does not; and the pocket separates it from Ballade Française — this room keeps a danceable groove even at 62 BPM, where the ballad breathes rubato and builds by swelling."
+          ],
+          "rendering": "Live-feel drums with boom-bap warmth, Rhodes and soft keys, a real moving bass, felted guitar color, strings swelling at the peaks. Big stacked background harmonies treated as their own instrument, a melisma-capable lead upfront with runs at phrase ends, an extended outro vamp; early-2000s French R&B radio warmth — the Skyrock and Groove era — analog sheen, no modern trap gloss.",
+          "storyFit": "Best for: love with drama in it — betrayal confronted, an apology at full voice, winning someone back in front of witnesses, growing up and proving yourself, family and roots told with pride, new love announced like news. Poor fit: guarded fragments and night-drive pride — that is Moderne; the close dance for an audience of one — that is Slow; detached irony, which this sincere room cannot hold.",
+          "parodyTraps": "Dated slang and 2000s props the user never wrote — the era is chords and choirs, not vocabulary; a melisma run on every line; a French lyric phrased like a translated US slow jam; choruses that are paragraphs instead of chants; nostalgia worn as costume instead of testimony built from the user's story.",
+          "performance": {
+            "prose": "Density heavy; min adlibs 6; delivery tags [Call and Response] [Harmonies] [Vocal Run] [Belting]. This is the genre's loudest, most vocally crowded room — one soul-warm lead and a full backing stack that answers line for line. Signature: the choir answer — the stack echoes the last words of the lead's calls through the verses, blooms into full harmony on the chorus, then holds the hook on the end-vamp while the lead runs free above it. Placement: verses stay lead-forward with short echoed line-ends; the stack thickens on each chorus return; the bridge strips near-solo so the final belt and the one saved showcase run land as the peak. Tag identity: a lead voice and its choir — answered calls, stacked chorus harmonies, one belted final lift, runs cued at phrase ends only; every answered word comes from the user's own sheet.",
+            "adlibDensity": "heavy",
+            "minAdlibs": 6,
+            "deliveryTags": [
+              "[Call and Response]",
+              "[Harmonies]",
+              "[Vocal Run]",
+              "[Belting]"
+            ]
+          },
+          "builder": {
+            "instruments": [
+              "Rhodes",
+              "claviers doux",
+              "basse live",
+              "boîte à rythmes",
+              "cordes",
+              "guitare feutrée"
+            ],
+            "themes": [
+              "L'amour compliqué",
+              "La trahison",
+              "Grandir et s'affirmer",
+              "La famille",
+              "L'amour naissant"
+            ],
+            "purposes": [
+              "Vider son cœur",
+              "Se sentir compris",
+              "Reconquérir quelqu un"
+            ]
+          }
+        },
+        {
+          "id": "rnb-moderne",
+          "name": "RnB Moderne / Trap-Soul",
+          "oneLine": "Today's lane — the streaming-era rebirth: Ronisia, the Imen Es borderline, night-drive trap-soul; 808 sub-bass under soft keys, autotune worn as feeling.",
+          "tempoGroove": "Felt tempo 60-82 BPM in half-time — often written 130-150 with hi-hats rolling double and triple over the slow snare — and mid-tempos to about 95 with a soft head-nod. The 808 slides under soft keys and the voice floats a hair behind the grid. Low word density: clipped phrases of three to seven words dropped like late-night texts, real silence between them, repetition doing the melodic work.",
+          "writingDials": [
+            "Phrases run short and clipped — dropped like a text, each followed by air; a long flowing sentence breaks this lane instantly and belongs to the 2000s room.",
+            "Repetition IS the hook: one blunt French phrase looping with small melodic variation, meaning more each pass — write the line that can loop, not the clever constructed chorus.",
+            "Autotune is written for, not apologized for: plan held line-end notes and small bent intervals where the tuning becomes the tremble — the machine carries the ache the guarded voice refuses to perform.",
+            "The register is guarded-honest: pride and hurt sit side by side, admitted flatly; the confession arrives without drama, and the coolness of the delivery is itself the feeling.",
+            "Verses slide between sung and near-spoken — write lines that survive both, because the performer will blur them.",
+            "The night is the room: the drive home, the phone that stays lit, the message never sent — but it must be the user's actual night and city; an American night pasted over a French one is this lane's fastest parody.",
+            "Rhyme leans rap-adjacent — internal echoes, repeated end-words, identical line-endings are idiomatic here, the shared border of the feature culture — but the core stays sung melody.",
+            "Forms run short and front-loaded: the hook arrives fast and returns often, verse two may be half-length, and anything the loop can carry gets cut — a shorter true song beats a padded one.",
+            "Cross-genre firewall: the sung core separates it from Rap Français — the two lanes share beats and trade features, but here the center of the song is melody with the guard up, and a rapped verse only guests; the drum cell separates it from Afro — Tayc and Dadju live in the Afro pack, and the moment the drums bounce with the afro-pop lilt the song re-routes; and French prosody separates it from the English-catalog trap-soul room — a translated US topline reads as costume here."
+          ],
+          "rendering": "Booming 808 sub-bass under soft keys and gentle synth pads, crisp hi-hats rolling double and triple, half-time snare, a sparse felted guitar loop. Close-miked vocal in a light autotune color with doubled hooks and murmured ad-libs tucked behind the lead; 2018-to-now French streaming-era palette — minimal, nocturnal, spacious, the keys soft where the sub is heavy.",
+          "storyFit": "Best for: complicated love told in fragments, the night and what it does to feelings, distance and missing someone with pride intact, betrayal admitted flatly, ambition tangled with love, confessions half-regretted by morning. Poor fit: weddings, family tributes, and open-hearted devotion — those belong to the 2000s room or the Slow room; joyful celebration; any story that needs its drama performed at full voice.",
+          "parodyTraps": "Borrowed US costume — brand inventories, substances, translated Atlanta clichés the user never lived; over-singing where the lane murmurs; greeting-card rhymes in a room built on flat honesty; the guard collapsing into melodrama; filling the silence the 808 needs to breathe.",
+          "performance": {
+            "prose": "Density moderate; min adlibs 4; delivery tags [Whispered] [Soft] [Spoken] [Crooning]. This room performs by murmur and tone — runs stay rare and small, a slide at a line-end, never a showcase — one voice doubled and echoed, the beat carrying what runs would carry elsewhere. Signature: the doubled murmur — the lead's own voice echoes a clipped last word at phrase ends, autotuned and low, like a thought repeating on the drive home. Placement: bracket headers sit alone on their own lines where a section turns inward; parenthetical adlibs live only at phrase ends, never inside the protected air; the floor of 4 spreads roughly two under the hook, one at a verse line-end, one held soft word at the close. Tag identity: a solo modern voice and its own doubles — no choir, no crowd, no group answer; every murmured echo is the user's own words re-breathed.",
+            "adlibDensity": "moderate",
+            "minAdlibs": 4,
+            "deliveryTags": [
+              "[Whispered]",
+              "[Soft]",
+              "[Spoken]",
+              "[Crooning]"
+            ]
+          },
+          "builder": {
+            "instruments": [
+              "808 sub-bass",
+              "claviers doux",
+              "nappes de synthé",
+              "boîte à rythmes",
+              "guitare feutrée"
+            ],
+            "themes": [
+              "La nuit et les sentiments",
+              "L'amour compliqué",
+              "Le manque et la distance",
+              "La trahison",
+              "Grandir et s'affirmer"
+            ],
+            "purposes": [
+              "Ambiancer la nuit",
+              "Vider son cœur",
+              "Se sentir compris"
+            ]
+          }
+        },
+        {
+          "id": "rnb-slow",
+          "name": "RnB Slow / Sensuel",
+          "oneLine": "The dedicated slow-jam and duet room — le slow: seduction and reconquest at close range, the wedding-and-bedroom repertoire, the 2000s slow tradition carried into today.",
+          "tempoGroove": "55-75 BPM, straight or gently swung, sometimes in a rolling 6/8 sway — and always a pocket: soft drums keeping a slow grid two people can actually dance on, never rubato. The lowest word density in the genre: one idea per section, lines that bloom instead of rush, long open vowels waiting on the held notes, phrases at speaking-to-one-person pace.",
+          "writingDials": [
+            "Address is one person at close range — the song is written for an audience of one, in the room, tonight, and every line must survive being sung that close.",
+            "Patience is the craft: one idea per section, a verse allowed to spend four lines setting a single scene — rushing the words is the cardinal sin of the slow.",
+            "Sensuality is suggested with class: closeness, breath, one real detail from the user's own story carrying all the heat — the explicit inventory is banned; this room implies or it dies.",
+            "The duet is a form to plan, not a doubling: two voices get their own lines — statement and answer, question and promise — then twine on the chorus; the second voice is a character, never an echo.",
+            "Reconquest is this room's specialty: the apology at close range argues by memory — one remembered detail proving the narrator never stopped paying attention — and wins the person back by tenderness, not volume.",
+            "Word choice is strictest here: long open vowels on the held notes, soft consonants throughout, lines that stay beautiful at half volume — the melisma waits for the vowels the writing prepares.",
+            "The climax is a vamp, not a bigger chorus: the refrain loops while the lead climbs freely over it, so the chorus words must be simple and true enough to survive twenty repeats.",
+            "If conflict enters, it resolves inside the song — the wedding-and-bedroom repertoire keeps its elegance from first line to last; wounds stay open in other rooms, not this one.",
+            "Cross-genre firewall: the drum cell guards the borders: if the ti-bwa pattern — the Antillean tick-tick cell — enters the kit, the song has crossed into Zouk, the border where Joé Dwèt Filé stands; if the pocket dissolves into rubato piano-and-voice, it is Ballade Française, which builds by breathing where the slow builds by groove; and against the English pack's quiet-storm room — same candlelight, different school — the French held vowels and phrase-final stress are the wall."
+          ],
+          "rendering": "Rhodes and soft keys over a gentle slow drum grid, warm live bass, strings swelling late, felted guitar and airy synth pads filling the space between phrases. Velvet close-miked lead — an answering second voice when the story calls for a duet — harmonies arriving on the late choruses, tasteful runs saved for the final vamp; timeless French slow-jam warmth, dim-lit, unhurried, elegant.",
+          "storyFit": "Best for: seduction with class, the anniversary and the wedding slow, new love at first touch, reconquest by tenderness, a night built for two, the duet where both voices belong to the story. Poor fit: guarded fragments and night-drive pride — that is Moderne; public drama and confrontation — that is the 2000s room; casual flings played for laughs; anything explicit, which this room refuses by law.",
+          "parodyTraps": "The seduction-cliché checklist — wine, silk, candlelight — instead of the couple's real details; getting explicit where the room's whole law is suggestion; breathy overacting; words rushing ahead of the tempo; a duet where both voices sing the same person's lines instead of two real parts.",
+          "performance": {
+            "prose": "Density sparse; min adlibs 3; delivery tags [Soft] [Falsetto] [Harmonies] [Vocal Run]. This room performs by holding back — verses nearly bare, dynamics kept low, everything saved for the end. Signature: the final vamp — the simple refrain loops while the lead climbs into falsetto and spends the runs it saved all song, without ever raising the room's volume; in a duet the second voice answers low beneath the climb. Placement: the floor of 3 sits where a lover would sigh — one breathed hum under a verse line, one soft harmony entrance on the late chorus, one held last word trailing at the close; the pre-chorus stays bare so the lift is felt, not announced. Tag identity: near-silence as a choice — soft entrances, one climb, no crowd, no belt; every breathed word comes from the user's own sheet.",
+            "adlibDensity": "sparse",
+            "minAdlibs": 3,
+            "deliveryTags": [
+              "[Soft]",
+              "[Falsetto]",
+              "[Harmonies]",
+              "[Vocal Run]"
+            ]
+          },
+          "builder": {
+            "instruments": [
+              "Rhodes",
+              "claviers doux",
+              "cordes",
+              "basse live",
+              "guitare feutrée",
+              "nappes de synthé"
+            ],
+            "themes": [
+              "La sensualité",
+              "L'amour naissant",
+              "Le manque et la distance"
+            ],
+            "purposes": [
+              "Danser un slow",
+              "Séduire",
+              "Reconquérir quelqu un"
+            ]
+          }
+        }
+      ],
+      "cues": [
+        {
+          "cue": "r&b années 2000",
+          "strength": "strong",
+          "roomId": "rnb-2000s"
+        },
+        {
+          "cue": "matt houston",
+          "strength": "strong",
+          "roomId": "rnb-2000s"
+        },
+        {
+          "cue": "k-reen",
+          "strength": "strong",
+          "roomId": "rnb-2000s"
+        },
+        {
+          "cue": "wallen",
+          "strength": "strong",
+          "roomId": "rnb-2000s"
+        },
+        {
+          "cue": "sheryfa luna",
+          "strength": "strong",
+          "roomId": "rnb-2000s"
+        },
+        {
+          "cue": "tragédie",
+          "strength": "strong",
+          "roomId": "rnb-2000s"
+        },
+        {
+          "cue": "willy denzey",
+          "strength": "strong",
+          "roomId": "rnb-2000s"
+        },
+        {
+          "cue": "leslie",
+          "strength": "strong",
+          "roomId": "rnb-2000s"
+        },
+        {
+          "cue": "kayna samet",
+          "strength": "weak",
+          "roomId": "rnb-2000s"
+        },
+        {
+          "cue": "génération skyrock",
+          "strength": "strong",
+          "roomId": "rnb-2000s"
+        },
+        {
+          "cue": "amel bent",
+          "strength": "weak",
+          "roomId": "rnb-2000s"
+        },
+        {
+          "cue": "vitaa",
+          "strength": "weak",
+          "roomId": "rnb-2000s"
+        },
+        {
+          "cue": "m. pokora première époque",
+          "strength": "weak",
+          "roomId": "rnb-2000s"
+        },
+        {
+          "cue": "radio groove",
+          "strength": "weak",
+          "roomId": "rnb-2000s"
+        },
+        {
+          "cue": "chœurs derrière la voix",
+          "strength": "weak",
+          "roomId": "rnb-2000s"
+        },
+        {
+          "cue": "trahison confrontée",
+          "strength": "weak",
+          "roomId": "rnb-2000s"
+        },
+        {
+          "cue": "plaider à pleine voix",
+          "strength": "weak",
+          "roomId": "rnb-2000s"
+        },
+        {
+          "cue": "nostalgie 2000",
+          "strength": "weak",
+          "roomId": "rnb-2000s"
+        },
+        {
+          "cue": "trap-soul",
+          "strength": "strong",
+          "roomId": "rnb-moderne"
+        },
+        {
+          "cue": "r&b moderne",
+          "strength": "strong",
+          "roomId": "rnb-moderne"
+        },
+        {
+          "cue": "ronisia",
+          "strength": "strong",
+          "roomId": "rnb-moderne"
+        },
+        {
+          "cue": "autotune",
+          "strength": "strong",
+          "roomId": "rnb-moderne"
+        },
+        {
+          "cue": "808",
+          "strength": "strong",
+          "roomId": "rnb-moderne"
+        },
+        {
+          "cue": "imen es",
+          "strength": "weak",
+          "roomId": "rnb-moderne"
+        },
+        {
+          "cue": "nej'",
+          "strength": "weak",
+          "roomId": "rnb-moderne"
+        },
+        {
+          "cue": "lyna mahyem",
+          "strength": "weak",
+          "roomId": "rnb-moderne"
+        },
+        {
+          "cue": "la nuit",
+          "strength": "weak",
+          "roomId": "rnb-moderne"
+        },
+        {
+          "cue": "la route de nuit",
+          "strength": "weak",
+          "roomId": "rnb-moderne"
+        },
+        {
+          "cue": "le message jamais envoyé",
+          "strength": "weak",
+          "roomId": "rnb-moderne"
+        },
+        {
+          "cue": "fierté blessée",
+          "strength": "weak",
+          "roomId": "rnb-moderne"
+        },
+        {
+          "cue": "l'amour compliqué",
+          "strength": "weak",
+          "roomId": "rnb-moderne"
+        },
+        {
+          "cue": "le manque et la distance",
+          "strength": "weak",
+          "roomId": "rnb-moderne"
+        },
+        {
+          "cue": "confession à froid",
+          "strength": "weak",
+          "roomId": "rnb-moderne"
+        },
+        {
+          "cue": "slow — le slow dansé, a pocket under it; a rubato piano-voix slow routes to ballade française",
+          "strength": "strong",
+          "roomId": "rnb-slow"
+        },
+        {
+          "cue": "slow sensuel",
+          "strength": "strong",
+          "roomId": "rnb-slow"
+        },
+        {
+          "cue": "sensualité",
+          "strength": "strong",
+          "roomId": "rnb-slow"
+        },
+        {
+          "cue": "séduire",
+          "strength": "strong",
+          "roomId": "rnb-slow"
+        },
+        {
+          "cue": "slow de mariage",
+          "strength": "strong",
+          "roomId": "rnb-slow"
+        },
+        {
+          "cue": "duo d'amoureux",
+          "strength": "strong",
+          "roomId": "rnb-slow"
+        },
+        {
+          "cue": "joé dwèt filé — only his r&b-slow side; if the story or sound asks for the ti-bwa cell, route to zouk",
+          "strength": "weak",
+          "roomId": "rnb-slow"
+        },
+        {
+          "cue": "reconquérir quelqu'un",
+          "strength": "weak",
+          "roomId": "rnb-slow"
+        },
+        {
+          "cue": "anniversaire de couple",
+          "strength": "weak",
+          "roomId": "rnb-slow"
+        },
+        {
+          "cue": "nuit à deux",
+          "strength": "weak",
+          "roomId": "rnb-slow"
+        },
+        {
+          "cue": "l'amour naissant",
+          "strength": "weak",
+          "roomId": "rnb-slow"
+        },
+        {
+          "cue": "tendresse",
+          "strength": "weak",
+          "roomId": "rnb-slow"
+        },
+        {
+          "cue": "au creux de l'oreille",
+          "strength": "weak",
+          "roomId": "rnb-slow"
+        }
+      ]
+    },
+    "musette": {
+      "id": "musette",
+      "name": "Musette",
+      "aliases": [
+        "bal musette",
+        "valse musette",
+        "java",
+        "musette manouche",
+        "accordéon musette",
+        "accordeon musette",
+        "guinguette"
+      ],
+      "profileText": "A musette writer's first move is to read which evening the story asks for — the turn, the party, or the swing — before its topic, because every musette holds love, memory, and the bal, and only the dials keep three nights from becoming one postcard. The founding law is dance function: the song faces a floor of turning couples and serves the dancers' clock — constant tempo, even bar counts, phrases arcing with the dance — in the valse and java rooms a ternary bar felt in one, the stressed syllable riding the downbeat; in the swing lane's four-beat numbers the pompe's steady four, with phrases leaning off the beat. The accordion is the co-lead voice, not accompaniment: lines end early so its reply can speak, whole passes belong to the reeds, and the refrain is the bellows' as much as the singer's. Whatever the story, the bal must keep turning; a sheet that stops the dance has failed before a word is judged.\n\nThe lineage sets the warmth. Musette was born on the rue de Lappe where the Auvergnat cabrette met the Italian migrants' accordion; Émile Vacher fixed the style and the guinguettes by the Marne carried it out to Sunday crowds. In the thirties Gus Viseur and Tony Murena married it to swing under Django's shadow, manouche guitar chugging under virtuoso reeds; after the war Jo Privat held the Balajo, Yvette Horner and André Verchuren took the bal to every town square, and Richard Galliano's nouvelle musette renews it still. One register runs through it all: warm communal nostalgia — the ache smiles, an old love or a lost Sunday remembered over a glass among friends. The java tunes that warmth to tender-rude faubourg humor; the swing lane presses it cool; private mourning that stops the dance belongs to another genre.\n\nOne line per room. Valse Musette Traditionnelle turns in one: a single broad refrain, open vowels on the held downbeats, verses as short scene-setters, the melody re-sung in reeds between. Java / Guinguette Festive is patter and payoff: crisp syllables, punchlines cracking on the downbeat, a refrain short enough for the whole guinguette to seize. Musette Manouche / Swing sings least: one compact suave refrain leaning off the beat, then the band takes the theme away over the pompe. The language law rules them all: the lyrics will be French, written by a later layer — this writer works in plain-English craft and never fakes gouaille, argot, or an accent the user did not write; craft terms like pompe or valse swing stay out of lyrics and adlibs; Amélie-poster Paris is parody; and the user's real bal, real grandparents, real Sunday outrank everything.",
+      "defaultRoomId": "valse-musette-traditionnelle",
+      "rooms": [
+        {
+          "id": "valse-musette-traditionnelle",
+          "name": "Valse Musette Traditionnelle",
+          "oneLine": "The 3/4 heart of the bal — the Émile Vacher inheritance carried through Yvette Horner and André Verchuren: the turning waltz of the guinguette by the Marne, accordion co-lead, nostalgia warm enough to dance to.",
+          "tempoGroove": "A fast turning waltz felt in one — roughly 170-210 BPM on the quarter but lived as one pulse per bar under the dancers' three quick steps, 55-70 turns a minute, the bass landing the downbeat and chords brushing the second and third beats while the couples rotate; tender valses ease back toward 140-160 without ever losing the turn. Low word density: one stressed syllable per bar carried on the downbeat, the light syllables tucked inside the turn, short lines with real air at phrase-ends for the accordion's reply.",
+          "writingDials": [
+            "Write in one, not in three: the bar is a single footfall of the turn — the stressed syllable of the key word rides the downbeat and the rest of the bar carries it; a line that fights the downbeat gets recut, never forced.",
+            "Phrases arc over the turn: think in eight- and sixteen-bar spans matching the couples' rotation, the landing word arriving where the turn completes — never end a thought mid-turn, and keep bar counts even so the floor never stumbles.",
+            "The accordion is the co-lead voice: end lines early and leave phrase-ends open for its ornamented reply, and plan whole passes where the refrain is played, not sung — the melody belongs to the reeds as much as to the singer.",
+            "Refrain first: one broad singable refrain is the song's whole reason — simple, symmetric, open vowels on the held downbeats — with verses as short scene-setters between its returns, never the main event.",
+            "Nostalgia is worn warm and together: the ache smiles — an old love, a lost Sunday, the ones who danced here before, remembered over a glass among friends; private mourning that stops the dance belongs to another genre.",
+            "Front-of-mouth singability: plain words, clean rhymes, no consonant pileups — the test is a floor of amateur voices humming the refrain by its second return.",
+            "The user's real Sunday outranks every postcard: their riverbank, their village hall, their grandmother's kitchen radio — one true detail per verse; paper-lantern Paris only if the user actually lived it.",
+            "The bal must keep turning: constant tempo, no rubato collapse, no stop-time drama — the intro sets the dancers' feet in a few bars and the song ends with the turn, not against it.",
+            "Cross-genre firewall: The clock is the tell against Chanson Française: in chanson réaliste the band follows the singer's speech and the text may even halt the music for the story's sake; here the singer serves the dancers' clock, and a valse whose tempo bends to the voice has left the bal. Against Folk: an acoustic waltz with a storytelling verse engine and a guitar-led strum is the English-catalog folk room — musette leads with the accordion and writes for the turning couple, not the listening circle."
+          ],
+          "rendering": "Vintage bal-musette waltz — musette-tuned accordion lead with its reedy tremolo carrying and ornamenting the melody, manouche guitar brushing the second and third beats, warm contrebasse on the downbeat, a violin or piano countermelody behind the refrain. One clear warm lead voice, light harmonies on the final refrain only, full instrumental passes of the refrain between sung sections; 1930s-to-50s Paris dancehall warmth, acoustic, no modern drum kit — at most period brushes — no gloss.",
+          "storyFit": "Best for: an old love remembered warmly, the grandparents' first dance, a Sunday guinguette by the river, honoring the ones who danced before, a wedding waltz gathering three generations, love that lasted a lifetime. Poor fit: punchline party energy and crowd comedy — that is the java's floor; suave late-night swing elegance — that is the manouche lane; raw private grief or protest, which no musette room carries.",
+          "parodyTraps": "Amélie-poster Paris — the accordion as baguette-and-beret postcard, Eiffel-Tower scenery standing in for a lived bal; syrupy fake-vintage crooning; a waltz that keeps stopping for feelings; craft terms sung in the lyric; any French slang pasted in that the user never wrote.",
+          "performance": {
+            "prose": "Density sparse; min adlibs 2; delivery tags [Accordion Solo] [Instrumental Break] [Harmonies] [Soft]. This room performs like a bal orchestra level with its dancers — one clear lead voice, the accordion answering as a second singer, and the floor humming along by the last refrain. Signature: the refrain re-sung in reeds — the voice states the refrain, then an [Accordion Solo] or [Instrumental Break] plays the same melody back ornamented while the couples keep turning, the feeling said once in words and once in reeds. Placement: the accordion's short replies sit at the open phrase-ends; the full instrumental pass takes the middle of the song; light [Harmonies] warm only the final refrain, and a [Soft] last pass can land the tendresse as the turn eases. Tag identity: one warm voice and an answering accordion over a turning floor — no belting, no crowd stack, no drama stops; every sung word plain language from the user's own sheet.",
+            "adlibDensity": "sparse",
+            "minAdlibs": 2,
+            "deliveryTags": [
+              "[Accordion Solo]",
+              "[Instrumental Break]",
+              "[Harmonies]",
+              "[Soft]"
+            ]
+          },
+          "builder": {
+            "instruments": [
+              "accordéon",
+              "guitare manouche",
+              "contrebasse",
+              "violon",
+              "piano"
+            ],
+            "themes": [
+              "Le bal et la valse",
+              "L'amour d'autrefois",
+              "La nostalgie",
+              "Le souvenir des anciens",
+              "Paris et ses guinguettes"
+            ],
+            "purposes": [
+              "Danser la valse",
+              "Émouvoir avec nostalgie",
+              "Faire tourner le bal",
+              "Rassembler les générations"
+            ]
+          }
+        },
+        {
+          "id": "java",
+          "name": "Java / Guinguette Festive",
+          "oneLine": "The cheeky quick-three of the faubourg — rue de Lappe and Jo Privat's Balajo: tiny shuffling steps, gouaille and punchlines, the bal populaire at full joy with a refrain the whole guinguette shouts back.",
+          "tempoGroove": "A quick light 3/8 — the waltz's cheeky little sister — felt as a brisk shuffling one around 60-80 bars a minute, quicker-feeling than the valse because the steps shrink: tiny shuffling steps, partners close, banjo and guitar cracking the offbeats staccato while the bass bounces the downbeat. Moderate word density, the genre's highest: patter verses in short crisp phrases, syllables front-of-mouth and rhythmic, but the refrain stays short and shoutable — a crowd cannot patter.",
+          "writingDials": [
+            "Small steps, quick tongue: the java's tiny steps invite patter — more syllables per bar than the valse, kept crisp and percussive, every word sayable at speed by an amateur mouth.",
+            "Build to the downbeat: verses are chains of small set-ups whose payoff word cracks on the one — a java verse is comic timing written in bars, the wink landing exactly where the step does.",
+            "The wink is the register: faubourg humor — tender-rude, flirtatious, gently mocking, laughing with the room and never at its expense; cruelty, smut, or a sneer breaks the party's warmth and gets cut.",
+            "The refrain is collective property: short, symmetric, open-vowel, built to be seized by the whole guinguette on its second return — if a tipsy wedding table cannot shout it, it is not a java refrain.",
+            "Verses are scenes at the party: the aunt who out-dances everyone, the shy one pushed onto the floor, the spilled carafe — one small scene per verse in character-sketch economy, each advancing the night.",
+            "Call the room in: direct address to the dancers and planned gaps for their answer — the crowd is an instrument, and the sheet writes its entries like any other part.",
+            "Keep the party's clock: tempo fixed, sections even, the accordion's riff between verses left its full bars — the riff is the party breathing, never dead space to fill with words.",
+            "Joy is lived, not listed: the user's actual fête — their wedding, their 14 juillet, their café counter — carries the song; a stock inventory of wine, accordions, and Paris props is the parody, not the party.",
+            "Cross-genre firewall: Against Variété Française: no synth floor, no radio build, no modern backbeat — the java runs on an acoustic bal band (its vintage \"jazz\" drummer at most woodblock and brushes) and a crowd, and a produced pop chorus kills the guinguette instantly. Against Chanson Française: chanson réaliste tells the faubourg story to a listening table and serves the text — Piaf sang javas, but a musette java serves the floor: if the words demand the dance stop to be heard, the song has changed genre."
+          ],
+          "rendering": "Bright up-tempo bal-musette java — musette accordion riffing fast and playful, banjo cracking staccato offbeats, contrebasse bouncing the downbeat, manouche guitar chops, a piano may double the riff. One lively lead voice with a wink in it, the band and room shouting the refrain back rough and joyful, glasses-and-wood-floor guinguette ambience; vintage rue de Lappe party sound, acoustic and alive — light period woodblock-and-brush percussion optional, no modern kit, no polish.",
+          "storyFit": "Best for: a wedding or village fête, a 14 juillet street bal, bistrot flirtations and comic sketches, teasing a beloved regular, pulling three generations onto one floor, the joy of the party itself. Poor fit: tender turning nostalgia — that is the valse's floor; suave instrumental elegance — that is the swing lane; any story whose humor turns cruel, or grief of any kind.",
+          "parodyTraps": "Cartoon Frenchness — baguette props, a faked gouaille accent or argot the user never wrote; humor that punches down; a refrain too wordy for a tipsy room to seize; comedy with no real people in it — the stock drunk, the stock flirt; the party listed as scenery instead of lived.",
+          "performance": {
+            "prose": "Density moderate; min adlibs 4; delivery tags [Call and Response] [Accordion Solo] [Shout] [Harmonies]. This room performs like a party leader working a packed guinguette — one lively lead, an accordion cracking jokes back, and the whole room as the chorus. Signature: the seized refrain — the lead throws the refrain once and the room takes it on every return after, rough unison [Harmonies] growing louder and happier each pass while the lead lifts over the top. Placement: verses stay lead-forward so the punchlines land clean; a [Shout] lift marks the turn into each refrain; [Call and Response] hands the refrain's last words to the crowd; an [Accordion Solo] takes the dance break where the words stop and the floor spins. Tag identity: a winking lead and an answering room — crowd unison on the refrain, shouted lifts at the turns, the accordion's break as the party's peak. Every shout is plain-language energy from the user's own sheet — a lift, an answer, a cheer — never slang or an accent the user did not write.",
+            "adlibDensity": "moderate",
+            "minAdlibs": 4,
+            "deliveryTags": [
+              "[Call and Response]",
+              "[Accordion Solo]",
+              "[Shout]",
+              "[Harmonies]"
+            ]
+          },
+          "builder": {
+            "instruments": [
+              "accordéon",
+              "banjo",
+              "contrebasse",
+              "guitare manouche",
+              "piano"
+            ],
+            "themes": [
+              "La joie populaire",
+              "Les amours de bistrot",
+              "Paris et ses guinguettes",
+              "Le bal et la valse"
+            ],
+            "purposes": [
+              "Célébrer une fête",
+              "Faire tourner le bal",
+              "Rassembler les générations"
+            ]
+          }
+        },
+        {
+          "id": "musette-manouche",
+          "name": "Musette Manouche / Swing",
+          "oneLine": "The Viseur-Murena lane under Django's shadow — swing musette: la pompe chugging beneath a virtuoso accordion, valse swing and four-beat elegance, one compact suave refrain the band keeps taking away.",
+          "tempoGroove": "Two feels, one nonchalance: the valse swing keeps the trad room's turning one at full speed but swings its ornaments, and the four-beat lane sits at 110-170 BPM over the manouche guitar's pompe — that dry percussive chunk on every beat — with a two-feel contrebasse underneath. The genre's lowest word density: one compact refrain and a short verse or two, phrases leaning off the beat with lazy pickups, most of the side belonging to the instruments.",
+          "writingDials": [
+            "Write a theme, not a narrative: the sung material is one compact melodic refrain strong enough to be varied all night — if the accordion cannot take the line and fly with it, the line is not finished.",
+            "The voice is one soloist among several: plan the sung sections small and hand the floor away — the sheet marks more instrumental bars than sung ones, and that ratio is the room's identity.",
+            "Swing the syllables: pickup notes ahead of the bar, line-ends that fall lazily behind the beat, phrases that lean rather than land — a lyric squared to the grid has traded the swing away.",
+            "Nonchalance is the register: tendresse worn with a raised eyebrow, nostalgia pressed flat and cool — the feeling is real but never begs, and a weepy line breaks the suit.",
+            "Write the trades like a plot: the voice states the refrain, the accordion answers with a variation, the guitar takes a chorus, the voice returns changed — the handoffs are the song's events and the sheet plans them.",
+            "Keep it danceable: even bar counts and a steady pompe — swing musette still faces a floor; a free-time intro or a rubato ballad has left the bal for the concert hall.",
+            "Open vowels at the phrase peaks: the held swing note is the voice's one luxury — give it a vowel that can sit, bend, and let go; consonant clusters die at tempo.",
+            "One real night anchors the cool: the user's actual club, actual late hour, actual one-who-stayed — elegance is the easiest costume in the genre to fake, and only their specifics keep it true.",
+            "Cross-genre firewall: Against Jazz: an all-instrumental manouche set of swing standards for a seated listening room is the Jazz pack's gypsy-jazz lane — this room keeps the bal's dance function and the musette repertoire's sung refrain, the accordion co-lead with the guitar. Against Folk: two acoustic guitars do not make it folk — the pompe is dance machinery and the accordion answers as a co-lead; folk strums under a storyteller, and nobody turns."
+          ],
+          "rendering": "Swing musette — manouche rhythm guitar playing the dry percussive pompe, two-feel contrebasse, virtuoso musette accordion lead trading runs with a lead guitar, optional violin or clarinet lines. One suave close-mic voice on the compact refrain only, long instrumental stretches between; 1930s-40s Paris hot-club-meets-bal sound, brilliant and unhurried, acoustic swing, no drum kit.",
+          "storyFit": "Best for: a suave Paris night, elegance with an ache under it, a bistrot love worn lightly, the dance floor at midnight, nostalgia kept cool and pressed, a band's virtuosity celebrated inside the song itself. Poor fit: warm open-hearted nostalgia at family scale — that is the valse; crowd comedy and singalong — that is the java; any story needing many verses of plot, which this instrumental-first room cannot hold.",
+          "parodyTraps": "Manouche costume — borrowed mystique or slang the user never wrote; cool with nothing under it; a refrain too weak to survive its own variations; wall-to-wall verses that starve the soloists; a drum kit and big-band gloss pasted over the small string band; craft terms sung in the lyric.",
+          "performance": {
+            "prose": "Density sparse; min adlibs 2; delivery tags [Guitar Solo] [Accordion Solo] [Instrumental Break] [Scat]. This room performs like a small swing band passing one melody around — a suave lead voice states the refrain, and the accordion and guitar spend the rest of the side answering it. Signature: the theme taken away — the sung refrain returns as an [Accordion Solo] variation, then a [Guitar Solo] chorus over the pompe, each pass flying further from the words while the floor keeps dancing. Placement: the voice opens and closes the song; the solos own the middle in full choruses; a light [Scat] pass may trade two bars with the reeds where the story earns playfulness; an [Instrumental Break] header marks any stretch the band takes whole. Tag identity: one nonchalant voice and two virtuoso answerers — the refrain restated in reeds and strings, the scat used only as sound, never words; everything sung stays plain language from the user's own sheet.",
+            "adlibDensity": "sparse",
+            "minAdlibs": 2,
+            "deliveryTags": [
+              "[Guitar Solo]",
+              "[Accordion Solo]",
+              "[Instrumental Break]",
+              "[Scat]"
+            ]
+          },
+          "builder": {
+            "instruments": [
+              "accordéon",
+              "guitare manouche",
+              "contrebasse",
+              "violon",
+              "clarinette"
+            ],
+            "themes": [
+              "Le bal et la valse",
+              "La nostalgie",
+              "Les amours de bistrot",
+              "Paris et ses guinguettes"
+            ],
+            "purposes": [
+              "Faire tourner le bal",
+              "Danser la valse",
+              "Célébrer une fête"
+            ]
+          }
+        }
+      ],
+      "cues": [
+        {
+          "cue": "valse musette",
+          "strength": "strong",
+          "roomId": "valse-musette-traditionnelle"
+        },
+        {
+          "cue": "bal musette",
+          "strength": "strong",
+          "roomId": "valse-musette-traditionnelle"
+        },
+        {
+          "cue": "yvette horner",
+          "strength": "strong",
+          "roomId": "valse-musette-traditionnelle"
+        },
+        {
+          "cue": "andré verchuren",
+          "strength": "strong",
+          "roomId": "valse-musette-traditionnelle"
+        },
+        {
+          "cue": "émile vacher",
+          "strength": "strong",
+          "roomId": "valse-musette-traditionnelle"
+        },
+        {
+          "cue": "guinguette",
+          "strength": "weak",
+          "roomId": "valse-musette-traditionnelle"
+        },
+        {
+          "cue": "aimable",
+          "strength": "weak",
+          "roomId": "valse-musette-traditionnelle"
+        },
+        {
+          "cue": "accordéon",
+          "strength": "weak",
+          "roomId": "valse-musette-traditionnelle"
+        },
+        {
+          "cue": "valse",
+          "strength": "weak",
+          "roomId": "valse-musette-traditionnelle"
+        },
+        {
+          "cue": "nostalgie",
+          "strength": "weak",
+          "roomId": "valse-musette-traditionnelle"
+        },
+        {
+          "cue": "tendresse",
+          "strength": "weak",
+          "roomId": "valse-musette-traditionnelle"
+        },
+        {
+          "cue": "dimanche au bord de la marne",
+          "strength": "weak",
+          "roomId": "valse-musette-traditionnelle"
+        },
+        {
+          "cue": "les anciens",
+          "strength": "weak",
+          "roomId": "valse-musette-traditionnelle"
+        },
+        {
+          "cue": "premier bal",
+          "strength": "weak",
+          "roomId": "valse-musette-traditionnelle"
+        },
+        {
+          "cue": "souvenir",
+          "strength": "weak",
+          "roomId": "valse-musette-traditionnelle"
+        },
+        {
+          "cue": "valse de mariage",
+          "strength": "weak",
+          "roomId": "valse-musette-traditionnelle"
+        },
+        {
+          "cue": "java",
+          "strength": "strong",
+          "roomId": "java"
+        },
+        {
+          "cue": "jo privat",
+          "strength": "strong",
+          "roomId": "java"
+        },
+        {
+          "cue": "balajo",
+          "strength": "strong",
+          "roomId": "java"
+        },
+        {
+          "cue": "rue de lappe",
+          "strength": "weak",
+          "roomId": "java"
+        },
+        {
+          "cue": "guinguette festive",
+          "strength": "strong",
+          "roomId": "java"
+        },
+        {
+          "cue": "14 juillet",
+          "strength": "strong",
+          "roomId": "java"
+        },
+        {
+          "cue": "bal populaire",
+          "strength": "weak",
+          "roomId": "java"
+        },
+        {
+          "cue": "bal des pompiers",
+          "strength": "weak",
+          "roomId": "java"
+        },
+        {
+          "cue": "fête de village",
+          "strength": "weak",
+          "roomId": "java"
+        },
+        {
+          "cue": "banjo",
+          "strength": "weak",
+          "roomId": "java"
+        },
+        {
+          "cue": "gouaille",
+          "strength": "weak",
+          "roomId": "java"
+        },
+        {
+          "cue": "faubourg",
+          "strength": "weak",
+          "roomId": "java"
+        },
+        {
+          "cue": "bistrot",
+          "strength": "weak",
+          "roomId": "java"
+        },
+        {
+          "cue": "petits pas",
+          "strength": "weak",
+          "roomId": "java"
+        },
+        {
+          "cue": "rires",
+          "strength": "weak",
+          "roomId": "java"
+        },
+        {
+          "cue": "swing musette",
+          "strength": "strong",
+          "roomId": "musette-manouche"
+        },
+        {
+          "cue": "musette manouche",
+          "strength": "strong",
+          "roomId": "musette-manouche"
+        },
+        {
+          "cue": "valse swing",
+          "strength": "strong",
+          "roomId": "musette-manouche"
+        },
+        {
+          "cue": "gus viseur",
+          "strength": "strong",
+          "roomId": "musette-manouche"
+        },
+        {
+          "cue": "tony murena",
+          "strength": "strong",
+          "roomId": "musette-manouche"
+        },
+        {
+          "cue": "richard galliano",
+          "strength": "strong",
+          "roomId": "musette-manouche"
+        },
+        {
+          "cue": "baro ferret",
+          "strength": "strong",
+          "roomId": "musette-manouche"
+        },
+        {
+          "cue": "matelo ferret",
+          "strength": "weak",
+          "roomId": "musette-manouche"
+        },
+        {
+          "cue": "manouche partie",
+          "strength": "weak",
+          "roomId": "musette-manouche"
+        },
+        {
+          "cue": "guitare manouche",
+          "strength": "weak",
+          "roomId": "musette-manouche"
+        },
+        {
+          "cue": "la pompe",
+          "strength": "weak",
+          "roomId": "musette-manouche"
+        },
+        {
+          "cue": "django",
+          "strength": "weak",
+          "roomId": "musette-manouche"
+        },
+        {
+          "cue": "swing",
+          "strength": "weak",
+          "roomId": "musette-manouche"
+        },
+        {
+          "cue": "élégance",
+          "strength": "weak",
+          "roomId": "musette-manouche"
+        },
+        {
+          "cue": "nonchalance",
+          "strength": "weak",
+          "roomId": "musette-manouche"
+        },
+        {
+          "cue": "nuit parisienne",
+          "strength": "weak",
+          "roomId": "musette-manouche"
+        },
+        {
+          "cue": "virtuose",
+          "strength": "weak",
+          "roomId": "musette-manouche"
+        },
+        {
+          "cue": "clarinette",
+          "strength": "weak",
+          "roomId": "musette-manouche"
+        }
+      ]
     }
   },
-  "hash": "368c96cec321",
+  "hash": "a048d74b77d6",
   "approxTokens": {
     "core": 1794,
-    "largestSlice": 3774
+    "largestSlice": 3808
   }
 };
