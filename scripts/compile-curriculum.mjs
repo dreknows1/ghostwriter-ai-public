@@ -205,6 +205,36 @@ const GENRE_PACKS = [
     aliases: ["funk brasileiro", "baile funk", "funk ostentacao", "funk ostentação", "funk melody", "mandelao", "mandelão", "brazilian funk"],
     profileFile: "SONGWRITING_PROFILE_FUNKCARIOCA.md",
   },
+  {
+    section: "Forró", id: "forro", name: "Forró",
+    aliases: ["forro", "pe de serra", "pé de serra", "pé-de-serra", "forro universitario", "forró universitário", "forro eletronico", "forró eletrônico", "xote", "baiao", "baião", "arrasta-pé", "arrasta-pe"],
+    profileFile: "SONGWRITING_PROFILE_FORRO.md",
+  },
+  {
+    section: "Pop Brasileiro", id: "popbrasileiro", name: "Pop Brasileiro",
+    aliases: ["pop nacional", "pop brasil", "brazilian pop", "pop rock nacional"],
+    profileFile: "SONGWRITING_PROFILE_POPBRASILEIRO.md",
+  },
+  {
+    section: "Axé", id: "axe", name: "Axé",
+    aliases: ["axe", "axe music", "axé music", "samba-reggae", "samba reggae", "trio eletrico", "trio elétrico"],
+    profileFile: "SONGWRITING_PROFILE_AXE.md",
+  },
+  {
+    section: "Piseiro / Arrocha", id: "piseiroarrocha", name: "Piseiro / Arrocha",
+    aliases: ["piseiro", "pisadinha", "arrocha", "sofrencia", "sofrência", "paredao", "paredão", "seresta"],
+    profileFile: "SONGWRITING_PROFILE_PISEIROARROCHA.md",
+  },
+  {
+    section: "Fado", id: "fado", name: "Fado",
+    aliases: ["fado castico", "fado castiço", "fado cancao", "fado canção", "novo fado", "fado tradicional", "fado portugues", "fado português"],
+    profileFile: "SONGWRITING_PROFILE_FADO.md",
+  },
+  {
+    section: "Kizomba", id: "kizomba", name: "Kizomba",
+    aliases: ["tarraxinha", "tarraxa", "kizomba romantica", "kizomba romântica", "semba", "kizomba angolana"],
+    profileFile: "SONGWRITING_PROFILE_KIZOMBA.md",
+  },
 ];
 
 // The plan's build check: no quoted lyric lines anywhere in compiled writer text.
