@@ -1125,9 +1125,9 @@ var CURRICULUM = {
         ],
         "purposes": [
           "Raconter une histoire",
-          "\xC9mouvoir jusqu aux larmes",
+          "\xC9mouvoir jusqu'aux larmes",
           "D\xE9noncer une injustice",
-          "Rendre hommage \xE0 quelqu un",
+          "Rendre hommage \xE0 quelqu'un",
           "Faire r\xE9fl\xE9chir",
           "Chanter la vie"
         ],
@@ -1242,7 +1242,7 @@ var CURRICULUM = {
           "La fiert\xE9 du continent",
           "La femme",
           "La r\xE9ussite",
-          "Danser jusqu au bout de la nuit",
+          "Danser jusqu'au bout de la nuit",
           "La joie communicative"
         ],
         "purposes": [
@@ -1306,7 +1306,7 @@ var CURRICULUM = {
           "L'espoir d'un retour"
         ],
         "purposes": [
-          "\xC9mouvoir jusqu aux larmes",
+          "\xC9mouvoir jusqu'aux larmes",
           "D\xE9clarer sa flamme",
           "Danser un slow",
           "Consoler",
@@ -1342,6 +1342,7 @@ var CURRICULUM = {
         "instruments": [
           "synth\xE9s filtr\xE9s",
           "basse funky",
+          "basse distordue",
           "bo\xEEte \xE0 rythmes house",
           "nappes analogiques",
           "samples disco",
@@ -1396,7 +1397,7 @@ var CURRICULUM = {
           "Vider son c\u0153ur",
           "Se sentir compris",
           "Ambiancer la nuit",
-          "Reconqu\xE9rir quelqu un"
+          "Reconqu\xE9rir quelqu'un"
         ],
         "instruments": [
           "claviers doux",
@@ -1597,6 +1598,7 @@ var CURRICULUM = {
           "A quebrada e a favela",
           "Ostenta\xE7\xE3o e conquista",
           "Desejo e sensualidade",
+          "Amor e cora\xE7\xE3o partido",
           "F\xE9 e agradecimento a Deus",
           "Supera\xE7\xE3o da comunidade",
           "Poder feminino e atitude",
@@ -13419,6 +13421,7 @@ Musical craft (the founder's list; each becomes concrete rules)
               "batida de funk"
             ],
             "themes": [
+              "Amor e cora\xE7\xE3o partido",
               "Desejo e sensualidade",
               "Poder feminino e atitude",
               "O baile e a pista",
@@ -15755,7 +15758,7 @@ Musical craft (the founder's list; each becomes concrete rules)
               "Raconter une histoire",
               "Faire r\xE9fl\xE9chir",
               "D\xE9noncer une injustice",
-              "Rendre hommage \xE0 quelqu un"
+              "Rendre hommage \xE0 quelqu'un"
             ]
           }
         },
@@ -15806,7 +15809,7 @@ Musical craft (the founder's list; each becomes concrete rules)
               "La mort et l'absence"
             ],
             "purposes": [
-              "\xC9mouvoir jusqu aux larmes",
+              "\xC9mouvoir jusqu'aux larmes",
               "Raconter une histoire",
               "Chanter la vie"
             ]
@@ -15861,7 +15864,7 @@ Musical craft (the founder's list; each becomes concrete rules)
             "purposes": [
               "Chanter la vie",
               "Faire r\xE9fl\xE9chir",
-              "\xC9mouvoir jusqu aux larmes"
+              "\xC9mouvoir jusqu'aux larmes"
             ]
           }
         }
@@ -17495,7 +17498,7 @@ Musical craft (the founder's list; each becomes concrete rules)
             "themes": [
               "La f\xEAte et l'ambiance",
               "La joie communicative",
-              "Danser jusqu au bout de la nuit",
+              "Danser jusqu'au bout de la nuit",
               "La d\xE9brouille et les b\xE9n\xE9dictions"
             ],
             "purposes": [
@@ -18245,7 +18248,7 @@ Musical craft (the founder's list; each becomes concrete rules)
             ],
             "purposes": [
               "Consoler",
-              "\xC9mouvoir jusqu aux larmes",
+              "\xC9mouvoir jusqu'aux larmes",
               "Rendre hommage"
             ]
           }
@@ -18297,7 +18300,7 @@ Musical craft (the founder's list; each becomes concrete rules)
             ],
             "purposes": [
               "D\xE9clarer sa flamme",
-              "\xC9mouvoir jusqu aux larmes",
+              "\xC9mouvoir jusqu'aux larmes",
               "Rendre hommage"
             ]
           }
@@ -19404,7 +19407,7 @@ Musical craft (the founder's list; each becomes concrete rules)
             "purposes": [
               "Vider son c\u0153ur",
               "Se sentir compris",
-              "Reconqu\xE9rir quelqu un"
+              "Reconqu\xE9rir quelqu'un"
             ]
           }
         },
@@ -19507,7 +19510,7 @@ Musical craft (the founder's list; each becomes concrete rules)
             "purposes": [
               "Danser un slow",
               "S\xE9duire",
-              "Reconqu\xE9rir quelqu un"
+              "Reconqu\xE9rir quelqu'un"
             ]
           }
         }
@@ -20165,7 +20168,7 @@ Musical craft (the founder's list; each becomes concrete rules)
       ]
     }
   },
-  "hash": "a048d74b77d6",
+  "hash": "c291a3cebc73",
   "approxTokens": {
     "core": 1794,
     "largestSlice": 3808

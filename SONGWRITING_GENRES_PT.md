@@ -27,7 +27,7 @@
 - **Purposes:** Animar o churrasco; Dançar coladinho; Cantar com a galera; Chorar um término; Paquerar na festa; Celebrar a amizade
 - **Instrumentation options:** cavaquinho; banjo; pandeiro; tantã; repique de mão; violão; surdo; teclado
 ## Funk Carioca
-- **Themes:** O baile e a pista; A quebrada e a favela; Ostentação e conquista; Desejo e sensualidade; Fé e agradecimento a Deus; Superação da comunidade; Poder feminino e atitude; A vida na correria; Orgulho de onde vim
+- **Themes:** O baile e a pista; A quebrada e a favela; Ostentação e conquista; Desejo e sensualidade; Amor e coração partido; Fé e agradecimento a Deus; Superação da comunidade; Poder feminino e atitude; A vida na correria; Orgulho de onde vim
 - **Purposes:** Botar pra quebrar no baile; Rebolar e dançar; Ostentar e celebrar; Provocar e seduzir; Contar a realidade da rua; Dar volta por cima
 - **Instrumentation options:** batida de funk; tamborzão; 808 grave; beat eletrônico; sintetizador; sample vocal; percussão eletrônica
 ## Forró
