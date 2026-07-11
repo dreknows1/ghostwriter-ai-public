@@ -4,8 +4,9 @@ import { AppStep, AppView, SongInputs, UserProfile } from './types';
 import { generateSong, generateAlbumArt, generateSocialPack, translateLyrics, structureImportedSong, suggestTitles } from './services/geminiService';
 import { saveSong } from './services/songService';
 import { getUserProfile } from './services/userService';
-import { getSession, signOut, signIn, signUp, signInWithOAuthEmail, startProviderSignIn } from './services/authService';
+import { getSession, signOut, signIn, signUp, signInWithOAuthToken, startProviderSignIn } from './services/authService';
 import { getUserCredits, hasEnoughCredits, deductCredits, COSTS, formatCredits } from './services/creditService';
+import { apiFetch, SESSION_EXPIRED_EVENT } from './lib/api';
 import LyricsDisplay from './components/LyricsDisplay';
 import ProfileView from './components/ProfileView';
 import PricingView from './components/PricingView';
@@ -17,7 +18,10 @@ import { toast } from './components/Feedback';
 import AskAndreWidget from './components/AskAndreWidget';
 import { Logo } from './components/Logo';
 import IntroAnimation from './components/IntroAnimation';
-import { LoadingSpinner, ProfileIcon, WalletIcon, EditIcon, ClockIcon } from './components/icons';
+import { LoadingSpinner, ProfileIcon, WalletIcon, EditIcon, ClockIcon, GhostIcon, BoltIcon } from './components/icons';
+import { isNative } from './lib/platform';
+import { hapticLight, hapticSuccess } from './lib/haptics';
+import { openExternal } from './lib/nativeBridge';
 
 const AuthAppleIcon = () => (
   <svg viewBox="0 0 24 24" className="w-5 h-5" fill="currentColor" aria-hidden="true">
@@ -60,13 +64,16 @@ const ENGLISH_GENRES = [
 import { sanitizeEmail, sanitizeText, sanitizeUnknown } from './lib/sanitizeInput';
 
 
+// Ghost-voiced generation stages (docs/DESIGN.md Part 2) — ids/keywords drive the
+// real telemetry match against server __STATUS__ chunks; labels are the séance copy
+// shown on screen, replacing the old "Process Stages" system-log presentation.
 const GENERATION_STAGES = [
-  { label: 'Initialize Session', keywords: ['listening', 'analyzing'] },
-  { label: 'Draft Song Core', keywords: ['drafting', 'structure'] },
-  { label: 'Apply Genre Agent', keywords: ['agent', 'genre', 'subgenre'] },
-  { label: 'Apply Guide Compliance', keywords: ['guide', 'compliance', 'check'] },
-  { label: 'Refine Output', keywords: ['refine', 'polish'] },
-  { label: 'Finalize Output', keywords: ['finalizing', 'suno prompt'] },
+  { label: 'Channeling your story', keywords: ['listening', 'analyzing'] },
+  { label: 'Casting the first verse', keywords: ['drafting', 'structure'] },
+  { label: 'Possessing the bridge', keywords: ['agent', 'genre', 'subgenre'] },
+  { label: 'Haunting the hook', keywords: ['guide', 'compliance', 'check'] },
+  { label: 'Mixing the séance', keywords: ['refine', 'polish'] },
+  { label: 'Sealing the record', keywords: ['finalizing', 'suno prompt'] },
 ] as const;
 
 
@@ -143,6 +150,122 @@ const roomsForGenre = (packs: RoomPacks | null, genre: string): RoomCard[] => {
   return [];
 };
 
+const FAST_TRACK_GENRES = ENGLISH_GENRES;
+const STORY_MAX = 600;
+
+/**
+ * FAST_TRACK — the default Studio entry (docs/PLAN.md "Create experience").
+ * One screen: story + genre chips + Create. Every unset field stays '' so
+ * buildInputs() below reads as "Ghost decides" exactly like the full wizard's
+ * own default. "Customize every detail" drops into the unchanged 9-step
+ * SongBuilder for anyone who wants full control.
+ */
+const FastTrackCreate: React.FC<{
+  isGenerating: boolean;
+  credits: number;
+  onGenerate: (builtInputs: SongInputs) => void;
+  onCustomize: () => void;
+}> = ({ isGenerating, credits, onGenerate, onCustomize }) => {
+  const [story, setStory] = useState('');
+  const [genre, setGenre] = useState('');
+
+  const buildInputs = (): SongInputs => ({
+    ...DEFAULT_INPUTS,
+    genre,
+    emotion: 'Match the creative direction',
+    creativeDirection: story.trim(),
+  });
+
+  const pickGenre = (g: string) => {
+    hapticLight();
+    setGenre((prev) => (prev === g ? '' : g));
+  };
+
+  return (
+    <div className="w-full max-w-xl mx-auto px-5 pt-6 pb-10 animate-fade-in flex flex-col min-h-[75vh]">
+      <h1 className="heading-display text-3xl md:text-5xl font-bold text-slate-100 leading-[1.1] tracking-tight">
+        What's your <span style={{ color: 'var(--amber-bright)' }}>song</span> about?
+      </h1>
+      <p className="mt-3 text-sm text-slate-400 leading-relaxed max-w-sm">
+        Give Ghost the story — a memory, a text you never sent, a feeling you can't quite name.
+      </p>
+
+      <div className="mt-6">
+        <textarea
+          autoFocus
+          value={story}
+          maxLength={STORY_MAX}
+          onChange={(e) => setStory(e.target.value)}
+          onFocus={(e) => {
+            // Keep the textarea clear of the keyboard on native — WKWebView doesn't
+            // always scroll focused inputs into view on its own.
+            requestAnimationFrame(() => e.currentTarget.scrollIntoView({ block: 'center', behavior: 'smooth' }));
+          }}
+          placeholder="A breakup text I never sent, but wish I had…"
+          rows={5}
+          className="w-full rounded-[1.4rem] p-5 text-[15px] leading-relaxed resize-none outline-none transition-all font-serif italic placeholder:font-serif placeholder:italic bg-slate-800 border border-slate-700 text-slate-100 placeholder:text-slate-500 focus:border-amber-400"
+        />
+        <div className="mt-2 text-right text-[11px] font-bold uppercase tracking-widest text-slate-600">
+          {story.length}/{STORY_MAX}
+        </div>
+      </div>
+
+      <div className="mt-2">
+        <div className="flex gap-2 overflow-x-auto pb-1 -mx-5 px-5" style={{ scrollbarWidth: 'none' }}>
+          <button
+            type="button"
+            onClick={() => { hapticLight(); setGenre(''); }}
+            className={`shrink-0 inline-flex items-center gap-1.5 whitespace-nowrap px-4 py-2.5 rounded-full border text-[12.5px] font-bold transition-all ${
+              genre === ''
+                ? 'border-cyan-400 text-cyan-200 bg-cyan-500/10 shadow-[0_0_18px_-6px_rgba(79,215,196,0.65)]'
+                : 'border-slate-700 text-slate-400'
+            }`}
+          >
+            <GhostIcon className="h-4 w-4" /> Let Ghost decide
+          </button>
+          {FAST_TRACK_GENRES.map((g) => (
+            <button
+              key={g}
+              type="button"
+              onClick={() => pickGenre(g)}
+              className={`shrink-0 whitespace-nowrap px-4 py-2.5 rounded-full border text-[12.5px] font-bold transition-all ${
+                genre === g
+                  ? 'border-amber-400 text-amber-200 bg-amber-500/10 shadow-[0_0_18px_-6px_rgba(226,153,60,0.65)]'
+                  : 'border-slate-700 text-slate-400'
+              }`}
+            >
+              {g}
+            </button>
+          ))}
+        </div>
+      </div>
+
+      <div className="flex-1" />
+
+      <div className="mt-8">
+        <p className="text-center text-[11px] font-bold uppercase tracking-widest text-slate-500 mb-3">
+          Uses {COSTS.GENERATE_SONG} credits · {formatCredits(credits)} left this month
+        </p>
+        <button
+          type="button"
+          onClick={() => { hapticLight(); onGenerate(buildInputs()); }}
+          disabled={isGenerating}
+          className="cta-primary w-full py-5 rounded-2xl text-[15px] uppercase tracking-[0.1em] flex items-center justify-center gap-2 active:scale-[0.99] transition-all disabled:opacity-50 disabled:cursor-not-allowed"
+        >
+          <GhostIcon className="h-5 w-5" /> {isGenerating ? 'Creating…' : 'Create My Song'}
+        </button>
+        <button
+          type="button"
+          onClick={onCustomize}
+          className="w-full mt-4 text-center text-sm font-bold text-cyan-300 active:text-cyan-200"
+        >
+          Customize every detail →
+        </button>
+      </div>
+    </div>
+  );
+};
+
 /**
  * Song Builder — the guided creation flow. One composition question per screen
  * (genre → room → theme → purpose → audience → voice → story + title), big
@@ -185,7 +308,7 @@ const SongBuilder: React.FC<{
     let cancelled = false;
     (async () => {
       try {
-        const res = await fetch('/api/ai');
+        const res = await apiFetch('/api/ai');
         if (!res.ok) return;
         const json = await res.json();
         if (!cancelled && json && typeof json.rooms === 'object' && json.rooms) {
@@ -240,8 +363,8 @@ const SongBuilder: React.FC<{
   const stepIndex = Math.max(0, steps.indexOf(stepId));
   const isLastStep = stepId === 'story';
 
-  const goNext = () => { setCustomFor(null); setCustomDraft(''); setStepId(steps[Math.min(steps.length - 1, stepIndex + 1)]); };
-  const goBack = () => { setCustomFor(null); setCustomDraft(''); setStepId(steps[Math.max(0, stepIndex - 1)]); };
+  const goNext = () => { hapticLight(); setCustomFor(null); setCustomDraft(''); setStepId(steps[Math.min(steps.length - 1, stepIndex + 1)]); };
+  const goBack = () => { hapticLight(); setCustomFor(null); setCustomDraft(''); setStepId(steps[Math.max(0, stepIndex - 1)]); };
 
   const pickGenre = (g: string) => {
     setGenre(g);
@@ -305,9 +428,9 @@ const SongBuilder: React.FC<{
   // Shared chip styles — same visual language as the genre grid.
   const chipBase =
     'w-full p-4 sm:p-5 rounded-3xl border transition-all text-sm sm:text-base leading-tight font-black uppercase tracking-[0.08em] min-h-[56px] flex items-center justify-center text-center break-words';
-  const chipIdle = 'bg-slate-700 border-slate-600 text-slate-200 hover:bg-slate-600 hover:border-orange-400 hover:text-white';
+  const chipIdle = 'bg-slate-700 border-slate-600 text-slate-200 active:bg-slate-600 active:border-orange-400 active:text-white';
   const chipPicked = 'bg-slate-600 border-orange-400 text-white';
-  const decideIdle = 'bg-slate-800 border-slate-700 text-slate-400 hover:border-cyan-400 hover:text-cyan-200';
+  const decideIdle = 'bg-slate-800 border-slate-700 text-slate-400 active:border-cyan-400 active:text-cyan-200';
   const decidePicked = 'bg-cyan-500/15 border-cyan-400 text-cyan-200';
 
   /** "Write my own" — every question accepts a typed answer, and it flows into the song
@@ -326,7 +449,7 @@ const SongBuilder: React.FC<{
             placeholder={placeholder}
             className="flex-1 bg-slate-800 border border-cyan-400/60 rounded-xl px-4 py-3 text-sm text-white placeholder:text-slate-500 focus:border-cyan-400 outline-none"
           />
-          <button type="submit" className="px-5 py-3 rounded-xl bg-cyan-500 text-white text-xs font-black uppercase tracking-widest hover:bg-cyan-400 transition-all">
+          <button type="submit" className="px-5 py-3 rounded-xl bg-cyan-500 text-white text-xs font-black uppercase tracking-widest active:bg-cyan-400 transition-all">
             Use it →
           </button>
         </form>
@@ -334,7 +457,7 @@ const SongBuilder: React.FC<{
         <button
           type="button"
           onClick={() => { setCustomFor(step); setCustomDraft(''); }}
-          className="w-full p-3 rounded-xl border border-dashed border-slate-600 text-slate-400 text-xs font-black uppercase tracking-widest hover:border-cyan-400 hover:text-cyan-200 transition-all"
+          className="w-full p-3 rounded-xl border border-dashed border-slate-600 text-slate-400 text-xs font-black uppercase tracking-widest active:border-cyan-400 active:text-cyan-200 transition-all"
         >
           ✍️ Write my own
         </button>
@@ -376,7 +499,7 @@ const SongBuilder: React.FC<{
           <button
             type="button"
             onClick={goBack}
-            className="text-xs font-black uppercase tracking-widest text-slate-400 hover:text-white transition-colors"
+            className="text-xs font-black uppercase tracking-widest text-slate-400 active:text-white transition-colors"
           >
             ← Back
           </button>
@@ -398,7 +521,7 @@ const SongBuilder: React.FC<{
             type="button"
             onClick={goNext}
             title={LET_GHOST_DECIDE}
-            className="text-xs font-black uppercase tracking-widest text-slate-400 hover:text-white transition-colors"
+            className="text-xs font-black uppercase tracking-widest text-slate-400 active:text-white transition-colors"
           >
             Skip →
           </button>
@@ -514,7 +637,7 @@ const SongBuilder: React.FC<{
               <button
                 type="button"
                 onClick={goNext}
-                className="px-8 py-3 rounded-xl bg-cyan-500 text-white text-xs font-black uppercase tracking-widest hover:bg-cyan-400 transition-all"
+                className="px-8 py-3 rounded-xl bg-cyan-500 text-white text-xs font-black uppercase tracking-widest active:bg-cyan-400 transition-all"
               >
                 Continue with {instruments.length} →
               </button>
@@ -531,7 +654,7 @@ const SongBuilder: React.FC<{
               type="button"
               onClick={() => { setVocals(v); goNext(); }}
               className={`px-4 py-2.5 rounded-xl text-[11px] font-black uppercase tracking-widest transition-all ${
-                vocals === v ? 'bg-cyan-500 text-white shadow-lg' : 'bg-slate-800 text-slate-400 hover:bg-slate-700 hover:text-slate-200'
+                vocals === v ? 'bg-cyan-500 text-white shadow-lg' : 'bg-slate-800 text-slate-400 active:bg-slate-700 active:text-slate-200'
               }`}
             >
               {v}
@@ -556,7 +679,7 @@ const SongBuilder: React.FC<{
               type="button"
               onClick={handleTitleIdeas}
               disabled={isTitleLoading}
-              className="px-5 py-3 rounded-xl bg-slate-800 border border-slate-700 text-slate-200 text-xs font-black uppercase tracking-widest hover:border-cyan-400 hover:text-cyan-200 transition-all disabled:opacity-60 flex items-center gap-2"
+              className="px-5 py-3 rounded-xl bg-slate-800 border border-slate-700 text-slate-200 text-xs font-black uppercase tracking-widest active:border-cyan-400 active:text-cyan-200 transition-all disabled:opacity-60 flex items-center gap-2"
             >
               {isTitleLoading && (
                 <span className="inline-block w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" aria-hidden="true" />
@@ -602,7 +725,7 @@ const SongBuilder: React.FC<{
           <button
             onClick={() => onGenerate(buildInputs())}
             disabled={isGenerating}
-            className="w-full bg-gradient-to-r from-orange-500 via-amber-500 to-cyan-500 py-6 md:py-7 rounded-[2rem] text-base md:text-xl font-black uppercase tracking-[0.16em] md:tracking-[0.4em] text-white shadow-xl transition-all hover:scale-[1.02] disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100"
+            className="cta-primary w-full py-6 md:py-7 rounded-[2rem] text-base md:text-xl uppercase tracking-[0.12em] md:tracking-[0.2em] transition-all active:scale-[0.99] disabled:opacity-50 disabled:cursor-not-allowed"
           >
             {isGenerating ? 'GENERATING…' : `CREATE MY SONG (${COSTS.GENERATE_SONG} CREDITS)`}
           </button>
@@ -651,7 +774,7 @@ export const App: React.FC = () => {
   const [utilitySection, setUtilitySection] = useState<UtilitySection>('invite');
   const [utilityReturnView, setUtilityReturnView] = useState<AppView>(AppView.LANDING);
   const [termsReturnView, setTermsReturnView] = useState<AppView>(AppView.AUTH);
-  
+
   // Paste / Import State
   const [isPasteMode, setIsPasteMode] = useState(false);
   const [pasteContent, setPasteContent] = useState('');
@@ -663,7 +786,7 @@ export const App: React.FC = () => {
     let cancelled = false;
     (async () => {
       try {
-        const res = await fetch('/api/ai');
+        const res = await apiFetch('/api/ai');
         if (!res.ok) return;
         const json = await res.json();
         if (cancelled) return;
@@ -762,12 +885,30 @@ export const App: React.FC = () => {
     return () => window.removeEventListener('songghost:openApiKeyModal', handler);
   }, []);
 
+  // Session expiry: when apiFetch sees a 401 with X-Session-Invalid (missing or
+  // expired session bearer — e.g. an existing web user who has no token yet), it
+  // fires this event. Sign out cleanly and route to AUTH so re-login mints a new
+  // token. Graceful: a clear "session expired, sign in again" — no white screen.
+  useEffect(() => {
+    const handler = () => {
+      signOut().then(() => {
+        setSession(null);
+        setCredits(0);
+        setHeaderAvatarUrl(null);
+        setView(AppView.AUTH);
+        toast('Your session expired. Please sign in again.', 'info');
+      });
+    };
+    window.addEventListener(SESSION_EXPIRED_EVENT, handler);
+    return () => window.removeEventListener(SESSION_EXPIRED_EVENT, handler);
+  }, []);
+
 
 
   useEffect(() => {
     const bootstrap = async () => {
       const search = new URLSearchParams(window.location.search);
-      const oauthEmail = search.get('oauth_email');
+      const oauthToken = search.get('oauth_token');
       const oauthError = search.get('oauth_error');
 
       if (oauthError) {
@@ -777,17 +918,17 @@ export const App: React.FC = () => {
         window.history.replaceState({}, '', q ? `/?${q}` : '/');
       }
 
-      if (oauthEmail) {
+      if (oauthToken) {
         setIsAuthLoading(true);
         try {
-          const { data, error } = await signInWithOAuthEmail(oauthEmail);
+          const { data, error } = await signInWithOAuthToken(oauthToken);
           if (error) throw error;
           if (data?.session) {
             // Apply pending tier from community code if validated
             const savedTier = localStorage.getItem('sg_pending_tier');
             if (savedTier === 'skool') {
               try {
-                await fetch('/api/db', {
+                await apiFetch('/api/db', {
                   method: 'POST',
                   headers: { 'Content-Type': 'application/json' },
                   body: JSON.stringify({ action: 'db', dbAction: 'setProfileTier', payload: { email: data.session.user.email, tier: 'skool' } }),
@@ -807,7 +948,7 @@ export const App: React.FC = () => {
           setView(AppView.AUTH);
         } finally {
           setIsAuthLoading(false);
-          search.delete('oauth_email');
+          search.delete('oauth_token');
           const q = search.toString();
           window.history.replaceState({}, '', q ? `/?${q}` : '/');
         }
@@ -827,7 +968,7 @@ export const App: React.FC = () => {
         if (status === 'success') {
           try {
             if (sessionId) {
-              await fetch('/api/checkout-complete', {
+              await apiFetch('/api/checkout-complete', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ sessionId }),
@@ -891,6 +1032,7 @@ export const App: React.FC = () => {
       const canAfford = await hasEnoughCredits(session.user.email || '', COSTS.GENERATE_SONG);
       if (!canAfford) {
           generationInFlightRef.current = false;
+          toast('Even ghosts need fuel — top up to keep the hooks coming.', 'error');
           setView(AppView.PRICING);
           return;
       }
@@ -917,6 +1059,7 @@ export const App: React.FC = () => {
           }
           await deductCredits(session.user.email || '', COSTS.GENERATE_SONG, "song_generation");
           setStep(AppStep.SONG_DISPLAYED);
+          hapticSuccess();
       } catch (err: any) {
           console.error(err);
           toast(`Generation failed: ${err.message} You weren't charged.`, { kind: 'error', actionLabel: 'Retry', onAction: () => handleGenerate() });
@@ -1038,7 +1181,7 @@ export const App: React.FC = () => {
             const savedTier = localStorage.getItem('sg_pending_tier');
             if (savedTier === 'skool') {
               try {
-                await fetch('/api/db', {
+                await apiFetch('/api/db', {
                   method: 'POST',
                   headers: { 'Content-Type': 'application/json' },
                   body: JSON.stringify({ action: 'db', dbAction: 'setProfileTier', payload: { email: data.session.user.email, tier: 'skool' } }),
@@ -1089,6 +1232,7 @@ export const App: React.FC = () => {
       const canAfford = await hasEnoughCredits(session.user.email || '', COSTS.GENERATE_SONG);
       if (!canAfford) {
           generationInFlightRef.current = false;
+          toast('Even ghosts need fuel — top up to keep the hooks coming.', 'error');
           setView(AppView.PRICING);
           return;
       }
@@ -1139,9 +1283,8 @@ export const App: React.FC = () => {
   if (!session || view === AppView.AUTH) {
     return (
       <>
-        <div className="app-shell min-h-screen flex flex-col items-center justify-center p-3 sm:p-4 relative overflow-hidden">
-          <div className="fixed top-0 left-0 w-full h-full bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-slate-900 via-[#140e28] to-[#0c0a1d] pointer-events-none z-0"></div>
-          <div className="relative z-10 w-full max-w-xl rounded-[2rem] border border-slate-800/80 bg-[#120e24]/95 shadow-[0_24px_90px_rgba(0,0,0,0.62)] overflow-hidden">
+        <div className="app-shell min-h-screen flex flex-col items-center justify-center p-3 sm:p-4 relative overflow-hidden safe-top safe-bottom safe-x">
+          <div className="relative z-10 w-full max-w-xl rounded-[2rem] border border-slate-800/80 bg-[#141110]/95 shadow-[0_24px_90px_rgba(0,0,0,0.62)] overflow-hidden">
           <div className="p-6 sm:p-9">
             <div className="flex justify-center mb-4"><Logo size={68} /></div>
             <h1 className="heading-display text-3xl sm:text-4xl font-black text-center tracking-tight text-white mb-3">Write. Refine. Release.</h1>
@@ -1163,7 +1306,7 @@ export const App: React.FC = () => {
                       placeholder="Enter community code"
                       value={communityCode}
                       onChange={(e) => { setCommunityCode(e.target.value.toUpperCase()); setCommunityCodeError(null); }}
-                      className="flex-1 bg-[#161030] border border-cyan-300/45 p-3 rounded-xl text-white outline-none focus:border-cyan-200 text-sm placeholder:text-slate-400 transition-all uppercase tracking-widest"
+                      className="flex-1 bg-[#1d1815] border border-cyan-300/45 p-3 rounded-xl text-white outline-none focus:border-cyan-200 text-sm placeholder:text-slate-400 transition-all uppercase tracking-widest"
                     />
                     <button
                       type="button"
@@ -1172,7 +1315,7 @@ export const App: React.FC = () => {
                         setIsAuthLoading(true);
                         setCommunityCodeError(null);
                         try {
-                          const res = await fetch('/api/auth', {
+                          const res = await apiFetch('/api/auth', {
                             method: 'POST',
                             headers: { 'Content-Type': 'application/json' },
                             body: JSON.stringify({ action: 'validateCommunityCode', code: communityCode.trim() }),
@@ -1201,19 +1344,19 @@ export const App: React.FC = () => {
                           setIsAuthLoading(false);
                         }
                       }}
-                      className="px-5 h-12 rounded-xl bg-cyan-300 text-slate-950 font-black text-sm hover:bg-cyan-200 transition-all disabled:opacity-50"
+                      className="px-5 h-12 rounded-xl bg-cyan-300 text-slate-950 font-black text-sm active:bg-cyan-200 transition-all disabled:opacity-50"
                     >
                       Verify
                     </button>
                   </div>
                   {communityCodeError && <p className="text-rose-300 text-xs font-semibold mt-1">{communityCodeError}</p>}
-                  <button type="button" onClick={() => setShowCommunityCode(false)} className="text-slate-300 text-xs font-semibold hover:text-white mt-1">Cancel</button>
+                  <button type="button" onClick={() => setShowCommunityCode(false)} className="text-slate-300 text-xs font-semibold active:text-white mt-1">Cancel</button>
                 </div>
               ) : (
                 <button
                   type="button"
                   onClick={() => setShowCommunityCode(true)}
-                  className="community-code-cta w-full mb-5 rounded-xl border border-cyan-400/55 bg-cyan-950/30 px-4 py-3 text-center text-cyan-100 text-sm font-black uppercase tracking-[0.12em] hover:border-cyan-300 hover:bg-cyan-900/35 transition-colors"
+                  className="community-code-cta w-full mb-5 rounded-xl border border-cyan-400/55 bg-cyan-950/30 px-4 py-3 text-center text-cyan-100 text-sm font-black uppercase tracking-[0.12em] active:border-cyan-300 active:bg-cyan-900/35 transition-colors"
                 >
                   Have a community code?
                 </button>
@@ -1232,7 +1375,7 @@ export const App: React.FC = () => {
                     type="button"
                     onClick={() => handleOAuthProvider(provider.provider)}
                     disabled={isAuthLoading}
-                    className="h-12 rounded-xl border border-slate-700/90 bg-[#141028] text-slate-300 flex items-center justify-center hover:border-slate-500 hover:text-white transition-all"
+                    className="h-12 rounded-xl border border-slate-700/90 bg-[#141028] text-slate-300 flex items-center justify-center active:border-slate-500 active:text-white transition-all"
                     aria-label={`${provider.name} sign in`}
                     title={`${provider.name} sign in`}
                   >
@@ -1260,7 +1403,7 @@ export const App: React.FC = () => {
                     placeholder="Enter your email"
                     value={authEmail}
                     onChange={(e) => setAuthEmail(e.target.value)}
-                    className="w-full bg-[#161030] border border-slate-700 p-4 rounded-xl text-white outline-none focus:border-orange-400 text-base placeholder:text-slate-500 transition-all"
+                    className="w-full bg-[#1d1815] border border-slate-700 p-4 rounded-xl text-white outline-none focus:border-orange-400 text-base placeholder:text-slate-500 transition-all"
                     required
                   />
                 </div>
@@ -1271,7 +1414,7 @@ export const App: React.FC = () => {
                     placeholder="Enter your password"
                     value={authPassword}
                     onChange={(e) => setAuthPassword(e.target.value)}
-                    className="w-full bg-[#161030] border border-slate-700 p-4 rounded-xl text-white outline-none focus:border-orange-400 text-base placeholder:text-slate-500 transition-all"
+                    className="w-full bg-[#1d1815] border border-slate-700 p-4 rounded-xl text-white outline-none focus:border-orange-400 text-base placeholder:text-slate-500 transition-all"
                     required
                     minLength={8}
                   />
@@ -1284,13 +1427,13 @@ export const App: React.FC = () => {
                       placeholder="Enter referral code"
                       value={referralCode}
                       onChange={(e) => setReferralCode(e.target.value.toUpperCase())}
-                      className="w-full bg-[#161030] border border-slate-700 p-4 rounded-xl text-white outline-none focus:border-orange-400 text-base placeholder:text-slate-500 transition-all"
+                      className="w-full bg-[#1d1815] border border-slate-700 p-4 rounded-xl text-white outline-none focus:border-orange-400 text-base placeholder:text-slate-500 transition-all"
                     />
                   </div>
                 )}
                 <button
                   disabled={isAuthLoading}
-                  className="w-full h-14 rounded-xl bg-white text-black font-black text-xl hover:bg-slate-200 transition-all disabled:opacity-70 flex items-center justify-center"
+                  className="w-full h-14 rounded-xl bg-white text-black font-black text-xl active:bg-slate-200 transition-all disabled:opacity-70 flex items-center justify-center"
                 >
                   {isAuthLoading ? <LoadingSpinner /> : (isSignUpMode ? 'Create Account' : 'Continue')}
                 </button>
@@ -1318,7 +1461,7 @@ export const App: React.FC = () => {
                   setTermsReturnView(AppView.AUTH);
                   setView(AppView.TERMS);
                 }}
-                className="text-sm text-slate-500 hover:text-slate-300"
+                className="text-sm text-slate-500 active:text-slate-300"
               >
                 By continuing, you accept our Privacy Policy and Terms
               </button>
@@ -1345,7 +1488,7 @@ export const App: React.FC = () => {
   if (view === AppView.HELP && session) {
       return (
         <>
-          <div className="app-shell min-h-screen text-slate-200">
+          <div className="app-shell min-h-screen text-slate-200 safe-top safe-bottom safe-x">
             <UtilityHub
               email={session.user.email}
               section={utilitySection}
@@ -1365,7 +1508,12 @@ export const App: React.FC = () => {
   if (view === AppView.PRICING) {
       return (
         <>
-          <PricingView email={session.user.email} onClose={() => setView(AppView.LANDING)} onPurchaseComplete={() => {}} />
+          <PricingView
+            email={session.user.email}
+            onClose={() => setView(AppView.LANDING)}
+            onPurchaseComplete={() => {}}
+            onOpenTerms={() => { setTermsReturnView(AppView.PRICING); setView(AppView.TERMS); }}
+          />
           <AskAndreWidget email={session?.user?.email || ''} />
     <ApiKeyModal isOpen={isApiKeyModalOpen} onClose={closeApiKeyModal} onSaved={onApiKeySaved} />
         </>
@@ -1383,7 +1531,7 @@ export const App: React.FC = () => {
             setLoadedSongId(s.id);
             setView(AppView.STUDIO);
             setStep(AppStep.SONG_DISPLAYED);
-          }} onBack={() => setView(AppView.LANDING)} onSignOut={() => signOut().then(() => { setSession(null); setView(AppView.AUTH); setHeaderAvatarUrl(null); })} onProfileUpdate={(updated) => setHeaderAvatarUrl(updated?.avatar_url || null)} onBuyCredits={() => setView(AppView.PRICING)} />
+          }} onBack={() => setView(AppView.LANDING)} onSignOut={() => signOut().then(() => { setSession(null); setView(AppView.AUTH); setHeaderAvatarUrl(null); })} onProfileUpdate={(updated) => setHeaderAvatarUrl(updated?.avatar_url || null)} onBuyCredits={() => setView(AppView.PRICING)} onCreateNew={() => { setView(AppView.STUDIO); setStep(AppStep.FAST_TRACK); setInputs(DEFAULT_INPUTS); }} />
           <AskAndreWidget email={session?.user?.email || ''} />
     <ApiKeyModal isOpen={isApiKeyModalOpen} onClose={closeApiKeyModal} onSaved={onApiKeySaved} />
         </>
@@ -1393,9 +1541,8 @@ export const App: React.FC = () => {
   if (view === AppView.LANDING) {
       return (
         <>
-        <div className="app-shell min-h-screen text-slate-200 font-sans selection:bg-orange-500/30 relative overflow-hidden flex flex-col items-center justify-center p-4 md:p-6">
-             <div className="fixed top-0 left-0 w-full h-full bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-slate-900 via-[#0c0a1d] to-[#0c0a1d] pointer-events-none z-0"></div>
-             
+        <div className="app-shell min-h-screen text-slate-200 font-sans selection:bg-amber-500/30 relative overflow-hidden flex flex-col items-center justify-center p-4 md:p-6 safe-top safe-bottom safe-x">
+
              {isPasteMode ? (
                  <div className="glass-panel-strong relative z-10 w-full max-w-2xl p-6 md:p-8 rounded-[2rem] md:rounded-[3rem] animate-fade-in shadow-emerald-900/20">
                      <h2 className="text-2xl font-black text-white tracking-tight mb-2">Import & Structure Session</h2>
@@ -1407,7 +1554,7 @@ export const App: React.FC = () => {
                              <select
                                  value={inputs.language || 'English'}
                                  onChange={(e) => setInputs(prev => ({ ...prev, language: e.target.value, genre: '', subGenre: '' }))}
-                                 className="bg-[#161030] border border-slate-800 rounded-2xl px-4 py-3 text-slate-200 focus:border-emerald-500 outline-none text-sm"
+                                 className="bg-[#1d1815] border border-slate-800 rounded-2xl px-4 py-3 text-slate-200 focus:border-emerald-500 outline-none text-sm"
                              >
                                  {LANGUAGE_OPTIONS.map((l) => <option key={l} value={l}>{l}</option>)}
                              </select>
@@ -1417,7 +1564,7 @@ export const App: React.FC = () => {
                              <select
                                  value={inputs.genre || ''}
                                  onChange={(e) => setInputs(prev => ({ ...prev, genre: e.target.value, subGenre: '' }))}
-                                 className="bg-[#161030] border border-slate-800 rounded-2xl px-4 py-3 text-slate-200 focus:border-emerald-500 outline-none text-sm"
+                                 className="bg-[#1d1815] border border-slate-800 rounded-2xl px-4 py-3 text-slate-200 focus:border-emerald-500 outline-none text-sm"
                              >
                                  <option value="">Auto / no genre</option>
                                  {importGenreChips.map((g) => <option key={g} value={g}>{g}</option>)}
@@ -1429,7 +1576,7 @@ export const App: React.FC = () => {
                                  value={inputs.subGenre || ''}
                                  disabled={!importRooms.length}
                                  onChange={(e) => setInputs(prev => ({ ...prev, subGenre: e.target.value }))}
-                                 className="bg-[#161030] border border-slate-800 rounded-2xl px-4 py-3 text-slate-200 focus:border-emerald-500 outline-none text-sm disabled:opacity-40"
+                                 className="bg-[#1d1815] border border-slate-800 rounded-2xl px-4 py-3 text-slate-200 focus:border-emerald-500 outline-none text-sm disabled:opacity-40"
                              >
                                  <option value="">Auto (best room)</option>
                                  {importRooms.map((r) => <option key={r.name} value={r.name}>{r.name}</option>)}
@@ -1438,7 +1585,7 @@ export const App: React.FC = () => {
                      </div>
 
                      <textarea
-                        className="w-full h-64 bg-[#161030] border border-slate-800 rounded-3xl p-6 text-slate-300 focus:border-emerald-500 outline-none resize-none mb-6 font-mono text-sm shadow-inner"
+                        className="w-full h-64 bg-[#1d1815] border border-slate-800 rounded-3xl p-6 text-slate-300 focus:border-emerald-500 outline-none resize-none mb-6 font-mono text-sm shadow-inner"
                         placeholder="Paste your lyrics or raw ideas here..."
                         value={pasteContent}
                         onChange={(e) => setPasteContent(e.target.value)}
@@ -1459,7 +1606,7 @@ export const App: React.FC = () => {
                      <div className="mb-12 flex flex-col items-center relative">
                         <button
                           onClick={() => setIsMenuOpen((v) => !v)}
-                          className="absolute -top-4 right-0 px-3 py-2 rounded-xl bg-slate-900 border border-slate-800 text-slate-300 hover:text-white"
+                          className="absolute -top-4 right-0 px-3 py-2 rounded-xl bg-slate-900 border border-slate-800 text-slate-300 active:text-white"
                         >
                           Menu
                         </button>
@@ -1472,67 +1619,54 @@ export const App: React.FC = () => {
                         ) : (
                           <Logo size={100} className="mb-6" />
                         )}
-                        <h1 className="heading-display text-4xl md:text-5xl font-black text-white tracking-tighter mb-2">Write. Refine. Release.</h1>
-                        <p className="text-slate-500 font-black uppercase tracking-[0.14em] md:tracking-[0.28em] text-[10px] md:text-xs">Song Ghost helps you draft lyrics, polish structure, and generate cover art in a cohesive style.</p>
-                        <p className="mt-3 px-4 py-1.5 rounded-full bg-emerald-500/10 border border-emerald-400/30 text-emerald-300 text-[11px] font-black uppercase tracking-widest">Your first songs are on us — no setup, no API keys</p>
+                        <h1 className="heading-display text-4xl md:text-5xl font-bold text-slate-100 tracking-tight mb-2">Write. Refine. Release.</h1>
+                        <p className="text-slate-500 text-sm mt-1">Song Ghost helps you draft lyrics, polish structure, and generate cover art in a cohesive style.</p>
+                        <p className="mt-3 px-4 py-1.5 rounded-full bg-cyan-500/10 border border-cyan-400/30 text-cyan-300 text-[11px] font-bold uppercase tracking-widest">Your first songs are on us — no setup, no API keys</p>
                      </div>
 
-                     <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                     {/* New Song — the single dominant action. */}
+                     <button
+                        onClick={() => { hapticLight(); setView(AppView.STUDIO); setStep(AppStep.FAST_TRACK); setInputs(DEFAULT_INPUTS); }}
+                        className="cta-primary group w-full p-8 md:p-10 rounded-[2rem] md:rounded-[2.5rem] flex flex-col items-center gap-3 transition-all active:scale-[0.99] relative overflow-hidden"
+                     >
+                         <GhostIcon className="h-10 w-10" />
+                         <h3 className="heading-display text-2xl font-bold tracking-tight">New Song</h3>
+                         <p className="text-xs font-bold uppercase tracking-widest opacity-70">Genre + your story. Done.</p>
+                     </button>
 
-                         {/* Option 0: Quick Song — the 3-decision fast lane (AMBER) */}
+                     {/* Secondary actions — hairline list rows, not competing cards. */}
+                     <div className="mt-4 rounded-2xl border border-slate-800 divide-y divide-slate-800 overflow-hidden text-left">
                          <button
-                            onClick={() => { setView(AppView.STUDIO); setStep(AppStep.FAST_TRACK); setInputs(DEFAULT_INPUTS); }}
-                            className="group glass-panel bg-[#140e28]/65 hover:border-amber-300 p-8 rounded-[2rem] md:rounded-[2.5rem] flex flex-col items-center gap-6 transition-all hover:-translate-y-1 hover:shadow-2xl hover:shadow-amber-400/30 relative overflow-hidden"
-                         >
-                             <div className="absolute inset-0 bg-amber-400/5 opacity-0 group-hover:opacity-100 transition-opacity"></div>
-                             <div className="w-20 h-20 rounded-full bg-amber-400/20 text-amber-300 flex items-center justify-center text-3xl font-black group-hover:bg-amber-400 group-hover:text-white group-hover:shadow-[0_0_30px_rgba(251,191,36,0.5)] transition-all relative z-10">
-                                 ⚡
-                             </div>
-                             <div className="relative z-10">
-                                 <h3 className="text-xl font-black text-white uppercase tracking-wider mb-2 group-hover:text-amber-300 transition-colors">New Song</h3>
-                                 <p className="text-xs text-slate-500 font-bold uppercase tracking-widest">Genre + your story. Done.</p>
-                             </div>
-                         </button>
-
-                         {/* Option 2: Paste Lyrics (EMERALD) */}
-                         <button 
                             onClick={() => setIsPasteMode(true)}
-                            className="group glass-panel bg-[#140e28]/65 hover:border-emerald-400 p-8 rounded-[2rem] md:rounded-[2.5rem] flex flex-col items-center gap-6 transition-all hover:-translate-y-1 hover:shadow-2xl hover:shadow-emerald-400/30 relative overflow-hidden"
+                            className="w-full flex items-center gap-4 px-5 py-4 bg-slate-900/40 active:bg-slate-800/60 transition-colors"
                          >
-                             <div className="absolute inset-0 bg-emerald-500/5 opacity-0 group-hover:opacity-100 transition-opacity"></div>
-                             <div className="w-20 h-20 rounded-full bg-emerald-500/20 text-emerald-300 flex items-center justify-center group-hover:bg-emerald-500 group-hover:text-white group-hover:shadow-[0_0_30px_rgba(52,211,153,0.5)] transition-all relative z-10">
-                                 <EditIcon />
-                             </div>
-                             <div className="relative z-10">
-                                 <h3 className="text-xl font-black text-white uppercase tracking-wider mb-2 group-hover:text-emerald-300 transition-colors">Paste / Import</h3>
-                                 <p className="text-xs text-slate-500 font-bold uppercase tracking-widest">Structure Lyrics & Ideas</p>
-                             </div>
+                             <span className="w-10 h-10 rounded-full bg-slate-800 text-cyan-300 flex items-center justify-center shrink-0"><EditIcon /></span>
+                             <span className="flex-1">
+                                 <span className="block text-sm font-bold text-slate-100">Paste / Import</span>
+                                 <span className="block text-xs text-slate-500">Structure lyrics &amp; ideas you already have</span>
+                             </span>
                          </button>
-
-                         {/* Option 3: Discography (VIOLET/PURPLE) */}
-                         <button 
+                         <button
                             onClick={() => setView(AppView.PROFILE)}
-                            className="group glass-panel bg-[#140e28]/65 hover:border-cyan-400 p-8 rounded-[2rem] md:rounded-[2.5rem] flex flex-col items-center gap-6 transition-all hover:-translate-y-1 hover:shadow-2xl hover:shadow-cyan-400/30 relative overflow-hidden"
+                            className="w-full flex items-center gap-4 px-5 py-4 bg-slate-900/40 active:bg-slate-800/60 transition-colors"
                          >
-                             <div className="absolute inset-0 bg-cyan-500/5 opacity-0 group-hover:opacity-100 transition-opacity"></div>
-                             <div className="w-20 h-20 rounded-full bg-cyan-500/20 text-cyan-300 flex items-center justify-center group-hover:bg-cyan-500 group-hover:text-white group-hover:shadow-[0_0_30px_rgba(34,211,238,0.5)] transition-all relative z-10">
-                                 <ClockIcon />
-                             </div>
-                             <div className="relative z-10">
-                                 <h3 className="text-xl font-black text-white uppercase tracking-wider mb-2 group-hover:text-cyan-300 transition-colors">Discography</h3>
-                                 <p className="text-xs text-slate-500 font-bold uppercase tracking-widest">View Past Sessions</p>
-                             </div>
+                             <span className="w-10 h-10 rounded-full bg-slate-800 text-cyan-300 flex items-center justify-center shrink-0"><ClockIcon /></span>
+                             <span className="flex-1">
+                                 <span className="block text-sm font-bold text-slate-100">Discography</span>
+                                 <span className="block text-xs text-slate-500">View past sessions</span>
+                             </span>
                          </button>
-
                      </div>
 
-                     <div className="mt-16 flex flex-wrap justify-center gap-4 md:gap-6">
+                     <div className="mt-10 flex flex-wrap justify-center gap-4 md:gap-6">
                          <div className="flex items-center gap-2 px-5 py-2 bg-slate-900 rounded-full border border-slate-800">
                              <WalletIcon className="w-4 h-4 text-slate-500" />
-                             <span className="text-xs font-black text-slate-300 uppercase tracking-widest">Balance: {formatCredits(credits)}</span>
+                             <span className="text-xs font-bold text-slate-300 uppercase tracking-widest">Balance: {formatCredits(credits)}</span>
                          </div>
-                         <button onClick={handleManageGeminiApiKey} className="text-xs font-black text-slate-400 uppercase tracking-widest hover:text-white transition-colors">Set AI Key</button>
-                         <button onClick={() => signOut().then(() => { setSession(null); setView(AppView.AUTH); })} className="text-xs font-black text-slate-600 uppercase tracking-widest hover:text-white transition-colors">Sign Out</button>
+                         {!isNative() && (
+                           <button onClick={handleManageGeminiApiKey} className="text-xs font-bold text-slate-400 uppercase tracking-widest active:text-white transition-colors">Set AI Key</button>
+                         )}
+                         <button onClick={() => signOut().then(() => { setSession(null); setView(AppView.AUTH); })} className="text-xs font-bold text-slate-600 uppercase tracking-widest active:text-white transition-colors">Sign Out</button>
                      </div>
                  </div>
              )}
@@ -1553,12 +1687,11 @@ export const App: React.FC = () => {
   // STUDIO VIEW
   return (
     <>
-    <div className="app-shell min-h-screen text-slate-200 font-sans selection:bg-orange-500/30 relative overflow-x-hidden">
-      <div className="fixed top-0 left-0 w-full h-full bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-slate-900 via-[#0c0a1d] to-[#0c0a1d] pointer-events-none z-0"></div>
-      
+    <div className="app-shell min-h-screen text-slate-200 font-sans selection:bg-amber-500/30 relative overflow-x-hidden safe-x">
+
       {/* Header */}
-      <nav className="glass-panel relative z-50 p-4 md:p-6 mt-3 flex justify-between items-center max-w-7xl mx-auto rounded-2xl md:rounded-3xl gap-3">
-         <div onClick={() => setView(AppView.LANDING)} className="cursor-pointer hover:opacity-80 transition-opacity">
+      <nav className="glass-panel relative z-50 p-4 md:p-6 mt-3 flex justify-between items-center max-w-7xl mx-auto rounded-2xl md:rounded-3xl gap-3 safe-top">
+         <div onClick={() => setView(AppView.LANDING)} className="cursor-pointer active:opacity-80 transition-opacity">
             {headerAvatarUrl ? (
               <img
                 src={headerAvatarUrl}
@@ -1575,17 +1708,17 @@ export const App: React.FC = () => {
                 <span className="text-[11px] font-black tracking-wider tabular-nums">{formatCredits(credits)}</span>
              </div>
              {/* Credit Monitor & Add Button */}
-             <div className="hidden md:flex items-center bg-[#140e28] border border-slate-800 rounded-full p-1 pl-1 pr-4 gap-3 shadow-inner">
+             <div className="hidden md:flex items-center bg-[#171310] border border-slate-800 rounded-full p-1 pl-1 pr-4 gap-3 shadow-inner">
                 <div className="flex items-center gap-2 px-4 py-2 rounded-full bg-slate-800 border border-slate-700 text-cyan-400">
                     <WalletIcon className="w-4 h-4" />
                     <span className="text-sm font-black tracking-widest tabular-nums">{formatCredits(credits)}</span>
                 </div>
-                <button onClick={() => setView(AppView.PRICING)} className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-400 hover:text-white transition-colors">
+                <button onClick={() => setView(AppView.PRICING)} className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-400 active:text-white transition-colors">
                     Add Credits
                 </button>
              </div>
 
-             <button onClick={() => setView(AppView.PROFILE)} className="w-10 h-10 rounded-full bg-slate-800 flex items-center justify-center text-slate-400 hover:bg-slate-700 hover:text-white transition-all overflow-hidden border border-slate-700">
+             <button onClick={() => setView(AppView.PROFILE)} className="w-10 h-10 rounded-full bg-slate-800 flex items-center justify-center text-slate-400 active:bg-slate-700 active:text-white transition-all overflow-hidden border border-slate-700">
                  {headerAvatarUrl ? (
                    <img src={headerAvatarUrl} alt="Profile avatar" className="w-full h-full object-cover" />
                  ) : (
@@ -1594,7 +1727,7 @@ export const App: React.FC = () => {
              </button>
              <button
                onClick={() => setIsMenuOpen((v) => !v)}
-               className="h-10 px-3 rounded-xl bg-slate-800 text-slate-300 hover:bg-slate-700 hover:text-white"
+               className="h-10 px-3 rounded-xl bg-slate-800 text-slate-300 active:bg-slate-700 active:text-white"
              >
                Menu
              </button>
@@ -1637,68 +1770,61 @@ export const App: React.FC = () => {
                 currentInputs={inputs}
               />
           ) : step === AppStep.GENERATING ? (
-              <div className="w-full max-w-3xl mx-auto flex flex-col gap-6">
-                  <div className="rounded-3xl border border-slate-700 bg-slate-900/60 p-6 md:p-8">
-                    <div className="flex items-center gap-4">
-                      <LoadingSpinner />
-                      <div>
-                        <h2 className="text-2xl font-black text-white tracking-tight">{loadingMessage}</h2>
-                        <p className="mt-2 text-slate-400 font-black uppercase tracking-widest text-xs">Applying genre guide directives during creation</p>
-                      </div>
-                    </div>
-                    <div className="mt-5 h-2 w-full rounded-full bg-slate-800 overflow-hidden">
+              <div className="relative w-full max-w-sm mx-auto flex flex-col items-center justify-center text-center min-h-[75vh] px-6">
+                  <div
+                    className="absolute top-[14%] left-1/2 -translate-x-1/2 w-72 h-72 rounded-full pointer-events-none"
+                    style={{ background: 'radial-gradient(circle, rgba(226,153,60,0.22) 0%, rgba(226,153,60,0.06) 45%, transparent 72%)' }}
+                  />
+                  <GhostIcon className="relative z-10 h-28 w-auto text-amber-400 ghost-glow-anim" />
+
+                  <div className="relative z-10 flex items-end gap-1.5 mt-8 h-16">
+                    {[16, 32, 52, 26, 44, 64, 36, 56, 22, 48, 20, 38, 14].map((h, i) => (
                       <div
-                        className="h-full bg-gradient-to-r from-orange-500 via-amber-400 to-cyan-400 transition-all duration-500"
-                        style={{ width: `${Math.min(100, Math.round(((generationStageIndex + 1) / GENERATION_STAGES.length) * 100))}%` }}
+                        key={i}
+                        className={`vu-bar w-1.5 rounded-t-sm ${i % 3 === 1 ? 'bg-cyan-400' : i % 5 === 0 ? 'bg-amber-300' : 'bg-amber-500'}`}
+                        style={{ height: `${h}px`, animationDelay: `${i * 90}ms` }}
                       />
-                    </div>
+                    ))}
                   </div>
 
-                  <div className="rounded-3xl border border-slate-700 bg-slate-900/50 p-6">
-                    <p className="text-xs font-black uppercase tracking-widest text-slate-400 mb-4">Process Stages</p>
-                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                      {GENERATION_STAGES.map((stage, idx) => {
-                        const isDone = idx < generationStageIndex;
-                        const isActive = idx === generationStageIndex;
-                        return (
-                          <div
-                            key={stage.label}
-                            className={`rounded-2xl border px-4 py-3 text-sm font-bold tracking-wide transition-all ${
-                              isActive
-                                ? 'border-cyan-400 bg-cyan-500/10 text-cyan-200'
-                                : isDone
-                                  ? 'border-amber-500/50 bg-amber-500/10 text-amber-200'
-                                  : 'border-slate-700 bg-slate-800/30 text-slate-400'
-                            }`}
-                          >
-                            {isDone ? 'DONE - ' : isActive ? 'LIVE - ' : 'PENDING - '}
-                            {stage.label}
-                          </div>
-                        );
-                      })}
-                    </div>
-                  </div>
+                  <h2
+                    className="relative z-10 heading-display mt-7 text-xl font-semibold text-amber-300"
+                    style={{ textShadow: '0 0 22px rgba(226,153,60,0.5)' }}
+                  >
+                    {(GENERATION_STAGES[generationStageIndex] || GENERATION_STAGES[0]).label}…
+                  </h2>
 
-                  <div className="rounded-3xl border border-slate-700 bg-slate-900/50 p-6">
-                    <p className="text-xs font-black uppercase tracking-widest text-slate-400 mb-3">Live Activity</p>
-                    <div className="space-y-2">
-                      {generationLog.map((entry, idx) => (
-                        <div key={`${entry}-${idx}`} className="text-sm text-slate-300">
-                          {idx === generationLog.length - 1 ? '-> ' : '- '}
-                          {entry}
+                  <div className="relative z-10 mt-6 w-full max-w-[260px] flex flex-col gap-1.5 text-left">
+                    {GENERATION_STAGES.map((stage, idx) => {
+                      const isDone = idx < generationStageIndex;
+                      const isActive = idx === generationStageIndex;
+                      return (
+                        <div
+                          key={stage.label}
+                          className={`flex items-center gap-2.5 text-[13px] py-1 ${
+                            isActive ? 'text-amber-300 font-bold' : isDone ? 'text-slate-400' : 'text-slate-600'
+                          }`}
+                        >
+                          <span className={`w-4 text-center text-[13px] ${isDone ? 'text-cyan-400' : isActive ? 'text-amber-400' : ''}`}>
+                            {isDone ? '✓' : isActive ? '▸' : '•'}
+                          </span>
+                          {stage.label}
                         </div>
-                      ))}
-                    </div>
+                      );
+                    })}
                   </div>
 
-                  {/* Live draft — the lyrics write themselves as the model streams. */}
-                  {generatedSong && !generatedSong.startsWith('__STATUS__') && (
-                    <div className="rounded-3xl border border-cyan-500/30 bg-slate-900/50 p-6">
-                      <p className="text-xs font-black uppercase tracking-widest text-cyan-400 mb-3">Live Draft</p>
-                      <pre className="whitespace-pre-wrap font-mono text-sm leading-relaxed text-slate-200 max-h-80 overflow-y-auto">{generatedSong}</pre>
-                    </div>
-                  )}
+                  <p className="relative z-10 mt-7 text-xs text-slate-500">
+                    Ghost is writing — this usually takes 20 seconds.
+                  </p>
               </div>
+          ) : step === AppStep.FAST_TRACK ? (
+              <FastTrackCreate
+                isGenerating={isLoading}
+                credits={credits}
+                onGenerate={(builtInputs) => handleGenerate(builtInputs)}
+                onCustomize={() => { hapticLight(); setStep(AppStep.AWAITING_LANGUAGE); }}
+              />
           ) : (
               <SongBuilder
                 isGenerating={isLoading}

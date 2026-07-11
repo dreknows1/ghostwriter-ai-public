@@ -56,15 +56,15 @@ const AskAndreWidget: React.FC<AskAndreWidgetProps> = ({ email }) => {
   };
 
   return (
-    <div className="fixed bottom-4 right-4 z-[95]">
+    <div className="fixed bottom-4 right-4 z-[95] safe-bottom" style={{ marginBottom: 'var(--safe-bottom, 0px)' }}>
       {open ? (
-        <div className="w-[22rem] max-w-[92vw] rounded-2xl border border-slate-700 bg-[#120e24] shadow-2xl overflow-hidden">
+        <div className="w-[22rem] max-w-[92vw] rounded-2xl border border-slate-700 bg-[#141110] shadow-2xl overflow-hidden">
           <div className="flex items-center justify-between px-4 py-3 border-b border-slate-700">
             <div>
               <p className="text-sm font-bold text-cyan-300">Ask Andre</p>
               <p className="text-[11px] text-slate-400">Conversational Help</p>
             </div>
-            <button onClick={() => setOpen(false)} className="text-slate-400 hover:text-white text-sm">Close</button>
+            <button onClick={() => setOpen(false)} className="text-slate-400 active:text-white text-sm">Close</button>
           </div>
           <div className="h-72 overflow-y-auto px-3 py-3 space-y-2 bg-slate-900/40">
             {visibleMessages.map((msg, idx) => (
@@ -98,7 +98,7 @@ const AskAndreWidget: React.FC<AskAndreWidgetProps> = ({ email }) => {
               <button
                 onClick={handleSend}
                 disabled={loading || !input.trim()}
-                className="px-3 py-2 rounded-lg bg-cyan-600 hover:bg-cyan-500 disabled:bg-slate-700 disabled:text-slate-500 text-white text-sm font-semibold"
+                className="px-3 py-2 rounded-lg bg-cyan-600 active:bg-cyan-500 disabled:bg-slate-700 disabled:text-slate-500 text-white text-sm font-semibold"
               >
                 Send
               </button>
@@ -108,9 +108,11 @@ const AskAndreWidget: React.FC<AskAndreWidgetProps> = ({ email }) => {
       ) : (
         <button
           onClick={() => setOpen(true)}
-          className="px-4 py-3 rounded-full bg-cyan-600 hover:bg-cyan-500 text-white font-bold text-sm shadow-xl border border-cyan-400/40"
+          aria-label="Ask Andre"
+          title="Ask Andre"
+          className="w-12 h-12 rounded-full bg-cyan-600 active:bg-cyan-500 text-white shadow-xl border border-cyan-400/40 flex items-center justify-center text-lg font-black"
         >
-          Ask Andre
+          ?
         </button>
       )}
     </div>
