@@ -4,7 +4,7 @@ import { AppStep, AppView, SongInputs, UserProfile } from './types';
 import { generateSong, generateAlbumArt, generateSocialPack, translateLyrics, structureImportedSong, suggestTitles } from './services/geminiService';
 import { saveSong } from './services/songService';
 import { getUserProfile } from './services/userService';
-import { getSession, signOut, signIn, signUp, signInWithOAuthEmail, startProviderSignIn } from './services/authService';
+import { getSession, signOut, signIn, signUp, signInWithOAuthToken, startProviderSignIn } from './services/authService';
 import { getUserCredits, hasEnoughCredits, deductCredits, COSTS, formatCredits } from './services/creditService';
 import LyricsDisplay from './components/LyricsDisplay';
 import ProfileView from './components/ProfileView';
@@ -762,12 +762,26 @@ export const App: React.FC = () => {
     return () => window.removeEventListener('songghost:openApiKeyModal', handler);
   }, []);
 
+  // SECURITY HOTFIX: when a gated API call reports the session bearer is expired
+  // (401 + X-Session-Invalid), the service layer clears the stored session and
+  // fires this event. Route the user back to sign-in.
+  useEffect(() => {
+    const handler = () => {
+      setSession(null);
+      setCredits(0);
+      setView(AppView.AUTH);
+      setAuthError('Your session has expired. Please sign in again.');
+    };
+    window.addEventListener('songghost:sessionExpired', handler);
+    return () => window.removeEventListener('songghost:sessionExpired', handler);
+  }, []);
+
 
 
   useEffect(() => {
     const bootstrap = async () => {
       const search = new URLSearchParams(window.location.search);
-      const oauthEmail = search.get('oauth_email');
+      const oauthToken = search.get('oauth_token');
       const oauthError = search.get('oauth_error');
 
       if (oauthError) {
@@ -777,10 +791,10 @@ export const App: React.FC = () => {
         window.history.replaceState({}, '', q ? `/?${q}` : '/');
       }
 
-      if (oauthEmail) {
+      if (oauthToken) {
         setIsAuthLoading(true);
         try {
-          const { data, error } = await signInWithOAuthEmail(oauthEmail);
+          const { data, error } = await signInWithOAuthToken(oauthToken);
           if (error) throw error;
           if (data?.session) {
             // Apply pending tier from community code if validated
@@ -807,7 +821,7 @@ export const App: React.FC = () => {
           setView(AppView.AUTH);
         } finally {
           setIsAuthLoading(false);
-          search.delete('oauth_email');
+          search.delete('oauth_token');
           const q = search.toString();
           window.history.replaceState({}, '', q ? `/?${q}` : '/');
         }

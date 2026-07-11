@@ -53,14 +53,15 @@ export const upsertUserCredentials = mutation({
       return await ctx.db.get(id);
     }
 
+    // H1 (defense in depth): NEVER attach or overwrite a password on an existing
+    // user here. A password may only be set at net-new creation (the branch
+    // above). Attaching one to an existing (passwordless) account was an
+    // account-takeover vector. Passwordless refresh (oauth/skool sign-in) still
+    // updates the activity timestamp.
     const patch: any = {
       updatedAt: Date.now(),
       isActive: true,
     };
-    if (args.passwordHash && args.passwordSalt) {
-      patch.passwordHash = args.passwordHash;
-      patch.passwordSalt = args.passwordSalt;
-    }
 
     await ctx.db.patch(existing._id, patch);
     return await ctx.db.get(existing._id);

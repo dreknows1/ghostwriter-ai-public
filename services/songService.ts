@@ -1,9 +1,10 @@
 import { SavedSong, SocialPack } from "../types";
+import { authorizedFetch } from "./authService";
 
 const STORAGE_LIMIT = 25;
 
 async function callDb(action: string, payload: any) {
-  const res = await fetch("/api/auth", {
+  const res = await authorizedFetch("/api/auth", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ action: "db", dbAction: action, payload }),

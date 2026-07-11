@@ -2,6 +2,7 @@
 import React, { useState, useEffect } from 'react';
 import { LoadingSpinner } from './icons';
 import { toast } from './Feedback';
+import { authorizedFetch } from '../services/authService';
 
 interface PricingViewProps {
     email: string;
@@ -30,7 +31,7 @@ const PricingView: React.FC<PricingViewProps> = ({ email, onClose }) => {
     useEffect(() => {
         const fetchTier = async () => {
             try {
-                const res = await fetch('/api/db', {
+                const res = await authorizedFetch('/api/db', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({ action: 'getUserProfileByEmail', payload: { email } }),
