@@ -21504,6 +21504,45 @@ async function runEngine(curriculum, inputs, generate, stage = () => {
   };
 }
 
+// lib/cors.ts
+var CORS_ALLOWLIST = [
+  "https://www.songghost.com",
+  "https://songghost.com",
+  "https://ghostwriter-ai-public.vercel.app",
+  "capacitor://localhost",
+  "http://localhost:5173"
+  // Vite dev server
+];
+function headerValue(v) {
+  return Array.isArray(v) ? v[0] : v;
+}
+function resolveAllowedOrigin(origin) {
+  const o = headerValue(origin);
+  if (!o) return null;
+  return CORS_ALLOWLIST.includes(o) ? o : null;
+}
+function applyCors(req, res) {
+  res.setHeader("Vary", "Origin");
+  const allowed = resolveAllowedOrigin(req.headers.origin);
+  if (allowed) {
+    res.setHeader("Access-Control-Allow-Origin", allowed);
+    res.setHeader("Access-Control-Allow-Methods", "GET, POST, OPTIONS");
+    res.setHeader(
+      "Access-Control-Allow-Headers",
+      "Content-Type, Authorization, x-gemini-api-key"
+    );
+    res.setHeader("Access-Control-Max-Age", "86400");
+  }
+}
+function handlePreflight(req, res) {
+  applyCors(req, res);
+  if ((req.method || "").toUpperCase() === "OPTIONS") {
+    res.status(204).end();
+    return true;
+  }
+  return false;
+}
+
 // server/ai.ts
 var ASK_ANDRE_AUDIT_CONTEXT = `
 You are "Ask Andre" inside SongGhost.
@@ -22437,6 +22476,8 @@ async function streamSongV3(payload, res) {
   }
 }
 async function handler(req, res) {
+  if (handlePreflight(req, res)) return;
+  applyCors(req, res);
   if (req.method === "GET") {
     const rooms = {};
     for (const pack of Object.values(CURRICULUM.genres)) {

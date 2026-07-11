@@ -18,6 +18,24 @@ export const CREDITS_PUBLIC = 25;
 export const CREDITS_SKOOL = 100;
 export const CREDITS_PRO = 500;
 
+export const DAY_MS = 86_400_000;
+
+/**
+ * Reset-only grace window. A subscriber whose planExpiresAt has just passed but
+ * whose RENEWAL webhook hasn't landed yet (or who is in RevenueCat's
+ * billing-retry/grace period) is treated as still-active FOR THE CALENDAR RESET
+ * ONLY, so a UTC month rollover in that gap doesn't wipe a paying user to 25.
+ */
+export const PRO_GRACE_MS = 3 * DAY_MS;
+
+/**
+ * A CANCELLATION event whose cancel_reason is in this set is an actual money
+ * refund (clawback), per RevenueCat's webhook schema. Every other cancel_reason
+ * (UNSUBSCRIBE, BILLING_ERROR, …) just means auto-renew was turned off — keep
+ * the credits until expiry.
+ */
+export const REFUND_CANCEL_REASONS = new Set(["CUSTOMER_SUPPORT"]);
+
 /** Credits granted per one-time pack, keyed by both RevenueCat and Stripe ids. */
 export const PACK_CREDITS: Record<string, number> = {
   // RevenueCat / StoreKit product ids
@@ -49,9 +67,13 @@ export interface ProfileCreditState {
   lastResetDate?: string;
 }
 
-/** True when the profile holds an unexpired Pro subscription. */
-export function isProActive(state: ProfileCreditState, now: number): boolean {
-  return state.plan === "pro" && (state.planExpiresAt ?? 0) > now;
+/**
+ * True when the profile holds an unexpired Pro subscription. `graceMs` extends
+ * the active window past planExpiresAt (used by the calendar reset only, to
+ * avoid clobbering a subscriber mid billing-retry/grace).
+ */
+export function isProActive(state: ProfileCreditState, now: number, graceMs = 0): boolean {
+  return state.plan === "pro" && (state.planExpiresAt ?? 0) + graceMs > now;
 }
 
 /** Monthly baseline for a profile: 500 active-Pro / 100 skool / 25 public. */
@@ -92,7 +114,9 @@ export function computeMonthlyReset(state: ProfileCreditState, now: number): Res
   const lastReset = state.lastResetDate ? new Date(state.lastResetDate).getTime() : 0;
   const sameMonth = monthKey(now) === monthKey(lastReset);
   if (sameMonth) return { reset: false, credits: state.credits };
-  if (isProActive(state, now)) {
+  // Skip the reset for an active Pro — including a short grace window so a
+  // subscriber awaiting renewal / in billing-retry isn't wiped at the boundary.
+  if (isProActive(state, now, PRO_GRACE_MS)) {
     return { reset: false, credits: state.credits };
   }
   const baseline = state.tier === "skool" ? CREDITS_SKOOL : CREDITS_PUBLIC;
@@ -138,6 +162,36 @@ export function computeSpend(
   };
 }
 
+export interface CheckedSpendDecision extends SpendDecision {
+  /** false when the balance can't cover `amount` — NO deduction is applied. */
+  ok: boolean;
+  /** Spendable total before the attempt. */
+  available: number;
+}
+
+/**
+ * Server-authoritative spend: unlike `computeSpend` (which clamps), this REJECTS
+ * an over-spend without deducting so the generation path can refuse and surface
+ * the paywall CTA. On success it deducts monthly-bucket-first, then packs.
+ */
+export function computeSpendChecked(
+  creditsIn: number,
+  packCreditsIn: number,
+  amount: number
+): CheckedSpendDecision {
+  const credits = Math.max(0, creditsIn);
+  const packCredits = Math.max(0, packCreditsIn);
+  const available = credits + packCredits;
+  const amt = Math.max(0, amount);
+
+  if (amt > available) {
+    // Insufficient funds — leave both buckets untouched.
+    return { ok: false, available, credits, packCredits, total: available, spent: 0 };
+  }
+  const spend = computeSpend(credits, packCredits, amt);
+  return { ok: true, available, ...spend };
+}
+
 // ---------------------------------------------------------------------------
 // Purchase / entitlement grants (shared by Stripe + RevenueCat)
 // ---------------------------------------------------------------------------
@@ -173,23 +227,43 @@ const NOOP_GRANT: GrantDecision = {
 };
 
 /**
+ * Derive a sane forward expiry when a Pro grant carries no usable future expiry
+ * (missing/null expiration_at_ms). 7 days for a trial, ~1 month otherwise —
+ * generous enough to survive one calendar-reset boundary until the store's real
+ * expiry arrives on the next renewal event.
+ */
+export function fallbackExpiry(now: number, periodType?: string): number {
+  const days = periodType === "TRIAL" ? 7 : 31;
+  return now + days * DAY_MS;
+}
+
+/**
  * Pro subscription grant / renewal: SET the monthly bucket to 500 (never
  * additive), stamp plan=pro + expiry + source, and re-anchor the reset clock.
+ *
+ * planExpiresAt only ever moves FORWARD (max of incoming vs existing) so an
+ * out-of-order webhook — e.g. a RENEWAL processed before a reordered
+ * INITIAL_PURCHASE — can't regress a later paid-through date. If neither yields
+ * a future expiry, a sane one is derived so the 500-credit grant isn't left
+ * instantly-expired (which the next calendar reset would then wipe).
  */
 export function applyProGrant(
   state: ProfileCreditState,
   expiresAt: number | undefined,
   now: number,
-  source: string
+  source: string,
+  periodType?: string
 ): GrantDecision {
   const credits = Math.max(0, state.credits ?? 0);
+  let target = Math.max(expiresAt ?? 0, state.planExpiresAt ?? 0);
+  if (target <= now) target = fallbackExpiry(now, periodType);
   return {
     action: "pro_grant",
     changed: true,
     patch: {
       credits: CREDITS_PRO,
       plan: "pro",
-      planExpiresAt: expiresAt ?? state.planExpiresAt,
+      planExpiresAt: target,
       planSource: source,
       lastResetDate: new Date(now).toISOString(),
     },
@@ -221,6 +295,69 @@ export interface RcEvent {
   type: string;
   productId?: string;
   expirationAtMs?: number | null;
+  /** RevenueCat CANCELLATION cancel_reason (CUSTOMER_SUPPORT ⇒ refund). */
+  cancelReason?: string;
+  /** RevenueCat period_type (TRIAL | INTRO | NORMAL | PROMOTIONAL | PREPAID). */
+  periodType?: string;
+}
+
+/** True when a webhook event represents an actual money refund (clawback). */
+export function isRefundEvent(event: RcEvent): boolean {
+  if (event.type === "REFUND") return true; // legacy/defensive; RC uses CANCELLATION
+  return (
+    event.type === "CANCELLATION" &&
+    !!event.cancelReason &&
+    REFUND_CANCEL_REASONS.has(event.cancelReason)
+  );
+}
+
+/** True when an event is a one-time consumable (pack) purchase. */
+export function isConsumableEvent(event: RcEvent): boolean {
+  return event.type === "NON_RENEWING_PURCHASE";
+}
+
+/**
+ * Refund clawback. Targets the entitlement actually held, NOT product-id
+ * absence:
+ *  - a known pack refund subtracts the pack size (clamp ≥ 0);
+ *  - a subscription refund fires only when the profile genuinely held Pro via
+ *    RevenueCat (known Pro product id, or planSource=revenuecat + plan=pro),
+ *    clearing plan→free + planExpiresAt + planSource and clawing back the 500;
+ *  - an unknown-product refund on a pack-only / never-Pro user is a no-op so a
+ *    stray refund can't zero someone's monthly allowance.
+ */
+export function computeRefund(state: ProfileCreditState, productId: string): GrantDecision {
+  const packSize = PACK_CREDITS[productId] ?? 0;
+  if (packSize > 0) {
+    const packCredits = Math.max(0, state.packCredits ?? 0);
+    const newPack = Math.max(0, packCredits - packSize);
+    return {
+      action: "refund",
+      changed: newPack !== packCredits,
+      patch: { packCredits: newPack },
+      ledgerDelta: newPack - packCredits,
+      ledgerReason: "revenuecat_refund_pack",
+    };
+  }
+
+  const heldProViaRc =
+    PRO_PRODUCT_IDS.has(productId) ||
+    (state.planSource === "revenuecat" && state.plan === "pro");
+  if (!heldProViaRc) {
+    // Unknown product and no matching Pro entitlement → nothing to claw back.
+    return { ...NOOP_GRANT, action: "refund" };
+  }
+
+  const credits = Math.max(0, state.credits ?? 0);
+  const newCredits = Math.max(0, credits - CREDITS_PRO);
+  return {
+    action: "refund",
+    changed: true,
+    // undefined clears planExpiresAt/planSource (Convex db.patch removes them).
+    patch: { credits: newCredits, plan: "free", planExpiresAt: undefined, planSource: undefined },
+    ledgerDelta: newCredits - credits,
+    ledgerReason: "revenuecat_refund_sub",
+  };
 }
 
 /**
@@ -229,10 +366,11 @@ export interface RcEvent {
  *
  * - INITIAL_PURCHASE / RENEWAL / UNCANCELLATION → Pro grant (bucket set-to-500).
  * - NON_RENEWING_PURCHASE                       → pack grant (packCredits +=).
- * - CANCELLATION                                → no change (keep until expiry).
+ * - CANCELLATION (refund cancel_reason)         → refund clawback (see below).
+ * - CANCELLATION (other cancel_reason)          → no change (keep until expiry).
  * - EXPIRATION / BILLING_ISSUE                  → plan=free only past expiry;
  *                                                 credits are never zeroed.
- * - REFUND                                      → claw back, clamp ≥ 0.
+ * - REFUND (legacy/defensive)                   → refund clawback, clamp ≥ 0.
  * - anything else                               → ignore.
  */
 export function reduceRevenueCatEvent(
@@ -240,17 +378,29 @@ export function reduceRevenueCatEvent(
   event: RcEvent,
   now: number
 ): GrantDecision {
+  // Refunds arrive as a CANCELLATION with cancel_reason=CUSTOMER_SUPPORT (or a
+  // legacy REFUND type). Detect before the CANCELLATION no-op branch.
+  if (isRefundEvent(event)) {
+    return computeRefund(state, event.productId ?? "");
+  }
+
   switch (event.type) {
     case "INITIAL_PURCHASE":
     case "RENEWAL":
     case "UNCANCELLATION":
-      return applyProGrant(state, event.expirationAtMs ?? undefined, now, "revenuecat");
+      return applyProGrant(
+        state,
+        event.expirationAtMs ?? undefined,
+        now,
+        "revenuecat",
+        event.periodType
+      );
 
     case "NON_RENEWING_PURCHASE":
       return applyPackGrant(state, event.productId ?? "", "revenuecat");
 
     case "CANCELLATION":
-      // Auto-renew turned off. Entitlement (and credits) persist until expiry.
+      // Non-refund cancellation (auto-renew off). Credits persist until expiry.
       return { ...NOOP_GRANT, action: "cancellation" };
 
     case "EXPIRATION":
@@ -267,32 +417,6 @@ export function reduceRevenueCatEvent(
         patch: { plan: "free" },
         ledgerDelta: 0,
         ledgerReason: "",
-      };
-    }
-
-    case "REFUND": {
-      const packSize = PACK_CREDITS[event.productId ?? ""] ?? 0;
-      if (packSize > 0) {
-        // Pack refund: subtract the granted credits, clamp ≥ 0.
-        const packCredits = Math.max(0, state.packCredits ?? 0);
-        const newPack = Math.max(0, packCredits - packSize);
-        return {
-          action: "refund",
-          changed: newPack !== packCredits,
-          patch: { packCredits: newPack },
-          ledgerDelta: newPack - packCredits,
-          ledgerReason: "revenuecat_refund_pack",
-        };
-      }
-      // Subscription refund: revoke Pro and claw back the monthly grant, clamp ≥ 0.
-      const credits = Math.max(0, state.credits ?? 0);
-      const newCredits = Math.max(0, credits - CREDITS_PRO);
-      return {
-        action: "refund",
-        changed: true,
-        patch: { credits: newCredits, plan: "free" },
-        ledgerDelta: newCredits - credits,
-        ledgerReason: "revenuecat_refund_sub",
       };
     }
 
@@ -338,9 +462,12 @@ export function planRevenueCatApply(
 ): RcApplyPlan {
   // Already-seen event: no-op, and do NOT re-insert (the row already exists).
   if (ctx.eventSeen) return { skip: true, reason: "duplicate_event", recordEvent: false };
-  // Store transaction already applied under a different event id: record this
-  // event so future redeliveries short-circuit, but grant nothing.
-  if (ctx.transactionSeen) {
+  // Store-transaction dedupe guards ONLY consumable (pack) grants — a refund or
+  // renewal reuses/omits the original purchase transaction id, so applying it
+  // here would wrongly swallow a refund clawback (a purchase already wrote a row
+  // under that transaction id). Consumable redelivery under a NEW event id still
+  // can't double-grant thanks to this + the rcEvents by_event dedupe above.
+  if (isConsumableEvent(event) && ctx.transactionSeen) {
     return { skip: true, reason: "duplicate_transaction", recordEvent: true };
   }
   // Owner: record the event, never touch credits.

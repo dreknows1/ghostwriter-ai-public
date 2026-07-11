@@ -3,13 +3,18 @@ import {
   CREDITS_PRO,
   CREDITS_PUBLIC,
   CREDITS_SKOOL,
+  DAY_MS,
+  PRO_GRACE_MS,
+  monthKey,
   computeMonthlyReset,
   computeSpend,
+  computeSpendChecked,
   reduceRevenueCatEvent,
   planRevenueCatApply,
   applyProGrant,
   applyPackGrant,
   isProActive,
+  isRefundEvent,
   spendableTotal,
   type ProfileCreditState,
   type RcEvent,
@@ -72,6 +77,37 @@ describe("computeMonthlyReset", () => {
     expect(d.credits).toBe(CREDITS_PUBLIC);
   });
 
+  // Finding #5: expiry 1 day ago, month boundary crossed, still within grace →
+  // a paying subscriber awaiting renewal is NOT reset to 25.
+  it("does NOT reset a Pro within the billing-retry grace window", () => {
+    const now = FEB;
+    const state: ProfileCreditState = {
+      credits: 500,
+      tier: "public",
+      plan: "pro",
+      planExpiresAt: now - DAY_MS, // expired 1 day ago, inside PRO_GRACE_MS
+      lastResetDate: iso(JAN),
+    };
+    expect(PRO_GRACE_MS).toBeGreaterThan(DAY_MS);
+    const d = computeMonthlyReset(state, now);
+    expect(d.reset).toBe(false);
+    expect(d.credits).toBe(500);
+  });
+
+  it("DOES reset a Pro once past the grace window", () => {
+    const now = FEB;
+    const state: ProfileCreditState = {
+      credits: 500,
+      tier: "public",
+      plan: "pro",
+      planExpiresAt: now - PRO_GRACE_MS - DAY_MS, // grace fully elapsed
+      lastResetDate: iso(JAN),
+    };
+    const d = computeMonthlyReset(state, now);
+    expect(d.reset).toBe(true);
+    expect(d.credits).toBe(CREDITS_PUBLIC);
+  });
+
   // Row 15: pack credits survive a month rollover — reset never returns/touches packs.
   it("never references packCredits (packs survive rollover)", () => {
     const state: ProfileCreditState = {
@@ -123,6 +159,34 @@ describe("computeSpend", () => {
   });
 });
 
+// Finding #6: server-authoritative spend REJECTS instead of clamping.
+describe("computeSpendChecked", () => {
+  it("rejects an over-spend and deducts nothing", () => {
+    const d = computeSpendChecked(9, 0, 10); // 9 available, costs 10
+    expect(d.ok).toBe(false);
+    expect(d.spent).toBe(0);
+    expect(d.credits).toBe(9); // untouched
+    expect(d.packCredits).toBe(0);
+    expect(d.available).toBe(9);
+  });
+
+  it("succeeds and deducts monthly-first when covered", () => {
+    const d = computeSpendChecked(4, 250, 10); // 4 monthly + 6 pack
+    expect(d.ok).toBe(true);
+    expect(d.credits).toBe(0);
+    expect(d.packCredits).toBe(244);
+    expect(d.spent).toBe(10);
+    expect(d.total).toBe(244);
+  });
+
+  it("succeeds on an exact-balance spend", () => {
+    const d = computeSpendChecked(6, 4, 10);
+    expect(d.ok).toBe(true);
+    expect(d.total).toBe(0);
+    expect(d.spent).toBe(10);
+  });
+});
+
 // ---------------------------------------------------------------------------
 // Grants (shared Stripe/RevenueCat building blocks)
 // ---------------------------------------------------------------------------
@@ -136,6 +200,64 @@ describe("applyProGrant", () => {
     expect(d.patch.lastResetDate).toBe(iso(JAN));
     // packCredits is never referenced by a Pro grant.
     expect(d.patch.packCredits).toBeUndefined();
+  });
+
+  // Finding #2: planExpiresAt only ever moves forward.
+  it("keeps the later expiry when an out-of-order earlier one arrives", () => {
+    const MARCH = Date.UTC(2026, 2, 15);
+    // Existing state already renewed through March; an out-of-order INITIAL
+    // (expiry Feb) must NOT drag expiry backward.
+    const state: ProfileCreditState = { credits: 500, plan: "pro", planExpiresAt: MARCH };
+    const d = applyProGrant(state, FEB, JAN, "revenuecat");
+    expect(d.patch.planExpiresAt).toBe(MARCH);
+  });
+
+  it("advances expiry when the incoming one is later", () => {
+    const MARCH = Date.UTC(2026, 2, 15);
+    const state: ProfileCreditState = { credits: 500, plan: "pro", planExpiresAt: FEB };
+    const d = applyProGrant(state, MARCH, JAN, "revenuecat");
+    expect(d.patch.planExpiresAt).toBe(MARCH);
+  });
+
+  // Finding #4: a grant with no usable future expiry derives a sane one so the
+  // 500 isn't left instantly-expired for the next reset to wipe.
+  it("derives a future expiry when none is provided (default ~1 month)", () => {
+    const d = applyProGrant({ credits: 25 }, undefined, JAN, "revenuecat");
+    expect(d.patch.planExpiresAt).toBe(JAN + 31 * DAY_MS);
+    expect(d.patch.planExpiresAt!).toBeGreaterThan(JAN);
+  });
+
+  it("derives a 7-day expiry for a TRIAL period when none is provided", () => {
+    const d = applyProGrant({ credits: 25 }, undefined, JAN, "revenuecat", "TRIAL");
+    expect(d.patch.planExpiresAt).toBe(JAN + 7 * DAY_MS);
+  });
+
+  it("derives a future expiry when the provided/existing one is already in the past", () => {
+    const state: ProfileCreditState = { credits: 25, plan: "pro", planExpiresAt: JAN - DAY_MS };
+    const d = applyProGrant(state, JAN - 1000, JAN, "revenuecat");
+    expect(d.patch.planExpiresAt!).toBeGreaterThan(JAN);
+  });
+
+  // Finding #4 DONE criterion: a renewal missing expiration_at_ms still keeps the
+  // user Pro-active through the next calendar month boundary (reset is skipped).
+  it("renewal without expiry keeps the user Pro-active past the month boundary", () => {
+    // Grant at Jan 15 with no expiry → derived expiry Jan 15 + 31d = Feb 15.
+    const grant = applyProGrant({ credits: 30, plan: "pro", tier: "public" }, undefined, JAN, "revenuecat");
+    const granted: ProfileCreditState = {
+      credits: grant.patch.credits!,
+      plan: grant.patch.plan,
+      planExpiresAt: grant.patch.planExpiresAt,
+      planSource: grant.patch.planSource,
+      tier: "public",
+      lastResetDate: grant.patch.lastResetDate,
+    };
+    // Early February: a new calendar month vs the Jan grant, still before expiry.
+    const FEB_EARLY = Date.UTC(2026, 1, 3);
+    expect(monthKey(FEB_EARLY)).not.toBe(monthKey(JAN));
+    expect(isProActive(granted, FEB_EARLY)).toBe(true);
+    const reset = computeMonthlyReset(granted, FEB_EARLY);
+    expect(reset.reset).toBe(false); // not wiped to 25 at the boundary
+    expect(reset.credits).toBe(CREDITS_PRO);
   });
 });
 
@@ -237,17 +359,78 @@ describe("reduceRevenueCatEvent", () => {
     expect(d.patch.packCredits).toBe(0); // 100 - 250 clamped to 0
   });
 
-  it("REFUND of a subscription revokes Pro and claws back the monthly grant (clamp ≥ 0)", () => {
-    const pro: ProfileCreditState = { credits: 200, packCredits: 0, plan: "pro", planExpiresAt: FEB, tier: "public" };
+  it("REFUND of a subscription revokes Pro, claws back the grant, and clears expiry/source", () => {
+    const pro: ProfileCreditState = { credits: 200, packCredits: 0, plan: "pro", planSource: "revenuecat", planExpiresAt: FEB, tier: "public" };
     const d = reduceRevenueCatEvent(pro, { type: "REFUND", productId: "sg_pro_monthly" }, JAN);
     expect(d.patch.plan).toBe("free");
     expect(d.patch.credits).toBe(0); // max(0, 200 - 500)
+    expect(d.patch.planExpiresAt).toBeUndefined(); // cleared
+    expect(d.patch.planSource).toBeUndefined(); // cleared
+  });
+
+  // Finding #1: refunds are delivered as CANCELLATION with a refund cancel_reason.
+  it("CANCELLATION with cancel_reason=CUSTOMER_SUPPORT claws back a subscription", () => {
+    const pro: ProfileCreditState = { credits: 500, plan: "pro", planSource: "revenuecat", planExpiresAt: FEB, tier: "public" };
+    const d = reduceRevenueCatEvent(
+      pro,
+      { type: "CANCELLATION", cancelReason: "CUSTOMER_SUPPORT", productId: "sg_pro_monthly" },
+      JAN
+    );
+    expect(d.action).toBe("refund");
+    expect(d.patch.plan).toBe("free");
+    expect(d.patch.credits).toBe(0);
+  });
+
+  it("CANCELLATION with cancel_reason=CUSTOMER_SUPPORT claws back a pack", () => {
+    const withPack: ProfileCreditState = { credits: 25, packCredits: 250, plan: "free", tier: "public" };
+    const d = reduceRevenueCatEvent(
+      withPack,
+      { type: "CANCELLATION", cancelReason: "CUSTOMER_SUPPORT", productId: "sg_pack_250" },
+      JAN
+    );
+    expect(d.action).toBe("refund");
+    expect(d.patch.packCredits).toBe(0);
+    expect(d.patch.credits).toBeUndefined(); // monthly bucket untouched
+  });
+
+  it("CANCELLATION with cancel_reason=UNSUBSCRIBE is a no-op (keeps credits)", () => {
+    const pro: ProfileCreditState = { credits: 500, plan: "pro", planExpiresAt: FEB, tier: "public" };
+    const d = reduceRevenueCatEvent(pro, { type: "CANCELLATION", cancelReason: "UNSUBSCRIBE" }, JAN);
+    expect(d.action).toBe("cancellation");
+    expect(d.changed).toBe(false);
+  });
+
+  // Finding #8: a stray/unknown-product refund must NOT zero a pack-only user's
+  // monthly allowance, and must not touch a plan they never held.
+  it("unknown-product REFUND on a pack-only free user is a no-op (25 credits kept)", () => {
+    const packOnly: ProfileCreditState = { credits: 25, packCredits: 100, plan: "free", tier: "public" };
+    const d = reduceRevenueCatEvent(packOnly, { type: "REFUND", productId: "" }, JAN);
+    expect(d.changed).toBe(false);
+    expect(d.patch.credits).toBeUndefined();
+    expect(d.patch.plan).toBeUndefined();
+  });
+
+  it("unknown-product CANCELLATION-refund still claws a genuine RC Pro holder", () => {
+    // No productId, but the profile held Pro via RevenueCat → sub clawback fires.
+    const pro: ProfileCreditState = { credits: 400, plan: "pro", planSource: "revenuecat", planExpiresAt: FEB, tier: "public" };
+    const d = reduceRevenueCatEvent(pro, { type: "CANCELLATION", cancelReason: "CUSTOMER_SUPPORT", productId: "" }, JAN);
+    expect(d.action).toBe("refund");
+    expect(d.patch.plan).toBe("free");
+    expect(d.patch.credits).toBe(0);
   });
 
   it("ignores an unrecognized event type", () => {
     const d = reduceRevenueCatEvent(base, { type: "TRANSFER" }, JAN);
     expect(d.action).toBe("ignore");
     expect(d.changed).toBe(false);
+  });
+
+  it("isRefundEvent classifies CANCELLATION cancel_reasons correctly", () => {
+    expect(isRefundEvent({ type: "CANCELLATION", cancelReason: "CUSTOMER_SUPPORT" })).toBe(true);
+    expect(isRefundEvent({ type: "CANCELLATION", cancelReason: "UNSUBSCRIBE" })).toBe(false);
+    expect(isRefundEvent({ type: "CANCELLATION" })).toBe(false);
+    expect(isRefundEvent({ type: "REFUND" })).toBe(true);
+    expect(isRefundEvent({ type: "RENEWAL" })).toBe(false);
   });
 });
 
@@ -334,6 +517,118 @@ describe("planRevenueCatApply idempotency", () => {
     profile = { ...profile, credits: first.patch.credits!, planExpiresAt: first.patch.planExpiresAt };
     const second = reduceRevenueCatEvent(profile, ev, FEB);
     expect(second.patch.credits).toBe(CREDITS_PRO); // still 500, not 1000
+  });
+
+  // The refund-swallow bug lived exactly here: refund events routed through
+  // planRevenueCatApply with transactionSeen=true. Prove they are NOT skipped.
+  it("does NOT swallow a refund event even when its transaction id was seen", () => {
+    const pro: ProfileCreditState = { credits: 500, plan: "pro", planSource: "revenuecat", planExpiresAt: FEB };
+    const plan = planRevenueCatApply(
+      pro,
+      { type: "CANCELLATION", cancelReason: "CUSTOMER_SUPPORT", productId: "sg_pro_monthly" },
+      JAN,
+      { eventSeen: false, transactionSeen: true, isOwner: false } // original purchase tx already recorded
+    );
+    expect(plan.skip).toBe(false);
+    expect(plan.decision!.action).toBe("refund");
+    expect(plan.decision!.patch.plan).toBe("free");
+  });
+});
+
+// ---------------------------------------------------------------------------
+// Full lifecycle through planRevenueCatApply (the real mutation entry point).
+// The in-memory store faithfully models billing:applyRevenueCatEvent: rcEvents
+// by_event dedupe, consumable-only transaction dedupe, and pro/pack grants both
+// recording a transactions row keyed by the store transaction id.
+// ---------------------------------------------------------------------------
+describe("lifecycle through planRevenueCatApply", () => {
+  const NOW = Date.UTC(2026, 0, 20);
+
+  function makeStore(initial: ProfileCreditState) {
+    const profile: ProfileCreditState = { ...initial };
+    const seenEvents = new Set<string>();
+    const seenTx = new Set<string>();
+
+    function deliver(eventId: string, event: RcEvent, transactionId?: string) {
+      const consumable = event.type === "NON_RENEWING_PURCHASE";
+      const eventSeen = seenEvents.has(eventId);
+      const transactionSeen = consumable && transactionId ? seenTx.has(transactionId) : false;
+      const plan = planRevenueCatApply(profile, event, NOW, { eventSeen, transactionSeen, isOwner: false });
+      if (plan.skip) {
+        if (plan.recordEvent) seenEvents.add(eventId);
+        return plan;
+      }
+      const d = plan.decision as GrantDecision;
+      if (d.changed) {
+        if (d.patch.credits !== undefined) profile.credits = d.patch.credits;
+        if (d.patch.packCredits !== undefined) profile.packCredits = d.patch.packCredits;
+        if (d.patch.plan !== undefined) profile.plan = d.patch.plan;
+        if ("planExpiresAt" in d.patch) profile.planExpiresAt = d.patch.planExpiresAt;
+        if ("planSource" in d.patch) profile.planSource = d.patch.planSource;
+      }
+      // Both pro and pack grants write a transactions row with rcTransactionId.
+      if ((d.action === "pro_grant" || d.action === "pack_grant") && transactionId) {
+        seenTx.add(transactionId);
+      }
+      seenEvents.add(eventId);
+      return plan;
+    }
+
+    return { profile, deliver };
+  }
+
+  // Finding #1: purchase → refund (refund reuses the purchase transaction id)
+  // must end at free with credits clawed back — not swallowed as a duplicate.
+  it("purchase → refund ends at free with the pro grant clawed back", () => {
+    const store = makeStore({ credits: 25, plan: "free", tier: "public" });
+    const TX = "txn_sub_1";
+
+    store.deliver("evt_purchase", { type: "INITIAL_PURCHASE", productId: "sg_pro_monthly", expirationAtMs: NOW + 30 * DAY_MS, periodType: "NORMAL" }, TX);
+    expect(store.profile.plan).toBe("pro");
+    expect(store.profile.credits).toBe(CREDITS_PRO);
+
+    // Refund arrives as a CANCELLATION reusing the same store transaction id.
+    const plan = store.deliver("evt_refund", { type: "CANCELLATION", cancelReason: "CUSTOMER_SUPPORT", productId: "sg_pro_monthly" }, TX);
+    expect(plan.skip).toBe(false); // NOT swallowed by tx-dedupe
+    expect(store.profile.plan).toBe("free");
+    expect(store.profile.credits).toBe(0);
+    expect(store.profile.planExpiresAt).toBeUndefined();
+    expect(store.profile.planSource).toBeUndefined();
+  });
+
+  it("a redelivered refund event does not double-apply (rcEvents dedupe)", () => {
+    const store = makeStore({ credits: 25, plan: "free", tier: "public" });
+    const TX = "txn_sub_2";
+    store.deliver("evt_p", { type: "INITIAL_PURCHASE", productId: "sg_pro_monthly", expirationAtMs: NOW + 30 * DAY_MS }, TX);
+    store.deliver("evt_r", { type: "CANCELLATION", cancelReason: "CUSTOMER_SUPPORT", productId: "sg_pro_monthly" }, TX);
+    const replay = store.deliver("evt_r", { type: "CANCELLATION", cancelReason: "CUSTOMER_SUPPORT", productId: "sg_pro_monthly" }, TX);
+    expect(replay.skip).toBe(true);
+    expect(replay.reason).toBe("duplicate_event");
+    expect(store.profile.plan).toBe("free");
+  });
+
+  // Finding #3: pack purchase delivered twice with NO store transaction id but
+  // the same deterministic fallback key, under two different event ids → once.
+  it("consumable with a fallback dedupe key grants once across two event ids", () => {
+    const store = makeStore({ credits: 25, packCredits: 0, plan: "free", tier: "public" });
+    // Webhook derives this deterministic key when transaction_id is absent.
+    const FALLBACK = "rcfallback_user@x.com_sg_pack_250_1700000000000";
+    const ev: RcEvent = { type: "NON_RENEWING_PURCHASE", productId: "sg_pack_250" };
+    store.deliver("evt_a", ev, FALLBACK);
+    const second = store.deliver("evt_b", ev, FALLBACK); // new event id, same fallback key
+    expect(second.skip).toBe(true);
+    expect(second.reason).toBe("duplicate_transaction");
+    expect(store.profile.packCredits).toBe(250); // granted once, not 500
+  });
+
+  // Finding #8 end-to-end: stray refund on a pack-only user leaves them at 25.
+  it("stray unknown-product refund leaves a pack-only user untouched", () => {
+    const store = makeStore({ credits: 25, packCredits: 100, plan: "free", tier: "public" });
+    const plan = store.deliver("evt_stray", { type: "REFUND", productId: "" }, "txn_x");
+    expect(plan.skip).toBe(false);
+    expect(store.profile.credits).toBe(25);
+    expect(store.profile.packCredits).toBe(100);
+    expect(store.profile.plan).toBe("free");
   });
 });
 

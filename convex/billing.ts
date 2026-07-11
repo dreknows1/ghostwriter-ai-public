@@ -288,9 +288,12 @@ export const applyRevenueCatEvent = mutation({
     expirationAtMs: v.optional(v.number()),
     transactionId: v.optional(v.string()),
     amountCents: v.optional(v.number()),
+    cancelReason: v.optional(v.string()),
+    periodType: v.optional(v.string()),
   },
   handler: async (ctx: any, args: any) => {
     const now = Date.now();
+    const isConsumable = args.type === "NON_RENEWING_PURCHASE";
 
     // DB lookups the pure planner needs: event dedupe, transaction dedupe.
     const eventSeen = !!(await ctx.db
@@ -298,8 +301,10 @@ export const applyRevenueCatEvent = mutation({
       .withIndex("by_event", (q: any) => q.eq("eventId", args.eventId))
       .first());
 
+    // Transaction-level dedupe only guards consumable (pack) grants; renewals
+    // and refunds reuse/omit the purchase transaction id and must not dedupe on it.
     let transactionSeen = false;
-    if (args.transactionId) {
+    if (isConsumable && args.transactionId) {
       transactionSeen = !!(await ctx.db
         .query("transactions")
         .withIndex("by_rc_transaction", (q: any) => q.eq("rcTransactionId", args.transactionId))
@@ -319,7 +324,13 @@ export const applyRevenueCatEvent = mutation({
 
     const plan = planRevenueCatApply(
       state,
-      { type: args.type, productId: args.productId, expirationAtMs: args.expirationAtMs },
+      {
+        type: args.type,
+        productId: args.productId,
+        expirationAtMs: args.expirationAtMs,
+        cancelReason: args.cancelReason,
+        periodType: args.periodType,
+      },
       now,
       { eventSeen, transactionSeen, isOwner: isOwnerEmail(args.userEmail) }
     );

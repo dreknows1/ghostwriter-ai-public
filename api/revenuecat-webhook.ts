@@ -105,15 +105,33 @@ export default async function handler(req: any, res: any) {
     client.setAdminAuth(convexAdminKey);
 
     const price = Number(event.price_in_purchased_currency || 0);
+    const productId = event.product_id ? String(event.product_id) : undefined;
+
+    // Consumable dedupe key. Prefer the store transaction id; if absent, derive
+    // a deterministic key from stable fields so a redelivery under a NEW event
+    // id still can't double-grant a pack (rcEvents by_event covers same-id
+    // redelivery). Subscriptions/refunds don't dedupe on transaction id.
+    let transactionId = event.transaction_id
+      ? String(event.transaction_id)
+      : event.original_transaction_id
+        ? String(event.original_transaction_id)
+        : undefined;
+    if (type === 'NON_RENEWING_PURCHASE' && !transactionId) {
+      const stamp = event.purchased_at_ms ?? event.event_timestamp_ms ?? '';
+      transactionId = `rcfallback_${appUserId}_${productId ?? 'unknown'}_${stamp}`;
+    }
+
     const args: Record<string, any> = {
       eventId,
       type,
       userEmail: appUserId,
-      productId: event.product_id ? String(event.product_id) : undefined,
-      transactionId: event.transaction_id ? String(event.transaction_id) : undefined,
+      productId,
+      transactionId,
       amountCents: Number.isFinite(price) ? Math.round(price * 100) : 0,
     };
     if (typeof event.expiration_at_ms === 'number') args.expirationAtMs = event.expiration_at_ms;
+    if (event.cancel_reason) args.cancelReason = String(event.cancel_reason);
+    if (event.period_type) args.periodType = String(event.period_type);
 
     const result = await client.mutation(applyRevenueCatEventRef as any, args);
     return res.status(200).json({ received: true, result });

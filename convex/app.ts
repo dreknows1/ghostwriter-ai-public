@@ -1,7 +1,7 @@
 import { mutation, query, internalMutation } from "./_generated/server";
 import { v } from "convex/values";
 import { CREDITS_PUBLIC, CREDITS_SKOOL, UNLIMITED_CREDITS, isOwnerEmail } from "./constants";
-import { computeMonthlyReset, computeSpend } from "./creditLogic";
+import { computeMonthlyReset, computeSpend, computeSpendChecked } from "./creditLogic";
 const REFERRAL_INVITER_CREDITS = 40;
 const REFERRAL_INVITEE_CREDITS = 20;
 
@@ -471,6 +471,40 @@ export const spendCreditsByEmail = mutation({
       createdAt: Date.now(),
     });
     return decision.total;
+  },
+});
+
+/**
+ * Server-authoritative spend: REJECTS when the balance can't cover `amount`
+ * (returns `{ ok: false }` and deducts nothing) instead of clamping. This is the
+ * primitive the generation path must call so credits are enforced server-side
+ * rather than trusting the client. Distinct from `spendCreditsByEmail` (which
+ * clamps and returns a number) to preserve that function's existing contract.
+ */
+export const spendCreditsStrictByEmail = mutation({
+  args: { email: v.string(), amount: v.number(), reason: v.string() },
+  handler: async (ctx: any, args: any) => {
+    // Owner accounts: unlimited — always succeeds, never deducts.
+    if (isOwnerEmail(args.email)) {
+      return { ok: true, spent: args.amount, credits: UNLIMITED_CREDITS, packCredits: 0, total: UNLIMITED_CREDITS };
+    }
+    const { profile } = await ensureUserAndProfile(ctx, args.email);
+    const decision = computeSpendChecked(profile.credits || 0, profile.packCredits || 0, args.amount);
+    if (!decision.ok) {
+      return { ok: false, reason: "insufficient_credits", available: decision.available, total: decision.available };
+    }
+    await ctx.db.patch(profile._id, {
+      credits: decision.credits,
+      packCredits: decision.packCredits,
+      updatedAt: Date.now(),
+    });
+    await ctx.db.insert("creditLedger", {
+      userId: profile.userId,
+      delta: -decision.spent,
+      reason: args.reason,
+      createdAt: Date.now(),
+    });
+    return { ok: true, spent: decision.spent, credits: decision.credits, packCredits: decision.packCredits, total: decision.total };
   },
 });
 

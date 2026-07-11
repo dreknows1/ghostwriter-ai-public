@@ -1,4 +1,6 @@
 import { apiFetch, apiUrl } from '../lib/api';
+import { isNative } from '../lib/platform';
+import { legacyLocalStorageGet, storageGet, storageRemove, storageSet } from '../lib/storage';
 
 const SESSION_KEY = 'gwai_session';
 
@@ -16,6 +18,13 @@ const createSession = (email: string): AppSession => ({
   }
 });
 
+/** Cryptographically-random hex nonce for the Sign-in-with-Apple handshake. */
+const generateNonce = (): string => {
+  const bytes = new Uint8Array(16);
+  crypto.getRandomValues(bytes);
+  return Array.from(bytes, (b) => b.toString(16).padStart(2, '0')).join('');
+};
+
 export const signUp = async (email: string, pass: string, referralCode?: string) => {
   try {
     const resp = await apiFetch('/api/auth', {
@@ -26,7 +35,7 @@ export const signUp = async (email: string, pass: string, referralCode?: string)
     const json = await resp.json();
     if (!resp.ok) return { data: null, error: new Error(json?.error || 'Sign up failed') };
     const session = json?.session || createSession(email);
-    localStorage.setItem(SESSION_KEY, JSON.stringify(session));
+    await storageSet(SESSION_KEY, JSON.stringify(session));
     return { data: { session }, error: null };
   } catch (e: any) {
     return { data: null, error: e };
@@ -43,29 +52,86 @@ export const signIn = async (email: string, pass: string) => {
     const json = await resp.json();
     if (!resp.ok) return { data: null, error: new Error(json?.error || 'Sign in failed') };
     const session = json?.session || createSession(email);
-    localStorage.setItem(SESSION_KEY, JSON.stringify(session));
+    await storageSet(SESSION_KEY, JSON.stringify(session));
     return { data: { session }, error: null };
   } catch (e: any) {
     return { data: null, error: e };
   }
 };
 
-export const signInWithOAuthEmail = async (email: string) => {
+/**
+ * Redeem a signed single-use OAuth token (minted by api/oauth/callback.ts after
+ * a real provider exchange) for a session. The email is derived server-side from
+ * the verified token — we never post a bare email here.
+ */
+export const signInWithOAuthToken = async (token: string) => {
   try {
     const resp = await apiFetch('/api/auth', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ action: 'oauth', email }),
+      body: JSON.stringify({ action: 'oauth', token }),
     });
     const json = await resp.json();
     if (!resp.ok) return { data: null, error: new Error(json?.error || 'OAuth sign in failed') };
-    const session = json?.session || createSession(email);
-    localStorage.setItem(SESSION_KEY, JSON.stringify(session));
+    const session = json?.session as AppSession | undefined;
+    if (!session?.user?.email) return { data: null, error: new Error('OAuth sign in returned no session') };
+    await storageSet(SESSION_KEY, JSON.stringify(session));
     return { data: { session }, error: null };
   } catch (e: any) {
     return { data: null, error: e };
   }
 };
+
+/**
+ * Native Sign in with Apple. Presents the native sheet, then POSTs the identity
+ * token to /api/auth-apple which verifies it against Apple's JWKS. Web callers
+ * continue to use the redirect OAuth flow (startProviderSignIn). The button UI
+ * is owned by the UI task; this exports the function it calls.
+ */
+export const signInWithApple = async () => {
+  if (!isNative()) {
+    return { data: null, error: new Error('Apple sign-in is only available in the app') };
+  }
+  try {
+    const { SignInWithApple } = await import('@capacitor-community/apple-sign-in');
+    const nonce = generateNonce();
+    const result = await SignInWithApple.authorize({
+      clientId: 'com.songghost.app',
+      redirectURI: 'https://www.songghost.com/api/oauth/callback',
+      scopes: 'name email',
+      nonce,
+    });
+    const response = result?.response;
+    const identityToken = response?.identityToken;
+    if (!identityToken) {
+      return { data: null, error: new Error('Apple did not return an identity token') };
+    }
+    const givenName = response?.givenName || '';
+    const familyName = response?.familyName || '';
+    const fullName = `${givenName} ${familyName}`.trim() || undefined;
+
+    const resp = await apiFetch('/api/auth-apple', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ identityToken, nonce, email: response?.email || undefined, fullName }),
+    });
+    const json = await resp.json();
+    if (!resp.ok) return { data: null, error: new Error(json?.error || 'Apple sign in failed') };
+    const session = json?.session as AppSession | undefined;
+    if (!session?.user?.email) return { data: null, error: new Error('Apple sign in returned no session') };
+    await storageSet(SESSION_KEY, JSON.stringify(session));
+    return { data: { session }, error: null };
+  } catch (e: any) {
+    return { data: null, error: e };
+  }
+};
+
+/**
+ * Spec/PLAN alias for {@link signInWithApple}. Exported under both names so the
+ * UI-layer Apple button can import whichever it references. Guarded by isNative()
+ * inside signInWithApple.
+ */
+export const startAppleSignIn = signInWithApple;
 
 export const startProviderSignIn = (provider: string) => {
   const normalizedProvider = provider.toLowerCase().trim();
@@ -73,13 +139,28 @@ export const startProviderSignIn = (provider: string) => {
 };
 
 export const signOut = async () => {
-  localStorage.removeItem(SESSION_KEY);
+  await storageRemove(SESSION_KEY);
+  // Also clear any legacy web copy so a native migration can't resurrect it.
+  try {
+    if (typeof localStorage !== 'undefined') localStorage.removeItem(SESSION_KEY);
+  } catch {
+    /* non-fatal */
+  }
   return { error: null };
 };
 
-export const getSession = async () => {
+export const getSession = async (): Promise<AppSession | null> => {
   try {
-    const raw = localStorage.getItem(SESSION_KEY);
+    let raw = await storageGet(SESSION_KEY);
+    if (!raw) {
+      // One-time migration: on native, Preferences is empty on first launch —
+      // adopt an existing web/localStorage session if one is present.
+      const legacy = legacyLocalStorageGet(SESSION_KEY);
+      if (legacy) {
+        await storageSet(SESSION_KEY, legacy);
+        raw = legacy;
+      }
+    }
     if (!raw) return null;
     const parsed = JSON.parse(raw) as AppSession;
     if (!parsed?.user?.email) return null;

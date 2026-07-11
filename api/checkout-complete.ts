@@ -1,12 +1,16 @@
 import Stripe from "stripe";
 import { ConvexHttpClient } from "convex/browser";
 import { makeFunctionReference } from "convex/server";
+import { applyCors, handlePreflight } from "../lib/cors";
 
 const applyStripeCheckoutCreditsByEmailRef = makeFunctionReference<"mutation">(
   "billing:applyStripeCheckoutCreditsByEmail"
 );
 
 export default async function handler(req: any, res: any) {
+  if (handlePreflight(req, res)) return;
+  applyCors(req, res);
+
   if (req.method !== "POST") {
     res.setHeader("Allow", "POST");
     return res.status(405).json({ error: "Method Not Allowed" });

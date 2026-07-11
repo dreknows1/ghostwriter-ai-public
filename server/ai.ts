@@ -16,6 +16,7 @@ import {
   type EngineGenerate,
 } from "./engine/pipeline";
 import { landRoom } from "./engine/landing";
+import { applyCors, handlePreflight } from "../lib/cors";
 
 
 const ASK_ANDRE_AUDIT_CONTEXT = `
@@ -1123,6 +1124,9 @@ async function streamSongV3(payload: any, res: VercelResponse) {
 }
 
 export default async function handler(req: VercelRequest, res: VercelResponse) {
+  if (handlePreflight(req, res)) return;
+  applyCors(req, res);
+
   if (req.method === "GET") {
     // Deployment canary (plan §1): proves the curriculum is inside the deployed bundle.
     // `rooms` also feeds the Song Builder's sub-genre step (name + picker one-liner).
