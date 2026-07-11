@@ -2,6 +2,7 @@
 import React, { useState, useEffect } from 'react';
 import { LoadingSpinner } from './icons';
 import { toast } from './Feedback';
+import { apiFetch } from '../lib/api';
 
 interface PricingViewProps {
     email: string;
@@ -30,7 +31,7 @@ const PricingView: React.FC<PricingViewProps> = ({ email, onClose }) => {
     useEffect(() => {
         const fetchTier = async () => {
             try {
-                const res = await fetch('/api/db', {
+                const res = await apiFetch('/api/db', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({ action: 'getUserProfileByEmail', payload: { email } }),
@@ -50,7 +51,7 @@ const PricingView: React.FC<PricingViewProps> = ({ email, onClose }) => {
     const handlePurchase = async (priceId: string) => {
         setProcessingId(priceId);
         try {
-            const response = await fetch('/api/create-checkout-session', {
+            const response = await apiFetch('/api/create-checkout-session', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ priceId, email }),

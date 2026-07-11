@@ -6,6 +6,7 @@ import { saveSong } from './services/songService';
 import { getUserProfile } from './services/userService';
 import { getSession, signOut, signIn, signUp, signInWithOAuthEmail, startProviderSignIn } from './services/authService';
 import { getUserCredits, hasEnoughCredits, deductCredits, COSTS, formatCredits } from './services/creditService';
+import { apiFetch } from './lib/api';
 import LyricsDisplay from './components/LyricsDisplay';
 import ProfileView from './components/ProfileView';
 import PricingView from './components/PricingView';
@@ -185,7 +186,7 @@ const SongBuilder: React.FC<{
     let cancelled = false;
     (async () => {
       try {
-        const res = await fetch('/api/ai');
+        const res = await apiFetch('/api/ai');
         if (!res.ok) return;
         const json = await res.json();
         if (!cancelled && json && typeof json.rooms === 'object' && json.rooms) {
@@ -663,7 +664,7 @@ export const App: React.FC = () => {
     let cancelled = false;
     (async () => {
       try {
-        const res = await fetch('/api/ai');
+        const res = await apiFetch('/api/ai');
         if (!res.ok) return;
         const json = await res.json();
         if (cancelled) return;
@@ -787,7 +788,7 @@ export const App: React.FC = () => {
             const savedTier = localStorage.getItem('sg_pending_tier');
             if (savedTier === 'skool') {
               try {
-                await fetch('/api/db', {
+                await apiFetch('/api/db', {
                   method: 'POST',
                   headers: { 'Content-Type': 'application/json' },
                   body: JSON.stringify({ action: 'db', dbAction: 'setProfileTier', payload: { email: data.session.user.email, tier: 'skool' } }),
@@ -827,7 +828,7 @@ export const App: React.FC = () => {
         if (status === 'success') {
           try {
             if (sessionId) {
-              await fetch('/api/checkout-complete', {
+              await apiFetch('/api/checkout-complete', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ sessionId }),
@@ -1038,7 +1039,7 @@ export const App: React.FC = () => {
             const savedTier = localStorage.getItem('sg_pending_tier');
             if (savedTier === 'skool') {
               try {
-                await fetch('/api/db', {
+                await apiFetch('/api/db', {
                   method: 'POST',
                   headers: { 'Content-Type': 'application/json' },
                   body: JSON.stringify({ action: 'db', dbAction: 'setProfileTier', payload: { email: data.session.user.email, tier: 'skool' } }),
@@ -1172,7 +1173,7 @@ export const App: React.FC = () => {
                         setIsAuthLoading(true);
                         setCommunityCodeError(null);
                         try {
-                          const res = await fetch('/api/auth', {
+                          const res = await apiFetch('/api/auth', {
                             method: 'POST',
                             headers: { 'Content-Type': 'application/json' },
                             body: JSON.stringify({ action: 'validateCommunityCode', code: communityCode.trim() }),

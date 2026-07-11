@@ -1,7 +1,8 @@
 import { UserProfile, Transaction } from "../types";
+import { apiFetch } from "../lib/api";
 
 async function callDb(action: string, payload: any) {
-  const res = await fetch("/api/auth", {
+  const res = await apiFetch("/api/auth", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ action: "db", dbAction: action, payload }),

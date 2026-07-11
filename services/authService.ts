@@ -1,3 +1,4 @@
+import { apiFetch, apiUrl } from '../lib/api';
 
 const SESSION_KEY = 'gwai_session';
 
@@ -17,7 +18,7 @@ const createSession = (email: string): AppSession => ({
 
 export const signUp = async (email: string, pass: string, referralCode?: string) => {
   try {
-    const resp = await fetch('/api/auth', {
+    const resp = await apiFetch('/api/auth', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ action: 'signup', email, password: pass, referralCode }),
@@ -34,7 +35,7 @@ export const signUp = async (email: string, pass: string, referralCode?: string)
 
 export const signIn = async (email: string, pass: string) => {
   try {
-    const resp = await fetch('/api/auth', {
+    const resp = await apiFetch('/api/auth', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ action: 'signin', email, password: pass }),
@@ -51,7 +52,7 @@ export const signIn = async (email: string, pass: string) => {
 
 export const signInWithOAuthEmail = async (email: string) => {
   try {
-    const resp = await fetch('/api/auth', {
+    const resp = await apiFetch('/api/auth', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ action: 'oauth', email }),
@@ -68,7 +69,7 @@ export const signInWithOAuthEmail = async (email: string) => {
 
 export const startProviderSignIn = (provider: string) => {
   const normalizedProvider = provider.toLowerCase().trim();
-  window.location.href = `/api/oauth/start?provider=${encodeURIComponent(normalizedProvider)}`;
+  window.location.href = apiUrl(`/api/oauth/start?provider=${encodeURIComponent(normalizedProvider)}`);
 };
 
 export const signOut = async () => {

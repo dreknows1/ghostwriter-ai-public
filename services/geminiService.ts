@@ -1,5 +1,6 @@
 import { SongInputs, SocialPack, UserProfile } from "../types";
 import { sanitizeEmail, sanitizeUnknown } from "../lib/sanitizeInput";
+import { apiFetch } from "../lib/api";
 
 type AIAction =
   | "generateSong"
@@ -40,7 +41,7 @@ async function callAI<T>(action: AIAction, email: string, payload: Record<string
     const controller = new AbortController();
     const timer = setTimeout(() => controller.abort(), REQUEST_TIMEOUT_MS);
     try {
-      return await fetch("/api/ai", {
+      return await apiFetch("/api/ai", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ action, email: safeEmail, payload: { ...safePayload, userGeminiApiKey } }),
@@ -160,7 +161,7 @@ async function* streamSongEvents(
   userProfile: unknown,
   userGeminiApiKey: string
 ): AsyncGenerator<string> {
-  const resp = await fetch("/api/ai", {
+  const resp = await apiFetch("/api/ai", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({
