@@ -1,6 +1,7 @@
 import { mutation, query, internalMutation } from "./_generated/server";
 import { v } from "convex/values";
 import { CREDITS_PUBLIC, CREDITS_SKOOL, UNLIMITED_CREDITS, isOwnerEmail } from "./constants";
+import { computeMonthlyReset, computeSpend } from "./creditLogic";
 const REFERRAL_INVITER_CREDITS = 40;
 const REFERRAL_INVITEE_CREDITS = 20;
 
@@ -92,11 +93,6 @@ async function getExistingUserAndProfile(ctx: any, emailRaw: string) {
   return { user, profile: profile || null, email };
 }
 
-function monthKey(ts: number) {
-  const d = new Date(ts);
-  return `${d.getUTCFullYear()}-${d.getUTCMonth() + 1}`;
-}
-
 async function qualifyAndRewardReferral(ctx: any, referredUserId: any) {
   const referral = await ctx.db
     .query("referrals")
@@ -154,6 +150,8 @@ export const getUserProfileByEmail = query({
       id: user._id,
       user_email: email,
       credits: profile.credits,
+      pack_credits: profile.packCredits ?? 0,
+      credits_total: (profile.credits ?? 0) + (profile.packCredits ?? 0),
       display_name: profile.displayName,
       avatar_url: profile.avatarUrl,
       bio: profile.bio,
@@ -161,6 +159,9 @@ export const getUserProfileByEmail = query({
       preferred_art_style: profile.preferredArtStyle,
       last_reset_date: profile.lastResetDate,
       tier: profile.tier || "public",
+      plan: profile.plan || "free",
+      plan_expires_at: profile.planExpiresAt,
+      plan_source: profile.planSource,
     };
   },
 });
@@ -396,6 +397,13 @@ export const auditSkoolTierMismatches = internalMutation({
   },
 });
 
+/**
+ * Returns total spendable credits (monthly bucket + packCredits) as a plain
+ * number — the shape existing callers (services/creditService.ts →
+ * getUserCredits → App.tsx) depend on. Applies the calendar reset first:
+ * active-Pro subscribers are skipped so a UTC month rollover never clobbers
+ * their bucket, and packCredits are never touched by the reset.
+ */
 export const getCreditsByEmail = mutation({
   args: { email: v.string() },
   handler: async (ctx: any, args: any) => {
@@ -408,43 +416,61 @@ export const getCreditsByEmail = mutation({
       return UNLIMITED_CREDITS;
     }
     const now = Date.now();
-    const lastReset = profile.lastResetDate ? new Date(profile.lastResetDate).getTime() : 0;
-    if (monthKey(now) !== monthKey(lastReset)) {
-      const isSkool = profile.tier === "skool";
-      const monthlyCredits = isSkool ? CREDITS_SKOOL : CREDITS_PUBLIC;
+    const decision = computeMonthlyReset(
+      {
+        credits: profile.credits,
+        packCredits: profile.packCredits,
+        plan: profile.plan,
+        planExpiresAt: profile.planExpiresAt,
+        tier: profile.tier,
+        lastResetDate: profile.lastResetDate,
+      },
+      now
+    );
 
+    const packCredits = profile.packCredits ?? 0;
+
+    if (decision.reset) {
       await ctx.db.patch(profile._id, {
-        credits: monthlyCredits,
-        lastResetDate: new Date(now).toISOString(),
+        credits: decision.credits,
+        lastResetDate: decision.lastResetDate,
         updatedAt: now,
       });
       await ctx.db.insert("creditLedger", {
         userId: profile.userId,
-        delta: monthlyCredits,
+        delta: decision.credits - (profile.credits || 0),
         reason: "monthly_reset",
         createdAt: now,
       });
-      return monthlyCredits;
+      return decision.credits + packCredits;
     }
-    return profile.credits;
+    return (profile.credits || 0) + packCredits;
   },
 });
 
+/**
+ * Spends `amount` credits from the monthly bucket first, then packCredits.
+ * Returns the new total spendable balance (number) for backward compatibility.
+ */
 export const spendCreditsByEmail = mutation({
   args: { email: v.string(), amount: v.number(), reason: v.string() },
   handler: async (ctx: any, args: any) => {
     // Owner accounts: spends are no-ops — unlimited credits, never charged.
     if (isOwnerEmail(args.email)) return UNLIMITED_CREDITS;
     const { profile } = await ensureUserAndProfile(ctx, args.email);
-    const next = Math.max(0, profile.credits - args.amount);
-    await ctx.db.patch(profile._id, { credits: next, updatedAt: Date.now() });
+    const decision = computeSpend(profile.credits || 0, profile.packCredits || 0, args.amount);
+    await ctx.db.patch(profile._id, {
+      credits: decision.credits,
+      packCredits: decision.packCredits,
+      updatedAt: Date.now(),
+    });
     await ctx.db.insert("creditLedger", {
       userId: profile.userId,
-      delta: -args.amount,
+      delta: -decision.spent,
       reason: args.reason,
       createdAt: Date.now(),
     });
-    return next;
+    return decision.total;
   },
 });
 

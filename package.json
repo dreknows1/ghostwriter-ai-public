@@ -25,6 +25,7 @@
     "@fontsource/manrope": "^5.2.8",
     "@fontsource/unbounded": "^5.2.8",
     "@google/genai": "*",
+    "@revenuecat/purchases-capacitor": "^11.3.2",
     "@stripe/stripe-js": "^3.0.0",
     "buffer": "^6.0.3",
     "convex": "^1.18.0",

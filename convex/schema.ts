@@ -18,9 +18,16 @@ export default defineSchema({
     bio: v.optional(v.string()),
     preferredVibe: v.optional(v.string()),
     preferredArtStyle: v.optional(v.string()),
+    // Monthly-allowance bucket (reset on calendar rollover; see convex/creditLogic.ts).
     credits: v.number(),
     lastResetDate: v.optional(v.string()),
     tier: v.optional(v.string()), // "public" | "skool"
+    // Two-bucket credit system (docs/PLAN.md "Credits & payments").
+    plan: v.optional(v.string()), // "free" | "pro"
+    planExpiresAt: v.optional(v.number()),
+    planSource: v.optional(v.string()), // "stripe" | "revenuecat"
+    // Non-expiring bucket funded by one-time credit packs; never touched by reset.
+    packCredits: v.optional(v.number()),
     updatedAt: v.number(),
   }).index("by_user", ["userId"]),
 
@@ -46,14 +53,27 @@ export default defineSchema({
   transactions: defineTable({
     userId: v.id("users"),
     stripeSessionId: v.string(),
+    // RevenueCat store transaction id — dedupes consumable (pack) grants across
+    // webhook redeliveries. Absent on Stripe rows.
+    rcTransactionId: v.optional(v.string()),
     item: v.string(),
     amountCents: v.number(),
     creditsGranted: v.number(),
     status: v.string(),
     createdAt: v.number(),
-  }).index("by_user", ["userId"]).index("by_session", ["stripeSessionId"]),
+  })
+    .index("by_user", ["userId"])
+    .index("by_session", ["stripeSessionId"])
+    .index("by_rc_transaction", ["rcTransactionId"]),
 
   stripeEvents: defineTable({
+    eventId: v.string(),
+    type: v.string(),
+    createdAt: v.number(),
+  }).index("by_event", ["eventId"]),
+
+  // RevenueCat webhook event ledger — mirrors stripeEvents for idempotency.
+  rcEvents: defineTable({
     eventId: v.string(),
     type: v.string(),
     createdAt: v.number(),

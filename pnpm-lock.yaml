@@ -26,6 +26,9 @@ importers:
       '@google/genai':
         specifier: '*'
         version: 1.40.0
+      '@revenuecat/purchases-capacitor':
+        specifier: ^11.3.2
+        version: 11.3.2(@capacitor/core@7.6.7)
       '@stripe/stripe-js':
         specifier: ^3.0.0
         version: 3.5.0
@@ -807,6 +810,14 @@ packages:
 
   '@protobufjs/utf8@1.1.0':
     resolution: {integrity: sha512-Vvn3zZrhQZkkBE8LSuW3em98c0FwgO4nxzv6OdSxPKJIEKY2bGbHn+mhGIPerzI4twdxaP8/0+06HBpwf345Lw==}
+
+  '@revenuecat/purchases-capacitor@11.3.2':
+    resolution: {integrity: sha512-3T4/lcAwpbPagrT4DuXvJ+8RewzFmHf3fQJQuhVy+uTQk5HGMHNlXcm2A/UdyHtWqU+/VqWbCClPFYGnpnNXAQ==}
+    peerDependencies:
+      '@capacitor/core': '>=7.0.0'
+
+  '@revenuecat/purchases-typescript-internal-esm@17.25.0':
+    resolution: {integrity: sha512-KC4BjFaQclXqFafG1Enh7t8GSwdg8p905by7UrHq0WSJmLhOR6yXSj6WDv1iwsFSAZxPPwgozNxt+U6IOFTdCA==}
 
   '@rolldown/pluginutils@1.0.0-beta.27':
     resolution: {integrity: sha512-+d0F4MKMCbeVUJwG96uQ4SgAznZNSq93I3V+9NHA4OpvqG8mRCpGdKmK8l/dl02h2CCDHwW2FqilnTyDcAnqjA==}
@@ -3216,6 +3227,13 @@ snapshots:
   '@protobufjs/pool@1.1.0': {}
 
   '@protobufjs/utf8@1.1.0': {}
+
+  '@revenuecat/purchases-capacitor@11.3.2(@capacitor/core@7.6.7)':
+    dependencies:
+      '@capacitor/core': 7.6.7
+      '@revenuecat/purchases-typescript-internal-esm': 17.25.0
+
+  '@revenuecat/purchases-typescript-internal-esm@17.25.0': {}
 
   '@rolldown/pluginutils@1.0.0-beta.27': {}
 
