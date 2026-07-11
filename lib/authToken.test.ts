@@ -6,6 +6,11 @@ import {
   __resetConsumedNonces,
   OAUTH_SESSION_PURPOSE,
   MAX_TOKEN_TTL_MS,
+  mintSessionToken,
+  verifySessionToken,
+  extractBearerToken,
+  SESSION_PURPOSE,
+  SESSION_TTL_MS,
 } from "./authToken";
 
 const SECRET = "test-secret-please-ignore-0123456789";
@@ -97,5 +102,83 @@ describe("authToken.consumeNonce (single-use replay guard)", () => {
     expect(consumeNonce("stale", now + 1_000, now)).toBe(true);
     // A later call past the entry's exp sweeps it; the value is then fresh again.
     expect(consumeNonce("stale", now + 1_000, now + 2_000)).toBe(true);
+  });
+});
+
+describe("sessionToken.mint / verify (the identity bearer)", () => {
+  it("mints a 30-day session that verifies and returns the normalized email", () => {
+    const now = 1_000_000;
+    const token = mintSessionToken({ email: "Person@Example.com", secret: SECRET, now });
+    const result = verifySessionToken(token, SECRET, { now: now + 1000 });
+    expect(result.valid).toBe(true);
+    if (result.valid) {
+      expect(result.email).toBe("person@example.com");
+      expect(result.payload.purpose).toBe(SESSION_PURPOSE);
+      expect(result.payload.exp).toBe(now + SESSION_TTL_MS);
+      expect(result.payload.iat).toBe(now);
+    }
+  });
+
+  it("is reusable — the same token verifies many times (no single-use nonce)", () => {
+    const token = mintSessionToken({ email: "a@b.com", secret: SECRET });
+    expect(verifySessionToken(token, SECRET).valid).toBe(true);
+    expect(verifySessionToken(token, SECRET).valid).toBe(true);
+    expect(verifySessionToken(token, SECRET).valid).toBe(true);
+  });
+
+  it("rejects an expired session", () => {
+    const now = 1_000_000;
+    const token = mintSessionToken({ email: "a@b.com", secret: SECRET, now, ttlMs: 60_000 });
+    expect(verifySessionToken(token, SECRET, { now: now + 60_001 })).toEqual({
+      valid: false,
+      reason: "expired",
+    });
+  });
+
+  it("rejects a tampered payload (attacker swaps the email under a stolen sig)", () => {
+    const now = 1_000_000;
+    const token = mintSessionToken({ email: "victim@b.com", secret: SECRET, now });
+    const [, sig] = token.split(".");
+    const forgedPayload = Buffer.from(
+      JSON.stringify({ email: "attacker@b.com", iat: now, exp: now + SESSION_TTL_MS, purpose: SESSION_PURPOSE })
+    ).toString("base64url");
+    expect(verifySessionToken(`${forgedPayload}.${sig}`, SECRET, { now })).toEqual({
+      valid: false,
+      reason: "bad_signature",
+    });
+  });
+
+  it("rejects a session signed with a different secret", () => {
+    const token = mintSessionToken({ email: "a@b.com", secret: "other-secret" });
+    expect(verifySessionToken(token, SECRET)).toEqual({ valid: false, reason: "bad_signature" });
+  });
+
+  it("rejects an OAuth (single-use) token presented as a session — wrong purpose", () => {
+    const oauth = mintToken({ email: "a@b.com", secret: SECRET });
+    expect(verifySessionToken(oauth, SECRET)).toEqual({ valid: false, reason: "wrong_purpose" });
+  });
+
+  it("rejects malformed / missing inputs", () => {
+    expect(verifySessionToken("", SECRET)).toEqual({ valid: false, reason: "malformed" });
+    expect(verifySessionToken("only-one-part", SECRET)).toEqual({ valid: false, reason: "malformed" });
+    expect(verifySessionToken(null, SECRET)).toEqual({ valid: false, reason: "malformed" });
+    expect(verifySessionToken(mintSessionToken({ email: "a@b.com", secret: SECRET }), "")).toEqual({
+      valid: false,
+      reason: "malformed",
+    });
+  });
+});
+
+describe("extractBearerToken", () => {
+  it("extracts a bearer token (case-insensitive scheme)", () => {
+    expect(extractBearerToken("Bearer abc.def")).toBe("abc.def");
+    expect(extractBearerToken("bearer abc.def")).toBe("abc.def");
+    expect(extractBearerToken(["Bearer xyz"])).toBe("xyz");
+  });
+  it("returns null for absent / non-bearer headers", () => {
+    expect(extractBearerToken(undefined)).toBeNull();
+    expect(extractBearerToken("")).toBeNull();
+    expect(extractBearerToken("Basic abc")).toBeNull();
+    expect(extractBearerToken("Bearer ")).toBeNull();
   });
 });

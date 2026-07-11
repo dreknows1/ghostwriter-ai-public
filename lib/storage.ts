@@ -17,6 +17,14 @@
  */
 import { isNative } from "./platform";
 
+/**
+ * Storage key for the server-verified session bearer token (SECURITY HOTFIX).
+ * Written by authService after every successful login and read by lib/api.ts
+ * `apiFetch` to attach `Authorization: Bearer <token>` on every request. Shared
+ * here so the writer (authService) and reader (apiFetch) can never drift.
+ */
+export const SESSION_TOKEN_KEY = "gwai_session_token";
+
 export async function storageGet(key: string): Promise<string | null> {
   if (isNative()) {
     const { Preferences } = await import("@capacitor/preferences");

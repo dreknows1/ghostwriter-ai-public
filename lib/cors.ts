@@ -60,6 +60,9 @@ export function applyCors(req: CorsRequestLike, res: CorsResponseLike): void {
       "Access-Control-Allow-Headers",
       "Content-Type, Authorization, x-gemini-api-key"
     );
+    // Let the cross-origin (Capacitor) client READ the session-expiry signal so
+    // it can distinguish an expired session from a bad-password 401 and re-login.
+    res.setHeader("Access-Control-Expose-Headers", "X-Session-Invalid");
     res.setHeader("Access-Control-Max-Age", "86400");
   }
 }

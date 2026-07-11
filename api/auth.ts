@@ -4,7 +4,8 @@ import { makeFunctionReference } from "convex/server";
 import { pbkdf2Sync, randomBytes, timingSafeEqual } from "node:crypto";
 import { applyCors, handlePreflight } from "../lib/cors";
 import { checkRateLimit, getRequestClientId } from "../lib/rateLimit";
-import { consumeNonce, OAUTH_SESSION_PURPOSE, verifyToken } from "../lib/authToken";
+import { consumeNonce, mintSessionToken, OAUTH_SESSION_PURPOSE, verifyToken } from "../lib/authToken";
+import { requireSession } from "../lib/sessionAuth";
 
 const getUserByEmailRef = makeFunctionReference<"query">("users:getUserByEmail");
 const upsertUserCredentialsRef = makeFunctionReference<"mutation">("users:upsertUserCredentials");
@@ -29,11 +30,31 @@ const dbRefs = {
   claimReferralCodeByEmail: { mode: "mutation", ref: makeFunctionReference<"mutation">("app:claimReferralCodeByEmail") },
   getReferralSummaryByEmail: { mode: "query", ref: makeFunctionReference<"query">("app:getReferralSummaryByEmail") },
   validateInviteCode: { mode: "mutation", ref: makeFunctionReference<"mutation">("inviteCodes:validateCode") },
-  setProfileTier: { mode: "mutation", ref: makeFunctionReference<"mutation">("app:setProfileTier") },
+  // NOTE: setProfileTier is deliberately NOT client-reachable (C2). Tier only
+  // changes through the validated invite path / server logic, never a raw setter.
 } as const;
+
+/**
+ * db actions whose payload is scoped to an email — the acting email is FORCED to
+ * the session token's email. `validateInviteCode` takes only a `code`.
+ */
+const EMAIL_SCOPED_DB_ACTIONS: ReadonlySet<string> = new Set(
+  Object.keys(dbRefs).filter((k) => k !== "validateInviteCode")
+);
 
 function normalizeEmail(email: string): string {
   return email.toLowerCase().trim();
+}
+
+/**
+ * Mint the reusable session bearer returned to the client on every successful
+ * login. Throws (→ 500) if AUTH_TOKEN_SECRET is unset — we never issue a session
+ * we cannot later verify.
+ */
+function mintSessionForEmail(email: string): string {
+  const secret = process.env.AUTH_TOKEN_SECRET;
+  if (!secret) throw new Error("AUTH_TOKEN_SECRET is not configured");
+  return mintSessionToken({ email, secret });
 }
 
 function hashPassword(password: string, salt: string): string {
@@ -162,13 +183,20 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     }
 
     if (action === "db") {
+      // Fail closed: a valid session bearer is REQUIRED before any Convex call.
+      const session = requireSession(req, res);
+      if (!session.ok) return;
       if (!dbAction || !dbRefs[dbAction]) return res.status(400).json({ error: "Invalid db action" });
+      // Derive identity from the token; never trust a caller-supplied email.
+      const args = EMAIL_SCOPED_DB_ACTIONS.has(dbAction as string)
+        ? { ...(dbPayload || {}), email: session.email }
+        : dbPayload || {};
       const client = getConvexClient();
       const selected: any = (dbRefs as any)[dbAction];
       const data =
         selected.mode === "query"
-          ? await client.query(selected.ref, dbPayload)
-          : await client.mutation(selected.ref, dbPayload);
+          ? await client.query(selected.ref, args)
+          : await client.mutation(selected.ref, args);
       return res.status(200).json({ data });
     }
 
@@ -224,6 +252,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
       }
       return res.status(200).json({
         session: { user: { id: user?._id || `user_${oauthEmail}`, email: oauthEmail } },
+        sessionToken: mintSessionForEmail(oauthEmail),
       });
     }
 
@@ -253,7 +282,10 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     const isNetNewUser = !existing?._id;
 
     if (action === "signup") {
-      if (existing?.passwordHash && existing?.passwordSalt) {
+      // H1: NEVER attach a password to an already-existing account (password OR
+      // passwordless OAuth/Apple/skool). Any existing record → route to sign-in.
+      // Attaching a new password to a passwordless account was an account-takeover.
+      if (existing?._id) {
         return res.status(409).json({ error: "Account already exists. Please sign in." });
       }
 
@@ -291,6 +323,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
             email: normalizedEmail,
           },
         },
+        sessionToken: mintSessionForEmail(normalizedEmail),
       });
     }
 
@@ -309,6 +342,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
               email: normalizedEmail,
             },
           },
+          sessionToken: mintSessionForEmail(normalizedEmail),
         });
       }
       return res.status(401).json({ error: "Invalid email or password" });
@@ -328,6 +362,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
           email: normalizedEmail,
         },
       },
+      sessionToken: mintSessionForEmail(normalizedEmail),
     });
   } catch (error: any) {
     console.error("[Auth API Error]", error);

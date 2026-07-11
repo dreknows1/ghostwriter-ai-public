@@ -167,6 +167,10 @@ export const getUserProfileByEmail = query({
 });
 
 export const upsertUserProfileByEmail = mutation({
+  // C2: `credits` and `last_reset_date` are NOT client-writable. Letting the
+  // client set its own credit balance was free-unlimited-credits. Credits mutate
+  // ONLY via the webhook / spend / monthly-reset paths. Profile edits are limited
+  // to presentational fields.
   args: {
     email: v.string(),
     display_name: v.optional(v.string()),
@@ -174,8 +178,6 @@ export const upsertUserProfileByEmail = mutation({
     bio: v.optional(v.string()),
     preferred_vibe: v.optional(v.string()),
     preferred_art_style: v.optional(v.string()),
-    credits: v.optional(v.number()),
-    last_reset_date: v.optional(v.string()),
   },
   handler: async (ctx: any, args: any) => {
     const { user, profile, email } = await ensureUserAndProfile(ctx, args.email);
@@ -185,14 +187,12 @@ export const upsertUserProfileByEmail = mutation({
       bio: args.bio ?? profile.bio,
       preferredVibe: args.preferred_vibe ?? profile.preferredVibe,
       preferredArtStyle: args.preferred_art_style ?? profile.preferredArtStyle,
-      credits: args.credits ?? profile.credits,
-      lastResetDate: args.last_reset_date ?? profile.lastResetDate,
       updatedAt: Date.now(),
     });
     return {
       id: user._id,
       email,
-      credits: args.credits ?? profile.credits,
+      credits: profile.credits,
     };
   },
 });
@@ -560,6 +560,11 @@ export const saveSongByEmail = mutation({
     const now = Date.now();
 
     if (args.existingId) {
+      // Object-level authz: only overwrite a song the acting user owns.
+      const existingSong = await ctx.db.get(args.existingId as any);
+      if (!existingSong || existingSong.userId !== user._id) {
+        throw new Error("Not authorized to edit this song");
+      }
       await ctx.db.patch(args.existingId as any, {
         title: args.title,
         sunoPrompt: args.sunoPrompt,
@@ -588,8 +593,16 @@ export const saveSongByEmail = mutation({
 });
 
 export const deleteSongById = mutation({
-  args: { songId: v.string() },
+  // `email` is forced to the session token's email by the API proxy; deletion is
+  // scoped to a song the acting user owns (closes the id-based IDOR in C1).
+  args: { songId: v.string(), email: v.string() },
   handler: async (ctx: any, args: any) => {
+    const { user } = await getExistingUserAndProfile(ctx, args.email);
+    const song = await ctx.db.get(args.songId as any);
+    if (!song) return { ok: true }; // already gone — idempotent
+    if (!user || song.userId !== user._id) {
+      throw new Error("Not authorized to delete this song");
+    }
     await ctx.db.delete(args.songId as any);
     return { ok: true };
   },

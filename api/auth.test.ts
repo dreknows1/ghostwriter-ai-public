@@ -17,7 +17,7 @@ vi.mock("convex/browser", () => ({
 }));
 
 import handler from "./auth";
-import { mintToken, OAUTH_SESSION_PURPOSE, __resetConsumedNonces } from "../lib/authToken";
+import { mintToken, mintSessionToken, OAUTH_SESSION_PURPOSE, __resetConsumedNonces } from "../lib/authToken";
 
 const SECRET = "auth-handler-test-secret-abcdef123456";
 
@@ -144,5 +144,58 @@ describe("POST /api/auth action:oauth — the closed account-takeover hole", () 
     const res = makeRes();
     await handler(makeReq({ action: "oauth" }, "GET"), res);
     expect(res.statusCode).toBe(405);
+  });
+});
+
+function makeAuthedReq(body: any, headers: Record<string, string> = {}) {
+  ipCounter += 1;
+  return {
+    method: "POST",
+    headers: { "x-forwarded-for": `10.9.0.${ipCounter}`, origin: "capacitor://localhost", ...headers },
+    body,
+  } as any;
+}
+
+describe("POST /api/auth action:db — session enforcement", () => {
+  it("rejects a db call with no bearer token (401, no Convex call)", async () => {
+    const res = makeRes();
+    await handler(
+      makeAuthedReq({ action: "db", dbAction: "getSongsByEmail", payload: { email: "victim@example.com" } }),
+      res
+    );
+    expect(res.statusCode).toBe(401);
+    expect(res.headers["X-Session-Invalid"]).toBe("1");
+    expect(mockQuery).not.toHaveBeenCalled();
+    expect(mockMutation).not.toHaveBeenCalled();
+  });
+
+  it("with a valid token, forces the token email onto the payload (ignores caller email)", async () => {
+    mockQuery.mockResolvedValueOnce([{ id: "song_1" }]);
+    const token = mintSessionToken({ email: "owner@example.com", secret: SECRET });
+    const res = makeRes();
+    await handler(
+      makeAuthedReq(
+        { action: "db", dbAction: "getSongsByEmail", payload: { email: "victim@example.com" } },
+        { authorization: `Bearer ${token}` }
+      ),
+      res
+    );
+    expect(res.statusCode).toBe(200);
+    expect(mockQuery.mock.calls[0][1].email).toBe("owner@example.com");
+  });
+});
+
+describe("POST /api/auth action:signup — H1 (no takeover of an existing account)", () => {
+  it("rejects signup against ANY existing account with 409 and never sets a password", async () => {
+    // getUserByEmail returns an existing (passwordless) account.
+    mockQuery.mockResolvedValueOnce({ _id: "user_existing", email: "taken@example.com" });
+    const res = makeRes();
+    await handler(
+      makeAuthedReq({ action: "signup", email: "taken@example.com", password: "supersecret123" }),
+      res
+    );
+    expect(res.statusCode).toBe(409);
+    // Crucially, upsertUserCredentials (which would attach the password) never ran.
+    expect(mockMutation).not.toHaveBeenCalled();
   });
 });

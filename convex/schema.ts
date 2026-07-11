@@ -6,10 +6,15 @@ export default defineSchema({
     email: v.string(),
     passwordHash: v.optional(v.string()),
     passwordSalt: v.optional(v.string()),
+    // Sign in with Apple stable subject (H2). Set on the first Apple sign-in and
+    // used to resolve the account on repeats when Apple omits the email claim.
+    appleSub: v.optional(v.string()),
     createdAt: v.number(),
     updatedAt: v.optional(v.number()),
     isActive: v.boolean(),
-  }).index("by_email", ["email"]),
+  })
+    .index("by_email", ["email"])
+    .index("by_apple_sub", ["appleSub"]),
 
   profiles: defineTable({
     userId: v.id("users"),

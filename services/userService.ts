@@ -18,6 +18,9 @@ export const getUserProfile = async (email: string): Promise<UserProfile | null>
 };
 
 export const upsertUserProfile = async (profile: UserProfile) => {
+  // C2: credits / last_reset_date are server-owned and no longer accepted by the
+  // mutation. Only presentational fields are sent (and `email` is overridden to
+  // the session token's email by the API proxy).
   const data = await callDb("upsertUserProfileByEmail", {
     email: profile.user_email,
     display_name: profile.display_name,
@@ -25,8 +28,6 @@ export const upsertUserProfile = async (profile: UserProfile) => {
     bio: profile.bio,
     preferred_vibe: profile.preferred_vibe,
     preferred_art_style: profile.preferred_art_style,
-    credits: profile.credits,
-    last_reset_date: profile.last_reset_date,
   });
   return { data, error: null };
 };

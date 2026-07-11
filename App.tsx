@@ -6,7 +6,7 @@ import { saveSong } from './services/songService';
 import { getUserProfile } from './services/userService';
 import { getSession, signOut, signIn, signUp, signInWithOAuthToken, startProviderSignIn } from './services/authService';
 import { getUserCredits, hasEnoughCredits, deductCredits, COSTS, formatCredits } from './services/creditService';
-import { apiFetch } from './lib/api';
+import { apiFetch, SESSION_EXPIRED_EVENT } from './lib/api';
 import LyricsDisplay from './components/LyricsDisplay';
 import ProfileView from './components/ProfileView';
 import PricingView from './components/PricingView';
@@ -883,6 +883,24 @@ export const App: React.FC = () => {
     const handler = () => setIsApiKeyModalOpen(true);
     window.addEventListener('songghost:openApiKeyModal', handler);
     return () => window.removeEventListener('songghost:openApiKeyModal', handler);
+  }, []);
+
+  // Session expiry: when apiFetch sees a 401 with X-Session-Invalid (missing or
+  // expired session bearer — e.g. an existing web user who has no token yet), it
+  // fires this event. Sign out cleanly and route to AUTH so re-login mints a new
+  // token. Graceful: a clear "session expired, sign in again" — no white screen.
+  useEffect(() => {
+    const handler = () => {
+      signOut().then(() => {
+        setSession(null);
+        setCredits(0);
+        setHeaderAvatarUrl(null);
+        setView(AppView.AUTH);
+        toast('Your session expired. Please sign in again.', 'info');
+      });
+    };
+    window.addEventListener(SESSION_EXPIRED_EVENT, handler);
+    return () => window.removeEventListener(SESSION_EXPIRED_EVENT, handler);
   }, []);
 
 

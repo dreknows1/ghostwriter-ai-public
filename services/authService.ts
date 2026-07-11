@@ -1,8 +1,24 @@
 import { apiFetch, apiUrl } from '../lib/api';
 import { isNative } from '../lib/platform';
-import { legacyLocalStorageGet, storageGet, storageRemove, storageSet } from '../lib/storage';
+import { legacyLocalStorageGet, SESSION_TOKEN_KEY, storageGet, storageRemove, storageSet } from '../lib/storage';
 
 const SESSION_KEY = 'gwai_session';
+
+/**
+ * Persist the server-verified session bearer minted by the login endpoints.
+ * apiFetch reads it from storage (same SESSION_TOKEN_KEY) to authenticate every
+ * subsequent request. Silently ignores an absent token (older server build).
+ */
+async function storeSessionToken(token: unknown): Promise<void> {
+  if (typeof token === 'string' && token) {
+    await storageSet(SESSION_TOKEN_KEY, token);
+  }
+}
+
+/** Read the stored session bearer, or null if the user has none. */
+export const getSessionToken = async (): Promise<string | null> => {
+  return storageGet(SESSION_TOKEN_KEY);
+};
 
 type AppSession = {
   user: {
@@ -36,6 +52,7 @@ export const signUp = async (email: string, pass: string, referralCode?: string)
     if (!resp.ok) return { data: null, error: new Error(json?.error || 'Sign up failed') };
     const session = json?.session || createSession(email);
     await storageSet(SESSION_KEY, JSON.stringify(session));
+    await storeSessionToken(json?.sessionToken);
     return { data: { session }, error: null };
   } catch (e: any) {
     return { data: null, error: e };
@@ -53,6 +70,7 @@ export const signIn = async (email: string, pass: string) => {
     if (!resp.ok) return { data: null, error: new Error(json?.error || 'Sign in failed') };
     const session = json?.session || createSession(email);
     await storageSet(SESSION_KEY, JSON.stringify(session));
+    await storeSessionToken(json?.sessionToken);
     return { data: { session }, error: null };
   } catch (e: any) {
     return { data: null, error: e };
@@ -76,6 +94,7 @@ export const signInWithOAuthToken = async (token: string) => {
     const session = json?.session as AppSession | undefined;
     if (!session?.user?.email) return { data: null, error: new Error('OAuth sign in returned no session') };
     await storageSet(SESSION_KEY, JSON.stringify(session));
+    await storeSessionToken(json?.sessionToken);
     return { data: { session }, error: null };
   } catch (e: any) {
     return { data: null, error: e };
@@ -120,6 +139,7 @@ export const signInWithApple = async () => {
     const session = json?.session as AppSession | undefined;
     if (!session?.user?.email) return { data: null, error: new Error('Apple sign in returned no session') };
     await storageSet(SESSION_KEY, JSON.stringify(session));
+    await storeSessionToken(json?.sessionToken);
     return { data: { session }, error: null };
   } catch (e: any) {
     return { data: null, error: e };
@@ -140,9 +160,13 @@ export const startProviderSignIn = (provider: string) => {
 
 export const signOut = async () => {
   await storageRemove(SESSION_KEY);
-  // Also clear any legacy web copy so a native migration can't resurrect it.
+  await storageRemove(SESSION_TOKEN_KEY);
+  // Also clear any legacy web copies so a native migration can't resurrect them.
   try {
-    if (typeof localStorage !== 'undefined') localStorage.removeItem(SESSION_KEY);
+    if (typeof localStorage !== 'undefined') {
+      localStorage.removeItem(SESSION_KEY);
+      localStorage.removeItem(SESSION_TOKEN_KEY);
+    }
   } catch {
     /* non-fatal */
   }

@@ -22,8 +22,9 @@ import {
 } from "../lib/appleAuth";
 import { applyCors, handlePreflight } from "../lib/cors";
 import { checkRateLimit, getRequestClientId } from "../lib/rateLimit";
+import { mintSessionToken } from "../lib/authToken";
 
-const upsertUserCredentialsRef = makeFunctionReference<"mutation">("users:upsertUserCredentials");
+const upsertAppleUserRef = makeFunctionReference<"mutation">("users:upsertAppleUser");
 const isSkoolMemberByEmailRef = makeFunctionReference<"query">("app:isSkoolMemberByEmail");
 const setProfileTierRef = makeFunctionReference<"mutation">("app:setProfileTier");
 
@@ -78,10 +79,12 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
   }
 
   try {
-    const { identityToken, nonce, email: bodyEmail } = (req.body || {}) as {
+    // NOTE: we deliberately do NOT read `email` from the body. Apple identity is
+    // bound to the verified `sub` claim (H2); a client-supplied email is never
+    // trusted — it was an account-spoofing vector.
+    const { identityToken, nonce } = (req.body || {}) as {
       identityToken?: string;
       nonce?: string;
-      email?: string;
       fullName?: unknown;
     };
 
@@ -112,15 +115,32 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
       return res.status(401).json({ error: "Apple identity token rejected", reason: validation.reason });
     }
 
-    // 3. Resolve the binding email. Apple includes `email` (relay or real) in the
-    //    identity token; fall back to the client-supplied value only if absent.
-    const email = (validation.email || (bodyEmail || "")).toLowerCase().trim();
-    if (!email) {
-      return res.status(401).json({ error: "Apple account did not provide an email" });
+    // 3. Bind identity to the Apple `sub` (H2). The `sub` is the stable, verified
+    //    per-user identifier. Apple only sends `email` on the FIRST authorization;
+    //    on repeats we resolve the account by its stored sub→email mapping. We
+    //    never fall back to a client-supplied email.
+    const sub = validation.sub;
+    if (!sub) {
+      return res.status(401).json({ error: "Apple identity token missing subject" });
+    }
+    const claimEmail = validation.email || undefined; // from the verified token only
+
+    const secret = process.env.AUTH_TOKEN_SECRET;
+    if (!secret) {
+      console.error("[Apple Auth API] AUTH_TOKEN_SECRET is not configured");
+      return res.status(500).json({ error: "Server authentication is misconfigured" });
     }
 
     const client = getConvexClient();
-    const user: any = await client.mutation(upsertUserCredentialsRef as any, { email });
+    // Resolves by sub (repeat sign-in) or links sub→email on first sign-in.
+    // Returns null only when the account is unknown AND Apple sent no email claim.
+    const user: any = await client.mutation(upsertAppleUserRef as any, { sub, email: claimEmail });
+    if (!user?.email) {
+      return res.status(401).json({
+        error: "Apple sign-in could not resolve your account. Please sign in again with email sharing enabled.",
+      });
+    }
+    const email = String(user.email).toLowerCase().trim();
     await enforceSkoolTierIfEligible(client, email);
 
     return res.status(200).json({
@@ -130,6 +150,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
           email,
         },
       },
+      sessionToken: mintSessionToken({ email, secret }),
     });
   } catch (error: any) {
     console.error("[Apple Auth API Error]", error);
