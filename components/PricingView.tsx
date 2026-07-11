@@ -1,48 +1,36 @@
 
 import React, { useState, useEffect } from 'react';
-import { LoadingSpinner, GhostIcon } from './icons';
+import { LoadingSpinner } from './icons';
 import { toast } from './Feedback';
-import { apiFetch } from '../lib/api';
-import { isNative } from '../lib/platform';
-import { createEntitlementService } from '../services/entitlementService';
-import { hapticLight } from '../lib/haptics';
 
 interface PricingViewProps {
     email: string;
     onClose: () => void;
     onPurchaseComplete: (newBalance: number) => void;
-    onOpenTerms?: () => void;
 }
 
-type PlanId = 'pack_50' | 'pro_monthly' | 'pack_100';
-
-// Product ids the store platform expects. Web keeps its existing Stripe price ids
-// (api/create-checkout-session.ts); native uses the RevenueCat/StoreKit product ids
-// from docs/PLAN.md "Credits & payments" — wired here so entitlementService's native
-// path is ready the moment RevenueCat lands, even though NativeEntitlements.purchase()
-// is still a stub.
-const PRODUCTS: Record<PlanId, { webId: string; nativeId: string; name: string; sub: string; price: string; credits: number; badge?: string; featured?: boolean }> = {
-    pack_50: { webId: 'pack_50', nativeId: 'sg_pack_50', name: 'Starter Pack', sub: '50 credits · one-time', price: '$4.99', credits: 50, badge: 'Most Popular', featured: true },
-    pro_monthly: { webId: 'pro_monthly', nativeId: 'sg_pro_monthly', name: 'Pro Monthly', sub: 'then $24.99/mo', price: '$24.99/mo', credits: 500, badge: '7-Day Trial' },
-    pack_100: { webId: 'pack_100', nativeId: 'sg_pack_100', name: 'Power Pack', sub: '100 credits · one-time', price: '$7.99', credits: 100 },
+const SUBSCRIPTION = {
+    id: 'pro_monthly',
+    name: 'Pro Monthly',
+    credits: 500,
+    basePrice: 24.99,
+    subtitle: 'Best Value — Subscription',
 };
 
-const BENEFITS = [
-    '500 credits every month',
-    'Priority generation',
-    'New genre packs monthly',
-    'Credits never expire on packs',
+const CREDIT_PACKS = [
+    { id: 'pack_250', credits: 250, price: 14.99 },
+    { id: 'pack_100', credits: 100, price: 7.99 },
+    { id: 'pack_50', credits: 50, price: 4.99 },
 ];
 
-const PricingView: React.FC<PricingViewProps> = ({ email, onClose, onOpenTerms }) => {
-    const [processingId, setProcessingId] = useState<PlanId | null>(null);
-    const [selected, setSelected] = useState<PlanId>('pack_50');
+const PricingView: React.FC<PricingViewProps> = ({ email, onClose }) => {
+    const [processingId, setProcessingId] = useState<string | null>(null);
     const [userTier, setUserTier] = useState<string>('public');
 
     useEffect(() => {
         const fetchTier = async () => {
             try {
-                const res = await apiFetch('/api/db', {
+                const res = await fetch('/api/db', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({ action: 'getUserProfileByEmail', payload: { email } }),
@@ -57,136 +45,126 @@ const PricingView: React.FC<PricingViewProps> = ({ email, onClose, onOpenTerms }
     }, [email]);
 
     const isSkool = userTier === 'skool';
+    const subDiscount = isSkool ? 0.75 : 1;
 
-    const handleContinue = async () => {
-        const plan = PRODUCTS[selected];
-        setProcessingId(selected);
-        hapticLight();
+    const handlePurchase = async (priceId: string) => {
+        setProcessingId(priceId);
         try {
-            const service = createEntitlementService(email);
-            const productId = isNative() ? plan.nativeId : plan.webId;
-            await service.purchase(productId);
-            // Web purchase() redirects the page to Stripe Checkout — nothing further to do here.
+            const response = await fetch('/api/create-checkout-session', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ priceId, email }),
+            });
+
+            if (!response.ok) {
+                const errText = await response.text();
+                throw new Error(`Server responded with ${response.status}: ${errText}`);
+            }
+
+            const data = await response.json();
+            if (data.url) {
+                window.location.href = data.url;
+            } else {
+                toast('Payment system error — no redirect URL. Please try again.', 'error');
+                setProcessingId(null);
+            }
         } catch (e: any) {
-            console.error('Purchase flow error:', e);
-            toast(
-                isNative()
-                    ? "Purchases aren't live in this build yet — check back soon."
-                    : `Payment initialization failed: ${e?.message || 'please try again.'}`,
-                'error'
-            );
+            console.error("Purchase Flow Error:", e);
+            toast(`Payment initialization failed: ${e.message}`, 'error');
             setProcessingId(null);
         }
     };
 
-    return (
-        <div className="w-full max-w-md mx-auto pt-8 md:pt-12 px-5 pb-16 animate-fade-in safe-top safe-bottom safe-x">
-            <div className="flex justify-end">
-                <button onClick={onClose} aria-label="Close" className="w-9 h-9 rounded-full border border-slate-700 flex items-center justify-center text-slate-400 active:text-white">×</button>
-            </div>
+    const subPrice = SUBSCRIPTION.basePrice * subDiscount;
+    const subPerCredit = (subPrice / SUBSCRIPTION.credits).toFixed(3);
 
-            <div className="text-center mt-2 relative">
-                <div className="relative w-16 h-16 mx-auto mb-3 flex items-center justify-center">
-                    <div className="absolute inset-[-14px] rounded-full" style={{ background: 'radial-gradient(circle, rgba(226,153,60,0.30), transparent 70%)' }} />
-                    <GhostIcon className="relative z-10 h-12 w-auto text-amber-400" />
-                </div>
-                <h2 className="heading-display text-2xl font-bold text-slate-100 leading-tight">Try Pro Free<br />for 7 Days</h2>
-                <p className="mt-2 text-[13px] text-slate-400 leading-relaxed px-2">
-                    Unlimited access to the full genre curriculum. No séance required.
-                </p>
-                {isSkool && !isNative() && (
-                    <div className="mt-3 inline-block rounded-full bg-cyan-500/10 border border-cyan-500/30 px-4 py-1.5">
-                        <span className="text-cyan-300 text-xs font-bold uppercase tracking-widest">Community Member — 25% off subscription</span>
+    return (
+        <div className="w-full max-w-7xl mx-auto pt-24 md:pt-32 px-4 md:px-6 pb-20 animate-fade-in">
+             <div className="text-center mb-16">
+                <button onClick={onClose} className="text-slate-500 hover:text-white mb-6 text-sm font-black uppercase tracking-[0.14em] md:tracking-[0.3em]">&larr; Back to Studio</button>
+                <h2 className="heading-display text-4xl md:text-6xl font-black text-white mb-4 tracking-tighter">Plans & Credits</h2>
+                <p className="text-slate-400 font-black uppercase tracking-[0.14em] md:tracking-[0.2em] text-sm md:text-base">Credits mapped to real generation usage.</p>
+                {isSkool && (
+                    <div className="mt-4 inline-block rounded-full bg-emerald-500/10 border border-emerald-500/30 px-6 py-2">
+                        <span className="text-emerald-400 text-sm font-black uppercase tracking-widest">Community Member &mdash; 25% Off Subscription</span>
                     </div>
                 )}
-            </div>
+             </div>
 
-            <div className="mt-6 flex flex-col gap-2.5">
-                {BENEFITS.map((b) => (
-                    <div key={b} className="flex items-center gap-2.5">
-                        <span className="w-5 h-5 rounded-full bg-amber-500/15 border border-amber-400 text-amber-300 flex items-center justify-center shrink-0 text-[10px]">✓</span>
-                        <span className="text-[13px] font-semibold text-slate-200">{b}</span>
+             {/* ── Subscription (Hero) ── */}
+             <div className="max-w-lg mx-auto mb-16">
+                <div className="glass-panel relative rounded-[2.5rem] md:rounded-[3.5rem] p-10 md:p-14 flex flex-col items-center text-center border-cyan-400 shadow-[0_0_60px_rgba(6,182,212,0.2)] transition-all hover:scale-[1.02]">
+                    <div className="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-cyan-500 text-black px-8 py-2.5 rounded-full text-sm font-black uppercase tracking-widest">
+                        Best Value
                     </div>
-                ))}
-            </div>
 
-            <div className="mt-6 flex flex-col gap-2.5">
-                {(Object.keys(PRODUCTS) as PlanId[]).map((id) => {
-                    const plan = PRODUCTS[id];
-                    const isSelected = selected === id;
-                    return (
-                        <button
-                            key={id}
-                            type="button"
-                            onClick={() => { hapticLight(); setSelected(id); }}
-                            className={`relative flex items-center justify-between gap-3 rounded-2xl border px-4 py-3.5 text-left transition-all ${
-                                isSelected
-                                    ? 'border-amber-400 bg-gradient-to-b from-amber-500/15 to-amber-500/5'
-                                    : 'border-slate-700 bg-slate-800'
-                            }`}
-                        >
-                            {plan.featured && (
-                                <span className="absolute -top-2.5 left-4 bg-amber-400 text-amber-950 text-[9px] font-black uppercase tracking-widest px-2.5 py-0.5 rounded-full">Most Popular</span>
-                            )}
-                            <div className="flex items-center gap-3">
-                                <span className={`w-[19px] h-[19px] rounded-full border-[1.5px] flex items-center justify-center shrink-0 ${isSelected ? 'border-amber-400' : 'border-slate-600'}`}>
-                                    {isSelected && <span className="w-2.5 h-2.5 rounded-full bg-amber-400" />}
-                                </span>
-                                <span>
-                                    <span className="flex items-center gap-2">
-                                        <span className="text-[13.5px] font-black text-slate-100">{plan.name}</span>
-                                        {plan.badge && !plan.featured && (
-                                            <span className="text-[9px] font-black uppercase tracking-widest text-cyan-300 border border-cyan-500/40 rounded-full px-1.5 py-0.5">{plan.badge}</span>
-                                        )}
-                                    </span>
-                                    <span className="block text-[11px] text-slate-500 mt-0.5">{plan.sub}</span>
-                                </span>
-                            </div>
-                            <span className={`text-[15px] font-black whitespace-nowrap ${isSelected ? 'text-amber-300' : 'text-slate-100'}`}>{plan.price}</span>
-                        </button>
-                    );
-                })}
-            </div>
+                    <h3 className="text-white text-2xl md:text-3xl font-black uppercase tracking-wide md:tracking-widest mb-2 mt-4">{SUBSCRIPTION.name}</h3>
+                    <p className="text-[10px] text-slate-500 font-black uppercase tracking-[0.22em] mb-6">{SUBSCRIPTION.subtitle}</p>
 
-            <button
-                onClick={handleContinue}
-                disabled={!!processingId}
-                className="cta-primary w-full mt-6 py-[18px] rounded-2xl text-[15px] uppercase tracking-[0.1em] flex items-center justify-center gap-2 active:scale-[0.99] transition-all disabled:opacity-60"
-            >
-                {processingId ? <LoadingSpinner /> : 'Continue'}
-            </button>
+                    <div className="flex justify-center items-baseline gap-1 mb-3">
+                        <span className="text-6xl md:text-7xl font-black text-white">${subPrice.toFixed(2)}</span>
+                        <span className="text-slate-500 font-bold text-lg">/mo</span>
+                    </div>
 
-            <p className="mt-3 text-[10.5px] leading-relaxed text-slate-500 text-center px-1">
-                7-day free trial applies to Pro only. Renews at $24.99/mo unless cancelled 24 hours before trial ends. Credit packs are one-time — no subscription.
-            </p>
+                    {isSkool && (
+                        <p className="text-emerald-400 text-xs font-bold mb-4">
+                            <span className="line-through text-slate-600">${SUBSCRIPTION.basePrice.toFixed(2)}</span>
+                            <span className="ml-2">Community Discount (25% Off)</span>
+                        </p>
+                    )}
 
-            <button
-                onClick={async () => {
-                    try {
-                        await createEntitlementService(email).restore();
-                        toast('Purchases restored.', 'success');
-                    } catch (e: any) {
-                        toast(`Restore failed: ${e?.message || 'please try again.'}`, 'error');
-                    }
-                }}
-                className="w-full mt-2.5 text-center text-[12.5px] font-bold text-cyan-300 active:text-cyan-200"
-            >
-                Restore Purchases
-            </button>
+                    <div className="px-8 py-5 bg-slate-900 rounded-2xl inline-block border border-slate-800 mb-3">
+                        <span className="text-cyan-400 font-black text-3xl">{SUBSCRIPTION.credits} Credits</span>
+                    </div>
+                    <p className="text-slate-500 text-xs font-bold uppercase tracking-widest mb-8">${subPerCredit}/credit &middot; ~50 songs/mo</p>
 
-            {onOpenTerms && (
-                <button onClick={onOpenTerms} className="w-full mt-2 text-center text-[10.5px] text-slate-500 active:text-slate-300">
-                    Terms of Use · Privacy Policy
-                </button>
-            )}
-
-            {/* Web-only: Stripe disclosure. Guideline 3.1.1 — zero web-pricing/payment-processor
-                references may render inside the native purchase surface. */}
-            {!isNative() && (
-                <div className="mt-8 text-center text-[11px] text-slate-600 leading-relaxed">
-                    Payments processed securely via Stripe. Credits post after payment confirmation.
+                    <button
+                        onClick={() => handlePurchase(SUBSCRIPTION.id)}
+                        disabled={!!processingId}
+                        className="w-full py-6 rounded-2xl text-base md:text-lg font-black uppercase tracking-[0.12em] md:tracking-[0.3em] transition-all flex items-center justify-center gap-2 min-h-[72px] cta-primary hover:brightness-110 shadow-lg"
+                    >
+                        {processingId === SUBSCRIPTION.id ? <LoadingSpinner /> : 'Start Plan'}
+                    </button>
                 </div>
-            )}
+             </div>
+
+             {/* ── Credit Packs ── */}
+             <div className="max-w-3xl mx-auto">
+                <h3 className="text-center text-slate-500 font-black uppercase tracking-[0.2em] text-xs mb-6">Or buy credits one-time</h3>
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                    {CREDIT_PACKS.map((pack) => {
+                        const perCredit = (pack.price / pack.credits).toFixed(3);
+                        return (
+                            <div
+                                key={pack.id}
+                                className="glass-panel rounded-2xl md:rounded-3xl p-6 flex flex-col items-center text-center border-slate-700 transition-all hover:scale-[1.02]"
+                            >
+                                <span className="text-cyan-400 font-black text-xl mb-1">{pack.credits} Credits</span>
+                                <div className="flex items-baseline gap-1 mb-1">
+                                    <span className="text-3xl font-black text-white">${pack.price.toFixed(2)}</span>
+                                </div>
+                                <p className="text-slate-600 text-[10px] font-bold uppercase tracking-widest mb-4">${perCredit}/credit</p>
+
+                                <button
+                                    onClick={() => handlePurchase(pack.id)}
+                                    disabled={!!processingId}
+                                    className="w-full py-3 rounded-xl text-sm font-black uppercase tracking-widest transition-all flex items-center justify-center gap-2 cta-secondary text-white hover:bg-slate-700 border border-slate-700"
+                                >
+                                    {processingId === pack.id ? <LoadingSpinner /> : 'Buy'}
+                                </button>
+                            </div>
+                        );
+                    })}
+                </div>
+             </div>
+
+             <div className="glass-panel mt-20 text-center max-w-2xl mx-auto p-8 rounded-3xl">
+                <h4 className="text-slate-300 font-black uppercase tracking-widest text-sm mb-2">Secure Payments</h4>
+                <p className="text-slate-500 text-base leading-relaxed">
+                    Payments are processed securely via Stripe. Credits are granted after payment confirmation and may take a moment to appear.
+                    <br/><span className="text-sm text-slate-600 mt-2 block">If balance is unchanged, refresh your Song Ghost dashboard.</span>
+                </p>
+             </div>
         </div>
     );
 };

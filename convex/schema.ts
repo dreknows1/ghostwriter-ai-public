@@ -6,15 +6,10 @@ export default defineSchema({
     email: v.string(),
     passwordHash: v.optional(v.string()),
     passwordSalt: v.optional(v.string()),
-    // Sign in with Apple stable subject (H2). Set on the first Apple sign-in and
-    // used to resolve the account on repeats when Apple omits the email claim.
-    appleSub: v.optional(v.string()),
     createdAt: v.number(),
     updatedAt: v.optional(v.number()),
     isActive: v.boolean(),
-  })
-    .index("by_email", ["email"])
-    .index("by_apple_sub", ["appleSub"]),
+  }).index("by_email", ["email"]),
 
   profiles: defineTable({
     userId: v.id("users"),
@@ -23,16 +18,9 @@ export default defineSchema({
     bio: v.optional(v.string()),
     preferredVibe: v.optional(v.string()),
     preferredArtStyle: v.optional(v.string()),
-    // Monthly-allowance bucket (reset on calendar rollover; see convex/creditLogic.ts).
     credits: v.number(),
     lastResetDate: v.optional(v.string()),
     tier: v.optional(v.string()), // "public" | "skool"
-    // Two-bucket credit system (docs/PLAN.md "Credits & payments").
-    plan: v.optional(v.string()), // "free" | "pro"
-    planExpiresAt: v.optional(v.number()),
-    planSource: v.optional(v.string()), // "stripe" | "revenuecat"
-    // Non-expiring bucket funded by one-time credit packs; never touched by reset.
-    packCredits: v.optional(v.number()),
     updatedAt: v.number(),
   }).index("by_user", ["userId"]),
 
@@ -58,42 +46,18 @@ export default defineSchema({
   transactions: defineTable({
     userId: v.id("users"),
     stripeSessionId: v.string(),
-    // RevenueCat store transaction id — dedupes consumable (pack) grants across
-    // webhook redeliveries. Absent on Stripe rows.
-    rcTransactionId: v.optional(v.string()),
     item: v.string(),
     amountCents: v.number(),
     creditsGranted: v.number(),
     status: v.string(),
     createdAt: v.number(),
-  })
-    .index("by_user", ["userId"])
-    .index("by_session", ["stripeSessionId"])
-    .index("by_rc_transaction", ["rcTransactionId"]),
+  }).index("by_user", ["userId"]).index("by_session", ["stripeSessionId"]),
 
   stripeEvents: defineTable({
     eventId: v.string(),
     type: v.string(),
     createdAt: v.number(),
   }).index("by_event", ["eventId"]),
-
-  // RevenueCat webhook event ledger — mirrors stripeEvents for idempotency.
-  rcEvents: defineTable({
-    eventId: v.string(),
-    type: v.string(),
-    createdAt: v.number(),
-  }).index("by_event", ["eventId"]),
-
-  // Single-use guard for OAuth/Apple session-mint tokens (docs/PLAN.md "Auth on
-  // iOS", SECURITY FIX). Each signed token carries a random nonce; api/auth.ts
-  // records it here on first use, so a replayed token is rejected even across
-  // cold serverless instances (an in-process Map cannot). `exp` mirrors the
-  // token's own expiry so rows can be swept after they can no longer be replayed.
-  authNonces: defineTable({
-    nonce: v.string(),
-    exp: v.number(),
-    createdAt: v.number(),
-  }).index("by_nonce", ["nonce"]),
 
   referralCodes: defineTable({
     userId: v.id("users"),

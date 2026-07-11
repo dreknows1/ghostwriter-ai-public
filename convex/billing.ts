@@ -1,15 +1,5 @@
 import { mutation } from "./_generated/server";
 import { v } from "convex/values";
-import { isOwnerEmail } from "./constants";
-import {
-  applyPackGrant,
-  applyProGrant,
-  planRevenueCatApply,
-  spendableTotal,
-  PACK_CREDITS,
-  PRO_PRODUCT_IDS,
-  type GrantDecision,
-} from "./creditLogic";
 
 const CREDITS_PUBLIC = 25;
 const CREDITS_SKOOL = 100;
@@ -159,16 +149,6 @@ export const applyStripeCheckoutCredits = mutation({
   },
 });
 
-/**
- * Applies a Stripe purchase to the two-bucket credit model (docs/PLAN.md).
- * Aligned with the RevenueCat path:
- *  - Pro subscription (pkgId `pro_monthly`, initial + renewal) → monthly bucket
- *    SET to 500, plan/planExpiresAt/planSource="stripe" stamped (never additive).
- *  - One-time packs (pkgId `pack_*`)                          → packCredits +=.
- *  - Unknown/legacy pkgId (e.g. old client reconcile calls)   → additive to the
- *    monthly bucket, preserving prior behavior.
- * Idempotent via `transactions.by_session` + `stripeEvents.by_event` (unchanged).
- */
 export const applyStripeCheckoutCreditsByEmail = mutation({
   args: {
     eventId: v.string(),
@@ -177,8 +157,6 @@ export const applyStripeCheckoutCreditsByEmail = mutation({
     credits: v.number(),
     item: v.string(),
     amountCents: v.number(),
-    pkgId: v.optional(v.string()),
-    planExpiresAt: v.optional(v.number()),
   },
   handler: async (ctx: any, args: any) => {
     const existingTx = await ctx.db
@@ -195,48 +173,20 @@ export const applyStripeCheckoutCreditsByEmail = mutation({
     if (seen) return { applied: false, reason: "duplicate_event" };
 
     const { user, profile } = await ensureUserAndProfile(ctx, args.userEmail);
-    const now = Date.now();
-    const isOwner = isOwnerEmail(args.userEmail);
-    const pkgId: string = args.pkgId || "";
+    const nextCredits = profile.credits + args.credits;
 
-    const state = {
-      credits: profile.credits || 0,
-      packCredits: profile.packCredits || 0,
-      plan: profile.plan,
-      planExpiresAt: profile.planExpiresAt,
-      planSource: profile.planSource,
-      tier: profile.tier,
-    };
+    await ctx.db.patch(profile._id, {
+      credits: nextCredits,
+      updatedAt: Date.now(),
+    });
 
-    let decision: GrantDecision;
-    if (PRO_PRODUCT_IDS.has(pkgId)) {
-      decision = applyProGrant(state, args.planExpiresAt, now, "stripe");
-    } else if (PACK_CREDITS[pkgId]) {
-      decision = applyPackGrant(state, pkgId, "stripe");
-    } else {
-      // Legacy / unknown pkgId (e.g. api/checkout-complete fallback with no
-      // pkgId): keep the historical additive-to-monthly-bucket behavior.
-      decision = {
-        action: "pack_grant",
-        changed: true,
-        patch: { credits: state.credits + args.credits },
-        ledgerDelta: args.credits,
-        ledgerReason: "stripe_checkout",
-      };
-    }
-
-    if (!isOwner && decision.changed && Object.keys(decision.patch).length > 0) {
-      await ctx.db.patch(profile._id, { ...decision.patch, updatedAt: now });
-      if (decision.ledgerDelta !== 0) {
-        await ctx.db.insert("creditLedger", {
-          userId: user._id,
-          delta: decision.ledgerDelta,
-          reason: decision.ledgerReason || "stripe_checkout",
-          metadata: { sessionId: args.sessionId, amountCents: args.amountCents, pkgId },
-          createdAt: now,
-        });
-      }
-    }
+    await ctx.db.insert("creditLedger", {
+      userId: user._id,
+      delta: args.credits,
+      reason: "stripe_checkout",
+      metadata: { sessionId: args.sessionId, amountCents: args.amountCents },
+      createdAt: Date.now(),
+    });
 
     if (existingTx) {
       await ctx.db.patch(existingTx._id, {
@@ -253,143 +203,17 @@ export const applyStripeCheckoutCreditsByEmail = mutation({
         amountCents: args.amountCents,
         creditsGranted: args.credits,
         status: "completed",
-        createdAt: now,
+        createdAt: Date.now(),
       });
     }
 
     await ctx.db.insert("stripeEvents", {
       eventId: args.eventId,
       type: "checkout.session.completed",
-      createdAt: now,
+      createdAt: Date.now(),
     });
 
-    const newCredits = decision.patch.credits ?? state.credits;
-    const newPack = decision.patch.packCredits ?? state.packCredits;
-    return { applied: true, credits: isOwner ? profile.credits : newCredits + newPack };
-  },
-});
-
-/**
- * Applies a RevenueCat webhook event to the two-bucket model (docs/PLAN.md
- * event map). Pure decision logic lives in convex/creditLogic.ts; this wrapper
- * enforces idempotency and persistence.
- *
- * Idempotency:
- *  - `rcEvents.by_event`      dedupes redelivered webhook events (same eventId).
- *  - `transactions.by_rc_transaction` dedupes consumable (pack) grants when a
- *    store transaction is replayed under a different event id.
- */
-export const applyRevenueCatEvent = mutation({
-  args: {
-    eventId: v.string(),
-    type: v.string(),
-    userEmail: v.string(),
-    productId: v.optional(v.string()),
-    expirationAtMs: v.optional(v.number()),
-    transactionId: v.optional(v.string()),
-    amountCents: v.optional(v.number()),
-    cancelReason: v.optional(v.string()),
-    periodType: v.optional(v.string()),
-  },
-  handler: async (ctx: any, args: any) => {
-    const now = Date.now();
-    const isConsumable = args.type === "NON_RENEWING_PURCHASE";
-
-    // DB lookups the pure planner needs: event dedupe, transaction dedupe.
-    const eventSeen = !!(await ctx.db
-      .query("rcEvents")
-      .withIndex("by_event", (q: any) => q.eq("eventId", args.eventId))
-      .first());
-
-    // Transaction-level dedupe only guards consumable (pack) grants; renewals
-    // and refunds reuse/omit the purchase transaction id and must not dedupe on it.
-    let transactionSeen = false;
-    if (isConsumable && args.transactionId) {
-      transactionSeen = !!(await ctx.db
-        .query("transactions")
-        .withIndex("by_rc_transaction", (q: any) => q.eq("rcTransactionId", args.transactionId))
-        .first());
-    }
-
-    const { user, profile } = await ensureUserAndProfile(ctx, args.userEmail);
-
-    const state = {
-      credits: profile.credits || 0,
-      packCredits: profile.packCredits || 0,
-      plan: profile.plan,
-      planExpiresAt: profile.planExpiresAt,
-      planSource: profile.planSource,
-      tier: profile.tier,
-    };
-
-    const plan = planRevenueCatApply(
-      state,
-      {
-        type: args.type,
-        productId: args.productId,
-        expirationAtMs: args.expirationAtMs,
-        cancelReason: args.cancelReason,
-        periodType: args.periodType,
-      },
-      now,
-      { eventSeen, transactionSeen, isOwner: isOwnerEmail(args.userEmail) }
-    );
-
-    if (plan.skip) {
-      if (plan.recordEvent) {
-        await ctx.db.insert("rcEvents", { eventId: args.eventId, type: args.type, createdAt: now });
-      }
-      return { applied: false, reason: plan.reason };
-    }
-
-    const decision = plan.decision!;
-
-    if (decision.changed && Object.keys(decision.patch).length > 0) {
-      await ctx.db.patch(profile._id, { ...decision.patch, updatedAt: now });
-    }
-    if (decision.ledgerDelta !== 0) {
-      await ctx.db.insert("creditLedger", {
-        userId: user._id,
-        delta: decision.ledgerDelta,
-        reason: decision.ledgerReason || `revenuecat_${args.type}`,
-        metadata: { eventId: args.eventId, type: args.type, productId: args.productId },
-        createdAt: now,
-      });
-    }
-
-    // Record a transaction row for grants (pack + pro) so account history and
-    // the consumable-dedupe index stay populated.
-    if (decision.action === "pack_grant" && decision.packCreditsGranted) {
-      await ctx.db.insert("transactions", {
-        userId: user._id,
-        stripeSessionId: `rc_${args.transactionId || args.eventId}`,
-        rcTransactionId: args.transactionId,
-        item: args.productId || "Credit Pack",
-        amountCents: args.amountCents || 0,
-        creditsGranted: decision.packCreditsGranted,
-        status: "completed",
-        createdAt: now,
-      });
-    } else if (decision.action === "pro_grant") {
-      await ctx.db.insert("transactions", {
-        userId: user._id,
-        stripeSessionId: `rc_sub_${args.eventId}`,
-        rcTransactionId: args.transactionId,
-        item: args.productId || "Pro Monthly",
-        amountCents: args.amountCents || 0,
-        creditsGranted: decision.patch.credits ?? 0,
-        status: "completed",
-        createdAt: now,
-      });
-    }
-
-    await ctx.db.insert("rcEvents", { eventId: args.eventId, type: args.type, createdAt: now });
-
-    return {
-      applied: decision.changed,
-      action: decision.action,
-      credits: spendableTotal({ credits: decision.patch.credits ?? state.credits, packCredits: decision.patch.packCredits ?? state.packCredits }),
-    };
+    return { applied: true, credits: nextCredits };
   },
 });
 

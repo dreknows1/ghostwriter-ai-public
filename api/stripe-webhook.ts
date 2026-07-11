@@ -98,22 +98,6 @@ export default async function handler(req: any, res: any) {
 
       const amountCents = session.amount_total || 0;
       const item = metadata.productName || 'Credit Package';
-      const pkgId = metadata.pkgId || '';
-
-      // For a Pro subscription checkout, resolve the paid-period end so the
-      // profile's planExpiresAt is stamped (drives the reset "skip active Pro").
-      let planExpiresAt: number | undefined;
-      if (session.mode === 'subscription' && session.subscription) {
-        try {
-          const subId = typeof session.subscription === 'string'
-            ? session.subscription
-            : session.subscription.id;
-          const sub = await stripe.subscriptions.retrieve(subId);
-          if (sub.current_period_end) planExpiresAt = sub.current_period_end * 1000;
-        } catch (e) {
-          console.error('[Stripe Webhook] subscription lookup failed', e);
-        }
-      }
 
       await client.mutation(applyStripeCheckoutCreditsByEmailRef as any, {
         eventId: event.id,
@@ -122,8 +106,6 @@ export default async function handler(req: any, res: any) {
         credits,
         item,
         amountCents,
-        pkgId,
-        ...(planExpiresAt ? { planExpiresAt } : {}),
       });
     }
 
@@ -145,12 +127,6 @@ export default async function handler(req: any, res: any) {
       const metadata = subscription.metadata || {};
       const userEmail = metadata.userEmail || invoice.customer_email;
       const credits = Number(metadata.credits || 0);
-      // Renewal → Pro grant (bucket SET to 500, not additive). Default pkgId to
-      // pro_monthly so the mutation takes the Pro branch even on legacy subs.
-      const pkgId = metadata.pkgId || 'pro_monthly';
-      const planExpiresAt = subscription.current_period_end
-        ? subscription.current_period_end * 1000
-        : undefined;
 
       if (userEmail && credits > 0) {
         await client.mutation(applyStripeCheckoutCreditsByEmailRef as any, {
@@ -160,8 +136,6 @@ export default async function handler(req: any, res: any) {
           credits,
           item: metadata.productName || 'Pro Monthly Plan',
           amountCents: invoice.amount_paid || invoice.amount_due || 0,
-          pkgId,
-          ...(planExpiresAt ? { planExpiresAt } : {}),
         });
       }
     }

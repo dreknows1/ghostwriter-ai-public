@@ -1,7 +1,6 @@
 import { mutation, query, internalMutation } from "./_generated/server";
 import { v } from "convex/values";
 import { CREDITS_PUBLIC, CREDITS_SKOOL, UNLIMITED_CREDITS, isOwnerEmail } from "./constants";
-import { computeMonthlyReset, computeSpend, computeSpendChecked } from "./creditLogic";
 const REFERRAL_INVITER_CREDITS = 40;
 const REFERRAL_INVITEE_CREDITS = 20;
 
@@ -93,6 +92,11 @@ async function getExistingUserAndProfile(ctx: any, emailRaw: string) {
   return { user, profile: profile || null, email };
 }
 
+function monthKey(ts: number) {
+  const d = new Date(ts);
+  return `${d.getUTCFullYear()}-${d.getUTCMonth() + 1}`;
+}
+
 async function qualifyAndRewardReferral(ctx: any, referredUserId: any) {
   const referral = await ctx.db
     .query("referrals")
@@ -150,8 +154,6 @@ export const getUserProfileByEmail = query({
       id: user._id,
       user_email: email,
       credits: profile.credits,
-      pack_credits: profile.packCredits ?? 0,
-      credits_total: (profile.credits ?? 0) + (profile.packCredits ?? 0),
       display_name: profile.displayName,
       avatar_url: profile.avatarUrl,
       bio: profile.bio,
@@ -159,18 +161,11 @@ export const getUserProfileByEmail = query({
       preferred_art_style: profile.preferredArtStyle,
       last_reset_date: profile.lastResetDate,
       tier: profile.tier || "public",
-      plan: profile.plan || "free",
-      plan_expires_at: profile.planExpiresAt,
-      plan_source: profile.planSource,
     };
   },
 });
 
 export const upsertUserProfileByEmail = mutation({
-  // C2: `credits` and `last_reset_date` are NOT client-writable. Letting the
-  // client set its own credit balance was free-unlimited-credits. Credits mutate
-  // ONLY via the webhook / spend / monthly-reset paths. Profile edits are limited
-  // to presentational fields.
   args: {
     email: v.string(),
     display_name: v.optional(v.string()),
@@ -178,6 +173,8 @@ export const upsertUserProfileByEmail = mutation({
     bio: v.optional(v.string()),
     preferred_vibe: v.optional(v.string()),
     preferred_art_style: v.optional(v.string()),
+    credits: v.optional(v.number()),
+    last_reset_date: v.optional(v.string()),
   },
   handler: async (ctx: any, args: any) => {
     const { user, profile, email } = await ensureUserAndProfile(ctx, args.email);
@@ -187,12 +184,14 @@ export const upsertUserProfileByEmail = mutation({
       bio: args.bio ?? profile.bio,
       preferredVibe: args.preferred_vibe ?? profile.preferredVibe,
       preferredArtStyle: args.preferred_art_style ?? profile.preferredArtStyle,
+      credits: args.credits ?? profile.credits,
+      lastResetDate: args.last_reset_date ?? profile.lastResetDate,
       updatedAt: Date.now(),
     });
     return {
       id: user._id,
       email,
-      credits: profile.credits,
+      credits: args.credits ?? profile.credits,
     };
   },
 });
@@ -397,13 +396,6 @@ export const auditSkoolTierMismatches = internalMutation({
   },
 });
 
-/**
- * Returns total spendable credits (monthly bucket + packCredits) as a plain
- * number — the shape existing callers (services/creditService.ts →
- * getUserCredits → App.tsx) depend on. Applies the calendar reset first:
- * active-Pro subscribers are skipped so a UTC month rollover never clobbers
- * their bucket, and packCredits are never touched by the reset.
- */
 export const getCreditsByEmail = mutation({
   args: { email: v.string() },
   handler: async (ctx: any, args: any) => {
@@ -416,95 +408,43 @@ export const getCreditsByEmail = mutation({
       return UNLIMITED_CREDITS;
     }
     const now = Date.now();
-    const decision = computeMonthlyReset(
-      {
-        credits: profile.credits,
-        packCredits: profile.packCredits,
-        plan: profile.plan,
-        planExpiresAt: profile.planExpiresAt,
-        tier: profile.tier,
-        lastResetDate: profile.lastResetDate,
-      },
-      now
-    );
+    const lastReset = profile.lastResetDate ? new Date(profile.lastResetDate).getTime() : 0;
+    if (monthKey(now) !== monthKey(lastReset)) {
+      const isSkool = profile.tier === "skool";
+      const monthlyCredits = isSkool ? CREDITS_SKOOL : CREDITS_PUBLIC;
 
-    const packCredits = profile.packCredits ?? 0;
-
-    if (decision.reset) {
       await ctx.db.patch(profile._id, {
-        credits: decision.credits,
-        lastResetDate: decision.lastResetDate,
+        credits: monthlyCredits,
+        lastResetDate: new Date(now).toISOString(),
         updatedAt: now,
       });
       await ctx.db.insert("creditLedger", {
         userId: profile.userId,
-        delta: decision.credits - (profile.credits || 0),
+        delta: monthlyCredits,
         reason: "monthly_reset",
         createdAt: now,
       });
-      return decision.credits + packCredits;
+      return monthlyCredits;
     }
-    return (profile.credits || 0) + packCredits;
+    return profile.credits;
   },
 });
 
-/**
- * Spends `amount` credits from the monthly bucket first, then packCredits.
- * Returns the new total spendable balance (number) for backward compatibility.
- */
 export const spendCreditsByEmail = mutation({
   args: { email: v.string(), amount: v.number(), reason: v.string() },
   handler: async (ctx: any, args: any) => {
     // Owner accounts: spends are no-ops — unlimited credits, never charged.
     if (isOwnerEmail(args.email)) return UNLIMITED_CREDITS;
     const { profile } = await ensureUserAndProfile(ctx, args.email);
-    const decision = computeSpend(profile.credits || 0, profile.packCredits || 0, args.amount);
-    await ctx.db.patch(profile._id, {
-      credits: decision.credits,
-      packCredits: decision.packCredits,
-      updatedAt: Date.now(),
-    });
+    const next = Math.max(0, profile.credits - args.amount);
+    await ctx.db.patch(profile._id, { credits: next, updatedAt: Date.now() });
     await ctx.db.insert("creditLedger", {
       userId: profile.userId,
-      delta: -decision.spent,
+      delta: -args.amount,
       reason: args.reason,
       createdAt: Date.now(),
     });
-    return decision.total;
-  },
-});
-
-/**
- * Server-authoritative spend: REJECTS when the balance can't cover `amount`
- * (returns `{ ok: false }` and deducts nothing) instead of clamping. This is the
- * primitive the generation path must call so credits are enforced server-side
- * rather than trusting the client. Distinct from `spendCreditsByEmail` (which
- * clamps and returns a number) to preserve that function's existing contract.
- */
-export const spendCreditsStrictByEmail = mutation({
-  args: { email: v.string(), amount: v.number(), reason: v.string() },
-  handler: async (ctx: any, args: any) => {
-    // Owner accounts: unlimited — always succeeds, never deducts.
-    if (isOwnerEmail(args.email)) {
-      return { ok: true, spent: args.amount, credits: UNLIMITED_CREDITS, packCredits: 0, total: UNLIMITED_CREDITS };
-    }
-    const { profile } = await ensureUserAndProfile(ctx, args.email);
-    const decision = computeSpendChecked(profile.credits || 0, profile.packCredits || 0, args.amount);
-    if (!decision.ok) {
-      return { ok: false, reason: "insufficient_credits", available: decision.available, total: decision.available };
-    }
-    await ctx.db.patch(profile._id, {
-      credits: decision.credits,
-      packCredits: decision.packCredits,
-      updatedAt: Date.now(),
-    });
-    await ctx.db.insert("creditLedger", {
-      userId: profile.userId,
-      delta: -decision.spent,
-      reason: args.reason,
-      createdAt: Date.now(),
-    });
-    return { ok: true, spent: decision.spent, credits: decision.credits, packCredits: decision.packCredits, total: decision.total };
+    return next;
   },
 });
 
@@ -560,11 +500,6 @@ export const saveSongByEmail = mutation({
     const now = Date.now();
 
     if (args.existingId) {
-      // Object-level authz: only overwrite a song the acting user owns.
-      const existingSong = await ctx.db.get(args.existingId as any);
-      if (!existingSong || existingSong.userId !== user._id) {
-        throw new Error("Not authorized to edit this song");
-      }
       await ctx.db.patch(args.existingId as any, {
         title: args.title,
         sunoPrompt: args.sunoPrompt,
@@ -593,16 +528,8 @@ export const saveSongByEmail = mutation({
 });
 
 export const deleteSongById = mutation({
-  // `email` is forced to the session token's email by the API proxy; deletion is
-  // scoped to a song the acting user owns (closes the id-based IDOR in C1).
-  args: { songId: v.string(), email: v.string() },
+  args: { songId: v.string() },
   handler: async (ctx: any, args: any) => {
-    const { user } = await getExistingUserAndProfile(ctx, args.email);
-    const song = await ctx.db.get(args.songId as any);
-    if (!song) return { ok: true }; // already gone — idempotent
-    if (!user || song.userId !== user._id) {
-      throw new Error("Not authorized to delete this song");
-    }
     await ctx.db.delete(args.songId as any);
     return { ok: true };
   },

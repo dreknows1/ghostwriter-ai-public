@@ -149,7 +149,7 @@ export default function FeedbackHost() {
             <div
               key={t.id}
               role="status"
-              className={`pointer-events-auto flex items-center gap-3 rounded-2xl border ${KIND_STYLES[t.kind].border} bg-[#181410] px-4 py-3 shadow-2xl animate-fade-in`}
+              className={`pointer-events-auto flex items-center gap-3 rounded-2xl border ${KIND_STYLES[t.kind].border} bg-[#1a1530]/95 backdrop-blur px-4 py-3 shadow-2xl animate-fade-in`}
             >
               <span className={`shrink-0 w-6 h-6 rounded-full flex items-center justify-center text-xs font-black ${KIND_ICON_STYLES[t.kind]}`}>
                 {KIND_STYLES[t.kind].icon}
@@ -159,12 +159,12 @@ export default function FeedbackHost() {
                 <button
                   type="button"
                   onClick={() => { t.onAction?.(); dismissToast(t.id); }}
-                  className="shrink-0 px-3 py-1.5 rounded-lg bg-cyan-500/20 text-cyan-200 text-xs font-black uppercase tracking-wide active:bg-cyan-500/30"
+                  className="shrink-0 px-3 py-1.5 rounded-lg bg-cyan-500/20 text-cyan-200 text-xs font-black uppercase tracking-wide hover:bg-cyan-500/30"
                 >
                   {t.actionLabel}
                 </button>
               )}
-              <button type="button" aria-label="Dismiss" onClick={() => dismissToast(t.id)} className="shrink-0 text-slate-500 active:text-white text-lg leading-none px-1">×</button>
+              <button type="button" aria-label="Dismiss" onClick={() => dismissToast(t.id)} className="shrink-0 text-slate-500 hover:text-white text-lg leading-none px-1">×</button>
             </div>
           ))}
         </div>
@@ -173,12 +173,12 @@ export default function FeedbackHost() {
       {/* Confirm / prompt modal */}
       {modal && (
         <div
-          className="fixed inset-0 z-[140] flex items-center justify-center p-4 bg-black/80"
+          className="fixed inset-0 z-[140] flex items-center justify-center p-4 bg-black/70 backdrop-blur-sm"
           onClick={() => settleModal(modal.type === 'confirm' ? false : null)}
           role="dialog"
           aria-modal="true"
         >
-          <div className="w-full max-w-sm rounded-2xl border border-slate-700/70 bg-[#181410] shadow-2xl p-5" onClick={(e) => e.stopPropagation()}>
+          <div className="w-full max-w-sm rounded-2xl border border-slate-700/70 bg-[#1a1530] shadow-2xl p-5" onClick={(e) => e.stopPropagation()}>
             {modal.opts.title && <h2 className="text-lg font-black text-white mb-2">{modal.opts.title}</h2>}
             {'message' in modal.opts && modal.opts.message && (
               <p className="text-sm text-slate-300 leading-relaxed whitespace-pre-line">{modal.opts.message}</p>
@@ -191,14 +191,14 @@ export default function FeedbackHost() {
                 placeholder={modal.opts.placeholder || ''}
                 onChange={(e) => setPromptValue(e.target.value)}
                 onKeyDown={(e) => { if (e.key === 'Enter') settleModal(promptValue.trim() || null); }}
-                className="mt-4 w-full rounded-xl border border-slate-700 bg-[#141110] px-4 py-3 text-base text-white placeholder:text-slate-600 focus:outline-none focus:border-cyan-400"
+                className="mt-4 w-full rounded-xl border border-slate-700 bg-[#0f0a22] px-4 py-3 text-base text-white placeholder:text-slate-600 focus:outline-none focus:border-cyan-400"
               />
             )}
             <div className="mt-5 flex justify-end gap-2">
               <button
                 type="button"
                 onClick={() => settleModal(modal.type === 'confirm' ? false : null)}
-                className="px-4 py-2 rounded-lg border border-slate-700 bg-slate-800/60 text-sm font-semibold text-slate-200 active:border-slate-500"
+                className="px-4 py-2 rounded-lg border border-slate-700 bg-slate-800/60 text-sm font-semibold text-slate-200 hover:border-slate-500"
               >
                 {(modal.type === 'confirm' && modal.opts.cancelLabel) || 'Cancel'}
               </button>
@@ -208,8 +208,8 @@ export default function FeedbackHost() {
                 onClick={() => settleModal(modal.type === 'confirm' ? true : (promptValue.trim() || null))}
                 className={`px-4 py-2 rounded-lg text-sm font-black ${
                   modal.type === 'confirm' && modal.opts.danger
-                    ? 'bg-rose-500 text-white active:bg-rose-400'
-                    : 'bg-cyan-400 text-[#06121a] active:brightness-110'
+                    ? 'bg-rose-500 text-white hover:bg-rose-400'
+                    : 'bg-cyan-400 text-[#06121a] hover:brightness-110'
                 }`}
               >
                 {modal.opts.confirmLabel || (modal.type === 'confirm' ? 'Confirm' : 'OK')}

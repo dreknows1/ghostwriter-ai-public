@@ -1,7 +1,5 @@
 import React from 'react';
 import { UtilitySection } from './UtilityHub';
-import { isNative } from '../lib/platform';
-import { openExternal } from '../lib/nativeBridge';
 
 /**
  * The app menu drawer, shared by the LANDING and STUDIO views. Previously each
@@ -51,12 +49,9 @@ const SOCIALS: Array<{ name: string; icon: React.ReactNode; url: string }> = [
   { name: 'Discord', icon: <SocialDiscordIcon />, url: '' },
 ];
 
-// Referral/earn entries are stripped on native — guideline 3.1.1 territory (they
-// point at web-only reward mechanics not wired into IAP), and the invite flow
-// isn't part of the v1 native surface (docs/PLAN.md "Create experience").
-const UTILITY_ITEMS: Array<[string, UtilitySection, { webOnly?: boolean }?]> = [
-  ['Invite Friends', 'invite', { webOnly: true }],
-  ['Earn Credits', 'earn', { webOnly: true }],
+const UTILITY_ITEMS: Array<[string, UtilitySection]> = [
+  ['Invite Friends', 'invite'],
+  ['Earn Credits', 'earn'],
   ["What's New?", 'whatsnew'],
   ['Help', 'help'],
   ['Contact Support', 'support'],
@@ -67,7 +62,7 @@ const UTILITY_ITEMS: Array<[string, UtilitySection, { webOnly?: boolean }?]> = [
 ];
 
 const ITEM_CLASS =
-  'w-full text-left px-4 py-3 rounded-xl text-[15px] font-semibold leading-snug text-slate-200 active:bg-slate-800/60 active:text-white transition-colors';
+  'w-full text-left px-4 py-3 rounded-xl text-lg font-semibold leading-snug hover:bg-slate-700/40 transition-colors';
 
 interface MenuDrawerProps {
   isOpen: boolean;
@@ -80,58 +75,56 @@ export default function MenuDrawer({ isOpen, onClose, onSetAiKey, onOpenUtility 
   if (!isOpen) return null;
 
   const visibleSocials = SOCIALS.filter((s) => s.url);
-  const native = isNative();
-  const visibleUtilityItems = UTILITY_ITEMS.filter(([, , opts]) => !(native && opts?.webOnly));
 
   return (
     <>
       <button
         aria-label="Close menu overlay"
         onClick={onClose}
-        className="fixed inset-0 z-[65] bg-black/50"
+        className="fixed inset-0 z-[65] bg-black/35"
       />
-      <div className="fixed right-3 top-16 bottom-3 z-[70] w-[19rem] rounded-[1.1rem] border border-slate-700 bg-slate-900 shadow-2xl flex flex-col overflow-hidden safe-bottom">
+      <div className="fixed right-3 top-16 bottom-3 z-[70] w-[19rem] rounded-[1.1rem] border border-slate-700/70 bg-[#1a1530] shadow-2xl flex flex-col overflow-hidden">
         <div className="p-3 overflow-y-auto">
-          {!native && (
-            <button
-              onClick={() => { onSetAiKey(); onClose(); }}
-              className={`${ITEM_CLASS} text-cyan-300`}
-            >
-              Set AI Key
-            </button>
-          )}
+          <button
+            onClick={() => { onSetAiKey(); onClose(); }}
+            className={`${ITEM_CLASS} text-cyan-300 hover:text-cyan-200`}
+          >
+            Set AI Key
+          </button>
           <button
             onClick={() => {
-              openExternal('https://blog.songghost.com/home');
+              window.open('https://blog.songghost.com/home', '_blank', 'noopener,noreferrer');
               onClose();
             }}
-            className={ITEM_CLASS}
+            className={`${ITEM_CLASS} text-slate-200 hover:text-white`}
           >
             Blog
           </button>
-          {visibleUtilityItems.map(([label, key]) => (
+          {UTILITY_ITEMS.map(([label, key]) => (
             <button
               key={key}
               onClick={() => onOpenUtility(key)}
-              className={ITEM_CLASS}
+              className={`${ITEM_CLASS} text-slate-200 hover:text-white`}
             >
               {label}
             </button>
           ))}
         </div>
         {visibleSocials.length > 0 && (
-          <div className="border-t border-slate-800 p-3">
+          <div className="border-t border-slate-600/50 p-3">
             <div className="flex items-center justify-around text-slate-300">
               {visibleSocials.map((social) => (
-                <button
+                <a
                   key={social.name}
-                  onClick={() => openExternal(social.url)}
-                  className="w-9 h-9 rounded-full border border-slate-700 flex items-center justify-center active:bg-slate-800"
+                  href={social.url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="w-9 h-9 rounded-full border border-slate-600/70 flex items-center justify-center hover:bg-slate-700/50"
                   aria-label={social.name}
                   title={social.name}
                 >
                   {social.icon}
-                </button>
+                </a>
               ))}
             </div>
           </div>

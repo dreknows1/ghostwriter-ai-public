@@ -1,6 +1,5 @@
 import type { VercelRequest, VercelResponse } from "@vercel/node";
 import { createSign } from "node:crypto";
-import { mintToken } from "../../lib/authToken";
 
 type Provider = "google" | "discord" | "facebook" | "microsoft" | "apple";
 
@@ -218,16 +217,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     const tokens = await exchangeCode(provider, req, code);
     const email = await fetchEmail(provider, tokens.access_token!, tokens.id_token);
 
-    // Mint a signed, single-use, short-lived token proving this email completed
-    // a real OAuth exchange. The client redeems it at POST /api/auth
-    // {action:"oauth", token} — we no longer leak a bare email in the URL.
-    const secret = process.env.AUTH_TOKEN_SECRET;
-    if (!secret) {
-      console.error("[OAuth Callback] AUTH_TOKEN_SECRET is not configured");
-      return res.redirect(`/?oauth_error=${encodeURIComponent("Sign-in is temporarily unavailable")}`);
-    }
-    const token = mintToken({ email, secret });
-    return res.redirect(`/?oauth_token=${encodeURIComponent(token)}`);
+    return res.redirect(`/?oauth_email=${encodeURIComponent(email)}`);
   } catch (error: any) {
     console.error("[OAuth Callback Error]", error);
     return res.redirect(`/?oauth_error=${encodeURIComponent(error?.message || "OAuth authentication failed")}`);

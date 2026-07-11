@@ -5,9 +5,9 @@ import { getUserProfile, upsertUserProfile, deleteUserProfile, getUserTransactio
 import { getSavedSongs, deleteSong, deleteAllUserSongs } from '../services/songService';
 import { COSTS, deductCredits, hasEnoughCredits, formatCredits } from '../services/creditService';
 import { toast, confirmDialog } from './Feedback';
-import {
-    LoadingSpinner, ProfileIcon, TrashIcon, ImageIcon,
-    HomeIcon, WalletIcon, ClockIcon, LogoutIcon, GhostIcon
+import { 
+    LoadingSpinner, ProfileIcon, TrashIcon, ImageIcon, 
+    HomeIcon, WalletIcon, ClockIcon, LogoutIcon 
 } from './icons';
 
 interface ProfileViewProps {
@@ -17,7 +17,6 @@ interface ProfileViewProps {
   onSignOut: () => void;
   onProfileUpdate?: (updated: UserProfile) => void;
   onBuyCredits: () => void;
-  onCreateNew?: () => void;
 }
 
 type Tab = 'overview' | 'profile' | 'wallet' | 'history';
@@ -34,7 +33,7 @@ const ART_STYLES = [
     "Surrealism"
 ];
 
-const ProfileView: React.FC<ProfileViewProps> = ({ email, onLoadSong, onBack, onSignOut, onProfileUpdate, onBuyCredits, onCreateNew }) => {
+const ProfileView: React.FC<ProfileViewProps> = ({ email, onLoadSong, onBack, onSignOut, onProfileUpdate, onBuyCredits }) => {
   const [activeTab, setActiveTab] = useState<Tab>('overview');
   const [profile, setProfile] = useState<UserProfile | null>(null);
   const [songs, setSongs] = useState<SavedSong[]>([]);
@@ -165,7 +164,7 @@ const ProfileView: React.FC<ProfileViewProps> = ({ email, onLoadSong, onBack, on
                     if (!isMember && !alreadyHasAvatar) {
                         const canAfford = await hasEnoughCredits(email, COSTS.CREATE_AVATAR);
                         if (!canAfford) {
-                            toast('Even ghosts need fuel — top up to keep the hooks coming.', { kind: 'error', actionLabel: 'Buy credits', onAction: onBuyCredits });
+                            toast(`Insufficient credits — creating an avatar costs ${COSTS.CREATE_AVATAR} credits.`, { kind: 'error', actionLabel: 'Buy credits', onAction: onBuyCredits });
                             return;
                         }
                         await deductCredits(email, COSTS.CREATE_AVATAR, "avatar_creation");
@@ -247,9 +246,9 @@ const ProfileView: React.FC<ProfileViewProps> = ({ email, onLoadSong, onBack, on
   );
 
   const NavItem = ({ id, icon: Icon, label }: { id: Tab, icon: any, label: string }) => (
-      <button
+      <button 
         onClick={() => setActiveTab(id)}
-        className={`w-full flex items-center gap-4 px-6 py-4 rounded-2xl transition-all mb-2 ${activeTab === id ? 'bg-amber-500 text-slate-950 shadow-lg' : 'text-slate-500 active:bg-slate-800 active:text-white'}`}
+        className={`w-full flex items-center gap-4 px-6 py-4 rounded-2xl transition-all mb-2 ${activeTab === id ? 'bg-orange-500 text-white shadow-lg' : 'text-slate-500 hover:bg-slate-800 hover:text-white'}`}
       >
           <Icon />
           <span className="text-sm font-black uppercase tracking-[0.2em]">{label}</span>
@@ -257,19 +256,10 @@ const ProfileView: React.FC<ProfileViewProps> = ({ email, onLoadSong, onBack, on
   );
 
   return (
-    <div className="max-w-7xl mx-auto pt-6 md:pt-8 pb-24 px-4 animate-fade-in flex flex-col md:flex-row gap-8 relative safe-top safe-bottom safe-x">
-        {onCreateNew && (
-          <button
-            onClick={onCreateNew}
-            style={{ bottom: 'calc(88px + var(--safe-bottom, 0px))' }}
-            className="cta-primary fixed right-5 z-40 flex items-center gap-2 px-5 py-3.5 rounded-full text-[13px] uppercase tracking-widest active:scale-[0.97] transition-all"
-          >
-            <GhostIcon className="h-4 w-4" /> New Song
-          </button>
-        )}
+    <div className="max-w-7xl mx-auto pt-6 md:pt-8 pb-20 px-4 animate-fade-in flex flex-col md:flex-row gap-8">
         {/* Sidebar Navigation */}
         <div className="w-full md:w-64 flex-shrink-0">
-            <button onClick={onBack} className="mb-8 text-slate-500 active:text-white transition-all font-black text-sm uppercase tracking-widest flex items-center gap-2 group">
+            <button onClick={onBack} className="mb-8 text-slate-500 hover:text-white transition-all font-black text-sm uppercase tracking-widest flex items-center gap-2 group">
                 <span className="group-hover:-translate-x-1 transition-transform">←</span> Return to Studio
             </button>
             
@@ -290,7 +280,7 @@ const ProfileView: React.FC<ProfileViewProps> = ({ email, onLoadSong, onBack, on
                 <NavItem id="history" icon={ClockIcon} label="Studio History" />
                 
                 <div className="mt-8 pt-4 border-t border-slate-800/50">
-                    <button onClick={onSignOut} className="w-full flex items-center gap-4 px-6 py-4 rounded-2xl text-slate-500 active:text-red-400 active:bg-red-900/10 transition-all">
+                    <button onClick={onSignOut} className="w-full flex items-center gap-4 px-6 py-4 rounded-2xl text-slate-500 hover:text-red-400 hover:bg-red-900/10 transition-all">
                         <LogoutIcon />
                         <span className="text-sm font-black uppercase tracking-[0.2em]">Sign Out</span>
                     </button>
@@ -320,7 +310,7 @@ const ProfileView: React.FC<ProfileViewProps> = ({ email, onLoadSong, onBack, on
                                 </div>
                             )}
 
-                            <button onClick={onBuyCredits} className="mt-2 w-full px-6 py-3 bg-orange-500 active:bg-orange-400 rounded-2xl text-sm font-black uppercase tracking-widest text-white transition-all shadow-lg">Add Credits</button>
+                            <button onClick={onBuyCredits} className="mt-2 w-full px-6 py-3 bg-orange-500 hover:bg-orange-400 rounded-2xl text-sm font-black uppercase tracking-widest text-white transition-all shadow-lg">Add Credits</button>
                             <p className="mt-4 text-[10px] text-slate-400 uppercase tracking-widest leading-relaxed opacity-60">
                                 *Free tier: 25/mo. Members: 100/mo. Pro subscription: 500/mo.
                             </p>
@@ -347,32 +337,29 @@ const ProfileView: React.FC<ProfileViewProps> = ({ email, onLoadSong, onBack, on
                     </div>
 
                     <div>
-                        <div className="flex justify-between items-end mb-4">
+                        <div className="flex justify-between items-end mb-6">
                              <h3 className="text-xl font-black text-white tracking-tight">Recent Activity</h3>
-                             <button onClick={() => setActiveTab('history')} className="text-sm font-bold uppercase tracking-widest text-amber-400 active:text-white">View All</button>
+                             <button onClick={() => setActiveTab('history')} className="text-sm font-black uppercase tracking-widest text-orange-500 hover:text-white">View All</button>
                         </div>
                         {songs.length > 0 ? (
-                            <div className="rounded-2xl border border-slate-800 divide-y divide-slate-800 overflow-hidden">
+                            <div className="space-y-4">
                                 {songs.slice(0, 3).map(song => (
-                                    <div key={song.id} className="bg-slate-900/40 p-4 flex items-center justify-between gap-4">
-                                        <div className="flex items-center gap-4 min-w-0">
-                                            <div className="w-11 h-11 bg-slate-800 rounded-xl flex items-center justify-center text-slate-600 shrink-0">
+                                    <div key={song.id} className="glass-panel bg-[#161030]/70 p-6 rounded-3xl flex items-center justify-between">
+                                        <div className="flex items-center gap-6">
+                                            <div className="w-14 h-14 bg-slate-800 rounded-xl flex items-center justify-center text-slate-600">
                                                 {song.album_art ? <img src={song.album_art} className="w-full h-full object-cover rounded-xl" /> : <ImageIcon />}
                                             </div>
-                                            <div className="min-w-0">
-                                                <h4 className="font-bold text-white text-sm truncate">{song.title}</h4>
-                                                <p className="text-xs text-slate-500">{new Date(song.created_at).toLocaleDateString()}</p>
+                                            <div>
+                                                <h4 className="font-bold text-white text-base">{song.title}</h4>
+                                                <p className="text-sm text-slate-500">{new Date(song.created_at).toLocaleDateString()}</p>
                                             </div>
                                         </div>
-                                        <button onClick={() => onLoadSong(song)} className="text-xs font-bold uppercase tracking-widest text-slate-500 active:text-white shrink-0">Open</button>
+                                        <button onClick={() => onLoadSong(song)} className="text-sm font-black uppercase tracking-widest text-slate-500 hover:text-white">Open</button>
                                     </div>
                                 ))}
                             </div>
                         ) : (
-                            <div className="p-8 text-center border border-slate-800 border-dashed rounded-3xl text-slate-600 text-sm flex flex-col items-center gap-3">
-                                <GhostIcon className="h-8 w-8 opacity-40" />
-                                No spirits in your discography yet — write one and I'll haunt it for you.
-                            </div>
+                            <div className="p-8 text-center border border-slate-800 border-dashed rounded-3xl text-slate-600 text-sm">No recent activity.</div>
                         )}
                     </div>
                 </div>
@@ -387,7 +374,7 @@ const ProfileView: React.FC<ProfileViewProps> = ({ email, onLoadSong, onBack, on
                         <div className="grid grid-cols-2 gap-8">
                              <div className="col-span-2">
                                 <label className="block text-sm font-black uppercase tracking-widest text-slate-500 mb-3">Display Name</label>
-                                <input type="text" value={editData.display_name} onChange={e => setEditData({...editData, display_name: e.target.value})} className="w-full bg-[#1d1815] border border-slate-800 p-4 rounded-2xl text-white text-base outline-none focus:border-orange-400 transition-all" />
+                                <input type="text" value={editData.display_name} onChange={e => setEditData({...editData, display_name: e.target.value})} className="w-full bg-[#161030] border border-slate-800 p-4 rounded-2xl text-white text-base outline-none focus:border-orange-400 transition-all" />
                              </div>
                              
                              {/* AVATAR UPLOAD SECTION */}
@@ -402,7 +389,7 @@ const ProfileView: React.FC<ProfileViewProps> = ({ email, onLoadSong, onBack, on
                                             type="file" 
                                             accept="image/*"
                                             onChange={handleAvatarUpload}
-                                            className="w-full bg-[#1d1815] border border-slate-800 p-3 rounded-2xl text-sm text-slate-300 file:mr-4 file:py-2 file:px-4 file:rounded-xl file:border-0 file:text-xs file:font-black file:uppercase file:bg-slate-800 file:text-white active:file:bg-slate-700 cursor-pointer"
+                                            className="w-full bg-[#161030] border border-slate-800 p-3 rounded-2xl text-sm text-slate-300 file:mr-4 file:py-2 file:px-4 file:rounded-xl file:border-0 file:text-xs file:font-black file:uppercase file:bg-slate-800 file:text-white hover:file:bg-slate-700 cursor-pointer"
                                          />
                                             <p className="mt-3 text-xs text-slate-500 uppercase tracking-widest leading-relaxed">Upload artist persona (JPG/PNG). Used as reference for session art. Max 512px. {(profile?.tier || '').toLowerCase() === 'skool' ? 'Free for Members.' : `Cost: ${COSTS.CREATE_AVATAR} credits.`}</p>
                                         </div>
@@ -414,7 +401,7 @@ const ProfileView: React.FC<ProfileViewProps> = ({ email, onLoadSong, onBack, on
                                 <select 
                                     value={editData.preferred_art_style} 
                                     onChange={e => setEditData({...editData, preferred_art_style: e.target.value})}
-                                    className="w-full bg-[#1d1815] border border-slate-800 p-4 rounded-2xl text-white text-base outline-none focus:border-orange-400 transition-all appearance-none cursor-pointer"
+                                    className="w-full bg-[#161030] border border-slate-800 p-4 rounded-2xl text-white text-base outline-none focus:border-orange-400 transition-all appearance-none cursor-pointer"
                                 >
                                     <option value="" disabled>Select a visual style</option>
                                     {ART_STYLES.map(style => (
@@ -425,23 +412,23 @@ const ProfileView: React.FC<ProfileViewProps> = ({ email, onLoadSong, onBack, on
 
                              <div className="col-span-2">
                                 <label className="block text-sm font-black uppercase tracking-widest text-slate-500 mb-3">Musical Vibe / Style</label>
-                                <input type="text" value={editData.preferred_vibe} onChange={e => setEditData({...editData, preferred_vibe: e.target.value})} className="w-full bg-[#1d1815] border border-slate-800 p-4 rounded-2xl text-white text-base outline-none focus:border-orange-400 transition-all" />
+                                <input type="text" value={editData.preferred_vibe} onChange={e => setEditData({...editData, preferred_vibe: e.target.value})} className="w-full bg-[#161030] border border-slate-800 p-4 rounded-2xl text-white text-base outline-none focus:border-orange-400 transition-all" />
                              </div>
                              <div className="col-span-2">
                                 <label className="block text-sm font-black uppercase tracking-widest text-slate-500 mb-3">Bio / Manifesto</label>
-                                <textarea value={editData.bio} onChange={e => setEditData({...editData, bio: e.target.value})} className="w-full h-32 bg-[#1d1815] border border-slate-800 p-4 rounded-2xl text-white text-base outline-none focus:border-orange-400 transition-all resize-none" />
+                                <textarea value={editData.bio} onChange={e => setEditData({...editData, bio: e.target.value})} className="w-full h-32 bg-[#161030] border border-slate-800 p-4 rounded-2xl text-white text-base outline-none focus:border-orange-400 transition-all resize-none" />
                              </div>
                         </div>
 
                         <div className="pt-6 flex items-center gap-4">
-                            <button onClick={handleSaveProfile} disabled={isSavingProfile} className="bg-orange-500 px-10 py-5 rounded-2xl text-white font-black uppercase tracking-widest text-base active:bg-orange-400 transition-all shadow-lg min-h-[56px] flex items-center justify-center min-w-[200px]">
+                            <button onClick={handleSaveProfile} disabled={isSavingProfile} className="bg-orange-500 px-10 py-5 rounded-2xl text-white font-black uppercase tracking-widest text-base hover:bg-orange-400 transition-all shadow-lg min-h-[56px] flex items-center justify-center min-w-[200px]">
                                 {isSavingProfile ? <LoadingSpinner /> : 'Save Changes'}
                             </button>
                         </div>
                         
                         <div className="mt-12 pt-12 border-t border-slate-800/50">
                              <h3 className="text-red-500 font-bold mb-4 uppercase text-sm tracking-widest">Danger Zone</h3>
-                             <button onClick={handleDeleteAccount} className="border border-red-900/30 bg-red-900/10 text-red-500 px-8 py-4 rounded-2xl text-sm font-black uppercase tracking-widest active:bg-red-900/20">Delete Account</button>
+                             <button onClick={handleDeleteAccount} className="border border-red-900/30 bg-red-900/10 text-red-500 px-8 py-4 rounded-2xl text-sm font-black uppercase tracking-widest hover:bg-red-900/20">Delete Account</button>
                         </div>
                     </div>
                 </div>
@@ -455,10 +442,10 @@ const ProfileView: React.FC<ProfileViewProps> = ({ email, onLoadSong, onBack, on
                             <h2 className="text-3xl font-black text-white tracking-tighter mb-2">Billing & Credits</h2>
                             <p className="text-slate-500 text-base">Manage your studio currency and view transaction history.</p>
                         </div>
-                        <button onClick={onBuyCredits} className="bg-white text-black px-8 py-4 rounded-2xl font-black uppercase tracking-widest text-base active:scale-105 transition-all shadow-xl">Add Credits</button>
+                        <button onClick={onBuyCredits} className="bg-white text-black px-8 py-4 rounded-2xl font-black uppercase tracking-widest text-base hover:scale-105 transition-all shadow-xl">Add Credits</button>
                     </div>
 
-                    <div className="bg-[#1d1815] border border-slate-800 rounded-[2rem] md:rounded-[2.5rem] p-6 md:p-10 mb-12 flex items-center justify-between relative overflow-hidden gap-4">
+                    <div className="bg-[#161030] border border-slate-800 rounded-[2rem] md:rounded-[2.5rem] p-6 md:p-10 mb-12 flex items-center justify-between relative overflow-hidden gap-4">
                         <div className="relative z-10">
                             <span className="text-sm font-black uppercase tracking-[0.2em] text-slate-400 block mb-2">Current Balance</span>
                             <span className="text-5xl md:text-7xl font-black text-white tracking-tighter block mb-4">{formatCredits(profile?.credits)}</span>
@@ -481,7 +468,7 @@ const ProfileView: React.FC<ProfileViewProps> = ({ email, onLoadSong, onBack, on
                     </div>
 
                     <h3 className="text-xl font-black text-white mb-6">Transaction History</h3>
-                    <div className="bg-[#171310] border border-slate-800 rounded-3xl overflow-hidden">
+                    <div className="bg-[#140e28] border border-slate-800 rounded-3xl overflow-hidden">
                         <div className="overflow-x-auto">
                         <table className="w-full min-w-[560px] text-left">
                             <thead className="bg-slate-900/50 border-b border-slate-800">
@@ -494,7 +481,7 @@ const ProfileView: React.FC<ProfileViewProps> = ({ email, onLoadSong, onBack, on
                             </thead>
                             <tbody className="divide-y divide-slate-800">
                                 {transactions.length > 0 ? transactions.map(tx => (
-                                    <tr key={tx.id} className="active:bg-slate-900/30 transition-colors">
+                                    <tr key={tx.id} className="hover:bg-slate-900/30 transition-colors">
                                         <td className="p-6 text-slate-400 text-sm font-mono">{new Date(tx.date).toLocaleDateString()}</td>
                                         <td className="p-6 text-white font-bold text-base">{tx.item}</td>
                                         <td className="p-6 text-cyan-400 font-bold text-sm">+{tx.credits}</td>
@@ -512,37 +499,32 @@ const ProfileView: React.FC<ProfileViewProps> = ({ email, onLoadSong, onBack, on
                 </div>
             )}
 
-            {/* HISTORY TAB — hairline discography rows, not glass cards. */}
+            {/* HISTORY TAB */}
             {activeTab === 'history' && (
                 <div className="animate-fade-in">
-                    <h2 className="text-3xl font-black text-white tracking-tighter mb-6">Discography</h2>
-                    {songs.length > 0 ? (
-                        <div className="rounded-2xl border border-slate-800 divide-y divide-slate-800 overflow-hidden">
-                            {songs.map(song => (
-                                <div key={song.id} className="group flex items-center justify-between gap-4 p-4 md:p-5 active:bg-slate-900/40 transition-all">
-                                    <div className="flex items-center gap-4 min-w-0">
-                                        <div className="w-14 h-14 bg-slate-800 rounded-xl flex-shrink-0 overflow-hidden">
-                                            {song.album_art ? <img src={song.album_art} className="w-full h-full object-cover" /> : <div className="w-full h-full flex items-center justify-center text-slate-600"><ImageIcon /></div>}
-                                        </div>
-                                        <div className="min-w-0">
-                                            <h4 className="text-base font-bold text-white truncate">{song.title}</h4>
-                                            <p className="text-xs text-slate-500 truncate max-w-md">{song.lyrics.slice(0, 70)}...</p>
-                                            <span className="text-[11px] text-slate-600 uppercase tracking-widest mt-1 block">{new Date(song.created_at).toLocaleDateString()}</span>
-                                        </div>
-                                    </div>
-                                    <div className="flex items-center gap-2 shrink-0">
-                                        <button onClick={() => onLoadSong(song)} className="px-4 py-2.5 rounded-xl bg-slate-100 text-slate-950 text-xs font-black uppercase tracking-widest active:scale-95 transition-all">Open</button>
-                                        <button onClick={() => handleDeleteSong(song.id)} className="p-2.5 rounded-xl border border-slate-800 text-slate-500 active:text-red-400 active:border-red-900 transition-all"><TrashIcon /></button>
-                                    </div>
-                                </div>
-                            ))}
-                        </div>
-                    ) : (
-                        <div className="text-center py-20 text-slate-500 text-sm flex flex-col items-center gap-3">
-                            <GhostIcon className="h-10 w-10 opacity-40" />
-                            No spirits in your discography yet — write one and I'll haunt it for you.
-                        </div>
-                    )}
+                    <h2 className="text-3xl font-black text-white tracking-tighter mb-8">Studio History</h2>
+                    <div className="grid grid-cols-1 gap-6">
+                        {songs.length > 0 ? songs.map(song => (
+                             <div key={song.id} className="group bg-[#140e28] border border-slate-800 p-4 md:p-6 rounded-3xl flex flex-col md:flex-row items-start md:items-center justify-between gap-4 md:gap-6 hover:border-orange-500/30 transition-all">
+                                 <div className="flex items-center gap-6">
+                                     <div className="w-20 h-20 bg-slate-800 rounded-2xl flex-shrink-0 overflow-hidden">
+                                         {song.album_art ? <img src={song.album_art} className="w-full h-full object-cover" /> : <div className="w-full h-full flex items-center justify-center text-slate-600"><ImageIcon /></div>}
+                                     </div>
+                                     <div>
+                                        <h4 className="text-lg md:text-xl font-bold text-white mb-1 group-hover:text-orange-400 transition-colors">{song.title}</h4>
+                                         <p className="text-sm text-slate-500 font-mono line-clamp-1 max-w-md">{song.lyrics.slice(0, 70)}...</p>
+                                         <span className="text-xs text-slate-600 uppercase tracking-widest mt-2 block">{new Date(song.created_at).toLocaleDateString()}</span>
+                                     </div>
+                                 </div>
+                                 <div className="flex items-center gap-3 w-full md:w-auto">
+                                     <button onClick={() => onLoadSong(song)} className="flex-grow md:flex-none px-8 py-4 rounded-xl bg-white text-black text-sm font-black uppercase tracking-widest hover:scale-105 transition-all">Open Record</button>
+                                     <button onClick={() => handleDeleteSong(song.id)} className="p-4 rounded-xl bg-slate-900 border border-slate-800 text-slate-500 hover:text-red-500 hover:border-red-900 transition-all"><TrashIcon /></button>
+                                 </div>
+                             </div>
+                        )) : (
+                            <div className="text-center py-20 text-slate-500 text-base">No history available.</div>
+                        )}
+                    </div>
                 </div>
             )}
 

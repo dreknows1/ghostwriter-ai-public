@@ -16,8 +16,6 @@ import {
   type EngineGenerate,
 } from "./engine/pipeline";
 import { landRoom } from "./engine/landing";
-import { applyCors, handlePreflight } from "../lib/cors";
-import { requireSession } from "../lib/sessionAuth";
 
 
 const ASK_ANDRE_AUDIT_CONTEXT = `
@@ -1125,9 +1123,6 @@ async function streamSongV3(payload: any, res: VercelResponse) {
 }
 
 export default async function handler(req: VercelRequest, res: VercelResponse) {
-  if (handlePreflight(req, res)) return;
-  applyCors(req, res);
-
   if (req.method === "GET") {
     // Deployment canary (plan §1): proves the curriculum is inside the deployed bundle.
     // `rooms` also feeds the Song Builder's sub-genre step (name + picker one-liner).
@@ -1158,20 +1153,15 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     return res.status(405).json({ error: "Method Not Allowed" });
   }
 
-  // Fail closed: generation REQUIRES a valid session bearer. This also kills
-  // anonymous free generation. Identity is the token's email — any `email` in
-  // the request body is ignored. (GET catalog above stays public.)
-  const session = requireSession(req, res);
-  if (!session.ok) return;
-  const email = session.email;
-
   try {
-    const { action, payload } = (req.body || {}) as {
+    const { action, email, payload } = (req.body || {}) as {
       action?: AIAction;
+      email?: string;
       payload?: any;
     };
 
     if (!action) return res.status(400).json({ error: "Missing action" });
+    if (!isAllowedEmail(email)) return res.status(401).json({ error: "Invalid user identity" });
     requestRequiresUserGeminiKey =
       action === "askAndre" ? false : await shouldRequireUserGeminiKey(String(email || ""));
     requestGeminiTextApiKey =
