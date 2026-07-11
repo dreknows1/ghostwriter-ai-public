@@ -140,13 +140,13 @@ export default function ApiKeyModal({ isOpen, onClose, onSaved, required }: ApiK
 
   return (
     <div
-      className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-black/70 backdrop-blur-sm"
+      className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-black/80"
       onClick={() => { if (!required) closeAndNotify(); }}
       aria-modal="true"
       role="dialog"
     >
       <div
-        className="w-full max-w-lg rounded-2xl border border-slate-700/70 bg-[#1a1530] text-slate-100 shadow-2xl"
+        className="w-full max-w-lg rounded-2xl border border-slate-700/70 bg-[#181410] text-slate-100 shadow-2xl"
         onClick={(e) => e.stopPropagation()}
       >
         <div className="flex items-start justify-between p-5 border-b border-slate-800">
@@ -160,7 +160,7 @@ export default function ApiKeyModal({ isOpen, onClose, onSaved, required }: ApiK
             <button
               onClick={closeAndNotify}
               aria-label="Close"
-              className="text-slate-400 hover:text-white text-2xl leading-none px-2 -mt-1"
+              className="text-slate-400 active:text-white text-2xl leading-none px-2 -mt-1"
             >
               ×
             </button>
@@ -182,7 +182,7 @@ export default function ApiKeyModal({ isOpen, onClose, onSaved, required }: ApiK
               <button
                 type="button"
                 onClick={() => setReveal((v) => !v)}
-                className="text-xs text-cyan-300 hover:text-cyan-200"
+                className="text-xs text-cyan-300 active:text-cyan-200"
               >
                 {reveal ? "Hide" : "Show"}
               </button>
@@ -195,7 +195,7 @@ export default function ApiKeyModal({ isOpen, onClose, onSaved, required }: ApiK
               placeholder="AIza..."
               value={value}
               onChange={(e) => { setValue(e.target.value); setStatus({ kind: "idle" }); }}
-              className="w-full rounded-xl border border-slate-700 bg-[#0f0a22] px-4 py-3 text-base font-mono text-cyan-200 placeholder:text-slate-600 focus:outline-none focus:border-cyan-400"
+              className="w-full rounded-xl border border-slate-700 bg-[#141110] px-4 py-3 text-base font-mono text-cyan-200 placeholder:text-slate-600 focus:outline-none focus:border-cyan-400"
               onKeyDown={(e) => { if (e.key === "Enter") handleSave(); }}
             />
             <div className="flex flex-wrap items-center gap-2 mt-3">
@@ -203,7 +203,7 @@ export default function ApiKeyModal({ isOpen, onClose, onSaved, required }: ApiK
                 type="button"
                 onClick={handleTest}
                 disabled={!value.trim() || status.kind === "testing"}
-                className="px-3 py-2 rounded-lg border border-slate-700 bg-slate-800/60 text-sm font-semibold text-slate-200 hover:border-cyan-400 hover:text-white disabled:opacity-40 disabled:cursor-not-allowed"
+                className="px-3 py-2 rounded-lg border border-slate-700 bg-slate-800/60 text-sm font-semibold text-slate-200 active:border-cyan-400 active:text-white disabled:opacity-40 disabled:cursor-not-allowed"
               >
                 {status.kind === "testing" ? "Testing..." : "Test key"}
               </button>
@@ -211,14 +211,14 @@ export default function ApiKeyModal({ isOpen, onClose, onSaved, required }: ApiK
                 href="https://aistudio.google.com/app/apikey"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="px-3 py-2 rounded-lg border border-cyan-400/40 bg-cyan-500/10 text-sm font-semibold text-cyan-200 hover:bg-cyan-500/20 hover:text-white"
+                className="px-3 py-2 rounded-lg border border-cyan-400/40 bg-cyan-500/10 text-sm font-semibold text-cyan-200 active:bg-cyan-500/20 active:text-white"
               >
                 Get a free key →
               </a>
               <button
                 type="button"
                 onClick={() => setShowHelp((v) => !v)}
-                className="px-3 py-2 rounded-lg text-sm text-slate-400 hover:text-slate-200"
+                className="px-3 py-2 rounded-lg text-sm text-slate-400 active:text-slate-200"
               >
                 {showHelp ? "Hide steps" : "Where do I get this?"}
               </button>
@@ -237,7 +237,7 @@ export default function ApiKeyModal({ isOpen, onClose, onSaved, required }: ApiK
           </div>
 
           {showHelp && (
-            <div className="rounded-xl border border-slate-700 bg-[#0f0a22] px-4 py-3 text-sm text-slate-300 space-y-2">
+            <div className="rounded-xl border border-slate-700 bg-[#141110] px-4 py-3 text-sm text-slate-300 space-y-2">
               <div className="font-bold text-white">How to get a Gemini API key (free):</div>
               <ol className="list-decimal pl-5 space-y-1 text-slate-300">
                 <li>Click <a href="https://aistudio.google.com/app/apikey" target="_blank" rel="noopener noreferrer" className="text-cyan-300 underline">Get a free key</a> above (opens Google AI Studio in a new tab).</li>
@@ -258,7 +258,7 @@ export default function ApiKeyModal({ isOpen, onClose, onSaved, required }: ApiK
               <button
                 type="button"
                 onClick={handleClear}
-                className="px-3 py-2 rounded-lg text-sm text-rose-300 hover:text-rose-200"
+                className="px-3 py-2 rounded-lg text-sm text-rose-300 active:text-rose-200"
               >
                 Remove saved key
               </button>
@@ -269,7 +269,7 @@ export default function ApiKeyModal({ isOpen, onClose, onSaved, required }: ApiK
               <button
                 type="button"
                 onClick={closeAndNotify}
-                className="px-4 py-2 rounded-lg border border-slate-700 bg-slate-800/60 text-sm font-semibold text-slate-200 hover:border-slate-500"
+                className="px-4 py-2 rounded-lg border border-slate-700 bg-slate-800/60 text-sm font-semibold text-slate-200 active:border-slate-500"
               >
                 {existing ? "Close" : "Not now"}
               </button>
@@ -278,7 +278,7 @@ export default function ApiKeyModal({ isOpen, onClose, onSaved, required }: ApiK
               type="button"
               onClick={handleSave}
               disabled={!value.trim() || status.kind === "testing"}
-              className="px-4 py-2 rounded-lg bg-cyan-400 text-[#06121a] text-sm font-black hover:brightness-110 disabled:opacity-40 disabled:cursor-not-allowed"
+              className="px-4 py-2 rounded-lg bg-cyan-400 text-[#06121a] text-sm font-black active:brightness-110 disabled:opacity-40 disabled:cursor-not-allowed"
             >
               Save key
             </button>

@@ -42,8 +42,8 @@ export const SaveIcon: React.FC = () => (
   </svg>
 );
 
-export const CopyIcon: React.FC = () => (
-  <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+export const CopyIcon: React.FC<{ className?: string }> = ({ className }) => (
+  <svg xmlns="http://www.w3.org/2000/svg" className={className || "h-4 w-4 mr-1"} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
     <path strokeLinecap="round" strokeLinejoin="round" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z" />
   </svg>
 );
@@ -78,8 +78,8 @@ export const SocialIcon: React.FC = () => (
   </svg>
 );
 
-export const TranslateIcon: React.FC = () => (
-  <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+export const TranslateIcon: React.FC<{ className?: string }> = ({ className }) => (
+  <svg xmlns="http://www.w3.org/2000/svg" className={className || "h-5 w-5 mr-1"} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
     <path strokeLinecap="round" strokeLinejoin="round" d="M3 5h12M9 3v2m1.048 9.5A18.022 18.022 0 016.412 9m6.088 9h7M11 21l5-10 5 10M12.751 5C11.783 10.77 8.07 15.61 3 18.129" />
   </svg>
 );
@@ -120,8 +120,57 @@ export const LogoutIcon: React.FC = () => (
   </svg>
 );
 
-export const DownloadIcon: React.FC = () => (
-  <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+export const DownloadIcon: React.FC<{ className?: string }> = ({ className }) => (
+  <svg xmlns="http://www.w3.org/2000/svg" className={className || "h-5 w-5 mr-1"} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
     <path strokeLinecap="round" strokeLinejoin="round" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
+  </svg>
+);
+
+/** SongGhost's mascot mark — used on the generating screen, quick-create, and paywall. */
+export const GhostIcon: React.FC<{ className?: string }> = ({ className }) => (
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 132" className={className || 'h-8 w-8'} aria-hidden="true">
+    <path
+      d="M20 122C13 122 9 115 14 108C18 115 24 115 28 106C32 115 38 115 42 106C46 115 52 115 56 106C60 115 66 115 70 106C74 115 80 115 84 108C89 115 85 122 78 122L78 62C78 27 63 8 49 8C35 8 20 27 20 62Z"
+      fill="currentColor"
+    />
+    <circle cx="38" cy="58" r="6.2" fill="#0b0a09" />
+    <circle cx="61" cy="58" r="6.2" fill="#0b0a09" />
+    <path d="M35 75Q49 87 64 75" stroke="#0b0a09" strokeWidth="4.2" fill="none" strokeLinecap="round" />
+  </svg>
+);
+
+export const ExternalLinkIcon: React.FC<{ className?: string }> = ({ className }) => (
+  <svg xmlns="http://www.w3.org/2000/svg" className={className || 'h-5 w-5'} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.4}>
+    <path strokeLinecap="round" strokeLinejoin="round" d="M8 16L16 8" />
+    <path strokeLinecap="round" strokeLinejoin="round" d="M9 7H17V15" />
+  </svg>
+);
+
+export const ShareIcon: React.FC<{ className?: string }> = ({ className }) => (
+  <svg xmlns="http://www.w3.org/2000/svg" className={className || 'h-5 w-5'} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+    <path strokeLinecap="round" strokeLinejoin="round" d="M12 3V15" />
+    <path strokeLinecap="round" strokeLinejoin="round" d="M7 8L12 3L17 8" />
+    <path strokeLinecap="round" strokeLinejoin="round" d="M5 13V18C5 19.1 5.9 20 7 20H17C18.1 20 19 19.1 19 18V13" />
+  </svg>
+);
+
+export const BookmarkIcon: React.FC<{ className?: string }> = ({ className }) => (
+  <svg xmlns="http://www.w3.org/2000/svg" className={className || 'h-5 w-5'} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+    <path strokeLinecap="round" strokeLinejoin="round" d="M7 4H17C17.6 4 18 4.4 18 5V21L12 17.5L6 21V5C6 4.4 6.4 4 7 4Z" />
+  </svg>
+);
+
+export const RefreshIcon: React.FC<{ className?: string }> = ({ className }) => (
+  <svg xmlns="http://www.w3.org/2000/svg" className={className || 'h-5 w-5'} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+    <path strokeLinecap="round" strokeLinejoin="round" d="M4 12C4 7.6 7.6 4 12 4C15 4 17.6 5.7 19 8.2" />
+    <path strokeLinecap="round" strokeLinejoin="round" d="M20 12C20 16.4 16.4 20 12 20C9 20 6.4 18.3 5 15.8" />
+    <path strokeLinecap="round" strokeLinejoin="round" d="M19 4V8.2H14.8" />
+    <path strokeLinecap="round" strokeLinejoin="round" d="M5 20V15.8H9.2" />
+  </svg>
+);
+
+export const BoltIcon: React.FC<{ className?: string }> = ({ className }) => (
+  <svg xmlns="http://www.w3.org/2000/svg" className={className || 'h-3.5 w-3.5'} viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+    <path d="M13 2L4 14H11L10 22L20 9H13L13 2Z" />
   </svg>
 );

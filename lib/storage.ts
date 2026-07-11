@@ -10,6 +10,10 @@
  * The API is async everywhere so callers don't fork on platform. `@capacitor/
  * preferences` is loaded via dynamic import so the web bundle never pulls it in
  * (isNative() is false there and the import is never reached).
+ *
+ * Two naming conventions are exported for historical reasons — `storageGet/Set/
+ * Remove` (auth layer) and `getItem/setItem/removeItem` (UI layer) — both bound
+ * to the same implementation.
  */
 import { isNative } from "./platform";
 
@@ -64,3 +68,8 @@ export function legacyLocalStorageGet(key: string): string | null {
     return null;
   }
 }
+
+// Aliases for the UI layer's call sites (intro-seen flag, etc.).
+export const getItem = storageGet;
+export const setItem = storageSet;
+export const removeItem = storageRemove;

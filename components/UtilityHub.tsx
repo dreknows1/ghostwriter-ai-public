@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { getOrCreateReferralCode, getReferralSummary } from "../services/userService";
 import { toast } from "./Feedback";
+import { isNative } from "../lib/platform";
+import { copyText } from "../lib/nativeBridge";
 
 export type UtilitySection =
   | "invite"
@@ -43,21 +45,30 @@ const UtilityHub: React.FC<UtilityHubProps> = ({ email, section, onBack, onOpenT
 
   const copy = async (value: string) => {
     if (!value) return;
-    await navigator.clipboard.writeText(value);
+    await copyText(value);
     toast('Copied to clipboard.', 'success');
   };
 
+  const nativeAndReferral = isNative() && (section === "invite" || section === "earn");
+
   return (
-    <div className="max-w-3xl mx-auto pt-6 md:pt-10 pb-20 px-4 animate-fade-in">
-      <button onClick={onBack} className="mb-6 text-slate-500 hover:text-white text-sm font-black uppercase tracking-widest">
+    <div className="max-w-3xl mx-auto pt-6 md:pt-10 pb-20 px-4 animate-fade-in safe-top safe-bottom safe-x">
+      <button onClick={onBack} className="mb-6 text-slate-500 active:text-white text-sm font-bold uppercase tracking-widest">
         ← Back
       </button>
 
-      {section === "invite" && (
+      {nativeAndReferral && (
+        <div className="glass-panel rounded-3xl p-6 md:p-8 space-y-3">
+          <h2 className="text-2xl font-bold text-white">Not available here</h2>
+          <p className="text-slate-400">This feature isn't part of the app yet. Check songghost.com on the web.</p>
+        </div>
+      )}
+
+      {!nativeAndReferral && section === "invite" && (
         <div className="glass-panel rounded-3xl p-6 md:p-8 space-y-5">
           <h2 className="text-3xl font-black text-white">Invite Friends</h2>
           <p className="text-slate-400">Share your invite link. You earn credits when invited users complete their first qualified action.</p>
-          <div className="bg-[#161030] border border-slate-800 rounded-2xl p-4 break-all text-cyan-400 font-mono">{inviteLink || "Loading..."}</div>
+          <div className="bg-[#1d1815] border border-slate-800 rounded-2xl p-4 break-all text-cyan-400 font-mono">{inviteLink || "Loading..."}</div>
           <div className="flex flex-col sm:flex-row gap-3">
             <button onClick={() => copy(inviteLink)} className="bg-white text-black px-6 py-3 rounded-xl font-black">Copy Link</button>
             <button onClick={() => copy(code)} className="bg-slate-800 text-white px-6 py-3 rounded-xl font-black">Copy Code</button>
@@ -65,20 +76,20 @@ const UtilityHub: React.FC<UtilityHubProps> = ({ email, section, onBack, onOpenT
         </div>
       )}
 
-      {section === "earn" && (
+      {!nativeAndReferral && section === "earn" && (
         <div className="glass-panel rounded-3xl p-6 md:p-8 space-y-5">
           <h2 className="text-3xl font-black text-white">Earn Credits</h2>
           <p className="text-slate-400">Referral rewards: inviter +40 and invitee +20 after first qualified action.</p>
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
-            <div className="bg-[#161030] border border-slate-800 rounded-2xl p-4">
+            <div className="bg-[#1d1815] border border-slate-800 rounded-2xl p-4">
               <div className="text-xs uppercase tracking-widest text-slate-500">Invited</div>
               <div className="text-2xl font-black text-white">{summary?.invitedCount ?? 0}</div>
             </div>
-            <div className="bg-[#161030] border border-slate-800 rounded-2xl p-4">
+            <div className="bg-[#1d1815] border border-slate-800 rounded-2xl p-4">
               <div className="text-xs uppercase tracking-widest text-slate-500">Rewarded</div>
               <div className="text-2xl font-black text-white">{summary?.rewardedCount ?? 0}</div>
             </div>
-            <div className="bg-[#161030] border border-slate-800 rounded-2xl p-4">
+            <div className="bg-[#1d1815] border border-slate-800 rounded-2xl p-4">
               <div className="text-xs uppercase tracking-widest text-slate-500">Earned</div>
               <div className="text-2xl font-black text-cyan-400">{summary?.earnedCredits ?? 0}</div>
             </div>
@@ -114,7 +125,7 @@ const UtilityHub: React.FC<UtilityHubProps> = ({ email, section, onBack, onOpenT
         <div className="glass-panel rounded-3xl p-6 md:p-8 space-y-5">
           <h2 className="text-3xl font-black text-white">Contact Support</h2>
           <p className="text-slate-400">Reach our team directly. Replies typically within 1 business day.</p>
-          <div className="bg-[#161030] border border-slate-800 rounded-2xl p-4 break-all text-cyan-400 font-mono">{SUPPORT_EMAIL}</div>
+          <div className="bg-[#1d1815] border border-slate-800 rounded-2xl p-4 break-all text-cyan-400 font-mono">{SUPPORT_EMAIL}</div>
           <div className="flex flex-col sm:flex-row gap-3">
             <button onClick={() => copy(SUPPORT_EMAIL)} className="bg-white text-black px-6 py-3 rounded-xl font-black">Copy Email</button>
             <a
@@ -135,7 +146,7 @@ const UtilityHub: React.FC<UtilityHubProps> = ({ email, section, onBack, onOpenT
             value={feedback}
             onChange={(e) => setFeedback(e.target.value)}
             placeholder="Tell us what to improve..."
-            className="w-full h-40 bg-[#161030] border border-slate-800 rounded-2xl p-4 text-white outline-none"
+            className="w-full h-40 bg-[#1d1815] border border-slate-800 rounded-2xl p-4 text-white outline-none"
           />
           <button
             onClick={() => {

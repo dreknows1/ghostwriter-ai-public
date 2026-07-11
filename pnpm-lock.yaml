@@ -14,18 +14,36 @@ importers:
       '@capacitor-community/apple-sign-in':
         specifier: ^7.1.0
         version: 7.1.0(@capacitor/core@7.6.7)
+      '@capacitor/browser':
+        specifier: ^7.0.5
+        version: 7.0.5(@capacitor/core@7.6.7)
+      '@capacitor/clipboard':
+        specifier: ^7.0.4
+        version: 7.0.4(@capacitor/core@7.6.7)
       '@capacitor/core':
         specifier: ^7.6.7
         version: 7.6.7
+      '@capacitor/filesystem':
+        specifier: ^7.1.8
+        version: 7.1.8(@capacitor/core@7.6.7)
+      '@capacitor/haptics':
+        specifier: ^7.0.5
+        version: 7.0.5(@capacitor/core@7.6.7)
       '@capacitor/ios':
         specifier: ^7.6.7
         version: 7.6.7(@capacitor/core@7.6.7)
       '@capacitor/preferences':
         specifier: ^7.0.4
         version: 7.0.4(@capacitor/core@7.6.7)
+      '@capacitor/share':
+        specifier: ^7.0.4
+        version: 7.0.4(@capacitor/core@7.6.7)
       '@fontsource/manrope':
         specifier: ^5.2.8
         version: 5.2.8
+      '@fontsource/newsreader':
+        specifier: ^5.2.10
+        version: 5.2.10
       '@fontsource/unbounded':
         specifier: ^5.2.8
         version: 5.2.8
@@ -210,13 +228,33 @@ packages:
     peerDependencies:
       '@capacitor/core': '>=7.0.0'
 
+  '@capacitor/browser@7.0.5':
+    resolution: {integrity: sha512-YF/kC1m1e6c81X/agtAnYItVlqiQ/nXLG+Q3QXNDuiMoRynqa3Guu8ZaV9kWvqQcHoE2w18xz7WGpPOuh+R1fA==}
+    peerDependencies:
+      '@capacitor/core': '>=7.0.0'
+
   '@capacitor/cli@7.6.7':
     resolution: {integrity: sha512-nV9j1+431/rsiabGs1UK0SbETrl2JfAf3SSlsM9RbMMjAL7WmruxnlJcbB9IXPoa6L99GljSO5q/9UCNvYz6Ag==}
     engines: {node: '>=20.0.0'}
     hasBin: true
 
+  '@capacitor/clipboard@7.0.4':
+    resolution: {integrity: sha512-+kiTRFjwD5UiWRg/m1JA/0Z0DDdsZLa25MLqI1e3MUi3yNZIwVZV5Oj6v4O0gxmpoBxf5A1L1v3weq+vWOBUuQ==}
+    peerDependencies:
+      '@capacitor/core': '>=7.0.0'
+
   '@capacitor/core@7.6.7':
     resolution: {integrity: sha512-DR0kqfcsDzWhvskz+sJWy41cdv+P1ITjmOYYG5WSV88EO6tx5Tf82M61vp4NjV7rfQDUAQjBAypgaTiB2/2oEg==}
+
+  '@capacitor/filesystem@7.1.8':
+    resolution: {integrity: sha512-Qpw/2SE4/CzqAUvGgSM9hw/uXQ5qoOaF4wxbToXwpAaKPS+tzletS1h5ti3jjLmGcqizTs2sEXMtcsARW/Ceew==}
+    peerDependencies:
+      '@capacitor/core': '>=7.0.0'
+
+  '@capacitor/haptics@7.0.5':
+    resolution: {integrity: sha512-ujXuUkL8UG1YLhuJo/q+jiHr0K5JmclGZHmV1RttmiUBRG1XpC4Fc4gXUJyEX+6IoyfwWhgtPvJFRUB31HYnRQ==}
+    peerDependencies:
+      '@capacitor/core': '>=7.0.0'
 
   '@capacitor/ios@7.6.7':
     resolution: {integrity: sha512-ZXw1tO1orV6yDpkJyXxoerLC6S+UW8HFa280TX57Pgo4tPwuqWDF22vInjaolKmL/+k70R+zuRjul+hhiBWvlw==}
@@ -227,6 +265,14 @@ packages:
     resolution: {integrity: sha512-TJhkwaI2RCs/iDC9PjNczZV4h6JM4gUtTuKMeFdy0OwGgFEHf4TrtW2mFMc1TnPDalYQ91p9NT+UKgiJs9/xtg==}
     peerDependencies:
       '@capacitor/core': '>=7.0.0'
+
+  '@capacitor/share@7.0.4':
+    resolution: {integrity: sha512-wNXxmXUcChrtbZ5jQv8scFIbIGKo3rk6B7qpWySxfUhYJP5NANgAqQ9Z69m0k/zYsucdh66SBU7XW1ykd9aUug==}
+    peerDependencies:
+      '@capacitor/core': '>=7.0.0'
+
+  '@capacitor/synapse@1.0.4':
+    resolution: {integrity: sha512-/C1FUo8/OkKuAT4nCIu/34ny9siNHr9qtFezu4kxm6GY1wNFxrCFWjfYx5C1tUhVGz3fxBABegupkpjXvjCHrw==}
 
   '@cspotcode/source-map-support@0.8.1':
     resolution: {integrity: sha512-IchNf6dN4tHoMFIn/7OE8LWZ19Y6q/67Bmf6vnGREv8RSbBVb9LPJxEcnwrcwX6ixSvaiGoomAUvu4YSxXrVgw==}
@@ -708,6 +754,9 @@ packages:
 
   '@fontsource/manrope@5.2.8':
     resolution: {integrity: sha512-gJHJmcuUk7qWcNCfcAri/DJQtXtBYqi9yKratr4jXhSo0I3xUtNNKI+igQIcw5c+m95g0vounk8ZnX/kb8o0TA==}
+
+  '@fontsource/newsreader@5.2.10':
+    resolution: {integrity: sha512-TFaYzoFhDqarUyV2yYjgZZEwT4bpaj6sGBnXSnFknQ/QB8/9LzfY6IO9+inHOX4zzPp87Z7/KuG1OI5gr91Q3A==}
 
   '@fontsource/unbounded@5.2.8':
     resolution: {integrity: sha512-tBHtKB+s5tKvQXEWy5h86sDY5hzVLsEbW6TGphSjUY9b/gawUPvXv5vFS4ZdPbGDcvSqMMy6eXkqdcsKI29dig==}
@@ -2809,6 +2858,10 @@ snapshots:
       '@types/scriptjs': 0.0.2
       scriptjs: 2.5.9
 
+  '@capacitor/browser@7.0.5(@capacitor/core@7.6.7)':
+    dependencies:
+      '@capacitor/core': 7.6.7
+
   '@capacitor/cli@7.6.7':
     dependencies:
       '@ionic/cli-framework-output': 2.2.8
@@ -2831,9 +2884,22 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
+  '@capacitor/clipboard@7.0.4(@capacitor/core@7.6.7)':
+    dependencies:
+      '@capacitor/core': 7.6.7
+
   '@capacitor/core@7.6.7':
     dependencies:
       tslib: 2.8.1
+
+  '@capacitor/filesystem@7.1.8(@capacitor/core@7.6.7)':
+    dependencies:
+      '@capacitor/core': 7.6.7
+      '@capacitor/synapse': 1.0.4
+
+  '@capacitor/haptics@7.0.5(@capacitor/core@7.6.7)':
+    dependencies:
+      '@capacitor/core': 7.6.7
 
   '@capacitor/ios@7.6.7(@capacitor/core@7.6.7)':
     dependencies:
@@ -2842,6 +2908,12 @@ snapshots:
   '@capacitor/preferences@7.0.4(@capacitor/core@7.6.7)':
     dependencies:
       '@capacitor/core': 7.6.7
+
+  '@capacitor/share@7.0.4(@capacitor/core@7.6.7)':
+    dependencies:
+      '@capacitor/core': 7.6.7
+
+  '@capacitor/synapse@1.0.4': {}
 
   '@cspotcode/source-map-support@0.8.1':
     dependencies:
@@ -3087,6 +3159,8 @@ snapshots:
   '@fastify/busboy@2.1.1': {}
 
   '@fontsource/manrope@5.2.8': {}
+
+  '@fontsource/newsreader@5.2.10': {}
 
   '@fontsource/unbounded@5.2.8': {}
 

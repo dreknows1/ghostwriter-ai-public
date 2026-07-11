@@ -8,14 +8,14 @@ interface IntroAnimationProps {
 const NOTES = ['♪', '♫', '♬', '♩', '♪', '♫', '♬', '♩', '♪', '♫', '♬', '♩', '♪', '♫'];
 const WORDS = ['LYRICS', 'MELODY', 'FLOW', 'WRITE', 'SONG', 'BEAT', 'RHYTHM', 'VIBE'];
 const COLORS = [
-  'rgba(249,115,22,0.8)',   // orange
-  'rgba(56,189,248,0.8)',   // cyan
-  'rgba(244,114,182,0.8)',  // pink
-  'rgba(251,191,36,0.8)',   // amber
-  'rgba(139,92,246,0.7)',   // violet
-  'rgba(52,211,153,0.7)',   // emerald
-  'rgba(96,165,250,0.8)',   // blue
-  'rgba(248,113,113,0.7)',  // red
+  'rgba(226,153,60,0.85)',  // amber
+  'rgba(79,215,196,0.85)',  // teal
+  'rgba(243,186,95,0.85)',  // amber bright
+  'rgba(79,215,196,0.7)',   // teal dim
+  'rgba(185,117,42,0.8)',   // amber deep
+  'rgba(111,223,205,0.75)', // teal light
+  'rgba(226,153,60,0.7)',   // amber
+  'rgba(79,215,196,0.8)',   // teal
 ];
 
 const IntroAnimation: React.FC<IntroAnimationProps> = ({ onComplete }) => {
@@ -68,7 +68,7 @@ const IntroAnimation: React.FC<IntroAnimationProps> = ({ onComplete }) => {
           alignItems: 'center',
           justifyContent: 'center',
           overflow: 'hidden',
-          background: 'radial-gradient(ellipse at 50% 30%, rgba(139,92,246,0.30), transparent 55%), radial-gradient(ellipse at 20% 70%, rgba(249,115,22,0.18), transparent 50%), radial-gradient(ellipse at 80% 20%, rgba(236,72,153,0.15), transparent 50%), radial-gradient(ellipse at 60% 80%, rgba(56,189,248,0.12), transparent 45%), linear-gradient(160deg, #0c0a1d, #120e24 45%, #1a1535)',
+          background: 'radial-gradient(ellipse at 50% 30%, rgba(226,153,60,0.22), transparent 55%), radial-gradient(ellipse at 20% 70%, rgba(79,215,196,0.14), transparent 50%), radial-gradient(ellipse at 80% 20%, rgba(226,153,60,0.12), transparent 50%), radial-gradient(ellipse at 60% 80%, rgba(79,215,196,0.10), transparent 45%), linear-gradient(160deg, #0b0a09, #141110 45%, #1d1815)',
           willChange: 'opacity, transform',
         }}
         initial={{ opacity: 1 }}
@@ -78,10 +78,10 @@ const IntroAnimation: React.FC<IntroAnimationProps> = ({ onComplete }) => {
       >
         {/* Ambient floating orbs */}
         {[
-          { x: '15%', y: '20%', size: 300, color: 'rgba(139,92,246,0.15)', delay: 0 },
-          { x: '80%', y: '30%', size: 250, color: 'rgba(249,115,22,0.12)', delay: 0.3 },
-          { x: '50%', y: '75%', size: 350, color: 'rgba(56,189,248,0.10)', delay: 0.6 },
-          { x: '25%', y: '65%', size: 200, color: 'rgba(244,114,182,0.10)', delay: 0.9 },
+          { x: '15%', y: '20%', size: 300, color: 'rgba(226,153,60,0.14)', delay: 0 },
+          { x: '80%', y: '30%', size: 250, color: 'rgba(79,215,196,0.12)', delay: 0.3 },
+          { x: '50%', y: '75%', size: 350, color: 'rgba(226,153,60,0.10)', delay: 0.6 },
+          { x: '25%', y: '65%', size: 200, color: 'rgba(79,215,196,0.10)', delay: 0.9 },
         ].map((orb, i) => (
           <motion.div
             key={`orb-${i}`}
@@ -138,10 +138,10 @@ const IntroAnimation: React.FC<IntroAnimationProps> = ({ onComplete }) => {
               opacity: [0, 0.6, 0.3, 0.6],
               scale: [0.5, 1.1, 0.95, 1.05],
               background: [
-                'radial-gradient(circle, rgba(249,115,22,0.4), rgba(139,92,246,0.2), transparent 70%)',
-                'radial-gradient(circle, rgba(56,189,248,0.4), rgba(244,114,182,0.2), transparent 70%)',
-                'radial-gradient(circle, rgba(139,92,246,0.4), rgba(249,115,22,0.2), transparent 70%)',
-                'radial-gradient(circle, rgba(244,114,182,0.4), rgba(56,189,248,0.2), transparent 70%)',
+                'radial-gradient(circle, rgba(226,153,60,0.45), rgba(79,215,196,0.18), transparent 70%)',
+                'radial-gradient(circle, rgba(79,215,196,0.4), rgba(226,153,60,0.2), transparent 70%)',
+                'radial-gradient(circle, rgba(243,186,95,0.4), rgba(79,215,196,0.2), transparent 70%)',
+                'radial-gradient(circle, rgba(79,215,196,0.4), rgba(226,153,60,0.22), transparent 70%)',
               ],
             }}
             transition={{ delay: 1.0, duration: 4, repeat: Infinity, ease: 'easeInOut' }}
@@ -153,14 +153,14 @@ const IntroAnimation: React.FC<IntroAnimationProps> = ({ onComplete }) => {
             alt="SongGhost"
             style={{ width: 220, height: 220, objectFit: 'contain', position: 'relative', zIndex: 2 }}
             initial={{
-              filter: 'drop-shadow(0 0 0px rgba(249,115,22,0)) brightness(0.7)',
+              filter: 'drop-shadow(0 0 0px rgba(226,153,60,0)) brightness(0.7)',
             }}
             animate={{
               filter: [
-                'drop-shadow(0 0 30px rgba(249,115,22,0.5)) brightness(1)',
-                'drop-shadow(0 0 40px rgba(56,189,248,0.5)) brightness(1.05)',
-                'drop-shadow(0 0 35px rgba(244,114,182,0.5)) brightness(1)',
-                'drop-shadow(0 0 40px rgba(139,92,246,0.5)) brightness(1.05)',
+                'drop-shadow(0 0 30px rgba(226,153,60,0.5)) brightness(1)',
+                'drop-shadow(0 0 40px rgba(79,215,196,0.5)) brightness(1.05)',
+                'drop-shadow(0 0 35px rgba(243,186,95,0.5)) brightness(1)',
+                'drop-shadow(0 0 40px rgba(79,215,196,0.45)) brightness(1.05)',
               ],
               y: [0, -6, 0, -4, 0],
             }}
@@ -292,7 +292,7 @@ const IntroAnimation: React.FC<IntroAnimationProps> = ({ onComplete }) => {
               key={i}
               style={{
                 display: 'inline-block',
-                background: 'linear-gradient(130deg, #f97316, #fb923c, #fbbf24, #38bdf8, #a78bfa, #f472b6)',
+                background: 'linear-gradient(130deg, #b9752a, #e2993c, #f3ba5f, #4fd7c4)',
                 backgroundSize: '400% 100%',
                 WebkitBackgroundClip: 'text',
                 WebkitTextFillColor: 'transparent',
@@ -329,11 +329,11 @@ const IntroAnimation: React.FC<IntroAnimationProps> = ({ onComplete }) => {
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 2.8, duration: 0.8 }}
         >
-          <span style={{ color: '#f97316' }}>Write</span>
-          <span style={{ color: '#a89bc4' }}> · </span>
-          <span style={{ color: '#38bdf8' }}>Refine</span>
-          <span style={{ color: '#a89bc4' }}> · </span>
-          <span style={{ color: '#f472b6' }}>Release</span>
+          <span style={{ color: '#f3ba5f' }}>Write</span>
+          <span style={{ color: '#8a7c6c' }}> · </span>
+          <span style={{ color: '#4fd7c4' }}>Refine</span>
+          <span style={{ color: '#8a7c6c' }}> · </span>
+          <span style={{ color: '#e2993c' }}>Release</span>
         </motion.p>
 
         {/* Animated tagline bar */}
@@ -352,7 +352,7 @@ const IntroAnimation: React.FC<IntroAnimationProps> = ({ onComplete }) => {
             style={{
               height: '100%',
               width: '100%',
-              background: 'linear-gradient(90deg, #f97316, #fbbf24, #38bdf8, #a78bfa, #f472b6)',
+              background: 'linear-gradient(90deg, #e2993c, #f3ba5f, #4fd7c4)',
               backgroundSize: '200% 100%',
             }}
             animate={{ backgroundPosition: ['0% center', '200% center'] }}
