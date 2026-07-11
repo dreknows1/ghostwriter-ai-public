@@ -1,7 +1,14 @@
 import { mutation, query, internalMutation } from "./_generated/server";
 import { v } from "convex/values";
-import { CREDITS_PUBLIC, CREDITS_SKOOL, UNLIMITED_CREDITS, isOwnerEmail } from "./constants";
-import { computeMonthlyReset, computeSpend, planKeyedSpend } from "./creditLogic";
+import { CREDITS_PUBLIC, CREDITS_SKOOL, UNLIMITED_CREDITS, CREATE_AVATAR_COST, isOwnerEmail } from "./constants";
+import {
+  computeMonthlyReset,
+  computeSpend,
+  planKeyedSpend,
+  planAvatarCharge,
+  isValidSpendAmount,
+  spendableTotal,
+} from "./creditLogic";
 const REFERRAL_INVITER_CREDITS = 40;
 const REFERRAL_INVITEE_CREDITS = 20;
 
@@ -181,18 +188,64 @@ export const upsertUserProfileByEmail = mutation({
   },
   handler: async (ctx: any, args: any) => {
     const { user, profile, email } = await ensureUserAndProfile(ctx, args.email);
-    await ctx.db.patch(profile._id, {
+    const now = Date.now();
+
+    // ── Server-authoritative avatar-creation charge ────────────────────────────
+    // The client no longer deducts for the avatar (that was client-trust). The
+    // FIRST time a non-owner, non-member sets an avatar (empty→present) we charge
+    // CREATE_AVATAR here. State-based idempotency: once an avatar is on file a
+    // re-save never re-charges. Insufficient balance ⇒ persist the OTHER fields
+    // but leave the avatar unset and flag the client to route to the paywall.
+    const prevAvatar = typeof profile.avatarUrl === "string" ? profile.avatarUrl.trim() : "";
+    const requestedAvatar = args.avatar_url ?? profile.avatarUrl;
+    const nextAvatar = typeof requestedAvatar === "string" ? requestedAvatar.trim() : "";
+    const avatarPlan = planAvatarCharge(
+      { credits: profile.credits || 0, packCredits: profile.packCredits || 0 },
+      CREATE_AVATAR_COST,
+      {
+        hadAvatar: !!prevAvatar,
+        addingAvatar: !!nextAvatar,
+        isOwner: isOwnerEmail(email),
+        isSkool: String(profile.tier || "").toLowerCase() === "skool",
+      }
+    );
+
+    const avatarUrlToPersist = avatarPlan.reject ? profile.avatarUrl : requestedAvatar;
+    const patch: any = {
       displayName: args.display_name ?? profile.displayName,
-      avatarUrl: args.avatar_url ?? profile.avatarUrl,
+      avatarUrl: avatarUrlToPersist,
       bio: args.bio ?? profile.bio,
       preferredVibe: args.preferred_vibe ?? profile.preferredVibe,
       preferredArtStyle: args.preferred_art_style ?? profile.preferredArtStyle,
-      updatedAt: Date.now(),
-    });
+      updatedAt: now,
+    };
+    if (avatarPlan.charge && avatarPlan.decision) {
+      patch.credits = avatarPlan.decision.credits;
+      patch.packCredits = avatarPlan.decision.packCredits;
+    }
+    await ctx.db.patch(profile._id, patch);
+
+    if (avatarPlan.charge && avatarPlan.decision) {
+      await ctx.db.insert("creditLedger", {
+        userId: profile.userId,
+        delta: -avatarPlan.decision.spent,
+        reason: "avatar_creation",
+        createdAt: now,
+      });
+    }
+
+    // Return the new MONTHLY bucket value (what getUserProfileByEmail reports as
+    // `credits`) so the client wallet reconciles to the true post-charge balance.
+    const creditsAfter =
+      avatarPlan.charge && avatarPlan.decision ? avatarPlan.decision.credits : profile.credits;
+
     return {
       id: user._id,
       email,
-      credits: profile.credits,
+      credits: creditsAfter,
+      avatarCharged: avatarPlan.charge,
+      avatarRejected: avatarPlan.reject,
+      ...(avatarPlan.reject ? { code: "insufficient_credits" } : {}),
     };
   },
 });
@@ -458,6 +511,13 @@ export const spendCreditsByEmail = mutation({
     // Owner accounts: spends are no-ops — unlimited credits, never charged.
     if (isOwnerEmail(args.email)) return UNLIMITED_CREDITS;
     const { profile } = await ensureUserAndProfile(ctx, args.email);
+    // Reject a malformed amount (<= 0, non-integer, NaN, Infinity). A client can
+    // reach this mutation via /api/db, so a negative could otherwise attempt to
+    // inflate the balance and NaN would corrupt it. No-op: deduct nothing, write
+    // no ledger row, and return the true spendable total unchanged.
+    if (!isValidSpendAmount(args.amount)) {
+      return spendableTotal({ credits: profile.credits || 0, packCredits: profile.packCredits || 0 });
+    }
     const decision = computeSpend(profile.credits || 0, profile.packCredits || 0, args.amount);
     await ctx.db.patch(profile._id, {
       credits: decision.credits,

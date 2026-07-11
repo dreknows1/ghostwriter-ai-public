@@ -11,6 +11,8 @@ import {
   computeSpend,
   computeSpendChecked,
   planKeyedSpend,
+  planAvatarCharge,
+  isValidSpendAmount,
   reduceRevenueCatEvent,
   planRevenueCatApply,
   applyProGrant,
@@ -276,6 +278,153 @@ describe("planKeyedSpend", () => {
     expect(spend("K1", 10)).toBe(true);
     expect(chargeCount).toBe(2);
     expect(profile.credits).toBe(15);
+  });
+
+  // ── Moved actions now share this server-authoritative spend path ──────────
+  // editSong (EDIT_SONG=1) and generateAlbumArt (GENERATE_ART=8) were client
+  // deducts; each now charges its cost once per key, 402s when short, and a
+  // refund releases the key — proven with the same in-memory mutation model.
+  it.each([
+    { action: "editSong", cost: 1 },
+    { action: "generateAlbumArt", cost: 8 },
+  ])("$action charges $cost once per key, refunds to release it", ({ cost }) => {
+    const profile: ProfileCreditState = { credits: 25, packCredits: 0, tier: "public" };
+    const spentKeys = new Map<string, "spent" | "refunded">();
+    let chargeCount = 0;
+    const spend = (key: string): boolean => {
+      const p = planKeyedSpend(profile, cost, { keySeen: spentKeys.get(key) === "spent", isOwner: false });
+      if (!p.proceed) return false;
+      if (p.charged) {
+        profile.credits = p.decision!.credits;
+        profile.packCredits = p.decision!.packCredits;
+        spentKeys.set(key, "spent");
+        chargeCount += 1;
+      }
+      return true;
+    };
+    // Two deliveries of one key → charged exactly once.
+    expect(spend("A1")).toBe(true);
+    expect(spend("A1")).toBe(true);
+    expect(chargeCount).toBe(1);
+    expect(profile.credits).toBe(25 - cost);
+    // Refund releases the key; a fresh attempt re-charges.
+    if (spentKeys.get("A1") === "spent") { profile.credits += cost; spentKeys.set("A1", "refunded"); }
+    expect(profile.credits).toBe(25);
+    expect(spend("A1")).toBe(true);
+    expect(chargeCount).toBe(2);
+  });
+
+  it("editSong at cost 1 is rejected (402) when the balance is empty", () => {
+    const p = planKeyedSpend({ credits: 0, packCredits: 0, tier: "public" }, 1, { keySeen: false, isOwner: false });
+    expect(p.proceed).toBe(false);
+    expect(p.charged).toBe(false);
+    expect(p.reason).toBe("insufficient_credits");
+  });
+
+  it("generateAlbumArt at cost 8 is rejected (402) with only 7 credits, deducting nothing", () => {
+    const p = planKeyedSpend({ credits: 7, packCredits: 0, tier: "public" }, 8, { keySeen: false, isOwner: false });
+    expect(p.proceed).toBe(false);
+    expect(p.charged).toBe(false);
+    expect(p.available).toBe(7);
+  });
+
+  // Self-credit vector: a negative/zero/non-integer amount must be REJECTED with
+  // no deduction and — crucially — can never increase the balance.
+  it.each([-100, -1, 0, 1.5, NaN, Infinity, -Infinity])(
+    "rejects a malformed amount (%p) without charging or inflating",
+    (bad) => {
+      const before: ProfileCreditState = { credits: 25, packCredits: 5, tier: "public" };
+      const p = planKeyedSpend(before, bad as number, { keySeen: false, isOwner: false });
+      expect(p.proceed).toBe(false);
+      expect(p.charged).toBe(false);
+      expect(p.reason).toBe("invalid_amount");
+      expect(p.decision).toBeUndefined();
+      // No path here can hand back MORE than the starting spendable total.
+      expect(p.available).toBe(30);
+    }
+  );
+
+  it("a negative amount cannot be turned into a credit gain (owner still free, others rejected)", () => {
+    // Non-owner: rejected outright.
+    const other = planKeyedSpend({ credits: 10, packCredits: 0 }, -50, { keySeen: false, isOwner: false });
+    expect(other.proceed).toBe(false);
+    expect(other.charged).toBe(false);
+    // Owner: unlimited/no-op — never charged, and never *credited* either.
+    const owner = planKeyedSpend({ credits: 0, packCredits: 0 }, -50, { keySeen: false, isOwner: true });
+    expect(owner.charged).toBe(false);
+    expect(owner.decision).toBeUndefined();
+  });
+});
+
+describe("isValidSpendAmount (self-credit vector guard)", () => {
+  it("accepts positive integers", () => {
+    for (const n of [1, 8, 10, 100, 9999]) expect(isValidSpendAmount(n)).toBe(true);
+  });
+  it("rejects zero, negatives, non-integers, and non-finite values", () => {
+    for (const n of [0, -1, -100, 0.5, 1.5, NaN, Infinity, -Infinity]) {
+      expect(isValidSpendAmount(n)).toBe(false);
+    }
+  });
+});
+
+describe("planAvatarCharge (server-authoritative avatar spend)", () => {
+  const AVATAR = 100;
+  const paid: ProfileCreditState = { credits: 100, packCredits: 0, tier: "public" };
+
+  it("charges the avatar cost on the FIRST avatar for a paying user", () => {
+    const p = planAvatarCharge(paid, AVATAR, { hadAvatar: false, addingAvatar: true, isOwner: false, isSkool: false });
+    expect(p.charge).toBe(true);
+    expect(p.reject).toBe(false);
+    expect(p.decision!.spent).toBe(100);
+    expect(p.decision!.total).toBe(0);
+  });
+
+  it("is idempotent by state: a re-save with an avatar already on file is free", () => {
+    const p = planAvatarCharge(paid, AVATAR, { hadAvatar: true, addingAvatar: true, isOwner: false, isSkool: false });
+    expect(p.charge).toBe(false);
+    expect(p.reject).toBe(false);
+    expect(p.decision).toBeUndefined();
+  });
+
+  it("does not charge when no avatar is being added (other profile edits)", () => {
+    const p = planAvatarCharge(paid, AVATAR, { hadAvatar: false, addingAvatar: false, isOwner: false, isSkool: false });
+    expect(p.charge).toBe(false);
+    expect(p.reject).toBe(false);
+  });
+
+  it("is free for skool members and for the owner", () => {
+    const skool = planAvatarCharge({ credits: 0, packCredits: 0 }, AVATAR, { hadAvatar: false, addingAvatar: true, isOwner: false, isSkool: true });
+    expect(skool.charge).toBe(false);
+    expect(skool.reject).toBe(false);
+    const owner = planAvatarCharge({ credits: 0, packCredits: 0 }, AVATAR, { hadAvatar: false, addingAvatar: true, isOwner: true, isSkool: false });
+    expect(owner.charge).toBe(false);
+    expect(owner.reject).toBe(false);
+  });
+
+  it("REJECTS (no charge, do-not-persist) when the balance can't cover the avatar", () => {
+    const p = planAvatarCharge({ credits: 40, packCredits: 0, tier: "public" }, AVATAR, { hadAvatar: false, addingAvatar: true, isOwner: false, isSkool: false });
+    expect(p.charge).toBe(false);
+    expect(p.reject).toBe(true);
+    expect(p.decision).toBeUndefined();
+    expect(p.available).toBe(40);
+  });
+
+  it("charges exactly once across a repeated save (state flips to hadAvatar)", () => {
+    const profile: ProfileCreditState = { credits: 100, packCredits: 0, tier: "public" };
+    let hadAvatar = false;
+    let charges = 0;
+    const save = () => {
+      const p = planAvatarCharge(profile, AVATAR, { hadAvatar, addingAvatar: true, isOwner: false, isSkool: false });
+      if (p.charge) {
+        profile.credits = p.decision!.credits;
+        profile.packCredits = p.decision!.packCredits;
+        hadAvatar = true; // avatar now on file
+        charges += 1;
+      }
+    };
+    save(); save(); save();
+    expect(charges).toBe(1);
+    expect(profile.credits).toBe(0);
   });
 });
 

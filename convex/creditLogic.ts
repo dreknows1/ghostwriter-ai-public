@@ -94,6 +94,18 @@ export function spendableTotal(state: ProfileCreditState): number {
   return Math.max(0, state.credits ?? 0) + Math.max(0, state.packCredits ?? 0);
 }
 
+/**
+ * A spend amount is only ever a POSITIVE INTEGER. Rejects <= 0, non-integer,
+ * NaN, and Infinity. This closes the self-credit vector: a client that reaches a
+ * spend mutation (e.g. `spendCreditsByEmail` via /api/db) cannot pass a negative
+ * amount to inflate a balance, and a NaN/Infinity can't corrupt the bucket
+ * arithmetic (`credits - NaN` ⇒ NaN). Owner-sentinel handling is separate and
+ * unaffected — an owner is short-circuited before any amount is inspected.
+ */
+export function isValidSpendAmount(amount: number): boolean {
+  return Number.isInteger(amount) && amount > 0;
+}
+
 // ---------------------------------------------------------------------------
 // Monthly reset
 // ---------------------------------------------------------------------------
@@ -225,7 +237,7 @@ export interface KeyedSpendPlan {
    * refunds a charge it doesn't own.
    */
   charged: boolean;
-  reason?: "duplicate_key" | "owner_unlimited" | "insufficient_credits";
+  reason?: "duplicate_key" | "owner_unlimited" | "insufficient_credits" | "invalid_amount";
   /** The deduction to persist; present only when `charged`. */
   decision?: CheckedSpendDecision;
   /** Spendable total before the attempt (drives the 402 payload). */
@@ -249,6 +261,12 @@ export function planKeyedSpend(
   if (ctx.isOwner) return { proceed: true, charged: false, reason: "owner_unlimited", available };
   // Already charged for this generation key — proceed, but do not double-charge.
   if (ctx.keySeen) return { proceed: true, charged: false, reason: "duplicate_key", available };
+  // Reject a malformed amount (<= 0, non-integer, NaN, Infinity) BEFORE computing a
+  // spend — a negative could otherwise attempt to inflate, and NaN would corrupt
+  // the bucket math. Nothing is deducted.
+  if (!isValidSpendAmount(amount)) {
+    return { proceed: false, charged: false, reason: "invalid_amount", available };
+  }
 
   const decision = computeSpendChecked(state.credits ?? 0, state.packCredits ?? 0, amount);
   if (!decision.ok) {
@@ -257,6 +275,57 @@ export function planKeyedSpend(
     return { proceed: false, charged: false, reason: "insufficient_credits", available };
   }
   return { proceed: true, charged: true, decision, available };
+}
+
+// ---------------------------------------------------------------------------
+// Server-authoritative avatar-creation charge (client-trust removal follow-up)
+// ---------------------------------------------------------------------------
+
+export interface AvatarChargeContext {
+  /** The profile already has a non-empty avatar on file. */
+  hadAvatar: boolean;
+  /** This request sets a non-empty avatar. */
+  addingAvatar: boolean;
+  /** Owner (unlimited) account — never charged. */
+  isOwner: boolean;
+  /** Skool member — avatars are free (matches the prior client rule). */
+  isSkool: boolean;
+}
+
+export interface AvatarChargePlan {
+  /** Deduct `cost` — a first-time avatar for a paying (non-member) user. */
+  charge: boolean;
+  /** Insufficient balance — the caller MUST NOT persist the avatar. */
+  reject: boolean;
+  /** The deduction to persist; present only when `charge`. */
+  decision?: CheckedSpendDecision;
+  /** Spendable total before the attempt. */
+  available: number;
+}
+
+/**
+ * Server-authoritative avatar-creation charge (pure). Unlike a generation, an
+ * avatar has no per-request idempotency key — the DB STATE TRANSITION is the
+ * idempotency guarantee: only the FIRST avatar a non-owner, non-member sets
+ * (empty→present) costs `cost`; every later save with an avatar already on file
+ * is free, so a re-save can never double-charge. Owner + skool members are always
+ * free. Insufficient balance ⇒ `reject` so the caller leaves the avatar unset and
+ * routes the user to the paywall (no partial charge). Extracted here so the charge
+ * rule is unit-testable without a Convex runtime — mirrors planKeyedSpend.
+ */
+export function planAvatarCharge(
+  state: ProfileCreditState,
+  cost: number,
+  ctx: AvatarChargeContext
+): AvatarChargePlan {
+  const available = spendableTotal(state);
+  // Free: nothing added, avatar already on file, owner, or skool member.
+  if (!ctx.addingAvatar || ctx.hadAvatar || ctx.isOwner || ctx.isSkool) {
+    return { charge: false, reject: false, available };
+  }
+  const decision = computeSpendChecked(state.credits ?? 0, state.packCredits ?? 0, cost);
+  if (!decision.ok) return { charge: false, reject: true, available };
+  return { charge: true, reject: false, decision, available };
 }
 
 // ---------------------------------------------------------------------------

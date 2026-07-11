@@ -3,7 +3,7 @@ import React, { useState, useEffect } from 'react';
 import { UserProfile, SavedSong, Transaction } from '../types';
 import { getUserProfile, upsertUserProfile, deleteUserProfile, getUserTransactions } from '../services/userService';
 import { getSavedSongs, deleteSong, deleteAllUserSongs } from '../services/songService';
-import { COSTS, deductCredits, hasEnoughCredits, formatCredits } from '../services/creditService';
+import { COSTS, hasEnoughCredits, formatCredits } from '../services/creditService';
 import { toast, confirmDialog } from './Feedback';
 import {
     LoadingSpinner, ProfileIcon, TrashIcon, ImageIcon,
@@ -109,19 +109,37 @@ const ProfileView: React.FC<ProfileViewProps> = ({ email, onLoadSong, onBack, on
       const updatedProfilePayload = { ...baseProfile, ...editData, user_email: email };
       
       const result = await upsertUserProfile(updatedProfilePayload);
-      
+      const data: any = result.data || null;
+      // The avatar charge is server-authoritative: the mutation deducts CREATE_AVATAR
+      // on the first avatar and rejects (persisting everything BUT the avatar) when
+      // the balance can't cover it. Honor that reply so the client can't show a
+      // free avatar the server refused.
+      const avatarRejected = !!data?.avatarRejected;
+      const avatarCharged = !!data?.avatarCharged;
+      const effectiveAvatarUrl = avatarRejected ? (profile?.avatar_url || '') : updatedProfilePayload.avatar_url;
+
       // Map back from the result to ensure internal state is clean
-      const finalUpdated: UserProfile = result.data ? {
+      const finalUpdated: UserProfile = data ? {
           ...updatedProfilePayload,
-          id: result.data.id || updatedProfilePayload.id,
-          credits: result.data.credits ?? updatedProfilePayload.credits,
+          id: data.id || updatedProfilePayload.id,
+          avatar_url: effectiveAvatarUrl,
+          credits: data.credits ?? updatedProfilePayload.credits,
           // Ensure we normalize the database email back to our user_email prop
-          user_email: (result.data as any).email || updatedProfilePayload.user_email
+          user_email: data.email || updatedProfilePayload.user_email
       } : updatedProfilePayload;
 
       setProfile(finalUpdated);
+      // Keep the edit form in sync when the server declined to persist the avatar.
+      if (avatarRejected) setEditData(prev => ({ ...prev, avatar_url: effectiveAvatarUrl }));
       if (onProfileUpdate) onProfileUpdate(finalUpdated);
-      toast('Profile updated successfully.', 'success');
+
+      if (avatarRejected) {
+        toast('Not enough credits to add your avatar — the rest of your profile was saved.', { kind: 'error', actionLabel: 'Buy credits', onAction: onBuyCredits });
+      } else if (avatarCharged) {
+        toast(`Profile saved. Avatar created — ${COSTS.CREATE_AVATAR} credits used.`, 'success');
+      } else {
+        toast('Profile updated successfully.', 'success');
+      }
     } catch (err) {
       console.error("Save error:", err);
       toast('Failed to save profile.', 'error');
@@ -162,16 +180,20 @@ const ProfileView: React.FC<ProfileViewProps> = ({ email, onLoadSong, onBack, on
                 if (dataUrl && dataUrl.length > 100) {
                     const isMember = (profile?.tier || '').toLowerCase() === 'skool';
                     const alreadyHasAvatar = !!(profile?.avatar_url || editData.avatar_url);
-                    if (!isMember && !alreadyHasAvatar) {
+                    const willCharge = !isMember && !alreadyHasAvatar;
+                    if (willCharge) {
+                        // UX pre-check only — NOT the authoritative spend. The charge is
+                        // enforced server-side in upsertUserProfileByEmail when the profile
+                        // is saved (empty→present avatar transition). This just avoids
+                        // letting a broke user stage an avatar they can't afford.
                         const canAfford = await hasEnoughCredits(email, COSTS.CREATE_AVATAR);
                         if (!canAfford) {
                             toast('Even ghosts need fuel — top up to keep the hooks coming.', { kind: 'error', actionLabel: 'Buy credits', onAction: onBuyCredits });
                             return;
                         }
-                        await deductCredits(email, COSTS.CREATE_AVATAR, "avatar_creation");
                     }
                     setEditData(prev => ({...prev, avatar_url: dataUrl}));
-                    const msg = isMember ? 'Avatar updated. Free for members.' : alreadyHasAvatar ? 'Avatar updated.' : `Avatar created. ${COSTS.CREATE_AVATAR} credits used.`;
+                    const msg = isMember ? 'Avatar updated. Free for members.' : alreadyHasAvatar ? 'Avatar updated.' : `Avatar staged — save your profile to apply (${COSTS.CREATE_AVATAR} credits).`;
                     toast(msg, 'success');
                 }
             }

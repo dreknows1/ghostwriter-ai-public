@@ -9,7 +9,7 @@ import { SocialPack, SongInputs } from '../types';
 import { editSong } from '../services/geminiService';
 import MetaTagLibrary from './MetaTagLibrary';
 import { toast, promptDialog } from './Feedback';
-import { hasEnoughCredits, deductCredits, COSTS } from '../services/creditService';
+import { hasEnoughCredits, COSTS } from '../services/creditService';
 import { openInSuno, copyText } from '../lib/nativeBridge';
 import { isNative } from '../lib/platform';
 import { hapticLight } from '../lib/haptics';
@@ -237,10 +237,18 @@ const LyricsDisplay: React.FC<LyricsDisplayProps> = ({
       if (res) {
           addToHistory(res);
           setQuickEditInput('');
-          await deductCredits(email, COSTS.EDIT_SONG, "song_edit");
+          // Credit was spent SERVER-side before the revision (server-authoritative,
+          // /api/ai). Reconcile the UI to the true post-spend balance — this
+          // replaces the removed client deductCredits double-charge.
           if (refreshCredits) await refreshCredits();
       }
-    } catch (e) { console.error(e); } finally { setIsQuickEditing(false); }
+    } catch (e: any) {
+      console.error(e);
+      if (refreshCredits) refreshCredits();
+      if (e?.code === 'insufficient_credits' || e?.status === 402) {
+        toast('Even ghosts need fuel — top up to keep the hooks coming.', 'error');
+      }
+    } finally { setIsQuickEditing(false); }
   };
 
   const handleGenerateArtwork = async () => {
@@ -258,12 +266,19 @@ const LyricsDisplay: React.FC<LyricsDisplayProps> = ({
             console.error("Auto-save artwork failed:", saveError);
           }
         }
-        await deductCredits(email, COSTS.GENERATE_ART, "art_generation");
+        // Credits were spent SERVER-side before the image call (server-authoritative,
+        // /api/ai), which also refunds a charged-then-failed generation. Reconcile
+        // the UI — this replaces the removed client deductCredits double-charge.
         if (refreshCredits) await refreshCredits();
       }
     } catch (e: any) {
       console.error("Art generation error:", e);
-      toast(`Artwork generation failed: ${e?.message || 'Unknown error'}`, 'error');
+      if (refreshCredits) refreshCredits();
+      if (e?.code === 'insufficient_credits' || e?.status === 402) {
+        toast('Even ghosts need fuel — top up to keep the hooks coming.', 'error');
+      } else {
+        toast(`Artwork generation failed: ${e?.message || 'Unknown error'}`, 'error');
+      }
     } finally {
       setIsGeneratingArt(false);
     }

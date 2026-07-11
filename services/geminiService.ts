@@ -322,6 +322,9 @@ export async function* editSong(
     editInstruction,
     inputs,
     userProfile,
+    // Per-edit idempotency key: the server charges EDIT_SONG against it before the
+    // revision, so a network retry of THIS edit charges exactly once.
+    generationKey: newGenerationKey(),
   });
   yield* singleYield(result.text || "");
 }
@@ -355,6 +358,9 @@ export async function generateAlbumArt(
     style,
     aspectRatio,
     avatarUrl,
+    // Per-generation idempotency key: the server charges GENERATE_ART against it
+    // before the image call and refunds on failure, so one click = one charge.
+    generationKey: newGenerationKey(),
   });
   if (!result.imageDataUrl) throw new Error("Image generation failed");
   return result.imageDataUrl;

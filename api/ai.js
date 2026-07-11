@@ -21860,9 +21860,13 @@ var getUserProfileByEmailRef = makeFunctionReference("app:getUserProfileByEmail"
 var spendCreditsStrictByEmailRef = makeFunctionReference("app:spendCreditsStrictByEmail");
 var refundGenerationByKeyRef = makeFunctionReference("app:refundGenerationByKey");
 var GENERATE_SONG_COST = 10;
+var EDIT_SONG_COST = 1;
+var GENERATE_ART_COST = 8;
 var AI_ACTION_COST = {
   generateSong: GENERATE_SONG_COST,
-  structureImportedSong: GENERATE_SONG_COST
+  structureImportedSong: GENERATE_SONG_COST,
+  editSong: EDIT_SONG_COST,
+  generateAlbumArt: GENERATE_ART_COST
 };
 function convexAdminClient() {
   const convexUrl = process.env.CONVEX_URL;

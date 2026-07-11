@@ -339,15 +339,22 @@ const refundGenerationByKeyRef = makeFunctionReference<"mutation">("app:refundGe
 
 /**
  * Server-authoritative credit cost per action (N1/B1 must-fix). MUST match
- * services/creditService.ts COSTS.GENERATE_SONG. Only the two song-producing
- * actions charge — exactly mirroring the (now-removed) client `deductCredits`
- * calls, so web behaviour is unchanged except that the spend is now enforced
- * server-side and cannot be skipped by a logged-in client.
+ * services/creditService.ts COSTS. Every paid action charges here — exactly
+ * mirroring the (now-removed) client `deductCredits` calls, so web behaviour is
+ * unchanged except that the spend is enforced server-side and cannot be skipped
+ * by a logged-in client. Charged BEFORE the work, keyed on the per-request
+ * generationKey (idempotent), 402 on insufficient, refunded on failure by the
+ * catch-all. Free actions (suggestTitles, generateSocialPack, translateLyrics,
+ * askAndre) are intentionally absent — they did not deduct on the client either.
  */
 const GENERATE_SONG_COST = 10;
+const EDIT_SONG_COST = 1; // COSTS.EDIT_SONG — the Master Revision / quick edit.
+const GENERATE_ART_COST = 8; // COSTS.GENERATE_ART — album-art generation.
 const AI_ACTION_COST: Partial<Record<AIAction, number>> = {
   generateSong: GENERATE_SONG_COST,
   structureImportedSong: GENERATE_SONG_COST,
+  editSong: EDIT_SONG_COST,
+  generateAlbumArt: GENERATE_ART_COST,
 };
 
 /** Admin-auth Convex client, or null when Convex isn't configured. */
