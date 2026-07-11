@@ -31,8 +31,8 @@ vi.mock("convex/browser", () => ({
 }));
 
 // Import handlers AFTER the mock is registered (vi.mock is hoisted above these).
-import dbHandler from "../api/db";
-import authHandler from "../api/auth";
+import dbHandler from "../server/db";
+import authHandler from "../server/auth";
 
 function makeRes() {
   const res: any = { statusCode: 0, headers: {} as Record<string, any>, body: undefined, ended: false };
