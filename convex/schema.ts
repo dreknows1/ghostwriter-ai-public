@@ -84,6 +84,20 @@ export default defineSchema({
     createdAt: v.number(),
   }).index("by_event", ["eventId"]),
 
+  // Server-authoritative generation spend ledger (N1/B1). Each generation
+  // carries a client-minted idempotency key; the /api/ai spend records it here
+  // so a retried/dropped SSE stream or the stream→classic fallback (two POSTs,
+  // one generation) charges exactly once. `status` flips to "refunded" when a
+  // charged generation fails, releasing the key for a clean retry.
+  spentKeys: defineTable({
+    key: v.string(),
+    userId: v.id("users"),
+    amount: v.number(),
+    status: v.string(), // "spent" | "refunded"
+    createdAt: v.number(),
+    updatedAt: v.optional(v.number()),
+  }).index("by_key", ["key"]),
+
   // Single-use guard for OAuth/Apple session-mint tokens (docs/PLAN.md "Auth on
   // iOS", SECURITY FIX). Each signed token carries a random nonce; api/auth.ts
   // records it here on first use, so a replayed token is rejected even across

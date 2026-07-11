@@ -5,7 +5,7 @@ import { generateSong, generateAlbumArt, generateSocialPack, translateLyrics, st
 import { saveSong } from './services/songService';
 import { getUserProfile } from './services/userService';
 import { getSession, signOut, signIn, signUp, signInWithOAuthToken, startProviderSignIn } from './services/authService';
-import { getUserCredits, hasEnoughCredits, deductCredits, COSTS, formatCredits } from './services/creditService';
+import { getUserCredits, hasEnoughCredits, COSTS, formatCredits } from './services/creditService';
 import { apiFetch, SESSION_EXPIRED_EVENT } from './lib/api';
 import LyricsDisplay from './components/LyricsDisplay';
 import ProfileView from './components/ProfileView';
@@ -21,7 +21,7 @@ import IntroAnimation from './components/IntroAnimation';
 import { LoadingSpinner, ProfileIcon, WalletIcon, EditIcon, ClockIcon, GhostIcon, BoltIcon } from './components/icons';
 import { isNative } from './lib/platform';
 import { hapticLight, hapticSuccess } from './lib/haptics';
-import { openExternal } from './lib/nativeBridge';
+import { openExternal, keepAwake, allowSleep, onPurchaseCompleted, refreshEntitlements } from './lib/nativeBridge';
 
 const AuthAppleIcon = () => (
   <svg viewBox="0 0 24 24" className="w-5 h-5" fill="currentColor" aria-hidden="true">
@@ -753,6 +753,12 @@ export const App: React.FC = () => {
   const generationInFlightRef = useRef(false);
   // When the key modal is opened by the Generate gate, this resumes generation after save.
   const pendingGenerateAfterKeyRef = useRef(false);
+  // B2 debounce: guards the session-expired handler so a burst of parallel 401s
+  // triggers exactly ONE signOut()+toast until the next successful login.
+  const sessionExpiredHandlingRef = useRef(false);
+  // Latest credit balance, readable inside long-lived listeners (purchase refresh)
+  // without re-registering them on every balance change.
+  const creditsRef = useRef(0);
   const [loadingMessage, setLoadingMessage] = useState('');
   const [generationStageIndex, setGenerationStageIndex] = useState(0);
   const [generationLog, setGenerationLog] = useState<string[]>([]);
@@ -891,6 +897,10 @@ export const App: React.FC = () => {
   // token. Graceful: a clear "session expired, sign in again" — no white screen.
   useEffect(() => {
     const handler = () => {
+      // B2: a burst of parallel apiFetch 401s all fire this event. Run the
+      // sign-out + toast ONCE; the flag resets on the next successful login.
+      if (sessionExpiredHandlingRef.current) return;
+      sessionExpiredHandlingRef.current = true;
       signOut().then(() => {
         setSession(null);
         setCredits(0);
@@ -902,6 +912,48 @@ export const App: React.FC = () => {
     window.addEventListener(SESSION_EXPIRED_EVENT, handler);
     return () => window.removeEventListener(SESSION_EXPIRED_EVENT, handler);
   }, []);
+
+  // Keep creditsRef in sync so long-lived listeners can read the current balance.
+  useEffect(() => { creditsRef.current = credits; }, [credits]);
+
+  // A fresh session (successful login) re-arms the session-expired debounce.
+  useEffect(() => {
+    if (session) sessionExpiredHandlingRef.current = false;
+  }, [session]);
+
+  // Keep-awake during GENERATING (docs/PLAN.md "Generation resilience"): hold a
+  // wake lock so iOS doesn't suspend the WKWebView and kill the in-flight SSE
+  // stream. Native-only (no-op on web); released on exit/complete/error/unmount.
+  useEffect(() => {
+    if (step === AppStep.GENERATING) {
+      keepAwake();
+    } else {
+      allowSleep();
+    }
+    return () => { allowSleep(); };
+  }, [step]);
+
+  // Purchase refresh (#7): after a native purchase/restore/renewal RevenueCat
+  // fires a CustomerInfo update. The webhook credit grant can lag a second or
+  // two, so bounded-poll the balance until it rises, then update the UI — no
+  // manual refresh needed. No-op on web.
+  useEffect(() => {
+    const email = session?.user?.email;
+    if (!email || !isNative()) return;
+    const unsubscribe = onPurchaseCompleted(async () => {
+      const updated = await refreshEntitlements(email, {
+        previousBalance: creditsRef.current,
+        tries: 5,
+        intervalMs: 2000,
+      });
+      if (typeof updated === 'number') {
+        setCredits(updated);
+        hapticSuccess();
+        toast('Purchase complete — credits added.', 'success');
+      }
+    });
+    return unsubscribe;
+  }, [session?.user?.email]);
 
 
 
@@ -1057,14 +1109,24 @@ export const App: React.FC = () => {
               }
               setGeneratedSong(chunk);
           }
-          await deductCredits(session.user.email || '', COSTS.GENERATE_SONG, "song_generation");
+          // Credits were spent SERVER-side before generation (server-authoritative,
+          // /api/ai). Reconcile the UI to the true post-spend balance — this
+          // replaces the removed client deductCredits double-charge.
+          await loadCredits();
           setStep(AppStep.SONG_DISPLAYED);
           hapticSuccess();
       } catch (err: any) {
           console.error(err);
-          toast(`Generation failed: ${err.message} You weren't charged.`, { kind: 'error', actionLabel: 'Retry', onAction: () => handleGenerate() });
-          // Reload the true balance — the optimistic deduction above is reverted server-side
+          // Reconcile the true balance: the optimistic reduction is corrected, and
+          // a charged-then-failed generation is refunded server-side.
           loadCredits();
+          if (err?.code === 'insufficient_credits' || err?.status === 402) {
+              // Server refused the spend (out of credits) — route to the paywall.
+              toast('Even ghosts need fuel — top up to keep the hooks coming.', 'error');
+              setView(AppView.PRICING);
+          } else {
+              toast(`Generation failed: ${err.message} You weren't charged.`, { kind: 'error', actionLabel: 'Retry', onAction: () => handleGenerate() });
+          }
           setStep(returnStep);
       } finally {
           setIsLoading(false);
@@ -1253,9 +1315,10 @@ export const App: React.FC = () => {
               }
               setGeneratedSong(chunk);
           }
-          // Deduct credits for the AI service
-          await deductCredits(session.user.email || '', COSTS.GENERATE_SONG, "song_generation");
-          setCredits(prev => Math.max(0, prev - COSTS.GENERATE_SONG));
+          // Credits were spent SERVER-side before structuring (server-authoritative,
+          // /api/ai). Reconcile the UI to the true balance — replaces the removed
+          // client deductCredits double-charge.
+          await loadCredits();
 
           setInputs(DEFAULT_INPUTS);
           setAlbumArt(null);
@@ -1263,9 +1326,15 @@ export const App: React.FC = () => {
           setStep(AppStep.SONG_DISPLAYED);
       } catch (e: any) {
           console.error(e);
-          toast('Import failed: ' + e.message, 'error');
+          loadCredits(); // reconcile (server refunds a charged-then-failed structuring)
+          if (e?.code === 'insufficient_credits' || e?.status === 402) {
+              toast('Even ghosts need fuel — top up to keep the hooks coming.', 'error');
+              setView(AppView.PRICING);
+          } else {
+              toast('Import failed: ' + e.message, 'error');
+              setView(AppView.LANDING);
+          }
           setStep(AppStep.FAST_TRACK); // Fallback
-          setView(AppView.LANDING);
       } finally {
           setIsLoading(false);
           setPasteContent('');
@@ -1511,7 +1580,7 @@ export const App: React.FC = () => {
           <PricingView
             email={session.user.email}
             onClose={() => setView(AppView.LANDING)}
-            onPurchaseComplete={() => {}}
+            onPurchaseComplete={(newBalance) => setCredits(newBalance)}
             onOpenTerms={() => { setTermsReturnView(AppView.PRICING); setView(AppView.TERMS); }}
           />
           <AskAndreWidget email={session?.user?.email || ''} />

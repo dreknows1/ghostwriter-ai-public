@@ -3,12 +3,14 @@ import {
   CREDITS_PRO,
   CREDITS_PUBLIC,
   CREDITS_SKOOL,
+  CREDITS_TRIAL,
   DAY_MS,
   PRO_GRACE_MS,
   monthKey,
   computeMonthlyReset,
   computeSpend,
   computeSpendChecked,
+  planKeyedSpend,
   reduceRevenueCatEvent,
   planRevenueCatApply,
   applyProGrant,
@@ -184,6 +186,96 @@ describe("computeSpendChecked", () => {
     expect(d.ok).toBe(true);
     expect(d.total).toBe(0);
     expect(d.spent).toBe(10);
+  });
+});
+
+// ---------------------------------------------------------------------------
+// Server-authoritative generation spend (N1/B1) — idempotent per key.
+// ---------------------------------------------------------------------------
+describe("planKeyedSpend", () => {
+  const state: ProfileCreditState = { credits: 25, packCredits: 0, tier: "public" };
+
+  it("charges on a first-time key (proceed + charged)", () => {
+    const p = planKeyedSpend(state, 10, { keySeen: false, isOwner: false });
+    expect(p.proceed).toBe(true);
+    expect(p.charged).toBe(true);
+    expect(p.decision!.ok).toBe(true);
+    expect(p.decision!.credits).toBe(15);
+    expect(p.decision!.spent).toBe(10);
+  });
+
+  // Row: retried/dropped SSE stream (or stream→classic fallback) reuses the key.
+  it("proceeds WITHOUT charging when the key was already spent (dedupe)", () => {
+    const p = planKeyedSpend(state, 10, { keySeen: true, isOwner: false });
+    expect(p.proceed).toBe(true);
+    expect(p.charged).toBe(false);
+    expect(p.reason).toBe("duplicate_key");
+    expect(p.decision).toBeUndefined();
+  });
+
+  // Row 22: 9 credits, song costs 10 → blocked (402), no deduction.
+  it("rejects (no charge) when the balance can't cover the cost", () => {
+    const p = planKeyedSpend({ credits: 9, packCredits: 0, tier: "public" }, 10, { keySeen: false, isOwner: false });
+    expect(p.proceed).toBe(false);
+    expect(p.charged).toBe(false);
+    expect(p.reason).toBe("insufficient_credits");
+    expect(p.available).toBe(9);
+  });
+
+  it("owner accounts proceed free (unlimited, never charged)", () => {
+    const p = planKeyedSpend({ credits: 0, packCredits: 0 }, 10, { keySeen: false, isOwner: true });
+    expect(p.proceed).toBe(true);
+    expect(p.charged).toBe(false);
+    expect(p.reason).toBe("owner_unlimited");
+  });
+
+  it("draws monthly-first then packs when charging", () => {
+    const p = planKeyedSpend({ credits: 4, packCredits: 250, tier: "public" }, 10, { keySeen: false, isOwner: false });
+    expect(p.charged).toBe(true);
+    expect(p.decision!.credits).toBe(0);
+    expect(p.decision!.packCredits).toBe(244);
+  });
+
+  // The core idempotency contract, modelled as the mutation would run it:
+  // one generation key charges exactly once no matter how many POSTs carry it,
+  // and a refund releases the key so a genuine retry can re-charge.
+  it("charges once across repeated deliveries of one key (in-memory mutation model)", () => {
+    const profile: ProfileCreditState = { credits: 25, packCredits: 0, tier: "public" };
+    // spentKeys[key] = "spent" | "refunded" | undefined
+    const spentKeys = new Map<string, "spent" | "refunded">();
+    let chargeCount = 0;
+
+    const spend = (key: string, amount: number): boolean => {
+      const keySeen = spentKeys.get(key) === "spent";
+      const p = planKeyedSpend(profile, amount, { keySeen, isOwner: false });
+      if (!p.proceed) return false;
+      if (p.charged) {
+        profile.credits = p.decision!.credits;
+        profile.packCredits = p.decision!.packCredits;
+        spentKeys.set(key, "spent");
+        chargeCount += 1;
+      }
+      return true;
+    };
+    const refund = (key: string, amount: number) => {
+      if (spentKeys.get(key) !== "spent") return; // idempotent
+      profile.credits += amount;
+      spentKeys.set(key, "refunded");
+    };
+
+    // Stream POST + classic-fallback POST, same key → charged once.
+    expect(spend("K1", 10)).toBe(true);
+    expect(spend("K1", 10)).toBe(true);
+    expect(spend("K1", 10)).toBe(true);
+    expect(chargeCount).toBe(1);
+    expect(profile.credits).toBe(15);
+
+    // Failed generation refunds K1; a retry re-uses K1 and legitimately re-charges.
+    refund("K1", 10);
+    expect(profile.credits).toBe(25);
+    expect(spend("K1", 10)).toBe(true);
+    expect(chargeCount).toBe(2);
+    expect(profile.credits).toBe(15);
   });
 });
 
@@ -431,6 +523,99 @@ describe("reduceRevenueCatEvent", () => {
     expect(isRefundEvent({ type: "CANCELLATION" })).toBe(false);
     expect(isRefundEvent({ type: "REFUND" })).toBe(true);
     expect(isRefundEvent({ type: "RENEWAL" })).toBe(false);
+  });
+});
+
+// ---------------------------------------------------------------------------
+// Trial metering (Andre: "meter the trial") — a 7-day trial grants 50, not 500.
+// ---------------------------------------------------------------------------
+describe("trial metering", () => {
+  const NOW = Date.UTC(2026, 0, 20);
+  const base: ProfileCreditState = { credits: 25, packCredits: 0, plan: "free", tier: "public" };
+
+  it("applyProGrant with periodType TRIAL grants 50, not 500", () => {
+    const d = applyProGrant(base, NOW + 7 * DAY_MS, NOW, "revenuecat", "TRIAL");
+    expect(d.patch.credits).toBe(CREDITS_TRIAL);
+    expect(d.patch.credits).toBe(50);
+    expect(d.patch.plan).toBe("pro");
+    expect(d.ledgerReason).toBe("revenuecat_pro_trial");
+  });
+
+  it("trial START (INITIAL_PURCHASE, period_type TRIAL) = 50 not 500", () => {
+    const ev: RcEvent = {
+      type: "INITIAL_PURCHASE",
+      productId: "sg_pro_monthly",
+      expirationAtMs: NOW + 7 * DAY_MS,
+      periodType: "TRIAL",
+    };
+    const d = reduceRevenueCatEvent(base, ev, NOW);
+    expect(d.patch.credits).toBe(CREDITS_TRIAL);
+    expect(d.patch.plan).toBe("pro");
+    expect(d.patch.credits).not.toBe(CREDITS_PRO);
+  });
+
+  it("conversion RENEWAL (period_type NORMAL) tops the trial 50 up to 500", () => {
+    // User is mid-trial with the metered 50.
+    const trialing: ProfileCreditState = {
+      credits: CREDITS_TRIAL,
+      packCredits: 0,
+      plan: "pro",
+      planExpiresAt: NOW + DAY_MS,
+      planSource: "revenuecat",
+      tier: "public",
+    };
+    const ev: RcEvent = {
+      type: "RENEWAL",
+      productId: "sg_pro_monthly",
+      expirationAtMs: NOW + 31 * DAY_MS,
+      periodType: "NORMAL",
+    };
+    const d = reduceRevenueCatEvent(trialing, ev, NOW);
+    expect(d.patch.credits).toBe(CREDITS_PRO); // topped to 500 (SET, not +500)
+  });
+
+  it("cancel-during-trial keeps only the 50 (CANCELLATION is a no-op)", () => {
+    const trialing: ProfileCreditState = {
+      credits: CREDITS_TRIAL,
+      packCredits: 0,
+      plan: "pro",
+      planExpiresAt: NOW + 3 * DAY_MS,
+      planSource: "revenuecat",
+      tier: "public",
+    };
+    const d = reduceRevenueCatEvent(trialing, { type: "CANCELLATION", cancelReason: "UNSUBSCRIBE" }, NOW);
+    expect(d.action).toBe("cancellation");
+    expect(d.changed).toBe(false);
+    expect(d.patch).toEqual({}); // credits untouched → still 50
+  });
+
+  it("trial EXPIRATION past period end → free, credits never negatived (50 kept)", () => {
+    const trialingExpired: ProfileCreditState = {
+      credits: CREDITS_TRIAL,
+      packCredits: 0,
+      plan: "pro",
+      planExpiresAt: NOW - DAY_MS, // trial lapsed
+      planSource: "revenuecat",
+      tier: "public",
+    };
+    const d = reduceRevenueCatEvent(trialingExpired, { type: "EXPIRATION" }, NOW);
+    expect(d.patch.plan).toBe("free");
+    expect(d.patch.credits).toBeUndefined(); // not zeroed / not negatived — 50 stays
+  });
+
+  it("an active trial subscriber is NOT reset up to 500 at a month boundary", () => {
+    // Trial started Jan 20 (50 credits), still valid into February.
+    const trialing: ProfileCreditState = {
+      credits: CREDITS_TRIAL,
+      packCredits: 0,
+      plan: "pro",
+      planExpiresAt: FEB + 2 * DAY_MS,
+      planSource: "revenuecat",
+      tier: "public",
+      lastResetDate: iso(JAN),
+    };
+    const reset = computeMonthlyReset(trialing, FEB);
+    expect(reset.reset).toBe(false); // active pro → reset skipped; 50 persists
   });
 });
 

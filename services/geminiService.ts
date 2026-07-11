@@ -18,6 +18,23 @@ function sleep(ms: number): Promise<void> {
   return new Promise((resolve) => setTimeout(resolve, ms));
 }
 
+/**
+ * Per-generation idempotency key. The server charges credits against this key
+ * before the LLM call; minting it ONCE per logical generation and reusing it
+ * across the streaming POST and its classic-fallback POST is what makes one
+ * generation charge exactly once (a dropped stream that falls back never
+ * double-charges). See server/ai.ts spendCreditsForRequest.
+ */
+function newGenerationKey(): string {
+  try {
+    const uuid = globalThis.crypto?.randomUUID?.();
+    if (uuid) return uuid;
+  } catch {
+    /* fall through */
+  }
+  return `gen_${Date.now()}_${Math.random().toString(36).slice(2, 12)}`;
+}
+
 async function callAI<T>(action: AIAction, email: string, payload: Record<string, unknown>): Promise<T> {
   const textActions = new Set<AIAction>([
     "generateSong",
@@ -84,7 +101,12 @@ async function callAI<T>(action: AIAction, email: string, payload: Record<string
         if (response.ok) return response.json();
       }
     }
-    throw new Error(parsedError || raw || `AI request failed (${response.status})`);
+    // Preserve the server's error code + status so callers can act on it —
+    // notably a 402 insufficient_credits routes the user to the paywall.
+    const err: any = new Error(parsedError || raw || `AI request failed (${response.status})`);
+    if (parsedCode) err.code = parsedCode;
+    err.status = response.status;
+    throw err;
   }
 
   return response.json();
@@ -159,7 +181,8 @@ async function* streamSongEvents(
   inputs: unknown,
   email: string,
   userProfile: unknown,
-  userGeminiApiKey: string
+  userGeminiApiKey: string,
+  generationKey: string
 ): AsyncGenerator<string> {
   const resp = await apiFetch("/api/ai", {
     method: "POST",
@@ -167,9 +190,20 @@ async function* streamSongEvents(
     body: JSON.stringify({
       action: "generateSong",
       email,
-      payload: { inputs, userProfile, userGeminiApiKey, stream: true },
+      payload: { inputs, userProfile, userGeminiApiKey, stream: true, generationKey },
     }),
   });
+  if (resp.status === 402) {
+    // Server-authoritative spend rejected the request (out of credits). Mark it
+    // fromServer so generateSong does NOT retry the classic path (which would
+    // 402 again) and carry the code so the UI routes to the paywall.
+    const body = await resp.json().catch(() => ({} as any));
+    throw Object.assign(new Error(body?.error || "You're out of credits."), {
+      code: "insufficient_credits",
+      status: 402,
+      fromServer: true,
+    });
+  }
   if (!resp.ok || !resp.body) {
     throw new Error(`stream unavailable (${resp.status})`);
   }
@@ -226,11 +260,14 @@ export async function* generateSong(
   const safeProfile = sanitizeUnknown(userProfile || {});
   const storedKey =
     typeof window !== "undefined" ? (window.localStorage.getItem(GEMINI_KEY_STORAGE) || "") : "";
+  // ONE idempotency key for this whole generation. Shared by the stream POST and
+  // the classic-fallback POST below so the server charges credits exactly once.
+  const generationKey = newGenerationKey();
 
   // Prefer the live stream: lyrics appear as they're written, stages are real.
   let yieldedLyrics = false;
   try {
-    for await (const chunk of streamSongEvents(safeInputs, safeEmail, safeProfile, storedKey)) {
+    for await (const chunk of streamSongEvents(safeInputs, safeEmail, safeProfile, storedKey, generationKey)) {
       if (typeof chunk === "string" && !chunk.startsWith("__STATUS__:") && chunk.trim()) {
         yieldedLyrics = true;
       }
@@ -239,13 +276,13 @@ export async function* generateSong(
     return;
   } catch (err) {
     // ONE user input produces ONE song. If lyrics already streamed, or the server
-    // itself reported the failure, a silent re-request would generate (and pay for)
-    // a second song — surface the error instead.
+    // itself reported the failure (incl. a 402 out-of-credits), a silent re-request
+    // would generate (and pay for) a second song — surface the error instead.
     if (yieldedLyrics || (err as any)?.fromServer) throw err;
     // Stream never got going (older deploy, proxy buffering, network) — classic path.
   }
 
-  const pending = callAI<{ text: string }>("generateSong", email, { inputs, userProfile });
+  const pending = callAI<{ text: string }>("generateSong", email, { inputs, userProfile, generationKey });
   const statusMessages = [
     "Song Ghost is listening...",
     "Drafting lyrics and structure...",
@@ -299,6 +336,7 @@ export async function* structureImportedSong(
     rawText,
     inputs,
     userProfile,
+    generationKey: newGenerationKey(),
   });
   yield* singleYield(result.text || "");
 }

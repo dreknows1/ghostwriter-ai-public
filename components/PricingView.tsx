@@ -5,6 +5,7 @@ import { toast } from './Feedback';
 import { apiFetch } from '../lib/api';
 import { isNative } from '../lib/platform';
 import { createEntitlementService } from '../services/entitlementService';
+import { refreshEntitlements } from '../lib/nativeBridge';
 import { hapticLight } from '../lib/haptics';
 
 interface PricingViewProps {
@@ -34,7 +35,7 @@ const BENEFITS = [
     'Credits never expire on packs',
 ];
 
-const PricingView: React.FC<PricingViewProps> = ({ email, onClose, onOpenTerms }) => {
+const PricingView: React.FC<PricingViewProps> = ({ email, onClose, onPurchaseComplete, onOpenTerms }) => {
     const [processingId, setProcessingId] = useState<PlanId | null>(null);
     const [selected, setSelected] = useState<PlanId>('pack_50');
     const [userTier, setUserTier] = useState<string>('public');
@@ -67,6 +68,14 @@ const PricingView: React.FC<PricingViewProps> = ({ email, onClose, onOpenTerms }
             const productId = isNative() ? plan.nativeId : plan.webId;
             await service.purchase(productId);
             // Web purchase() redirects the page to Stripe Checkout — nothing further to do here.
+            // Native purchase() resolves in-place: nudge an immediate credit refresh so the
+            // paywall reflects the new balance right away. The app-level onPurchaseCompleted
+            // listener (App.tsx) additionally bounded-polls for the lagging webhook grant.
+            if (isNative()) {
+                const updated = await refreshEntitlements(email);
+                if (typeof updated === 'number') onPurchaseComplete(updated);
+                setProcessingId(null);
+            }
         } catch (e: any) {
             console.error('Purchase flow error:', e);
             toast(

@@ -17,6 +17,13 @@
 export const CREDITS_PUBLIC = 25;
 export const CREDITS_SKOOL = 100;
 export const CREDITS_PRO = 500;
+/**
+ * Metered trial allowance (Andre: "meter the trial"). A 7-day free trial does
+ * NOT front-load the full 500; it grants a smaller evaluation bucket (~5 songs
+ * at 10 credits each). The full 500 lands only on the trial→paid conversion
+ * (the first non-TRIAL RENEWAL, i.e. period_type flips to NORMAL).
+ */
+export const CREDITS_TRIAL = 50;
 
 export const DAY_MS = 86_400_000;
 
@@ -193,6 +200,66 @@ export function computeSpendChecked(
 }
 
 // ---------------------------------------------------------------------------
+// Server-authoritative, idempotent generation spend (N1/B1 must-fix)
+// ---------------------------------------------------------------------------
+
+export interface KeyedSpendContext {
+  /**
+   * A spentKeys row with status "spent" already exists for this generation key
+   * — the request was already charged (a retried/dropped SSE stream, the
+   * stream→classic fallback that fires TWO POSTs for ONE generation, or a
+   * network retry). Proceed with generation but charge nothing.
+   */
+  keySeen: boolean;
+  /** Owner (unlimited) account — never deduct. */
+  isOwner: boolean;
+}
+
+export interface KeyedSpendPlan {
+  /** The caller may proceed with the paid operation (generation). */
+  proceed: boolean;
+  /**
+   * A fresh deduction happens on this call — true ONLY for a first-time charge.
+   * false for an owner or a deduped key. The server refunds on generation
+   * failure only when `charged` is true, so a deduped sibling request never
+   * refunds a charge it doesn't own.
+   */
+  charged: boolean;
+  reason?: "duplicate_key" | "owner_unlimited" | "insufficient_credits";
+  /** The deduction to persist; present only when `charged`. */
+  decision?: CheckedSpendDecision;
+  /** Spendable total before the attempt (drives the 402 payload). */
+  available: number;
+}
+
+/**
+ * Pure decision for the server-authoritative generation spend. Given the DB
+ * lookups the mutation performed (owner check + spentKeys dedupe), decides
+ * whether to proceed, whether to charge, and the exact deduction. Extracted so
+ * the idempotency contract ("same generation key ⇒ charged at most once") is
+ * unit-testable without a Convex runtime — mirrors planRevenueCatApply.
+ */
+export function planKeyedSpend(
+  state: ProfileCreditState,
+  amount: number,
+  ctx: KeyedSpendContext
+): KeyedSpendPlan {
+  const available = spendableTotal(state);
+  // Owner: unlimited — always proceed, never deduct.
+  if (ctx.isOwner) return { proceed: true, charged: false, reason: "owner_unlimited", available };
+  // Already charged for this generation key — proceed, but do not double-charge.
+  if (ctx.keySeen) return { proceed: true, charged: false, reason: "duplicate_key", available };
+
+  const decision = computeSpendChecked(state.credits ?? 0, state.packCredits ?? 0, amount);
+  if (!decision.ok) {
+    // Insufficient balance — reject so the API returns 402 and the client routes
+    // to the paywall. Nothing is deducted.
+    return { proceed: false, charged: false, reason: "insufficient_credits", available };
+  }
+  return { proceed: true, charged: true, decision, available };
+}
+
+// ---------------------------------------------------------------------------
 // Purchase / entitlement grants (shared by Stripe + RevenueCat)
 // ---------------------------------------------------------------------------
 
@@ -238,13 +305,20 @@ export function fallbackExpiry(now: number, periodType?: string): number {
 }
 
 /**
- * Pro subscription grant / renewal: SET the monthly bucket to 500 (never
- * additive), stamp plan=pro + expiry + source, and re-anchor the reset clock.
+ * Pro subscription grant / renewal: SET the monthly bucket (never additive),
+ * stamp plan=pro + expiry + source, and re-anchor the reset clock.
+ *
+ * Metered trial (Andre: "meter the trial"): a TRIAL period grants CREDITS_TRIAL
+ * (50), NOT the full CREDITS_PRO (500). The 500 lands only when period_type is
+ * anything other than TRIAL (the trial→paid conversion RENEWAL, an
+ * already-paid INITIAL_PURCHASE, or a Stripe grant which never sets a
+ * periodType). Because the grant SETS the bucket, the conversion RENEWAL simply
+ * tops the trial 50 up to 500 — idempotent under redelivery.
  *
  * planExpiresAt only ever moves FORWARD (max of incoming vs existing) so an
  * out-of-order webhook — e.g. a RENEWAL processed before a reordered
  * INITIAL_PURCHASE — can't regress a later paid-through date. If neither yields
- * a future expiry, a sane one is derived so the 500-credit grant isn't left
+ * a future expiry, a sane one is derived so the grant isn't left
  * instantly-expired (which the next calendar reset would then wipe).
  */
 export function applyProGrant(
@@ -257,18 +331,20 @@ export function applyProGrant(
   const credits = Math.max(0, state.credits ?? 0);
   let target = Math.max(expiresAt ?? 0, state.planExpiresAt ?? 0);
   if (target <= now) target = fallbackExpiry(now, periodType);
+  const isTrial = periodType === "TRIAL";
+  const grantCredits = isTrial ? CREDITS_TRIAL : CREDITS_PRO;
   return {
     action: "pro_grant",
     changed: true,
     patch: {
-      credits: CREDITS_PRO,
+      credits: grantCredits,
       plan: "pro",
       planExpiresAt: target,
       planSource: source,
       lastResetDate: new Date(now).toISOString(),
     },
-    ledgerDelta: CREDITS_PRO - credits,
-    ledgerReason: `${source}_pro`,
+    ledgerDelta: grantCredits - credits,
+    ledgerReason: `${source}_pro${isTrial ? "_trial" : ""}`,
   };
 }
 

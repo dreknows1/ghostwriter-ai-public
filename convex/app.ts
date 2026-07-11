@@ -1,7 +1,7 @@
 import { mutation, query, internalMutation } from "./_generated/server";
 import { v } from "convex/values";
 import { CREDITS_PUBLIC, CREDITS_SKOOL, UNLIMITED_CREDITS, isOwnerEmail } from "./constants";
-import { computeMonthlyReset, computeSpend, computeSpendChecked } from "./creditLogic";
+import { computeMonthlyReset, computeSpend, planKeyedSpend } from "./creditLogic";
 const REFERRAL_INVITER_CREDITS = 40;
 const REFERRAL_INVITEE_CREDITS = 20;
 
@@ -477,34 +477,133 @@ export const spendCreditsByEmail = mutation({
 /**
  * Server-authoritative spend: REJECTS when the balance can't cover `amount`
  * (returns `{ ok: false }` and deducts nothing) instead of clamping. This is the
- * primitive the generation path must call so credits are enforced server-side
- * rather than trusting the client. Distinct from `spendCreditsByEmail` (which
- * clamps and returns a number) to preserve that function's existing contract.
+ * primitive the generation path (/api/ai) calls so credits are enforced
+ * server-side rather than trusting the client. Distinct from
+ * `spendCreditsByEmail` (which clamps and returns a number) to preserve that
+ * function's existing contract.
+ *
+ * Idempotent on `idempotencyKey`: a `spentKeys` row (status "spent") means this
+ * generation was already charged — a retried/dropped SSE stream or the
+ * stream→classic fallback (two POSTs, one generation) proceeds without
+ * double-charging. `charged` distinguishes a first-time deduction from a dedupe
+ * so the server refunds on failure only the charge it actually created.
  */
 export const spendCreditsStrictByEmail = mutation({
-  args: { email: v.string(), amount: v.number(), reason: v.string() },
+  args: {
+    email: v.string(),
+    amount: v.number(),
+    reason: v.string(),
+    idempotencyKey: v.optional(v.string()),
+  },
   handler: async (ctx: any, args: any) => {
-    // Owner accounts: unlimited — always succeeds, never deducts.
-    if (isOwnerEmail(args.email)) {
-      return { ok: true, spent: args.amount, credits: UNLIMITED_CREDITS, packCredits: 0, total: UNLIMITED_CREDITS };
-    }
+    const isOwner = isOwnerEmail(args.email);
     const { profile } = await ensureUserAndProfile(ctx, args.email);
-    const decision = computeSpendChecked(profile.credits || 0, profile.packCredits || 0, args.amount);
-    if (!decision.ok) {
-      return { ok: false, reason: "insufficient_credits", available: decision.available, total: decision.available };
+    const key = typeof args.idempotencyKey === "string" ? args.idempotencyKey.trim() : "";
+
+    const existingKey = key
+      ? await ctx.db.query("spentKeys").withIndex("by_key", (q: any) => q.eq("key", key)).first()
+      : null;
+    const keySeen = !!existingKey && existingKey.status === "spent";
+
+    const plan = planKeyedSpend(
+      {
+        credits: profile.credits || 0,
+        packCredits: profile.packCredits || 0,
+        plan: profile.plan,
+        planExpiresAt: profile.planExpiresAt,
+        planSource: profile.planSource,
+        tier: profile.tier,
+      },
+      args.amount,
+      { keySeen, isOwner }
+    );
+
+    if (!plan.proceed) {
+      return { ok: false, charged: false, reason: plan.reason, available: plan.available, total: plan.available };
     }
+    if (!plan.charged) {
+      // Owner or an already-charged key: allow generation, deduct nothing.
+      return {
+        ok: true,
+        charged: false,
+        reason: plan.reason,
+        total: isOwner ? UNLIMITED_CREDITS : plan.available,
+      };
+    }
+
+    const decision = plan.decision!;
+    const now = Date.now();
     await ctx.db.patch(profile._id, {
       credits: decision.credits,
       packCredits: decision.packCredits,
-      updatedAt: Date.now(),
+      updatedAt: now,
     });
     await ctx.db.insert("creditLedger", {
       userId: profile.userId,
       delta: -decision.spent,
       reason: args.reason,
-      createdAt: Date.now(),
+      ...(key ? { metadata: { idempotencyKey: key } } : {}),
+      createdAt: now,
     });
-    return { ok: true, spent: decision.spent, credits: decision.credits, packCredits: decision.packCredits, total: decision.total };
+    if (key) {
+      if (existingKey) {
+        // A previously-refunded key being re-charged (failed attempt retried
+        // with the same key) — flip it back to "spent".
+        await ctx.db.patch(existingKey._id, { status: "spent", amount: decision.spent, updatedAt: now });
+      } else {
+        await ctx.db.insert("spentKeys", {
+          key,
+          userId: profile.userId,
+          amount: decision.spent,
+          status: "spent",
+          createdAt: now,
+        });
+      }
+    }
+    return {
+      ok: true,
+      charged: true,
+      spent: decision.spent,
+      credits: decision.credits,
+      packCredits: decision.packCredits,
+      total: decision.total,
+    };
+  },
+});
+
+/**
+ * Reverses a keyed generation charge when the generation fails after credits
+ * were spent. Idempotent: refunds only a `spentKeys` row currently in "spent"
+ * status (flipping it to "refunded"); a redelivery, an unknown key, or an
+ * already-refunded key is a safe no-op. The refund lands in the monthly bucket
+ * (the spend drew monthly-first), which the next calendar reset re-baselines
+ * anyway.
+ */
+export const refundGenerationByKey = mutation({
+  args: { email: v.string(), idempotencyKey: v.string(), reason: v.optional(v.string()) },
+  handler: async (ctx: any, args: any) => {
+    if (isOwnerEmail(args.email)) return { ok: true, refunded: 0 };
+    const key = typeof args.idempotencyKey === "string" ? args.idempotencyKey.trim() : "";
+    if (!key) return { ok: false, refunded: 0 };
+
+    const row = await ctx.db.query("spentKeys").withIndex("by_key", (q: any) => q.eq("key", key)).first();
+    if (!row || row.status !== "spent") return { ok: true, refunded: 0 };
+
+    const { profile } = await ensureUserAndProfile(ctx, args.email);
+    const now = Date.now();
+    await ctx.db.patch(profile._id, {
+      credits: (profile.credits || 0) + row.amount,
+      updatedAt: now,
+    });
+    await ctx.db.insert("creditLedger", {
+      userId: profile.userId,
+      delta: row.amount,
+      reason: args.reason || "generation_refund",
+      metadata: { idempotencyKey: key },
+      createdAt: now,
+    });
+    await ctx.db.patch(row._id, { status: "refunded", updatedAt: now });
+    return { ok: true, refunded: row.amount };
   },
 });
 

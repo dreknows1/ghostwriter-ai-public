@@ -113,25 +113,92 @@ export function onPurchaseCompleted(cb: PurchaseCompletedCallback): () => void {
   };
 }
 
+function sleep(ms: number): Promise<void> {
+  return new Promise((resolve) => setTimeout(resolve, ms));
+}
+
+/** Best-effort nudge so RevenueCat re-syncs CustomerInfo to its backend. */
+async function nudgeCustomerInfo(): Promise<void> {
+  if (!isNative()) return;
+  try {
+    const { Purchases } = await import('@revenuecat/purchases-capacitor');
+    await Purchases.getCustomerInfo();
+  } catch (e) {
+    console.error('[nativeBridge] getCustomerInfo failed', e);
+  }
+}
+
+export interface RefreshEntitlementsOptions {
+  /**
+   * Balance before the purchase. When provided, refreshEntitlements bounded-polls
+   * the credit endpoint until the balance rises above this (the RevenueCat
+   * webhook → billing grant can lag the purchase by a second or two), so the UI
+   * updates without a manual refresh. Omit for a single-shot fetch.
+   */
+  previousBalance?: number;
+  /** Max fetch attempts (default 5 when polling). */
+  tries?: number;
+  /** Delay between attempts in ms (default 2000). */
+  intervalMs?: number;
+}
+
 /**
  * Refreshes the credit balance after a native purchase/restore. Nudges the
  * RevenueCat SDK to sync CustomerInfo (best-effort), then re-fetches credits
- * through the existing creditService path. Returns the new total, or null if
+ * through the existing creditService path.
+ *
+ * With `previousBalance` it bounded-polls (default 5 tries, 2s apart), stopping
+ * early as soon as the balance increases — so a lagging webhook grant doesn't
+ * leave the user staring at a stale total. Returns the latest total, or null if
  * no email is available.
  */
-export async function refreshEntitlements(email?: string): Promise<number | null> {
+export async function refreshEntitlements(
+  email?: string,
+  opts?: RefreshEntitlementsOptions
+): Promise<number | null> {
   if (!email) return null;
 
-  if (isNative()) {
-    try {
-      const { Purchases } = await import('@revenuecat/purchases-capacitor');
-      // Force a CustomerInfo fetch so RevenueCat reports the latest state to
-      // its backend (which drives the webhook grant). Non-fatal on failure.
-      await Purchases.getCustomerInfo();
-    } catch (e) {
-      console.error('[nativeBridge] getCustomerInfo failed', e);
-    }
-  }
+  await nudgeCustomerInfo();
+  let latest = await getUserCredits(email);
 
-  return getUserCredits(email);
+  const baseline = opts?.previousBalance;
+  if (baseline === undefined) return latest;
+
+  const tries = Math.max(1, opts?.tries ?? 5);
+  const intervalMs = Math.max(250, opts?.intervalMs ?? 2000);
+  let attempt = 1;
+  while (attempt < tries && latest <= baseline) {
+    await sleep(intervalMs);
+    await nudgeCustomerInfo();
+    latest = await getUserCredits(email);
+    attempt += 1;
+  }
+  return latest;
+}
+
+/**
+ * Keep-awake seam (docs/PLAN.md "Generation resilience"). During the GENERATING
+ * state the app holds a wake lock so iOS doesn't suspend the WKWebView and kill
+ * the in-flight SSE generation. No-op on web; failures are swallowed so a device
+ * without the capability never breaks generation.
+ */
+export async function keepAwake(): Promise<void> {
+  if (!isNative()) return;
+  try {
+    const { KeepAwake } = await import('@capacitor-community/keep-awake');
+    await KeepAwake.keepAwake();
+  } catch (e) {
+    console.error('[nativeBridge] keepAwake failed', e);
+  }
+}
+
+/** Releases the wake lock taken by {@link keepAwake}. Safe to call unconditionally. */
+export async function allowSleep(): Promise<void> {
+  if (!isNative()) return;
+  try {
+    const { KeepAwake } = await import('@capacitor-community/keep-awake');
+    await KeepAwake.allowSleep();
+  } catch (e) {
+    console.error('[nativeBridge] allowSleep failed', e);
+  }
 }

@@ -21857,6 +21857,56 @@ STRICT STYLE: REALISM
   }
 }
 var getUserProfileByEmailRef = makeFunctionReference("app:getUserProfileByEmail");
+var spendCreditsStrictByEmailRef = makeFunctionReference("app:spendCreditsStrictByEmail");
+var refundGenerationByKeyRef = makeFunctionReference("app:refundGenerationByKey");
+var GENERATE_SONG_COST = 10;
+var AI_ACTION_COST = {
+  generateSong: GENERATE_SONG_COST,
+  structureImportedSong: GENERATE_SONG_COST
+};
+function convexAdminClient() {
+  const convexUrl = process.env.CONVEX_URL;
+  const convexAdminKey = process.env.CONVEX_ADMIN_KEY;
+  if (!convexUrl || !convexAdminKey) return null;
+  const client = new ConvexHttpClient(convexUrl);
+  client.setAdminAuth(convexAdminKey);
+  return client;
+}
+function resolveGenerationKey(raw) {
+  const s = typeof raw === "string" ? raw.trim() : "";
+  if (s && /^[A-Za-z0-9_-]{8,128}$/.test(s)) return s;
+  const rand = globalThis?.crypto?.randomUUID?.();
+  return typeof rand === "string" ? `srv_${rand}` : `srv_${Date.now()}_${Math.random().toString(36).slice(2, 12)}`;
+}
+async function spendCreditsForRequest(email, amount, key, reason) {
+  const client = convexAdminClient();
+  if (!client) {
+    throw Object.assign(new Error("Credit service is unavailable. Please try again."), {
+      status: 503,
+      code: "credit_service_unavailable"
+    });
+  }
+  const result = await client.mutation(spendCreditsStrictByEmailRef, {
+    email,
+    amount,
+    reason,
+    idempotencyKey: key
+  });
+  return {
+    ok: !!result?.ok,
+    charged: !!result?.charged,
+    available: Number(result?.available ?? result?.total ?? 0)
+  };
+}
+async function refundCreditsForRequest(email, key, reason) {
+  try {
+    const client = convexAdminClient();
+    if (!client) return;
+    await client.mutation(refundGenerationByKeyRef, { email, idempotencyKey: key, reason });
+  } catch (e) {
+    console.error("[AI API] credit refund failed", { message: e?.message, key });
+  }
+}
 async function openAIResponses(prompt, model) {
   const useOpenAI = getDraftLLM() === "openai";
   if (useOpenAI) {
@@ -22335,10 +22385,12 @@ async function streamSongInterim(payload, res) {
       send({ type: "d", t: draft });
     }
     send({ type: "done", text: draft });
+    res.end();
+    return { ok: true };
   } catch (error) {
     send({ type: "error", error: error?.message || "Song generation failed." });
-  } finally {
     res.end();
+    return { ok: false };
   }
 }
 async function editSongInterim(payload) {
@@ -22538,14 +22590,16 @@ async function streamSongV3(payload, res) {
     );
     send({ type: "d", t: result.text });
     send({ type: "done", text: result.text, meta: result.meta });
+    res.end();
+    return { ok: true };
   } catch (error) {
     send({
       type: "error",
       error: error?.message || "Song generation failed.",
       ...Array.isArray(error?.reasons) ? { reasons: error.reasons } : {}
     });
-  } finally {
     res.end();
+    return { ok: false };
   }
 }
 async function handler(req, res) {
@@ -22581,23 +22635,47 @@ async function handler(req, res) {
   const session = requireSession(req, res);
   if (!session.ok) return;
   const email = session.email;
+  let spendCost = 0;
+  let genKey = "";
+  let charged = false;
   try {
     const { action, payload } = req.body || {};
     if (!action) return res.status(400).json({ error: "Missing action" });
+    spendCost = AI_ACTION_COST[action] ?? 0;
+    genKey = resolveGenerationKey(payload?.generationKey);
+    if (spendCost > 0) {
+      const spend = await spendCreditsForRequest(String(email), spendCost, genKey, `ai_${action}`);
+      if (!spend.ok) {
+        return res.status(402).json({
+          error: "You're out of credits. Add more to keep the hooks coming.",
+          code: "insufficient_credits",
+          available: spend.available
+        });
+      }
+      charged = spend.charged;
+    }
     requestRequiresUserGeminiKey = action === "askAndre" ? false : await shouldRequireUserGeminiKey(String(email || ""));
     requestGeminiTextApiKey = String(payload?.userGeminiApiKey || req.headers["x-gemini-api-key"] || "").trim() || null;
     switch (action) {
       case "generateSong": {
         const wantsV3 = engineAllowed(email) && payload?.engine !== "interim" && resolveGenre(CURRICULUM, String(payload?.inputs?.genre || "")) !== null;
         if (wantsV3) {
-          if (payload?.stream) return await streamSongV3(payload, res);
+          if (payload?.stream) {
+            const r = await streamSongV3(payload, res);
+            if (!r.ok && charged) await refundCreditsForRequest(String(email), genKey, "generation_failed");
+            return;
+          }
           try {
             return res.status(200).json(await generateSongV3(payload));
           } catch (e) {
             if (!(e instanceof EngineNotAvailable)) throw e;
           }
         }
-        if (payload?.stream) return await streamSongInterim(payload, res);
+        if (payload?.stream) {
+          const r = await streamSongInterim(payload, res);
+          if (!r.ok && charged) await refundCreditsForRequest(String(email), genKey, "generation_failed");
+          return;
+        }
         return res.status(200).json(await generateSongInterim(payload));
       }
       case "suggestTitles":
@@ -22634,6 +22712,9 @@ async function handler(req, res) {
       details: error?.details,
       reasons: error?.reasons
     });
+    if (spendCost > 0 && charged) {
+      await refundCreditsForRequest(String(email), genKey, "generation_failed");
+    }
     const status = Number.isInteger(error?.status) ? error.status : 500;
     return res.status(status).json({
       error: error?.message || "AI API failed",

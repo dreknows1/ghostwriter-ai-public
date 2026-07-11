@@ -334,6 +334,83 @@ STRICT STYLE: REALISM
 }
 
 const getUserProfileByEmailRef = makeFunctionReference<"query">("app:getUserProfileByEmail");
+const spendCreditsStrictByEmailRef = makeFunctionReference<"mutation">("app:spendCreditsStrictByEmail");
+const refundGenerationByKeyRef = makeFunctionReference<"mutation">("app:refundGenerationByKey");
+
+/**
+ * Server-authoritative credit cost per action (N1/B1 must-fix). MUST match
+ * services/creditService.ts COSTS.GENERATE_SONG. Only the two song-producing
+ * actions charge — exactly mirroring the (now-removed) client `deductCredits`
+ * calls, so web behaviour is unchanged except that the spend is now enforced
+ * server-side and cannot be skipped by a logged-in client.
+ */
+const GENERATE_SONG_COST = 10;
+const AI_ACTION_COST: Partial<Record<AIAction, number>> = {
+  generateSong: GENERATE_SONG_COST,
+  structureImportedSong: GENERATE_SONG_COST,
+};
+
+/** Admin-auth Convex client, or null when Convex isn't configured. */
+function convexAdminClient(): any | null {
+  const convexUrl = process.env.CONVEX_URL;
+  const convexAdminKey = process.env.CONVEX_ADMIN_KEY;
+  if (!convexUrl || !convexAdminKey) return null;
+  const client: any = new ConvexHttpClient(convexUrl);
+  client.setAdminAuth(convexAdminKey);
+  return client;
+}
+
+/**
+ * Accept a client-minted generation idempotency key, or mint a server one.
+ * A shared key across the stream POST and its classic-fallback POST is what
+ * makes one generation charge exactly once; an absent/malformed key still
+ * charges this request (no cross-request dedupe, acceptable safety net).
+ */
+function resolveGenerationKey(raw: unknown): string {
+  const s = typeof raw === "string" ? raw.trim() : "";
+  if (s && /^[A-Za-z0-9_-]{8,128}$/.test(s)) return s;
+  const rand = (globalThis as any)?.crypto?.randomUUID?.();
+  return typeof rand === "string" ? `srv_${rand}` : `srv_${Date.now()}_${Math.random().toString(36).slice(2, 12)}`;
+}
+
+type SpendResult = { ok: boolean; charged: boolean; available: number };
+
+/**
+ * Charge for a generation BEFORE the LLM call. Fails CLOSED (503) when Convex
+ * isn't configured — never an open door to free generation. Returns ok:false
+ * only for a genuine insufficient-credits rejection (→ HTTP 402).
+ */
+async function spendCreditsForRequest(email: string, amount: number, key: string, reason: string): Promise<SpendResult> {
+  const client = convexAdminClient();
+  if (!client) {
+    throw Object.assign(new Error("Credit service is unavailable. Please try again."), {
+      status: 503,
+      code: "credit_service_unavailable",
+    });
+  }
+  const result: any = await client.mutation(spendCreditsStrictByEmailRef as any, {
+    email,
+    amount,
+    reason,
+    idempotencyKey: key,
+  });
+  return {
+    ok: !!result?.ok,
+    charged: !!result?.charged,
+    available: Number(result?.available ?? result?.total ?? 0),
+  };
+}
+
+/** Best-effort refund of a keyed charge when generation fails. Non-fatal. */
+async function refundCreditsForRequest(email: string, key: string, reason: string): Promise<void> {
+  try {
+    const client = convexAdminClient();
+    if (!client) return;
+    await client.mutation(refundGenerationByKeyRef as any, { email, idempotencyKey: key, reason });
+  } catch (e: any) {
+    console.error("[AI API] credit refund failed", { message: e?.message, key });
+  }
+}
 
 async function openAIResponses(prompt: string, model?: string): Promise<string> {
   // Route through OpenAI when it's the configured LLM (default)
@@ -858,7 +935,7 @@ async function generateSongInterim(payload: any) {
   return { text };
 }
 
-async function streamSongInterim(payload: any, res: VercelResponse) {
+async function streamSongInterim(payload: any, res: VercelResponse): Promise<{ ok: boolean }> {
   res.writeHead(200, {
     "Content-Type": "text/event-stream; charset=utf-8",
     "Cache-Control": "no-cache, no-transform",
@@ -889,10 +966,12 @@ async function streamSongInterim(payload: any, res: VercelResponse) {
       send({ type: "d", t: draft });
     }
     send({ type: "done", text: draft });
+    res.end();
+    return { ok: true };
   } catch (error: any) {
     send({ type: "error", error: error?.message || "Song generation failed." });
-  } finally {
     res.end();
+    return { ok: false };
   }
 }
 
@@ -1100,7 +1179,7 @@ async function generateSongV3(payload: any) {
   return { text: result.text, meta: result.meta };
 }
 
-async function streamSongV3(payload: any, res: VercelResponse) {
+async function streamSongV3(payload: any, res: VercelResponse): Promise<{ ok: boolean }> {
   res.writeHead(200, {
     "Content-Type": "text/event-stream; charset=utf-8",
     "Cache-Control": "no-cache, no-transform",
@@ -1113,14 +1192,16 @@ async function streamSongV3(payload: any, res: VercelResponse) {
     );
     send({ type: "d", t: result.text });
     send({ type: "done", text: result.text, meta: result.meta });
+    res.end();
+    return { ok: true };
   } catch (error: any) {
     send({
       type: "error",
       error: error?.message || "Song generation failed.",
       ...(Array.isArray(error?.reasons) ? { reasons: error.reasons } : {}),
     });
-  } finally {
     res.end();
+    return { ok: false };
   }
 }
 
@@ -1165,6 +1246,12 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
   if (!session.ok) return;
   const email = session.email;
 
+  // Server-authoritative spend bookkeeping (N1/B1). Declared out here so the
+  // catch-all can refund a charge whose generation then threw.
+  let spendCost = 0;
+  let genKey = "";
+  let charged = false;
+
   try {
     const { action, payload } = (req.body || {}) as {
       action?: AIAction;
@@ -1172,6 +1259,27 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     };
 
     if (!action) return res.status(400).json({ error: "Missing action" });
+
+    // ── Server-authoritative credit spend (N1/B1 MUST-FIX) ──────────────────
+    // Charge BEFORE any LLM call so a logged-in client can no longer skip
+    // payment by omitting the (now-removed) client deduct. Idempotent on the
+    // per-generation key: the stream→classic fallback (two POSTs, one song) and
+    // any network retry charge exactly once. Insufficient balance → 402 so the
+    // client routes to the paywall. Applies to web too (correct + desired).
+    spendCost = AI_ACTION_COST[action] ?? 0;
+    genKey = resolveGenerationKey(payload?.generationKey);
+    if (spendCost > 0) {
+      const spend = await spendCreditsForRequest(String(email), spendCost, genKey, `ai_${action}`);
+      if (!spend.ok) {
+        return res.status(402).json({
+          error: "You're out of credits. Add more to keep the hooks coming.",
+          code: "insufficient_credits",
+          available: spend.available,
+        });
+      }
+      charged = spend.charged;
+    }
+
     requestRequiresUserGeminiKey =
       action === "askAndre" ? false : await shouldRequireUserGeminiKey(String(email || ""));
     requestGeminiTextApiKey =
@@ -1185,14 +1293,22 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
           payload?.engine !== "interim" &&
           resolveGenre(CURRICULUM, String(payload?.inputs?.genre || "")) !== null;
         if (wantsV3) {
-          if (payload?.stream) return await streamSongV3(payload, res);
+          if (payload?.stream) {
+            const r = await streamSongV3(payload, res);
+            if (!r.ok && charged) await refundCreditsForRequest(String(email), genKey, "generation_failed");
+            return;
+          }
           try {
             return res.status(200).json(await generateSongV3(payload));
           } catch (e: any) {
             if (!(e instanceof EngineNotAvailable)) throw e; // EngineFailure → 422 via catch-all
           }
         }
-        if (payload?.stream) return await streamSongInterim(payload, res);
+        if (payload?.stream) {
+          const r = await streamSongInterim(payload, res);
+          if (!r.ok && charged) await refundCreditsForRequest(String(email), genKey, "generation_failed");
+          return;
+        }
         return res.status(200).json(await generateSongInterim(payload));
       }
       case "suggestTitles":
@@ -1232,6 +1348,12 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
       details: error?.details,
       reasons: error?.reasons,
     });
+    // A non-stream generation threw AFTER we charged (creative refusal, engine
+    // failure, provider error) — refund so the user isn't billed for a song
+    // they never got. Idempotent + best-effort; only refunds our own charge.
+    if (spendCost > 0 && charged) {
+      await refundCreditsForRequest(String(email), genKey, "generation_failed");
+    }
     const status = Number.isInteger(error?.status) ? error.status : 500;
     return res.status(status).json({
       error: error?.message || "AI API failed",
