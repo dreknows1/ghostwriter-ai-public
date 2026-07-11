@@ -2,6 +2,10 @@ import type { VercelRequest, VercelResponse } from "@vercel/node";
 import { ConvexHttpClient } from "convex/browser";
 import { makeFunctionReference } from "convex/server";
 import { pbkdf2Sync, randomBytes, timingSafeEqual } from "node:crypto";
+import { applyCors, handlePreflight } from "../lib/cors";
+import { checkRateLimit, getRequestClientId } from "../lib/rateLimit";
+import { consumeNonce, mintSessionToken, OAUTH_SESSION_PURPOSE, verifyToken } from "../lib/authToken";
+import { requireSession } from "../lib/sessionAuth";
 
 const getUserByEmailRef = makeFunctionReference<"query">("users:getUserByEmail");
 const upsertUserCredentialsRef = makeFunctionReference<"mutation">("users:upsertUserCredentials");
@@ -9,6 +13,7 @@ const claimReferralCodeByEmailRef = makeFunctionReference<"mutation">("app:claim
 const isSkoolMemberByEmailRef = makeFunctionReference<"query">("app:isSkoolMemberByEmail");
 const setProfileTierRef = makeFunctionReference<"mutation">("app:setProfileTier");
 const validateInviteCodeRef = makeFunctionReference<"mutation">("inviteCodes:validateCode");
+const consumeAuthNonceRef = makeFunctionReference<"mutation">("authNonces:consume");
 const dbRefs = {
   getUserProfileByEmail: { mode: "query", ref: makeFunctionReference<"query">("app:getUserProfileByEmail") },
   upsertUserProfileByEmail: { mode: "mutation", ref: makeFunctionReference<"mutation">("app:upsertUserProfileByEmail") },
@@ -25,11 +30,31 @@ const dbRefs = {
   claimReferralCodeByEmail: { mode: "mutation", ref: makeFunctionReference<"mutation">("app:claimReferralCodeByEmail") },
   getReferralSummaryByEmail: { mode: "query", ref: makeFunctionReference<"query">("app:getReferralSummaryByEmail") },
   validateInviteCode: { mode: "mutation", ref: makeFunctionReference<"mutation">("inviteCodes:validateCode") },
-  setProfileTier: { mode: "mutation", ref: makeFunctionReference<"mutation">("app:setProfileTier") },
+  // NOTE: setProfileTier is deliberately NOT client-reachable (C2). Tier only
+  // changes through the validated invite path / server logic, never a raw setter.
 } as const;
+
+/**
+ * db actions whose payload is scoped to an email — the acting email is FORCED to
+ * the session token's email. `validateInviteCode` takes only a `code`.
+ */
+const EMAIL_SCOPED_DB_ACTIONS: ReadonlySet<string> = new Set(
+  Object.keys(dbRefs).filter((k) => k !== "validateInviteCode")
+);
 
 function normalizeEmail(email: string): string {
   return email.toLowerCase().trim();
+}
+
+/**
+ * Mint the reusable session bearer returned to the client on every successful
+ * login. Throws (→ 500) if AUTH_TOKEN_SECRET is unset — we never issue a session
+ * we cannot later verify.
+ */
+function mintSessionForEmail(email: string): string {
+  const secret = process.env.AUTH_TOKEN_SECRET;
+  if (!secret) throw new Error("AUTH_TOKEN_SECRET is not configured");
+  return mintSessionToken({ email, secret });
 }
 
 function hashPassword(password: string, salt: string): string {
@@ -41,6 +66,12 @@ function safeEqualHex(a: string, b: string): boolean {
   const bb = Buffer.from(b, "hex");
   if (ab.length !== bb.length) return false;
   return timingSafeEqual(ab, bb);
+}
+
+function rejectRateLimited(res: VercelResponse, resetAt: number) {
+  const retryAfter = Math.max(1, Math.ceil((resetAt - Date.now()) / 1000));
+  res.setHeader("Retry-After", String(retryAfter));
+  return res.status(429).json({ error: "Too many requests. Please slow down." });
 }
 
 function getConvexClient() {
@@ -124,6 +155,9 @@ async function syncContactToGHL(input: {
 }
 
 export default async function handler(req: VercelRequest, res: VercelResponse) {
+  if (handlePreflight(req, res)) return;
+  applyCors(req, res);
+
   if (req.method !== "POST") {
     res.setHeader("Allow", "POST");
     return res.status(405).json({ error: "Method Not Allowed" });
@@ -149,14 +183,77 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     }
 
     if (action === "db") {
+      // Fail closed: a valid session bearer is REQUIRED before any Convex call.
+      const session = requireSession(req, res);
+      if (!session.ok) return;
       if (!dbAction || !dbRefs[dbAction]) return res.status(400).json({ error: "Invalid db action" });
+      // Derive identity from the token; never trust a caller-supplied email.
+      const args = EMAIL_SCOPED_DB_ACTIONS.has(dbAction as string)
+        ? { ...(dbPayload || {}), email: session.email }
+        : dbPayload || {};
       const client = getConvexClient();
       const selected: any = (dbRefs as any)[dbAction];
       const data =
         selected.mode === "query"
-          ? await client.query(selected.ref, dbPayload)
-          : await client.mutation(selected.ref, dbPayload);
+          ? await client.query(selected.ref, args)
+          : await client.mutation(selected.ref, args);
       return res.status(200).json({ data });
+    }
+
+    // OAuth session mint — REQUIRES a signed single-use token minted by the
+    // OAuth callback (api/oauth/callback.ts) after a real provider exchange. A
+    // bare `{action:"oauth", email}` (the pre-existing hole) is now rejected:
+    // the email is derived from the verified token, never from the caller.
+    if (action === "oauth") {
+      const ip = getRequestClientId(req as any);
+      const oauthRl = checkRateLimit(`auth:oauth:ip:${ip}`, 20, 60_000);
+      if (!oauthRl.allowed) return rejectRateLimited(res, oauthRl.resetAt);
+
+      const secret = process.env.AUTH_TOKEN_SECRET;
+      if (!secret) {
+        console.error("[Auth API] AUTH_TOKEN_SECRET is not configured");
+        return res.status(500).json({ error: "Server authentication is misconfigured" });
+      }
+      const token = String((req.body as any)?.token || "");
+      const verified = verifyToken(token, secret, { expectedPurpose: OAUTH_SESSION_PURPOSE });
+      if (!verified.valid) {
+        return res.status(401).json({ error: "Invalid or expired sign-in token" });
+      }
+      // Single-use, layer 1: in-process fast-reject (same warm instance).
+      if (!consumeNonce(verified.payload.nonce, verified.payload.exp)) {
+        return res.status(401).json({ error: "Sign-in token has already been used" });
+      }
+      const oauthEmail = normalizeEmail(verified.payload.email);
+      if (!oauthEmail) {
+        return res.status(401).json({ error: "Invalid sign-in token" });
+      }
+
+      const client = getConvexClient();
+      // Single-use, layer 2 (authoritative): Convex records the nonce atomically,
+      // so a token replayed against a DIFFERENT cold instance is still rejected.
+      // Fail closed — any error here falls through to the 500 catch, denying mint.
+      const consumeResult: any = await client.mutation(consumeAuthNonceRef as any, {
+        nonce: verified.payload.nonce,
+        exp: verified.payload.exp,
+      });
+      if (!consumeResult?.firstUse) {
+        return res.status(401).json({ error: "Sign-in token has already been used" });
+      }
+      const existing: any = await client.query(getUserByEmailRef as any, { email: oauthEmail });
+      const isNetNewUser = !existing?._id;
+      const user: any = await client.mutation(upsertUserCredentialsRef as any, { email: oauthEmail });
+      await enforceSkoolTierIfEligible(client, oauthEmail);
+      if (isNetNewUser) {
+        try {
+          await syncContactToGHL({ email: oauthEmail });
+        } catch (e: any) {
+          console.error("[GHL Sync Error][oauth]", e?.message || e);
+        }
+      }
+      return res.status(200).json({
+        session: { user: { id: user?._id || `user_${oauthEmail}`, email: oauthEmail } },
+        sessionToken: mintSessionForEmail(oauthEmail),
+      });
     }
 
     const normalizedEmail = normalizeEmail(email || "");
@@ -171,34 +268,24 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
       return res.status(400).json({ error: "Password must be at least 8 characters" });
     }
 
+    // Rate limit credential auth per-IP and per-email to blunt brute force.
+    if (action === "signin" || action === "signup") {
+      const ip = getRequestClientId(req as any);
+      const ipRl = checkRateLimit(`auth:${action}:ip:${ip}`, 10, 60_000);
+      if (!ipRl.allowed) return rejectRateLimited(res, ipRl.resetAt);
+      const emailRl = checkRateLimit(`auth:${action}:email:${normalizedEmail}`, 10, 60_000);
+      if (!emailRl.allowed) return rejectRateLimited(res, emailRl.resetAt);
+    }
+
     const client = getConvexClient();
     const existing: any = await client.query(getUserByEmailRef as any, { email: normalizedEmail });
     const isNetNewUser = !existing?._id;
 
-    if (action === "oauth") {
-      const user: any = await client.mutation(upsertUserCredentialsRef as any, {
-        email: normalizedEmail,
-      });
-      await enforceSkoolTierIfEligible(client, normalizedEmail);
-      if (isNetNewUser) {
-        try {
-          await syncContactToGHL({ email: normalizedEmail });
-        } catch (e: any) {
-          console.error("[GHL Sync Error][oauth]", e?.message || e);
-        }
-      }
-      return res.status(200).json({
-        session: {
-          user: {
-            id: user?._id || `user_${normalizedEmail}`,
-            email: normalizedEmail,
-          },
-        },
-      });
-    }
-
     if (action === "signup") {
-      if (existing?.passwordHash && existing?.passwordSalt) {
+      // H1: NEVER attach a password to an already-existing account (password OR
+      // passwordless OAuth/Apple/skool). Any existing record → route to sign-in.
+      // Attaching a new password to a passwordless account was an account-takeover.
+      if (existing?._id) {
         return res.status(409).json({ error: "Account already exists. Please sign in." });
       }
 
@@ -236,6 +323,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
             email: normalizedEmail,
           },
         },
+        sessionToken: mintSessionForEmail(normalizedEmail),
       });
     }
 
@@ -254,6 +342,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
               email: normalizedEmail,
             },
           },
+          sessionToken: mintSessionForEmail(normalizedEmail),
         });
       }
       return res.status(401).json({ error: "Invalid email or password" });
@@ -273,6 +362,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
           email: normalizedEmail,
         },
       },
+      sessionToken: mintSessionForEmail(normalizedEmail),
     });
   } catch (error: any) {
     console.error("[Auth API Error]", error);

@@ -59,6 +59,17 @@ export default defineSchema({
     createdAt: v.number(),
   }).index("by_event", ["eventId"]),
 
+  // Single-use guard for the OAuth session-mint token (SECURITY FIX). Each signed
+  // token minted by api/oauth/callback.ts carries a random nonce; api/auth.ts
+  // records it here on first use, so a replayed token is rejected even across
+  // cold serverless instances (an in-process Map cannot). `exp` mirrors the
+  // token's own expiry so rows can be swept after they can no longer be replayed.
+  authNonces: defineTable({
+    nonce: v.string(),
+    exp: v.number(),
+    createdAt: v.number(),
+  }).index("by_nonce", ["nonce"]),
+
   referralCodes: defineTable({
     userId: v.id("users"),
     code: v.string(),
