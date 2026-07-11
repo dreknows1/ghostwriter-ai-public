@@ -4,7 +4,7 @@ import { AppStep, AppView, SongInputs, UserProfile } from './types';
 import { generateSong, generateAlbumArt, generateSocialPack, translateLyrics, structureImportedSong, suggestTitles } from './services/geminiService';
 import { saveSong } from './services/songService';
 import { getUserProfile } from './services/userService';
-import { getSession, signOut, signIn, signUp, signInWithOAuthToken, startProviderSignIn } from './services/authService';
+import { getSession, signOut, signIn, signUp, signInWithOAuthToken, startProviderSignIn, signInWithApple } from './services/authService';
 import { getUserCredits, hasEnoughCredits, COSTS, formatCredits } from './services/creditService';
 import { apiFetch, SESSION_EXPIRED_EVENT } from './lib/api';
 import LyricsDisplay from './components/LyricsDisplay';
@@ -839,6 +839,51 @@ export const App: React.FC = () => {
     startProviderSignIn(provider);
   };
 
+  // Native-only: Sign in with Apple via the OS sheet (services/authService.signInWithApple),
+  // as opposed to handleOAuthProvider's web full-page redirect. Mirrors the oauth_token
+  // bootstrap success path below (session set, pending community tier applied, credits +
+  // avatar loaded, routed to LANDING). A user-cancelled sheet rejects with Apple's native
+  // ASAuthorizationError (code 1001 — the default NSError text doesn't always say "cancel",
+  // it reads like "...AuthorizationError error 1001."), so we treat that as a silent
+  // no-op rather than surfacing an error banner.
+  const handleNativeAppleSignIn = async () => {
+    if (isAuthLoading) return;
+    setAuthError(null);
+    setIsAuthLoading(true);
+    try {
+      const { data, error } = await signInWithApple();
+      if (error) throw error;
+      if (data?.session) {
+        // Apply pending tier from community code if validated
+        const savedTier = localStorage.getItem('sg_pending_tier');
+        if (savedTier === 'skool') {
+          try {
+            await apiFetch('/api/db', {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({ action: 'db', dbAction: 'setProfileTier', payload: { email: data.session.user.email, tier: 'skool' } }),
+            });
+            localStorage.removeItem('sg_pending_tier');
+          } catch (e) { console.error('Failed to set tier:', e); }
+        }
+        setSession(data.session);
+        setView(AppView.LANDING);
+        const c = await getUserCredits(data.session.user.email || '');
+        setCredits(c);
+        await loadHeaderAvatar(data.session.user.email || '');
+        promptForGeminiApiKeyIfMissing(data.session.user.email || '');
+      }
+    } catch (e: any) {
+      const message = String(e?.message || '');
+      const isCancel = /cancel/i.test(message) || /\b1001\b/.test(message);
+      if (!isCancel) {
+        setAuthError(message || 'Apple sign in failed');
+      }
+    } finally {
+      setIsAuthLoading(false);
+    }
+  };
+
   const loadCredits = async () => {
      if (session?.user?.email) {
          const c = await getUserCredits(session.user.email || '');
@@ -1431,27 +1476,45 @@ export const App: React.FC = () => {
                 </button>
               )}
 
-              <div className="grid grid-cols-5 gap-2 sm:gap-3 mb-7">
-                {[
-                  { name: 'Apple', provider: 'apple', icon: <AuthAppleIcon /> },
-                  { name: 'Discord', provider: 'discord', icon: <AuthDiscordIcon /> },
-                  { name: 'Facebook', provider: 'facebook', icon: <AuthFacebookIcon /> },
-                  { name: 'Google', provider: 'google', icon: <AuthGoogleIcon /> },
-                  { name: 'Microsoft', provider: 'microsoft', icon: <AuthMicrosoftIcon /> },
-                ].map((provider) => (
-                  <button
-                    key={provider.name}
-                    type="button"
-                    onClick={() => handleOAuthProvider(provider.provider)}
-                    disabled={isAuthLoading}
-                    className="h-12 rounded-xl border border-slate-700/90 bg-[#141028] text-slate-300 flex items-center justify-center active:border-slate-500 active:text-white transition-all"
-                    aria-label={`${provider.name} sign in`}
-                    title={`${provider.name} sign in`}
-                  >
-                    {provider.icon}
-                  </button>
-                ))}
-              </div>
+              {isNative() ? (
+                <button
+                  type="button"
+                  onClick={handleNativeAppleSignIn}
+                  disabled={isAuthLoading}
+                  className="w-full h-14 rounded-xl bg-black border border-white/15 text-white flex items-center justify-center gap-2.5 font-semibold text-lg active:bg-slate-900 transition-all disabled:opacity-70 mb-7"
+                  aria-label="Sign in with Apple"
+                  title="Sign in with Apple"
+                >
+                  {isAuthLoading ? <LoadingSpinner /> : (
+                    <>
+                      <AuthAppleIcon />
+                      <span>Sign in with Apple</span>
+                    </>
+                  )}
+                </button>
+              ) : (
+                <div className="grid grid-cols-5 gap-2 sm:gap-3 mb-7">
+                  {[
+                    { name: 'Apple', provider: 'apple', icon: <AuthAppleIcon /> },
+                    { name: 'Discord', provider: 'discord', icon: <AuthDiscordIcon /> },
+                    { name: 'Facebook', provider: 'facebook', icon: <AuthFacebookIcon /> },
+                    { name: 'Google', provider: 'google', icon: <AuthGoogleIcon /> },
+                    { name: 'Microsoft', provider: 'microsoft', icon: <AuthMicrosoftIcon /> },
+                  ].map((provider) => (
+                    <button
+                      key={provider.name}
+                      type="button"
+                      onClick={() => handleOAuthProvider(provider.provider)}
+                      disabled={isAuthLoading}
+                      className="h-12 rounded-xl border border-slate-700/90 bg-[#141028] text-slate-300 flex items-center justify-center active:border-slate-500 active:text-white transition-all"
+                      aria-label={`${provider.name} sign in`}
+                      title={`${provider.name} sign in`}
+                    >
+                      {provider.icon}
+                    </button>
+                  ))}
+                </div>
+              )}
 
               <div className="flex items-center gap-4 mb-6">
                 <div className="h-px flex-1 bg-slate-800"></div>
