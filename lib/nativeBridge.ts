@@ -46,15 +46,22 @@ export async function copyText(text: string): Promise<void> {
 
 const SUNO_APP_SCHEME = 'suno://create';
 const SUNO_WEB_URL = 'https://suno.com/create';
+const UDIO_WEB_URL = 'https://www.udio.com/create';
 
 /**
- * "Open in Suno" — the result screen's hero action. Copies the style prompt
- * to the clipboard first (so it's one paste away regardless of whether the
- * deep link lands), then attempts the native Suno app via its URL scheme,
- * falling back to the Suno website. On web this is just copy + open a tab.
+ * "Open in Suno" — the result screen's hero action. Copies `text` to the
+ * clipboard first (so it's one paste away regardless of whether the deep link
+ * lands), then attempts the native Suno app via its URL scheme, falling back to
+ * the Suno website. On web this is just copy + open a tab.
+ *
+ * Neither Suno nor Udio publishes a documented URL that pre-fills their create
+ * form, so this is a copy-then-open handoff: we put the lyrics (which already
+ * carry [Verse]/[Chorus] structure tags Suno understands) on the clipboard so
+ * the user pastes straight into the lyrics box; the style prompt is copied
+ * separately from the result screen.
  */
-export async function openInSuno(prompt: string): Promise<void> {
-  await copyText(prompt);
+export async function openInSuno(text: string): Promise<void> {
+  await copyText(text);
   if (isNative()) {
     // Best-effort deep link into the Suno app; the OS silently no-ops if it
     // isn't installed, so we still want the web fallback under it.
@@ -63,6 +70,16 @@ export async function openInSuno(prompt: string): Promise<void> {
     return;
   }
   window.open(SUNO_WEB_URL, '_blank', 'noopener,noreferrer');
+}
+
+/** "Open in Udio" — same copy-then-open handoff, for Udio's web create page. */
+export async function openInUdio(text: string): Promise<void> {
+  await copyText(text);
+  if (isNative()) {
+    await Browser.open({ url: UDIO_WEB_URL });
+    return;
+  }
+  window.open(UDIO_WEB_URL, '_blank', 'noopener,noreferrer');
 }
 
 export type PurchaseCompletedPayload = {

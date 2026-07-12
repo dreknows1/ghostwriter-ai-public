@@ -1,20 +1,23 @@
 
-// LyricsDisplay.tsx - the result screen. Hierarchy: lamplit parchment lyrics →
-// teal Suno prompt block → hero "Open in Suno" → secondary icon row. Editing
-// tools (quick revision, meta tags, session art) stay available below, for
-// anyone who wants to go deeper than the quick result.
+// LyricsDisplay.tsx - the result screen (Suno-Cream). Live-editor layout: the
+// lyrics are the editable surface with a docked meta-tag bar right under them
+// (tags never scroll away — Andre's #6), a copyable Suno style prompt, an
+// Open-in-Suno / Udio hand-off that copies the lyrics, and a clearly-priced
+// cover-art action (#4). Rudy rides in the header.
 import React, { useMemo, useState, useRef, useEffect, useCallback } from 'react';
-import { CopyIcon, CheckIcon, ImageIcon, TranslateIcon, LoadingSpinner, MagicWandIcon, DownloadIcon, ExternalLinkIcon, ShareIcon, BookmarkIcon, RefreshIcon } from './icons';
+import { CopyIcon, ImageIcon, TranslateIcon, LoadingSpinner, MagicWandIcon, DownloadIcon, ShareIcon, BookmarkIcon, RefreshIcon } from './icons';
 import { SocialPack, SongInputs } from '../types';
 import { editSong } from '../services/geminiService';
-import MetaTagLibrary from './MetaTagLibrary';
 import { toast, promptDialog } from './Feedback';
 import { hasEnoughCredits, COSTS } from '../services/creditService';
-import { openInSuno, copyText } from '../lib/nativeBridge';
+import { openInSuno, openInUdio, copyText } from '../lib/nativeBridge';
+import { Rudy } from './Rudy';
 import { isNative } from '../lib/platform';
 import { hapticLight } from '../lib/haptics';
 import { Share } from '@capacitor/share';
 import { Filesystem, Directory } from '@capacitor/filesystem';
+
+const TAG_BAR = ['[Intro]', '[Verse]', '[Pre-Chorus]', '[Chorus]', '[Post-Chorus]', '[Bridge]', '[Hook]', '[Outro]', '(yeah)', '(oh)', '(uh)', '(ad-lib)'];
 
 interface LyricsDisplayProps {
   song: string;
@@ -49,27 +52,6 @@ const LyricsDisplay: React.FC<LyricsDisplayProps> = ({
     email,
     currentInputs,
 }) => {
-  const questionnaireItems = useMemo(() => {
-    const inputs = currentInputs || {};
-    const rows: Array<{ label: string; value: string }> = [
-      { label: "Language", value: String(inputs.language || "") },
-      { label: "Genre", value: String(inputs.genre || "") },
-      { label: "Subgenre", value: String(inputs.subGenre || "") },
-      { label: "Instrumentation", value: String(inputs.instrumentation || "") },
-      { label: "Audio Environment", value: String(inputs.audioEnv || "") },
-      { label: "Scene", value: String(inputs.scene || "") },
-      { label: "Emotion", value: String(inputs.emotion || "") },
-      { label: "Vocals", value: String(inputs.vocals || "") },
-      { label: "Duet Type", value: String(inputs.duetType || "") },
-      { label: "Performer Type", value: String(inputs.performerType || "") },
-      { label: "Reference Artist", value: String(inputs.referenceArtist || "") },
-      { label: "Additional Direction", value: String(inputs.additionalInfo || "") },
-      { label: "Mundane Objects", value: String(inputs.mundaneObjects || "") },
-      { label: "Creative Direction", value: String(inputs.creativeDirection || (inputs as any).awkwardMoment || "") },
-    ];
-    return rows.filter((row) => row.value.trim().length > 0);
-  }, [currentInputs]);
-
   const [history, setHistory] = useState<string[]>([song]);
   const [historyIndex, setHistoryIndex] = useState(0);
   const currentFullSong = history[historyIndex];
@@ -81,7 +63,7 @@ const LyricsDisplay: React.FC<LyricsDisplayProps> = ({
   const [artAspect, setArtAspect] = useState<"9:16" | "1:1" | "16:9">("9:16");
   const [copiedPrompt, setCopiedPrompt] = useState(false);
   const [copiedLyrics, setCopiedLyrics] = useState(false);
-  const [showAdvanced, setShowAdvanced] = useState(false);
+  const [showRevision, setShowRevision] = useState(false);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
   const backdropRef = useRef<HTMLDivElement>(null);
 
@@ -163,19 +145,27 @@ const LyricsDisplay: React.FC<LyricsDisplayProps> = ({
   const handleCopyLyrics = async () => {
     await copyToClipboard(parsed.lyrics, setCopiedLyrics);
     hapticLight();
-    toast('Copied. Go haunt Suno with it.', 'success');
+    toast('Lyrics copied. Go haunt Suno with them.', 'success');
   };
 
   const handleCopyPrompt = async () => {
     await copyToClipboard(parsed.prompt, setCopiedPrompt);
     hapticLight();
-    toast('Copied. Go haunt Suno with it.', 'success');
+    toast('Style prompt copied.', 'success');
   };
 
   const handleOpenInSuno = async () => {
     hapticLight();
-    await openInSuno(parsed.prompt);
-    toast('Copied. Go haunt Suno with it.', 'success');
+    // Copy the lyrics (with their [Verse]/[Chorus] tags — ready for Suno's
+    // lyrics box). The style prompt has its own Copy action below.
+    await openInSuno(parsed.lyrics);
+    toast('Lyrics copied — paste into Suno, then grab your style below.', 'success');
+  };
+
+  const handleOpenInUdio = async () => {
+    hapticLight();
+    await openInUdio(parsed.lyrics);
+    toast('Lyrics copied — paste into Udio, then grab your style below.', 'success');
   };
 
   const handleShare = async () => {
@@ -238,8 +228,7 @@ const LyricsDisplay: React.FC<LyricsDisplayProps> = ({
           addToHistory(res);
           setQuickEditInput('');
           // Credit was spent SERVER-side before the revision (server-authoritative,
-          // /api/ai). Reconcile the UI to the true post-spend balance — this
-          // replaces the removed client deductCredits double-charge.
+          // /api/ai). Reconcile the UI to the true post-spend balance.
           if (refreshCredits) await refreshCredits();
       }
     } catch (e: any) {
@@ -267,8 +256,7 @@ const LyricsDisplay: React.FC<LyricsDisplayProps> = ({
           }
         }
         // Credits were spent SERVER-side before the image call (server-authoritative,
-        // /api/ai), which also refunds a charged-then-failed generation. Reconcile
-        // the UI — this replaces the removed client deductCredits double-charge.
+        // /api/ai), which also refunds a charged-then-failed generation.
         if (refreshCredits) await refreshCredits();
       }
     } catch (e: any) {
@@ -285,278 +273,181 @@ const LyricsDisplay: React.FC<LyricsDisplayProps> = ({
   };
 
   useEffect(() => { handleScroll(); }, [currentFullSong]);
-  return (
-    <div className="w-full max-w-3xl mx-auto animate-fade-in flex flex-col items-center px-4 md:px-6 pb-20 safe-top safe-bottom safe-x">
-      <div className="w-full mb-6 flex items-center pt-4">
-        <button onClick={onGoHome} className="text-slate-500 active:text-white transition-all font-bold text-sm flex items-center gap-2">
-            <span>←</span> Dashboard
-        </button>
-      </div>
 
-      <div className="w-full flex flex-col">
-        {/* Title block */}
-        <div className="mb-4">
-          <span className="section-label text-cyan-400">Track — Ghost-Picked</span>
-          <h2 className="heading-display text-3xl md:text-5xl font-bold text-slate-100 tracking-tight leading-none break-words mt-2">{parsed.title}</h2>
+  return (
+    <div className="min-h-screen w-full font-sans" style={{ background: '#F7F3EA', color: '#1a1a1a' }}>
+      <div className="w-full max-w-xl mx-auto flex flex-col px-4 pt-14 pb-24 safe-top safe-bottom safe-x">
+
+        {/* Header */}
+        <div className="flex items-center justify-between mb-4">
+          <button onClick={onGoHome} className="text-[13px] font-bold text-[#8a8272] active:text-[#1a1a1a] flex items-center gap-1">‹ Dashboard</button>
+          <Rudy size={30} variant="vector" />
         </div>
 
-        {/* Lamplit lyric page */}
-        <div className="lyric-page rounded-[1.6rem] p-6 md:p-8 relative">
-          <div
-            className="font-lyric text-[16px] leading-[1.7] max-h-[46vh] overflow-y-auto pr-1"
-            style={{ color: 'var(--page-ink)' }}
-          >
-            {parsed.lyrics.split('\n').map((line, i) => {
-              const sectionMatch = line.trim().match(/^\[(.+)\]$/);
-              if (sectionMatch) {
-                return (
-                  <div key={i} className="lyric-section-mark mt-4 mb-1 first:mt-0">{sectionMatch[1]}</div>
-                );
-              }
-              return <div key={i}>{line || ' '}</div>;
+        {/* Title */}
+        <div className="mb-3">
+          <span className="text-[10.5px] font-extrabold uppercase tracking-[0.14em] text-[#2b5be0]">Your track</span>
+          <h2 className="heading-display text-[27px] font-black tracking-tight leading-[1.05] break-words mt-1">{parsed.title}</h2>
+        </div>
+
+        {/* Lyric page — editable, with the docked tag bar right under it */}
+        <div className="rounded-[22px] bg-white border border-[#eadfca] shadow-[0_8px_22px_rgba(90,70,30,0.06)] overflow-hidden">
+          <div className="relative cursor-text" style={{ height: '40vh', minHeight: 260 }}>
+            <div
+              ref={backdropRef}
+              className="cream-lyr-layer cream-lyr-backdrop"
+              dangerouslySetInnerHTML={{ __html: renderHighlights(parsed.lyrics) }}
+            />
+            <textarea
+              ref={textareaRef}
+              value={parsed.lyrics}
+              onChange={(e) => handleManualLyricsChange(e.target.value)}
+              onScroll={handleScroll}
+              spellCheck={false}
+              autoCorrect="off"
+              autoCapitalize="off"
+              className="cream-lyr-layer cream-lyr-input"
+            />
+          </div>
+          <div className="flex gap-2 overflow-x-auto px-3 py-2.5 border-t border-[#efe6d3] bg-[#faf6ec] hide-scrollbar">
+            {TAG_BAR.map((tag) => {
+              const isCue = tag.startsWith('(');
+              return (
+                <button
+                  key={tag}
+                  type="button"
+                  onClick={() => { insertTagAtCursor(tag); hapticLight(); }}
+                  className={`whitespace-nowrap text-[12.5px] font-bold px-3 py-2 rounded-full border ${isCue ? 'bg-[#e3f5f1] text-[#1f8a76] border-[#c9ece4] italic' : 'bg-[#efe7d7] text-[#5b5346] border-[#e3d8c1]'}`}
+                >
+                  {tag}
+                </button>
+              );
             })}
           </div>
         </div>
 
-        {/* Teal Suno style prompt block */}
-        <div className="mt-4 rounded-2xl border border-cyan-500/25 bg-slate-800 p-4 md:p-5">
+        {/* Suno style prompt */}
+        <div className="mt-3 rounded-2xl bg-[#f1ece0] border border-[#e6dcc6] p-3.5">
           <div className="flex items-center justify-between">
-            <span className="section-label text-cyan-400">Suno Style Prompt</span>
-            <button onClick={handleCopyPrompt} aria-label="Copy prompt" className="w-8 h-8 rounded-lg border border-slate-700 flex items-center justify-center text-slate-400 active:text-cyan-300 active:border-cyan-400 transition-colors">
-              {copiedPrompt ? <span className="text-cyan-300 text-xs">✓</span> : <CopyIcon className="!h-3.5 !w-3.5 !mr-0" />}
-            </button>
+            <span className="text-[10.5px] font-extrabold uppercase tracking-[0.14em] text-[#2b5be0]">Suno style</span>
+            <button onClick={handleCopyPrompt} className="text-[11px] font-extrabold text-[#2b5be0] active:opacity-60">{copiedPrompt ? 'Copied ✓' : 'Copy'}</button>
           </div>
           <textarea
             value={parsed.prompt}
             onChange={(e) => addToHistory(`Title: ${parsed.title}\n\n### SUNO Prompt\n${e.target.value}\n\n### Lyrics\n${parsed.lyrics}`)}
-            className="w-full bg-transparent mt-2 text-[13px] font-mono leading-relaxed text-slate-300 outline-none resize-none"
-            rows={3}
+            rows={2}
+            className="w-full bg-transparent mt-1.5 text-[12.5px] font-mono leading-relaxed text-[#6b6357] outline-none resize-none"
           />
         </div>
 
-        {/* Hero action */}
-        <button
-          onClick={handleOpenInSuno}
-          className="cta-primary w-full mt-5 py-5 rounded-2xl text-[15px] uppercase tracking-[0.1em] flex items-center justify-center gap-2 active:scale-[0.99] transition-all"
-        >
-          Open in Suno <ExternalLinkIcon className="h-4 w-4" />
-        </button>
-
-        {/* Secondary icon row */}
-        <div className="mt-4 pt-4 border-t border-slate-800 grid grid-cols-5 gap-2">
-          <button onClick={handleCopyLyrics} className="flex flex-col items-center gap-1.5 text-slate-400 active:text-cyan-300 transition-colors">
-            <CopyIcon className="!h-5 !w-5 !mr-0" />
-            <span className="text-[9.5px] font-bold uppercase tracking-wide">{copiedLyrics ? 'Copied' : 'Lyrics'}</span>
-          </button>
-          <button onClick={handleCopyPrompt} className="flex flex-col items-center gap-1.5 text-slate-400 active:text-cyan-300 transition-colors">
-            <CopyIcon className="!h-5 !w-5 !mr-0" />
-            <span className="text-[9.5px] font-bold uppercase tracking-wide">{copiedPrompt ? 'Copied' : 'Prompt'}</span>
-          </button>
+        {/* Hand-off: Suno + Udio */}
+        <div className="flex gap-2.5 mt-3.5">
           <button
-            onClick={async () => { setIsSaving(true); try { await onSave(parsed.title, parsed.prompt, parsed.lyrics, albumArt || undefined); } finally { setIsSaving(false); } }}
-            className="flex flex-col items-center gap-1.5 text-slate-400 active:text-cyan-300 transition-colors"
+            onClick={handleOpenInSuno}
+            className="flex-[1.4] rounded-2xl text-white text-center py-4 font-black text-[15px] active:scale-[0.99] transition-transform"
+            style={{ background: 'linear-gradient(150deg,#3f78ff,#2b5be0 55%,#6a3cf0)', boxShadow: '0 12px 26px rgba(47,91,224,0.32)' }}
           >
-            {isSaving ? <LoadingSpinner /> : <BookmarkIcon className="h-5 w-5" />}
-            <span className="text-[9.5px] font-bold uppercase tracking-wide">Save</span>
+            Open in Suno
+            <span className="block text-[10px] font-bold uppercase tracking-[0.08em] opacity-85 mt-0.5">Lyrics copied</span>
           </button>
-          <button onClick={handleShare} disabled={isSharing} className="flex flex-col items-center gap-1.5 text-slate-400 active:text-cyan-300 transition-colors">
-            <ShareIcon className="h-5 w-5" />
-            <span className="text-[9.5px] font-bold uppercase tracking-wide">Share</span>
+          <button onClick={handleOpenInUdio} className="flex-1 rounded-2xl bg-white border-[1.5px] border-[#d8cdb4] text-[#1a1a1a] font-extrabold text-[15px] active:bg-[#faf6ec] transition-colors">Udio</button>
+        </div>
+
+        {/* Cover art — priced */}
+        <div className="mt-3.5 rounded-2xl bg-[#f1ece0] border border-[#e6dcc6] p-3">
+          <div className="flex items-center gap-3">
+            <div className={`${artAspect === '9:16' ? 'aspect-[9/16] w-12' : artAspect === '1:1' ? 'aspect-square w-14' : 'aspect-[16/9] w-16'} rounded-xl bg-[#e2d8c4] flex items-center justify-center text-[#a99e86] overflow-hidden shrink-0`}>
+              {isGeneratingArt ? <LoadingSpinner /> : albumArt ? <img src={albumArt} alt="Cover" className="w-full h-full object-cover" /> : <ImageIcon />}
+            </div>
+            <div className="flex-1 min-w-0">
+              <div className="text-[14px] font-extrabold">Cover art</div>
+              <div className="text-[12px] text-[#8a8272]">Generate a matching cover</div>
+            </div>
+            <button onClick={handleGenerateArtwork} disabled={isGeneratingArt} className="bg-[#1a1a1a] text-white font-extrabold text-[12px] px-3.5 py-2.5 rounded-xl whitespace-nowrap disabled:opacity-60">
+              {isGeneratingArt ? 'Generating…' : <>Generate · <b className="text-[#8fb0ff]">{COSTS.GENERATE_ART} cr</b></>}
+            </button>
+          </div>
+          <div className="flex gap-2 mt-3">
+            {(['9:16', '1:1', '16:9'] as const).map((ratio) => (
+              <button
+                key={ratio}
+                type="button"
+                onClick={() => setArtAspect(ratio)}
+                className={`flex-1 py-1.5 rounded-lg text-[11px] font-bold border ${artAspect === ratio ? 'bg-[#e7edff] border-[#2b5be0] text-[#2b5be0]' : 'bg-white border-[#e3d8c1] text-[#8a8272]'}`}
+              >
+                {ratio}
+              </button>
+            ))}
+          </div>
+          {albumArt && (
+            <button onClick={handleDownloadArt} className="w-full mt-2 py-2.5 rounded-xl bg-white border border-[#e3d8c1] text-[#5b5346] text-[12px] font-bold flex items-center justify-center gap-2">
+              <DownloadIcon className="!h-4 !w-4 !mr-0" /> {isNative() ? 'Save / Share art' : 'Download art'}
+            </button>
+          )}
+        </div>
+
+        {/* Action row */}
+        <div className="flex justify-between mt-3.5 pt-3 border-t border-[#e7ddc9]">
+          <button onClick={handleCopyLyrics} className="flex flex-col items-center gap-1 text-[#8a8272] active:text-[#2b5be0] transition-colors">
+            <CopyIcon className="!h-5 !w-5 !mr-0" /><span className="text-[9.5px] font-extrabold uppercase tracking-wide">{copiedLyrics ? 'Copied' : 'Lyrics'}</span>
           </button>
-          <button onClick={onStartOver} className="flex flex-col items-center gap-1.5 text-slate-400 active:text-cyan-300 transition-colors">
-            <RefreshIcon className="h-5 w-5" />
-            <span className="text-[9.5px] font-bold uppercase tracking-wide">Redo</span>
+          <button onClick={() => setShowRevision(v => !v)} className="flex flex-col items-center gap-1 text-[#8a8272] active:text-[#2b5be0] transition-colors">
+            <MagicWandIcon /><span className="text-[9.5px] font-extrabold uppercase tracking-wide">Revise</span>
+          </button>
+          <button onClick={async () => { setIsSaving(true); try { await onSave(parsed.title, parsed.prompt, parsed.lyrics, albumArt || undefined); } finally { setIsSaving(false); } }} className="flex flex-col items-center gap-1 text-[#8a8272] active:text-[#2b5be0] transition-colors">
+            {isSaving ? <LoadingSpinner /> : <BookmarkIcon className="h-5 w-5" />}<span className="text-[9.5px] font-extrabold uppercase tracking-wide">Save</span>
+          </button>
+          <button onClick={handleShare} disabled={isSharing} className="flex flex-col items-center gap-1 text-[#8a8272] active:text-[#2b5be0] transition-colors">
+            <ShareIcon className="h-5 w-5" /><span className="text-[9.5px] font-extrabold uppercase tracking-wide">Share</span>
+          </button>
+          <button onClick={onStartOver} className="flex flex-col items-center gap-1 text-[#8a8272] active:text-[#2b5be0] transition-colors">
+            <RefreshIcon className="h-5 w-5" /><span className="text-[9.5px] font-extrabold uppercase tracking-wide">Redo</span>
           </button>
         </div>
 
-        {/* Advanced editing — collapsed by default; the quick result stands alone above. */}
-        <button
-          type="button"
-          onClick={() => setShowAdvanced((v) => !v)}
-          className="w-full mt-8 text-center text-xs font-bold uppercase tracking-widest text-slate-500 active:text-slate-300"
-        >
-          {showAdvanced ? 'Hide advanced editing ↑' : 'Advanced editing (lyrics, art, translate) ↓'}
-        </button>
-
-        {showAdvanced && (
-        <div className="w-full grid grid-cols-1 lg:grid-cols-12 gap-8 mt-6">
-            <div className="lg:col-span-8 flex flex-col gap-6">
-              <div className="glass-panel-strong rounded-[2rem] flex flex-col relative overflow-hidden">
-
-                  <div className="bg-slate-900/60 px-5 md:px-8 py-4 md:py-5 border-b border-slate-800 flex justify-between items-center relative z-40 gap-3">
-                      <span className="section-label">Editable Lyrics</span>
-                      <div className="flex items-center gap-2">
-                        <button onClick={async () => {
-                            const lang = await promptDialog({ title: 'Translate lyrics', message: 'Which language should the lyrics be translated to?', placeholder: 'e.g. Spanish', initialValue: 'Spanish', confirmLabel: 'Translate' });
-                            if (lang) {
-                              const res = await onTranslate(parsed.lyrics, lang);
-                              addToHistory(`Title: ${parsed.title}\n\n### SUNO Prompt\n${parsed.prompt}\n\n### Lyrics\n${res}`);
-                            }
-                        }} className="cta-secondary px-3 py-2 rounded-xl text-xs font-bold text-slate-200 transition-all flex items-center justify-center gap-1.5">
-                            <TranslateIcon className="!h-4 !w-4 !mr-0" /> Translate
-                        </button>
-                        <button onClick={handleCopyLyrics} className={`px-3 py-2 rounded-xl text-xs font-bold border transition-all whitespace-nowrap ${copiedLyrics ? 'bg-cyan-500/10 border-cyan-500/50 text-cyan-300' : 'bg-slate-100 text-slate-950 border-transparent'}`}>
-                            {copiedLyrics ? 'Copied' : 'Copy'}
-                        </button>
-                      </div>
-                  </div>
-
-                  <div className="relative flex-grow cursor-text overflow-hidden min-h-[420px]">
-                      <div
-                          ref={backdropRef}
-                          className="studio-text-layer studio-backdrop z-0 select-none pointer-events-none"
-                          dangerouslySetInnerHTML={{ __html: renderHighlights(parsed.lyrics) }}
-                      />
-
-                      <textarea
-                          ref={textareaRef}
-                          value={parsed.lyrics}
-                          onChange={(e) => handleManualLyricsChange(e.target.value)}
-                          onScroll={handleScroll}
-                          spellCheck={false}
-                          autoCorrect="off"
-                          autoCapitalize="off"
-                          className="studio-text-layer studio-input z-20 bg-transparent text-transparent caret-amber-300 resize-none focus:outline-none"
-                      />
-                  </div>
-              </div>
+        {/* Master revision — reveal on demand */}
+        {showRevision && (
+          <div className="mt-4 rounded-2xl bg-[#f1ece0] border border-[#e6dcc6] p-4 animate-fade-in">
+            <div className="flex items-center gap-2 mb-3">
+              <MagicWandIcon /><span className="text-[11px] font-extrabold uppercase tracking-[0.12em] text-[#2b5be0]">Master revision</span>
             </div>
-
-            <div className="lg:col-span-4 flex flex-col gap-8">
-                <div className="flex flex-col">
-                    <h3 className="text-cyan-400 text-sm font-bold uppercase tracking-widest mb-4 flex items-center gap-2">
-                      <MagicWandIcon /> Studio Revision
-                    </h3>
-                    {questionnaireItems.length > 0 && (
-                      <div className="mb-6 rounded-2xl border border-slate-700 bg-slate-800 p-4">
-                        <div className="flex items-center justify-between mb-2">
-                          <span className="section-label text-cyan-300">Questionnaire Context</span>
-                          <span className="text-[11px] font-bold text-cyan-200">{questionnaireItems.length} fields</span>
-                        </div>
-                        <div className="space-y-1.5 max-h-64 overflow-auto pr-1">
-                          {questionnaireItems.map((item) => (
-                            <div key={item.label} className="text-[11px]">
-                              <span className="text-slate-400">{item.label}: </span>
-                              <span className="text-slate-200">{item.value}</span>
-                            </div>
-                          ))}
-                        </div>
-                      </div>
-                    )}
-                    <textarea
-                      className="w-full bg-slate-800 border border-cyan-500/40 rounded-2xl p-5 text-sm leading-relaxed text-white placeholder:text-slate-500 focus:border-cyan-400 outline-none resize-none mb-4 transition-all"
-                      rows={6}
-                      placeholder="e.g. Add more ad-libs, make the chorus hit harder..."
-                      value={quickEditInput}
-                      onChange={(e) => setQuickEditInput(e.target.value)}
-                    />
-                    <button onClick={handleQuickEdit} disabled={isQuickEditing} className="w-full bg-cyan-600 active:bg-cyan-500 py-4 rounded-2xl text-xs font-bold uppercase tracking-widest text-white transition-all flex justify-center items-center min-h-[52px]">
-                        {isQuickEditing ? <LoadingSpinner /> : `Master Revision (${COSTS.EDIT_SONG} Credits)`}
-                    </button>
-                </div>
-
-                <MetaTagLibrary
-                  onTagClick={insertTagAtCursor}
-                  onDragStart={(e, tag) => {
-                    e.dataTransfer.setData('text', tag);
-                  }}
-                />
-
-                <div className="bg-slate-800 border border-slate-700 p-5 md:p-6 rounded-[1.5rem]">
-                    <h3 className="text-white text-xs font-bold uppercase tracking-widest mb-5 flex items-center gap-2"><ImageIcon /> Session Art</h3>
-                    <div className={`${artAspect === "9:16" ? "aspect-[9/16]" : artAspect === "1:1" ? "aspect-square" : "aspect-[16/9]"} w-full bg-slate-900 rounded-2xl flex items-center justify-center text-slate-700 border border-dashed border-slate-700 mb-4 overflow-hidden relative`}>
-                        {isGeneratingArt ? <LoadingSpinner /> : albumArt ? <img src={albumArt} alt="Artwork" className="w-full h-full object-cover" /> : <ImageIcon />}
-                    </div>
-                    <div className="grid grid-cols-3 gap-2 mb-4">
-                      {(["9:16", "1:1", "16:9"] as const).map((ratio) => (
-                        <button
-                          key={ratio}
-                          type="button"
-                          onClick={() => setArtAspect(ratio)}
-                          className={`py-2 rounded-xl text-xs font-bold border transition-all ${
-                            artAspect === ratio
-                              ? "bg-cyan-500/15 border-cyan-400 text-cyan-300"
-                              : "bg-slate-900/60 border-slate-700 text-slate-400"
-                          }`}
-                        >
-                          {ratio}
-                        </button>
-                      ))}
-                    </div>
-                    <button onClick={handleGenerateArtwork} disabled={isGeneratingArt} className="cta-secondary w-full py-4 rounded-2xl text-xs font-bold uppercase tracking-widest transition-all">
-                        {isGeneratingArt ? 'Visualizing...' : 'Generate Art'}
-                    </button>
-                    {albumArt && (
-                      <button onClick={handleDownloadArt} className="cta-secondary w-full mt-2 py-3 rounded-xl text-xs font-bold uppercase tracking-widest transition-all flex items-center justify-center gap-2">
-                        <DownloadIcon className="!h-4 !w-4 !mr-0" />
-                        {isNative() ? 'Save / Share Art' : 'Download Art'}
-                      </button>
-                    )}
-                </div>
+            <textarea
+              className="w-full bg-white border border-[#e3d8c1] rounded-xl p-3.5 text-[13.5px] leading-relaxed text-[#1a1a1a] placeholder:text-[#a99e86] outline-none resize-none focus:border-[#2b5be0]"
+              rows={3}
+              placeholder="e.g. Add more ad-libs, make the chorus hit harder…"
+              value={quickEditInput}
+              onChange={(e) => setQuickEditInput(e.target.value)}
+            />
+            <div className="flex gap-2 mt-2.5">
+              <button
+                onClick={async () => {
+                  const lang = await promptDialog({ title: 'Translate lyrics', message: 'Which language should the lyrics be translated to?', placeholder: 'e.g. Spanish', initialValue: 'Spanish', confirmLabel: 'Translate' });
+                  if (lang) { const res = await onTranslate(parsed.lyrics, lang); addToHistory(`Title: ${parsed.title}\n\n### SUNO Prompt\n${parsed.prompt}\n\n### Lyrics\n${res}`); }
+                }}
+                className="px-3.5 py-3 rounded-xl bg-white border border-[#e3d8c1] text-[#5b5346] text-[12px] font-bold flex items-center gap-1.5"
+              >
+                <TranslateIcon className="!h-4 !w-4 !mr-0" /> Translate
+              </button>
+              <button onClick={handleQuickEdit} disabled={isQuickEditing} className="flex-1 py-3 rounded-xl bg-[#1a1a1a] text-white text-[12px] font-extrabold uppercase tracking-wide flex justify-center items-center disabled:opacity-60">
+                {isQuickEditing ? <LoadingSpinner /> : <>Master Revision · <b className="text-[#8fb0ff] ml-1">{COSTS.EDIT_SONG} cr</b></>}
+              </button>
             </div>
-        </div>
+          </div>
         )}
       </div>
 
       <style>{`
-        .studio-text-layer {
-          position: absolute;
-          inset: 0;
-          width: 100%;
-          height: 100%;
-          padding: 32px;
-
-          font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-          font-size: 16px;
-          font-weight: 500;
-          line-height: 1.7;
-          letter-spacing: normal;
-          text-transform: none;
-
-          white-space: pre-wrap;
-          word-break: break-word;
-          overflow: auto;
-          box-sizing: border-box;
-          border: none;
-          outline: none;
-          margin: 0;
-        }
-
-        .studio-backdrop {
-          z-index: 0;
-          pointer-events: none;
-          color: rgba(244, 239, 231, 0.92);
-        }
-
-        .studio-input {
-          z-index: 10;
-          background: transparent !important;
-          color: transparent !important;
-        }
-
-        .studio-structure-tag {
-          display: inline-block;
-          color: var(--amber-bright);
-          font-weight: 800;
-          letter-spacing: 0.08em;
-          text-transform: uppercase;
-          font-size: 0.85em;
-        }
-        .studio-vocal-cue {
-          color: var(--teal);
-          font-style: italic;
-        }
-
-        .studio-text-layer::-webkit-scrollbar { width: 10px; }
-        .studio-text-layer::-webkit-scrollbar-track { background: transparent; }
-        .studio-text-layer::-webkit-scrollbar-thumb { background: var(--bg-3); border-radius: 10px; }
-
-        @media (max-width: 768px) {
-          .studio-text-layer {
-            padding: 18px;
-            font-size: 15px;
-          }
-        }
+        .cream-lyr-layer{ position:absolute; inset:0; width:100%; height:100%; padding:20px 20px 16px;
+          font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+          font-size:15px; font-weight:500; line-height:1.75; letter-spacing:normal;
+          white-space:pre-wrap; word-break:break-word; overflow:auto; box-sizing:border-box; border:none; outline:none; margin:0; }
+        .cream-lyr-backdrop{ z-index:0; pointer-events:none; color:#2a2620; }
+        .cream-lyr-input{ z-index:10; background:transparent !important; color:transparent !important; caret-color:#2b5be0; resize:none; }
+        .cream-lyr-backdrop .studio-structure-tag{ display:inline-block; background:#e7edff; color:#2b5be0; font-weight:800; letter-spacing:.04em; text-transform:uppercase; font-size:.78em; padding:1px 8px; border-radius:6px; }
+        .cream-lyr-backdrop .studio-vocal-cue{ color:#2ba18c; font-style:italic; }
+        .cream-lyr-backdrop .text-page-ink-soft{ color:#b3a892; }
+        .cream-lyr-layer::-webkit-scrollbar{ width:8px; } .cream-lyr-layer::-webkit-scrollbar-thumb{ background:#e2d8c4; border-radius:8px; }
+        .hide-scrollbar::-webkit-scrollbar{ display:none; } .hide-scrollbar{ -ms-overflow-style:none; scrollbar-width:none; }
       `}</style>
     </div>
   );
