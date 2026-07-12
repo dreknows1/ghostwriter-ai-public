@@ -9,6 +9,7 @@ import {
     LoadingSpinner, ProfileIcon, TrashIcon, ImageIcon,
     HomeIcon, WalletIcon, ClockIcon, LogoutIcon, GhostIcon
 } from './icons';
+import { Rudy } from './Rudy';
 
 interface ProfileViewProps {
   email: string;
@@ -18,6 +19,7 @@ interface ProfileViewProps {
   onProfileUpdate?: (updated: UserProfile) => void;
   onBuyCredits: () => void;
   onCreateNew?: () => void;
+  initialTab?: string;
 }
 
 type Tab = 'overview' | 'profile' | 'wallet' | 'history';
@@ -34,8 +36,8 @@ const ART_STYLES = [
     "Surrealism"
 ];
 
-const ProfileView: React.FC<ProfileViewProps> = ({ email, onLoadSong, onBack, onSignOut, onProfileUpdate, onBuyCredits, onCreateNew }) => {
-  const [activeTab, setActiveTab] = useState<Tab>('overview');
+const ProfileView: React.FC<ProfileViewProps> = ({ email, onLoadSong, onBack, onSignOut, onProfileUpdate, onBuyCredits, onCreateNew, initialTab }) => {
+  const [activeTab, setActiveTab] = useState<Tab>((initialTab as Tab) ?? 'overview');
   const [profile, setProfile] = useState<UserProfile | null>(null);
   const [songs, setSongs] = useState<SavedSong[]>([]);
   const [transactions, setTransactions] = useState<Transaction[]>([]);
@@ -264,14 +266,14 @@ const ProfileView: React.FC<ProfileViewProps> = ({ email, onLoadSong, onBack, on
   if (isLoading) return (
     <div className="flex flex-col items-center justify-center min-h-[60vh]">
       <LoadingSpinner />
-      <span className="mt-4 text-sm font-black uppercase tracking-[0.3em] text-slate-500">Loading Account Data...</span>
+      <span className="mt-4 text-sm font-black uppercase tracking-[0.3em] text-[#8a8272]">Loading Account Data...</span>
     </div>
   );
 
   const NavItem = ({ id, icon: Icon, label }: { id: Tab, icon: any, label: string }) => (
       <button
         onClick={() => setActiveTab(id)}
-        className={`w-full flex items-center gap-4 px-6 py-4 rounded-2xl transition-all mb-2 ${activeTab === id ? 'bg-amber-500 text-slate-950 shadow-lg' : 'text-slate-500 active:bg-slate-800 active:text-white'}`}
+        className={`w-full flex items-center gap-4 px-6 py-4 rounded-2xl transition-all mb-2 ${activeTab === id ? 'bg-[#e7edff] text-[#2b5be0]' : 'text-[#6b6357] active:bg-[#efe7d7] active:text-[#1a1a1a]'}`}
       >
           <Icon />
           <span className="text-sm font-black uppercase tracking-[0.2em]">{label}</span>
@@ -279,30 +281,30 @@ const ProfileView: React.FC<ProfileViewProps> = ({ email, onLoadSong, onBack, on
   );
 
   return (
-    <div className="max-w-7xl mx-auto pt-6 md:pt-8 pb-24 px-4 animate-fade-in flex flex-col md:flex-row gap-8 relative safe-top safe-bottom safe-x">
+    <div className="max-w-7xl mx-auto pt-6 md:pt-8 pb-24 px-4 animate-fade-in flex flex-col md:flex-row gap-8 relative safe-top safe-bottom safe-x bg-[#F7F3EA]">
         {onCreateNew && (
           <button
             onClick={onCreateNew}
-            style={{ bottom: 'calc(88px + var(--safe-bottom, 0px))' }}
-            className="cta-primary fixed right-5 z-40 flex items-center gap-2 px-5 py-3.5 rounded-full text-[13px] uppercase tracking-widest active:scale-[0.97] transition-all"
+            style={{ bottom: 'calc(88px + var(--safe-bottom, 0px))', background: 'linear-gradient(150deg,#3f78ff,#2b5be0 55%,#6a3cf0)' }}
+            className="fixed right-5 z-40 flex items-center gap-2 px-5 py-3.5 rounded-full text-[13px] uppercase tracking-widest text-white font-black shadow-lg active:scale-[0.97] transition-all"
           >
             <GhostIcon className="h-4 w-4" /> New Song
           </button>
         )}
         {/* Sidebar Navigation */}
         <div className="w-full md:w-64 flex-shrink-0">
-            <button onClick={onBack} className="mb-8 text-slate-500 active:text-white transition-all font-black text-sm uppercase tracking-widest flex items-center gap-2 group">
+            <button onClick={onBack} className="mb-8 text-[#6b6357] active:text-[#1a1a1a] transition-all font-black text-sm uppercase tracking-widest flex items-center gap-2 group">
                 <span className="group-hover:-translate-x-1 transition-transform">←</span> Return to Studio
             </button>
-            
-            <div className="glass-panel rounded-[1.5rem] md:rounded-[2rem] p-4 flex flex-col">
-                <div className="px-4 py-6 mb-4 border-b border-slate-800/50 flex items-center gap-4">
-                    <div className="w-12 h-12 rounded-full bg-slate-800 border border-slate-700 overflow-hidden flex-shrink-0">
-                         {editData.avatar_url ? <img src={editData.avatar_url} className="w-full h-full object-cover" /> : <div className="p-3 text-slate-500"><ProfileIcon /></div>}
+
+            <div className="bg-white border border-[#e7ddc9] rounded-[1.5rem] md:rounded-[2rem] p-4 flex flex-col shadow-sm">
+                <div className="px-4 py-6 mb-4 border-b border-[#eadfca] flex items-center gap-4">
+                    <div className="w-12 h-12 rounded-full bg-[#f1ece0] border border-[#e3d8c1] overflow-hidden flex-shrink-0">
+                         {editData.avatar_url ? <img src={editData.avatar_url} className="w-full h-full object-cover" /> : <div className="p-3 text-[#8a8272]"><ProfileIcon /></div>}
                     </div>
                     <div className="overflow-hidden">
-                        <h3 className="text-white font-bold text-base truncate">{editData.display_name || 'User'}</h3>
-                        <p className="text-xs text-slate-500 truncate">{email}</p>
+                        <h3 className="text-[#1a1a1a] font-bold text-base truncate">{editData.display_name || 'User'}</h3>
+                        <p className="text-xs text-[#8a8272] truncate">{email}</p>
                     </div>
                 </div>
 
@@ -310,9 +312,9 @@ const ProfileView: React.FC<ProfileViewProps> = ({ email, onLoadSong, onBack, on
                 <NavItem id="profile" icon={ProfileIcon} label="Profile Details" />
                 <NavItem id="wallet" icon={WalletIcon} label="Billing & Credits" />
                 <NavItem id="history" icon={ClockIcon} label="Studio History" />
-                
-                <div className="mt-8 pt-4 border-t border-slate-800/50">
-                    <button onClick={onSignOut} className="w-full flex items-center gap-4 px-6 py-4 rounded-2xl text-slate-500 active:text-red-400 active:bg-red-900/10 transition-all">
+
+                <div className="mt-8 pt-4 border-t border-[#eadfca]">
+                    <button onClick={onSignOut} className="w-full flex items-center gap-4 px-6 py-4 rounded-2xl text-[#6b6357] active:text-red-500 active:bg-red-50 transition-all">
                         <LogoutIcon />
                         <span className="text-sm font-black uppercase tracking-[0.2em]">Sign Out</span>
                     </button>
@@ -327,42 +329,42 @@ const ProfileView: React.FC<ProfileViewProps> = ({ email, onLoadSong, onBack, on
             {activeTab === 'overview' && (
                 <div className="space-y-8 animate-fade-in">
                     <div>
-                        <h2 className="heading-display text-3xl md:text-4xl font-black text-white tracking-tighter mb-2">Welcome back, {profile?.display_name?.split(' ')[0] || 'Artist'}.</h2>
-                        <p className="text-slate-500 font-bold uppercase tracking-widest text-sm">Here is what's happening in your studio today.</p>
+                        <h2 className="heading-display text-3xl md:text-4xl font-black text-[#1a1a1a] tracking-tighter mb-2">Welcome back, {profile?.display_name?.split(' ')[0] || 'Artist'}.</h2>
+                        <p className="text-[#6b6357] font-bold uppercase tracking-widest text-sm">Here is what's happening in your studio today.</p>
                     </div>
 
                     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                        <div className="glass-panel bg-gradient-to-br from-orange-900/25 to-slate-900 rounded-[2rem] md:rounded-[2.5rem] p-8 relative overflow-hidden">
-                            <h3 className="text-sm font-black uppercase tracking-[0.2em] text-orange-400 mb-4">Available Credits</h3>
-                            <div className="text-5xl md:text-6xl font-black text-white mb-2">{formatCredits(profile?.credits ?? 0)}</div>
-                            
+                        <div className="bg-[#e7edff] border border-[#d4deff] rounded-[2rem] md:rounded-[2.5rem] p-8 relative overflow-hidden">
+                            <h3 className="text-sm font-black uppercase tracking-[0.2em] text-[#2b5be0] mb-4">Available Credits</h3>
+                            <div className="text-5xl md:text-6xl font-black text-[#1a1a1a] mb-2">{formatCredits(profile?.credits ?? 0)}</div>
+
                             {nextRefillDate && (
-                                <div className="mb-4 inline-block px-3 py-1 bg-orange-500/10 rounded-lg border border-orange-500/20">
-                                     <span className="text-xs text-orange-300 font-bold uppercase tracking-wider">Next Refill: {nextRefillDate}</span>
+                                <div className="mb-4 inline-block px-3 py-1 bg-white/70 rounded-lg border border-[#d4deff]">
+                                     <span className="text-xs text-[#2b5be0] font-bold uppercase tracking-wider">Next Refill: {nextRefillDate}</span>
                                 </div>
                             )}
 
-                            <button onClick={onBuyCredits} className="mt-2 w-full px-6 py-3 bg-orange-500 active:bg-orange-400 rounded-2xl text-sm font-black uppercase tracking-widest text-white transition-all shadow-lg">Add Credits</button>
-                            <p className="mt-4 text-[10px] text-slate-400 uppercase tracking-widest leading-relaxed opacity-60">
+                            <button onClick={onBuyCredits} style={{ background: 'linear-gradient(150deg,#3f78ff,#2b5be0 55%,#6a3cf0)' }} className="mt-2 w-full px-6 py-3 rounded-2xl text-sm font-black uppercase tracking-widest text-white transition-all shadow-lg active:scale-[0.98]">Add Credits</button>
+                            <p className="mt-4 text-[10px] text-[#8a8272] uppercase tracking-widest leading-relaxed">
                                 *Free tier: 25/mo. Members: 100/mo. Pro subscription: 500/mo.
                             </p>
                         </div>
 
-                        <div className="glass-panel rounded-[2rem] md:rounded-[2.5rem] p-8">
-                             <h3 className="text-sm font-black uppercase tracking-[0.2em] text-slate-500 mb-4">Total Sessions</h3>
-                             <div className="text-5xl md:text-6xl font-black text-white mb-2">{songs.length}</div>
-                             <p className="text-slate-600 text-sm">Mastered tracks in catalog</p>
+                        <div className="bg-white border border-[#e7ddc9] rounded-[2rem] md:rounded-[2.5rem] p-8 shadow-sm">
+                             <h3 className="text-sm font-black uppercase tracking-[0.2em] text-[#8a8272] mb-4">Total Sessions</h3>
+                             <div className="text-5xl md:text-6xl font-black text-[#1a1a1a] mb-2">{songs.length}</div>
+                             <p className="text-[#6b6357] text-sm">Mastered tracks in catalog</p>
                         </div>
 
-                        <div className="glass-panel rounded-[2rem] md:rounded-[2.5rem] p-8">
-                             <h3 className="text-sm font-black uppercase tracking-[0.2em] text-slate-500 mb-4">Membership Status</h3>
-                             <div className="text-2xl font-black text-white mb-2 uppercase">{planState.plan}</div>
-                             <p className={`text-sm font-bold uppercase tracking-widest ${planState.isActive ? 'text-emerald-500' : 'text-amber-400'}`}>
+                        <div className="bg-white border border-[#e7ddc9] rounded-[2rem] md:rounded-[2.5rem] p-8 shadow-sm">
+                             <h3 className="text-sm font-black uppercase tracking-[0.2em] text-[#8a8272] mb-4">Membership Status</h3>
+                             <div className="text-2xl font-black text-[#1a1a1a] mb-2 uppercase">{planState.plan}</div>
+                             <p className={`text-sm font-bold uppercase tracking-widest ${planState.isActive ? 'text-emerald-600' : 'text-[#2b5be0]'}`}>
                                ● {planState.isActive ? 'Active' : 'Inactive'}
                              </p>
                              {planState.plan === 'Pro Monthly' && planState.renewalDate && (
-                                <p className="mt-2 text-xs text-slate-500 uppercase tracking-widest">
-                                  Renewal Date: <span className="text-slate-300">{planState.renewalDate}</span>
+                                <p className="mt-2 text-xs text-[#8a8272] uppercase tracking-widest">
+                                  Renewal Date: <span className="text-[#1a1a1a]">{planState.renewalDate}</span>
                                 </p>
                              )}
                         </div>
@@ -370,29 +372,29 @@ const ProfileView: React.FC<ProfileViewProps> = ({ email, onLoadSong, onBack, on
 
                     <div>
                         <div className="flex justify-between items-end mb-4">
-                             <h3 className="text-xl font-black text-white tracking-tight">Recent Activity</h3>
-                             <button onClick={() => setActiveTab('history')} className="text-sm font-bold uppercase tracking-widest text-amber-400 active:text-white">View All</button>
+                             <h3 className="text-xl font-black text-[#1a1a1a] tracking-tight">Recent Activity</h3>
+                             <button onClick={() => setActiveTab('history')} className="text-sm font-bold uppercase tracking-widest text-[#2b5be0] active:text-[#1a1a1a]">View All</button>
                         </div>
                         {songs.length > 0 ? (
-                            <div className="rounded-2xl border border-slate-800 divide-y divide-slate-800 overflow-hidden">
+                            <div className="rounded-2xl border border-[#e7ddc9] divide-y divide-[#eadfca] overflow-hidden">
                                 {songs.slice(0, 3).map(song => (
-                                    <div key={song.id} className="bg-slate-900/40 p-4 flex items-center justify-between gap-4">
+                                    <div key={song.id} className="bg-white p-4 flex items-center justify-between gap-4">
                                         <div className="flex items-center gap-4 min-w-0">
-                                            <div className="w-11 h-11 bg-slate-800 rounded-xl flex items-center justify-center text-slate-600 shrink-0">
+                                            <div className="w-11 h-11 bg-[#efe7d7] rounded-xl flex items-center justify-center text-[#8a8272] shrink-0">
                                                 {song.album_art ? <img src={song.album_art} className="w-full h-full object-cover rounded-xl" /> : <ImageIcon />}
                                             </div>
                                             <div className="min-w-0">
-                                                <h4 className="font-bold text-white text-sm truncate">{song.title}</h4>
-                                                <p className="text-xs text-slate-500">{new Date(song.created_at).toLocaleDateString()}</p>
+                                                <h4 className="font-bold text-[#1a1a1a] text-sm truncate">{song.title}</h4>
+                                                <p className="text-xs text-[#8a8272]">{new Date(song.created_at).toLocaleDateString()}</p>
                                             </div>
                                         </div>
-                                        <button onClick={() => onLoadSong(song)} className="text-xs font-bold uppercase tracking-widest text-slate-500 active:text-white shrink-0">Open</button>
+                                        <button onClick={() => onLoadSong(song)} className="text-xs font-bold uppercase tracking-widest text-[#2b5be0] active:text-[#1a1a1a] shrink-0">Open</button>
                                     </div>
                                 ))}
                             </div>
                         ) : (
-                            <div className="p-8 text-center border border-slate-800 border-dashed rounded-3xl text-slate-600 text-sm flex flex-col items-center gap-3">
-                                <GhostIcon className="h-8 w-8 opacity-40" />
+                            <div className="p-8 text-center border border-[#e7ddc9] border-dashed rounded-3xl text-[#6b6357] text-sm flex flex-col items-center gap-3">
+                                <Rudy size={110} variant="art" className="mx-auto mb-4" />
                                 No spirits in your discography yet — write one and I'll haunt it for you.
                             </div>
                         )}
@@ -403,40 +405,40 @@ const ProfileView: React.FC<ProfileViewProps> = ({ email, onLoadSong, onBack, on
             {/* PROFILE TAB */}
             {activeTab === 'profile' && (
                 <div className="animate-fade-in max-w-2xl">
-                    <h2 className="text-3xl font-black text-white tracking-tighter mb-8">Profile Settings</h2>
-                    
+                    <h2 className="text-3xl font-black text-[#1a1a1a] tracking-tighter mb-8">Profile Settings</h2>
+
                     <div className="space-y-8">
                         <div className="grid grid-cols-2 gap-8">
                              <div className="col-span-2">
-                                <label className="block text-sm font-black uppercase tracking-widest text-slate-500 mb-3">Display Name</label>
-                                <input type="text" value={editData.display_name} onChange={e => setEditData({...editData, display_name: e.target.value})} className="w-full bg-[#1d1815] border border-slate-800 p-4 rounded-2xl text-white text-base outline-none focus:border-orange-400 transition-all" />
+                                <label className="block text-sm font-black uppercase tracking-widest text-[#8a8272] mb-3">Display Name</label>
+                                <input type="text" value={editData.display_name} onChange={e => setEditData({...editData, display_name: e.target.value})} className="w-full bg-white border border-[#e3d8c1] p-4 rounded-2xl text-[#1a1a1a] text-base outline-none focus:border-[#2b5be0] transition-all" />
                              </div>
-                             
+
                              {/* AVATAR UPLOAD SECTION */}
                              <div className="col-span-2">
-                                <label className="block text-sm font-black uppercase tracking-widest text-slate-500 mb-3">Avatar Image</label>
+                                <label className="block text-sm font-black uppercase tracking-widest text-[#8a8272] mb-3">Avatar Image</label>
                                 <div className="flex items-center gap-6">
-                                    <div className="w-20 h-20 rounded-2xl bg-slate-800 border border-slate-700 overflow-hidden flex-shrink-0">
-                                         {editData.avatar_url ? <img src={editData.avatar_url} className="w-full h-full object-cover" /> : <div className="p-6 text-slate-500"><ProfileIcon /></div>}
+                                    <div className="w-20 h-20 rounded-2xl bg-[#f1ece0] border border-[#e3d8c1] overflow-hidden flex-shrink-0">
+                                         {editData.avatar_url ? <img src={editData.avatar_url} className="w-full h-full object-cover" /> : <div className="p-6 text-[#8a8272]"><ProfileIcon /></div>}
                                     </div>
                                     <div className="flex-grow">
-                                         <input 
-                                            type="file" 
+                                         <input
+                                            type="file"
                                             accept="image/*"
                                             onChange={handleAvatarUpload}
-                                            className="w-full bg-[#1d1815] border border-slate-800 p-3 rounded-2xl text-sm text-slate-300 file:mr-4 file:py-2 file:px-4 file:rounded-xl file:border-0 file:text-xs file:font-black file:uppercase file:bg-slate-800 file:text-white active:file:bg-slate-700 cursor-pointer"
+                                            className="w-full bg-white border border-[#e3d8c1] p-3 rounded-2xl text-sm text-[#6b6357] file:mr-4 file:py-2 file:px-4 file:rounded-xl file:border-0 file:text-xs file:font-black file:uppercase file:bg-[#1a1a1a] file:text-white active:file:bg-[#333] cursor-pointer"
                                          />
-                                            <p className="mt-3 text-xs text-slate-500 uppercase tracking-widest leading-relaxed">Upload artist persona (JPG/PNG). Used as reference for session art. Max 512px. {(profile?.tier || '').toLowerCase() === 'skool' ? 'Free for Members.' : `Cost: ${COSTS.CREATE_AVATAR} credits.`}</p>
+                                            <p className="mt-3 text-xs text-[#8a8272] uppercase tracking-widest leading-relaxed">Upload artist persona (JPG/PNG). Used as reference for session art. Max 512px. {(profile?.tier || '').toLowerCase() === 'skool' ? 'Free for Members.' : `Cost: ${COSTS.CREATE_AVATAR} credits.`}</p>
                                         </div>
                                     </div>
                                 </div>
 
                              <div className="col-span-2">
-                                <label className="block text-sm font-black uppercase tracking-widest text-slate-500 mb-3">Preferred Art Style</label>
-                                <select 
-                                    value={editData.preferred_art_style} 
+                                <label className="block text-sm font-black uppercase tracking-widest text-[#8a8272] mb-3">Preferred Art Style</label>
+                                <select
+                                    value={editData.preferred_art_style}
                                     onChange={e => setEditData({...editData, preferred_art_style: e.target.value})}
-                                    className="w-full bg-[#1d1815] border border-slate-800 p-4 rounded-2xl text-white text-base outline-none focus:border-orange-400 transition-all appearance-none cursor-pointer"
+                                    className="w-full bg-white border border-[#e3d8c1] p-4 rounded-2xl text-[#1a1a1a] text-base outline-none focus:border-[#2b5be0] transition-all appearance-none cursor-pointer"
                                 >
                                     <option value="" disabled>Select a visual style</option>
                                     {ART_STYLES.map(style => (
@@ -446,24 +448,24 @@ const ProfileView: React.FC<ProfileViewProps> = ({ email, onLoadSong, onBack, on
                              </div>
 
                              <div className="col-span-2">
-                                <label className="block text-sm font-black uppercase tracking-widest text-slate-500 mb-3">Musical Vibe / Style</label>
-                                <input type="text" value={editData.preferred_vibe} onChange={e => setEditData({...editData, preferred_vibe: e.target.value})} className="w-full bg-[#1d1815] border border-slate-800 p-4 rounded-2xl text-white text-base outline-none focus:border-orange-400 transition-all" />
+                                <label className="block text-sm font-black uppercase tracking-widest text-[#8a8272] mb-3">Musical Vibe / Style</label>
+                                <input type="text" value={editData.preferred_vibe} onChange={e => setEditData({...editData, preferred_vibe: e.target.value})} className="w-full bg-white border border-[#e3d8c1] p-4 rounded-2xl text-[#1a1a1a] text-base outline-none focus:border-[#2b5be0] transition-all" />
                              </div>
                              <div className="col-span-2">
-                                <label className="block text-sm font-black uppercase tracking-widest text-slate-500 mb-3">Bio / Manifesto</label>
-                                <textarea value={editData.bio} onChange={e => setEditData({...editData, bio: e.target.value})} className="w-full h-32 bg-[#1d1815] border border-slate-800 p-4 rounded-2xl text-white text-base outline-none focus:border-orange-400 transition-all resize-none" />
+                                <label className="block text-sm font-black uppercase tracking-widest text-[#8a8272] mb-3">Bio / Manifesto</label>
+                                <textarea value={editData.bio} onChange={e => setEditData({...editData, bio: e.target.value})} className="w-full h-32 bg-white border border-[#e3d8c1] p-4 rounded-2xl text-[#1a1a1a] text-base outline-none focus:border-[#2b5be0] transition-all resize-none" />
                              </div>
                         </div>
 
                         <div className="pt-6 flex items-center gap-4">
-                            <button onClick={handleSaveProfile} disabled={isSavingProfile} className="bg-orange-500 px-10 py-5 rounded-2xl text-white font-black uppercase tracking-widest text-base active:bg-orange-400 transition-all shadow-lg min-h-[56px] flex items-center justify-center min-w-[200px]">
+                            <button onClick={handleSaveProfile} disabled={isSavingProfile} style={{ background: 'linear-gradient(150deg,#3f78ff,#2b5be0 55%,#6a3cf0)' }} className="px-10 py-5 rounded-2xl text-white font-black uppercase tracking-widest text-base active:scale-[0.98] transition-all shadow-lg min-h-[56px] flex items-center justify-center min-w-[200px]">
                                 {isSavingProfile ? <LoadingSpinner /> : 'Save Changes'}
                             </button>
                         </div>
-                        
-                        <div className="mt-12 pt-12 border-t border-slate-800/50">
-                             <h3 className="text-red-500 font-bold mb-4 uppercase text-sm tracking-widest">Danger Zone</h3>
-                             <button onClick={handleDeleteAccount} className="border border-red-900/30 bg-red-900/10 text-red-500 px-8 py-4 rounded-2xl text-sm font-black uppercase tracking-widest active:bg-red-900/20">Delete Account</button>
+
+                        <div className="mt-12 pt-12 border-t border-[#eadfca]">
+                             <h3 className="text-red-600 font-bold mb-4 uppercase text-sm tracking-widest">Danger Zone</h3>
+                             <button onClick={handleDeleteAccount} className="border border-red-200 bg-red-50 text-red-600 px-8 py-4 rounded-2xl text-sm font-black uppercase tracking-widest active:bg-red-100">Delete Account</button>
                         </div>
                     </div>
                 </div>
@@ -474,57 +476,57 @@ const ProfileView: React.FC<ProfileViewProps> = ({ email, onLoadSong, onBack, on
                 <div className="animate-fade-in">
                     <div className="flex flex-col md:flex-row justify-between items-start md:items-end mb-10 gap-6">
                         <div>
-                            <h2 className="text-3xl font-black text-white tracking-tighter mb-2">Billing & Credits</h2>
-                            <p className="text-slate-500 text-base">Manage your studio currency and view transaction history.</p>
+                            <h2 className="text-3xl font-black text-[#1a1a1a] tracking-tighter mb-2">Billing & Credits</h2>
+                            <p className="text-[#6b6357] text-base">Manage your studio currency and view transaction history.</p>
                         </div>
-                        <button onClick={onBuyCredits} className="bg-white text-black px-8 py-4 rounded-2xl font-black uppercase tracking-widest text-base active:scale-105 transition-all shadow-xl">Add Credits</button>
+                        <button onClick={onBuyCredits} style={{ background: 'linear-gradient(150deg,#3f78ff,#2b5be0 55%,#6a3cf0)' }} className="text-white px-8 py-4 rounded-2xl font-black uppercase tracking-widest text-base active:scale-105 transition-all shadow-lg">Add Credits</button>
                     </div>
 
-                    <div className="bg-[#1d1815] border border-slate-800 rounded-[2rem] md:rounded-[2.5rem] p-6 md:p-10 mb-12 flex items-center justify-between relative overflow-hidden gap-4">
+                    <div className="bg-white border border-[#e7ddc9] rounded-[2rem] md:rounded-[2.5rem] p-6 md:p-10 mb-12 flex items-center justify-between relative overflow-hidden gap-4 shadow-sm">
                         <div className="relative z-10">
-                            <span className="text-sm font-black uppercase tracking-[0.2em] text-slate-400 block mb-2">Current Balance</span>
-                            <span className="text-5xl md:text-7xl font-black text-white tracking-tighter block mb-4">{formatCredits(profile?.credits)}</span>
-                            
+                            <span className="text-sm font-black uppercase tracking-[0.2em] text-[#8a8272] block mb-2">Current Balance</span>
+                            <span className="text-5xl md:text-7xl font-black text-[#1a1a1a] tracking-tighter block mb-4">{formatCredits(profile?.credits)}</span>
+
                             {nextRefillDate && (
                                 <div className="flex flex-col gap-1 mt-2">
-                                     <span className="text-sm text-slate-500 font-bold uppercase tracking-widest">
-                                        Next Monthly Reset: <span className="text-orange-400">{nextRefillDate}</span>
+                                     <span className="text-sm text-[#6b6357] font-bold uppercase tracking-widest">
+                                        Next Monthly Reset: <span className="text-[#2b5be0]">{nextRefillDate}</span>
                                      </span>
-                                     <span className="text-[10px] text-slate-600 uppercase tracking-widest">
+                                     <span className="text-[10px] text-[#8a8272] uppercase tracking-widest">
                                         (Free balance resets to 30 monthly. Pro monthly grants 2,000 on renewal.)
                                      </span>
                                 </div>
                             )}
                         </div>
-                        <div className="absolute right-0 top-0 h-full w-1/2 bg-gradient-to-l from-orange-900/15 to-transparent pointer-events-none"></div>
-                        <div className="relative z-10 hidden md:block">
+                        <div className="absolute right-0 top-0 h-full w-1/2 bg-gradient-to-l from-[#e7edff] to-transparent pointer-events-none"></div>
+                        <div className="relative z-10 hidden md:block text-[#2b5be0]">
                             <WalletIcon />
                         </div>
                     </div>
 
-                    <h3 className="text-xl font-black text-white mb-6">Transaction History</h3>
-                    <div className="bg-[#171310] border border-slate-800 rounded-3xl overflow-hidden">
+                    <h3 className="text-xl font-black text-[#1a1a1a] mb-6">Transaction History</h3>
+                    <div className="bg-white border border-[#e7ddc9] rounded-3xl overflow-hidden shadow-sm">
                         <div className="overflow-x-auto">
                         <table className="w-full min-w-[560px] text-left">
-                            <thead className="bg-slate-900/50 border-b border-slate-800">
+                            <thead className="bg-[#f1ece0] border-b border-[#eadfca]">
                                 <tr>
-                                    <th className="p-6 text-sm font-black uppercase tracking-widest text-slate-500">Date</th>
-                                    <th className="p-6 text-sm font-black uppercase tracking-widest text-slate-500">Item</th>
-                                    <th className="p-6 text-sm font-black uppercase tracking-widest text-slate-500">Credits</th>
-                                    <th className="p-6 text-sm font-black uppercase tracking-widest text-slate-500 text-right">Amount</th>
+                                    <th className="p-6 text-sm font-black uppercase tracking-widest text-[#8a8272]">Date</th>
+                                    <th className="p-6 text-sm font-black uppercase tracking-widest text-[#8a8272]">Item</th>
+                                    <th className="p-6 text-sm font-black uppercase tracking-widest text-[#8a8272]">Credits</th>
+                                    <th className="p-6 text-sm font-black uppercase tracking-widest text-[#8a8272] text-right">Amount</th>
                                 </tr>
                             </thead>
-                            <tbody className="divide-y divide-slate-800">
+                            <tbody className="divide-y divide-[#eadfca]">
                                 {transactions.length > 0 ? transactions.map(tx => (
-                                    <tr key={tx.id} className="active:bg-slate-900/30 transition-colors">
-                                        <td className="p-6 text-slate-400 text-sm font-mono">{new Date(tx.date).toLocaleDateString()}</td>
-                                        <td className="p-6 text-white font-bold text-base">{tx.item}</td>
-                                        <td className="p-6 text-cyan-400 font-bold text-sm">+{tx.credits}</td>
-                                        <td className="p-6 text-slate-300 font-bold text-base text-right">${tx.amount.toFixed(2)}</td>
+                                    <tr key={tx.id} className="active:bg-[#faf7f0] transition-colors">
+                                        <td className="p-6 text-[#6b6357] text-sm font-mono">{new Date(tx.date).toLocaleDateString()}</td>
+                                        <td className="p-6 text-[#1a1a1a] font-bold text-base">{tx.item}</td>
+                                        <td className="p-6 text-[#2b5be0] font-bold text-sm">+{tx.credits}</td>
+                                        <td className="p-6 text-[#1a1a1a] font-bold text-base text-right">${tx.amount.toFixed(2)}</td>
                                     </tr>
                                 )) : (
                                     <tr>
-                                        <td colSpan={4} className="p-10 text-center text-slate-600 text-sm">No transactions found.</td>
+                                        <td colSpan={4} className="p-10 text-center text-[#8a8272] text-sm">No transactions found.</td>
                                     </tr>
                                 )}
                             </tbody>
@@ -537,31 +539,31 @@ const ProfileView: React.FC<ProfileViewProps> = ({ email, onLoadSong, onBack, on
             {/* HISTORY TAB — hairline discography rows, not glass cards. */}
             {activeTab === 'history' && (
                 <div className="animate-fade-in">
-                    <h2 className="text-3xl font-black text-white tracking-tighter mb-6">Discography</h2>
+                    <h2 className="text-3xl font-black text-[#1a1a1a] tracking-tighter mb-6">Discography</h2>
                     {songs.length > 0 ? (
-                        <div className="rounded-2xl border border-slate-800 divide-y divide-slate-800 overflow-hidden">
+                        <div className="rounded-2xl border border-[#e7ddc9] divide-y divide-[#eadfca] overflow-hidden bg-white shadow-sm">
                             {songs.map(song => (
-                                <div key={song.id} className="group flex items-center justify-between gap-4 p-4 md:p-5 active:bg-slate-900/40 transition-all">
+                                <div key={song.id} className="group flex items-center justify-between gap-4 p-4 md:p-5 active:bg-[#faf7f0] transition-all">
                                     <div className="flex items-center gap-4 min-w-0">
-                                        <div className="w-14 h-14 bg-slate-800 rounded-xl flex-shrink-0 overflow-hidden">
-                                            {song.album_art ? <img src={song.album_art} className="w-full h-full object-cover" /> : <div className="w-full h-full flex items-center justify-center text-slate-600"><ImageIcon /></div>}
+                                        <div className="w-14 h-14 bg-[#efe7d7] rounded-xl flex-shrink-0 overflow-hidden">
+                                            {song.album_art ? <img src={song.album_art} className="w-full h-full object-cover" /> : <div className="w-full h-full flex items-center justify-center text-[#8a8272]"><ImageIcon /></div>}
                                         </div>
                                         <div className="min-w-0">
-                                            <h4 className="text-base font-bold text-white truncate">{song.title}</h4>
-                                            <p className="text-xs text-slate-500 truncate max-w-md">{song.lyrics.slice(0, 70)}...</p>
-                                            <span className="text-[11px] text-slate-600 uppercase tracking-widest mt-1 block">{new Date(song.created_at).toLocaleDateString()}</span>
+                                            <h4 className="text-base font-bold text-[#1a1a1a] truncate">{song.title}</h4>
+                                            <p className="text-xs text-[#6b6357] truncate max-w-md">{song.lyrics.slice(0, 70)}...</p>
+                                            <span className="text-[11px] text-[#8a8272] uppercase tracking-widest mt-1 block">{new Date(song.created_at).toLocaleDateString()}</span>
                                         </div>
                                     </div>
                                     <div className="flex items-center gap-2 shrink-0">
-                                        <button onClick={() => onLoadSong(song)} className="px-4 py-2.5 rounded-xl bg-slate-100 text-slate-950 text-xs font-black uppercase tracking-widest active:scale-95 transition-all">Open</button>
-                                        <button onClick={() => handleDeleteSong(song.id)} className="p-2.5 rounded-xl border border-slate-800 text-slate-500 active:text-red-400 active:border-red-900 transition-all"><TrashIcon /></button>
+                                        <button onClick={() => onLoadSong(song)} className="px-4 py-2.5 rounded-xl bg-[#1a1a1a] text-white text-xs font-black uppercase tracking-widest active:scale-95 transition-all">Open</button>
+                                        <button onClick={() => handleDeleteSong(song.id)} className="p-2.5 rounded-xl border border-[#e7ddc9] text-[#8a8272] active:text-red-500 active:border-red-200 transition-all"><TrashIcon /></button>
                                     </div>
                                 </div>
                             ))}
                         </div>
                     ) : (
-                        <div className="text-center py-20 text-slate-500 text-sm flex flex-col items-center gap-3">
-                            <GhostIcon className="h-10 w-10 opacity-40" />
+                        <div className="text-center py-20 text-[#6b6357] text-sm flex flex-col items-center gap-3">
+                            <Rudy size={110} variant="art" className="mx-auto mb-4" />
                             No spirits in your discography yet — write one and I'll haunt it for you.
                         </div>
                     )}

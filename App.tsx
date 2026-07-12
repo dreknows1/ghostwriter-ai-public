@@ -781,6 +781,9 @@ export const App: React.FC = () => {
   const [utilitySection, setUtilitySection] = useState<UtilitySection>('invite');
   const [utilityReturnView, setUtilityReturnView] = useState<AppView>(AppView.LANDING);
   const [termsReturnView, setTermsReturnView] = useState<AppView>(AppView.AUTH);
+  // Which ProfileView tab to open on. The landing "Discography" row deep-links
+  // straight to the saved-songs list; other entry points use ProfileView's own default.
+  const [profileInitialTab, setProfileInitialTab] = useState<string | undefined>(undefined);
 
   // Paste / Import State
   const [isPasteMode, setIsPasteMode] = useState(false);
@@ -1398,30 +1401,30 @@ export const App: React.FC = () => {
   if (!session || view === AppView.AUTH) {
     return (
       <>
-        <div className="app-shell min-h-screen flex flex-col items-center justify-center p-3 sm:p-4 relative overflow-hidden safe-top safe-bottom safe-x">
-          <div className="relative z-10 w-full max-w-xl rounded-[2rem] border border-slate-800/80 bg-[#141110]/95 shadow-[0_24px_90px_rgba(0,0,0,0.62)] overflow-hidden">
+        <div className="min-h-screen flex flex-col items-center justify-center p-3 sm:p-4 relative overflow-hidden safe-top safe-bottom safe-x" style={{ background: '#F7F3EA' }}>
+          <div className="relative z-10 w-full max-w-xl rounded-[2rem] border border-[#eadfca] bg-white shadow-[0_20px_60px_rgba(90,70,30,0.12)] overflow-hidden" style={{ color: '#1a1a1a' }}>
           <div className="p-6 sm:p-9">
-            <div className="flex justify-center mb-4"><Logo size={68} /></div>
-            <h1 className="heading-display text-3xl sm:text-4xl font-black text-center tracking-tight text-white mb-3">Write. Refine. Release.</h1>
-            <p className="text-center text-slate-400 text-base sm:text-lg mb-2">Song Ghost helps you draft lyrics, polish structure, and generate cover art in a cohesive style.</p>
-            <p className="text-center text-slate-500 text-xs font-black uppercase tracking-[0.18em] mb-8">{isSignUpMode ? 'Create your Song Ghost account' : 'Sign in to Song Ghost'}</p>
+            <div className="flex justify-center mb-4"><Rudy size={84} variant="art" /></div>
+            <h1 className="heading-display text-3xl sm:text-4xl font-black text-center tracking-tight mb-3">Write. Refine. Release.</h1>
+            <p className="text-center text-[#6b6357] text-base sm:text-lg mb-2">Song Ghost helps you draft lyrics, polish structure, and generate cover art in a cohesive style.</p>
+            <p className="text-center text-[#8a8272] text-xs font-black uppercase tracking-[0.18em] mb-8">{isSignUpMode ? 'Create your Song Ghost account' : 'Sign in to Song Ghost'}</p>
 
             <>
               {communityCodeValidated ? (
-                <div className="mb-6 rounded-xl border border-emerald-400/70 bg-emerald-900/35 px-5 py-4 text-center animate-fade-in shadow-[0_0_0_1px_rgba(74,222,128,0.25)]">
-                  <p className="text-emerald-200 font-black text-sm uppercase tracking-widest mb-1">Community Access Unlocked</p>
-                  <p className="text-emerald-100 text-xs font-semibold">Community Discount Active — 100 monthly credits + 50% off all purchases</p>
+                <div className="mb-6 rounded-xl border border-emerald-500/50 bg-emerald-50 px-5 py-4 text-center animate-fade-in">
+                  <p className="text-emerald-700 font-black text-sm uppercase tracking-widest mb-1">Community Access Unlocked</p>
+                  <p className="text-emerald-600 text-xs font-semibold">Community Discount Active — 100 monthly credits + 50% off all purchases</p>
                 </div>
               ) : showCommunityCode ? (
-                <div className="mb-6 animate-fade-in rounded-xl border border-cyan-400/45 bg-cyan-950/20 p-3">
-                  <p className="text-cyan-100 text-xs font-black uppercase tracking-[0.18em] mb-2">Community Code</p>
+                <div className="mb-6 animate-fade-in rounded-xl border border-[#c9d3f5] bg-[#eef2ff] p-3">
+                  <p className="text-[#2b5be0] text-xs font-black uppercase tracking-[0.18em] mb-2">Community Code</p>
                   <div className="flex gap-2 mb-2">
                     <input
                       type="text"
                       placeholder="Enter community code"
                       value={communityCode}
                       onChange={(e) => { setCommunityCode(e.target.value.toUpperCase()); setCommunityCodeError(null); }}
-                      className="flex-1 bg-[#1d1815] border border-cyan-300/45 p-3 rounded-xl text-white outline-none focus:border-cyan-200 text-sm placeholder:text-slate-400 transition-all uppercase tracking-widest"
+                      className="flex-1 bg-white border border-[#c9d3f5] p-3 rounded-xl text-[#1a1a1a] outline-none focus:border-[#2b5be0] text-sm placeholder:text-[#a99e86] transition-all uppercase tracking-widest"
                     />
                     <button
                       type="button"
@@ -1459,13 +1462,13 @@ export const App: React.FC = () => {
                           setIsAuthLoading(false);
                         }
                       }}
-                      className="px-5 h-12 rounded-xl bg-cyan-300 text-slate-950 font-black text-sm active:bg-cyan-200 transition-all disabled:opacity-50"
+                      className="px-5 h-12 rounded-xl bg-[#2b5be0] text-white font-black text-sm active:bg-[#2450c8] transition-all disabled:opacity-50"
                     >
                       Verify
                     </button>
                   </div>
-                  {communityCodeError && <p className="text-rose-300 text-xs font-semibold mt-1">{communityCodeError}</p>}
-                  <button type="button" onClick={() => setShowCommunityCode(false)} className="text-slate-300 text-xs font-semibold active:text-white mt-1">Cancel</button>
+                  {communityCodeError && <p className="text-rose-500 text-xs font-semibold mt-1">{communityCodeError}</p>}
+                  <button type="button" onClick={() => setShowCommunityCode(false)} className="text-[#8a8272] text-xs font-semibold active:text-[#1a1a1a] mt-1">Cancel</button>
                 </div>
               ) : null}
 
@@ -1499,7 +1502,7 @@ export const App: React.FC = () => {
                       type="button"
                       onClick={() => handleOAuthProvider(provider.provider)}
                       disabled={isAuthLoading}
-                      className="h-12 rounded-xl border border-slate-700/90 bg-[#141028] text-slate-300 flex items-center justify-center active:border-slate-500 active:text-white transition-all"
+                      className="h-12 rounded-xl border border-[#e3d8c1] bg-[#faf6ec] text-[#5b5346] flex items-center justify-center active:border-[#2b5be0] active:text-[#2b5be0] transition-all"
                       aria-label={`${provider.name} sign in`}
                       title={`${provider.name} sign in`}
                     >
@@ -1510,43 +1513,44 @@ export const App: React.FC = () => {
               )}
 
               <div className="flex items-center gap-4 mb-6">
-                <div className="h-px flex-1 bg-slate-800"></div>
-                <span className="text-slate-500 text-sm">or use email</span>
-                <div className="h-px flex-1 bg-slate-800"></div>
+                <div className="h-px flex-1 bg-[#e7ddc9]"></div>
+                <span className="text-[#8a8272] text-sm">or use email</span>
+                <div className="h-px flex-1 bg-[#e7ddc9]"></div>
               </div>
 
               <form onSubmit={handleAuth} className="space-y-5">
                 {authError && (
-                  <div className="rounded-xl border border-rose-500/40 bg-rose-900/20 px-4 py-3 text-sm text-rose-200">
+                  <div className="rounded-xl border border-rose-300 bg-rose-50 px-4 py-3 text-sm text-rose-600">
                     {authError}
                   </div>
                 )}
                 <div>
-                  <label className="block text-left text-white font-semibold mb-2.5 text-lg">Email</label>
+                  <label className="block text-left text-[#1a1a1a] font-semibold mb-2.5 text-lg">Email</label>
                   <input
                     type="email"
                     placeholder="Enter your email"
                     value={authEmail}
                     onChange={(e) => setAuthEmail(e.target.value)}
-                    className="w-full bg-[#1d1815] border border-slate-700 p-4 rounded-xl text-white outline-none focus:border-orange-400 text-base placeholder:text-slate-500 transition-all"
+                    className="w-full bg-white border border-[#e3d8c1] p-4 rounded-xl text-[#1a1a1a] outline-none focus:border-[#2b5be0] text-base placeholder:text-[#a99e86] transition-all"
                     required
                   />
                 </div>
                 <div>
-                  <label className="block text-left text-white font-semibold mb-2.5 text-lg">Password</label>
+                  <label className="block text-left text-[#1a1a1a] font-semibold mb-2.5 text-lg">Password</label>
                   <input
                     type="password"
                     placeholder="Enter your password"
                     value={authPassword}
                     onChange={(e) => setAuthPassword(e.target.value)}
-                    className="w-full bg-[#1d1815] border border-slate-700 p-4 rounded-xl text-white outline-none focus:border-orange-400 text-base placeholder:text-slate-500 transition-all"
+                    className="w-full bg-white border border-[#e3d8c1] p-4 rounded-xl text-[#1a1a1a] outline-none focus:border-[#2b5be0] text-base placeholder:text-[#a99e86] transition-all"
                     required
                     minLength={8}
                   />
                 </div>
                 <button
                   disabled={isAuthLoading}
-                  className="w-full h-14 rounded-xl bg-white text-black font-black text-xl active:bg-slate-200 transition-all disabled:opacity-70 flex items-center justify-center"
+                  className="w-full h-14 rounded-xl text-white font-black text-xl active:scale-[0.99] transition-transform disabled:opacity-70 flex items-center justify-center"
+                  style={{ background: 'linear-gradient(150deg,#3f78ff,#2b5be0 55%,#6a3cf0)', boxShadow: '0 14px 30px rgba(47,91,224,0.3)' }}
                 >
                   {isAuthLoading ? <LoadingSpinner /> : (isSignUpMode ? 'Create Account' : 'Continue')}
                 </button>
@@ -1554,16 +1558,16 @@ export const App: React.FC = () => {
             </>
           </div>
 
-          <div className="border-t border-slate-800 p-5 sm:p-6 bg-[#0e0c20]">
+          <div className="border-t border-[#eadfca] p-5 sm:p-6 bg-[#f1ece0]">
             <div className="flex flex-col sm:flex-row gap-3 items-center justify-between">
-              <p className="text-slate-400 text-base sm:text-lg">{isSignUpMode ? 'Already have an account?' : "Don't have an account?"}</p>
+              <p className="text-[#6b6357] text-base sm:text-lg">{isSignUpMode ? 'Already have an account?' : "Don't have an account?"}</p>
               <button
                 type="button"
                 onClick={() => {
                   setIsSignUpMode((v) => !v);
                   setAuthError(null);
                 }}
-                className="w-full sm:w-auto px-10 h-12 rounded-xl bg-white text-black font-black text-xl"
+                className="w-full sm:w-auto px-10 h-12 rounded-xl bg-white border-[1.5px] border-[#d8cdb4] text-[#1a1a1a] font-black text-xl active:bg-[#faf6ec] transition-colors"
               >
                 {isSignUpMode ? 'Sign in' : 'Sign up'}
               </button>
@@ -1573,7 +1577,7 @@ export const App: React.FC = () => {
                 <button
                   type="button"
                   onClick={() => setShowCommunityCode(true)}
-                  className="block w-full text-sm text-slate-500 active:text-slate-300"
+                  className="block w-full text-sm text-[#8a8272] active:text-[#1a1a1a]"
                 >
                   Have a community code?
                 </button>
@@ -1583,7 +1587,7 @@ export const App: React.FC = () => {
                   setTermsReturnView(AppView.AUTH);
                   setView(AppView.TERMS);
                 }}
-                className="block w-full text-sm text-slate-500 active:text-slate-300"
+                className="block w-full text-sm text-[#8a8272] active:text-[#1a1a1a]"
               >
                 By continuing, you accept our Privacy Policy and Terms
               </button>
@@ -1644,7 +1648,7 @@ export const App: React.FC = () => {
   if (view === AppView.PROFILE) {
       return (
         <>
-          <ProfileView email={session.user.email} onLoadSong={(s) => {
+          <ProfileView email={session.user.email} initialTab={profileInitialTab} onLoadSong={(s) => {
             setInputs({ ...DEFAULT_INPUTS, genre: 'Loaded Song' }); 
             setGeneratedSong(`Title: ${s.title || 'Untitled'}\n\n### SUNO Prompt\n${s.suno_prompt || ''}\n\n### Lyrics\n${s.lyrics || ''}`);
       
@@ -1665,39 +1669,39 @@ export const App: React.FC = () => {
         <div className="min-h-screen font-sans relative overflow-hidden flex flex-col items-center justify-center p-4 md:p-6 safe-top safe-bottom safe-x" style={{ background: '#F7F3EA' }}>
 
              {isPasteMode ? (
-                 <div className="glass-panel-strong relative z-10 w-full max-w-2xl p-6 md:p-8 rounded-[2rem] md:rounded-[3rem] animate-fade-in shadow-emerald-900/20">
-                     <h2 className="text-2xl font-black text-white tracking-tight mb-2">Import & Structure Session</h2>
-                     <p className="text-slate-500 text-sm font-black uppercase tracking-widest mb-6">Paste lyrics, choruses, verses, or just an idea — pick a genre and room, and we structure it into that style while keeping your words.</p>
+                 <div className="relative z-10 w-full max-w-2xl p-6 md:p-8 rounded-[2rem] md:rounded-[3rem] animate-fade-in bg-white border border-[#eadfca] shadow-[0_20px_60px_rgba(90,70,30,0.1)]" style={{ color: '#1a1a1a' }}>
+                     <h2 className="text-2xl font-black tracking-tight mb-2">Import & Structure Session</h2>
+                     <p className="text-[#8a8272] text-sm font-black uppercase tracking-widest mb-6">Paste lyrics, choruses, verses, or just an idea — pick a genre and room, and we structure it into that style while keeping your words.</p>
 
                      <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 mb-6">
                          <label className="flex flex-col gap-1.5">
-                             <span className="text-[10px] font-black uppercase tracking-widest text-slate-500">Language</span>
+                             <span className="text-[10px] font-black uppercase tracking-widest text-[#8a8272]">Language</span>
                              <select
                                  value={inputs.language || 'English'}
                                  onChange={(e) => setInputs(prev => ({ ...prev, language: e.target.value, genre: '', subGenre: '' }))}
-                                 className="bg-[#1d1815] border border-slate-800 rounded-2xl px-4 py-3 text-slate-200 focus:border-emerald-500 outline-none text-sm"
+                                 className="bg-[#faf6ec] border border-[#e3d8c1] rounded-2xl px-4 py-3 text-[#1a1a1a] focus:border-[#2b5be0] outline-none text-sm"
                              >
                                  {LANGUAGE_OPTIONS.map((l) => <option key={l} value={l}>{l}</option>)}
                              </select>
                          </label>
                          <label className="flex flex-col gap-1.5">
-                             <span className="text-[10px] font-black uppercase tracking-widest text-slate-500">Genre</span>
+                             <span className="text-[10px] font-black uppercase tracking-widest text-[#8a8272]">Genre</span>
                              <select
                                  value={inputs.genre || ''}
                                  onChange={(e) => setInputs(prev => ({ ...prev, genre: e.target.value, subGenre: '' }))}
-                                 className="bg-[#1d1815] border border-slate-800 rounded-2xl px-4 py-3 text-slate-200 focus:border-emerald-500 outline-none text-sm"
+                                 className="bg-[#faf6ec] border border-[#e3d8c1] rounded-2xl px-4 py-3 text-[#1a1a1a] focus:border-[#2b5be0] outline-none text-sm"
                              >
                                  <option value="">Auto / no genre</option>
                                  {importGenreChips.map((g) => <option key={g} value={g}>{g}</option>)}
                              </select>
                          </label>
                          <label className="flex flex-col gap-1.5">
-                             <span className="text-[10px] font-black uppercase tracking-widest text-slate-500">Room{importRooms.length ? '' : ' (pick a genre)'}</span>
+                             <span className="text-[10px] font-black uppercase tracking-widest text-[#8a8272]">Room{importRooms.length ? '' : ' (pick a genre)'}</span>
                              <select
                                  value={inputs.subGenre || ''}
                                  disabled={!importRooms.length}
                                  onChange={(e) => setInputs(prev => ({ ...prev, subGenre: e.target.value }))}
-                                 className="bg-[#1d1815] border border-slate-800 rounded-2xl px-4 py-3 text-slate-200 focus:border-emerald-500 outline-none text-sm disabled:opacity-40"
+                                 className="bg-[#faf6ec] border border-[#e3d8c1] rounded-2xl px-4 py-3 text-[#1a1a1a] focus:border-[#2b5be0] outline-none text-sm disabled:opacity-40"
                              >
                                  <option value="">Auto (best room)</option>
                                  {importRooms.map((r) => <option key={r.name} value={r.name}>{r.name}</option>)}
@@ -1706,18 +1710,18 @@ export const App: React.FC = () => {
                      </div>
 
                      <textarea
-                        className="w-full h-64 bg-[#1d1815] border border-slate-800 rounded-3xl p-6 text-slate-300 focus:border-emerald-500 outline-none resize-none mb-6 font-mono text-sm shadow-inner"
+                        className="w-full h-64 bg-[#faf6ec] border border-[#e3d8c1] rounded-3xl p-6 text-[#1a1a1a] focus:border-[#2b5be0] outline-none resize-none mb-6 font-mono text-sm placeholder:text-[#a99e86]"
                         placeholder="Paste your lyrics or raw ideas here..."
                         value={pasteContent}
                         onChange={(e) => setPasteContent(e.target.value)}
                         autoFocus
                      />
-                     
+
                      <div className="flex flex-col sm:flex-row gap-3 sm:gap-4">
-                         <button onClick={handlePasteImport} disabled={isLoading} className="cta-primary flex-1 py-4 rounded-2xl font-black uppercase tracking-widest transition-all disabled:opacity-50 disabled:cursor-not-allowed">
+                         <button onClick={handlePasteImport} disabled={isLoading} className="flex-1 py-4 rounded-2xl text-white font-black uppercase tracking-widest active:scale-[0.99] transition-transform disabled:opacity-50 disabled:cursor-not-allowed" style={{ background: 'linear-gradient(150deg,#3f78ff,#2b5be0 55%,#6a3cf0)', boxShadow: '0 14px 30px rgba(47,91,224,0.3)' }}>
                              {isLoading ? 'Structuring…' : `Structure Song (${COSTS.GENERATE_SONG} Credits)`}
                          </button>
-                         <button onClick={() => { setIsPasteMode(false); setPasteContent(''); }} className="cta-secondary flex-1 py-4 rounded-2xl text-slate-300 font-black uppercase tracking-widest transition-all">
+                         <button onClick={() => { setIsPasteMode(false); setPasteContent(''); }} className="flex-1 py-4 rounded-2xl bg-white border-[1.5px] border-[#d8cdb4] text-[#5b5346] font-black uppercase tracking-widest active:bg-[#faf6ec] transition-colors">
                              Cancel
                          </button>
                      </div>
@@ -1768,7 +1772,7 @@ export const App: React.FC = () => {
                            </span>
                          </button>
                          <div className="h-px bg-[#e7ddc9]" />
-                         <button onClick={() => setView(AppView.PROFILE)} className="w-full flex items-center gap-3.5 py-4 active:opacity-60 transition-opacity">
+                         <button onClick={() => { setProfileInitialTab('history'); setView(AppView.PROFILE); }} className="w-full flex items-center gap-3.5 py-4 active:opacity-60 transition-opacity">
                            <span className="w-11 h-11 rounded-2xl bg-[#efe7d7] text-[#2b5be0] flex items-center justify-center shrink-0"><ClockIcon /></span>
                            <span className="flex-1 text-left">
                              <span className="block text-[15px] font-extrabold">Discography</span>
@@ -1834,7 +1838,7 @@ export const App: React.FC = () => {
                 </button>
              </div>
 
-             <button onClick={() => setView(AppView.PROFILE)} className="w-10 h-10 rounded-full bg-slate-800 flex items-center justify-center text-slate-400 active:bg-slate-700 active:text-white transition-all overflow-hidden border border-slate-700">
+             <button onClick={() => { setProfileInitialTab(undefined); setView(AppView.PROFILE); }} className="w-10 h-10 rounded-full bg-slate-800 flex items-center justify-center text-slate-400 active:bg-slate-700 active:text-white transition-all overflow-hidden border border-slate-700">
                  {headerAvatarUrl ? (
                    <img src={headerAvatarUrl} alt="Profile avatar" className="w-full h-full object-cover" />
                  ) : (
