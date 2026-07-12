@@ -1466,15 +1466,7 @@ export const App: React.FC = () => {
                   {communityCodeError && <p className="text-rose-300 text-xs font-semibold mt-1">{communityCodeError}</p>}
                   <button type="button" onClick={() => setShowCommunityCode(false)} className="text-slate-300 text-xs font-semibold active:text-white mt-1">Cancel</button>
                 </div>
-              ) : (
-                <button
-                  type="button"
-                  onClick={() => setShowCommunityCode(true)}
-                  className="community-code-cta w-full mb-5 rounded-xl border border-cyan-400/55 bg-cyan-950/30 px-4 py-3 text-center text-cyan-100 text-sm font-black uppercase tracking-[0.12em] active:border-cyan-300 active:bg-cyan-900/35 transition-colors"
-                >
-                  Have a community code?
-                </button>
-              )}
+              ) : null}
 
               {isNative() ? (
                 <button
@@ -1518,7 +1510,7 @@ export const App: React.FC = () => {
 
               <div className="flex items-center gap-4 mb-6">
                 <div className="h-px flex-1 bg-slate-800"></div>
-                <span className="text-slate-500 text-base">or</span>
+                <span className="text-slate-500 text-sm">or use email</span>
                 <div className="h-px flex-1 bg-slate-800"></div>
               </div>
 
@@ -1551,18 +1543,6 @@ export const App: React.FC = () => {
                     minLength={8}
                   />
                 </div>
-                {isSignUpMode && (
-                  <div>
-                    <label className="block text-left text-white font-semibold mb-2.5 text-lg">Referral Code (optional)</label>
-                    <input
-                      type="text"
-                      placeholder="Enter referral code"
-                      value={referralCode}
-                      onChange={(e) => setReferralCode(e.target.value.toUpperCase())}
-                      className="w-full bg-[#1d1815] border border-slate-700 p-4 rounded-xl text-white outline-none focus:border-orange-400 text-base placeholder:text-slate-500 transition-all"
-                    />
-                  </div>
-                )}
                 <button
                   disabled={isAuthLoading}
                   className="w-full h-14 rounded-xl bg-white text-black font-black text-xl active:bg-slate-200 transition-all disabled:opacity-70 flex items-center justify-center"
@@ -1587,13 +1567,22 @@ export const App: React.FC = () => {
                 {isSignUpMode ? 'Sign in' : 'Sign up'}
               </button>
             </div>
-            <div className="mt-4 text-center">
+            <div className="mt-4 text-center space-y-2">
+              {!communityCodeValidated && !showCommunityCode && (
+                <button
+                  type="button"
+                  onClick={() => setShowCommunityCode(true)}
+                  className="block w-full text-sm text-slate-500 active:text-slate-300"
+                >
+                  Have a community code?
+                </button>
+              )}
               <button
                 onClick={() => {
                   setTermsReturnView(AppView.AUTH);
                   setView(AppView.TERMS);
                 }}
-                className="text-sm text-slate-500 active:text-slate-300"
+                className="block w-full text-sm text-slate-500 active:text-slate-300"
               >
                 By continuing, you accept our Privacy Policy and Terms
               </button>
