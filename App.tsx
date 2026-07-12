@@ -1730,7 +1730,7 @@ export const App: React.FC = () => {
                            {headerAvatarUrl ? (
                              <img src={headerAvatarUrl} alt="Your avatar" className="w-10 h-10 rounded-full object-cover" />
                            ) : (
-                             <Rudy size={38} />
+                             <Rudy size={34} variant="vector" />
                            )}
                            <span className="font-extrabold text-[19px] tracking-tight">SongGhost</span>
                          </div>
@@ -1746,8 +1746,8 @@ export const App: React.FC = () => {
                        <p className="text-[#6b6357] text-[15px] leading-[1.45] mt-3 max-w-[19rem]">Draft lyrics, polish structure, and generate cover art in one cohesive style.</p>
 
                        {/* Hero: New Song, with Rudy presenting it */}
-                       <div className="relative mt-10">
-                         <div className="absolute -top-7 left-6 z-10 pointer-events-none"><Rudy size={58} glow /></div>
+                       <div className="relative mt-12">
+                         <div className="absolute -top-12 left-4 z-10 pointer-events-none"><Rudy size={88} glow /></div>
                          <button
                            onClick={() => { hapticLight(); setView(AppView.STUDIO); setStep(AppStep.FAST_TRACK); setInputs(DEFAULT_INPUTS); }}
                            className="w-full rounded-[26px] px-6 pt-8 pb-6 text-left text-white active:scale-[0.99] transition-transform"

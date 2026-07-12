@@ -12,18 +12,20 @@ export const Rudy: React.FC<{
   size?: number;
   glow?: boolean;
   className?: string;
-  /** 'vector' (default) draws the SVG; 'art' renders /brand/rudy.png. */
+  /** 'art' (default) renders Andre's /brand/rudy.png; 'vector' draws the SVG fallback. */
   variant?: 'vector' | 'art';
-}> = ({ size = 96, glow = false, className = '', variant = 'vector' }) => {
+}> = ({ size = 96, glow = false, className = '', variant = 'art' }) => {
   if (variant === 'art') {
     return (
       <img
         src="/brand/rudy.png"
         alt="Rudy the SongGhost"
-        width={size}
-        height={size}
         className={className}
-        style={glow ? { filter: 'drop-shadow(0 12px 30px rgba(63,120,255,.35))' } : undefined}
+        style={{
+          width: size,
+          height: 'auto',
+          ...(glow ? { filter: 'drop-shadow(0 10px 26px rgba(63,120,255,.4))' } : {}),
+        }}
       />
     );
   }
