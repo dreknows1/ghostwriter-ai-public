@@ -1590,7 +1590,6 @@ export const App: React.FC = () => {
           </div>
           </div>
         </div>
-        <AskAndreWidget email={session?.user?.email || ''} />
     <ApiKeyModal isOpen={isApiKeyModalOpen} onClose={closeApiKeyModal} onSaved={onApiKeySaved} />
       </>
     );
