@@ -99,7 +99,7 @@ and each sub-genre page says when that bend applies.)
 1. **R&B** — space for the vocalist; sensuality and vulnerability; conversational intimacy; runs and ad-lib room; double entendres at home here
 2. **Hip-Hop** — momentum and flow; bars with internal rhythm; wordplay and flips; the verse is the star; cadence variety between sections
 3. **Gospel** — testimony and lift; congregational refrains built to repeat and vamp; scripture-rooted language welcome; the song must ASCEND
-4. **Reggae / Afrobeats** — groove-first writing; community and celebration or sufferation; space in the phrasing for the rhythm to breathe. Dialect rule: patois/pidgin appears ONLY if the user wrote it in their own story — otherwise the genre's rhythm and phrasing carry the identity in standard English (generated dialect reads as parody, not authenticity)
+4. **Reggae / Afrobeats** — groove-first writing; community and celebration or sufferation; space in the phrasing for the rhythm to breathe. Dialect rule (two halves): the VOCAL is performed in the tradition's own accent — the render tells Suno to sing Jamaican reggae in a Jamaican voice, Afrobeats in a West African voice, because a neutral American-sounding vocal is the failure — while the WRITTEN words carry the tradition's natural idiom and cadence, not American defaults. The writer never invents phonetic patois/pidgin spellings in the lyric; the user's own patois is the only patois in the words.
 5. **Pop** — the hook is king; economy of words; universal feeling through one specific story; polish without losing pulse
 
 All other genres remain available but are held to the standard AFTER these five are proven.

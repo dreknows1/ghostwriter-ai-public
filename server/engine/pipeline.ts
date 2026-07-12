@@ -256,12 +256,13 @@ ${picksBlock(inputs)}${storyBlock}`;
 function sectionsPrompt(brief: Brief, hook: string, card: RoomCard): string {
   return `Plan the sections for one song. No lyrics. Return ONLY a JSON array of 4-8 objects like {"tag":"[Verse]","job":"..."}.
 
-Allowed tags: [Intro] [Verse] [Pre-Chorus] [Chorus] [Bridge] [Outro] (repeat [Verse]/[Chorus] as needed).
-Every job is one sentence saying what THAT section must do for THIS song (what verse 1 establishes, what the bridge reveals). The chorus builds around the hook "${hook}".
+Allowed tags: [Intro] [Verse] [Pre-Chorus] [Chorus] [Post-Chorus] [Hook] [Refrain] [Bridge] [Interlude] [Breakdown] [Build Up] [Drop] [Outro] (repeat [Verse]/[Chorus] as needed). A spoken or ad-lib [Intro] is legal; a cold open that starts on the [Chorus]/[Hook] with no intro is legal.
+Every job is one sentence saying what THAT section must do for THIS song (what verse 1 establishes, what the bridge reveals). The chorus/hook builds around "${hook}".
 THE VERSE CARRIES THE STORY — it is the substance. Plan the verses to be as long as the chorus or longer (about 6–8 lines each), each verse advancing the story with new, specific detail. A song whose verses are shorter than its chorus has no room for meaning — do NOT plan thin 4-line verses under a big repeating hook.
-PLAN THE WHOLE-SONG ARC like a live record: intimate opening, the chorus opens up, a turn or interlude, a bridge that pulls the beat back for the emotional peak, and where the room fits — a call-and-response / crown moment where a choir or crowd answers the lead — then the fullest final chorus and a stripped outro. Each section's job includes its DYNAMIC (where it sits on the rise-and-fall), not just its words.
+CHOOSE THIS SONG'S OPENING — do NOT default to a soft intimate intro every time. Fit the opening to THIS room and story and vary it: a cold open straight on the hook/chorus; a spoken or ad-lib intro; a hard drop into verse 1 with no setup; one a-cappella line; a slow atmospheric build; or an intimate first verse. Genres that tend to lead with talking or with the chorus SHOULD. Name the opening move in the first section's job.
+SHAPE THE ARC FROM THE ROOM, NOT ONE TEMPLATE. Not every song needs a pre-chorus, a bridge in the same spot, or a giant final chorus — some ride one groove, some peak early, some end cold on a line. Let this room's conventions and dynamics decide where the energy sits. Each section's job names its DYNAMIC (where it sits on the rise-and-fall) AND how it CONTRASTS the section before it: a chorus is a different rhythmic and melodic idea than the verse (different cadence, line length, stress placement, melodic shape) — never the verse louder; a pre-chorus shifts the cadence to signal the lift; a bridge breaks the established pattern.
 Room conventions: ${card.name} — ${card.oneLine}
-How this room writes (plan the sections to honor these — if the room vamps, PLAN the vamp):
+How this room writes (plan the sections to honor these — if the room vamps, PLAN the vamp; if it opens cold or on the hook, open that way):
 ${card.writingDials.map((d) => `- ${d}`).join("\n")}
 Bars: ${brief.spec.barsPerSection}. The song's turn: ${brief.turn}. The central image: ${brief.centralImage}`;
 }
@@ -302,7 +303,7 @@ function writerPrompt(args: {
   const lang = String(language || "English").trim();
   const languageLine = /^english$/i.test(lang)
     ? ""
-    : `\nLANGUAGE: write ALL lyrics in ${lang} — natural, native phrasing a native speaker would sing, never translated-sounding. Bracket [tags] and the SUNO Prompt stay in ENGLISH; sung words in (parentheses) follow the lyrics' language. The Title is in ${lang}.\n`;
+    : `\nLANGUAGE: write ALL lyrics in ${lang} — natural, native phrasing a native speaker would sing, in the REGIONAL VARIETY of ${lang} this genre comes from (never a flattened, neutral standard), never translated-sounding. Bracket [tags] and the SUNO Prompt stay in ENGLISH; sung words in (parentheses) follow the lyrics' language. The Title is in ${lang}.\n`;
   const sectionLines = sections.map((s) => `${s.tag} — ${s.job}`).join("\n");
   const approach =
     variant === "hook-first"
@@ -350,8 +351,9 @@ Direct the performance INTO the song — this is what turns a lyric sheet into a
 - Give each section a DESCRIPTIVE header on its own line that names the section AND how it's performed — who sings, the arrangement, the dynamics. e.g. [Verse 1 — singing, lead only, choir hums softly], [Chorus 1 — full harmonies, crowd claps light], [Bridge — band pulls back, spotlight on the lead]. Rich detail is GOOD; it guides the render. (A short folded form like [Chorus: belted] is also fine.)
 - You may open with a production/setting header ([Live Performance — small theater], [Production: slow-burn R&B, ~80 BPM, live piano, hip-hop drums, ambient pads]) and close with a stage direction ([final chord rings, choir fades]).
 - Parentheses are HEARD and do double duty: (1) sung backing/adlibs, labeled — (Choir: "the words they sing"), (Ad-lib: "I'm sorry"), (background: "oohs") — put the actual short sung words in quotes after the label; and (2) short scene directions — (crowd cheers), (piano breathes). Use them freely where a singer answers or the room reacts.
-- Build the WHOLE-SONG ARC: intimate verses, the chorus opens up, a bridge that pulls the beat back for the emotional peak, a call-and-response or crown moment, the fullest final chorus, then a stripped outro. The performance should rise and fall across the whole song, never stay flat.
-- Density follows that arc — lighter in verses, fuller in choruses, heaviest at the peak. Match this room's character above.
+- Build the WHOLE-SONG ARC from THIS room, not a fixed shape: let the room set the opening (cold on the hook, a spoken/ad-lib intro, a hard drop-in, or an intimate build — follow the section plan's opening) and where the energy peaks. It rises and falls across the song, never flat — but not every song bridges in the same place or ends on a giant final chorus; some peak early, some end cold on a line.
+- CONTRAST the sections in more than volume: verse and chorus are different rhythmic and melodic IDEAS. The chorus changes the cadence, the syllables per line, where the stresses land against the beat, and the melodic contour — it is NEVER the verse sung louder. A pre-chorus shifts the rhythm to telegraph the lift; a bridge breaks the pattern with a new cadence and a new angle. Give the verses their own flow and the hook its own.
+- Density follows the arc — lighter where the room breathes, fuller where it peaks. Match this room's character above.
 - Your final hook (the Title) leads the chorus (or [Hook]) and appears word-for-word.
 
 ${story ? `=== THE STORY (the user's own words) ===\n${story}` : `=== NO STORY WAS GIVEN ===\nWrite from the brief alone. Keep it universal but concrete. NEVER invent fake personal details — no invented names, streets, dates, or events pretending to be the user's.`}
@@ -359,6 +361,10 @@ ${story ? `=== THE STORY (the user's own words) ===\n${story}` : `=== NO STORY W
 ${approach}${guidance ? `\n\nOne more thing from the last attempt: ${guidance}` : ""}
 
 Vocal: ${voiceLine(vocals)}.${languageLine}
+
+=== ACCENT & DIALECT (applies to every genre — overrides any "plain English", "standard English", or "never an accent" note above) ===
+This genre and its home region have a NATIVE singing accent, and this song must have it — there is no such thing as an accent-free voice, and a default American or "neutral" accent is the wrong choice and the flattest failure. In the SUNO Prompt, name the lead vocal's native accent: the accent of the people this genre comes from (for example — a Jamaican voice for reggae, a Nigerian or Ghanaian voice for Afrobeats, a Dominican voice for bachata, a Puerto Rican voice for reggaetón, a Mexican voice for mariachi and regional Mexicano, a Lisbon-Portuguese voice for fado, an Algerian-inflected voice for raï, an Antillean-Creole voice for zouk, a Southern voice for country and blues). If the notes above say "plain English", "standard English", or "never an accent", that meant ONE narrow thing — do not fake an accent by misspelling words — and it is overridden here for the sung accent: the accent lives in the VOICE (a production direction), never in re-spelled lyrics.
+The written words use the tradition's own natural idiom and cadence, not American defaults ("y'all", "gonna ride out", US slang the genre would not use). The writer still NEVER invents phonetic dialect / patois / pidgin spellings in the lyric; only the user's own dialect, if they wrote it, appears in the written words.
 
 Return exactly this format:
 Title: ${hookLocked ? hook : "<your final hook>"}
