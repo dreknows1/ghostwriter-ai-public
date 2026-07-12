@@ -184,10 +184,10 @@ const FastTrackCreate: React.FC<{
 
   return (
     <div className="w-full max-w-xl mx-auto px-5 pt-6 pb-10 animate-fade-in flex flex-col min-h-[75vh]">
-      <h1 className="heading-display text-3xl md:text-5xl font-bold text-slate-100 leading-[1.1] tracking-tight">
-        What's your <span style={{ color: 'var(--amber-bright)' }}>song</span> about?
+      <h1 className="heading-display text-3xl md:text-5xl font-bold leading-[1.1] tracking-tight" style={{ color: '#1a1a1a' }}>
+        What's your <span style={{ color: '#2b5be0' }}>song</span> about?
       </h1>
-      <p className="mt-3 text-sm text-slate-400 leading-relaxed max-w-sm">
+      <p className="mt-3 text-sm leading-relaxed max-w-sm" style={{ color: '#6b6357' }}>
         Give Ghost the story — a memory, a text you never sent, a feeling you can't quite name.
       </p>
 
@@ -204,9 +204,9 @@ const FastTrackCreate: React.FC<{
           }}
           placeholder="A breakup text I never sent, but wish I had…"
           rows={5}
-          className="w-full rounded-[1.4rem] p-5 text-[15px] leading-relaxed resize-none outline-none transition-all font-serif italic placeholder:font-serif placeholder:italic bg-slate-800 border border-slate-700 text-slate-100 placeholder:text-slate-500 focus:border-amber-400"
+          className="w-full rounded-[1.4rem] p-5 text-[15px] leading-relaxed resize-none outline-none transition-all font-serif italic placeholder:font-serif placeholder:italic bg-white border border-[#e3d8c1] text-[#1a1a1a] placeholder:text-[#a99e86] focus:border-[#2b5be0]"
         />
-        <div className="mt-2 text-right text-[11px] font-bold uppercase tracking-widest text-slate-600">
+        <div className="mt-2 text-right text-[11px] font-bold uppercase tracking-widest text-[#a89f8c]">
           {story.length}/{STORY_MAX}
         </div>
       </div>
@@ -218,8 +218,8 @@ const FastTrackCreate: React.FC<{
             onClick={() => { hapticLight(); setGenre(''); }}
             className={`shrink-0 inline-flex items-center gap-1.5 whitespace-nowrap px-4 py-2.5 rounded-full border text-[12.5px] font-bold transition-all ${
               genre === ''
-                ? 'border-cyan-400 text-cyan-200 bg-cyan-500/10 shadow-[0_0_18px_-6px_rgba(79,215,196,0.65)]'
-                : 'border-slate-700 text-slate-400'
+                ? 'border-[#2b5be0] text-[#2b5be0] bg-[#e7edff]'
+                : 'border-[#e3d8c1] text-[#6b6357]'
             }`}
           >
             <GhostIcon className="h-4 w-4" /> Let Ghost decide
@@ -231,8 +231,8 @@ const FastTrackCreate: React.FC<{
               onClick={() => pickGenre(g)}
               className={`shrink-0 whitespace-nowrap px-4 py-2.5 rounded-full border text-[12.5px] font-bold transition-all ${
                 genre === g
-                  ? 'border-amber-400 text-amber-200 bg-amber-500/10 shadow-[0_0_18px_-6px_rgba(226,153,60,0.65)]'
-                  : 'border-slate-700 text-slate-400'
+                  ? 'border-[#2b5be0] text-[#2b5be0] bg-[#e7edff]'
+                  : 'border-[#e3d8c1] text-[#6b6357]'
               }`}
             >
               {g}
@@ -244,21 +244,22 @@ const FastTrackCreate: React.FC<{
       <div className="flex-1" />
 
       <div className="mt-8">
-        <p className="text-center text-[11px] font-bold uppercase tracking-widest text-slate-500 mb-3">
+        <p className="text-center text-[11px] font-bold uppercase tracking-widest text-[#8a8272] mb-3">
           Uses {COSTS.GENERATE_SONG} credits · {formatCredits(credits)} left this month
         </p>
         <button
           type="button"
           onClick={() => { hapticLight(); onGenerate(buildInputs()); }}
           disabled={isGenerating}
-          className="cta-primary w-full py-5 rounded-2xl text-[15px] uppercase tracking-[0.1em] flex items-center justify-center gap-2 active:scale-[0.99] transition-all disabled:opacity-50 disabled:cursor-not-allowed"
+          className="w-full py-5 rounded-2xl text-[15px] font-black uppercase tracking-[0.1em] text-white flex items-center justify-center gap-2 active:scale-[0.99] transition-all disabled:opacity-50 disabled:cursor-not-allowed"
+          style={{ background: 'linear-gradient(150deg,#3f78ff,#2b5be0 55%,#6a3cf0)', boxShadow: '0 14px 30px rgba(47,91,224,0.3)' }}
         >
           <GhostIcon className="h-5 w-5" /> {isGenerating ? 'Creating…' : 'Create My Song'}
         </button>
         <button
           type="button"
           onClick={onCustomize}
-          className="w-full mt-4 text-center text-sm font-bold text-cyan-300 active:text-cyan-200"
+          className="w-full mt-4 text-center text-sm font-bold text-[#2b5be0] active:opacity-70"
         >
           Customize every detail →
         </button>
@@ -429,10 +430,10 @@ const SongBuilder: React.FC<{
   // Shared chip styles — same visual language as the genre grid.
   const chipBase =
     'w-full p-4 sm:p-5 rounded-3xl border transition-all text-sm sm:text-base leading-tight font-black uppercase tracking-[0.08em] min-h-[56px] flex items-center justify-center text-center break-words';
-  const chipIdle = 'bg-slate-700 border-slate-600 text-slate-200 active:bg-slate-600 active:border-orange-400 active:text-white';
-  const chipPicked = 'bg-slate-600 border-orange-400 text-white';
-  const decideIdle = 'bg-slate-800 border-slate-700 text-slate-400 active:border-cyan-400 active:text-cyan-200';
-  const decidePicked = 'bg-cyan-500/15 border-cyan-400 text-cyan-200';
+  const chipIdle = 'bg-white border-[#e3d8c1] text-[#1a1a1a] active:bg-[#faf6ec] active:border-[#2b5be0]';
+  const chipPicked = 'bg-[#e7edff] border-[#2b5be0] text-[#2b5be0]';
+  const decideIdle = 'bg-[#faf6ec] border-[#e3d8c1] text-[#6b6357] active:border-[#2b5be0] active:text-[#2b5be0]';
+  const decidePicked = 'bg-[#e7edff] border-[#2b5be0] text-[#2b5be0]';
 
   /** "Write my own" — every question accepts a typed answer, and it flows into the song
    * exactly like a chip pick (same field, same weight in the brief). */
@@ -448,9 +449,9 @@ const SongBuilder: React.FC<{
             value={customDraft}
             onChange={(e) => setCustomDraft(e.target.value)}
             placeholder={placeholder}
-            className="flex-1 bg-slate-800 border border-cyan-400/60 rounded-xl px-4 py-3 text-sm text-white placeholder:text-slate-500 focus:border-cyan-400 outline-none"
+            className="flex-1 bg-white border border-[#e3d8c1] rounded-xl px-4 py-3 text-sm text-[#1a1a1a] placeholder:text-[#a99e86] focus:border-[#2b5be0] outline-none"
           />
-          <button type="submit" className="px-5 py-3 rounded-xl bg-cyan-500 text-white text-xs font-black uppercase tracking-widest active:bg-cyan-400 transition-all">
+          <button type="submit" className="px-5 py-3 rounded-xl text-white text-xs font-black uppercase tracking-widest active:opacity-90 transition-all" style={{ background: 'linear-gradient(150deg,#3f78ff,#2b5be0 55%,#6a3cf0)' }}>
             Use it →
           </button>
         </form>
@@ -458,7 +459,7 @@ const SongBuilder: React.FC<{
         <button
           type="button"
           onClick={() => { setCustomFor(step); setCustomDraft(''); }}
-          className="w-full p-3 rounded-xl border border-dashed border-slate-600 text-slate-400 text-xs font-black uppercase tracking-widest active:border-cyan-400 active:text-cyan-200 transition-all"
+          className="w-full p-3 rounded-xl border border-dashed border-[#d8cdb4] text-[#8a8272] text-xs font-black uppercase tracking-widest active:border-[#2b5be0] active:text-[#2b5be0] transition-all"
         >
           ✍️ Write my own
         </button>
@@ -500,7 +501,7 @@ const SongBuilder: React.FC<{
           <button
             type="button"
             onClick={goBack}
-            className="text-xs font-black uppercase tracking-widest text-slate-400 active:text-white transition-colors"
+            className="text-xs font-black uppercase tracking-widest text-[#8a8272] active:text-[#1a1a1a] transition-colors"
           >
             ← Back
           </button>
@@ -512,7 +513,7 @@ const SongBuilder: React.FC<{
             <span
               key={s}
               className={`h-2 rounded-full transition-all ${
-                i === stepIndex ? 'w-6 bg-cyan-400' : i < stepIndex ? 'w-2 bg-amber-400/80' : 'w-2 bg-slate-700'
+                i === stepIndex ? 'w-6 bg-[#2b5be0]' : i < stepIndex ? 'w-2 bg-[#2b5be0]/50' : 'w-2 bg-[#e3d8c1]'
               }`}
             />
           ))}
@@ -522,7 +523,7 @@ const SongBuilder: React.FC<{
             type="button"
             onClick={goNext}
             title={LET_GHOST_DECIDE}
-            className="text-xs font-black uppercase tracking-widest text-slate-400 active:text-white transition-colors"
+            className="text-xs font-black uppercase tracking-widest text-[#8a8272] active:text-[#1a1a1a] transition-colors"
           >
             Skip →
           </button>
@@ -532,8 +533,8 @@ const SongBuilder: React.FC<{
       </div>
 
       <div className="text-center mb-10">
-        <h2 className="heading-display text-3xl md:text-5xl font-black text-white tracking-tighter mb-3">{header.title}</h2>
-        <p className="text-slate-500 font-black uppercase tracking-[0.14em] md:tracking-[0.28em] text-[10px] md:text-xs">{header.caption}</p>
+        <h2 className="heading-display text-3xl md:text-5xl font-black tracking-tighter mb-3" style={{ color: '#1a1a1a' }}>{header.title}</h2>
+        <p className="text-[#8a8272] font-black uppercase tracking-[0.14em] md:tracking-[0.28em] text-[10px] md:text-xs">{header.caption}</p>
       </div>
 
       {stepId === 'language' && (
@@ -580,7 +581,7 @@ const SongBuilder: React.FC<{
             className={`w-full p-4 sm:p-5 rounded-3xl border text-left transition-all ${subGenre === '' ? decidePicked : decideIdle}`}
           >
             <span className="block font-black uppercase tracking-[0.08em] text-sm sm:text-base">{LET_GHOST_DECIDE}</span>
-            <span className="mt-1 block text-xs text-slate-400 leading-relaxed">We read your story and pick the room that fits it best.</span>
+            <span className="mt-1 block text-xs text-[#8a8272] leading-relaxed">We read your story and pick the room that fits it best.</span>
           </button>
           {genreRooms.map((room) => (
             <button
@@ -591,8 +592,8 @@ const SongBuilder: React.FC<{
                 subGenre === room.name ? chipPicked : chipIdle
               }`}
             >
-              <span className="block font-black text-sm sm:text-base text-white">{room.name}</span>
-              <span className="mt-1 block text-xs text-slate-400 leading-relaxed">{room.oneLine}</span>
+              <span className="block font-black text-sm sm:text-base">{room.name}</span>
+              <span className="mt-1 block text-xs text-[#8a8272] leading-relaxed">{room.oneLine}</span>
             </button>
           ))}
           </div>
@@ -638,7 +639,8 @@ const SongBuilder: React.FC<{
               <button
                 type="button"
                 onClick={goNext}
-                className="px-8 py-3 rounded-xl bg-cyan-500 text-white text-xs font-black uppercase tracking-widest active:bg-cyan-400 transition-all"
+                className="px-8 py-3 rounded-xl text-white text-xs font-black uppercase tracking-widest active:opacity-90 transition-all"
+                style={{ background: 'linear-gradient(150deg,#3f78ff,#2b5be0 55%,#6a3cf0)', boxShadow: '0 14px 30px rgba(47,91,224,0.3)' }}
               >
                 Continue with {instruments.length} →
               </button>
@@ -654,8 +656,8 @@ const SongBuilder: React.FC<{
               key={v}
               type="button"
               onClick={() => { setVocals(v); goNext(); }}
-              className={`px-4 py-2.5 rounded-xl text-[11px] font-black uppercase tracking-widest transition-all ${
-                vocals === v ? 'bg-cyan-500 text-white shadow-lg' : 'bg-slate-800 text-slate-400 active:bg-slate-700 active:text-slate-200'
+              className={`px-4 py-2.5 rounded-xl text-[11px] font-black uppercase tracking-widest border transition-all ${
+                vocals === v ? 'bg-[#e7edff] border-[#2b5be0] text-[#2b5be0] shadow-sm' : 'bg-white border-[#e3d8c1] text-[#6b6357] active:bg-[#faf6ec]'
               }`}
             >
               {v}
@@ -672,7 +674,7 @@ const SongBuilder: React.FC<{
             onChange={(e) => setStory(e.target.value)}
             rows={6}
             placeholder="Names, places, moments — the night you met, the song in the car, the thing they said. The more real, the better the song…"
-            className="w-full bg-slate-800/90 border-2 border-cyan-400/60 rounded-[1.5rem] md:rounded-[2rem] p-6 md:p-8 text-base md:text-lg leading-relaxed text-white placeholder:text-slate-500 focus:border-cyan-400 outline-none resize-none shadow-[0_0_40px_rgba(34,211,238,0.15)]"
+            className="w-full bg-white border-2 border-[#e3d8c1] rounded-[1.5rem] md:rounded-[2rem] p-6 md:p-8 text-base md:text-lg leading-relaxed text-[#1a1a1a] placeholder:text-[#a99e86] focus:border-[#2b5be0] outline-none resize-none shadow-[0_10px_30px_rgba(90,70,30,0.06)]"
           />
 
           <div className="flex justify-center">
@@ -680,10 +682,10 @@ const SongBuilder: React.FC<{
               type="button"
               onClick={handleTitleIdeas}
               disabled={isTitleLoading}
-              className="px-5 py-3 rounded-xl bg-slate-800 border border-slate-700 text-slate-200 text-xs font-black uppercase tracking-widest active:border-cyan-400 active:text-cyan-200 transition-all disabled:opacity-60 flex items-center gap-2"
+              className="px-5 py-3 rounded-xl bg-white border border-[#e3d8c1] text-[#6b6357] text-xs font-black uppercase tracking-widest active:border-[#2b5be0] active:text-[#2b5be0] transition-all disabled:opacity-60 flex items-center gap-2"
             >
               {isTitleLoading && (
-                <span className="inline-block w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" aria-hidden="true" />
+                <span className="inline-block w-4 h-4 border-2 border-[#2b5be0]/30 border-t-[#2b5be0] rounded-full animate-spin" aria-hidden="true" />
               )}
               {isTitleLoading ? 'Thinking…' : 'Get title ideas'}
             </button>
@@ -692,9 +694,9 @@ const SongBuilder: React.FC<{
           {titleIdeas !== null && (
             <div className="flex flex-col gap-3">
               {titleRoom && (
-                <p className="text-center text-sm text-slate-400">
-                  Your song will live in: <span className="text-cyan-300 font-bold">{titleRoom.name}</span>
-                  {titleRoom.note && <span className="block text-xs text-slate-500 mt-1">{titleRoom.note}</span>}
+                <p className="text-center text-sm text-[#6b6357]">
+                  Your song will live in: <span className="text-[#2b5be0] font-bold">{titleRoom.name}</span>
+                  {titleRoom.note && <span className="block text-xs text-[#8a8272] mt-1">{titleRoom.note}</span>}
                 </p>
               )}
               <div className="flex flex-wrap justify-center gap-2">
@@ -726,7 +728,8 @@ const SongBuilder: React.FC<{
           <button
             onClick={() => onGenerate(buildInputs())}
             disabled={isGenerating}
-            className="cta-primary w-full py-6 md:py-7 rounded-[2rem] text-base md:text-xl uppercase tracking-[0.12em] md:tracking-[0.2em] transition-all active:scale-[0.99] disabled:opacity-50 disabled:cursor-not-allowed"
+            className="w-full py-6 md:py-7 rounded-[2rem] text-base md:text-xl font-black text-white uppercase tracking-[0.12em] md:tracking-[0.2em] transition-all active:scale-[0.99] disabled:opacity-50 disabled:cursor-not-allowed"
+            style={{ background: 'linear-gradient(150deg,#3f78ff,#2b5be0 55%,#6a3cf0)', boxShadow: '0 14px 30px rgba(47,91,224,0.3)' }}
           >
             {isGenerating ? 'GENERATING…' : `CREATE MY SONG (${COSTS.GENERATE_SONG} CREDITS)`}
           </button>
@@ -1613,7 +1616,7 @@ export const App: React.FC = () => {
   if (view === AppView.HELP && session) {
       return (
         <>
-          <div className="app-shell min-h-screen text-slate-200 safe-top safe-bottom safe-x">
+          <div className="min-h-screen safe-top safe-bottom safe-x" style={{ background: '#F7F3EA', color: '#1a1a1a' }}>
             <UtilityHub
               email={session.user.email}
               section={utilitySection}
@@ -1807,38 +1810,38 @@ export const App: React.FC = () => {
   // STUDIO VIEW
   return (
     <>
-    <div className="app-shell min-h-screen text-slate-200 font-sans selection:bg-amber-500/30 relative overflow-x-hidden safe-x">
+    <div className="min-h-screen font-sans relative overflow-x-hidden safe-x" style={{ background: '#F7F3EA', color: '#1a1a1a' }}>
 
       {/* Header */}
-      <nav className="glass-panel relative z-50 p-4 md:p-6 mt-3 flex justify-between items-center max-w-7xl mx-auto rounded-2xl md:rounded-3xl gap-3 safe-top">
+      <nav className="relative z-50 p-4 md:p-6 mt-3 flex justify-between items-center max-w-7xl mx-auto rounded-2xl md:rounded-3xl gap-3 safe-top bg-white border border-[#eadfca] shadow-[0_10px_30px_rgba(90,70,30,0.06)]">
          <div onClick={() => setView(AppView.LANDING)} className="cursor-pointer active:opacity-80 transition-opacity">
             {headerAvatarUrl ? (
               <img
                 src={headerAvatarUrl}
                 alt="Your avatar"
-                className="w-12 h-12 rounded-full object-cover border border-slate-600/70"
+                className="w-12 h-12 rounded-full object-cover border border-[#e3d8c1]"
               />
             ) : (
               <Logo size={48} />
             )}
          </div>
          <div className="flex items-center gap-2 md:gap-4">
-             <div className="md:hidden flex items-center gap-1 px-3 py-2 rounded-full bg-slate-900 border border-slate-800 text-cyan-400">
+             <div className="md:hidden flex items-center gap-1 px-3 py-2 rounded-full bg-[#e7edff] border border-[#d6e0ff] text-[#2b5be0]">
                 <WalletIcon className="w-3.5 h-3.5" />
                 <span className="text-[11px] font-black tracking-wider tabular-nums">{formatCredits(credits)}</span>
              </div>
              {/* Credit Monitor & Add Button */}
-             <div className="hidden md:flex items-center bg-[#171310] border border-slate-800 rounded-full p-1 pl-1 pr-4 gap-3 shadow-inner">
-                <div className="flex items-center gap-2 px-4 py-2 rounded-full bg-slate-800 border border-slate-700 text-cyan-400">
+             <div className="hidden md:flex items-center bg-[#faf6ec] border border-[#e3d8c1] rounded-full p-1 pl-1 pr-4 gap-3">
+                <div className="flex items-center gap-2 px-4 py-2 rounded-full bg-[#e7edff] border border-[#d6e0ff] text-[#2b5be0]">
                     <WalletIcon className="w-4 h-4" />
                     <span className="text-sm font-black tracking-widest tabular-nums">{formatCredits(credits)}</span>
                 </div>
-                <button onClick={() => setView(AppView.PRICING)} className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-400 active:text-white transition-colors">
+                <button onClick={() => setView(AppView.PRICING)} className="text-[10px] font-black uppercase tracking-[0.2em] text-[#8a8272] active:text-[#1a1a1a] transition-colors">
                     Add Credits
                 </button>
              </div>
 
-             <button onClick={() => { setProfileInitialTab(undefined); setView(AppView.PROFILE); }} className="w-10 h-10 rounded-full bg-slate-800 flex items-center justify-center text-slate-400 active:bg-slate-700 active:text-white transition-all overflow-hidden border border-slate-700">
+             <button onClick={() => { setProfileInitialTab(undefined); setView(AppView.PROFILE); }} className="w-10 h-10 rounded-full bg-[#ece4d4] flex items-center justify-center text-[#5b5346] active:bg-[#e2d8c4] active:text-[#1a1a1a] transition-all overflow-hidden border border-[#e3d8c1]">
                  {headerAvatarUrl ? (
                    <img src={headerAvatarUrl} alt="Profile avatar" className="w-full h-full object-cover" />
                  ) : (
@@ -1847,7 +1850,7 @@ export const App: React.FC = () => {
              </button>
              <button
                onClick={() => setIsMenuOpen((v) => !v)}
-               className="h-10 px-3 rounded-xl bg-slate-800 text-slate-300 active:bg-slate-700 active:text-white"
+               className="h-10 px-3 rounded-xl bg-[#ece4d4] text-[#5b5346] active:bg-[#e2d8c4] active:text-[#1a1a1a]"
              >
                Menu
              </button>
@@ -1893,23 +1896,23 @@ export const App: React.FC = () => {
               <div className="relative w-full max-w-sm mx-auto flex flex-col items-center justify-center text-center min-h-[75vh] px-6">
                   <div
                     className="absolute top-[14%] left-1/2 -translate-x-1/2 w-72 h-72 rounded-full pointer-events-none"
-                    style={{ background: 'radial-gradient(circle, rgba(226,153,60,0.22) 0%, rgba(226,153,60,0.06) 45%, transparent 72%)' }}
+                    style={{ background: 'radial-gradient(circle, rgba(47,91,224,0.16) 0%, rgba(47,91,224,0.05) 45%, transparent 72%)' }}
                   />
-                  <GhostIcon className="relative z-10 h-28 w-auto text-amber-400 ghost-glow-anim" />
+                  <Rudy size={116} variant="art" glow className="relative z-10" />
 
                   <div className="relative z-10 flex items-end gap-1.5 mt-8 h-16">
                     {[16, 32, 52, 26, 44, 64, 36, 56, 22, 48, 20, 38, 14].map((h, i) => (
                       <div
                         key={i}
-                        className={`vu-bar w-1.5 rounded-t-sm ${i % 3 === 1 ? 'bg-cyan-400' : i % 5 === 0 ? 'bg-amber-300' : 'bg-amber-500'}`}
+                        className={`vu-bar w-1.5 rounded-t-sm ${i % 3 === 1 ? 'bg-[#6a3cf0]' : i % 5 === 0 ? 'bg-[#3f78ff]' : 'bg-[#2b5be0]'}`}
                         style={{ height: `${h}px`, animationDelay: `${i * 90}ms` }}
                       />
                     ))}
                   </div>
 
                   <h2
-                    className="relative z-10 heading-display mt-7 text-xl font-semibold text-amber-300"
-                    style={{ textShadow: '0 0 22px rgba(226,153,60,0.5)' }}
+                    className="relative z-10 heading-display mt-7 text-xl font-semibold"
+                    style={{ color: '#2b5be0' }}
                   >
                     {(GENERATION_STAGES[generationStageIndex] || GENERATION_STAGES[0]).label}…
                   </h2>
@@ -1922,10 +1925,10 @@ export const App: React.FC = () => {
                         <div
                           key={stage.label}
                           className={`flex items-center gap-2.5 text-[13px] py-1 ${
-                            isActive ? 'text-amber-300 font-bold' : isDone ? 'text-slate-400' : 'text-slate-600'
+                            isActive ? 'text-[#2b5be0] font-bold' : isDone ? 'text-[#6b6357]' : 'text-[#a89f8c]'
                           }`}
                         >
-                          <span className={`w-4 text-center text-[13px] ${isDone ? 'text-cyan-400' : isActive ? 'text-amber-400' : ''}`}>
+                          <span className={`w-4 text-center text-[13px] ${isDone ? 'text-[#2b5be0]' : isActive ? 'text-[#2b5be0]' : ''}`}>
                             {isDone ? '✓' : isActive ? '▸' : '•'}
                           </span>
                           {stage.label}
@@ -1934,7 +1937,7 @@ export const App: React.FC = () => {
                     })}
                   </div>
 
-                  <p className="relative z-10 mt-7 text-xs text-slate-500">
+                  <p className="relative z-10 mt-7 text-xs text-[#8a8272]">
                     Ghost is writing — this usually takes 20 seconds.
                   </p>
               </div>
