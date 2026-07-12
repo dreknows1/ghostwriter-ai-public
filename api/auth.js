@@ -8,6 +8,8 @@ var CORS_ALLOWLIST = [
   "https://www.songghost.com",
   "https://songghost.com",
   "https://ghostwriter-ai-public.vercel.app",
+  "capacitor://localhost",
+  // iOS Capacitor shell (WKWebView origin)
   "http://localhost:5173"
   // Vite dev server
 ];
