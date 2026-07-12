@@ -16,6 +16,7 @@ import ApiKeyModal from './components/ApiKeyModal';
 import MenuDrawer from './components/MenuDrawer';
 import { toast } from './components/Feedback';
 import AskAndreWidget from './components/AskAndreWidget';
+import { Rudy } from './components/Rudy';
 import { Logo } from './components/Logo';
 import IntroAnimation from './components/IntroAnimation';
 import { LoadingSpinner, ProfileIcon, WalletIcon, EditIcon, ClockIcon, GhostIcon, BoltIcon } from './components/icons';
@@ -1661,7 +1662,7 @@ export const App: React.FC = () => {
   if (view === AppView.LANDING) {
       return (
         <>
-        <div className="app-shell min-h-screen text-slate-200 font-sans selection:bg-amber-500/30 relative overflow-hidden flex flex-col items-center justify-center p-4 md:p-6 safe-top safe-bottom safe-x">
+        <div className="min-h-screen font-sans relative overflow-hidden flex flex-col items-center justify-center p-4 md:p-6 safe-top safe-bottom safe-x" style={{ background: '#F7F3EA' }}>
 
              {isPasteMode ? (
                  <div className="glass-panel-strong relative z-10 w-full max-w-2xl p-6 md:p-8 rounded-[2rem] md:rounded-[3rem] animate-fade-in shadow-emerald-900/20">
@@ -1722,73 +1723,68 @@ export const App: React.FC = () => {
                      </div>
                  </div>
              ) : (
-                     <div className="relative z-10 w-full max-w-4xl animate-fade-in text-center">
-                     <div className="mb-12 flex flex-col items-center relative">
-                        <button
-                          onClick={() => setIsMenuOpen((v) => !v)}
-                          className="absolute -top-4 right-0 px-3 py-2 rounded-xl bg-slate-900 border border-slate-800 text-slate-300 active:text-white"
-                        >
-                          Menu
-                        </button>
-                        {headerAvatarUrl ? (
-                          <img
-                            src={headerAvatarUrl}
-                            alt="Your avatar"
-                            className="mb-6 w-[100px] h-[100px] rounded-full object-cover border border-slate-600/70 shadow-[0_0_28px_rgba(56,189,248,0.2)]"
-                          />
-                        ) : (
-                          <Logo size={100} className="mb-6" />
-                        )}
-                        <h1 className="heading-display text-4xl md:text-5xl font-bold text-slate-100 tracking-tight mb-2">Write. Refine. Release.</h1>
-                        <p className="text-slate-500 text-sm mt-1">Song Ghost helps you draft lyrics, polish structure, and generate cover art in a cohesive style.</p>
-                        <p className="mt-3 px-4 py-1.5 rounded-full bg-cyan-500/10 border border-cyan-400/30 text-cyan-300 text-[11px] font-bold uppercase tracking-widest">Your first songs are on us — no setup, no API keys</p>
-                     </div>
-
-                     {/* New Song — the single dominant action. */}
-                     <button
-                        onClick={() => { hapticLight(); setView(AppView.STUDIO); setStep(AppStep.FAST_TRACK); setInputs(DEFAULT_INPUTS); }}
-                        className="cta-primary group w-full p-8 md:p-10 rounded-[2rem] md:rounded-[2.5rem] flex flex-col items-center gap-3 transition-all active:scale-[0.99] relative overflow-hidden"
-                     >
-                         <GhostIcon className="h-10 w-10" />
-                         <h3 className="heading-display text-2xl font-bold tracking-tight">New Song</h3>
-                         <p className="text-xs font-bold uppercase tracking-widest opacity-70">Genre + your story. Done.</p>
-                     </button>
-
-                     {/* Secondary actions — hairline list rows, not competing cards. */}
-                     <div className="mt-4 rounded-2xl border border-slate-800 divide-y divide-slate-800 overflow-hidden text-left">
-                         <button
-                            onClick={() => setIsPasteMode(true)}
-                            className="w-full flex items-center gap-4 px-5 py-4 bg-slate-900/40 active:bg-slate-800/60 transition-colors"
-                         >
-                             <span className="w-10 h-10 rounded-full bg-slate-800 text-cyan-300 flex items-center justify-center shrink-0"><EditIcon /></span>
-                             <span className="flex-1">
-                                 <span className="block text-sm font-bold text-slate-100">Paste / Import</span>
-                                 <span className="block text-xs text-slate-500">Structure lyrics &amp; ideas you already have</span>
-                             </span>
-                         </button>
-                         <button
-                            onClick={() => setView(AppView.PROFILE)}
-                            className="w-full flex items-center gap-4 px-5 py-4 bg-slate-900/40 active:bg-slate-800/60 transition-colors"
-                         >
-                             <span className="w-10 h-10 rounded-full bg-slate-800 text-cyan-300 flex items-center justify-center shrink-0"><ClockIcon /></span>
-                             <span className="flex-1">
-                                 <span className="block text-sm font-bold text-slate-100">Discography</span>
-                                 <span className="block text-xs text-slate-500">View past sessions</span>
-                             </span>
-                         </button>
-                     </div>
-
-                     <div className="mt-10 flex flex-wrap justify-center gap-4 md:gap-6">
-                         <div className="flex items-center gap-2 px-5 py-2 bg-slate-900 rounded-full border border-slate-800">
-                             <WalletIcon className="w-4 h-4 text-slate-500" />
-                             <span className="text-xs font-bold text-slate-300 uppercase tracking-widest">Balance: {formatCredits(credits)}</span>
+                     <div className="relative z-10 w-full max-w-md flex flex-col min-h-[calc(100dvh-2rem)] animate-fade-in" style={{ color: '#1a1a1a' }}>
+                       {/* Brand + credits + menu */}
+                       <div className="flex items-center justify-between mb-7">
+                         <div className="flex items-center gap-2.5">
+                           {headerAvatarUrl ? (
+                             <img src={headerAvatarUrl} alt="Your avatar" className="w-10 h-10 rounded-full object-cover" />
+                           ) : (
+                             <Rudy size={38} />
+                           )}
+                           <span className="font-extrabold text-[19px] tracking-tight">SongGhost</span>
                          </div>
+                         <div className="flex items-center gap-2">
+                           <span className="text-[11px] font-extrabold text-[#2b5be0] bg-[#e7edff] px-3 py-1.5 rounded-full uppercase tracking-wide">{formatCredits(credits)}</span>
+                           <button onClick={() => setIsMenuOpen((v) => !v)} aria-label="Menu" className="w-10 h-10 rounded-full bg-[#ece4d4] active:bg-[#e2d8c4] flex items-center justify-center text-[#5b5346]">
+                             <svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M4 7h16M4 12h16M4 17h16" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round"/></svg>
+                           </button>
+                         </div>
+                       </div>
+
+                       <h1 className="heading-display text-[33px] leading-[1.04] font-black tracking-tight">Write.<br/>Refine.<br/>Release.</h1>
+                       <p className="text-[#6b6357] text-[15px] leading-[1.45] mt-3 max-w-[19rem]">Draft lyrics, polish structure, and generate cover art in one cohesive style.</p>
+
+                       {/* Hero: New Song, with Rudy presenting it */}
+                       <div className="relative mt-10">
+                         <div className="absolute -top-7 left-6 z-10 pointer-events-none"><Rudy size={58} glow /></div>
+                         <button
+                           onClick={() => { hapticLight(); setView(AppView.STUDIO); setStep(AppStep.FAST_TRACK); setInputs(DEFAULT_INPUTS); }}
+                           className="w-full rounded-[26px] px-6 pt-8 pb-6 text-left text-white active:scale-[0.99] transition-transform"
+                           style={{ background: 'linear-gradient(150deg,#3f78ff,#2b5be0 55%,#6a3cf0)', boxShadow: '0 18px 38px rgba(47,91,224,0.34)' }}
+                         >
+                           <div className="text-[27px] font-black tracking-tight">New Song</div>
+                           <div className="text-[12px] font-bold uppercase tracking-[0.09em] opacity-90 mt-1.5">Genre + your story. Done.</div>
+                         </button>
+                       </div>
+
+                       {/* Secondary actions */}
+                       <div className="mt-6">
+                         <button onClick={() => setIsPasteMode(true)} className="w-full flex items-center gap-3.5 py-4 active:opacity-60 transition-opacity">
+                           <span className="w-11 h-11 rounded-2xl bg-[#efe7d7] text-[#2b5be0] flex items-center justify-center shrink-0"><EditIcon /></span>
+                           <span className="flex-1 text-left">
+                             <span className="block text-[15px] font-extrabold">Paste / Import</span>
+                             <span className="block text-[12.5px] text-[#8a8272]">Structure lyrics you already have</span>
+                           </span>
+                         </button>
+                         <div className="h-px bg-[#e7ddc9]" />
+                         <button onClick={() => setView(AppView.PROFILE)} className="w-full flex items-center gap-3.5 py-4 active:opacity-60 transition-opacity">
+                           <span className="w-11 h-11 rounded-2xl bg-[#efe7d7] text-[#2b5be0] flex items-center justify-center shrink-0"><ClockIcon /></span>
+                           <span className="flex-1 text-left">
+                             <span className="block text-[15px] font-extrabold">Discography</span>
+                             <span className="block text-[12.5px] text-[#8a8272]">Your past songs</span>
+                           </span>
+                         </button>
+                       </div>
+
+                       {/* Footer */}
+                       <div className="mt-auto pt-8 flex items-center justify-center gap-6">
                          {!isNative() && (
-                           <button onClick={handleManageGeminiApiKey} className="text-xs font-bold text-slate-400 uppercase tracking-widest active:text-white transition-colors">Set AI Key</button>
+                           <button onClick={handleManageGeminiApiKey} className="text-[11px] font-bold text-[#8a8272] uppercase tracking-widest active:text-[#1a1a1a] transition-colors">Set AI Key</button>
                          )}
-                         <button onClick={() => signOut().then(() => { setSession(null); setView(AppView.AUTH); })} className="text-xs font-bold text-slate-600 uppercase tracking-widest active:text-white transition-colors">Sign Out</button>
+                         <button onClick={() => signOut().then(() => { setSession(null); setView(AppView.AUTH); })} className="text-[11px] font-bold text-[#a89f8c] uppercase tracking-widest active:text-[#1a1a1a] transition-colors">Sign Out</button>
+                       </div>
                      </div>
-                 </div>
              )}
 
              <MenuDrawer
