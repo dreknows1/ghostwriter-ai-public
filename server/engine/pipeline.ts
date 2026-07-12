@@ -303,7 +303,7 @@ function writerPrompt(args: {
   const lang = String(language || "English").trim();
   const languageLine = /^english$/i.test(lang)
     ? ""
-    : `\nLANGUAGE: write ALL lyrics in ${lang} — natural, native phrasing a native speaker would sing, never translated-sounding. Bracket [tags] and the SUNO Prompt stay in ENGLISH; sung words in (parentheses) follow the lyrics' language. The Title is in ${lang}.\n`;
+    : `\nLANGUAGE: write ALL lyrics in ${lang} — natural, native phrasing a native speaker would sing, in the REGIONAL VARIETY of ${lang} this genre comes from (never a flattened, neutral standard), never translated-sounding. Bracket [tags] and the SUNO Prompt stay in ENGLISH; sung words in (parentheses) follow the lyrics' language. The Title is in ${lang}.\n`;
   const sectionLines = sections.map((s) => `${s.tag} — ${s.job}`).join("\n");
   const approach =
     variant === "hook-first"
@@ -361,6 +361,10 @@ ${story ? `=== THE STORY (the user's own words) ===\n${story}` : `=== NO STORY W
 ${approach}${guidance ? `\n\nOne more thing from the last attempt: ${guidance}` : ""}
 
 Vocal: ${voiceLine(vocals)}.${languageLine}
+
+=== ACCENT & DIALECT (applies to every genre — overrides any "plain English", "standard English", or "never an accent" note above) ===
+This genre and its home region have a NATIVE singing accent, and this song must have it — there is no such thing as an accent-free voice, and a default American or "neutral" accent is the wrong choice and the flattest failure. In the SUNO Prompt, name the lead vocal's native accent: the accent of the people this genre comes from (for example — a Jamaican voice for reggae, a Nigerian or Ghanaian voice for Afrobeats, a Dominican voice for bachata, a Puerto Rican voice for reggaetón, a Mexican voice for mariachi and regional Mexicano, a Lisbon-Portuguese voice for fado, an Algerian-inflected voice for raï, an Antillean-Creole voice for zouk, a Southern voice for country and blues). If the notes above say "plain English", "standard English", or "never an accent", that meant ONE narrow thing — do not fake an accent by misspelling words — and it is overridden here for the sung accent: the accent lives in the VOICE (a production direction), never in re-spelled lyrics.
+The written words use the tradition's own natural idiom and cadence, not American defaults ("y'all", "gonna ride out", US slang the genre would not use). The writer still NEVER invents phonetic dialect / patois / pidgin spellings in the lyric; only the user's own dialect, if they wrote it, appears in the written words.
 
 Return exactly this format:
 Title: ${hookLocked ? hook : "<your final hook>"}
