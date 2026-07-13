@@ -288,7 +288,7 @@ const ProfileView: React.FC<ProfileViewProps> = ({ email, onLoadSong, onBack, on
             style={{ bottom: 'calc(88px + var(--safe-bottom, 0px))', background: 'linear-gradient(150deg,#3f78ff,#2b5be0 55%,#6a3cf0)' }}
             className="fixed right-5 z-40 flex items-center gap-2 px-5 py-3.5 rounded-full text-[13px] uppercase tracking-widest text-white font-black shadow-lg active:scale-[0.97] transition-all"
           >
-            <GhostIcon className="h-4 w-4" /> New Song
+            <Rudy size={16} variant="vector" /> New Song
           </button>
         )}
         {/* Sidebar Navigation */}

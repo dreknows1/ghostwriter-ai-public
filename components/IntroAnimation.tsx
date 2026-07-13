@@ -149,9 +149,9 @@ const IntroAnimation: React.FC<IntroAnimationProps> = ({ onComplete }) => {
 
           {/* Mascot image */}
           <motion.img
-            src="/brand/songghost-logo.png"
-            alt="SongGhost"
-            style={{ width: 220, height: 220, objectFit: 'contain', position: 'relative', zIndex: 2 }}
+            src="/brand/rudy.png"
+            alt="Rudy the SongGhost"
+            style={{ width: 240, height: 240, objectFit: 'contain', position: 'relative', zIndex: 2 }}
             initial={{
               filter: 'drop-shadow(0 0 0px rgba(226,153,60,0)) brightness(0.7)',
             }}
