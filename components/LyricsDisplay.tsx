@@ -281,7 +281,7 @@ const LyricsDisplay: React.FC<LyricsDisplayProps> = ({
         {/* Header */}
         <div className="flex items-center justify-between mb-4">
           <button onClick={onGoHome} className="text-[13px] font-bold text-[#8a8272] active:text-[#1a1a1a] flex items-center gap-1">‹ Dashboard</button>
-          <Rudy size={30} variant="vector" />
+          <Rudy size={30} variant="art" />
         </div>
 
         {/* Title */}

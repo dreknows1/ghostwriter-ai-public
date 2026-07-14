@@ -222,7 +222,7 @@ const FastTrackCreate: React.FC<{
                 : 'border-[#e3d8c1] text-[#6b6357]'
             }`}
           >
-            <Rudy size={16} variant="vector" /> Let Ghost decide
+            <Rudy size={16} variant="art" /> Let Ghost decide
           </button>
           {FAST_TRACK_GENRES.map((g) => (
             <button
@@ -254,7 +254,7 @@ const FastTrackCreate: React.FC<{
           className="w-full py-5 rounded-2xl text-[15px] font-black uppercase tracking-[0.1em] text-white flex items-center justify-center gap-2 active:scale-[0.99] transition-all disabled:opacity-50 disabled:cursor-not-allowed"
           style={{ background: 'linear-gradient(150deg,#3f78ff,#2b5be0 55%,#6a3cf0)', boxShadow: '0 14px 30px rgba(47,91,224,0.3)' }}
         >
-          <Rudy size={20} variant="vector" /> {isGenerating ? 'Creating…' : 'Create My Song'}
+          <Rudy size={20} variant="art" /> {isGenerating ? 'Creating…' : 'Create My Song'}
         </button>
         <button
           type="button"
@@ -1737,7 +1737,7 @@ export const App: React.FC = () => {
                            {headerAvatarUrl ? (
                              <img src={headerAvatarUrl} alt="Your avatar" className="w-10 h-10 rounded-full object-cover" />
                            ) : (
-                             <Rudy size={34} variant="vector" />
+                             <Rudy size={34} variant="art" />
                            )}
                            <span className="font-extrabold text-[19px] tracking-tight">SongGhost</span>
                          </div>
@@ -1822,7 +1822,7 @@ export const App: React.FC = () => {
                 className="w-12 h-12 rounded-full object-cover border border-[#e3d8c1]"
               />
             ) : (
-              <Rudy size={44} variant="vector" />
+              <Rudy size={44} variant="art" />
             )}
          </div>
          <div className="flex items-center gap-2 md:gap-4">
