@@ -61,7 +61,7 @@ const AskAndreWidget: React.FC<AskAndreWidgetProps> = ({ email }) => {
         <div className="w-[22rem] max-w-[92vw] rounded-2xl border border-slate-700 bg-[#120e24] shadow-2xl overflow-hidden">
           <div className="flex items-center justify-between px-4 py-3 border-b border-slate-700">
             <div>
-              <p className="text-sm font-bold text-cyan-300">Ask Andre</p>
+              <p className="text-sm font-bold text-cyan-300">Ask Rudy</p>
               <p className="text-[11px] text-slate-400">Conversational Help</p>
             </div>
             <button onClick={() => setOpen(false)} className="text-slate-400 hover:text-white text-sm">Close</button>
@@ -110,7 +110,7 @@ const AskAndreWidget: React.FC<AskAndreWidgetProps> = ({ email }) => {
           onClick={() => setOpen(true)}
           className="px-4 py-3 rounded-full bg-cyan-600 hover:bg-cyan-500 text-white font-bold text-sm shadow-xl border border-cyan-400/40"
         >
-          Ask Andre
+          Ask Rudy
         </button>
       )}
     </div>

@@ -101,7 +101,7 @@ type BuilderStepId = 'language' | 'genre' | 'room' | 'theme' | 'purpose' | 'audi
 type GenreWorld = { themes: string[]; purposes: string[]; instruments: string[] };
 const LANGUAGE_OPTIONS = ['English', 'Spanish', 'French', 'Portuguese'];
 
-const LET_GHOST_DECIDE = 'Let Song Ghost decide';
+const LET_GHOST_DECIDE = 'Let Rudy decide';
 
 const THEME_OPTIONS = [
   'New love', 'Deep love / devotion', 'Complicated love', 'Heartbreak / letting go',
@@ -342,7 +342,7 @@ const SongBuilder: React.FC<{
     </div>
   );
 
-  /** Chip list for the simple option steps: "Let Song Ghost decide" first, picks auto-advance. */
+  /** Chip list for the simple option steps: "Let Rudy decide" first, picks auto-advance. */
   const optionChips = (step: BuilderStepId, options: string[], value: string, pick: (v: string) => void, customPlaceholder: string) => (
     <div>
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
@@ -913,7 +913,7 @@ export const App: React.FC = () => {
       setCredits(prev => Math.max(0, prev - COSTS.GENERATE_SONG));
 
       setIsLoading(true);
-      resetGenerationTelemetry("Song Ghost is listening...");
+      resetGenerationTelemetry("Rudy is listening...");
       setStep(AppStep.GENERATING);
       setGeneratedSong(''); // clear stale lyrics so the live-draft panel starts empty
       setLoadedSongId(null);
