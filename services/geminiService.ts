@@ -284,7 +284,7 @@ export async function* generateSong(
 
   const pending = callAI<{ text: string }>("generateSong", email, { inputs, userProfile, generationKey });
   const statusMessages = [
-    "Song Ghost is listening...",
+    "Rudy is listening...",
     "Drafting lyrics and structure...",
     "Applying genre conventions...",
     "Tightening lines and cutting clichés...",

@@ -395,7 +395,7 @@ const ProfileView: React.FC<ProfileViewProps> = ({ email, onLoadSong, onBack, on
                         ) : (
                             <div className="p-8 text-center border border-[#e7ddc9] border-dashed rounded-3xl text-[#6b6357] text-sm flex flex-col items-center gap-3">
                                 <Rudy size={110} variant="art" className="mx-auto mb-4" />
-                                No spirits in your discography yet — write one and I'll haunt it for you.
+                                No songs in your discography yet — write one and Rudy will make it real.
                             </div>
                         )}
                     </div>
@@ -564,7 +564,7 @@ const ProfileView: React.FC<ProfileViewProps> = ({ email, onLoadSong, onBack, on
                     ) : (
                         <div className="text-center py-20 text-[#6b6357] text-sm flex flex-col items-center gap-3">
                             <Rudy size={110} variant="art" className="mx-auto mb-4" />
-                            No spirits in your discography yet — write one and I'll haunt it for you.
+                            No songs in your discography yet — write one and Rudy will make it real.
                         </div>
                     )}
                 </div>

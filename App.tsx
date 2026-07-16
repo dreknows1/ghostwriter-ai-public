@@ -109,7 +109,7 @@ type BuilderStepId = 'language' | 'genre' | 'room' | 'theme' | 'purpose' | 'audi
 type GenreWorld = { themes: string[]; purposes: string[]; instruments: string[] };
 const LANGUAGE_OPTIONS = ['English', 'Spanish', 'French', 'Portuguese'];
 
-const LET_GHOST_DECIDE = 'Let Song Ghost decide';
+const LET_GHOST_DECIDE = 'Let Rudy decide';
 
 const THEME_OPTIONS = [
   'New love', 'Deep love / devotion', 'Complicated love', 'Heartbreak / letting go',
@@ -188,7 +188,7 @@ const FastTrackCreate: React.FC<{
         What's your <span style={{ color: '#2b5be0' }}>song</span> about?
       </h1>
       <p className="mt-3 text-sm leading-relaxed max-w-sm" style={{ color: '#6b6357' }}>
-        Give Ghost the story — a memory, a text you never sent, a feeling you can't quite name.
+        Give Rudy the story — a memory, a text you never sent, a feeling you can't quite name.
       </p>
 
       <div className="mt-6">
@@ -222,7 +222,7 @@ const FastTrackCreate: React.FC<{
                 : 'border-[#e3d8c1] text-[#6b6357]'
             }`}
           >
-            <Rudy size={16} variant="art" /> Let Ghost decide
+            <Rudy size={16} variant="art" /> Let Rudy decide
           </button>
           {FAST_TRACK_GENRES.map((g) => (
             <button
@@ -404,7 +404,7 @@ const SongBuilder: React.FC<{
       setTitleIdeas(Array.from(new Set(result.titles.filter((t) => typeof t === 'string' && t.trim()))).slice(0, 5));
       setTitleRoom(result.room || null);
       if (!result.titles.length) {
-        toast('No title ideas this time — Song Ghost will pick one during creation.', 'info');
+        toast('No title ideas this time — Rudy will pick one during creation.', 'info');
       }
     } catch (err: any) {
       // Never block creation on titles — surface it and move on.
@@ -1145,7 +1145,7 @@ export const App: React.FC = () => {
       setCredits(prev => Math.max(0, prev - COSTS.GENERATE_SONG));
 
       setIsLoading(true);
-      resetGenerationTelemetry("Song Ghost is listening...");
+      resetGenerationTelemetry("Rudy is listening...");
       setStep(AppStep.GENERATING);
       setGeneratedSong(''); // clear stale lyrics so the live-draft panel starts empty
       setLoadedSongId(null);
@@ -1938,7 +1938,7 @@ export const App: React.FC = () => {
                   </div>
 
                   <p className="relative z-10 mt-7 text-xs text-[#8a8272]">
-                    Ghost is writing — this usually takes 20 seconds.
+                    Rudy is writing — this usually takes 20 seconds.
                   </p>
               </div>
           ) : step === AppStep.FAST_TRACK ? (
