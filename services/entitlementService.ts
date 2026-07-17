@@ -189,6 +189,34 @@ export class NativeEntitlements implements EntitlementService {
     const Purchases = await this.purchases();
     await Purchases.restorePurchases();
   }
+
+  /**
+   * Pushes any finished-but-unrecorded StoreKit transactions to RevenueCat.
+   * With StoreKit 2 a purchase can complete on-device yet fail to post to RC
+   * (network blip, app killed mid-post) — RC then has no transaction, fires no
+   * webhook, and the user never gets credits. syncPurchases is RC's recovery
+   * path for exactly that.
+   */
+  async syncPurchases(): Promise<void> {
+    const Purchases = await this.purchases();
+    await Purchases.syncPurchases();
+  }
+}
+
+/**
+ * Warm up the RevenueCat SDK at sign-in (native only). Without this, RC is
+ * only configured lazily when the paywall first opens — so on a normal app
+ * launch the SDK isn't running and can never re-sync a purchase that failed
+ * to record. Configures RC under the signed-in email and syncs any stuck
+ * transactions. Best-effort: failures are logged, never thrown.
+ */
+export async function warmupNativePurchases(email: string): Promise<void> {
+  if (!isNative() || !email) return;
+  try {
+    await new NativeEntitlements(email).syncPurchases();
+  } catch (e) {
+    console.error('[entitlements] purchase warmup failed', e);
+  }
 }
 
 /** Factory: chooses the platform-appropriate entitlement implementation. */

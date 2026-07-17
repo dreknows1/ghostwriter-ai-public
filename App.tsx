@@ -23,6 +23,7 @@ import { LoadingSpinner, ProfileIcon, WalletIcon, EditIcon, ClockIcon, GhostIcon
 import { isNative } from './lib/platform';
 import { hapticLight, hapticSuccess } from './lib/haptics';
 import { openExternal, keepAwake, allowSleep, onPurchaseCompleted, refreshEntitlements } from './lib/nativeBridge';
+import { warmupNativePurchases } from './services/entitlementService';
 
 const AuthAppleIcon = () => (
   <svg viewBox="0 0 24 24" className="w-5 h-5" fill="currentColor" aria-hidden="true">
@@ -994,6 +995,10 @@ export const App: React.FC = () => {
   useEffect(() => {
     const email = session?.user?.email;
     if (!email || !isNative()) return;
+    // Start the RevenueCat SDK now (not lazily at the paywall) and push any
+    // finished-but-unrecorded StoreKit transactions — recovers purchases whose
+    // post to RC failed, which otherwise silently never grant credits.
+    warmupNativePurchases(email);
     const unsubscribe = onPurchaseCompleted(async () => {
       const before = creditsRef.current;
       const updated = await refreshEntitlements(email, {
