@@ -72,8 +72,6 @@ const isNetworkError = (e: any): boolean => {
 
 const PricingView: React.FC<PricingViewProps> = ({ email, onClose, onPurchaseComplete, onOpenTerms }) => {
     const [processingId, setProcessingId] = useState<PlanId | null>(null);
-    // Live purchase-stage readout (native): makes silent hangs visible on-device.
-    const [purchaseStep, setPurchaseStep] = useState<string | null>(null);
     const [selected, setSelected] = useState<PlanId>('pack_50');
     const [userTier, setUserTier] = useState<string>('public');
     // StoreKit-localized price strings keyed by native product id (sg_*), fetched
@@ -141,14 +139,9 @@ const PricingView: React.FC<PricingViewProps> = ({ email, onClose, onPurchaseCom
         const plan = PRODUCTS[selected];
         setProcessingId(selected);
         hapticLight();
-        // Accumulating trace: every step appends so the full sequence is visible.
-        setPurchaseStep(null);
-        const trace = (s: string) => setPurchaseStep((prev) => (prev ? `${prev} → ${s}` : s));
         try {
-            trace('A');
             const service = createEntitlementService(email);
             const productId = isNative() ? plan.nativeId : plan.webId;
-            trace(`B:${service.constructor.name}/${productId}`);
             // Snapshot the balance BEFORE the purchase so we can tell whether the
             // webhook grant actually landed (best-effort — a failed read just means
             // we can't verify the rise). Time-boxed: this must NEVER delay the
@@ -163,8 +156,7 @@ const PricingView: React.FC<PricingViewProps> = ({ email, onClose, onPurchaseCom
                     ]);
                 } catch { /* non-fatal */ }
             }
-            trace('C');
-            await service.purchase(productId, trace);
+            await service.purchase(productId);
             // Web purchase() redirects the page to Stripe Checkout — nothing further to do here.
             // Native purchase() resolves in-place: bounded-poll until the webhook grant
             // lands (it can lag the StoreKit sheet by a second or two), then close the
@@ -204,7 +196,6 @@ const PricingView: React.FC<PricingViewProps> = ({ email, onClose, onPurchaseCom
                     : `Payment initialization failed: ${e?.message || 'please try again.'}`,
                 'error'
             );
-            if (isNative()) trace(`FAILED: ${detail || 'unknown'}`);
         } finally {
             setProcessingId(null);
         }
@@ -291,12 +282,6 @@ const PricingView: React.FC<PricingViewProps> = ({ email, onClose, onPurchaseCom
             >
                 {processingId ? <LoadingSpinner /> : 'Continue'}
             </button>
-
-            {purchaseStep && (
-                <p className="mt-2 text-[11px] font-mono text-center text-[#6b6357] break-words px-1" aria-live="polite">
-                    {purchaseStep}
-                </p>
-            )}
 
             <p className="mt-3 text-[10.5px] leading-relaxed text-[#8a8272] text-center px-1">
                 7-day free trial applies to Pro only. Renews at {proRenewalPrice}/mo unless cancelled 24 hours before trial ends. Free trial includes 50 credits; the full 500 arrives when the trial converts. Credit packs are one-time — no subscription.
