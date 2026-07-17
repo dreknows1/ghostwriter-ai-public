@@ -1772,7 +1772,10 @@ export const App: React.FC = () => {
                            <span className="font-extrabold text-[19px] tracking-tight">SongGhost</span>
                          </div>
                          <div className="flex items-center gap-2">
-                           <span className="text-[11px] font-extrabold text-[#2b5be0] bg-[#e7edff] px-3 py-1.5 rounded-full uppercase tracking-wide">{formatCredits(credits)}</span>
+                           <button onClick={() => setView(AppView.PRICING)} aria-label="Buy credits" className="flex items-center gap-1 text-[11px] font-extrabold text-[#2b5be0] bg-[#e7edff] border border-[#d6e0ff] px-3 py-1.5 rounded-full uppercase tracking-wide active:bg-[#d6e0ff] transition-colors">
+                             {formatCredits(credits)}
+                             <span className="text-[13px] font-black leading-none" aria-hidden="true">+</span>
+                           </button>
                            <button onClick={() => setIsMenuOpen((v) => !v)} aria-label="Menu" className="w-10 h-10 rounded-full bg-[#ece4d4] active:bg-[#e2d8c4] flex items-center justify-center text-[#5b5346]">
                              <svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M4 7h16M4 12h16M4 17h16" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round"/></svg>
                            </button>
@@ -1829,6 +1832,7 @@ export const App: React.FC = () => {
                onClose={() => setIsMenuOpen(false)}
                onSetAiKey={handleManageGeminiApiKey}
                onOpenUtility={(section) => openUtility(section, AppView.LANDING)}
+               onOpenPricing={() => setView(AppView.PRICING)}
              />
         </div>
         {/* Help widget intentionally omitted in Studio — it overlapped the create CTA
@@ -1858,10 +1862,11 @@ export const App: React.FC = () => {
             )}
          </div>
          <div className="flex items-center gap-2 md:gap-4">
-             <div className="md:hidden flex items-center gap-1 px-3 py-2 rounded-full bg-[#e7edff] border border-[#d6e0ff] text-[#2b5be0]">
+             <button onClick={() => setView(AppView.PRICING)} aria-label="Buy credits" className="md:hidden flex items-center gap-1 px-3 py-2 rounded-full bg-[#e7edff] border border-[#d6e0ff] text-[#2b5be0] active:bg-[#d6e0ff] transition-colors">
                 <WalletIcon className="w-3.5 h-3.5" />
                 <span className="text-[11px] font-black tracking-wider tabular-nums">{formatCredits(credits)}</span>
-             </div>
+                <span className="text-[13px] font-black leading-none ml-0.5" aria-hidden="true">+</span>
+             </button>
              {/* Credit Monitor & Add Button */}
              <div className="hidden md:flex items-center bg-[#faf6ec] border border-[#e3d8c1] rounded-full p-1 pl-1 pr-4 gap-3">
                 <div className="flex items-center gap-2 px-4 py-2 rounded-full bg-[#e7edff] border border-[#d6e0ff] text-[#2b5be0]">
@@ -1894,6 +1899,7 @@ export const App: React.FC = () => {
         onClose={() => setIsMenuOpen(false)}
         onSetAiKey={handleManageGeminiApiKey}
         onOpenUtility={(section) => openUtility(section, AppView.STUDIO)}
+        onOpenPricing={() => setView(AppView.PRICING)}
       />
 
       {/* Main Content */}

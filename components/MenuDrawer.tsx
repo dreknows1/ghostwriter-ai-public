@@ -74,9 +74,10 @@ interface MenuDrawerProps {
   onClose: () => void;
   onSetAiKey: () => void;
   onOpenUtility: (section: UtilitySection) => void;
+  onOpenPricing: () => void;
 }
 
-export default function MenuDrawer({ isOpen, onClose, onSetAiKey, onOpenUtility }: MenuDrawerProps) {
+export default function MenuDrawer({ isOpen, onClose, onSetAiKey, onOpenUtility, onOpenPricing }: MenuDrawerProps) {
   if (!isOpen) return null;
 
   const visibleSocials = SOCIALS.filter((s) => s.url);
@@ -92,6 +93,12 @@ export default function MenuDrawer({ isOpen, onClose, onSetAiKey, onOpenUtility 
       />
       <div className="fixed right-3 top-16 bottom-3 z-[70] w-[19rem] rounded-[1.1rem] border border-[#eadfca] bg-white shadow-[0_10px_30px_rgba(90,70,30,0.15)] flex flex-col overflow-hidden safe-bottom">
         <div className="p-3 overflow-y-auto">
+          <button
+            onClick={() => { onOpenPricing(); onClose(); }}
+            className={`${ITEM_CLASS} text-[#2b5be0]`}
+          >
+            Pricing &amp; Credits
+          </button>
           {!native && (
             <button
               onClick={() => { onSetAiKey(); onClose(); }}
