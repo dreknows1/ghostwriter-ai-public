@@ -1646,7 +1646,8 @@ export const App: React.FC = () => {
   if (view === AppView.HELP && session) {
       return (
         <>
-          <div className="min-h-screen safe-top safe-bottom safe-x" style={{ background: '#F7F3EA', color: '#1a1a1a' }}>
+          {/* No safe-x here — UtilityHub applies its own; doubling it doubles the gutter. */}
+          <div className="min-h-screen safe-top safe-bottom" style={{ background: '#F7F3EA', color: '#1a1a1a' }}>
             <UtilityHub
               email={session.user.email}
               section={utilitySection}
