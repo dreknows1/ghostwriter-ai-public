@@ -1,4 +1,4 @@
-import { mutation } from "./_generated/server";
+import { internalMutation } from "./_generated/server";
 import { v } from "convex/values";
 
 /**
@@ -12,7 +12,7 @@ import { v } from "convex/values";
  * This is authoritative across cold serverless instances, which an in-process
  * Map cannot be — that is the whole point of backing it in Convex.
  */
-export const consume = mutation({
+export const consume = internalMutation({
   args: { nonce: v.string(), exp: v.number() },
   handler: async (ctx: any, args: any) => {
     const existing = await ctx.db
@@ -36,7 +36,7 @@ export const consume = mutation({
  * can no longer be replayed). Safe to call from a cron or manually; not required
  * for correctness. Deletes in bounded batches to stay within mutation limits.
  */
-export const cleanupExpired = mutation({
+export const cleanupExpired = internalMutation({
   args: { limit: v.optional(v.number()) },
   handler: async (ctx: any, args: any) => {
     const now = Date.now();

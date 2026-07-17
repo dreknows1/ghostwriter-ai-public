@@ -13,7 +13,7 @@
     "test": "vitest run",
     "test:watch": "vitest",
     "check:unused": "tsc --noEmit -p tsconfig.lint.json",
-    "build:api": "esbuild server/ai.ts --bundle --platform=node --format=esm --packages=external --outfile=api/ai.js && esbuild server/auth.ts --bundle --platform=node --format=esm --packages=external --outfile=api/auth.js && esbuild server/db.ts --bundle --platform=node --format=esm --packages=external --outfile=api/db.js && esbuild server/oauth-callback.ts --bundle --platform=node --format=esm --packages=external --outfile=api/oauth/callback.js && esbuild server/auth-apple.ts --bundle --platform=node --format=esm --packages=external --outfile=api/auth-apple.js",
+    "build:api": "esbuild server/ai.ts --bundle --platform=node --format=esm --packages=external --outfile=api/ai.js && esbuild server/auth.ts --bundle --platform=node --format=esm --packages=external --outfile=api/auth.js && esbuild server/db.ts --bundle --platform=node --format=esm --packages=external --outfile=api/db.js && esbuild server/oauth-callback.ts --bundle --platform=node --format=esm --packages=external --outfile=api/oauth/callback.js && esbuild server/auth-apple.ts --bundle --platform=node --format=esm --packages=external --outfile=api/auth-apple.js && esbuild server/revenuecat-webhook.ts --bundle --platform=node --format=esm --packages=external --outfile=api/revenuecat-webhook.js",
     "compile:curriculum": "node scripts/compile-curriculum.mjs"
   },
   "dependencies": {

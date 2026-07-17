@@ -1,4 +1,4 @@
-import { query, mutation, internalMutation, internalQuery } from "./_generated/server";
+import { internalMutation, internalQuery } from "./_generated/server";
 import { v } from "convex/values";
 
 const CODE_PREFIX = "BLACKAI";
@@ -17,7 +17,7 @@ function generateCode(): string {
   return CODE_PREFIX + suffix;
 }
 
-export const validateCode = mutation({
+export const validateCode = internalMutation({
   args: { code: v.string() },
   handler: async (ctx: any, { code }: any) => {
     const record = await ctx.db
@@ -35,7 +35,7 @@ export const validateCode = mutation({
   },
 });
 
-export const createCode = mutation({
+export const createCode = internalMutation({
   args: {
     ownerEmail: v.string(),
     code: v.string(),
@@ -92,7 +92,7 @@ export const rotateSkoolCode = internalMutation({
   },
 });
 
-export const getActiveCode = query({
+export const getActiveCode = internalQuery({
   args: { ownerEmail: v.string() },
   handler: async (_ctx: any, _args: any) => {
     return null;
@@ -105,7 +105,7 @@ export const getActiveCodeInternal = internalQuery({
   },
 });
 
-export const deactivateCode = mutation({
+export const deactivateCode = internalMutation({
   args: { ownerEmail: v.string(), code: v.string() },
   handler: async (_ctx: any, _args: any) => {
     throw new Error("Unauthorized. Use internal mutation inviteCodes:deactivateCodeInternal.");
@@ -137,7 +137,7 @@ export const reactivateCodeInternal = internalMutation({
   },
 });
 
-export const listCodes = query({
+export const listCodes = internalQuery({
   args: { ownerEmail: v.string() },
   handler: async (_ctx: any, _args: any) => {
     return [];

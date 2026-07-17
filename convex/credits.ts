@@ -1,8 +1,8 @@
-import { mutation, query } from "./_generated/server";
+import { internalMutation, internalQuery } from "./_generated/server";
 import { v } from "convex/values";
 import { CREDITS_PUBLIC, CREDITS_SKOOL } from "./constants";
 
-export const getCredits = query({
+export const getCredits = internalQuery({
   args: { userId: v.id("users") },
   handler: async (ctx: any, args: any) => {
     const profile = await ctx.db
@@ -14,7 +14,7 @@ export const getCredits = query({
   },
 });
 
-export const spendCredits = mutation({
+export const spendCredits = internalMutation({
   args: {
     userId: v.id("users"),
     amount: v.number(),
@@ -50,7 +50,7 @@ export const spendCredits = mutation({
   },
 });
 
-export const grantMonthlyCredits = mutation({
+export const grantMonthlyCredits = internalMutation({
   args: { userId: v.id("users") },
   handler: async (ctx: any, args: any) => {
     const profile = await ctx.db

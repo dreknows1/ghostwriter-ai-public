@@ -10,9 +10,11 @@
 
 import type * as analytics from "../analytics.js";
 import type * as app from "../app.js";
+import type * as authNonces from "../authNonces.js";
 import type * as billing from "../billing.js";
 import type * as blog from "../blog.js";
 import type * as constants from "../constants.js";
+import type * as creditLogic from "../creditLogic.js";
 import type * as credits from "../credits.js";
 import type * as crons from "../crons.js";
 import type * as http from "../http.js";
@@ -31,9 +33,11 @@ import type {
 declare const fullApi: ApiFromModules<{
   analytics: typeof analytics;
   app: typeof app;
+  authNonces: typeof authNonces;
   billing: typeof billing;
   blog: typeof blog;
   constants: typeof constants;
+  creditLogic: typeof creditLogic;
   credits: typeof credits;
   crons: typeof crons;
   http: typeof http;

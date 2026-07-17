@@ -329,20 +329,15 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
 
     // signin
     if (!existing?.passwordHash || !existing?.passwordSalt) {
+      // SECURITY (H2): never mint a session on email alone. Passwordless
+      // accounts (community members, OAuth/Apple-created) must sign in through
+      // a provider that actually proves identity — the OAuth/Apple paths apply
+      // the skool tier themselves on mint.
       const isSkoolMember = await client.query(isSkoolMemberByEmailRef as any, { email: normalizedEmail });
       if (isSkoolMember) {
-        const user: any = await client.mutation(upsertUserCredentialsRef as any, {
-          email: normalizedEmail,
-        });
-        await enforceSkoolTierIfEligible(client, normalizedEmail);
-        return res.status(200).json({
-          session: {
-            user: {
-              id: user?._id || `user_${normalizedEmail}`,
-              email: normalizedEmail,
-            },
-          },
-          sessionToken: mintSessionForEmail(normalizedEmail),
+        return res.status(401).json({
+          error:
+            "This community account doesn't have a password yet. Sign in with Google or Apple to continue.",
         });
       }
       return res.status(401).json({ error: "Invalid email or password" });

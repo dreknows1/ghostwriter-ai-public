@@ -1,9 +1,9 @@
-import { mutation, query } from "./_generated/server";
+import { internalMutation, internalQuery } from "./_generated/server";
 import { v } from "convex/values";
 
 const CREDITS_PUBLIC = 25;
 
-export const getByUser = query({
+export const getByUser = internalQuery({
   args: { userId: v.id("users") },
   handler: async (ctx: any, args: any) => {
     return await ctx.db
@@ -13,7 +13,7 @@ export const getByUser = query({
   },
 });
 
-export const upsertByUser = mutation({
+export const upsertByUser = internalMutation({
   args: {
     userId: v.id("users"),
     displayName: v.optional(v.string()),

@@ -1,4 +1,4 @@
-import { mutation } from "./_generated/server";
+import { internalMutation } from "./_generated/server";
 import { v } from "convex/values";
 
 const CREDITS_PUBLIC = 25;
@@ -75,7 +75,7 @@ async function ensureUserAndProfile(ctx: any, email: string) {
   return { user, profile };
 }
 
-export const applyStripeCheckoutCredits = mutation({
+export const applyStripeCheckoutCredits = internalMutation({
   args: {
     eventId: v.string(),
     sessionId: v.string(),
@@ -149,7 +149,7 @@ export const applyStripeCheckoutCredits = mutation({
   },
 });
 
-export const applyStripeCheckoutCreditsByEmail = mutation({
+export const applyStripeCheckoutCreditsByEmail = internalMutation({
   args: {
     eventId: v.string(),
     sessionId: v.string(),
@@ -217,7 +217,7 @@ export const applyStripeCheckoutCreditsByEmail = mutation({
   },
 });
 
-export const createStripeCheckoutPendingByEmail = mutation({
+export const createStripeCheckoutPendingByEmail = internalMutation({
   args: {
     sessionId: v.string(),
     userEmail: v.string(),

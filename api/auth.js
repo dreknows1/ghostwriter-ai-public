@@ -435,18 +435,8 @@ async function handler(req, res) {
     if (!existing?.passwordHash || !existing?.passwordSalt) {
       const isSkoolMember = await client.query(isSkoolMemberByEmailRef, { email: normalizedEmail });
       if (isSkoolMember) {
-        const user = await client.mutation(upsertUserCredentialsRef, {
-          email: normalizedEmail
-        });
-        await enforceSkoolTierIfEligible(client, normalizedEmail);
-        return res.status(200).json({
-          session: {
-            user: {
-              id: user?._id || `user_${normalizedEmail}`,
-              email: normalizedEmail
-            }
-          },
-          sessionToken: mintSessionForEmail(normalizedEmail)
+        return res.status(401).json({
+          error: "This community account doesn't have a password yet. Sign in with Google or Apple to continue."
         });
       }
       return res.status(401).json({ error: "Invalid email or password" });

@@ -1,4 +1,4 @@
-import { query, mutation, internalMutation, internalQuery } from "./_generated/server";
+import { internalMutation, internalQuery, query } from "./_generated/server";
 import { v } from "convex/values";
 
 
@@ -88,7 +88,7 @@ export const getAllPublishedSlugs = query({
 
 // ---- Admin (called server-side from blog-app via admin auth wrapper) ----
 
-export const adminListAll = mutation({
+export const adminListAll = internalMutation({
   args: { authorEmail: v.string() },
   handler: async (ctx: any, args: any) => {
     await requireAuthor(ctx, args.authorEmail);
@@ -97,7 +97,7 @@ export const adminListAll = mutation({
   },
 });
 
-export const adminGetById = mutation({
+export const adminGetById = internalMutation({
   args: { authorEmail: v.string(), id: v.id("blogPosts") },
   handler: async (ctx: any, args: any) => {
     await requireAuthor(ctx, args.authorEmail);
@@ -106,7 +106,7 @@ export const adminGetById = mutation({
   },
 });
 
-export const adminCreate = mutation({
+export const adminCreate = internalMutation({
   args: {
     authorEmail: v.string(),
     slug: v.string(),
@@ -155,7 +155,7 @@ export const adminCreate = mutation({
   },
 });
 
-export const adminUpdate = mutation({
+export const adminUpdate = internalMutation({
   args: {
     authorEmail: v.string(),
     id: v.id("blogPosts"),
@@ -213,7 +213,7 @@ export const adminUpdate = mutation({
   },
 });
 
-export const adminDelete = mutation({
+export const adminDelete = internalMutation({
   args: { authorEmail: v.string(), id: v.id("blogPosts") },
   handler: async (ctx: any, args: any) => {
     await requireAuthor(ctx, args.authorEmail);

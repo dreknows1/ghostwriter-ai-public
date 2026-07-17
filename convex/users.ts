@@ -1,7 +1,7 @@
-import { mutation, query } from "./_generated/server";
+import { internalMutation, internalQuery } from "./_generated/server";
 import { v } from "convex/values";
 
-export const getOrCreateUser = mutation({
+export const getOrCreateUser = internalMutation({
   args: { email: v.string() },
   handler: async (ctx: any, args: any) => {
     const email = args.email.toLowerCase().trim();
@@ -22,7 +22,7 @@ export const getOrCreateUser = mutation({
   },
 });
 
-export const upsertUserCredentials = mutation({
+export const upsertUserCredentials = internalMutation({
   args: {
     email: v.string(),
     passwordHash: v.optional(v.string()),
@@ -68,12 +68,62 @@ export const upsertUserCredentials = mutation({
   },
 });
 
-export const getUserByEmail = query({
+export const getUserByEmail = internalQuery({
   args: { email: v.string() },
   handler: async (ctx: any, args: any) => {
     return await ctx.db
       .query("users")
       .withIndex("by_email", (q: any) => q.eq("email", args.email.toLowerCase().trim()))
       .first();
+  },
+});
+
+/**
+ * Sign in with Apple: resolve or create a user by Apple's stable `sub`.
+ * Called by api/auth-apple after the identity token is cryptographically
+ * verified. Purely additive — only touches the users table.
+ * - Repeat sign-in: found by `by_apple_sub` → touch + return.
+ * - First sign-in with a known email: link the sub onto that account.
+ * - First sign-in, new email: create the account.
+ * Returns null when the account is unknown AND Apple sent no email claim.
+ */
+export const upsertAppleUser = internalMutation({
+  args: {
+    sub: v.string(),
+    email: v.optional(v.string()),
+  },
+  handler: async (ctx: any, args: any) => {
+    const sub = String(args.sub || "").trim();
+    if (!sub) return null;
+
+    const bySub = await ctx.db
+      .query("users")
+      .withIndex("by_apple_sub", (q: any) => q.eq("appleSub", sub))
+      .first();
+    if (bySub) {
+      await ctx.db.patch(bySub._id, { updatedAt: Date.now(), isActive: true });
+      return await ctx.db.get(bySub._id);
+    }
+
+    const email = String(args.email || "").toLowerCase().trim();
+    if (!email) return null;
+
+    const byEmail = await ctx.db
+      .query("users")
+      .withIndex("by_email", (q: any) => q.eq("email", email))
+      .first();
+    if (byEmail) {
+      await ctx.db.patch(byEmail._id, { appleSub: sub, updatedAt: Date.now(), isActive: true });
+      return await ctx.db.get(byEmail._id);
+    }
+
+    const id = await ctx.db.insert("users", {
+      email,
+      appleSub: sub,
+      createdAt: Date.now(),
+      updatedAt: Date.now(),
+      isActive: true,
+    });
+    return await ctx.db.get(id);
   },
 });

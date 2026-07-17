@@ -1,6 +1,14 @@
-import { mutation, query, internalMutation } from "./_generated/server";
+import { internalMutation, internalQuery } from "./_generated/server";
 import { v } from "convex/values";
-import { CREDITS_PUBLIC, CREDITS_SKOOL, UNLIMITED_CREDITS, isOwnerEmail } from "./constants";
+import { CREDITS_PUBLIC, CREDITS_SKOOL, UNLIMITED_CREDITS, CREATE_AVATAR_COST, isOwnerEmail } from "./constants";
+import {
+  computeMonthlyReset,
+  computeSpend,
+  planKeyedSpend,
+  planAvatarCharge,
+  isValidSpendAmount,
+  spendableTotal,
+} from "./creditLogic";
 const REFERRAL_INVITER_CREDITS = 40;
 const REFERRAL_INVITEE_CREDITS = 20;
 
@@ -145,7 +153,7 @@ async function qualifyAndRewardReferral(ctx: any, referredUserId: any) {
   });
 }
 
-export const getUserProfileByEmail = query({
+export const getUserProfileByEmail = internalQuery({
   args: { email: v.string() },
   handler: async (ctx: any, args: any) => {
     const { user, profile, email } = await getExistingUserAndProfile(ctx, args.email);
@@ -165,7 +173,7 @@ export const getUserProfileByEmail = query({
   },
 });
 
-export const upsertUserProfileByEmail = mutation({
+export const upsertUserProfileByEmail = internalMutation({
   // C2: `credits` and `last_reset_date` are NOT client-writable. Letting the
   // client set its own credit balance was free-unlimited-credits. Credits mutate
   // ONLY via the webhook / spend / monthly-reset paths. Profile edits are limited
@@ -180,23 +188,69 @@ export const upsertUserProfileByEmail = mutation({
   },
   handler: async (ctx: any, args: any) => {
     const { user, profile, email } = await ensureUserAndProfile(ctx, args.email);
-    await ctx.db.patch(profile._id, {
+    const now = Date.now();
+
+    // ── Server-authoritative avatar-creation charge ────────────────────────────
+    // The client no longer deducts for the avatar (that was client-trust). The
+    // FIRST time a non-owner, non-member sets an avatar (empty→present) we charge
+    // CREATE_AVATAR here. State-based idempotency: once an avatar is on file a
+    // re-save never re-charges. Insufficient balance ⇒ persist the OTHER fields
+    // but leave the avatar unset and flag the client to route to the paywall.
+    const prevAvatar = typeof profile.avatarUrl === "string" ? profile.avatarUrl.trim() : "";
+    const requestedAvatar = args.avatar_url ?? profile.avatarUrl;
+    const nextAvatar = typeof requestedAvatar === "string" ? requestedAvatar.trim() : "";
+    const avatarPlan = planAvatarCharge(
+      { credits: profile.credits || 0, packCredits: profile.packCredits || 0 },
+      CREATE_AVATAR_COST,
+      {
+        hadAvatar: !!prevAvatar,
+        addingAvatar: !!nextAvatar,
+        isOwner: isOwnerEmail(email),
+        isSkool: String(profile.tier || "").toLowerCase() === "skool",
+      }
+    );
+
+    const avatarUrlToPersist = avatarPlan.reject ? profile.avatarUrl : requestedAvatar;
+    const patch: any = {
       displayName: args.display_name ?? profile.displayName,
-      avatarUrl: args.avatar_url ?? profile.avatarUrl,
+      avatarUrl: avatarUrlToPersist,
       bio: args.bio ?? profile.bio,
       preferredVibe: args.preferred_vibe ?? profile.preferredVibe,
       preferredArtStyle: args.preferred_art_style ?? profile.preferredArtStyle,
-      updatedAt: Date.now(),
-    });
+      updatedAt: now,
+    };
+    if (avatarPlan.charge && avatarPlan.decision) {
+      patch.credits = avatarPlan.decision.credits;
+      patch.packCredits = avatarPlan.decision.packCredits;
+    }
+    await ctx.db.patch(profile._id, patch);
+
+    if (avatarPlan.charge && avatarPlan.decision) {
+      await ctx.db.insert("creditLedger", {
+        userId: profile.userId,
+        delta: -avatarPlan.decision.spent,
+        reason: "avatar_creation",
+        createdAt: now,
+      });
+    }
+
+    // Return the new MONTHLY bucket value (what getUserProfileByEmail reports as
+    // `credits`) so the client wallet reconciles to the true post-charge balance.
+    const creditsAfter =
+      avatarPlan.charge && avatarPlan.decision ? avatarPlan.decision.credits : profile.credits;
+
     return {
       id: user._id,
       email,
-      credits: profile.credits,
+      credits: creditsAfter,
+      avatarCharged: avatarPlan.charge,
+      avatarRejected: avatarPlan.reject,
+      ...(avatarPlan.reject ? { code: "insufficient_credits" } : {}),
     };
   },
 });
 
-export const setProfileTier = mutation({
+export const setProfileTier = internalMutation({
   args: { email: v.string(), tier: v.string() },
   handler: async (ctx: any, args: any) => {
     const { profile } = await ensureUserAndProfile(ctx, args.email);
@@ -213,7 +267,7 @@ export const setProfileTier = mutation({
   },
 });
 
-export const isSkoolMemberByEmail = query({
+export const isSkoolMemberByEmail = internalQuery({
   args: { email: v.string() },
   handler: async (ctx: any, args: any) => {
     const email = normalizeEmail(args.email);
@@ -396,7 +450,7 @@ export const auditSkoolTierMismatches = internalMutation({
   },
 });
 
-export const getCreditsByEmail = mutation({
+export const getCreditsByEmail = internalMutation({
   args: { email: v.string() },
   handler: async (ctx: any, args: any) => {
     const { profile } = await ensureUserAndProfile(ctx, args.email);
@@ -430,25 +484,169 @@ export const getCreditsByEmail = mutation({
   },
 });
 
-export const spendCreditsByEmail = mutation({
+export const spendCreditsByEmail = internalMutation({
   args: { email: v.string(), amount: v.number(), reason: v.string() },
   handler: async (ctx: any, args: any) => {
     // Owner accounts: spends are no-ops — unlimited credits, never charged.
     if (isOwnerEmail(args.email)) return UNLIMITED_CREDITS;
     const { profile } = await ensureUserAndProfile(ctx, args.email);
-    const next = Math.max(0, profile.credits - args.amount);
-    await ctx.db.patch(profile._id, { credits: next, updatedAt: Date.now() });
+    // Reject a malformed amount (<= 0, non-integer, NaN, Infinity). A client can
+    // reach this mutation via /api/db, so a negative could otherwise attempt to
+    // inflate the balance and NaN would corrupt it. No-op: deduct nothing, write
+    // no ledger row, and return the true spendable total unchanged.
+    if (!isValidSpendAmount(args.amount)) {
+      return spendableTotal({ credits: profile.credits || 0, packCredits: profile.packCredits || 0 });
+    }
+    const decision = computeSpend(profile.credits || 0, profile.packCredits || 0, args.amount);
+    await ctx.db.patch(profile._id, {
+      credits: decision.credits,
+      packCredits: decision.packCredits,
+      updatedAt: Date.now(),
+    });
+    await ctx.db.insert("creditLedger", {
+      userId: profile.userId,
+      delta: -decision.spent,
+      reason: args.reason,
+      createdAt: Date.now(),
+    });
+    return decision.total;
+  },
+});
+
+/**
+ * Server-authoritative spend: REJECTS when the balance can't cover `amount`
+ * (returns `{ ok: false }` and deducts nothing) instead of clamping. This is the
+ * primitive the generation path (/api/ai) calls so credits are enforced
+ * server-side rather than trusting the client. Distinct from
+ * `spendCreditsByEmail` (which clamps and returns a number) to preserve that
+ * function's existing contract.
+ *
+ * Idempotent on `idempotencyKey`: a `spentKeys` row (status "spent") means this
+ * generation was already charged — a retried/dropped SSE stream or the
+ * stream→classic fallback (two POSTs, one generation) proceeds without
+ * double-charging. `charged` distinguishes a first-time deduction from a dedupe
+ * so the server refunds on failure only the charge it actually created.
+ */
+export const spendCreditsStrictByEmail = internalMutation({
+  args: {
+    email: v.string(),
+    amount: v.number(),
+    reason: v.string(),
+    idempotencyKey: v.optional(v.string()),
+  },
+  handler: async (ctx: any, args: any) => {
+    const isOwner = isOwnerEmail(args.email);
+    const { profile } = await ensureUserAndProfile(ctx, args.email);
+    const key = typeof args.idempotencyKey === "string" ? args.idempotencyKey.trim() : "";
+
+    const existingKey = key
+      ? await ctx.db.query("spentKeys").withIndex("by_key", (q: any) => q.eq("key", key)).first()
+      : null;
+    const keySeen = !!existingKey && existingKey.status === "spent";
+
+    const plan = planKeyedSpend(
+      {
+        credits: profile.credits || 0,
+        packCredits: profile.packCredits || 0,
+        plan: profile.plan,
+        planExpiresAt: profile.planExpiresAt,
+        planSource: profile.planSource,
+        tier: profile.tier,
+      },
+      args.amount,
+      { keySeen, isOwner }
+    );
+
+    if (!plan.proceed) {
+      return { ok: false, charged: false, reason: plan.reason, available: plan.available, total: plan.available };
+    }
+    if (!plan.charged) {
+      // Owner or an already-charged key: allow generation, deduct nothing.
+      return {
+        ok: true,
+        charged: false,
+        reason: plan.reason,
+        total: isOwner ? UNLIMITED_CREDITS : plan.available,
+      };
+    }
+
+    const decision = plan.decision!;
+    const now = Date.now();
+    await ctx.db.patch(profile._id, {
+      credits: decision.credits,
+      packCredits: decision.packCredits,
+      updatedAt: now,
+    });
     await ctx.db.insert("creditLedger", {
       userId: profile.userId,
       delta: -args.amount,
       reason: args.reason,
-      createdAt: Date.now(),
+      ...(key ? { metadata: { idempotencyKey: key } } : {}),
+      createdAt: now,
     });
-    return next;
+    if (key) {
+      if (existingKey) {
+        // A previously-refunded key being re-charged (failed attempt retried
+        // with the same key) — flip it back to "spent".
+        await ctx.db.patch(existingKey._id, { status: "spent", amount: decision.spent, updatedAt: now });
+      } else {
+        await ctx.db.insert("spentKeys", {
+          key,
+          userId: profile.userId,
+          amount: decision.spent,
+          status: "spent",
+          createdAt: now,
+        });
+      }
+    }
+    return {
+      ok: true,
+      charged: true,
+      spent: decision.spent,
+      credits: decision.credits,
+      packCredits: decision.packCredits,
+      total: decision.total,
+    };
   },
 });
 
-export const getSongsByEmail = query({
+/**
+ * Reverses a keyed generation charge when the generation fails after credits
+ * were spent. Idempotent: refunds only a `spentKeys` row currently in "spent"
+ * status (flipping it to "refunded"); a redelivery, an unknown key, or an
+ * already-refunded key is a safe no-op. The refund lands in the monthly bucket
+ * (the spend drew monthly-first), which the next calendar reset re-baselines
+ * anyway.
+ */
+export const refundGenerationByKey = internalMutation({
+  args: { email: v.string(), idempotencyKey: v.string(), reason: v.optional(v.string()) },
+  handler: async (ctx: any, args: any) => {
+    if (isOwnerEmail(args.email)) return { ok: true, refunded: 0 };
+    const key = typeof args.idempotencyKey === "string" ? args.idempotencyKey.trim() : "";
+    if (!key) return { ok: false, refunded: 0 };
+
+    const row = await ctx.db.query("spentKeys").withIndex("by_key", (q: any) => q.eq("key", key)).first();
+    if (!row || row.status !== "spent") return { ok: true, refunded: 0 };
+
+    const { profile } = await ensureUserAndProfile(ctx, args.email);
+    const now = Date.now();
+    await ctx.db.patch(profile._id, {
+      credits: (profile.credits || 0) + row.amount,
+      updatedAt: now,
+    });
+    await ctx.db.insert("creditLedger", {
+      userId: profile.userId,
+      delta: row.amount,
+      reason: args.reason || "generation_refund",
+      metadata: { idempotencyKey: key },
+      createdAt: now,
+    });
+    await ctx.db.patch(row._id, { status: "refunded", updatedAt: now });
+    return { ok: true, refunded: row.amount };
+  },
+});
+
+export const getSongsByEmail = internalQuery({
   args: { email: v.string() },
   handler: async (ctx: any, args: any) => {
     const { user, email } = await getExistingUserAndProfile(ctx, args.email);
@@ -472,7 +670,7 @@ export const getSongsByEmail = query({
   },
 });
 
-export const getSongCountByEmail = query({
+export const getSongCountByEmail = internalQuery({
   args: { email: v.string() },
   handler: async (ctx: any, args: any) => {
     const { user } = await getExistingUserAndProfile(ctx, args.email);
@@ -485,7 +683,7 @@ export const getSongCountByEmail = query({
   },
 });
 
-export const saveSongByEmail = mutation({
+export const saveSongByEmail = internalMutation({
   args: {
     email: v.string(),
     title: v.string(),
@@ -532,7 +730,7 @@ export const saveSongByEmail = mutation({
   },
 });
 
-export const deleteSongById = mutation({
+export const deleteSongById = internalMutation({
   // `email` is forced to the session token's email by the API proxy; deletion is
   // scoped to a song the acting user owns (closes the id-based IDOR in C1).
   args: { songId: v.string(), email: v.string() },
@@ -548,7 +746,7 @@ export const deleteSongById = mutation({
   },
 });
 
-export const deleteAllSongsByEmail = mutation({
+export const deleteAllSongsByEmail = internalMutation({
   args: { email: v.string() },
   handler: async (ctx: any, args: any) => {
     const { user } = await ensureUserAndProfile(ctx, args.email);
@@ -561,7 +759,7 @@ export const deleteAllSongsByEmail = mutation({
   },
 });
 
-export const getTransactionsByEmail = query({
+export const getTransactionsByEmail = internalQuery({
   args: { email: v.string() },
   handler: async (ctx: any, args: any) => {
     const { user } = await getExistingUserAndProfile(ctx, args.email);
@@ -583,7 +781,7 @@ export const getTransactionsByEmail = query({
   },
 });
 
-export const deleteAccountByEmail = mutation({
+export const deleteAccountByEmail = internalMutation({
   args: { email: v.string() },
   handler: async (ctx: any, args: any) => {
     const email = normalizeEmail(args.email);
@@ -608,7 +806,7 @@ export const deleteAccountByEmail = mutation({
   },
 });
 
-export const getOrCreateReferralCodeByEmail = mutation({
+export const getOrCreateReferralCodeByEmail = internalMutation({
   args: { email: v.string() },
   handler: async (ctx: any, args: any) => {
     const { user } = await ensureUserAndProfile(ctx, args.email);
@@ -629,7 +827,7 @@ export const getOrCreateReferralCodeByEmail = mutation({
   },
 });
 
-export const claimReferralCodeByEmail = mutation({
+export const claimReferralCodeByEmail = internalMutation({
   args: { email: v.string(), code: v.string() },
   handler: async (ctx: any, args: any) => {
     const { user } = await ensureUserAndProfile(ctx, args.email);
@@ -657,7 +855,7 @@ export const claimReferralCodeByEmail = mutation({
   },
 });
 
-export const getReferralSummaryByEmail = query({
+export const getReferralSummaryByEmail = internalQuery({
   args: { email: v.string() },
   handler: async (ctx: any, args: any) => {
     const { user } = await getExistingUserAndProfile(ctx, args.email);
