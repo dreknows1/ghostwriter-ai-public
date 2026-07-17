@@ -17,6 +17,7 @@
  * across the app: opening links in the system browser, and the "Open in
  * Suno" deep-link handoff from the result screen.
  */
+import * as RCMod from '@revenuecat/purchases-capacitor';
 import { Browser } from '@capacitor/browser';
 import { Clipboard } from '@capacitor/clipboard';
 import { isNative } from './platform';
@@ -111,7 +112,7 @@ export function onPurchaseCompleted(cb: PurchaseCompletedCallback): () => void {
   let cancelled = false;
 
   (async () => {
-    const { Purchases } = await import('@revenuecat/purchases-capacitor');
+    const { Purchases } = await Promise.resolve(RCMod);
     if (cancelled) return;
     callbackId = await Purchases.addCustomerInfoUpdateListener((customerInfo: any) => {
       cb({ productId: latestProductId(customerInfo) });
@@ -122,7 +123,7 @@ export function onPurchaseCompleted(cb: PurchaseCompletedCallback): () => void {
     cancelled = true;
     if (!callbackId) return;
     const toRemove = callbackId;
-    import('@revenuecat/purchases-capacitor')
+    Promise.resolve(RCMod)
       .then(({ Purchases }) =>
         Purchases.removeCustomerInfoUpdateListener({ listenerToRemove: toRemove })
       )
@@ -147,7 +148,7 @@ function withTimeout<T>(p: Promise<T>, ms: number, fallback: T): Promise<T> {
 async function nudgeCustomerInfo(): Promise<void> {
   if (!isNative()) return;
   try {
-    const { Purchases } = await import('@revenuecat/purchases-capacitor');
+    const { Purchases } = await Promise.resolve(RCMod);
     await withTimeout(Purchases.getCustomerInfo().then(() => undefined), 3000, undefined);
   } catch (e) {
     console.error('[nativeBridge] getCustomerInfo failed', e);

@@ -141,9 +141,14 @@ const PricingView: React.FC<PricingViewProps> = ({ email, onClose, onPurchaseCom
         const plan = PRODUCTS[selected];
         setProcessingId(selected);
         hapticLight();
+        // Accumulating trace: every step appends so the full sequence is visible.
+        setPurchaseStep(null);
+        const trace = (s: string) => setPurchaseStep((prev) => (prev ? `${prev} → ${s}` : s));
         try {
+            trace('A');
             const service = createEntitlementService(email);
             const productId = isNative() ? plan.nativeId : plan.webId;
+            trace(`B:${service.constructor.name}/${productId}`);
             // Snapshot the balance BEFORE the purchase so we can tell whether the
             // webhook grant actually landed (best-effort — a failed read just means
             // we can't verify the rise). Time-boxed: this must NEVER delay the
@@ -158,7 +163,8 @@ const PricingView: React.FC<PricingViewProps> = ({ email, onClose, onPurchaseCom
                     ]);
                 } catch { /* non-fatal */ }
             }
-            await service.purchase(productId, (s) => setPurchaseStep(s));
+            trace('C');
+            await service.purchase(productId, trace);
             // Web purchase() redirects the page to Stripe Checkout — nothing further to do here.
             // Native purchase() resolves in-place: bounded-poll until the webhook grant
             // lands (it can lag the StoreKit sheet by a second or two), then close the
@@ -198,7 +204,7 @@ const PricingView: React.FC<PricingViewProps> = ({ email, onClose, onPurchaseCom
                     : `Payment initialization failed: ${e?.message || 'please try again.'}`,
                 'error'
             );
-            if (isNative()) setPurchaseStep((prev) => `${prev ?? ''} → FAILED: ${detail || 'unknown'}`.trim());
+            if (isNative()) trace(`FAILED: ${detail || 'unknown'}`);
         } finally {
             setProcessingId(null);
         }

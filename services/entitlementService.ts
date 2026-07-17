@@ -118,22 +118,19 @@ export class WebStripeEntitlements implements EntitlementService {
 /**
  * Native implementation backed by `@revenuecat/purchases-capacitor`.
  *
- * The RevenueCat SDK is loaded via dynamic `import()` and only ever reached
- * behind `isNative()`, so the web bundle tree-shakes it into an unloaded-on-web
- * chunk (verified in QA: no RevenueCat code executes on web). Credit grants are
- * authoritative server-side via the RevenueCat webhook → `applyRevenueCatEvent`;
- * these methods only drive the StoreKit UI and let the UI refresh afterward.
+ * TWO HARD-WON RULES (the cause of the builds-17..23 purchase hang):
+ * 1. The plugin is imported STATICALLY — dynamic import() of split chunks can
+ *    hang forever in WKWebView. The registerPlugin shim costs a few KB on web;
+ *    its heavy web-implementation chunk still never loads on native.
+ * 2. Every method configures INLINE, unconditionally — awaits that hop through
+ *    helper async fns or stored/shared promises have been observed to never
+ *    resume in this WKWebView, while flat, freshly-created bridge-call awaits
+ *    resume reliably. Re-configure is tolerated by the SDK (logs a warning).
+ *
+ * Credit grants stay authoritative server-side via the RevenueCat webhook →
+ * `applyRevenueCatEvent`; these methods only drive the StoreKit UI.
  */
-/**
- * App-wide single configure. Each NativeEntitlements instance used to run its
- * own `Purchases.configure()` — so the sign-in warmup and the paywall would
- * configure twice, and a second configure can deadlock inside the native SDK
- * behind an in-flight operation (observed on-device: the paywall's
- * "start billing" stage timing out while a background sync retried a wedged
- * transaction). One shared promise = one configure, everyone awaits the same
- * init. Keyed by appUserID so a future account switch re-configures.
- */
-let sharedInit: { userId: string; promise: Promise<typeof import('@revenuecat/purchases-capacitor').Purchases> } | null = null;
+import { Purchases as RCPurchases } from '@revenuecat/purchases-capacitor';
 
 /** Rejects (never hangs) if `p` hasn't settled within `ms`. */
 const withTimeout = <T,>(p: Promise<T>, ms: number, label: string): Promise<T> => {
@@ -144,38 +141,18 @@ const withTimeout = <T,>(p: Promise<T>, ms: number, label: string): Promise<T> =
   return Promise.race([p, timeout]).finally(() => clearTimeout(timer)) as Promise<T>;
 };
 
+const RC_API_KEY = () => {
+  const apiKey = import.meta.env.VITE_REVENUECAT_IOS_KEY;
+  if (!apiKey) throw new Error('Missing VITE_REVENUECAT_IOS_KEY');
+  return apiKey;
+};
+
 export class NativeEntitlements implements EntitlementService {
   constructor(private readonly email: string) {}
 
-  /**
-   * Lazily import + configure the RevenueCat SDK exactly once (native only).
-   * Both halves are time-boxed and reported separately, and a failed or hung
-   * attempt self-resets so the NEXT call starts a completely fresh attempt —
-   * a wedged first init must never be inherited by later purchase taps.
-   */
-  private async purchases(onStep?: (status: string) => void) {
-    const userId = this.email || '';
-    if (!sharedInit || sharedInit.userId !== userId) {
-      const attempt = (async () => {
-        onStep?.('load billing module…');
-        const mod = await withTimeout(import('@revenuecat/purchases-capacitor'), 8000, 'load billing module');
-        const apiKey = import.meta.env.VITE_REVENUECAT_IOS_KEY;
-        if (!apiKey) throw new Error('Missing VITE_REVENUECAT_IOS_KEY');
-        onStep?.('connect billing…');
-        await withTimeout(mod.Purchases.configure({ apiKey, appUserID: userId || null }), 8000, 'connect billing');
-        onStep?.('billing ready ✓');
-        return mod.Purchases;
-      })();
-      sharedInit = { userId, promise: attempt };
-      attempt.catch(() => {
-        if (sharedInit?.promise === attempt) sharedInit = null;
-      });
-    }
-    return sharedInit.promise;
-  }
-
   async getOffering(): Promise<Offering> {
-    const Purchases = await this.purchases();
+    await withTimeout(RCPurchases.configure({ apiKey: RC_API_KEY(), appUserID: this.email || null }), 8000, 'connect billing');
+    const Purchases = RCPurchases;
 
     // Prefer the configured Offering; fall back to fetching products by id.
     let storeProducts: any[] = [];
@@ -232,8 +209,8 @@ export class NativeEntitlements implements EntitlementService {
     };
 
     const storeKitId = WEB_TO_STOREKIT[productId] || productId;
-    // Init self-instruments + self-times-out (load module / connect billing).
-    const Purchases = await this.purchases(onStep);
+    await step('connect billing', () => RCPurchases.configure({ apiKey: RC_API_KEY(), appUserID: this.email || null }), 8000);
+    const Purchases = RCPurchases;
     const pay = await step('check purchases allowed', () => Purchases.canMakePayments(), 10000);
     if (!pay.canMakePayments) {
       throw new Error('This device blocks in-app purchases (Screen Time → Content & Privacy → iTunes & App Store Purchases).');
@@ -248,8 +225,8 @@ export class NativeEntitlements implements EntitlementService {
   }
 
   async restore(): Promise<void> {
-    const Purchases = await this.purchases();
-    await Purchases.restorePurchases();
+    await withTimeout(RCPurchases.configure({ apiKey: RC_API_KEY(), appUserID: this.email || null }), 8000, 'connect billing');
+    await RCPurchases.restorePurchases();
   }
 
   /**
@@ -260,13 +237,13 @@ export class NativeEntitlements implements EntitlementService {
    * path for exactly that.
    */
   async syncPurchases(): Promise<void> {
-    const Purchases = await this.purchases();
-    await Purchases.syncPurchases();
+    await withTimeout(RCPurchases.configure({ apiKey: RC_API_KEY(), appUserID: this.email || null }), 8000, 'connect billing');
+    await RCPurchases.syncPurchases();
   }
 
   /** Start (configure) the SDK without performing any operation. */
   async warmup(): Promise<void> {
-    await this.purchases();
+    await withTimeout(RCPurchases.configure({ apiKey: RC_API_KEY(), appUserID: this.email || null }), 8000, 'connect billing');
   }
 }
 
