@@ -35,7 +35,7 @@ function newGenerationKey(): string {
   return `gen_${Date.now()}_${Math.random().toString(36).slice(2, 12)}`;
 }
 
-async function callAI<T>(action: AIAction, email: string, payload: Record<string, unknown>): Promise<T> {
+async function callAI<T>(action: AIAction, email: string, payload: Record<string, unknown>, externalSignal?: AbortSignal): Promise<T> {
   const textActions = new Set<AIAction>([
     "generateSong",
     "editSong",
@@ -57,6 +57,12 @@ async function callAI<T>(action: AIAction, email: string, payload: Record<string
   const sendRequest = async (userGeminiApiKey: string) => {
     const controller = new AbortController();
     const timer = setTimeout(() => controller.abort(), REQUEST_TIMEOUT_MS);
+    // Let a caller-supplied signal (e.g. the user cancelling) also abort the request.
+    const onExternalAbort = () => controller.abort();
+    if (externalSignal) {
+      if (externalSignal.aborted) controller.abort();
+      else externalSignal.addEventListener("abort", onExternalAbort, { once: true });
+    }
     try {
       return await apiFetch("/api/ai", {
         method: "POST",
@@ -66,11 +72,15 @@ async function callAI<T>(action: AIAction, email: string, payload: Record<string
       });
     } catch (e: any) {
       if (e?.name === "AbortError") {
+        if (externalSignal?.aborted) {
+          throw Object.assign(new Error("Generation cancelled."), { canceled: true, fromServer: true });
+        }
         throw new Error("This is taking longer than expected. Please try again — you were not charged.");
       }
       throw e;
     } finally {
       clearTimeout(timer);
+      if (externalSignal) externalSignal.removeEventListener("abort", onExternalAbort);
     }
   };
 
@@ -177,12 +187,17 @@ async function* singleYield(text: string): AsyncGenerator<string> {
  * start (caller falls back to the classic request) or dies midway (caller must
  * NOT silently regenerate — that would double-charge).
  */
+// If the SSE connection goes quiet for this long mid-generation, stop waiting
+// rather than stranding the user on the generating screen forever.
+const STREAM_INACTIVITY_MS = 45000;
+
 async function* streamSongEvents(
   inputs: unknown,
   email: string,
   userProfile: unknown,
   userGeminiApiKey: string,
-  generationKey: string
+  generationKey: string,
+  signal?: AbortSignal
 ): AsyncGenerator<string> {
   const resp = await apiFetch("/api/ai", {
     method: "POST",
@@ -192,6 +207,7 @@ async function* streamSongEvents(
       email,
       payload: { inputs, userProfile, userGeminiApiKey, stream: true, generationKey },
     }),
+    signal,
   });
   if (resp.status === 402) {
     // Server-authoritative spend rejected the request (out of credits). Mark it
@@ -222,7 +238,34 @@ async function* streamSongEvents(
   let finished = false;
 
   while (true) {
-    const { value, done } = await reader.read();
+    // Cancelled by the user (they left the generating screen).
+    if (signal?.aborted) {
+      try { await reader.cancel(); } catch { /* ignore */ }
+      throw Object.assign(new Error("Generation cancelled."), { canceled: true, fromServer: true });
+    }
+    // Inactivity watchdog: a stalled-open connection would otherwise hang forever.
+    let inactivityTimer: ReturnType<typeof setTimeout> | undefined;
+    let result: ReadableStreamReadResult<Uint8Array>;
+    try {
+      result = await Promise.race([
+        reader.read(),
+        new Promise<never>((_, reject) => {
+          inactivityTimer = setTimeout(
+            () => reject(Object.assign(new Error("Rudy went quiet — the connection stalled. Please try again — you were not charged."), { stalled: true })),
+            STREAM_INACTIVITY_MS
+          );
+        }),
+      ]);
+    } catch (streamErr) {
+      try { await reader.cancel(); } catch { /* ignore */ }
+      if (signal?.aborted) {
+        throw Object.assign(new Error("Generation cancelled."), { canceled: true, fromServer: true });
+      }
+      throw streamErr;
+    } finally {
+      if (inactivityTimer) clearTimeout(inactivityTimer);
+    }
+    const { value, done } = result;
     if (done) break;
     buffer += decoder.decode(value, { stream: true });
     const events = buffer.split("\n\n");
@@ -253,7 +296,8 @@ async function* streamSongEvents(
 export async function* generateSong(
   inputs: SongInputs,
   email: string,
-  userProfile?: UserProfile | null
+  userProfile?: UserProfile | null,
+  signal?: AbortSignal
 ): AsyncGenerator<string> {
   const safeEmail = sanitizeEmail(email || "");
   const safeInputs = sanitizeUnknown(inputs || {});
@@ -267,7 +311,7 @@ export async function* generateSong(
   // Prefer the live stream: lyrics appear as they're written, stages are real.
   let yieldedLyrics = false;
   try {
-    for await (const chunk of streamSongEvents(safeInputs, safeEmail, safeProfile, storedKey, generationKey)) {
+    for await (const chunk of streamSongEvents(safeInputs, safeEmail, safeProfile, storedKey, generationKey, signal)) {
       if (typeof chunk === "string" && !chunk.startsWith("__STATUS__:") && chunk.trim()) {
         yieldedLyrics = true;
       }
@@ -275,10 +319,11 @@ export async function* generateSong(
     }
     return;
   } catch (err) {
-    // ONE user input produces ONE song. If lyrics already streamed, or the server
-    // itself reported the failure (incl. a 402 out-of-credits), a silent re-request
-    // would generate (and pay for) a second song — surface the error instead.
-    if (yieldedLyrics || (err as any)?.fromServer) throw err;
+    // ONE user input produces ONE song. If lyrics already streamed, the server
+    // itself reported the failure (incl. a 402 out-of-credits), or the user
+    // cancelled, a silent re-request would generate (and pay for) a second song —
+    // surface the error instead.
+    if (yieldedLyrics || (err as any)?.fromServer || (err as any)?.canceled) throw err;
     // Stream never got going (older deploy, proxy buffering, network) — classic path.
   }
 
@@ -333,14 +378,15 @@ export async function* structureImportedSong(
   rawText: string,
   email: string,
   inputs?: SongInputs,
-  userProfile?: UserProfile | null
+  userProfile?: UserProfile | null,
+  signal?: AbortSignal
 ): AsyncGenerator<string> {
   const result = await callAI<{ text: string }>("structureImportedSong", email, {
     rawText,
     inputs,
     userProfile,
     generationKey: newGenerationKey(),
-  });
+  }, signal);
   yield* singleYield(result.text || "");
 }
 

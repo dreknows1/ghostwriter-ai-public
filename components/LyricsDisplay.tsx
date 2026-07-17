@@ -280,7 +280,7 @@ const LyricsDisplay: React.FC<LyricsDisplayProps> = ({
 
         {/* Header */}
         <div className="flex items-center justify-between mb-4">
-          <button onClick={onGoHome} className="text-[13px] font-bold text-[#8a8272] active:text-[#1a1a1a] flex items-center gap-1">‹ Dashboard</button>
+          <button onClick={onGoHome} className="text-[13px] font-bold text-[#6b6357] active:text-[#1a1a1a] flex items-center gap-1">‹ Dashboard</button>
           <Rudy size={30} variant="art" />
         </div>
 
@@ -317,7 +317,7 @@ const LyricsDisplay: React.FC<LyricsDisplayProps> = ({
                   key={tag}
                   type="button"
                   onClick={() => { insertTagAtCursor(tag); hapticLight(); }}
-                  className={`whitespace-nowrap text-[12.5px] font-bold px-3 py-2 rounded-full border ${isCue ? 'bg-[#e3f5f1] text-[#1f8a76] border-[#c9ece4] italic' : 'bg-[#efe7d7] text-[#5b5346] border-[#e3d8c1]'}`}
+                  className={`whitespace-nowrap inline-flex items-center min-h-[44px] text-[12.5px] font-bold px-3 py-2 rounded-full border ${isCue ? 'bg-[#e3f5f1] text-[#1f8a76] border-[#c9ece4] italic' : 'bg-[#efe7d7] text-[#5b5346] border-[#e3d8c1]'}`}
                 >
                   {tag}
                 </button>
@@ -373,7 +373,7 @@ const LyricsDisplay: React.FC<LyricsDisplayProps> = ({
                 key={ratio}
                 type="button"
                 onClick={() => setArtAspect(ratio)}
-                className={`flex-1 py-1.5 rounded-lg text-[11px] font-bold border ${artAspect === ratio ? 'bg-[#e7edff] border-[#2b5be0] text-[#2b5be0]' : 'bg-white border-[#e3d8c1] text-[#8a8272]'}`}
+                className={`flex-1 min-h-[40px] inline-flex items-center justify-center py-1.5 rounded-lg text-[11px] font-bold border ${artAspect === ratio ? 'bg-[#e7edff] border-[#2b5be0] text-[#2b5be0]' : 'bg-white border-[#e3d8c1] text-[#6b6357]'}`}
               >
                 {ratio}
               </button>
@@ -388,19 +388,19 @@ const LyricsDisplay: React.FC<LyricsDisplayProps> = ({
 
         {/* Action row */}
         <div className="flex justify-between mt-3.5 pt-3 border-t border-[#e7ddc9]">
-          <button onClick={handleCopyLyrics} className="flex flex-col items-center gap-1 text-[#8a8272] active:text-[#2b5be0] transition-colors">
+          <button onClick={handleCopyLyrics} className="flex flex-col items-center gap-1 text-[#6b6357] active:text-[#2b5be0] transition-colors">
             <CopyIcon className="!h-5 !w-5 !mr-0" /><span className="text-[9.5px] font-extrabold uppercase tracking-wide">{copiedLyrics ? 'Copied' : 'Lyrics'}</span>
           </button>
-          <button onClick={() => setShowRevision(v => !v)} className="flex flex-col items-center gap-1 text-[#8a8272] active:text-[#2b5be0] transition-colors">
+          <button onClick={() => setShowRevision(v => !v)} className="flex flex-col items-center gap-1 text-[#6b6357] active:text-[#2b5be0] transition-colors">
             <MagicWandIcon /><span className="text-[9.5px] font-extrabold uppercase tracking-wide">Revise</span>
           </button>
-          <button onClick={async () => { setIsSaving(true); try { await onSave(parsed.title, parsed.prompt, parsed.lyrics, albumArt || undefined); } finally { setIsSaving(false); } }} className="flex flex-col items-center gap-1 text-[#8a8272] active:text-[#2b5be0] transition-colors">
+          <button onClick={async () => { setIsSaving(true); try { await onSave(parsed.title, parsed.prompt, parsed.lyrics, albumArt || undefined); } finally { setIsSaving(false); } }} className="flex flex-col items-center gap-1 text-[#6b6357] active:text-[#2b5be0] transition-colors">
             {isSaving ? <LoadingSpinner className="h-5 w-5 text-[#2b5be0]" /> : <BookmarkIcon className="h-5 w-5" />}<span className="text-[9.5px] font-extrabold uppercase tracking-wide">Save</span>
           </button>
-          <button onClick={handleShare} disabled={isSharing} className="flex flex-col items-center gap-1 text-[#8a8272] active:text-[#2b5be0] transition-colors">
+          <button onClick={handleShare} disabled={isSharing} className="flex flex-col items-center gap-1 text-[#6b6357] active:text-[#2b5be0] transition-colors">
             <ShareIcon className="h-5 w-5" /><span className="text-[9.5px] font-extrabold uppercase tracking-wide">Share</span>
           </button>
-          <button onClick={onStartOver} className="flex flex-col items-center gap-1 text-[#8a8272] active:text-[#2b5be0] transition-colors">
+          <button onClick={onStartOver} className="flex flex-col items-center gap-1 text-[#6b6357] active:text-[#2b5be0] transition-colors">
             <RefreshIcon className="h-5 w-5" /><span className="text-[9.5px] font-extrabold uppercase tracking-wide">Redo</span>
           </button>
         </div>

@@ -40,6 +40,23 @@ export const hasEnoughCredits = async (email: string, cost: number = 1): Promise
   return credits >= cost;
 };
 
+// Affordability check that distinguishes a real "out of credits" from a network
+// failure. getUserCredits() returns 0 on any error, which would falsely route an
+// offline user to the paywall — this reports `offline` instead so the caller can
+// show a connection message and NOT open Pricing.
+export type AffordCheck = { ok: boolean; reason: 'ok' | 'insufficient' | 'offline'; credits: number | null };
+export const checkAffordability = async (email: string, cost: number): Promise<AffordCheck> => {
+  try {
+    const raw = await callDb("getCreditsByEmail", { email });
+    const credits = Number(raw ?? FREE_MONTHLY_CREDITS);
+    const ok = credits >= cost;
+    return { ok, reason: ok ? 'ok' : 'insufficient', credits };
+  } catch (e) {
+    console.error("Affordability check failed (offline?):", e);
+    return { ok: false, reason: 'offline', credits: null };
+  }
+};
+
 export const deductCredits = async (email: string, amount: number = 1, reason: string = "app_usage"): Promise<number> => {
   try {
     const next = await callDb("spendCreditsByEmail", { email, amount, reason });

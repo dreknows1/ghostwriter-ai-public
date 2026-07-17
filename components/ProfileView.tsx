@@ -266,7 +266,7 @@ const ProfileView: React.FC<ProfileViewProps> = ({ email, onLoadSong, onBack, on
   if (isLoading) return (
     <div className="flex flex-col items-center justify-center min-h-[60vh]">
       <LoadingSpinner />
-      <span className="mt-4 text-sm font-black uppercase tracking-[0.3em] text-[#8a8272]">Loading Account Data...</span>
+      <span className="mt-4 text-sm font-black uppercase tracking-[0.3em] text-[#6b6357]">Loading Account Data...</span>
     </div>
   );
 
@@ -304,7 +304,7 @@ const ProfileView: React.FC<ProfileViewProps> = ({ email, onLoadSong, onBack, on
                     </div>
                     <div className="overflow-hidden">
                         <h3 className="text-[#1a1a1a] font-bold text-base truncate">{editData.display_name || 'User'}</h3>
-                        <p className="text-xs text-[#8a8272] truncate">{email}</p>
+                        <p className="text-xs text-[#6b6357] truncate">{email}</p>
                     </div>
                 </div>
 
@@ -351,13 +351,13 @@ const ProfileView: React.FC<ProfileViewProps> = ({ email, onLoadSong, onBack, on
                         </div>
 
                         <div className="bg-white border border-[#e7ddc9] rounded-[2rem] md:rounded-[2.5rem] p-8 shadow-sm">
-                             <h3 className="text-sm font-black uppercase tracking-[0.2em] text-[#8a8272] mb-4">Total Sessions</h3>
+                             <h3 className="text-sm font-black uppercase tracking-[0.2em] text-[#6b6357] mb-4">Total Sessions</h3>
                              <div className="text-5xl md:text-6xl font-black text-[#1a1a1a] mb-2">{songs.length}</div>
                              <p className="text-[#6b6357] text-sm">Mastered tracks in catalog</p>
                         </div>
 
                         <div className="bg-white border border-[#e7ddc9] rounded-[2rem] md:rounded-[2.5rem] p-8 shadow-sm">
-                             <h3 className="text-sm font-black uppercase tracking-[0.2em] text-[#8a8272] mb-4">Membership Status</h3>
+                             <h3 className="text-sm font-black uppercase tracking-[0.2em] text-[#6b6357] mb-4">Membership Status</h3>
                              <div className="text-2xl font-black text-[#1a1a1a] mb-2 uppercase">{planState.plan}</div>
                              <p className={`text-sm font-bold uppercase tracking-widest ${planState.isActive ? 'text-emerald-600' : 'text-[#2b5be0]'}`}>
                                ● {planState.isActive ? 'Active' : 'Inactive'}
@@ -410,13 +410,13 @@ const ProfileView: React.FC<ProfileViewProps> = ({ email, onLoadSong, onBack, on
                     <div className="space-y-8">
                         <div className="grid grid-cols-2 gap-8">
                              <div className="col-span-2">
-                                <label className="block text-sm font-black uppercase tracking-widest text-[#8a8272] mb-3">Display Name</label>
+                                <label className="block text-sm font-black uppercase tracking-widest text-[#6b6357] mb-3">Display Name</label>
                                 <input type="text" value={editData.display_name} onChange={e => setEditData({...editData, display_name: e.target.value})} className="w-full bg-white border border-[#e3d8c1] p-4 rounded-2xl text-[#1a1a1a] text-base outline-none focus:border-[#2b5be0] transition-all" />
                              </div>
 
                              {/* AVATAR UPLOAD SECTION */}
                              <div className="col-span-2">
-                                <label className="block text-sm font-black uppercase tracking-widest text-[#8a8272] mb-3">Avatar Image</label>
+                                <label className="block text-sm font-black uppercase tracking-widest text-[#6b6357] mb-3">Avatar Image</label>
                                 <div className="flex items-center gap-6">
                                     <div className="w-20 h-20 rounded-2xl bg-[#f1ece0] border border-[#e3d8c1] overflow-hidden flex-shrink-0">
                                          {editData.avatar_url ? <img src={editData.avatar_url} className="w-full h-full object-cover" /> : <div className="p-6 text-[#8a8272]"><ProfileIcon /></div>}
@@ -428,13 +428,13 @@ const ProfileView: React.FC<ProfileViewProps> = ({ email, onLoadSong, onBack, on
                                             onChange={handleAvatarUpload}
                                             className="w-full bg-white border border-[#e3d8c1] p-3 rounded-2xl text-sm text-[#6b6357] file:mr-4 file:py-2 file:px-4 file:rounded-xl file:border-0 file:text-xs file:font-black file:uppercase file:bg-[#1a1a1a] file:text-white active:file:bg-[#333] cursor-pointer"
                                          />
-                                            <p className="mt-3 text-xs text-[#8a8272] uppercase tracking-widest leading-relaxed">Upload artist persona (JPG/PNG). Used as reference for session art. Max 512px. {(profile?.tier || '').toLowerCase() === 'skool' ? 'Free for Members.' : `Cost: ${COSTS.CREATE_AVATAR} credits.`}</p>
+                                            <p className="mt-3 text-xs text-[#6b6357] uppercase tracking-widest leading-relaxed">Upload artist persona (JPG/PNG). Used as reference for session art. Max 512px. {(profile?.tier || '').toLowerCase() === 'skool' ? 'Free for Members.' : `Cost: ${COSTS.CREATE_AVATAR} credits.`}</p>
                                         </div>
                                     </div>
                                 </div>
 
                              <div className="col-span-2">
-                                <label className="block text-sm font-black uppercase tracking-widest text-[#8a8272] mb-3">Preferred Art Style</label>
+                                <label className="block text-sm font-black uppercase tracking-widest text-[#6b6357] mb-3">Preferred Art Style</label>
                                 <select
                                     value={editData.preferred_art_style}
                                     onChange={e => setEditData({...editData, preferred_art_style: e.target.value})}
@@ -448,11 +448,11 @@ const ProfileView: React.FC<ProfileViewProps> = ({ email, onLoadSong, onBack, on
                              </div>
 
                              <div className="col-span-2">
-                                <label className="block text-sm font-black uppercase tracking-widest text-[#8a8272] mb-3">Musical Vibe / Style</label>
+                                <label className="block text-sm font-black uppercase tracking-widest text-[#6b6357] mb-3">Musical Vibe / Style</label>
                                 <input type="text" value={editData.preferred_vibe} onChange={e => setEditData({...editData, preferred_vibe: e.target.value})} className="w-full bg-white border border-[#e3d8c1] p-4 rounded-2xl text-[#1a1a1a] text-base outline-none focus:border-[#2b5be0] transition-all" />
                              </div>
                              <div className="col-span-2">
-                                <label className="block text-sm font-black uppercase tracking-widest text-[#8a8272] mb-3">Bio / Manifesto</label>
+                                <label className="block text-sm font-black uppercase tracking-widest text-[#6b6357] mb-3">Bio / Manifesto</label>
                                 <textarea value={editData.bio} onChange={e => setEditData({...editData, bio: e.target.value})} className="w-full h-32 bg-white border border-[#e3d8c1] p-4 rounded-2xl text-[#1a1a1a] text-base outline-none focus:border-[#2b5be0] transition-all resize-none" />
                              </div>
                         </div>
@@ -484,7 +484,7 @@ const ProfileView: React.FC<ProfileViewProps> = ({ email, onLoadSong, onBack, on
 
                     <div className="bg-white border border-[#e7ddc9] rounded-[2rem] md:rounded-[2.5rem] p-6 md:p-10 mb-12 flex items-center justify-between relative overflow-hidden gap-4 shadow-sm">
                         <div className="relative z-10">
-                            <span className="text-sm font-black uppercase tracking-[0.2em] text-[#8a8272] block mb-2">Current Balance</span>
+                            <span className="text-sm font-black uppercase tracking-[0.2em] text-[#6b6357] block mb-2">Current Balance</span>
                             <span className="text-5xl md:text-7xl font-black text-[#1a1a1a] tracking-tighter block mb-4">{formatCredits(profile?.credits)}</span>
 
                             {nextRefillDate && (
@@ -510,10 +510,10 @@ const ProfileView: React.FC<ProfileViewProps> = ({ email, onLoadSong, onBack, on
                         <table className="w-full min-w-[560px] text-left">
                             <thead className="bg-[#f1ece0] border-b border-[#eadfca]">
                                 <tr>
-                                    <th className="p-6 text-sm font-black uppercase tracking-widest text-[#8a8272]">Date</th>
-                                    <th className="p-6 text-sm font-black uppercase tracking-widest text-[#8a8272]">Item</th>
-                                    <th className="p-6 text-sm font-black uppercase tracking-widest text-[#8a8272]">Credits</th>
-                                    <th className="p-6 text-sm font-black uppercase tracking-widest text-[#8a8272] text-right">Amount</th>
+                                    <th className="p-6 text-sm font-black uppercase tracking-widest text-[#6b6357]">Date</th>
+                                    <th className="p-6 text-sm font-black uppercase tracking-widest text-[#6b6357]">Item</th>
+                                    <th className="p-6 text-sm font-black uppercase tracking-widest text-[#6b6357]">Credits</th>
+                                    <th className="p-6 text-sm font-black uppercase tracking-widest text-[#6b6357] text-right">Amount</th>
                                 </tr>
                             </thead>
                             <tbody className="divide-y divide-[#eadfca]">
@@ -526,7 +526,7 @@ const ProfileView: React.FC<ProfileViewProps> = ({ email, onLoadSong, onBack, on
                                     </tr>
                                 )) : (
                                     <tr>
-                                        <td colSpan={4} className="p-10 text-center text-[#8a8272] text-sm">No transactions found.</td>
+                                        <td colSpan={4} className="p-10 text-center text-[#6b6357] text-sm">No transactions found.</td>
                                     </tr>
                                 )}
                             </tbody>

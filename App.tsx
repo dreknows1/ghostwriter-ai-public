@@ -5,7 +5,7 @@ import { generateSong, generateAlbumArt, generateSocialPack, translateLyrics, st
 import { saveSong } from './services/songService';
 import { getUserProfile } from './services/userService';
 import { getSession, signOut, signIn, signUp, signInWithOAuthToken, startProviderSignIn, signInWithApple } from './services/authService';
-import { getUserCredits, hasEnoughCredits, COSTS, formatCredits } from './services/creditService';
+import { getUserCredits, hasEnoughCredits, checkAffordability, COSTS, formatCredits } from './services/creditService';
 import { apiFetch, SESSION_EXPIRED_EVENT } from './lib/api';
 import LyricsDisplay from './components/LyricsDisplay';
 import ProfileView from './components/ProfileView';
@@ -206,7 +206,7 @@ const FastTrackCreate: React.FC<{
           rows={5}
           className="w-full rounded-[1.4rem] p-5 text-[15px] leading-relaxed resize-none outline-none transition-all font-serif italic placeholder:font-serif placeholder:italic bg-white border border-[#e3d8c1] text-[#1a1a1a] placeholder:text-[#a99e86] focus:border-[#2b5be0]"
         />
-        <div className="mt-2 text-right text-[11px] font-bold uppercase tracking-widest text-[#a89f8c]">
+        <div className="mt-2 text-right text-[11px] font-bold uppercase tracking-widest text-[#6b6357]">
           {story.length}/{STORY_MAX}
         </div>
       </div>
@@ -244,7 +244,7 @@ const FastTrackCreate: React.FC<{
       <div className="flex-1" />
 
       <div className="mt-8">
-        <p className="text-center text-[11px] font-bold uppercase tracking-widest text-[#8a8272] mb-3">
+        <p className="text-center text-[11px] font-bold uppercase tracking-widest text-[#6b6357] mb-3">
           Uses {COSTS.GENERATE_SONG} credits · {formatCredits(credits)} left this month
         </p>
         <button
@@ -755,6 +755,8 @@ export const App: React.FC = () => {
   const [albumArt, setAlbumArt] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(false);
   const generationInFlightRef = useRef(false);
+  // Lets the user cancel an in-flight generation from the generating screen.
+  const abortGenerationRef = useRef<AbortController | null>(null);
   // When the key modal is opened by the Generate gate, this resumes generation after save.
   const pendingGenerateAfterKeyRef = useRef(false);
   // B2 debounce: guards the session-expired handler so a burst of parallel 401s
@@ -1133,11 +1135,16 @@ export const App: React.FC = () => {
           return;
       }
 
-      const canAfford = await hasEnoughCredits(session.user.email || '', COSTS.GENERATE_SONG);
-      if (!canAfford) {
+      const afford = await checkAffordability(session.user.email || '', COSTS.GENERATE_SONG);
+      if (!afford.ok) {
           generationInFlightRef.current = false;
-          toast('Even ghosts need fuel — top up to keep the hooks coming.', 'error');
-          setView(AppView.PRICING);
+          if (afford.reason === 'offline') {
+              // Don't send an offline user to the paywall — it's a connection issue, not an empty wallet.
+              toast("Can't reach the server — check your connection and try again.", 'error');
+          } else {
+              toast('Even ghosts need fuel — top up to keep the hooks coming.', 'error');
+              setView(AppView.PRICING);
+          }
           return;
       }
 
@@ -1151,9 +1158,11 @@ export const App: React.FC = () => {
       setLoadedSongId(null);
       setAlbumArt(null);
 
+      const abort = new AbortController();
+      abortGenerationRef.current = abort;
       try {
-          const generator = generateSong(cleanedInputs, session.user.email || '', profile);
-          
+          const generator = generateSong(cleanedInputs, session.user.email || '', profile, abort.signal);
+
           for await (const chunk of generator) {
               if (typeof chunk === 'string' && chunk.startsWith('__STATUS__:')) {
                   updateGenerationTelemetry(chunk.replace('__STATUS__:', '').trim() || 'Processing...');
@@ -1172,18 +1181,28 @@ export const App: React.FC = () => {
           // Reconcile the true balance: the optimistic reduction is corrected, and
           // a charged-then-failed generation is refunded server-side.
           loadCredits();
-          if (err?.code === 'insufficient_credits' || err?.status === 402) {
+          if (err?.canceled) {
+              // User cancelled from the generating screen — no error, just go back.
+              setStep(returnStep);
+          } else if (err?.code === 'insufficient_credits' || err?.status === 402) {
               // Server refused the spend (out of credits) — route to the paywall.
               toast('Even ghosts need fuel — top up to keep the hooks coming.', 'error');
               setView(AppView.PRICING);
           } else {
               toast(`Generation failed: ${err.message} You weren't charged.`, { kind: 'error', actionLabel: 'Retry', onAction: () => handleGenerate() });
+              setStep(returnStep);
           }
-          setStep(returnStep);
       } finally {
           setIsLoading(false);
           generationInFlightRef.current = false;
+          abortGenerationRef.current = null;
       }
+  };
+
+  // Cancel an in-flight generation from the generating screen.
+  const handleCancelGeneration = () => {
+      hapticLight();
+      abortGenerationRef.current?.abort();
   };
 
   // Closing the key modal clears any pending auto-resume so a later unrelated save
@@ -1343,11 +1362,15 @@ export const App: React.FC = () => {
       }
 
       // Cost of "Structuring" is treated as a FULL GENERATION (5 credits) as it builds the song.
-      const canAfford = await hasEnoughCredits(session.user.email || '', COSTS.GENERATE_SONG);
-      if (!canAfford) {
+      const afford = await checkAffordability(session.user.email || '', COSTS.GENERATE_SONG);
+      if (!afford.ok) {
           generationInFlightRef.current = false;
-          toast('Even ghosts need fuel — top up to keep the hooks coming.', 'error');
-          setView(AppView.PRICING);
+          if (afford.reason === 'offline') {
+              toast("Can't reach the server — check your connection and try again.", 'error');
+          } else {
+              toast('Even ghosts need fuel — top up to keep the hooks coming.', 'error');
+              setView(AppView.PRICING);
+          }
           return;
       }
 
@@ -1357,9 +1380,11 @@ export const App: React.FC = () => {
       setIsPasteMode(false); // Close the modal
       setView(AppView.STUDIO); // Switch context to studio
 
+      const abort = new AbortController();
+      abortGenerationRef.current = abort;
       try {
-          const generator = structureImportedSong(cleanPasteContent, session.user.email || '', cleanedInputs, profile);
-          
+          const generator = structureImportedSong(cleanPasteContent, session.user.email || '', cleanedInputs, profile, abort.signal);
+
           for await (const chunk of generator) {
               if (typeof chunk === 'string' && chunk.startsWith('__STATUS__:')) {
                   updateGenerationTelemetry(chunk.replace('__STATUS__:', '').trim() || 'Processing...');
@@ -1379,16 +1404,21 @@ export const App: React.FC = () => {
       } catch (e: any) {
           console.error(e);
           loadCredits(); // reconcile (server refunds a charged-then-failed structuring)
-          if (e?.code === 'insufficient_credits' || e?.status === 402) {
+          if (e?.canceled) {
+              // User cancelled from the generating screen — quietly return to create.
+              setStep(AppStep.FAST_TRACK);
+          } else if (e?.code === 'insufficient_credits' || e?.status === 402) {
               toast('Even ghosts need fuel — top up to keep the hooks coming.', 'error');
               setView(AppView.PRICING);
+              setStep(AppStep.FAST_TRACK);
           } else {
               toast('Import failed: ' + e.message, 'error');
               setView(AppView.LANDING);
+              setStep(AppStep.FAST_TRACK); // Fallback
           }
-          setStep(AppStep.FAST_TRACK); // Fallback
       } finally {
           setIsLoading(false);
+          abortGenerationRef.current = null;
           setPasteContent('');
           generationInFlightRef.current = false;
       }
@@ -1642,7 +1672,7 @@ export const App: React.FC = () => {
             onPurchaseComplete={(newBalance) => setCredits(newBalance)}
             onOpenTerms={() => { setTermsReturnView(AppView.PRICING); setView(AppView.TERMS); }}
           />
-          <AskAndreWidget email={session?.user?.email || ''} />
+          {/* Help widget intentionally omitted on the paywall — it overlapped Restore/Terms (M6). */}
     <ApiKeyModal isOpen={isApiKeyModalOpen} onClose={closeApiKeyModal} onSaved={onApiKeySaved} />
         </>
       );
@@ -1789,7 +1819,7 @@ export const App: React.FC = () => {
                          {!isNative() && (
                            <button onClick={handleManageGeminiApiKey} className="text-[11px] font-bold text-[#8a8272] uppercase tracking-widest active:text-[#1a1a1a] transition-colors">Set AI Key</button>
                          )}
-                         <button onClick={() => signOut().then(() => { setSession(null); setView(AppView.AUTH); })} className="text-[11px] font-bold text-[#a89f8c] uppercase tracking-widest active:text-[#1a1a1a] transition-colors">Sign Out</button>
+                         <button onClick={() => signOut().then(() => { setSession(null); setView(AppView.AUTH); })} className="text-[11px] font-bold text-[#6b6357] uppercase tracking-widest active:text-[#1a1a1a] transition-colors">Sign Out</button>
                        </div>
                      </div>
              )}
@@ -1801,7 +1831,9 @@ export const App: React.FC = () => {
                onOpenUtility={(section) => openUtility(section, AppView.LANDING)}
              />
         </div>
-        <AskAndreWidget email={session?.user?.email || ''} />
+        {/* Help widget intentionally omitted in Studio — it overlapped the create CTA
+            and the Open-in-Suno button on the result screen (M6 / task #24). Help is
+            still reachable from the menu. */}
     <ApiKeyModal isOpen={isApiKeyModalOpen} onClose={closeApiKeyModal} onSaved={onApiKeySaved} />
         </>
       );
@@ -1836,7 +1868,7 @@ export const App: React.FC = () => {
                     <WalletIcon className="w-4 h-4" />
                     <span className="text-sm font-black tracking-widest tabular-nums">{formatCredits(credits)}</span>
                 </div>
-                <button onClick={() => setView(AppView.PRICING)} className="text-[10px] font-black uppercase tracking-[0.2em] text-[#8a8272] active:text-[#1a1a1a] transition-colors">
+                <button onClick={() => setView(AppView.PRICING)} className="text-[10px] font-black uppercase tracking-[0.2em] text-[#6b6357] active:text-[#1a1a1a] transition-colors">
                     Add Credits
                 </button>
              </div>
@@ -1925,7 +1957,7 @@ export const App: React.FC = () => {
                         <div
                           key={stage.label}
                           className={`flex items-center gap-2.5 text-[13px] py-1 ${
-                            isActive ? 'text-[#2b5be0] font-bold' : isDone ? 'text-[#6b6357]' : 'text-[#a89f8c]'
+                            isActive ? 'text-[#2b5be0] font-bold' : isDone ? 'text-[#6b6357]' : 'text-[#8a8272]'
                           }`}
                         >
                           <span className={`w-4 text-center text-[13px] ${isDone ? 'text-[#2b5be0]' : isActive ? 'text-[#2b5be0]' : ''}`}>
@@ -1937,9 +1969,17 @@ export const App: React.FC = () => {
                     })}
                   </div>
 
-                  <p className="relative z-10 mt-7 text-xs text-[#8a8272]">
+                  <p className="relative z-10 mt-7 text-xs text-[#6b6357]">
                     Rudy is writing — this usually takes 20 seconds.
                   </p>
+
+                  <button
+                    type="button"
+                    onClick={handleCancelGeneration}
+                    className="relative z-10 mt-6 text-sm font-semibold text-[#6b6357] active:text-[#1a1a1a] underline underline-offset-4"
+                  >
+                    Cancel
+                  </button>
               </div>
           ) : step === AppStep.FAST_TRACK ? (
               <FastTrackCreate

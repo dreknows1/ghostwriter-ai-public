@@ -1,5 +1,6 @@
 import React, { useMemo, useState } from "react";
 import { askAndre } from "../services/geminiService";
+import { isNative } from "../lib/platform";
 
 type ChatMessage = {
   role: "user" | "assistant";
@@ -33,6 +34,25 @@ const AskAndreWidget: React.FC<AskAndreWidgetProps> = ({ email }) => {
       }
       return <React.Fragment key={`${index}-txt`}>{part}</React.Fragment>;
     });
+  };
+
+  // On native (iOS/Android) we can't steer users to web billing (App Store 3.1.1):
+  // drop any songghost.com billing URL from the bot's reply and point them in-app.
+  const stripBillingLinks = (text: string) => {
+    const hasBillingUrl = /https?:\/\/\S*songghost\.com\S*/i.test(text);
+    if (!hasBillingUrl) return text;
+    const cleaned = text.replace(/https?:\/\/\S*songghost\.com\S*/gi, "").replace(/ {2,}/g, " ").trim();
+    const hint = "— open Pricing from the credits pill.";
+    return cleaned ? `${cleaned} ${hint}` : hint;
+  };
+
+  // Native: never render tappable links (assistant billing URLs get rewritten to an
+  // in-app hint). Web keeps the existing tappable-link behavior unchanged.
+  const renderMessageContent = (msg: ChatMessage) => {
+    if (isNative()) {
+      return msg.role === "assistant" ? stripBillingLinks(msg.content) : msg.content;
+    }
+    return renderWithLinks(msg.content);
   };
 
   const handleSend = async () => {
@@ -76,7 +96,7 @@ const AskAndreWidget: React.FC<AskAndreWidgetProps> = ({ email }) => {
                     : "bg-[#e7edff] text-[#2b5be0] ml-8"
                 }`}
               >
-                {renderWithLinks(msg.content)}
+                {renderMessageContent(msg)}
               </div>
             ))}
             {loading && <div className="text-xs text-[#8a8272]">Thinking...</div>}
