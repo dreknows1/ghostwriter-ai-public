@@ -995,15 +995,20 @@ export const App: React.FC = () => {
     const email = session?.user?.email;
     if (!email || !isNative()) return;
     const unsubscribe = onPurchaseCompleted(async () => {
+      const before = creditsRef.current;
       const updated = await refreshEntitlements(email, {
-        previousBalance: creditsRef.current,
+        previousBalance: before,
         tries: 5,
         intervalMs: 2000,
       });
       if (typeof updated === 'number') {
         setCredits(updated);
-        hapticSuccess();
-        toast('Purchase complete — credits added.', 'success');
+        // Only claim success when the balance actually rose — the webhook grant
+        // can lag (or fail); a "credits added" toast on a stale balance is a lie.
+        if (updated > before) {
+          hapticSuccess();
+          toast('Purchase complete — credits added.', 'success');
+        }
       }
     });
     return unsubscribe;

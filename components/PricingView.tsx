@@ -126,21 +126,35 @@ const PricingView: React.FC<PricingViewProps> = ({ email, onClose, onPurchaseCom
         try {
             const service = createEntitlementService(email);
             const productId = isNative() ? plan.nativeId : plan.webId;
+            // Snapshot the balance BEFORE the purchase so we can tell whether the
+            // webhook grant actually landed (best-effort — a failed read just means
+            // we can't verify the rise).
+            let before: number | null = null;
+            if (isNative()) {
+                try { before = await refreshEntitlements(email); } catch { /* non-fatal */ }
+            }
             await service.purchase(productId);
             // Web purchase() redirects the page to Stripe Checkout — nothing further to do here.
-            // Native purchase() resolves in-place: nudge an immediate credit refresh so the
-            // paywall reflects the new balance right away. The app-level onPurchaseCompleted
-            // listener (App.tsx) additionally bounded-polls for the lagging webhook grant.
+            // Native purchase() resolves in-place: bounded-poll until the webhook grant
+            // lands (it can lag the StoreKit sheet by a second or two), then close the
+            // paywall so the user sees their new balance. If it hasn't landed after the
+            // poll window, say so honestly instead of hanging on the spinner.
             if (isNative()) {
-                const updated = await refreshEntitlements(email);
+                const updated = await refreshEntitlements(
+                    email,
+                    typeof before === 'number' ? { previousBalance: before } : undefined
+                );
                 if (typeof updated === 'number') onPurchaseComplete(updated);
-                setProcessingId(null);
+                if (typeof updated === 'number' && typeof before === 'number' && updated > before) {
+                    onClose();
+                } else {
+                    toast('Purchase received — your credits are on the way and will appear shortly.', 'success');
+                }
             }
         } catch (e: any) {
             console.error('Purchase flow error:', e);
             if (isNative() && isUserCancelledError(e)) {
                 // User backed out of the StoreKit sheet — silent, no toast.
-                setProcessingId(null);
                 return;
             }
             toast(
@@ -149,6 +163,7 @@ const PricingView: React.FC<PricingViewProps> = ({ email, onClose, onPurchaseCom
                     : `Payment initialization failed: ${e?.message || 'please try again.'}`,
                 'error'
             );
+        } finally {
             setProcessingId(null);
         }
     };
