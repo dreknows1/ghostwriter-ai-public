@@ -25,8 +25,12 @@ export interface Offering {
 export interface EntitlementService {
   /** Returns the current subscription + credit-pack offering. */
   getOffering(): Promise<Offering>;
-  /** Purchases a product by id (Stripe price id on web, RevenueCat/StoreKit product id on native). */
-  purchase(productId: string): Promise<void>;
+  /**
+   * Purchases a product by id (Stripe price id on web, RevenueCat/StoreKit
+   * product id on native). `onStep` (native only) reports live progress of
+   * each purchase stage so hangs surface as named, visible failures.
+   */
+  purchase(productId: string, onStep?: (status: string) => void): Promise<void>;
   /** Restores previously granted entitlements (native restore / web re-sync). */
   restore(): Promise<void>;
 }
@@ -174,15 +178,39 @@ export class NativeEntitlements implements EntitlementService {
     };
   }
 
-  async purchase(productId: string): Promise<void> {
-    const Purchases = await this.purchases();
+  async purchase(productId: string, onStep?: (status: string) => void): Promise<void> {
+    // Each stage is labeled and time-boxed: a hang anywhere (SDK init, a
+    // wedged StoreKit daemon, a sheet that never appears) surfaces as a named
+    // TIMEOUT error instead of an eternal spinner — the diagnostic we've been
+    // missing on-device.
+    const step = async <T,>(label: string, run: () => Promise<T>, ms: number): Promise<T> => {
+      onStep?.(`${label}…`);
+      let timer: ReturnType<typeof setTimeout> | undefined;
+      const timeout = new Promise<never>((_, reject) => {
+        timer = setTimeout(() => reject(new Error(`TIMEOUT at "${label}" after ${Math.round(ms / 1000)}s`)), ms);
+      });
+      try {
+        const result = (await Promise.race([run(), timeout])) as T;
+        onStep?.(`${label} ✓`);
+        return result;
+      } finally {
+        clearTimeout(timer);
+      }
+    };
+
     const storeKitId = WEB_TO_STOREKIT[productId] || productId;
-    const res = await Purchases.getProducts({ productIdentifiers: [storeKitId] });
+    const Purchases = await step('start billing', () => this.purchases(), 10000);
+    const pay = await step('check purchases allowed', () => Purchases.canMakePayments(), 10000);
+    if (!pay.canMakePayments) {
+      throw new Error('This device blocks in-app purchases (Screen Time → Content & Privacy → iTunes & App Store Purchases).');
+    }
+    const res = await step('fetch product', () => Purchases.getProducts({ productIdentifiers: [storeKitId] }), 15000);
     const product = res.products?.[0];
-    if (!product) throw new Error(`Product ${storeKitId} is not available`);
+    if (!product) throw new Error(`Product ${storeKitId} not returned by the App Store`);
     // Grant is applied server-side by the RevenueCat webhook; the UI refreshes
     // via lib/nativeBridge.onPurchaseCompleted / refreshEntitlements.
-    await Purchases.purchaseStoreProduct({ product });
+    // 3-minute box: the sheet legitimately waits on the user, but "forever" = wedged.
+    await step('purchase', () => Purchases.purchaseStoreProduct({ product }), 180000);
   }
 
   async restore(): Promise<void> {

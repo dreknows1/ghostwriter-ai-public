@@ -72,6 +72,8 @@ const isNetworkError = (e: any): boolean => {
 
 const PricingView: React.FC<PricingViewProps> = ({ email, onClose, onPurchaseComplete, onOpenTerms }) => {
     const [processingId, setProcessingId] = useState<PlanId | null>(null);
+    // Live purchase-stage readout (native): makes silent hangs visible on-device.
+    const [purchaseStep, setPurchaseStep] = useState<string | null>(null);
     const [selected, setSelected] = useState<PlanId>('pack_50');
     const [userTier, setUserTier] = useState<string>('public');
     // StoreKit-localized price strings keyed by native product id (sg_*), fetched
@@ -156,7 +158,7 @@ const PricingView: React.FC<PricingViewProps> = ({ email, onClose, onPurchaseCom
                     ]);
                 } catch { /* non-fatal */ }
             }
-            await service.purchase(productId);
+            await service.purchase(productId, (s) => setPurchaseStep(s));
             // Web purchase() redirects the page to Stripe Checkout — nothing further to do here.
             // Native purchase() resolves in-place: bounded-poll until the webhook grant
             // lands (it can lag the StoreKit sheet by a second or two), then close the
@@ -186,12 +188,17 @@ const PricingView: React.FC<PricingViewProps> = ({ email, onClose, onPurchaseCom
                 toast("Payment sent, but we can't reach the billing service right now. Your credits will arrive automatically once the app reconnects — no need to buy again.", 'error');
                 return;
             }
+            // Surface the real failure (code + message) — we need the diagnosis
+            // on-device, not a generic apology.
+            const detail = [e?.code, e?.userInfo?.readableErrorCode ?? e?.readableErrorCode, e?.message]
+                .filter(Boolean).join(' · ');
             toast(
                 isNative()
-                    ? "Purchase didn't complete. You weren't charged — try again."
+                    ? `Purchase didn't complete — ${detail || 'unknown error'}`
                     : `Payment initialization failed: ${e?.message || 'please try again.'}`,
                 'error'
             );
+            if (isNative()) setPurchaseStep((prev) => `${prev ?? ''} → FAILED: ${detail || 'unknown'}`.trim());
         } finally {
             setProcessingId(null);
         }
@@ -278,6 +285,12 @@ const PricingView: React.FC<PricingViewProps> = ({ email, onClose, onPurchaseCom
             >
                 {processingId ? <LoadingSpinner /> : 'Continue'}
             </button>
+
+            {purchaseStep && (
+                <p className="mt-2 text-[11px] font-mono text-center text-[#6b6357] break-words px-1" aria-live="polite">
+                    {purchaseStep}
+                </p>
+            )}
 
             <p className="mt-3 text-[10.5px] leading-relaxed text-[#8a8272] text-center px-1">
                 7-day free trial applies to Pro only. Renews at {proRenewalPrice}/mo unless cancelled 24 hours before trial ends. Free trial includes 50 credits; the full 500 arrives when the trial converts. Credit packs are one-time — no subscription.
