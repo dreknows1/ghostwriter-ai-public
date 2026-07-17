@@ -7,12 +7,12 @@
     <title>Song Ghost</title>
     <link rel="preload" as="image" href="/brand/rudy.png">
     <style>
-      /* First paint + native feel: cream immediately (no dark flash between the
-         launch screen and React), and no page-level rubber-band panning. */
-      html, body { background: #F7F3EA; overscroll-behavior: none; overflow-x: hidden; }
+      /* First paint matches the intro's dark base (no flash between the launch
+         screen and React), and no page-level rubber-band panning or zoom. */
+      html, body { background: #0b0a09; overscroll-behavior: none; overflow-x: hidden; }
     </style>
   </head>
-  <body style="background:#F7F3EA">
+  <body>
     <div id="root"></div>
     <script type="module" src="/index.tsx"></script>
   </body>

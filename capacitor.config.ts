@@ -4,8 +4,8 @@ const config: CapacitorConfig = {
   appId: 'com.songghost.app',
   appName: 'SongGhost',
   webDir: 'dist',
-  // Paint cream behind the WebView so launch → web handoff never flashes.
-  backgroundColor: '#F7F3EA',
+  // Paint the intro's dark base behind the WebView so launch → intro never flashes.
+  backgroundColor: '#0b0a09',
 };
 
 export default config;
