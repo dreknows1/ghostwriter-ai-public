@@ -13,34 +13,34 @@ importers:
         version: 0.80.0
       '@capacitor-community/apple-sign-in':
         specifier: ^7.1.0
-        version: 7.1.0(@capacitor/core@7.6.7)
+        version: 7.1.0(@capacitor/core@8.4.2)
       '@capacitor-community/keep-awake':
-        specifier: ^7.1.0
-        version: 7.1.0(@capacitor/core@7.6.7)
+        specifier: ^8.0.1
+        version: 8.0.1(@capacitor/core@8.4.2)
       '@capacitor/browser':
-        specifier: ^7.0.5
-        version: 7.0.5(@capacitor/core@7.6.7)
+        specifier: ^8.0.4
+        version: 8.0.4(@capacitor/core@8.4.2)
       '@capacitor/clipboard':
-        specifier: ^7.0.4
-        version: 7.0.4(@capacitor/core@7.6.7)
+        specifier: ^8.0.1
+        version: 8.0.1(@capacitor/core@8.4.2)
       '@capacitor/core':
-        specifier: ^7.6.7
-        version: 7.6.7
+        specifier: ^8.4.2
+        version: 8.4.2
       '@capacitor/filesystem':
-        specifier: ^7.1.8
-        version: 7.1.8(@capacitor/core@7.6.7)
+        specifier: ^8.1.2
+        version: 8.1.2(@capacitor/core@8.4.2)
       '@capacitor/haptics':
-        specifier: ^7.0.5
-        version: 7.0.5(@capacitor/core@7.6.7)
+        specifier: ^8.0.2
+        version: 8.0.2(@capacitor/core@8.4.2)
       '@capacitor/ios':
-        specifier: ^7.6.7
-        version: 7.6.7(@capacitor/core@7.6.7)
+        specifier: ^8.4.2
+        version: 8.4.2(@capacitor/core@8.4.2)
       '@capacitor/preferences':
-        specifier: ^7.0.4
-        version: 7.0.4(@capacitor/core@7.6.7)
+        specifier: ^8.0.1
+        version: 8.0.1(@capacitor/core@8.4.2)
       '@capacitor/share':
-        specifier: ^7.0.4
-        version: 7.0.4(@capacitor/core@7.6.7)
+        specifier: ^8.0.1
+        version: 8.0.1(@capacitor/core@8.4.2)
       '@fontsource/manrope':
         specifier: ^5.2.8
         version: 5.2.8
@@ -54,8 +54,8 @@ importers:
         specifier: '*'
         version: 1.40.0
       '@revenuecat/purchases-capacitor':
-        specifier: ^11.3.2
-        version: 11.3.2(@capacitor/core@7.6.7)
+        specifier: ^13.2.3
+        version: 13.2.3(@capacitor/core@8.4.2)
       '@stripe/stripe-js':
         specifier: ^3.0.0
         version: 3.5.0
@@ -85,8 +85,8 @@ importers:
         version: 14.25.0
     devDependencies:
       '@capacitor/cli':
-        specifier: ^7.6.7
-        version: 7.6.7
+        specifier: ^8.4.2
+        version: 8.4.2
       '@types/node':
         specifier: ^20.11.0
         version: 20.19.33
@@ -231,53 +231,53 @@ packages:
     peerDependencies:
       '@capacitor/core': '>=7.0.0'
 
-  '@capacitor-community/keep-awake@7.1.0':
-    resolution: {integrity: sha512-4Hj6OKnBd/DAOeiMnqBy74tg1rwC+qLYWQbWJmysMZm2e2nptz43hxaKu22Xlyyw5O71CwwskLCM0skDFMPpQQ==}
+  '@capacitor-community/keep-awake@8.0.1':
+    resolution: {integrity: sha512-wTI5A6FWl5gWoMduzJ5euuJ1P73SO+rea0jV6vNdmz5TLbwIDhufelFe/GowNvU9gog6kDYbFhJ2pOp9ua1f3w==}
     peerDependencies:
-      '@capacitor/core': '>=7.0.0'
+      '@capacitor/core': '>=8.0.0'
 
-  '@capacitor/browser@7.0.5':
-    resolution: {integrity: sha512-YF/kC1m1e6c81X/agtAnYItVlqiQ/nXLG+Q3QXNDuiMoRynqa3Guu8ZaV9kWvqQcHoE2w18xz7WGpPOuh+R1fA==}
+  '@capacitor/browser@8.0.4':
+    resolution: {integrity: sha512-ORZ4u/y+7aMuu6yVuk6SP529fUZyqcbnuHB1q5McpA3o2SYfVoi28iB8rsQjI2ad1qlKJd29ZUuGtspXLBDlWg==}
     peerDependencies:
-      '@capacitor/core': '>=7.0.0'
+      '@capacitor/core': '>=8.0.0'
 
-  '@capacitor/cli@7.6.7':
-    resolution: {integrity: sha512-nV9j1+431/rsiabGs1UK0SbETrl2JfAf3SSlsM9RbMMjAL7WmruxnlJcbB9IXPoa6L99GljSO5q/9UCNvYz6Ag==}
-    engines: {node: '>=20.0.0'}
+  '@capacitor/cli@8.4.2':
+    resolution: {integrity: sha512-hE4HmpMdr5T8eQ++kGa1BKkdG2JLEvo1y1cj1kmFK78VB9dBp538oe1EZvzwupNGOl0ZueALotzL5wcXRD9w1Q==}
+    engines: {node: '>=22.0.0'}
     hasBin: true
 
-  '@capacitor/clipboard@7.0.4':
-    resolution: {integrity: sha512-+kiTRFjwD5UiWRg/m1JA/0Z0DDdsZLa25MLqI1e3MUi3yNZIwVZV5Oj6v4O0gxmpoBxf5A1L1v3weq+vWOBUuQ==}
+  '@capacitor/clipboard@8.0.1':
+    resolution: {integrity: sha512-iOlbTi8MojKyLnYE+M27priXid7vHd0PlDwyHohPzkuQ8Rkp6q7ykwZmPEUD+OnU/Ink7Qw/pUOfKgraKmA6Eg==}
     peerDependencies:
-      '@capacitor/core': '>=7.0.0'
+      '@capacitor/core': '>=8.0.0'
 
-  '@capacitor/core@7.6.7':
-    resolution: {integrity: sha512-DR0kqfcsDzWhvskz+sJWy41cdv+P1ITjmOYYG5WSV88EO6tx5Tf82M61vp4NjV7rfQDUAQjBAypgaTiB2/2oEg==}
+  '@capacitor/core@8.4.2':
+    resolution: {integrity: sha512-fQPRb3JXRaU2pnufDUvqOjhsrYxDQeFRZyaj/sHydIUxD2NxOGHKMpmKUdI+U4OOmKuGZyvRpi7TSJU+7Bjbmg==}
 
-  '@capacitor/filesystem@7.1.8':
-    resolution: {integrity: sha512-Qpw/2SE4/CzqAUvGgSM9hw/uXQ5qoOaF4wxbToXwpAaKPS+tzletS1h5ti3jjLmGcqizTs2sEXMtcsARW/Ceew==}
+  '@capacitor/filesystem@8.1.2':
+    resolution: {integrity: sha512-doaaMfGoFR2hWU6aV6u83I+5ZsGyJVq+Gz4r9lMpJzUKMm1eMu0hLnFdV1aXZlU9FlK/RndFrVD8oRZfNOqWgQ==}
     peerDependencies:
-      '@capacitor/core': '>=7.0.0'
+      '@capacitor/core': '>=8.0.0'
 
-  '@capacitor/haptics@7.0.5':
-    resolution: {integrity: sha512-ujXuUkL8UG1YLhuJo/q+jiHr0K5JmclGZHmV1RttmiUBRG1XpC4Fc4gXUJyEX+6IoyfwWhgtPvJFRUB31HYnRQ==}
+  '@capacitor/haptics@8.0.2':
+    resolution: {integrity: sha512-c2hZzRR5Fk1tbTvhG1jhh2XBAf3EhnIerMIb2sl7Mt41Gxx1fhBJFDa0/BI1IbY4loVepyyuqNC9820/GZuoWQ==}
     peerDependencies:
-      '@capacitor/core': '>=7.0.0'
+      '@capacitor/core': '>=8.0.0'
 
-  '@capacitor/ios@7.6.7':
-    resolution: {integrity: sha512-ZXw1tO1orV6yDpkJyXxoerLC6S+UW8HFa280TX57Pgo4tPwuqWDF22vInjaolKmL/+k70R+zuRjul+hhiBWvlw==}
+  '@capacitor/ios@8.4.2':
+    resolution: {integrity: sha512-ClVzIjK++yRjsRPOpdEzhsZfbHfoEc0f4M6vD0v7sWh0qcoF6NkxNAeHpWTn4OPJpJfpGGoYsq+IfEHrYyBiWA==}
     peerDependencies:
-      '@capacitor/core': ^7.6.0
+      '@capacitor/core': ^8.4.0
 
-  '@capacitor/preferences@7.0.4':
-    resolution: {integrity: sha512-TJhkwaI2RCs/iDC9PjNczZV4h6JM4gUtTuKMeFdy0OwGgFEHf4TrtW2mFMc1TnPDalYQ91p9NT+UKgiJs9/xtg==}
+  '@capacitor/preferences@8.0.1':
+    resolution: {integrity: sha512-T6no3ebi79XJCk91U3Jp/liJUwgBdvHR+s6vhvPkPxSuch7z3zx5Rv1bdWM6sWruNx+pViuEGqZvbfCdyBvcHQ==}
     peerDependencies:
-      '@capacitor/core': '>=7.0.0'
+      '@capacitor/core': '>=8.0.0'
 
-  '@capacitor/share@7.0.4':
-    resolution: {integrity: sha512-wNXxmXUcChrtbZ5jQv8scFIbIGKo3rk6B7qpWySxfUhYJP5NANgAqQ9Z69m0k/zYsucdh66SBU7XW1ykd9aUug==}
+  '@capacitor/share@8.0.1':
+    resolution: {integrity: sha512-3cSBKBCJVon54rKDROP2rqGyeGks4pBh9TbaEk9S375Kbek/ZHe72N50zIa0Vn9Eac/SuhwgehO/mmA4CsUOiw==}
     peerDependencies:
-      '@capacitor/core': '>=7.0.0'
+      '@capacitor/core': '>=8.0.0'
 
   '@capacitor/synapse@1.0.4':
     resolution: {integrity: sha512-/C1FUo8/OkKuAT4nCIu/34ny9siNHr9qtFezu4kxm6GY1wNFxrCFWjfYx5C1tUhVGz3fxBABegupkpjXvjCHrw==}
@@ -887,13 +887,13 @@ packages:
   '@protobufjs/utf8@1.1.0':
     resolution: {integrity: sha512-Vvn3zZrhQZkkBE8LSuW3em98c0FwgO4nxzv6OdSxPKJIEKY2bGbHn+mhGIPerzI4twdxaP8/0+06HBpwf345Lw==}
 
-  '@revenuecat/purchases-capacitor@11.3.2':
-    resolution: {integrity: sha512-3T4/lcAwpbPagrT4DuXvJ+8RewzFmHf3fQJQuhVy+uTQk5HGMHNlXcm2A/UdyHtWqU+/VqWbCClPFYGnpnNXAQ==}
+  '@revenuecat/purchases-capacitor@13.2.3':
+    resolution: {integrity: sha512-fW10KEjRnDev5G/KLBkMHyE8XRrDv4ivzV+Jv/2ACj9u28CXAcc39323rKaYsQiiTen40JEyeQXBsQUtTNyFBg==}
     peerDependencies:
-      '@capacitor/core': '>=7.0.0'
+      '@capacitor/core': '>=8.0.0'
 
-  '@revenuecat/purchases-typescript-internal-esm@17.25.0':
-    resolution: {integrity: sha512-KC4BjFaQclXqFafG1Enh7t8GSwdg8p905by7UrHq0WSJmLhOR6yXSj6WDv1iwsFSAZxPPwgozNxt+U6IOFTdCA==}
+  '@revenuecat/purchases-typescript-internal-esm@18.21.0':
+    resolution: {integrity: sha512-6aOc/RaWiIL8w69DzGZX9eenQ+dATc0ZcLbQlusFT28+6ODukSYyy4xPbVo7uZO5wkeZ0nRO74Yoi00kTOdfhg==}
 
   '@rolldown/pluginutils@1.0.0-beta.27':
     resolution: {integrity: sha512-+d0F4MKMCbeVUJwG96uQ4SgAznZNSq93I3V+9NHA4OpvqG8mRCpGdKmK8l/dl02h2CCDHwW2FqilnTyDcAnqjA==}
@@ -2860,21 +2860,21 @@ snapshots:
       '@babel/helper-string-parser': 7.27.1
       '@babel/helper-validator-identifier': 7.28.5
 
-  '@capacitor-community/apple-sign-in@7.1.0(@capacitor/core@7.6.7)':
+  '@capacitor-community/apple-sign-in@7.1.0(@capacitor/core@8.4.2)':
     dependencies:
-      '@capacitor/core': 7.6.7
+      '@capacitor/core': 8.4.2
       '@types/scriptjs': 0.0.2
       scriptjs: 2.5.9
 
-  '@capacitor-community/keep-awake@7.1.0(@capacitor/core@7.6.7)':
+  '@capacitor-community/keep-awake@8.0.1(@capacitor/core@8.4.2)':
     dependencies:
-      '@capacitor/core': 7.6.7
+      '@capacitor/core': 8.4.2
 
-  '@capacitor/browser@7.0.5(@capacitor/core@7.6.7)':
+  '@capacitor/browser@8.0.4(@capacitor/core@8.4.2)':
     dependencies:
-      '@capacitor/core': 7.6.7
+      '@capacitor/core': 8.4.2
 
-  '@capacitor/cli@7.6.7':
+  '@capacitor/cli@8.4.2':
     dependencies:
       '@ionic/cli-framework-output': 2.2.8
       '@ionic/utils-subprocess': 3.0.1
@@ -2896,34 +2896,34 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
-  '@capacitor/clipboard@7.0.4(@capacitor/core@7.6.7)':
+  '@capacitor/clipboard@8.0.1(@capacitor/core@8.4.2)':
     dependencies:
-      '@capacitor/core': 7.6.7
+      '@capacitor/core': 8.4.2
 
-  '@capacitor/core@7.6.7':
+  '@capacitor/core@8.4.2':
     dependencies:
       tslib: 2.8.1
 
-  '@capacitor/filesystem@7.1.8(@capacitor/core@7.6.7)':
+  '@capacitor/filesystem@8.1.2(@capacitor/core@8.4.2)':
     dependencies:
-      '@capacitor/core': 7.6.7
+      '@capacitor/core': 8.4.2
       '@capacitor/synapse': 1.0.4
 
-  '@capacitor/haptics@7.0.5(@capacitor/core@7.6.7)':
+  '@capacitor/haptics@8.0.2(@capacitor/core@8.4.2)':
     dependencies:
-      '@capacitor/core': 7.6.7
+      '@capacitor/core': 8.4.2
 
-  '@capacitor/ios@7.6.7(@capacitor/core@7.6.7)':
+  '@capacitor/ios@8.4.2(@capacitor/core@8.4.2)':
     dependencies:
-      '@capacitor/core': 7.6.7
+      '@capacitor/core': 8.4.2
 
-  '@capacitor/preferences@7.0.4(@capacitor/core@7.6.7)':
+  '@capacitor/preferences@8.0.1(@capacitor/core@8.4.2)':
     dependencies:
-      '@capacitor/core': 7.6.7
+      '@capacitor/core': 8.4.2
 
-  '@capacitor/share@7.0.4(@capacitor/core@7.6.7)':
+  '@capacitor/share@8.0.1(@capacitor/core@8.4.2)':
     dependencies:
-      '@capacitor/core': 7.6.7
+      '@capacitor/core': 8.4.2
 
   '@capacitor/synapse@1.0.4': {}
 
@@ -3273,7 +3273,7 @@ snapshots:
 
   '@isaacs/fs-minipass@4.0.1':
     dependencies:
-      minipass: 7.1.2
+      minipass: 7.1.3
 
   '@jridgewell/gen-mapping@0.3.13':
     dependencies:
@@ -3352,12 +3352,12 @@ snapshots:
 
   '@protobufjs/utf8@1.1.0': {}
 
-  '@revenuecat/purchases-capacitor@11.3.2(@capacitor/core@7.6.7)':
+  '@revenuecat/purchases-capacitor@13.2.3(@capacitor/core@8.4.2)':
     dependencies:
-      '@capacitor/core': 7.6.7
-      '@revenuecat/purchases-typescript-internal-esm': 17.25.0
+      '@capacitor/core': 8.4.2
+      '@revenuecat/purchases-typescript-internal-esm': 18.21.0
 
-  '@revenuecat/purchases-typescript-internal-esm@17.25.0': {}
+  '@revenuecat/purchases-typescript-internal-esm@18.21.0': {}
 
   '@rolldown/pluginutils@1.0.0-beta.27': {}
 
@@ -4465,7 +4465,7 @@ snapshots:
 
   minizlib@3.1.0:
     dependencies:
-      minipass: 7.1.2
+      minipass: 7.1.3
 
   mkdirp@1.0.4: {}
 
@@ -4918,7 +4918,7 @@ snapshots:
     dependencies:
       '@isaacs/fs-minipass': 4.0.1
       chownr: 3.0.0
-      minipass: 7.1.2
+      minipass: 7.1.3
       minizlib: 3.1.0
       yallist: 5.0.0
 
