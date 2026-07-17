@@ -23,7 +23,6 @@ import { LoadingSpinner, ProfileIcon, WalletIcon, EditIcon, ClockIcon, GhostIcon
 import { isNative } from './lib/platform';
 import { hapticLight, hapticSuccess } from './lib/haptics';
 import { openExternal, keepAwake, allowSleep, onPurchaseCompleted, refreshEntitlements } from './lib/nativeBridge';
-import { warmupNativePurchases } from './services/entitlementService';
 
 const AuthAppleIcon = () => (
   <svg viewBox="0 0 24 24" className="w-5 h-5" fill="currentColor" aria-hidden="true">
@@ -995,10 +994,11 @@ export const App: React.FC = () => {
   useEffect(() => {
     const email = session?.user?.email;
     if (!email || !isNative()) return;
-    // Start the RevenueCat SDK now (not lazily at the paywall) and push any
-    // finished-but-unrecorded StoreKit transactions — recovers purchases whose
-    // post to RC failed, which otherwise silently never grant credits.
-    warmupNativePurchases(email);
+    // NO SDK warmup here — deliberately. Early init at sign-in (builds 18-22)
+    // is exactly what wedged purchases on-device: a hung early configure was
+    // inherited by the paywall. Build 16 semantics (lazy init at the paywall,
+    // time-boxed + self-resetting in entitlementService) are the ones that
+    // provably worked.
     const unsubscribe = onPurchaseCompleted(async () => {
       const before = creditsRef.current;
       const updated = await refreshEntitlements(email, {

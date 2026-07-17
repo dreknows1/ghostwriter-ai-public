@@ -135,25 +135,41 @@ export class WebStripeEntitlements implements EntitlementService {
  */
 let sharedInit: { userId: string; promise: Promise<typeof import('@revenuecat/purchases-capacitor').Purchases> } | null = null;
 
+/** Rejects (never hangs) if `p` hasn't settled within `ms`. */
+const withTimeout = <T,>(p: Promise<T>, ms: number, label: string): Promise<T> => {
+  let timer: ReturnType<typeof setTimeout> | undefined;
+  const timeout = new Promise<never>((_, reject) => {
+    timer = setTimeout(() => reject(new Error(`TIMEOUT at "${label}" after ${Math.round(ms / 1000)}s`)), ms);
+  });
+  return Promise.race([p, timeout]).finally(() => clearTimeout(timer)) as Promise<T>;
+};
+
 export class NativeEntitlements implements EntitlementService {
   constructor(private readonly email: string) {}
 
-  /** Lazily import + configure the RevenueCat SDK exactly once (native only). */
-  private async purchases() {
+  /**
+   * Lazily import + configure the RevenueCat SDK exactly once (native only).
+   * Both halves are time-boxed and reported separately, and a failed or hung
+   * attempt self-resets so the NEXT call starts a completely fresh attempt —
+   * a wedged first init must never be inherited by later purchase taps.
+   */
+  private async purchases(onStep?: (status: string) => void) {
     const userId = this.email || '';
     if (!sharedInit || sharedInit.userId !== userId) {
-      sharedInit = {
-        userId,
-        promise: (async () => {
-          const mod = await import('@revenuecat/purchases-capacitor');
-          const apiKey = import.meta.env.VITE_REVENUECAT_IOS_KEY;
-          if (!apiKey) throw new Error('Missing VITE_REVENUECAT_IOS_KEY');
-          await mod.Purchases.configure({ apiKey, appUserID: userId || null });
-          return mod.Purchases;
-        })(),
-      };
-      // A failed configure must not poison every later attempt.
-      sharedInit.promise.catch(() => { sharedInit = null; });
+      const attempt = (async () => {
+        onStep?.('load billing module…');
+        const mod = await withTimeout(import('@revenuecat/purchases-capacitor'), 8000, 'load billing module');
+        const apiKey = import.meta.env.VITE_REVENUECAT_IOS_KEY;
+        if (!apiKey) throw new Error('Missing VITE_REVENUECAT_IOS_KEY');
+        onStep?.('connect billing…');
+        await withTimeout(mod.Purchases.configure({ apiKey, appUserID: userId || null }), 8000, 'connect billing');
+        onStep?.('billing ready ✓');
+        return mod.Purchases;
+      })();
+      sharedInit = { userId, promise: attempt };
+      attempt.catch(() => {
+        if (sharedInit?.promise === attempt) sharedInit = null;
+      });
     }
     return sharedInit.promise;
   }
@@ -216,7 +232,8 @@ export class NativeEntitlements implements EntitlementService {
     };
 
     const storeKitId = WEB_TO_STOREKIT[productId] || productId;
-    const Purchases = await step('start billing', () => this.purchases(), 10000);
+    // Init self-instruments + self-times-out (load module / connect billing).
+    const Purchases = await this.purchases(onStep);
     const pay = await step('check purchases allowed', () => Purchases.canMakePayments(), 10000);
     if (!pay.canMakePayments) {
       throw new Error('This device blocks in-app purchases (Screen Time → Content & Privacy → iTunes & App Store Purchases).');
