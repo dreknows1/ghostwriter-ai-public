@@ -145,7 +145,7 @@ const LyricsDisplay: React.FC<LyricsDisplayProps> = ({
   const handleCopyLyrics = async () => {
     await copyToClipboard(parsed.lyrics, setCopiedLyrics);
     hapticLight();
-    toast('Lyrics copied. Go haunt Suno with them.', 'success');
+    toast('Lyrics copied — take them to Suno.', 'success');
   };
 
   const handleCopyPrompt = async () => {
@@ -178,7 +178,7 @@ const LyricsDisplay: React.FC<LyricsDisplayProps> = ({
         await navigator.share({ title: parsed.title, text });
       } else {
         await copyText(text);
-        toast('Copied. Go haunt Suno with it.', 'success');
+        toast('Copied — take it to Suno.', 'success');
       }
     } catch (e) {
       // User-cancelled shares throw too — stay quiet.
@@ -357,7 +357,7 @@ const LyricsDisplay: React.FC<LyricsDisplayProps> = ({
         <div className="mt-3.5 rounded-2xl bg-[#f1ece0] border border-[#e6dcc6] p-3">
           <div className="flex items-center gap-3">
             <div className={`${artAspect === '9:16' ? 'aspect-[9/16] w-12' : artAspect === '1:1' ? 'aspect-square w-14' : 'aspect-[16/9] w-16'} rounded-xl bg-[#e2d8c4] flex items-center justify-center text-[#a99e86] overflow-hidden shrink-0`}>
-              {isGeneratingArt ? <LoadingSpinner /> : albumArt ? <img src={albumArt} alt="Cover" className="w-full h-full object-cover" /> : <ImageIcon />}
+              {isGeneratingArt ? <LoadingSpinner className="h-5 w-5 text-[#1a1a1a]" /> : albumArt ? <img src={albumArt} alt="Cover" className="w-full h-full object-cover" /> : <ImageIcon />}
             </div>
             <div className="flex-1 min-w-0">
               <div className="text-[14px] font-extrabold">Cover art</div>
@@ -395,7 +395,7 @@ const LyricsDisplay: React.FC<LyricsDisplayProps> = ({
             <MagicWandIcon /><span className="text-[9.5px] font-extrabold uppercase tracking-wide">Revise</span>
           </button>
           <button onClick={async () => { setIsSaving(true); try { await onSave(parsed.title, parsed.prompt, parsed.lyrics, albumArt || undefined); } finally { setIsSaving(false); } }} className="flex flex-col items-center gap-1 text-[#8a8272] active:text-[#2b5be0] transition-colors">
-            {isSaving ? <LoadingSpinner /> : <BookmarkIcon className="h-5 w-5" />}<span className="text-[9.5px] font-extrabold uppercase tracking-wide">Save</span>
+            {isSaving ? <LoadingSpinner className="h-5 w-5 text-[#2b5be0]" /> : <BookmarkIcon className="h-5 w-5" />}<span className="text-[9.5px] font-extrabold uppercase tracking-wide">Save</span>
           </button>
           <button onClick={handleShare} disabled={isSharing} className="flex flex-col items-center gap-1 text-[#8a8272] active:text-[#2b5be0] transition-colors">
             <ShareIcon className="h-5 w-5" /><span className="text-[9.5px] font-extrabold uppercase tracking-wide">Share</span>

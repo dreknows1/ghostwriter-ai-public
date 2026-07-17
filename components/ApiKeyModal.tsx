@@ -140,27 +140,27 @@ export default function ApiKeyModal({ isOpen, onClose, onSaved, required }: ApiK
 
   return (
     <div
-      className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-black/80"
+      className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-black/40"
       onClick={() => { if (!required) closeAndNotify(); }}
       aria-modal="true"
       role="dialog"
     >
       <div
-        className="w-full max-w-lg rounded-2xl border border-slate-700/70 bg-[#181410] text-slate-100 shadow-2xl"
+        className="w-full max-w-lg rounded-2xl border border-[#eadfca] bg-white text-[#1a1a1a] shadow-[0_10px_30px_rgba(90,70,30,0.15)]"
         onClick={(e) => e.stopPropagation()}
       >
-        <div className="flex items-start justify-between p-5 border-b border-slate-800">
+        <div className="flex items-start justify-between p-5 border-b border-[#eadfca]">
           <div>
-            <h2 className="text-xl font-black text-white">Connect your Gemini API key</h2>
-            <p className="text-sm text-slate-400 mt-1">
-              Song Ghost uses your own free Gemini key for lyric generation. The key stays in your browser — it's never sent to our servers.
+            <h2 className="text-xl font-black text-[#1a1a1a]">Connect your Gemini API key</h2>
+            <p className="text-sm text-[#6b6357] mt-1">
+              Song Ghost uses your own free Gemini key for lyric generation. The key stays on your device — it's never sent to our servers.
             </p>
           </div>
           {!required && (
             <button
               onClick={closeAndNotify}
               aria-label="Close"
-              className="text-slate-400 active:text-white text-2xl leading-none px-2 -mt-1"
+              className="text-[#8a8272] active:text-[#1a1a1a] text-2xl leading-none px-2 -mt-1"
             >
               ×
             </button>
@@ -169,20 +169,20 @@ export default function ApiKeyModal({ isOpen, onClose, onSaved, required }: ApiK
 
         <div className="p-5 space-y-4">
           {existing && (
-            <div className="rounded-xl border border-emerald-500/30 bg-emerald-500/5 px-4 py-3 text-sm">
-              <div className="text-emerald-300 font-semibold">Key already saved on this device</div>
-              <div className="font-mono text-xs text-slate-400 mt-1 break-all">{maskKey(existing)}</div>
-              <div className="text-slate-400 mt-2">Paste a new key below to replace it, or remove it.</div>
+            <div className="rounded-xl border border-emerald-300 bg-emerald-50 px-4 py-3 text-sm">
+              <div className="text-emerald-700 font-semibold">Key already saved on this device</div>
+              <div className="font-mono text-xs text-[#6b6357] mt-1 break-all">{maskKey(existing)}</div>
+              <div className="text-[#6b6357] mt-2">Paste a new key below to replace it, or remove it.</div>
             </div>
           )}
 
           <div>
             <div className="flex items-center justify-between mb-2">
-              <label className="text-xs font-bold uppercase tracking-widest text-slate-400">Your Gemini API key</label>
+              <label className="text-xs font-bold uppercase tracking-widest text-[#8a8272]">Your Gemini API key</label>
               <button
                 type="button"
                 onClick={() => setReveal((v) => !v)}
-                className="text-xs text-cyan-300 active:text-cyan-200"
+                className="text-xs text-[#2b5be0] active:opacity-70"
               >
                 {reveal ? "Hide" : "Show"}
               </button>
@@ -195,7 +195,7 @@ export default function ApiKeyModal({ isOpen, onClose, onSaved, required }: ApiK
               placeholder="AIza..."
               value={value}
               onChange={(e) => { setValue(e.target.value); setStatus({ kind: "idle" }); }}
-              className="w-full rounded-xl border border-slate-700 bg-[#141110] px-4 py-3 text-base font-mono text-cyan-200 placeholder:text-slate-600 focus:outline-none focus:border-cyan-400"
+              className="w-full rounded-xl border border-[#e3d8c1] bg-white px-4 py-3 text-base font-mono text-[#2b5be0] placeholder:text-[#8a8272] focus:outline-none focus:border-[#2b5be0]"
               onKeyDown={(e) => { if (e.key === "Enter") handleSave(); }}
             />
             <div className="flex flex-wrap items-center gap-2 mt-3">
@@ -203,7 +203,7 @@ export default function ApiKeyModal({ isOpen, onClose, onSaved, required }: ApiK
                 type="button"
                 onClick={handleTest}
                 disabled={!value.trim() || status.kind === "testing"}
-                className="px-3 py-2 rounded-lg border border-slate-700 bg-slate-800/60 text-sm font-semibold text-slate-200 active:border-cyan-400 active:text-white disabled:opacity-40 disabled:cursor-not-allowed"
+                className="px-3 py-2 rounded-lg border border-[#e3d8c1] bg-white text-sm font-semibold text-[#1a1a1a] active:border-[#2b5be0] active:text-[#2b5be0] disabled:opacity-40 disabled:cursor-not-allowed"
               >
                 {status.kind === "testing" ? "Testing..." : "Test key"}
               </button>
@@ -211,54 +211,54 @@ export default function ApiKeyModal({ isOpen, onClose, onSaved, required }: ApiK
                 href="https://aistudio.google.com/app/apikey"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="px-3 py-2 rounded-lg border border-cyan-400/40 bg-cyan-500/10 text-sm font-semibold text-cyan-200 active:bg-cyan-500/20 active:text-white"
+                className="px-3 py-2 rounded-lg border border-[#c9d7ff] bg-[#e7edff] text-sm font-semibold text-[#2b5be0] active:bg-[#d9e3ff]"
               >
                 Get a free key →
               </a>
               <button
                 type="button"
                 onClick={() => setShowHelp((v) => !v)}
-                className="px-3 py-2 rounded-lg text-sm text-slate-400 active:text-slate-200"
+                className="px-3 py-2 rounded-lg text-sm text-[#6b6357] active:text-[#1a1a1a]"
               >
                 {showHelp ? "Hide steps" : "Where do I get this?"}
               </button>
             </div>
 
             {status.kind === "ok" && (
-              <div className="mt-3 rounded-lg border border-emerald-500/30 bg-emerald-500/10 px-3 py-2 text-sm text-emerald-200">
+              <div className="mt-3 rounded-lg border border-emerald-300 bg-emerald-50 px-3 py-2 text-sm text-emerald-700">
                 ✓ Key works — Google returned {status.modelCount} model{status.modelCount === 1 ? "" : "s"}.
               </div>
             )}
             {status.kind === "error" && (
-              <div className="mt-3 rounded-lg border border-rose-500/30 bg-rose-500/10 px-3 py-2 text-sm text-rose-200">
+              <div className="mt-3 rounded-lg border border-rose-300 bg-rose-50 px-3 py-2 text-sm text-rose-600">
                 {status.message}
               </div>
             )}
           </div>
 
           {showHelp && (
-            <div className="rounded-xl border border-slate-700 bg-[#141110] px-4 py-3 text-sm text-slate-300 space-y-2">
-              <div className="font-bold text-white">How to get a Gemini API key (free):</div>
-              <ol className="list-decimal pl-5 space-y-1 text-slate-300">
-                <li>Click <a href="https://aistudio.google.com/app/apikey" target="_blank" rel="noopener noreferrer" className="text-cyan-300 underline">Get a free key</a> above (opens Google AI Studio in a new tab).</li>
+            <div className="rounded-xl border border-[#e7ddc9] bg-[#f1ece0] px-4 py-3 text-sm text-[#6b6357] space-y-2">
+              <div className="font-bold text-[#1a1a1a]">How to get a Gemini API key (free):</div>
+              <ol className="list-decimal pl-5 space-y-1 text-[#6b6357]">
+                <li>Click <a href="https://aistudio.google.com/app/apikey" target="_blank" rel="noopener noreferrer" className="text-[#2b5be0] underline">Get a free key</a> above (opens Google AI Studio in a new tab).</li>
                 <li>Sign in with the Google account you want to use.</li>
                 <li>Click <strong>"Create API key"</strong> → pick or create a project → copy the key (starts with <span className="font-mono">AIza...</span>).</li>
                 <li>Come back here, paste it above, click <strong>Test key</strong> or just <strong>Save</strong>.</li>
               </ol>
-              <div className="text-xs text-slate-500 pt-2 border-t border-slate-800">
+              <div className="text-xs text-[#8a8272] pt-2 border-t border-[#e7ddc9]">
                 The free tier is generous and renews monthly. Song Ghost never sees this key — it's stored only on this device.
               </div>
             </div>
           )}
         </div>
 
-        <div className="flex items-center justify-between gap-3 p-5 border-t border-slate-800">
+        <div className="flex items-center justify-between gap-3 p-5 border-t border-[#eadfca]">
           <div>
             {existing && (
               <button
                 type="button"
                 onClick={handleClear}
-                className="px-3 py-2 rounded-lg text-sm text-rose-300 active:text-rose-200"
+                className="px-3 py-2 rounded-lg text-sm text-rose-600 active:text-rose-500"
               >
                 Remove saved key
               </button>
@@ -269,7 +269,7 @@ export default function ApiKeyModal({ isOpen, onClose, onSaved, required }: ApiK
               <button
                 type="button"
                 onClick={closeAndNotify}
-                className="px-4 py-2 rounded-lg border border-slate-700 bg-slate-800/60 text-sm font-semibold text-slate-200 active:border-slate-500"
+                className="px-4 py-2 rounded-lg border border-[#e3d8c1] bg-white text-sm font-semibold text-[#6b6357] active:border-[#8a8272]"
               >
                 {existing ? "Close" : "Not now"}
               </button>
@@ -278,7 +278,7 @@ export default function ApiKeyModal({ isOpen, onClose, onSaved, required }: ApiK
               type="button"
               onClick={handleSave}
               disabled={!value.trim() || status.kind === "testing"}
-              className="px-4 py-2 rounded-lg bg-cyan-400 text-[#06121a] text-sm font-black active:brightness-110 disabled:opacity-40 disabled:cursor-not-allowed"
+              className="px-4 py-2 rounded-lg bg-[#2b5be0] text-white text-sm font-black active:brightness-110 disabled:opacity-40 disabled:cursor-not-allowed"
             >
               Save key
             </button>

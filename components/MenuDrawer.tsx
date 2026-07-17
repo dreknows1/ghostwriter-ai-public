@@ -67,7 +67,7 @@ const UTILITY_ITEMS: Array<[string, UtilitySection, { webOnly?: boolean }?]> = [
 ];
 
 const ITEM_CLASS =
-  'w-full text-left px-4 py-3 rounded-xl text-[15px] font-semibold leading-snug text-slate-200 active:bg-slate-800/60 active:text-white transition-colors';
+  'w-full text-left px-4 py-3 rounded-xl text-[15px] font-semibold leading-snug text-[#1a1a1a] active:bg-[#f1ece0] transition-colors';
 
 interface MenuDrawerProps {
   isOpen: boolean;
@@ -88,14 +88,14 @@ export default function MenuDrawer({ isOpen, onClose, onSetAiKey, onOpenUtility 
       <button
         aria-label="Close menu overlay"
         onClick={onClose}
-        className="fixed inset-0 z-[65] bg-black/50"
+        className="fixed inset-0 z-[65] bg-black/40"
       />
-      <div className="fixed right-3 top-16 bottom-3 z-[70] w-[19rem] rounded-[1.1rem] border border-slate-700 bg-slate-900 shadow-2xl flex flex-col overflow-hidden safe-bottom">
+      <div className="fixed right-3 top-16 bottom-3 z-[70] w-[19rem] rounded-[1.1rem] border border-[#eadfca] bg-white shadow-[0_10px_30px_rgba(90,70,30,0.15)] flex flex-col overflow-hidden safe-bottom">
         <div className="p-3 overflow-y-auto">
           {!native && (
             <button
               onClick={() => { onSetAiKey(); onClose(); }}
-              className={`${ITEM_CLASS} text-cyan-300`}
+              className={`${ITEM_CLASS} text-[#2b5be0]`}
             >
               Set AI Key
             </button>
@@ -120,13 +120,13 @@ export default function MenuDrawer({ isOpen, onClose, onSetAiKey, onOpenUtility 
           ))}
         </div>
         {visibleSocials.length > 0 && (
-          <div className="border-t border-slate-800 p-3">
-            <div className="flex items-center justify-around text-slate-300">
+          <div className="border-t border-[#eadfca] p-3">
+            <div className="flex items-center justify-around text-[#6b6357]">
               {visibleSocials.map((social) => (
                 <button
                   key={social.name}
                   onClick={() => openExternal(social.url)}
-                  className="w-9 h-9 rounded-full border border-slate-700 flex items-center justify-center active:bg-slate-800"
+                  className="w-9 h-9 rounded-full border border-[#e3d8c1] flex items-center justify-center active:bg-[#f1ece0]"
                   aria-label={social.name}
                   title={social.name}
                 >

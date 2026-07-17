@@ -26,7 +26,7 @@ const AskAndreWidget: React.FC<AskAndreWidgetProps> = ({ email }) => {
     return parts.map((part, index) => {
       if (/^https?:\/\/[^\s]+$/.test(part)) {
         return (
-          <a key={`${part}-${index}`} href={part} target="_blank" rel="noreferrer" className="text-cyan-300 underline break-all">
+          <a key={`${part}-${index}`} href={part} target="_blank" rel="noreferrer" className="text-[#2b5be0] underline break-all">
             {part}
           </a>
         );
@@ -58,30 +58,30 @@ const AskAndreWidget: React.FC<AskAndreWidgetProps> = ({ email }) => {
   return (
     <div className="fixed bottom-4 right-4 z-[95] safe-bottom" style={{ marginBottom: 'var(--safe-bottom, 0px)' }}>
       {open ? (
-        <div className="w-[22rem] max-w-[92vw] rounded-2xl border border-slate-700 bg-[#141110] shadow-2xl overflow-hidden">
-          <div className="flex items-center justify-between px-4 py-3 border-b border-slate-700">
+        <div className="w-[22rem] max-w-[92vw] rounded-2xl border border-[#eadfca] bg-white shadow-[0_10px_30px_rgba(90,70,30,0.15)] overflow-hidden">
+          <div className="flex items-center justify-between px-4 py-3 border-b border-[#eadfca]">
             <div>
-              <p className="text-sm font-bold text-cyan-300">Ask Rudy</p>
-              <p className="text-[11px] text-slate-400">Conversational Help</p>
+              <p className="text-sm font-bold text-[#2b5be0]">Ask Rudy</p>
+              <p className="text-[11px] text-[#8a8272]">Conversational Help</p>
             </div>
-            <button onClick={() => setOpen(false)} className="text-slate-400 active:text-white text-sm">Close</button>
+            <button onClick={() => setOpen(false)} className="text-[#8a8272] active:text-[#1a1a1a] text-sm">Close</button>
           </div>
-          <div className="h-72 overflow-y-auto px-3 py-3 space-y-2 bg-slate-900/40">
+          <div className="h-72 overflow-y-auto px-3 py-3 space-y-2 bg-white">
             {visibleMessages.map((msg, idx) => (
               <div
                 key={`${msg.role}-${idx}`}
                 className={`rounded-xl px-3 py-2 text-xs leading-relaxed ${
                   msg.role === "assistant"
-                    ? "bg-slate-800 text-slate-100"
-                    : "bg-cyan-900/40 border border-cyan-800 text-cyan-100 ml-8"
+                    ? "bg-[#f1ece0] text-[#1a1a1a]"
+                    : "bg-[#e7edff] text-[#2b5be0] ml-8"
                 }`}
               >
                 {renderWithLinks(msg.content)}
               </div>
             ))}
-            {loading && <div className="text-xs text-slate-400">Thinking...</div>}
+            {loading && <div className="text-xs text-[#8a8272]">Thinking...</div>}
           </div>
-          <div className="p-3 border-t border-slate-700 bg-[#0e0c20]">
+          <div className="p-3 border-t border-[#eadfca] bg-white">
             <div className="flex gap-2">
               <input
                 value={input}
@@ -93,12 +93,12 @@ const AskAndreWidget: React.FC<AskAndreWidgetProps> = ({ email }) => {
                   }
                 }}
                 placeholder="Ask a question..."
-                className="flex-1 bg-slate-800 border border-slate-700 rounded-lg px-3 py-2 text-sm text-white placeholder:text-slate-500 focus:outline-none focus:border-cyan-500"
+                className="flex-1 bg-white border border-[#e3d8c1] rounded-lg px-3 py-2 text-sm text-[#1a1a1a] placeholder:text-[#8a8272] focus:outline-none focus:border-[#2b5be0]"
               />
               <button
                 onClick={handleSend}
                 disabled={loading || !input.trim()}
-                className="px-3 py-2 rounded-lg bg-cyan-600 active:bg-cyan-500 disabled:bg-slate-700 disabled:text-slate-500 text-white text-sm font-semibold"
+                className="px-3 py-2 rounded-lg bg-[#2b5be0] active:brightness-110 disabled:bg-[#e7ddc9] disabled:text-[#8a8272] text-white text-sm font-semibold"
               >
                 Send
               </button>
@@ -110,7 +110,8 @@ const AskAndreWidget: React.FC<AskAndreWidgetProps> = ({ email }) => {
           onClick={() => setOpen(true)}
           aria-label="Ask Rudy"
           title="Ask Rudy"
-          className="w-12 h-12 rounded-full bg-cyan-600 active:bg-cyan-500 text-white shadow-xl border border-cyan-400/40 flex items-center justify-center text-lg font-black"
+          className="w-12 h-12 rounded-full text-white flex items-center justify-center text-lg font-black active:brightness-110"
+          style={{ background: 'linear-gradient(150deg,#3f78ff,#2b5be0 55%,#6a3cf0)', boxShadow: '0 12px 26px rgba(47,91,224,0.32)' }}
         >
           ?
         </button>

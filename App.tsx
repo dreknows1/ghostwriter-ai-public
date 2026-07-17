@@ -65,16 +65,16 @@ const ENGLISH_GENRES = [
 import { sanitizeEmail, sanitizeText, sanitizeUnknown } from './lib/sanitizeInput';
 
 
-// Ghost-voiced generation stages (docs/DESIGN.md Part 2) — ids/keywords drive the
-// real telemetry match against server __STATUS__ chunks; labels are the séance copy
+// Generation stages (docs/DESIGN.md Part 2) — ids/keywords drive the
+// real telemetry match against server __STATUS__ chunks; labels are the friendly copy
 // shown on screen, replacing the old "Process Stages" system-log presentation.
 const GENERATION_STAGES = [
-  { label: 'Channeling your story', keywords: ['listening', 'analyzing'] },
-  { label: 'Casting the first verse', keywords: ['drafting', 'structure'] },
-  { label: 'Possessing the bridge', keywords: ['agent', 'genre', 'subgenre'] },
-  { label: 'Haunting the hook', keywords: ['guide', 'compliance', 'check'] },
-  { label: 'Mixing the séance', keywords: ['refine', 'polish'] },
-  { label: 'Sealing the record', keywords: ['finalizing', 'suno prompt'] },
+  { label: 'Reading your story', keywords: ['listening', 'analyzing'] },
+  { label: 'Writing the first verse', keywords: ['drafting', 'structure'] },
+  { label: 'Building the bridge', keywords: ['agent', 'genre', 'subgenre'] },
+  { label: 'Polishing the hook', keywords: ['guide', 'compliance', 'check'] },
+  { label: 'Mixing the layers', keywords: ['refine', 'polish'] },
+  { label: 'Finishing the record', keywords: ['finalizing', 'suno prompt'] },
 ] as const;
 
 
@@ -707,7 +707,7 @@ const SongBuilder: React.FC<{
                     title === '' ? decidePicked : decideIdle
                   }`}
                 >
-                  Let Song Ghost pick
+                  Let Rudy pick
                 </button>
                 {titleIdeas.map((t) => (
                   <button
@@ -1810,7 +1810,7 @@ export const App: React.FC = () => {
   // STUDIO VIEW
   return (
     <>
-    <div className="min-h-screen font-sans relative overflow-x-hidden safe-x" style={{ background: '#F7F3EA', color: '#1a1a1a' }}>
+    <div className="min-h-screen font-sans relative overflow-x-hidden safe-x safe-bottom" style={{ background: '#F7F3EA', color: '#1a1a1a' }}>
 
       {/* Header */}
       <nav className="relative z-50 p-4 md:p-6 mt-3 flex justify-between items-center max-w-7xl mx-auto rounded-2xl md:rounded-3xl gap-3 safe-top bg-white border border-[#eadfca] shadow-[0_10px_30px_rgba(90,70,30,0.06)]">

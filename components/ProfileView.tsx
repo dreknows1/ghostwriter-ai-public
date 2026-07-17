@@ -493,7 +493,7 @@ const ProfileView: React.FC<ProfileViewProps> = ({ email, onLoadSong, onBack, on
                                         Next Monthly Reset: <span className="text-[#2b5be0]">{nextRefillDate}</span>
                                      </span>
                                      <span className="text-[10px] text-[#8a8272] uppercase tracking-widest">
-                                        (Free balance resets to 30 monthly. Pro monthly grants 2,000 on renewal.)
+                                        (Free balance resets to 25 monthly. Pro monthly grants 500 on renewal.)
                                      </span>
                                 </div>
                             )}

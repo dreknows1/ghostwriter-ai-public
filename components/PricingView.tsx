@@ -36,10 +36,69 @@ const BENEFITS = [
     'Credits never expire on packs',
 ];
 
+/**
+ * True when a native purchase rejection means "the user dismissed the StoreKit
+ * sheet" — not an error, so the UI must show nothing (App Review rejects
+ * error toasts on voluntary cancellation). Matches the RevenueCat
+ * `PurchasesError` shape thrown by @revenuecat/purchases-capacitor:
+ * `code` (PURCHASES_ERROR_CODE.PURCHASE_CANCELLED_ERROR = "1"),
+ * `userInfo.readableErrorCode` (e.g. "PURCHASE_CANCELLED"), and the
+ * deprecated-but-still-populated `userCancelled` boolean.
+ */
+const isUserCancelledError = (e: any): boolean => {
+    if (!e) return false;
+    if (e.userCancelled === true) return true;
+    if (String(e.code ?? '') === '1') return true; // PURCHASES_ERROR_CODE.PURCHASE_CANCELLED_ERROR
+    const readable = String(e.userInfo?.readableErrorCode ?? e.readableErrorCode ?? '');
+    if (readable.toUpperCase().includes('PURCHASE_CANCELLED')) return true;
+    return /cancel/i.test(String(e.message ?? ''));
+};
+
 const PricingView: React.FC<PricingViewProps> = ({ email, onClose, onPurchaseComplete, onOpenTerms }) => {
     const [processingId, setProcessingId] = useState<PlanId | null>(null);
     const [selected, setSelected] = useState<PlanId>('pack_50');
     const [userTier, setUserTier] = useState<string>('public');
+    // StoreKit-localized price strings keyed by native product id (sg_*), fetched
+    // once on mount on native. Empty on web or when the fetch fails, in which
+    // case the hardcoded USD literals in PRODUCTS render as before.
+    const [nativePrices, setNativePrices] = useState<Record<string, string>>({});
+
+    useEffect(() => {
+        if (!isNative()) return;
+        let cancelled = false;
+        (async () => {
+            try {
+                const offering = await createEntitlementService(email).getOffering();
+                const map: Record<string, string> = {};
+                for (const p of [offering.subscription, ...offering.packs]) {
+                    if (p.priceString) map[p.id] = p.priceString;
+                }
+                if (!cancelled && Object.keys(map).length > 0) setNativePrices(map);
+            } catch (e) {
+                console.error('Failed to fetch native offering:', e);
+            }
+        })();
+        return () => { cancelled = true; };
+    }, [email]);
+
+    /** Localized price for a plan; falls back to the hardcoded USD string. */
+    const displayPrice = (id: PlanId): string => {
+        const plan = PRODUCTS[id];
+        const localized = nativePrices[plan.nativeId];
+        if (!localized) return plan.price;
+        return id === 'pro_monthly' ? `${localized}/mo` : localized;
+    };
+
+    /** Localized sub-line for a plan; falls back to the hardcoded string. */
+    const displaySub = (id: PlanId): string => {
+        const plan = PRODUCTS[id];
+        if (id !== 'pro_monthly') return plan.sub;
+        const localized = nativePrices[plan.nativeId];
+        return localized ? `then ${localized}/mo` : plan.sub;
+    };
+
+    /** Localized Pro renewal price for the disclosure line. */
+    const proRenewalPrice = nativePrices['sg_pro_monthly'] || '$24.99';
 
     useEffect(() => {
         const fetchTier = async () => {
@@ -79,9 +138,14 @@ const PricingView: React.FC<PricingViewProps> = ({ email, onClose, onPurchaseCom
             }
         } catch (e: any) {
             console.error('Purchase flow error:', e);
+            if (isNative() && isUserCancelledError(e)) {
+                // User backed out of the StoreKit sheet — silent, no toast.
+                setProcessingId(null);
+                return;
+            }
             toast(
                 isNative()
-                    ? "Purchases aren't live in this build yet — check back soon."
+                    ? "Purchase didn't complete. You weren't charged — try again."
                     : `Payment initialization failed: ${e?.message || 'please try again.'}`,
                 'error'
             );
@@ -150,10 +214,10 @@ const PricingView: React.FC<PricingViewProps> = ({ email, onClose, onPurchaseCom
                                             <span className="text-[9px] font-black uppercase tracking-widest text-[#2b5be0] rounded-full px-1.5 py-0.5" style={{ backgroundColor: '#e7edff' }}>{plan.badge}</span>
                                         )}
                                     </span>
-                                    <span className="block text-[11px] text-[#8a8272] mt-0.5">{plan.sub}</span>
+                                    <span className="block text-[11px] text-[#8a8272] mt-0.5">{displaySub(id)}</span>
                                 </span>
                             </div>
-                            <span className="text-[15px] font-black whitespace-nowrap" style={{ color: isSelected ? '#2b5be0' : '#1a1a1a' }}>{plan.price}</span>
+                            <span className="text-[15px] font-black whitespace-nowrap" style={{ color: isSelected ? '#2b5be0' : '#1a1a1a' }}>{displayPrice(id)}</span>
                         </button>
                     );
                 })}
@@ -172,7 +236,7 @@ const PricingView: React.FC<PricingViewProps> = ({ email, onClose, onPurchaseCom
             </button>
 
             <p className="mt-3 text-[10.5px] leading-relaxed text-[#8a8272] text-center px-1">
-                7-day free trial applies to Pro only. Renews at $24.99/mo unless cancelled 24 hours before trial ends. Credit packs are one-time — no subscription.
+                7-day free trial applies to Pro only. Renews at {proRenewalPrice}/mo unless cancelled 24 hours before trial ends. Free trial includes 50 credits; the full 500 arrives when the trial converts. Credit packs are one-time — no subscription.
             </p>
 
             <button
