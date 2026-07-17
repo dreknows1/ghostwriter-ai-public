@@ -124,21 +124,38 @@ export class WebStripeEntitlements implements EntitlementService {
  * authoritative server-side via the RevenueCat webhook → `applyRevenueCatEvent`;
  * these methods only drive the StoreKit UI and let the UI refresh afterward.
  */
-export class NativeEntitlements implements EntitlementService {
-  private configured = false;
+/**
+ * App-wide single configure. Each NativeEntitlements instance used to run its
+ * own `Purchases.configure()` — so the sign-in warmup and the paywall would
+ * configure twice, and a second configure can deadlock inside the native SDK
+ * behind an in-flight operation (observed on-device: the paywall's
+ * "start billing" stage timing out while a background sync retried a wedged
+ * transaction). One shared promise = one configure, everyone awaits the same
+ * init. Keyed by appUserID so a future account switch re-configures.
+ */
+let sharedInit: { userId: string; promise: Promise<typeof import('@revenuecat/purchases-capacitor').Purchases> } | null = null;
 
+export class NativeEntitlements implements EntitlementService {
   constructor(private readonly email: string) {}
 
-  /** Lazily import + configure the RevenueCat SDK (native only). */
+  /** Lazily import + configure the RevenueCat SDK exactly once (native only). */
   private async purchases() {
-    const mod = await import('@revenuecat/purchases-capacitor');
-    if (!this.configured) {
-      const apiKey = import.meta.env.VITE_REVENUECAT_IOS_KEY;
-      if (!apiKey) throw new Error('Missing VITE_REVENUECAT_IOS_KEY');
-      await mod.Purchases.configure({ apiKey, appUserID: this.email || null });
-      this.configured = true;
+    const userId = this.email || '';
+    if (!sharedInit || sharedInit.userId !== userId) {
+      sharedInit = {
+        userId,
+        promise: (async () => {
+          const mod = await import('@revenuecat/purchases-capacitor');
+          const apiKey = import.meta.env.VITE_REVENUECAT_IOS_KEY;
+          if (!apiKey) throw new Error('Missing VITE_REVENUECAT_IOS_KEY');
+          await mod.Purchases.configure({ apiKey, appUserID: userId || null });
+          return mod.Purchases;
+        })(),
+      };
+      // A failed configure must not poison every later attempt.
+      sharedInit.promise.catch(() => { sharedInit = null; });
     }
-    return mod.Purchases;
+    return sharedInit.promise;
   }
 
   async getOffering(): Promise<Offering> {
@@ -229,6 +246,11 @@ export class NativeEntitlements implements EntitlementService {
     const Purchases = await this.purchases();
     await Purchases.syncPurchases();
   }
+
+  /** Start (configure) the SDK without performing any operation. */
+  async warmup(): Promise<void> {
+    await this.purchases();
+  }
 }
 
 /**
@@ -241,7 +263,12 @@ export class NativeEntitlements implements EntitlementService {
 export async function warmupNativePurchases(email: string): Promise<void> {
   if (!isNative() || !email) return;
   try {
-    await new NativeEntitlements(email).syncPurchases();
+    // Configure ONLY — no syncPurchases here. An explicit background sync
+    // retrying a wedged transaction is exactly what deadlocked the paywall's
+    // configure on-device (builds 18-20). After configure, the SDK's own
+    // transaction listener processes unfinished transactions safely on its
+    // own schedule; manual sync stays available behind Restore Purchases.
+    await new NativeEntitlements(email).warmup();
   } catch (e) {
     console.error('[entitlements] purchase warmup failed', e);
   }
