@@ -217,6 +217,16 @@ html, body {
   padding-left: var(--safe-left);
   padding-right: var(--safe-right);
 }
+/* On phones the side insets are 0 in portrait, so safe-x (loaded after the
+   utility classes) was clobbering each screen's own padding gutter to zero —
+   every screen rendered edge-to-edge, "like a website with no margins".
+   Floor it at 1rem so screens keep an app-like gutter; desktop is untouched. */
+@media (max-width: 768px) {
+  .safe-x {
+    padding-left: max(var(--safe-left), 1rem);
+    padding-right: max(var(--safe-right), 1rem);
+  }
+}
 
 @media (max-width: 768px) {
   .heading-display {
