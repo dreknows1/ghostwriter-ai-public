@@ -54,6 +54,22 @@ const isUserCancelledError = (e: any): boolean => {
     return /cancel/i.test(String(e.message ?? ''));
 };
 
+/**
+ * True when a native purchase failed on RevenueCat connectivity — the StoreKit
+ * charge may have gone through, RC just couldn't record it. Distinct copy is
+ * required: "you weren't charged" would be false, and the launch-time
+ * syncPurchases recovery will deliver the credits once RC is reachable again.
+ * PURCHASES_ERROR_CODE.NETWORK_ERROR = "10", OFFLINE_CONNECTION_ERROR = "35".
+ */
+const isNetworkError = (e: any): boolean => {
+    if (!e) return false;
+    const code = String(e.code ?? '');
+    if (code === '10' || code === '35') return true;
+    const readable = String(e.userInfo?.readableErrorCode ?? e.readableErrorCode ?? '');
+    if (/NETWORK|OFFLINE/i.test(readable)) return true;
+    return /network|offline|connection/i.test(String(e.message ?? ''));
+};
+
 const PricingView: React.FC<PricingViewProps> = ({ email, onClose, onPurchaseComplete, onOpenTerms }) => {
     const [processingId, setProcessingId] = useState<PlanId | null>(null);
     const [selected, setSelected] = useState<PlanId>('pack_50');
@@ -128,10 +144,17 @@ const PricingView: React.FC<PricingViewProps> = ({ email, onClose, onPurchaseCom
             const productId = isNative() ? plan.nativeId : plan.webId;
             // Snapshot the balance BEFORE the purchase so we can tell whether the
             // webhook grant actually landed (best-effort — a failed read just means
-            // we can't verify the rise).
+            // we can't verify the rise). Time-boxed: this must NEVER delay the
+            // StoreKit sheet — RevenueCat calls can hang when its API is
+            // unreachable (DNS blockers/VPNs).
             let before: number | null = null;
             if (isNative()) {
-                try { before = await refreshEntitlements(email); } catch { /* non-fatal */ }
+                try {
+                    before = await Promise.race([
+                        refreshEntitlements(email),
+                        new Promise<null>((resolve) => setTimeout(() => resolve(null), 4000)),
+                    ]);
+                } catch { /* non-fatal */ }
             }
             await service.purchase(productId);
             // Web purchase() redirects the page to Stripe Checkout — nothing further to do here.
@@ -155,6 +178,12 @@ const PricingView: React.FC<PricingViewProps> = ({ email, onClose, onPurchaseCom
             console.error('Purchase flow error:', e);
             if (isNative() && isUserCancelledError(e)) {
                 // User backed out of the StoreKit sheet — silent, no toast.
+                return;
+            }
+            if (isNative() && isNetworkError(e)) {
+                // Apple may have completed the charge; RC just couldn't record it.
+                // The launch-time syncPurchases recovery delivers it once reachable.
+                toast("Payment sent, but we can't reach the billing service right now. Your credits will arrive automatically once the app reconnects — no need to buy again.", 'error');
                 return;
             }
             toast(

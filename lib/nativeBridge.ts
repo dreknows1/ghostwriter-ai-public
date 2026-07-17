@@ -134,12 +134,21 @@ function sleep(ms: number): Promise<void> {
   return new Promise((resolve) => setTimeout(resolve, ms));
 }
 
+/**
+ * Resolves with `fallback` if the promise hasn't settled within `ms`. RevenueCat
+ * SDK calls can hang for a long time when api.revenuecat.com is unreachable
+ * (DNS blockers, VPNs) — nothing in the purchase/refresh path may block on them.
+ */
+function withTimeout<T>(p: Promise<T>, ms: number, fallback: T): Promise<T> {
+  return Promise.race([p, sleep(ms).then(() => fallback)]);
+}
+
 /** Best-effort nudge so RevenueCat re-syncs CustomerInfo to its backend. */
 async function nudgeCustomerInfo(): Promise<void> {
   if (!isNative()) return;
   try {
     const { Purchases } = await import('@revenuecat/purchases-capacitor');
-    await Purchases.getCustomerInfo();
+    await withTimeout(Purchases.getCustomerInfo().then(() => undefined), 3000, undefined);
   } catch (e) {
     console.error('[nativeBridge] getCustomerInfo failed', e);
   }
