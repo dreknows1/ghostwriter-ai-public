@@ -77,6 +77,60 @@ export const signIn = async (email: string, pass: string) => {
   }
 };
 
+const GUEST_CRED_KEY = 'sg_guest_cred';
+const GUEST_FLAG_KEY = 'sg_is_guest';
+
+/**
+ * Provision (or resume) an anonymous guest account so users can reach the core
+ * songwriting feature WITHOUT registering — App Store Guideline 5.1.1 requires
+ * that non-account features not force sign-up. No personal information is asked:
+ * the app generates a random credential transparently.
+ *
+ * The credential is persisted and REUSED on later launches — this keeps the
+ * guest's free credits/songs intact and prevents both junk-account spam and the
+ * "relaunch for fresh free credits" exploit. A real sign-in (Apple/email/OAuth)
+ * clears the guest flag.
+ */
+export const signInAsGuest = async () => {
+  try {
+    // Resume an existing guest first (credits persist; no new account spawned).
+    const saved = await storageGet(GUEST_CRED_KEY);
+    if (saved) {
+      try {
+        const { email, password } = JSON.parse(saved);
+        const r = await signIn(email, password);
+        if (!r.error && r.data?.session) {
+          await storageSet(GUEST_FLAG_KEY, '1');
+          return { ...r, guest: true };
+        }
+      } catch { /* fall through to fresh provision */ }
+    }
+    // Fresh anonymous account — random local-part, random 64-hex password.
+    const rand = generateNonce() + generateNonce();
+    const email = `guest_${rand}@guest.songghost.com`;
+    const password = generateNonce() + generateNonce();
+    const r = await signUp(email, password);
+    if (r.error || !r.data?.session) {
+      return { data: null, error: r.error || new Error('Could not start guest session'), guest: true };
+    }
+    await storageSet(GUEST_CRED_KEY, JSON.stringify({ email, password }));
+    await storageSet(GUEST_FLAG_KEY, '1');
+    return { ...r, guest: true };
+  } catch (e: any) {
+    return { data: null, error: e, guest: true };
+  }
+};
+
+/** True when the current session is an anonymous guest (not a real account). */
+export const isGuestSession = async (): Promise<boolean> => {
+  return (await storageGet(GUEST_FLAG_KEY)) === '1';
+};
+
+/** Clear the guest flag after a real sign-in so the account is no longer a guest. */
+export const clearGuestFlag = async (): Promise<void> => {
+  await storageRemove(GUEST_FLAG_KEY);
+};
+
 /**
  * Redeem a signed single-use OAuth token (minted by api/oauth/callback.ts after
  * a real provider exchange) for a session. The email is derived server-side from

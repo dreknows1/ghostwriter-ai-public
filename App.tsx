@@ -4,7 +4,7 @@ import { AppStep, AppView, SongInputs, UserProfile } from './types';
 import { generateSong, generateAlbumArt, generateSocialPack, translateLyrics, structureImportedSong, suggestTitles } from './services/geminiService';
 import { saveSong } from './services/songService';
 import { getUserProfile } from './services/userService';
-import { getSession, signOut, signIn, signUp, signInWithOAuthToken, startProviderSignIn, signInWithApple } from './services/authService';
+import { getSession, signOut, signIn, signUp, signInWithOAuthToken, startProviderSignIn, signInWithApple, signInAsGuest, clearGuestFlag, isGuestSession } from './services/authService';
 import { getUserCredits, hasEnoughCredits, checkAffordability, COSTS, formatCredits } from './services/creditService';
 import { apiFetch, SESSION_EXPIRED_EVENT } from './lib/api';
 import LyricsDisplay from './components/LyricsDisplay';
@@ -747,6 +747,8 @@ export const App: React.FC = () => {
     catch { return false; }
   });
   const [session, setSession] = useState<any>(null);
+  // True when signed in as an anonymous guest (5.1.1: try the app without registering).
+  const [isGuest, setIsGuest] = useState(false);
   const [headerAvatarUrl, setHeaderAvatarUrl] = useState<string | null>(null);
   const [view, setView] = useState<AppView>(AppView.AUTH);
   const [step, setStep] = useState<AppStep>(AppStep.FAST_TRACK);
@@ -863,6 +865,9 @@ export const App: React.FC = () => {
       const { data, error } = await signInWithApple();
       if (error) throw error;
       if (data?.session) {
+        // A real Apple sign-in supersedes any guest session.
+        setIsGuest(false);
+        clearGuestFlag();
         // Apply pending tier from community code if validated
         const savedTier = localStorage.getItem('sg_pending_tier');
         if (savedTier === 'skool') {
@@ -1074,6 +1079,7 @@ export const App: React.FC = () => {
       const sess = await getSession();
       setSession(sess);
       if (sess) {
+        isGuestSession().then(setIsGuest); // restore guest state across launches
         setView(AppView.LANDING); // Default to Landing Dashboard
         getUserCredits(sess.user.email || '').then(c => setCredits(c));
         loadHeaderAvatar(sess.user.email || '');
@@ -1306,8 +1312,33 @@ export const App: React.FC = () => {
       }
   };
 
+  // "Continue as Guest" — provision an anonymous account and enter the app so
+  // the core songwriting feature is reachable without registering (5.1.1).
+  const handleGuest = async () => {
+      setAuthError(null);
+      setIsAuthLoading(true);
+      try {
+          const { data, error } = await signInAsGuest();
+          if (error) throw error;
+          if (data?.session) {
+            setIsGuest(true);
+            setSession(data.session);
+            setView(AppView.LANDING);
+            const c = await getUserCredits(data.session.user.email || '');
+            setCredits(c);
+          }
+      } catch (e: any) {
+          setAuthError(e?.message || 'Could not start guest session');
+      } finally {
+          setIsAuthLoading(false);
+      }
+  };
+
   const handleAuth = async (e: React.FormEvent) => {
       e.preventDefault();
+      // A real sign-in supersedes any guest session.
+      setIsGuest(false);
+      clearGuestFlag();
       const cleanEmail = sanitizeEmail(authEmail);
       const cleanPassword = sanitizeText(authPassword, 200);
       const cleanReferral = sanitizeText(referralCode, 64);
@@ -1444,8 +1475,11 @@ export const App: React.FC = () => {
   if (!session || view === AppView.AUTH) {
     return (
       <>
-        <div className="min-h-screen flex flex-col items-center justify-center p-3 sm:p-4 relative overflow-hidden safe-top safe-bottom safe-x" style={{ background: '#F7F3EA' }}>
-          <div className="relative z-10 w-full max-w-xl rounded-[2rem] border border-[#eadfca] bg-white shadow-[0_20px_60px_rgba(90,70,30,0.12)] overflow-hidden" style={{ color: '#1a1a1a' }}>
+        {/* Scrollable (not justify-center + overflow-hidden): a tall form would
+            otherwise clip its bottom — incl. the compliance-critical guest button
+            — with no way to reach it. my-auto centers it when it fits. */}
+        <div className="min-h-screen flex flex-col items-center py-6 px-3 sm:px-4 relative overflow-y-auto safe-top safe-bottom safe-x" style={{ background: '#F7F3EA' }}>
+          <div className="relative z-10 my-auto w-full max-w-xl rounded-[2rem] border border-[#eadfca] bg-white shadow-[0_20px_60px_rgba(90,70,30,0.12)] overflow-hidden" style={{ color: '#1a1a1a' }}>
           <div className="p-6 sm:p-9">
             <div className="flex justify-center mb-4"><Rudy size={84} variant="art" /></div>
             <h1 className="heading-display text-3xl sm:text-4xl font-black text-center tracking-tight mb-3">Write. Refine. Release.</h1>
@@ -1453,7 +1487,10 @@ export const App: React.FC = () => {
             <p className="text-center text-[#8a8272] text-xs font-black uppercase tracking-[0.18em] mb-8">{isSignUpMode ? 'Create your Song Ghost account' : 'Sign in to Song Ghost'}</p>
 
             <>
-              {communityCodeValidated ? (
+              {/* Community Code is a web-only Skool-community perk. Removed from
+                  the iOS app (App Store 2.1 — reviewer asked what it unlocks; it
+                  only granted a larger free-credit allowance, no features). */}
+              {isNative() ? null : communityCodeValidated ? (
                 <div className="mb-6 rounded-xl border border-emerald-500/50 bg-emerald-50 px-5 py-4 text-center animate-fade-in">
                   <p className="text-emerald-700 font-black text-sm uppercase tracking-widest mb-1">Community Access Unlocked</p>
                   <p className="text-emerald-600 text-xs font-semibold">Community Discount Active — 100 monthly credits + 50% off all purchases</p>
@@ -1598,6 +1635,20 @@ export const App: React.FC = () => {
                   {isAuthLoading ? <LoadingSpinner /> : (isSignUpMode ? 'Create Account' : 'Continue')}
                 </button>
               </form>
+
+              {/* Try it first — no account required (App Store 5.1.1). Signing in
+                  later saves your songs and unlocks more credits. */}
+              <div className="mt-6 pt-6 border-t border-[#eadfca] text-center">
+                <button
+                  type="button"
+                  onClick={handleGuest}
+                  disabled={isAuthLoading}
+                  className="w-full h-13 py-3.5 rounded-xl bg-[#faf6ec] border-[1.5px] border-[#d8cdb4] text-[#1a1a1a] font-black text-base active:bg-[#f1ece0] transition-colors disabled:opacity-60"
+                >
+                  Continue as Guest
+                </button>
+                <p className="mt-2 text-xs text-[#8a8272]">Write a couple of songs free — no account needed.</p>
+              </div>
             </>
           </div>
 
@@ -1616,7 +1667,7 @@ export const App: React.FC = () => {
               </button>
             </div>
             <div className="mt-4 text-center space-y-2">
-              {!communityCodeValidated && !showCommunityCode && (
+              {!isNative() && !communityCodeValidated && !showCommunityCode && (
                 <button
                   type="button"
                   onClick={() => setShowCommunityCode(true)}
@@ -1792,6 +1843,17 @@ export const App: React.FC = () => {
                            </button>
                          </div>
                        </div>
+
+                       {isGuest && (
+                         <button
+                           type="button"
+                           onClick={() => setView(AppView.AUTH)}
+                           className="mb-6 w-full rounded-2xl border border-[#d6e0ff] bg-[#eef2ff] px-4 py-3 text-left active:bg-[#e2e9ff] transition-colors"
+                         >
+                           <p className="text-[13px] font-black text-[#2b5be0]">You're browsing as a guest</p>
+                           <p className="text-[12px] text-[#6b6357] mt-0.5">Sign in to save your songs and add credits →</p>
+                         </button>
+                       )}
 
                        <h1 className="heading-display text-[33px] leading-[1.04] font-black tracking-tight">Write.<br/>Refine.<br/>Release.</h1>
                        <p className="text-[#6b6357] text-[15px] leading-[1.45] mt-3 max-w-[19rem]">Draft lyrics, polish structure, and generate cover art in one cohesive style.</p>
