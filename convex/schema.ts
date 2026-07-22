@@ -6,10 +6,15 @@ export default defineSchema({
     email: v.string(),
     passwordHash: v.optional(v.string()),
     passwordSalt: v.optional(v.string()),
+    // Sign in with Apple stable subject. Set on the first Apple sign-in and used
+    // to resolve the account on repeats when Apple omits the email claim.
+    appleSub: v.optional(v.string()),
     createdAt: v.number(),
     updatedAt: v.optional(v.number()),
     isActive: v.boolean(),
-  }).index("by_email", ["email"]),
+  })
+    .index("by_email", ["email"])
+    .index("by_apple_sub", ["appleSub"]),
 
   profiles: defineTable({
     userId: v.id("users"),
@@ -58,6 +63,17 @@ export default defineSchema({
     type: v.string(),
     createdAt: v.number(),
   }).index("by_event", ["eventId"]),
+
+  // Single-use guard for the OAuth session-mint token (SECURITY FIX). Each signed
+  // token minted by api/oauth/callback.ts carries a random nonce; api/auth.ts
+  // records it here on first use, so a replayed token is rejected even across
+  // cold serverless instances (an in-process Map cannot). `exp` mirrors the
+  // token's own expiry so rows can be swept after they can no longer be replayed.
+  authNonces: defineTable({
+    nonce: v.string(),
+    exp: v.number(),
+    createdAt: v.number(),
+  }).index("by_nonce", ["nonce"]),
 
   referralCodes: defineTable({
     userId: v.id("users"),

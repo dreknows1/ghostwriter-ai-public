@@ -10,6 +10,7 @@
 
 import type * as analytics from "../analytics.js";
 import type * as app from "../app.js";
+import type * as authNonces from "../authNonces.js";
 import type * as billing from "../billing.js";
 import type * as blog from "../blog.js";
 import type * as constants from "../constants.js";
@@ -31,6 +32,7 @@ import type {
 declare const fullApi: ApiFromModules<{
   analytics: typeof analytics;
   app: typeof app;
+  authNonces: typeof authNonces;
   billing: typeof billing;
   blog: typeof blog;
   constants: typeof constants;

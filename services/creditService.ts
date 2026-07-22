@@ -1,3 +1,5 @@
+import { authorizedFetch } from "./authService";
+
 const FREE_MONTHLY_CREDITS = 25;
 
 export const COSTS = {
@@ -13,7 +15,7 @@ export const formatCredits = (n: number | null | undefined): string =>
   typeof n === "number" && n >= 1_000_000 ? "∞" : String(n ?? 0);
 
 async function callDb(action: string, payload: any) {
-  const res = await fetch("/api/auth", {
+  const res = await authorizedFetch("/api/auth", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ action: "db", dbAction: action, payload }),

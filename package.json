@@ -5,7 +5,7 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "npm run compile:curriculum && tsc && vite build && npm run build:api",
+    "build": "node scripts/check-auth-env.mjs && npm run compile:curriculum && tsc && vite build && npm run build:api",
     "preview": "vite preview",
     "setup:convex": "./scripts/setup-convex.sh",
     "check:health": "./scripts/check-health.sh",
@@ -13,7 +13,7 @@
     "test": "vitest run",
     "test:watch": "vitest",
     "check:unused": "tsc --noEmit -p tsconfig.lint.json",
-    "build:api": "esbuild server/ai.ts --bundle --platform=node --format=esm --packages=external --outfile=api/ai.js",
+    "build:api": "esbuild server/ai.ts --bundle --platform=node --format=esm --packages=external --outfile=api/ai.js && esbuild server/auth.ts --bundle --platform=node --format=esm --packages=external --outfile=api/auth.js && esbuild server/db.ts --bundle --platform=node --format=esm --packages=external --outfile=api/db.js && esbuild server/oauth-callback.ts --bundle --platform=node --format=esm --packages=external --outfile=api/oauth/callback.js && esbuild server/auth-apple.ts --bundle --platform=node --format=esm --packages=external --outfile=api/auth-apple.js",
     "compile:curriculum": "node scripts/compile-curriculum.mjs"
   },
   "dependencies": {
@@ -23,6 +23,7 @@
     "buffer": "^6.0.3",
     "convex": "^1.18.0",
     "framer-motion": "^12.38.0",
+    "jose": "^6.2.3",
     "openai": "^6.32.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
