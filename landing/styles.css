@@ -417,21 +417,17 @@
 
 /* ── Steps (real product footage) ─────────────────────────────────── */
 
-.how {
-  display: grid;
-  grid-template-columns: minmax(0, 1.05fr) minmax(0, 0.95fr);
-  gap: clamp(2rem, 5vw, 5rem);
-  /* Top-aligned: centring the shorter steps list against the taller phone
-     opened a dead band between the heading and step 01. */
-  align-items: start;
-}
+/* ── How it works ─────────────────────────────────────────────────── */
 
-.steps { list-style: none; margin: 0; padding: 0; }
-.step {
-  padding: clamp(1.35rem, 3vh, 2rem) 0;
-  border-top: 1px solid var(--rule);
+.steps {
+  list-style: none;
+  margin: 0 0 clamp(2.5rem, 6vh, 4rem);
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: clamp(1.5rem, 4vw, 3.5rem);
 }
-.step:last-child { border-bottom: 1px solid var(--rule); }
+.step { padding-top: 1.15rem; border-top: 1px solid var(--rule); }
 .step__num {
   display: block;
   font-family: var(--display);
@@ -442,37 +438,78 @@
   margin-bottom: 0.55rem;
 }
 .step h3 { margin-bottom: 0.4rem; }
-.step p { color: var(--ink-soft); font-size: 0.9375rem; max-width: 44ch; }
+.step p { color: var(--ink-soft); font-size: 0.9375rem; max-width: 34ch; }
 
-/* A phone-shaped frame around a genuine capture. Deliberately restrained —
-   no fake notch, no glossy bezel; the screenshot is the point. */
-.device { margin: 0; justify-self: center; max-width: 21rem; width: 100%; }
-.device__screen {
-  border-radius: 30px;
+/* Five real captures. On desktop they sit in a row with a gentle stagger so
+   the band reads as a strip of film rather than a tidy icon grid; on narrow
+   screens it becomes a swipeable rail rather than five stacked phones. */
+.gallery {
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  gap: clamp(0.75rem, 1.6vw, 1.5rem);
+  align-items: start;
+}
+
+/* The gallery sits outside .shell: inside the 1240px text column each phone
+   was only ~230px wide and the screens stopped being readable. Its own wider
+   container avoids any 100vw/scrollbar arithmetic. */
+.gallery-wrap {
+  width: min(100% - (var(--gutter) * 2), 1680px);
+  margin-inline: auto;
+}
+.shot { margin: 0; }
+.shot:nth-child(even) { margin-top: clamp(1rem, 3vw, 2.5rem); }
+.shot__screen {
+  border-radius: clamp(12px, 1.6vw, 22px);
   overflow: hidden;
   background: var(--night);
-  padding: 6px;
+  padding: 4px;
   box-shadow:
-    0 0 0 1px rgba(26, 26, 26, 0.16),
-    0 40px 70px -44px rgba(11, 10, 9, 0.8);
+    0 0 0 1px rgba(26, 26, 26, 0.14),
+    0 26px 46px -34px rgba(11, 10, 9, 0.75);
 }
-.device__screen img { width: 100%; border-radius: 24px; }
-.device figcaption {
-  margin-top: 0.9rem;
+.shot__screen img {
+  width: 100%;
+  aspect-ratio: 9 / 19.5;
+  object-fit: cover;
+  object-position: 50% 0;
+  border-radius: clamp(9px, 1.3vw, 18px);
+}
+/* This capture is a crop (its clipped title band was trimmed), so it keeps its
+   own ratio rather than being cover-cropped sideways to match the others. The
+   shorter frame reads fine against the row's stagger. */
+.shot--short .shot__screen img { aspect-ratio: 560 / 1012; object-position: 50% 0; }
+.shot figcaption {
+  margin-top: 0.7rem;
   text-align: center;
   font-family: var(--display);
-  /* 10px at --ink-faint measured 2.3:1. Small text has to clear 4.5:1, so
-     this is --ink-muted at a size that can actually carry it. */
-  font-size: 0.6875rem;
+  font-size: 0.625rem;
   font-weight: 500;
-  letter-spacing: 0.11em;
+  letter-spacing: 0.1em;
   text-transform: uppercase;
   color: var(--ink-muted);
 }
 
-@media (max-width: 860px) {
-  .how { grid-template-columns: minmax(0, 1fr); gap: clamp(2.5rem, 8vw, 3.5rem); }
-  .device { order: -1; max-width: 17rem; }
+@media (max-width: 900px) {
+  .steps { grid-template-columns: 1fr; gap: 0; }
+  .step { padding-block: 1.15rem; }
+  .step p { max-width: none; }
+  /* A rail, not a stack: five full-width phones would be a scroll marathon. */
+  .gallery {
+    display: flex;
+    gap: 0.9rem;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    -webkit-overflow-scrolling: touch;
+    padding-bottom: 0.5rem;
+    /* Bleed the rail to the screen edges so it reads as scrollable. */
+    margin-inline: calc(var(--gutter) * -1);
+    padding-inline: var(--gutter);
+    scrollbar-width: none;
+  }
+  .gallery::-webkit-scrollbar { display: none; }
+  .shot { flex: 0 0 clamp(9.5rem, 46vw, 13rem); scroll-snap-align: center; }
+  .shot:nth-child(even) { margin-top: 0; }
 }
 
 /* ── Mid band ─────────────────────────────────────────────────────── */
