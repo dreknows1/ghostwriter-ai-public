@@ -452,8 +452,32 @@
 /* ── Contents list ────────────────────────────────────────────────── */
 
 /* Left edge stays on the shell like every other section; the measure is
-   capped on the list itself rather than by centring a narrower container. */
-.pb-toc { list-style: none; padding: 0; margin: 0; max-width: 48rem; counter-reset: toc; }
+   capped by the grid column rather than by centring a narrower container. */
+.pb-contents {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 0.74fr);
+  gap: clamp(1.5rem, 3vw, 3rem);
+  align-items: start;
+}
+/* Rudy rides along beside the list instead of scrolling off at the top of it.
+   The offset clears the sticky masthead. */
+.pb-rudy { margin: 0; position: sticky; top: 5rem; }
+/* The cutout lost the render's own contact shadow; this puts him back on the
+   ground without reintroducing a background box that could seam against the
+   section cream. */
+.pb-rudy img {
+  width: 100%;
+  height: auto;
+  display: block;
+  filter: drop-shadow(0 26px 26px rgba(11, 10, 9, 0.22));
+}
+
+@media (max-width: 900px) {
+  .pb-contents { grid-template-columns: minmax(0, 1fr); }
+  .pb-rudy { position: static; max-width: 17rem; margin: 0 auto; order: -1; }
+}
+
+.pb-toc { list-style: none; padding: 0; margin: 0; counter-reset: toc; }
 .pb-toc li {
   counter-increment: toc;
   display: grid;
@@ -684,7 +708,8 @@ Apron tied, she smiles at me
 <!-- ── What's in it ───────────────────────────────────────────────── -->
 
 <section class="pb-band" style="padding-top:0">
-  <div class="shell">
+  <div class="shell pb-contents">
+    <div>
     <div class="pb-band__head pb-reveal">
       <h2>What's in the book</h2>
     </div>
@@ -704,6 +729,15 @@ Apron tied, she smiles at me
       <li><div><b>The cheat sheet</b>
         <p>One page. Print it, or keep it open while you write.</p></div></li>
     </ol>
+    </div>
+
+    <figure class="pb-rudy pb-reveal">
+      <picture>
+        <source srcset="/media/rudy-reading.webp" type="image/webp">
+        <img src="/media/rudy-reading.png" width="1100" height="1100" loading="lazy" decoding="async"
+             alt="Rudy holding the Prompt Book open, reading it">
+      </picture>
+    </figure>
   </div>
 </section>
 
