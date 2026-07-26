@@ -94,6 +94,11 @@ Go write one tonight - https://songghost.com
 - Rudy`;
 
 async function sendEmail(token: string, contactId: string, firstName: string) {
+  // Send from the verified sending subdomain. Anything else lands in spam.
+  const from = process.env.GHL_FROM_EMAIL;
+  // Deliberately no `emailTo`: GHL resolves the address from the contact and
+  // rejects the call outright (CONVERSATIONS_MSG_INVALID_EMAILTO) if the value
+  // does not already match one of that contact's own addresses.
   const res = await fetch(`${BASE}/conversations/messages`, {
     method: "POST",
     headers: headers(token),
@@ -102,12 +107,12 @@ async function sendEmail(token: string, contactId: string, firstName: string) {
       contactId,
       subject: "Here's your Prompt Book",
       html: emailHtml(firstName),
-      emailTo: undefined, // GHL resolves the address from the contact
+      ...(from ? { emailFrom: from } : {}),
       message: emailText(firstName),
     }),
   });
-  if (res.ok) return { sent: true };
   const detail = await res.text().catch(() => "");
+  if (res.ok) return { sent: true, detail: detail.slice(0, 200) };
   return { sent: false, reason: `messages ${res.status}`, detail: detail.slice(0, 300) };
 }
 
