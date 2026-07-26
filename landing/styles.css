@@ -60,7 +60,7 @@
    as a flex item but its span keeps painting past the shrunken box, over the
    nowrap button, and the button runs off the edge. Rudy alone is enough at
    that width — the name is in the <title> and the aria-label. */
-@media (max-width: 400px) {
+@media (max-width: 374px) {
   .masthead__mark span { display: none; }
 }
 
@@ -193,15 +193,18 @@
      element that never gets to paint — autoplay refused, decode failed, file
      404, reduced-motion — would otherwise leave a black hole where the hero
      should be, and this way the still is breakpoint-aware. */
-  background: var(--night) url('/media/hero-rudy-poster.jpg') center 42% / cover no-repeat;
+  background: var(--night) url('/media/hero-rudy-poster-v2.jpg') 50% 46% / cover no-repeat;
   box-shadow: 0 40px 80px -50px rgba(11, 10, 9, 0.85);
 }
 .hero__film .film {
   width: 100%;
-  aspect-ratio: 4 / 5;
+  /* Square, not 4:5. The shot is now a narrative — Rudy floats, a request
+     arrives, he crosses to the desk — so it has real horizontal composition.
+     A 4:5 crop of a 16:9 frame keeps only ~42% of the width and guillotined
+     the lamp and the desk he moves to; 1:1 keeps ~56% and holds the action. */
+  aspect-ratio: 1 / 1;
   object-fit: cover;
-  /* Trim the generated frame's dead space and push Rudy toward the type. */
-  object-position: 50% 42%;
+  object-position: 50% 46%;
 }
 .film__cap {
   position: absolute;
@@ -231,10 +234,13 @@
 @media (max-width: 760px) {
   /* Phones get the 9:16 cut, so the fallback poster has to match it. */
   .hero__film {
-    background-image: url('/media/hero-rudy-mobile-poster.jpg');
-    background-position: center 34%;
+    background-image: url('/media/hero-rudy-mobile-poster-v2.jpg');
+    /* The 9:16 cut is an outpaint, so it gained ceiling and studio floor.
+       Centre on Rudy rather than on the frame, or the crop is mostly empty
+       light beam. */
+    background-position: 50% 54%;
   }
-  .hero__film .film { aspect-ratio: 4 / 5; object-position: 50% 34%; }
+  .hero__film .film { aspect-ratio: 4 / 5; object-position: 50% 54%; }
 }
 
 /* ── Section scaffolding ──────────────────────────────────────────── */
@@ -358,8 +364,8 @@
   width: 64%;
   height: 100%;
   object-fit: cover;
-  object-position: 52% 26%;
-  background: var(--night) url('/media/rudy-writing-poster.jpg') 52% 26% / cover no-repeat;
+  object-position: 44% 64%;
+  background: var(--night) url('/media/rudy-writing-poster-v2.jpg') 44% 64% / cover no-repeat;
 }
 .interlude__scrim {
   position: absolute;
@@ -398,8 +404,8 @@
     width: 100%;
     height: 58%;
     bottom: auto;
-    object-position: 52% 22%;
-    background-position: 52% 22%;
+    object-position: 46% 62%;
+    background-position: 46% 62%;
   }
   .interlude__scrim {
     background:
