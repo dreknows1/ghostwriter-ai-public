@@ -1,7 +1,20 @@
 <!doctype html>
-<html lang="en">
+<html lang="en" class="no-js">
 <head>
 <meta charset="utf-8">
+<script>
+/* Flipped before first paint: the reveal animations start at opacity 0, so if
+   scripting is off, .no-js is what keeps the page from rendering as a blank
+   sheet of cream. The timer covers the other half of that risk — scripting on
+   but main.js never arriving (404, blocked, offline) — by revealing everything
+   unconditionally if main.js hasn't checked in. */
+document.documentElement.classList.remove('no-js');
+setTimeout(function () {
+  if (document.documentElement.dataset.reveals === 'ready') return;
+  var els = document.querySelectorAll('[data-reveal]');
+  for (var i = 0; i < els.length; i++) els[i].classList.add('is-in');
+}, 2500);
+</script>
 <script>
 /* Legacy entry points land on "/" with query params the app owns:
    the OAuth callback returns ?oauth_token / ?oauth_error, and Stripe returns
@@ -174,11 +187,42 @@
           <h2 data-reveal>How it works</h2>
         </div>
         <p class="section__note" data-reveal>
-          Every screen below is the real app — captured, not mocked up.
+          The screen on the right is the real app, captured — not a mockup.
         </p>
       </div>
 
-      <ol class="steps" id="steps"><!-- filled with real captures --></ol>
+      <div class="how">
+        <ol class="steps">
+          <li class="step" data-reveal>
+            <span class="step__num">01</span>
+            <h3>Tell Rudy what it's about.</h3>
+            <p>In your words. A sentence is enough — a feeling, a memory, a name,
+               the thing you never sent.</p>
+          </li>
+          <li class="step" data-reveal>
+            <span class="step__num">02</span>
+            <h3>Pick a language and a genre.</h3>
+            <p>English, Spanish, French or Portuguese. Pop to Gospel, Country to
+               Afrobeats — each written to its own rules.</p>
+          </li>
+          <li class="step" data-reveal>
+            <span class="step__num">03</span>
+            <h3>Get a finished song.</h3>
+            <p>Structure, hooks, ad-libs and cover art, saved to your discography.
+               One tap into Suno or Udio.</p>
+          </li>
+        </ol>
+
+        <figure class="device" data-reveal>
+          <div class="device__screen">
+            <img src="/media/app-ios-home.jpg" width="700" height="1522" loading="lazy"
+                 decoding="async"
+                 alt="The SongGhost iOS app: a New Song button reading “genre + your story, done”,
+                      with Paste / Import and Discography below it.">
+          </div>
+          <figcaption>SongGhost on iOS</figcaption>
+        </figure>
+      </div>
     </div>
   </section>
 

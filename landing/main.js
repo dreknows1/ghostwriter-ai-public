@@ -7,6 +7,9 @@
   var reduced = window.matchMedia('(prefers-reduced-motion: reduce)');
   var saveData = (navigator.connection && navigator.connection.saveData) === true;
 
+  // Stands down the inline failsafe in index.html.
+  document.documentElement.dataset.reveals = 'ready';
+
   /* ── Year ─────────────────────────────────────────────────────── */
   var year = document.getElementById('year');
   if (year) year.textContent = String(new Date().getFullYear());
