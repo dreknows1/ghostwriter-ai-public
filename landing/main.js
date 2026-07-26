@@ -1,6 +1,7 @@
 /* SongGhost landing — behaviour.
    Everything here is progressive enhancement: with JS off the page is a
-   complete, readable document with poster images instead of video. */
+   complete, readable document, with the CSS background stills standing in
+   for the video. */
 (function () {
   'use strict';
 
@@ -55,8 +56,8 @@
 
   /* ── Video ────────────────────────────────────────────────────────
      Sources are attached only when a clip is close to the viewport, and
-     never at all under reduced-motion or Save-Data — in those cases the
-     poster is the finished state, which is why every <video> ships one. */
+     never at all under reduced-motion or Save-Data — in those cases the CSS
+     background still on the wrapper is the finished state. */
   var films = document.querySelectorAll('video[data-src]');
 
   /* A 9:16 cut exists for the hero so phones get a shot framed for their
@@ -91,11 +92,18 @@
 
   if (!reduced.matches && !saveData) {
     if ('IntersectionObserver' in window) {
-      var vio = new IntersectionObserver(function (entries, obs) {
+      // Attach when the clip gets close, then keep observing: a looping video
+      // left running far off-screen decodes frames forever for nobody.
+      var vio = new IntersectionObserver(function (entries) {
         entries.forEach(function (entry) {
-          if (!entry.isIntersecting) return;
-          attach(entry.target);
-          obs.unobserve(entry.target);
+          var v = entry.target;
+          if (entry.isIntersecting) {
+            attach(v);
+            var p = v.play();
+            if (p && p.catch) p.catch(function () {});
+          } else if (v.dataset.loaded) {
+            v.pause();
+          }
         });
       }, { rootMargin: '300px 0px' });
       films.forEach(function (v) { vio.observe(v); });
@@ -103,12 +111,18 @@
       films.forEach(attach);
     }
 
-    // Don't burn battery decoding video in a background tab.
+    // Don't burn battery decoding video in a background tab either. On the way
+    // back, only the clips actually on screen resume — the observer above owns
+    // the off-screen ones.
     document.addEventListener('visibilitychange', function () {
       films.forEach(function (v) {
         if (!v.dataset.loaded) return;
-        if (document.hidden) { v.pause(); }
-        else { var p = v.play(); if (p && p.catch) p.catch(function () {}); }
+        if (document.hidden) { v.pause(); return; }
+        var r = v.getBoundingClientRect();
+        if (r.bottom > 0 && r.top < window.innerHeight) {
+          var p = v.play();
+          if (p && p.catch) p.catch(function () {});
+        }
       });
     });
   }
@@ -130,6 +144,10 @@
     if (reduced.matches || !('IntersectionObserver' in window)) {
       finish();
     } else {
+      // The sentence ships in the markup so it still reads with JS blocked.
+      // Now that JS is here and will type it, clear it — before paint, so
+      // there's no flash of the finished line.
+      typed.textContent = '';
       var tio = new IntersectionObserver(function (entries, obs) {
         entries.forEach(function (entry) {
           if (!entry.isIntersecting) return;
@@ -146,7 +164,10 @@
             setTimeout(step, 34 + Math.random() * 46);
           })();
         });
-      }, { threshold: 0.6 });
+        // Deliberately low: at 0.6 an element taller than 60% of the viewport
+        // (a short landscape phone) can never satisfy the threshold, and the
+        // sentence — which JS has already blanked — would stay blank forever.
+      }, { threshold: 0.25 });
       tio.observe(typed.closest('.prompt'));
     }
   }

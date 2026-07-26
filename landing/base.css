@@ -19,15 +19,19 @@
   --paper-sunk: #efe9dc;
   --rule: rgba(26, 26, 26, 0.14);
   --rule-soft: rgba(26, 26, 26, 0.08);
-  --ink-70: rgba(26, 26, 26, 0.7);
-  --ink-55: rgba(26, 26, 26, 0.55);
-  --ink-38: rgba(26, 26, 26, 0.38);
+  /* Measured against cream, not chosen by eye. --ink-soft 6.1:1 and
+     --ink-muted 4.6:1 both clear AA at any size; --ink-faint is 3.7:1 and is
+     therefore only ever used on text large enough to qualify (≥18.66px bold). */
+  --ink-soft: rgba(26, 26, 26, 0.7);
+  --ink-muted: rgba(26, 26, 26, 0.62);
+  --ink-faint: rgba(26, 26, 26, 0.52);
 
   /* Night — matches the app's launch colour so the two never clash */
   --night: #0b0a09;
   --night-2: #131417;
   --night-ink: #f4f1ea;
   --night-ink-60: rgba(244, 241, 234, 0.6);
+  --night-ink-muted: rgba(244, 241, 234, 0.55);
   --night-rule: rgba(244, 241, 234, 0.16);
 
   --display: 'Unbounded', system-ui, sans-serif;
@@ -97,14 +101,14 @@ p { margin: 0; text-wrap: pretty; }
   font-weight: 500;
   letter-spacing: 0.12em;
   text-transform: uppercase;
-  color: var(--ink-55);
+  color: var(--ink-muted);
 }
 
 .lede {
   font-size: clamp(1.125rem, 0.6vw + 1rem, 1.3125rem);
   font-weight: 500;
   line-height: 1.5;
-  color: var(--ink-70);
+  color: var(--ink-soft);
   max-width: 34ch;
 }
 
@@ -142,4 +146,16 @@ p { margin: 0; text-wrap: pretty; }
     scroll-behavior: auto !important;
   }
   [data-reveal] { opacity: 1 !important; transform: none !important; }
+}
+
+/* The masthead is sticky and ~70px tall, so an in-page anchor would otherwise
+   land with the section's first 70px hidden underneath it. */
+:where(section[id]) { scroll-margin-top: 5.5rem; }
+
+/* Printing (and anything else that renders without scrolling) never fires the
+   reveal observer, so the whole page below the fold would come out blank. */
+@media print {
+  [data-reveal] { opacity: 1 !important; transform: none !important; }
+  .masthead { position: static; }
+  video { display: none; }
 }

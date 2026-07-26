@@ -24,7 +24,7 @@ setTimeout(function () {
    app never reads it from the URL, so a referral link should see the pitch. */
 (function () {
   var q = window.location.search;
-  if (q && /[?&](oauth_token|oauth_error|status|session_id)=/.test(q)) {
+  if (q && /[?&](oauth_token=|oauth_error=|session_id=|status=(success|cancel)\b)/.test(q)) {
     window.location.replace('/app/' + q + window.location.hash);
   }
 })();
@@ -34,8 +34,8 @@ setTimeout(function () {
 <meta name="description" content="SongGhost turns a feeling, a memory, or the text you never sent into a real song — verses, hooks, ad-libs and cover art — written by Rudy, your AI ghostwriter. English, Spanish, French and Portuguese.">
 <link rel="canonical" href="https://songghost.com/">
 <meta name="theme-color" content="#f7f3ea">
-<link rel="icon" href="/brand/rudy.png" type="image/png">
-<link rel="apple-touch-icon" href="/brand/rudy.png">
+<link rel="icon" href="/media/rudy-mark.png" type="image/png">
+<link rel="apple-touch-icon" href="/media/rudy-touch.png">
 
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="SongGhost">
@@ -74,10 +74,11 @@ setTimeout(function () {
 
 <header class="masthead" id="masthead">
   <a class="masthead__mark" href="/" aria-label="SongGhost home">
-    <img src="/brand/rudy.png" alt="" width="76" height="78" decoding="async">
+    <img src="/media/rudy-mark.png" alt="" width="96" height="99" decoding="async">
     <span>SongGhost</span>
   </a>
   <nav class="masthead__nav" aria-label="Primary">
+    <a href="#rudy">Meet Rudy</a>
     <a href="#craft">The craft</a>
     <a href="#how">How it works</a>
     <a class="btn btn--sm btn--primary" href="/app">Open the web app</a>
@@ -153,7 +154,7 @@ setTimeout(function () {
           <span class="prompt__num">03</span>
           <p class="prompt__text">
             <span class="prompt__struck">“The thing I should have said out loud.”</span>
-            <span class="prompt__typed" data-type="“The text I typed out at 2am and never sent.”"></span><b class="caret" aria-hidden="true"></b>
+            <span class="prompt__typed" data-type="“The text I typed out at 2am and never sent.”">“The text I typed out at 2am and never sent.”</span><b class="caret" aria-hidden="true"></b>
           </p>
           <span class="prompt__mark" aria-hidden="true">[Chorus]</span>
         </li>
@@ -162,7 +163,7 @@ setTimeout(function () {
   </section>
 
   <!-- ── Meet Rudy (dark interlude) ─────────────────────────────────── -->
-  <section class="interlude" id="craft">
+  <section class="interlude" id="rudy">
     <video class="interlude__film" autoplay muted loop playsinline preload="none"
            data-src="/media/rudy-writing.mp4"
            data-src-webm="/media/rudy-writing.webm" aria-hidden="true" tabindex="-1"></video>
@@ -188,7 +189,7 @@ setTimeout(function () {
           <h2 data-reveal>How it works</h2>
         </div>
         <p class="section__note" data-reveal>
-          The screen on the right is the real app, captured — not a mockup.
+          That is the real app below, captured — not a mockup.
         </p>
       </div>
 
@@ -244,7 +245,7 @@ setTimeout(function () {
   </section>
 
   <!-- ── The craft ──────────────────────────────────────────────────── -->
-  <section class="section" id="features">
+  <section class="section" id="craft">
     <div class="shell">
       <div class="section__head">
         <div>
@@ -347,7 +348,7 @@ setTimeout(function () {
 <footer class="foot">
   <div class="shell foot__inner">
     <a class="foot__mark" href="/" aria-label="SongGhost home">
-      <img src="/brand/rudy.png" alt="" width="60" height="62" loading="lazy" decoding="async">
+      <img src="/media/rudy-mark.png" alt="" width="96" height="99" loading="lazy" decoding="async">
       <span>SongGhost</span>
     </a>
     <p class="foot__legal">© <span id="year">2026</span> SongGhost</p>
