@@ -5,7 +5,7 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "node scripts/check-auth-env.mjs && npm run compile:curriculum && tsc && vite build && npm run build:api",
+    "build": "node scripts/check-auth-env.mjs && npm run compile:curriculum && tsc && vite build && npm run build:api && node scripts/build-site.mjs",
     "preview": "vite preview",
     "setup:convex": "./scripts/setup-convex.sh",
     "check:health": "./scripts/check-health.sh",

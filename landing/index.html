@@ -1,0 +1,365 @@
+<!doctype html>
+<html lang="en" class="no-js">
+<head>
+<meta charset="utf-8">
+<script>
+/* Flipped before first paint: the reveal animations start at opacity 0, so if
+   scripting is off, .no-js is what keeps the page from rendering as a blank
+   sheet of cream. The timer covers the other half of that risk — scripting on
+   but main.js never arriving (404, blocked, offline) — by revealing everything
+   unconditionally if main.js hasn't checked in. */
+document.documentElement.classList.remove('no-js');
+setTimeout(function () {
+  if (document.documentElement.dataset.reveals === 'ready') return;
+  var els = document.querySelectorAll('[data-reveal]');
+  for (var i = 0; i < els.length; i++) els[i].classList.add('is-in');
+}, 2500);
+</script>
+<script>
+/* Legacy entry points land on "/" with query params the app owns:
+   the OAuth callback returns ?oauth_token / ?oauth_error, and Stripe returns
+   ?status=success&session_id=… . Those redirects are baked into the deployed
+   API and the shipped iOS build, so rather than change them we forward here,
+   before a single pixel renders. ?ref= is deliberately NOT in this list — the
+   app never reads it from the URL, so a referral link should see the pitch. */
+(function () {
+  var q = window.location.search;
+  if (q && /[?&](oauth_token=|oauth_error=|session_id=|status=(success|cancel)\b)/.test(q)) {
+    window.location.replace('/app/' + q + window.location.hash);
+  }
+})();
+</script>
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>SongGhost — some things are easier sung than said</title>
+<meta name="description" content="SongGhost turns a feeling, a memory, or the text you never sent into a real song — verses, hooks, ad-libs and cover art — written by Rudy, your AI ghostwriter. English, Spanish, French and Portuguese.">
+<link rel="canonical" href="https://songghost.com/">
+<meta name="theme-color" content="#f7f3ea">
+<link rel="icon" href="/media/rudy-mark.png" type="image/png">
+<link rel="apple-touch-icon" href="/media/rudy-touch.png">
+
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="SongGhost">
+<meta property="og:title" content="SongGhost — some things are easier sung than said">
+<meta property="og:description" content="Turn a feeling, a memory, or the text you never sent into a real song. Written by Rudy, your AI ghostwriter.">
+<meta property="og:url" content="https://songghost.com/">
+<meta property="og:image" content="https://songghost.com/media/hero-rudy-poster.jpg">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="SongGhost — some things are easier sung than said">
+<meta name="twitter:description" content="Turn a feeling, a memory, or the text you never sent into a real song.">
+<meta name="twitter:image" content="https://songghost.com/media/hero-rudy-poster.jpg">
+
+<link rel="preload" href="/fonts/unbounded-latin.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="/fonts/manrope-latin.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="/media/hero-rudy-poster.jpg" as="image" fetchpriority="high">
+<link rel="stylesheet" href="/fonts/fonts.css">
+<link rel="stylesheet" href="/base.css">
+<link rel="stylesheet" href="/styles.css">
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "SoftwareApplication",
+  "name": "SongGhost",
+  "applicationCategory": "MultimediaApplication",
+  "operatingSystem": "iOS, Web",
+  "url": "https://songghost.com/",
+  "description": "SongGhost turns a feeling, a memory, or the text you never sent into a real song — verses, hooks, ad-libs and cover art — written by Rudy, an AI ghostwriter. Writes natively in English, Spanish, French and Portuguese across dozens of genres.",
+  "installUrl": "https://apps.apple.com/us/app/id6789995320"
+}
+</script>
+</head>
+<body>
+
+<a class="skip" href="#main">Skip to content</a>
+
+<header class="masthead" id="masthead">
+  <a class="masthead__mark" href="/" aria-label="SongGhost home">
+    <img src="/media/rudy-mark.png" alt="" width="96" height="99" decoding="async">
+    <span>SongGhost</span>
+  </a>
+  <nav class="masthead__nav" aria-label="Primary">
+    <a href="#rudy">Meet Rudy</a>
+    <a href="#craft">The craft</a>
+    <a href="#how">How it works</a>
+    <a class="btn btn--sm btn--primary" href="/app">Open the web app</a>
+  </nav>
+</header>
+
+<main id="main">
+
+  <!-- ── Hero ───────────────────────────────────────────────────────── -->
+  <section class="hero">
+    <div class="hero__type">
+      <p class="eyebrow" data-reveal>Meet Rudy — your AI ghostwriter</p>
+      <h1 data-reveal data-reveal-delay="1">
+        <span class="line">Some things</span>
+        <span class="line">are easier sung</span>
+        <span class="line">than said.</span>
+      </h1>
+      <hr class="rule rule--short" data-reveal data-reveal-delay="2">
+      <p class="lede" data-reveal data-reveal-delay="3">
+        SongGhost turns a feeling, a memory, or the text you never sent into a real
+        song — verses, hooks, ad-libs and cover art — written by Rudy.
+      </p>
+      <div class="cta-pair" data-reveal data-reveal-delay="4">
+        <a class="btn btn--primary" href="https://apps.apple.com/us/app/id6789995320"
+           rel="noopener">
+          <svg class="btn__glyph" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+            <path fill="currentColor" d="M16.4 12.7c0-2.3 1.9-3.4 2-3.5-1.1-1.6-2.8-1.8-3.4-1.8-1.4-.2-2.8.9-3.5.9-.7 0-1.9-.8-3-.8-1.6 0-3 .9-3.8 2.3-1.6 2.8-.4 7 1.2 9.3.8 1.1 1.7 2.4 2.9 2.3 1.2 0 1.6-.7 3-.7s1.8.7 3 .7 2-1.1 2.8-2.2c.9-1.3 1.2-2.5 1.3-2.6-.1 0-2.5-1-2.5-3.9zM14.2 5.9c.6-.8 1-1.9.9-3-.9 0-2 .6-2.7 1.4-.6.7-1.1 1.8-.9 2.9 1 0 2-.5 2.7-1.3z"/>
+          </svg>
+          Download on the App Store
+        </a>
+        <a class="btn btn--ghost" href="/app">Open the web app <span aria-hidden="true">→</span></a>
+      </div>
+    </div>
+
+    <figure class="hero__film">
+      <!-- No poster attribute on purpose: the still is painted by the CSS
+           background on .hero__film, which is breakpoint-aware. A poster here
+           would additionally pull the 16:9 still on phones that are about to
+           show the 9:16 one. -->
+      <video class="film" autoplay muted loop playsinline preload="none"
+             data-src="/media/hero-rudy.mp4"
+             data-src-webm="/media/hero-rudy.webm"
+             data-src-narrow="/media/hero-rudy-mobile.mp4"
+             data-src-narrow-webm="/media/hero-rudy-mobile.webm"
+             aria-label="Rudy, the SongGhost ghostwriter, floating in a dimly lit recording studio"></video>
+      <figcaption class="film__cap">Rudy — SongGhost's ghostwriter</figcaption>
+    </figure>
+  </section>
+
+  <!-- ── The blank page ─────────────────────────────────────────────── -->
+  <section class="section" id="prompts">
+    <div class="shell">
+      <div class="section__head">
+        <div>
+          <p class="eyebrow" data-reveal>The blank page</p>
+          <h2 data-reveal>It starts with something you can't say</h2>
+        </div>
+        <p class="section__note" data-reveal>
+          No template, no form field. Just the sentence someone actually typed.
+        </p>
+      </div>
+
+      <ol class="prompts">
+        <li class="prompt" data-reveal>
+          <span class="prompt__num">01</span>
+          <p class="prompt__text">“For my mum. She's been gone two years and I still set her a place.”</p>
+        </li>
+        <li class="prompt" data-reveal>
+          <span class="prompt__num">02</span>
+          <p class="prompt__text">“The night we drove to the coast and neither of us said anything.”</p>
+        </li>
+        <li class="prompt prompt--live" data-reveal>
+          <span class="prompt__num">03</span>
+          <p class="prompt__text">
+            <span class="prompt__struck">“The thing I should have said out loud.”</span>
+            <span class="prompt__typed" data-type="“The text I typed out at 2am and never sent.”">“The text I typed out at 2am and never sent.”</span><b class="caret" aria-hidden="true"></b>
+          </p>
+          <span class="prompt__mark" aria-hidden="true">[Chorus]</span>
+        </li>
+      </ol>
+    </div>
+  </section>
+
+  <!-- ── Meet Rudy (dark interlude) ─────────────────────────────────── -->
+  <section class="interlude" id="rudy">
+    <video class="interlude__film" autoplay muted loop playsinline preload="none"
+           data-src="/media/rudy-writing.mp4"
+           data-src-webm="/media/rudy-writing.webm" aria-hidden="true" tabindex="-1"></video>
+    <div class="interlude__scrim" aria-hidden="true"></div>
+    <div class="shell interlude__body">
+      <p class="eyebrow eyebrow--night" data-reveal>The ghostwriter</p>
+      <h2 data-reveal>Not a rhyming dictionary.<br>A ghostwriter.</h2>
+      <p class="interlude__copy" data-reveal>
+        Rudy knows what a chorus is for. He knows a Country verse doesn't move like an
+        Afrobeats verse, that a Gospel hook has to lift, and that a hook you can't
+        remember isn't a hook. He writes to the craft of the genre you pick — then
+        hands you the finished thing.
+      </p>
+    </div>
+  </section>
+
+  <!-- ── How it works ───────────────────────────────────────────────── -->
+  <section class="section" id="how">
+    <div class="shell">
+      <div class="section__head">
+        <div>
+          <p class="eyebrow" data-reveal>Three steps</p>
+          <h2 data-reveal>How it works</h2>
+        </div>
+        <p class="section__note" data-reveal>
+          That is the real app below, captured — not a mockup.
+        </p>
+      </div>
+
+      <div class="how">
+        <ol class="steps">
+          <li class="step" data-reveal>
+            <span class="step__num">01</span>
+            <h3>Tell Rudy what it's about.</h3>
+            <p>In your words. A sentence is enough — a feeling, a memory, a name,
+               the thing you never sent.</p>
+          </li>
+          <li class="step" data-reveal>
+            <span class="step__num">02</span>
+            <h3>Pick a language and a genre.</h3>
+            <p>English, Spanish, French or Portuguese. Pop to Gospel, Country to
+               Afrobeats — each written to its own rules.</p>
+          </li>
+          <li class="step" data-reveal>
+            <span class="step__num">03</span>
+            <h3>Get a finished song.</h3>
+            <p>Structure, hooks, ad-libs and cover art, saved to your discography.
+               One tap into Suno or Udio.</p>
+          </li>
+        </ol>
+
+        <figure class="device" data-reveal>
+          <div class="device__screen">
+            <img src="/media/app-ios-home.jpg" width="700" height="1387" loading="lazy"
+                 decoding="async"
+                 alt="The SongGhost iOS app: a New Song button reading “genre + your story, done”,
+                      with Paste / Import and Discography below it.">
+          </div>
+          <figcaption>SongGhost on iOS</figcaption>
+        </figure>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── Mid CTA ────────────────────────────────────────────────────── -->
+  <section class="band">
+    <div class="shell band__inner">
+      <p class="band__text" data-reveal>Two ways in. Same ghostwriter.</p>
+      <div class="cta-pair" data-reveal>
+        <a class="btn btn--primary" href="https://apps.apple.com/us/app/id6789995320" rel="noopener">
+          <svg class="btn__glyph" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+            <path fill="currentColor" d="M16.4 12.7c0-2.3 1.9-3.4 2-3.5-1.1-1.6-2.8-1.8-3.4-1.8-1.4-.2-2.8.9-3.5.9-.7 0-1.9-.8-3-.8-1.6 0-3 .9-3.8 2.3-1.6 2.8-.4 7 1.2 9.3.8 1.1 1.7 2.4 2.9 2.3 1.2 0 1.6-.7 3-.7s1.8.7 3 .7 2-1.1 2.8-2.2c.9-1.3 1.2-2.5 1.3-2.6-.1 0-2.5-1-2.5-3.9zM14.2 5.9c.6-.8 1-1.9.9-3-.9 0-2 .6-2.7 1.4-.6.7-1.1 1.8-.9 2.9 1 0 2-.5 2.7-1.3z"/>
+          </svg>
+          Download on the App Store
+        </a>
+        <a class="btn btn--ghost" href="/app">Open the web app <span aria-hidden="true">→</span></a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── The craft ──────────────────────────────────────────────────── -->
+  <section class="section" id="craft">
+    <div class="shell">
+      <div class="section__head">
+        <div>
+          <p class="eyebrow" data-reveal>The craft</p>
+          <h2 data-reveal>Everything a session writer would bring</h2>
+        </div>
+      </div>
+
+      <div class="craft">
+        <article class="craft__item" data-reveal>
+          <span class="craft__num">01</span>
+          <h3>Written natively in four languages</h3>
+          <p>English, Spanish, French and Portuguese — written in the language, not
+             translated into it. The idioms land because they were born there.</p>
+        </article>
+        <article class="craft__item" data-reveal>
+          <span class="craft__num">02</span>
+          <h3>Every genre you'd actually want</h3>
+          <p>Pop, Country, Hip-Hop, Gospel, Afrobeats, Bachata, Sertanejo, Chanson,
+             Fado and dozens more — each with its own songwriting rules.</p>
+        </article>
+        <article class="craft__item" data-reveal>
+          <span class="craft__num">03</span>
+          <h3>Real song structure</h3>
+          <p>Verses, pre-chorus, hooks, bridges, ad-libs — laid out and labelled, the
+             way a session writer would hand it to you.</p>
+        </article>
+        <article class="craft__item" data-reveal>
+          <span class="craft__num">04</span>
+          <h3>Cover art, instantly</h3>
+          <p>Every song gets artwork the moment it's written. It looks like a release
+             before it is one.</p>
+        </article>
+        <article class="craft__item" data-reveal>
+          <span class="craft__num">05</span>
+          <h3>Your discography, saved</h3>
+          <p>Every song you write stays in your library. Come back, pick it up, take
+             it further.</p>
+        </article>
+        <article class="craft__item" data-reveal>
+          <span class="craft__num">06</span>
+          <h3>One tap into Suno or Udio</h3>
+          <p>Lyrics formatted and ready. Hand them straight to the model that sings
+             them.</p>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── Who it's for ───────────────────────────────────────────────── -->
+  <section class="section section--tight" id="who">
+    <div class="shell">
+      <div class="section__head">
+        <div>
+          <p class="eyebrow" data-reveal>Who it's for</p>
+          <h2 data-reveal>Three kinds of person keep showing up</h2>
+        </div>
+      </div>
+      <div class="who">
+        <article class="who__item" data-reveal>
+          <h3>For the gift you can't buy.</h3>
+          <p>Anniversaries, weddings, birthdays, memorials. A song about one specific
+             person, with a date attached.</p>
+        </article>
+        <article class="who__item" data-reveal>
+          <h3>For the thing you never said.</h3>
+          <p>Heartbreak, grief, the 2am draft. Somewhere to put it down that isn't
+             another note in your phone.</p>
+        </article>
+        <article class="who__item" data-reveal>
+          <h3>For the artist who can't finish a verse.</h3>
+          <p>You've already got the beat and the model that sings it. Rudy's got
+             the pen.</p>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── Closing (dark) ─────────────────────────────────────────────── -->
+  <section class="closing">
+    <div class="shell closing__inner">
+      <img class="closing__rudy" src="/media/rudy-portrait.jpg" alt="" width="640" height="800"
+           loading="lazy" decoding="async">
+      <div class="closing__type">
+        <h2 data-reveal>What would you write, if you could write it?</h2>
+        <div class="cta-pair cta-pair--stack" data-reveal>
+          <a class="btn btn--primary btn--lg" href="https://apps.apple.com/us/app/id6789995320" rel="noopener">
+            <svg class="btn__glyph" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+              <path fill="currentColor" d="M16.4 12.7c0-2.3 1.9-3.4 2-3.5-1.1-1.6-2.8-1.8-3.4-1.8-1.4-.2-2.8.9-3.5.9-.7 0-1.9-.8-3-.8-1.6 0-3 .9-3.8 2.3-1.6 2.8-.4 7 1.2 9.3.8 1.1 1.7 2.4 2.9 2.3 1.2 0 1.6-.7 3-.7s1.8.7 3 .7 2-1.1 2.8-2.2c.9-1.3 1.2-2.5 1.3-2.6-.1 0-2.5-1-2.5-3.9zM14.2 5.9c.6-.8 1-1.9.9-3-.9 0-2 .6-2.7 1.4-.6.7-1.1 1.8-.9 2.9 1 0 2-.5 2.7-1.3z"/>
+            </svg>
+            Download on the App Store
+          </a>
+          <a class="btn btn--ghost btn--ghost-night btn--lg" href="/app">Open the web app <span aria-hidden="true">→</span></a>
+        </div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer class="foot">
+  <div class="shell foot__inner">
+    <a class="foot__mark" href="/" aria-label="SongGhost home">
+      <img src="/media/rudy-mark.png" alt="" width="96" height="99" loading="lazy" decoding="async">
+      <span>SongGhost</span>
+    </a>
+    <p class="foot__legal">© <span id="year">2026</span> SongGhost</p>
+    <nav class="foot__links" aria-label="Footer">
+      <a href="/app">Web app</a>
+      <a href="https://apps.apple.com/us/app/id6789995320" rel="noopener">iOS app</a>
+      <a href="/privacy.html">Privacy &amp; terms</a>
+    </nav>
+  </div>
+</footer>
+
+<script src="/main.js" defer></script>
+</body>
+</html>

@@ -1,0 +1,857 @@
+<meta charset="UTF-8" />
+<title>SongGhost — Variant C: The Writing Desk</title>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta name="description" content="Direction study for the SongGhost landing page — the songwriter's desk, the lyric sheet as artifact." />
+
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link
+  href="https://fonts.googleapis.com/css2?family=Unbounded:wght@400;500;600;700;800&family=Manrope:wght@400;500;600;700;800&family=Caveat:wght@500;600;700&display=swap"
+  rel="stylesheet"
+/>
+
+<style>
+  :root {
+    --cream: #f7f3ea;
+    --cream-paper: #f7f3ea;
+    --cream-desk: color-mix(in srgb, #f7f3ea 88%, #1a1a1a 12%);
+    --cream-tape: color-mix(in srgb, #f7f3ea 92%, #ffffff 8%);
+    --ink: #1a1a1a;
+    --ink-soft: color-mix(in srgb, #1a1a1a 62%, #f7f3ea 38%);
+    --ink-faint: color-mix(in srgb, #1a1a1a 32%, #f7f3ea 68%);
+    --accent: #2b5be0;
+    --violet: #6a3cf0;
+    --cta-gradient: linear-gradient(150deg, #3f78ff, #2b5be0 55%, #6a3cf0);
+    --rule: color-mix(in srgb, #1a1a1a 14%, transparent);
+    --font-display: "Unbounded", sans-serif;
+    --font-body: "Manrope", sans-serif;
+    --font-hand: "Caveat", cursive;
+    --container: 1180px;
+  }
+
+  * {
+    box-sizing: border-box;
+  }
+
+  html,
+  body {
+    margin: 0;
+    padding: 0;
+    overflow-x: hidden;
+    background: var(--cream-desk);
+  }
+
+  body {
+    color: var(--ink);
+    font-family: var(--font-body);
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  img {
+    max-width: 100%;
+    display: block;
+  }
+
+  a {
+    color: inherit;
+  }
+
+  .container {
+    max-width: var(--container);
+    margin: 0 auto;
+    padding-inline: clamp(20px, 5vw, 64px);
+  }
+
+  /* ---------- shared type ---------- */
+
+  .eyebrow {
+    font-family: var(--font-display);
+    font-size: 13px;
+    font-weight: 500;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin: 0 0 18px;
+  }
+
+  h1,
+  h2,
+  h3 {
+    font-family: var(--font-display);
+    margin: 0;
+    color: var(--ink);
+  }
+
+  /* ---------- paper grain (CSS/SVG only) ---------- */
+
+  .grain {
+    position: relative;
+    isolation: isolate;
+  }
+
+  .grain::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    z-index: 1;
+    opacity: 0.05;
+    mix-blend-mode: multiply;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+    background-size: 180px 180px;
+  }
+
+  .grain > * {
+    position: relative;
+    z-index: 2;
+  }
+
+  /* ---------- top bar ---------- */
+
+  .topbar {
+    position: relative;
+    z-index: 20;
+    display: flex;
+    align-items: center;
+    padding: clamp(16px, 3vw, 28px) clamp(20px, 5vw, 64px) 0;
+  }
+
+  .topbar__logo {
+    height: 30px;
+    width: auto;
+    background: var(--cream-desk);
+  }
+
+  /* ================= HERO ================= */
+
+  .hero {
+    position: relative;
+    background: var(--cream-desk);
+    padding: clamp(28px, 6vw, 56px) 0 clamp(48px, 8vw, 96px);
+    overflow: hidden;
+  }
+
+  /* faint radial desk vignette — one ambient layer, not a gradient blob accent */
+  .hero::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(
+      120% 90% at 50% 0%,
+      transparent 45%,
+      color-mix(in srgb, var(--ink) 6%, transparent) 100%
+    );
+    pointer-events: none;
+  }
+
+  .hero__stage {
+    position: relative;
+    max-width: 860px;
+    margin: 0 auto;
+    padding-inline: clamp(20px, 5vw, 40px);
+    padding-top: clamp(56px, 9vw, 84px);
+  }
+
+  /* Rudy peeking over the top edge of the sheet — the one character flourish */
+  .hero__rudy-wrap {
+    position: absolute;
+    top: clamp(-18px, -3vw, 0px);
+    right: clamp(6%, 9vw, 14%);
+    width: clamp(120px, 15vw, 208px);
+    aspect-ratio: 1 / 1.02;
+    background: radial-gradient(
+      circle at 50% 35%,
+      color-mix(in srgb, var(--accent) 14%, var(--cream)) 0%,
+      transparent 70%
+    );
+    z-index: 3;
+    pointer-events: none;
+  }
+
+  .hero__rudy {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    filter: drop-shadow(0 14px 20px rgba(26, 26, 26, 0.22));
+  }
+
+  /* ---------- the sheet: the artifact itself ---------- */
+
+  .sheet {
+    position: relative;
+    background: var(--cream-paper);
+    border-radius: 3px;
+    padding: clamp(28px, 6vw, 64px) clamp(24px, 6vw, 68px) clamp(32px, 6vw, 56px);
+    transform: rotate(-0.45deg);
+    box-shadow: 0 30px 60px -30px rgba(26, 26, 26, 0.4), 0 2px 0 rgba(26, 26, 26, 0.04);
+  }
+
+  .sheet::after {
+    /* hairline ruled baseline grid */
+    content: "";
+    position: absolute;
+    inset: clamp(90px, 16vw, 150px) 0 24px;
+    background-image: repeating-linear-gradient(
+      to bottom,
+      transparent,
+      transparent 42px,
+      var(--rule) 43px,
+      var(--rule) 44px
+    );
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  .sheet > * {
+    position: relative;
+    z-index: 1;
+  }
+
+  .hero__h1 {
+    font-size: clamp(2.75rem, 5vw + 1rem, 5.5rem);
+    font-weight: 700;
+    letter-spacing: -0.01em;
+    line-height: 1.04;
+    max-width: 13ch;
+  }
+
+  .hero__sub {
+    margin-top: 22px;
+    max-width: 46ch;
+    font-size: 1.25rem;
+    font-weight: 500;
+    line-height: 1.5;
+    color: var(--ink-soft);
+  }
+
+  /* ---------- the lyric-in-progress block ---------- */
+
+  .hero__draft {
+    position: relative;
+    margin-top: clamp(32px, 6vw, 48px);
+    padding-top: 6px;
+  }
+
+  .hero__crossed {
+    margin: 0 0 14px;
+    font-size: 1.0625rem;
+    font-weight: 500;
+    color: var(--ink-faint);
+    text-decoration: line-through;
+    text-decoration-thickness: 1.5px;
+    text-decoration-color: color-mix(in srgb, var(--ink) 55%, transparent);
+  }
+
+  .hero__live {
+    margin: 0;
+    font-size: clamp(1.15rem, 1.4vw + 0.9rem, 1.5rem);
+    font-weight: 600;
+    color: var(--accent);
+    min-height: 1.6em;
+  }
+
+  .hero__cursor {
+    display: inline-block;
+    width: 2px;
+    height: 1em;
+    margin-left: 2px;
+    background: var(--accent);
+    vertical-align: -0.15em;
+    animation: blink 1s step-end infinite;
+  }
+
+  @keyframes blink {
+    0%,
+    100% {
+      opacity: 1;
+    }
+    50% {
+      opacity: 0;
+    }
+  }
+
+  .hero__margin-note {
+    position: absolute;
+    right: clamp(-6px, 1vw, 12px);
+    top: -6px;
+    font-family: var(--font-hand);
+    font-size: 1.5rem;
+    color: var(--accent);
+    transform: rotate(-5deg);
+  }
+
+  @media (max-width: 640px) {
+    .hero__margin-note {
+      position: static;
+      display: block;
+      margin-top: 10px;
+      transform: rotate(-3deg);
+    }
+  }
+
+  /* ---------- CTAs ---------- */
+
+  .hero__ctas {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 14px;
+    margin-top: clamp(36px, 6vw, 52px);
+  }
+
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    text-decoration: none;
+    font-family: var(--font-body);
+    font-weight: 700;
+    font-size: 1rem;
+    padding: 15px 28px;
+    border-radius: 999px;
+    min-height: 48px;
+    line-height: 1;
+    transition: transform 0.15s ease;
+  }
+
+  .btn:active {
+    transform: translateY(1px);
+  }
+
+  .btn--primary {
+    background: var(--cta-gradient);
+    color: #fff;
+    box-shadow: 0 14px 30px -12px color-mix(in srgb, var(--accent) 55%, transparent);
+  }
+
+  .btn--secondary {
+    background: transparent;
+    color: var(--ink);
+    border: 1.5px solid color-mix(in srgb, var(--ink) 35%, transparent);
+  }
+
+  @media (max-width: 640px) {
+    .hero__ctas {
+      flex-direction: column;
+    }
+    .btn {
+      width: 100%;
+    }
+  }
+
+  /* ================= PROMPTS ================= */
+
+  .prompts {
+    background: var(--cream-desk);
+    padding: clamp(64px, 10vw, 120px) 0;
+  }
+
+  .prompts .eyebrow--section {
+    text-align: center;
+    color: var(--accent);
+  }
+
+  .prompts h2 {
+    text-align: center;
+    max-width: 20ch;
+    margin: 0 auto clamp(40px, 7vw, 64px);
+    font-size: clamp(1.75rem, 2.5vw + 1rem, 2.75rem);
+    font-weight: 600;
+    letter-spacing: -0.005em;
+    line-height: 1.15;
+  }
+
+  @media (max-width: 640px) {
+    .prompts h2 {
+      font-size: clamp(1.5rem, 6vw, 1.75rem);
+    }
+  }
+
+  .prompts__grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: clamp(20px, 3vw, 32px);
+  }
+
+  @media (max-width: 860px) {
+    .prompts__grid {
+      grid-template-columns: 1fr;
+      max-width: 480px;
+      margin: 0 auto;
+    }
+  }
+
+  .prompt-card {
+    margin: 0;
+    position: relative;
+    background: var(--cream-paper);
+    padding: 34px 26px 28px;
+    font-size: 1.0625rem;
+    font-weight: 500;
+    font-style: normal;
+    line-height: 1.55;
+    color: var(--ink);
+    box-shadow: 0 20px 40px -26px rgba(26, 26, 26, 0.35);
+  }
+
+  .prompt-card::before {
+    content: "\201C";
+    position: absolute;
+    top: 2px;
+    left: 20px;
+    font-family: var(--font-display);
+    font-size: 3rem;
+    line-height: 1;
+    color: var(--accent);
+    opacity: 0.5;
+  }
+
+  .prompt-card--1 {
+    transform: rotate(-0.7deg);
+  }
+  .prompt-card--2 {
+    transform: rotate(0.5deg);
+  }
+  .prompt-card--3 {
+    transform: rotate(-0.3deg);
+  }
+
+  /* ================= HOW IT WORKS ================= */
+
+  .how {
+    background: var(--cream-desk);
+    padding: clamp(64px, 10vw, 120px) 0;
+    border-top: 1px solid var(--rule);
+  }
+
+  .how .eyebrow--section {
+    text-align: center;
+  }
+
+  .how h2 {
+    text-align: center;
+    margin: 0 auto clamp(48px, 8vw, 80px);
+    font-size: clamp(1.75rem, 2.5vw + 1rem, 2.75rem);
+    font-weight: 600;
+    letter-spacing: -0.005em;
+  }
+
+  @media (max-width: 640px) {
+    .how h2 {
+      font-size: clamp(1.5rem, 6vw, 1.75rem);
+    }
+  }
+
+  .how__list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: clamp(28px, 3vw, 40px);
+  }
+
+  @media (max-width: 860px) {
+    .how__list {
+      grid-template-columns: 1fr;
+      max-width: 420px;
+      margin: 0 auto;
+    }
+  }
+
+  .how__step {
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+  }
+
+  .how__num {
+    display: block;
+    font-family: var(--font-display);
+    font-size: 0.9rem;
+    font-weight: 700;
+    color: var(--accent);
+    letter-spacing: 0.05em;
+    margin-bottom: 8px;
+  }
+
+  .how__copy h3 {
+    font-size: 1.25rem;
+    font-weight: 600;
+    letter-spacing: -0.005em;
+    margin-bottom: 8px;
+  }
+
+  .how__copy p {
+    margin: 0;
+    color: var(--ink-soft);
+    font-size: 1rem;
+  }
+
+  /* placeholder for real product footage — no fabricated UI */
+  .placeholder {
+    position: relative;
+    width: 100%;
+    background: color-mix(in srgb, var(--ink) 8%, var(--cream));
+    border: 1px solid var(--rule);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 16px;
+  }
+
+  .placeholder span {
+    font-family: var(--font-body);
+    font-size: 0.8125rem;
+    font-weight: 600;
+    letter-spacing: 0.02em;
+    color: var(--ink-faint);
+  }
+
+  /* tape flourish — reserved for this section only, as the product artifact taped to the desk */
+  .placeholder--tape::before,
+  .placeholder--tape::after {
+    content: "";
+    position: absolute;
+    width: 56px;
+    height: 22px;
+    background: var(--cream-tape);
+    opacity: 0.92;
+    box-shadow: 0 3px 6px rgba(26, 26, 26, 0.18);
+    z-index: 2;
+  }
+
+  .placeholder--tape::before {
+    top: -11px;
+    left: 14px;
+    transform: rotate(-7deg);
+  }
+
+  .placeholder--tape::after {
+    top: -11px;
+    right: 14px;
+    transform: rotate(6deg);
+  }
+
+  /* ================= FEATURES ================= */
+
+  .features {
+    background: var(--cream-desk);
+    padding: clamp(64px, 10vw, 120px) 0 clamp(80px, 12vw, 140px);
+    border-top: 1px solid var(--rule);
+  }
+
+  .features .eyebrow--section {
+    text-align: center;
+  }
+
+  .features h2 {
+    text-align: center;
+    margin: 0 auto clamp(48px, 8vw, 72px);
+    font-size: clamp(1.75rem, 2.5vw + 1rem, 2.75rem);
+    font-weight: 600;
+    letter-spacing: -0.005em;
+    max-width: 18ch;
+  }
+
+  @media (max-width: 640px) {
+    .features h2 {
+      font-size: clamp(1.5rem, 6vw, 1.75rem);
+    }
+  }
+
+  .features__list {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    column-gap: clamp(32px, 5vw, 72px);
+  }
+
+  @media (max-width: 760px) {
+    .features__list {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  .feature {
+    padding: 28px 0;
+    border-top: 1px solid var(--rule);
+    display: grid;
+    grid-template-columns: 52px 1fr;
+    gap: 18px;
+  }
+
+  .features__list > .feature:nth-child(5),
+  .features__list > .feature:nth-child(6) {
+    border-bottom: 1px solid var(--rule);
+  }
+
+  @media (max-width: 760px) {
+    .features__list > .feature {
+      border-bottom: 1px solid var(--rule);
+    }
+  }
+
+  .feature__num {
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: 1rem;
+    color: var(--accent);
+    letter-spacing: 0.02em;
+  }
+
+  .feature h3 {
+    font-size: 1.125rem;
+    font-weight: 600;
+    letter-spacing: -0.005em;
+    margin-bottom: 8px;
+  }
+
+  .feature p {
+    margin: 0;
+    font-size: 0.9375rem;
+    color: var(--ink-soft);
+    max-width: 46ch;
+  }
+
+  /* ---------- footer note (study only) ---------- */
+
+  .study-note {
+    text-align: center;
+    font-size: 0.75rem;
+    color: var(--ink-faint);
+    padding: 20px clamp(20px, 5vw, 64px) 40px;
+  }
+
+  /* ---------- reduced motion ---------- */
+
+  @media (prefers-reduced-motion: reduce) {
+    .hero__cursor {
+      animation: none;
+      display: none;
+    }
+    * {
+      transition: none !important;
+    }
+  }
+</style>
+
+<div class="page">
+  <header class="topbar">
+    <img
+      class="topbar__logo"
+      src="/brand/songghost-logo.png"
+      alt="SongGhost"
+      onerror="this.style.visibility='hidden'"
+    />
+  </header>
+
+  <main>
+    <!-- ================= HERO ================= -->
+    <section class="hero" id="hero">
+      <div class="hero__stage">
+        <div class="hero__rudy-wrap">
+          <img
+            class="hero__rudy"
+            src="/brand/rudy.png"
+            alt="Rudy the ghostwriter, peeking over the top of the page"
+            onerror="this.parentElement.style.background='color-mix(in srgb, var(--accent) 18%, var(--cream))'; this.remove();"
+          />
+        </div>
+
+        <div class="sheet grain">
+          <p class="eyebrow">Meet Rudy — your AI ghostwriter</p>
+          <h1 class="hero__h1">Some things are easier sung than said.</h1>
+          <p class="hero__sub">
+            SongGhost turns a feeling, a memory, or the text you never sent into a real song
+            — verses, hooks, ad-libs and cover art — written by Rudy.
+          </p>
+
+          <div class="hero__draft">
+            <p class="hero__crossed">
+              &ldquo;For my mum. She&rsquo;s been gone two years and I still set her a place.&rdquo;
+            </p>
+            <p class="hero__live">
+              <span class="hero__live-text" id="typedLine"></span><span
+                class="hero__cursor"
+                id="cursor"
+                aria-hidden="true"
+              ></span>
+            </p>
+            <span class="hero__margin-note" aria-hidden="true">[Chorus]</span>
+          </div>
+
+          <div class="hero__ctas">
+            <a class="btn btn--primary" href="https://apps.apple.com/us/app/id6789995320"
+              >Download on the App Store</a
+            >
+            <a class="btn btn--secondary" href="/app">Open the web app</a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================= IT STARTS WITH SOMETHING YOU CAN'T SAY ================= -->
+    <section class="prompts" id="prompts">
+      <div class="container">
+        <p class="eyebrow eyebrow--section">The prompt</p>
+        <h2>It starts with something you can&rsquo;t say</h2>
+        <div class="prompts__grid">
+          <blockquote class="prompt-card prompt-card--1">
+            For my mum. She&rsquo;s been gone two years and I still set her a place.
+          </blockquote>
+          <blockquote class="prompt-card prompt-card--2">
+            The night we drove to the coast and neither of us said anything.
+          </blockquote>
+          <blockquote class="prompt-card prompt-card--3">
+            The text I typed out at 2am and never sent.
+          </blockquote>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================= HOW IT WORKS ================= -->
+    <section class="how" id="how">
+      <div class="container">
+        <p class="eyebrow eyebrow--section">The process</p>
+        <h2>How it works</h2>
+        <ol class="how__list">
+          <li class="how__step">
+            <div class="how__copy">
+              <span class="how__num">01</span>
+              <h3>Tell Rudy what it&rsquo;s about.</h3>
+              <p>In your words. A sentence is enough.</p>
+            </div>
+            <div class="placeholder placeholder--tape" style="aspect-ratio: 9 / 18;">
+              <span>iOS — tell Rudy what it&rsquo;s about</span>
+            </div>
+          </li>
+          <li class="how__step">
+            <div class="how__copy">
+              <span class="how__num">02</span>
+              <h3>Pick a language and a genre.</h3>
+              <p>English, Spanish, French or Portuguese. Pop to Gospel.</p>
+            </div>
+            <div class="placeholder placeholder--tape" style="aspect-ratio: 9 / 18;">
+              <span>iOS — language &amp; genre picker</span>
+            </div>
+          </li>
+          <li class="how__step">
+            <div class="how__copy">
+              <span class="how__num">03</span>
+              <h3>Get a finished song.</h3>
+              <p>Structure, hooks, ad-libs, cover art. One tap into Suno or Udio.</p>
+            </div>
+            <div class="placeholder placeholder--tape" style="aspect-ratio: 9 / 18;">
+              <span>iOS — finished song, ready for Suno</span>
+            </div>
+          </li>
+        </ol>
+      </div>
+    </section>
+
+    <!-- ================= FEATURES ================= -->
+    <section class="features" id="features">
+      <div class="container">
+        <p class="eyebrow eyebrow--section">The craft</p>
+        <h2>Everything Rudy brings to the page</h2>
+        <div class="features__list">
+          <div class="feature">
+            <span class="feature__num">01</span>
+            <div>
+              <h3>Written natively in four languages</h3>
+              <p>
+                English, Spanish, French and Portuguese — written in the language, not
+                translated into it. The idioms land because they were born there.
+              </p>
+            </div>
+          </div>
+          <div class="feature">
+            <span class="feature__num">02</span>
+            <div>
+              <h3>Every genre you&rsquo;d actually want</h3>
+              <p>
+                Pop, Country, Hip-Hop, Gospel, Afrobeats, Bachata, Sertanejo, Chanson, Fado
+                and dozens more — each with its own songwriting rules.
+              </p>
+            </div>
+          </div>
+          <div class="feature">
+            <span class="feature__num">03</span>
+            <div>
+              <h3>Real song structure</h3>
+              <p>
+                Verses, pre-chorus, hooks, bridges, ad-libs — laid out and labelled, the way
+                a session writer would hand it to you.
+              </p>
+            </div>
+          </div>
+          <div class="feature">
+            <span class="feature__num">04</span>
+            <div>
+              <h3>Cover art, instantly</h3>
+              <p>
+                Every song gets artwork the moment it&rsquo;s written. It looks like a
+                release before it is one.
+              </p>
+            </div>
+          </div>
+          <div class="feature">
+            <span class="feature__num">05</span>
+            <div>
+              <h3>Your discography, saved</h3>
+              <p>
+                Every song you write stays in your library. Come back, pick it up, take it
+                further.
+              </p>
+            </div>
+          </div>
+          <div class="feature">
+            <span class="feature__num">06</span>
+            <div>
+              <h3>One tap into Suno or Udio</h3>
+              <p>Lyrics formatted and ready. Hand them straight to the model that sings them.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <p class="study-note">Variant C — &ldquo;The Writing Desk&rdquo; — direction study, not the finished page.</p>
+</div>
+
+<script>
+  (function () {
+    var LIVE_LINE = "The text I typed out at 2am and never sent.";
+    var el = document.getElementById("typedLine");
+    var cursor = document.getElementById("cursor");
+    if (!el) return;
+
+    var reduce =
+      window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+    if (reduce) {
+      el.textContent = LIVE_LINE;
+      return;
+    }
+
+    var i = 0;
+
+    function step() {
+      if (i <= LIVE_LINE.length) {
+        el.textContent = LIVE_LINE.slice(0, i);
+        i++;
+        window.setTimeout(step, 42 + Math.random() * 55);
+      } else {
+        window.setTimeout(function () {
+          i = 0;
+          step();
+        }, 2800);
+      }
+    }
+
+    step();
+  })();
+</script>

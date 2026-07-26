@@ -784,11 +784,16 @@ export const App: React.FC = () => {
       const oauthToken = search.get('oauth_token');
       const oauthError = search.get('oauth_error');
 
+      // The app is served from /app (the marketing site owns /), so every URL
+      // cleanup below has to keep the current pathname — replacing it with '/'
+      // would silently move the user off the app and onto the landing page.
+      const basePath = window.location.pathname || '/';
+
       if (oauthError) {
         setAuthError(`OAuth sign in failed: ${oauthError}`);
         search.delete('oauth_error');
         const q = search.toString();
-        window.history.replaceState({}, '', q ? `/?${q}` : '/');
+        window.history.replaceState({}, '', q ? `${basePath}?${q}` : basePath);
       }
 
       if (oauthToken) {
@@ -823,7 +828,7 @@ export const App: React.FC = () => {
           setIsAuthLoading(false);
           search.delete('oauth_token');
           const q = search.toString();
-          window.history.replaceState({}, '', q ? `/?${q}` : '/');
+          window.history.replaceState({}, '', q ? `${basePath}?${q}` : basePath);
         }
         return;
       }
@@ -855,7 +860,7 @@ export const App: React.FC = () => {
             setCredits(c);
             toast('Payment received. Credits are being finalized — refresh in a moment.', 'info');
           } finally {
-            window.history.replaceState({}, '', '/');
+            window.history.replaceState({}, '', basePath);
           }
         }
       } else {
