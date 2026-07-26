@@ -22515,7 +22515,7 @@ ${source}`;
   };
 }
 function engineAllowed(email) {
-  const list = (process.env.SONG_ENGINE_V3_EMAILS || "dreknows@gmail.com").split(",").map((e) => e.trim().toLowerCase()).filter(Boolean);
+  const list = (process.env.SONG_ENGINE_V3_EMAILS || "").split(",").map((e) => e.trim().toLowerCase()).filter(Boolean);
   return list.includes(String(email || "").trim().toLowerCase());
 }
 var engineGenerate = async (prompt, kind) => {

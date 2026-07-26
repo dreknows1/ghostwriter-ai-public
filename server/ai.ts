@@ -1102,7 +1102,12 @@ ${source}`;
 // 20-song gate passes. Rollback = remove the email from SONG_ENGINE_V3_EMAILS.
 
 function engineAllowed(email?: string): boolean {
-  const list = (process.env.SONG_ENGINE_V3_EMAILS || "dreknows@gmail.com")
+  // No hardcoded default: this repo is public, and the allowlist is real
+  // people's addresses. The gate is configured entirely through
+  // SONG_ENGINE_V3_EMAILS in the Vercel project. Unset means nobody is on the
+  // curriculum engine, which is the correct fail-safe — everyone stays on the
+  // interim generator rather than an unintended address being let through.
+  const list = (process.env.SONG_ENGINE_V3_EMAILS || "")
     .split(",")
     .map((e) => e.trim().toLowerCase())
     .filter(Boolean);
