@@ -118,3 +118,6 @@ dist
 .pnp.*
 .vercel
 .env*
+
+# Composed deploy output (dist + landing)
+site
