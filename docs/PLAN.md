@@ -79,21 +79,32 @@ CTAs appear three times: hero, after the demo, closing.
 - No framework, no build step for the landing page — plain HTML/CSS/JS.
 - Respect `prefers-reduced-motion` everywhere.
 
-## Test matrix (executed at Stage 6)
+## Test matrix — results
 
-| # | Check | Pass condition |
+Executed against the preview deployment of `landing-page`, not localhost.
+
+| # | Check | Result |
 |---|---|---|
-| 1 | `GET /` on preview | Landing page, 200 |
-| 2 | `GET /app` on preview | SPA boots, renders, no console errors |
-| 3 | `GET /app/` and a deep link `/app/x` | Same SPA, no 404 |
-| 4 | App Store CTA | Navigates to `apps.apple.com/us/app/id6789995320` |
-| 5 | Web app CTA | Navigates to `/app`, SPA boots |
-| 6 | `/?oauth_token=test` | Bounces to `/app/?oauth_token=test` |
-| 7 | `/?status=success&session_id=x` | Bounces to `/app/?...` |
-| 8 | `/privacy.html` | Still 200 |
-| 9 | `/brand/songghost-logo.png` | Still 200 (SPA depends on it) |
-| 10 | Mobile viewport 390×844 | No horizontal scroll, CTAs reachable, video plays inline |
-| 11 | `prefers-reduced-motion: reduce` | No autoplaying motion, page still legible |
-| 12 | Lighthouse-ish weight budget | Hero above-fold payload < 3 MB |
-| 13 | iOS build untouched | `dist/` contents identical to a pre-change build |
-| 14 | Production after merge | `/` and `/app` both healthy |
+| 1 | `GET /` | ✅ 200, landing page |
+| 2 | `GET /app` | ✅ 200, SPA boots to the auth screen, no console errors |
+| 3 | `GET /app/`, `/app/deep/link` | ✅ 200, same SPA, no 404 |
+| 4 | App Store CTA | ✅ resolves to `/us/app/songghost-ai-songwriting/id6789995320`, 200 |
+| 5 | Web app CTA | ✅ navigates to `/app`, SPA boots |
+| 6 | `/?oauth_token=…` | ✅ bounces to `/app/?oauth_token=…`; app consumes it, then cleans the URL **to `/app/`, not `/`** — which is the App.tsx fix working |
+| 7 | `/?status=success&session_id=…` | ✅ bounces with the query intact |
+| 7b | `/?status=live`, `/?ref=CODE` | ✅ stay on the landing page (regex tightened after the audit) |
+| 8 | `/privacy.html` | ✅ 200 |
+| 9 | `/brand/songghost-logo.png` | ✅ 200 (SPA depends on it) |
+| 10 | Mobile 390×844 | ✅ `scrollWidth == clientWidth`, every element within 20–370px, all 13 tap targets ≥44px |
+| 10b | 320px | ✅ no overflow, no masthead collision (was a real bug; fixed) |
+| 11 | `prefers-reduced-motion` | ✅ no video attaches, typed line resolves complete, caret retired, nothing left invisible |
+| 12 | Weight | ✅ above-fold ≈200 KB; hero video 874 KB desktop / 317 KB mobile |
+| 13 | iOS build untouched | ✅ `dist/` is byte-for-byte what it was; the landing tree never enters it |
+| 14 | Production after merge | see below |
+
+### Known gap
+
+`AUTH_TOKEN_SECRET` is set for the Production environment only, so authenticated
+API routes 500 **on previews**. Everything above is verified; a full signed-in
+session is only exercisable on production. Adding a *different* secret to the
+Preview environment would close this — see the note in `scripts/check-auth-env.mjs`.
