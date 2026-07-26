@@ -5,9 +5,9 @@
 <script>document.documentElement.classList.remove('no-js');</script>
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>The Prompt Book — free from SongGhost</title>
-<meta name="description" content="A free guide to getting songs you actually want out of SongGhost. The five things every good prompt has, a real before-and-after, and paste-ready recipes for 13 genres.">
+<meta name="description" content="A free 55-page guide to getting songs you actually want out of SongGhost. The five things every good prompt has, a real before-and-after run through the app, and paste-ready recipes for 13 genres.">
 <link rel="canonical" href="https://songghost.com/prompt-book">
-<meta name="theme-color" content="#f7f3ea">
+<meta name="theme-color" content="#0b0a09">
 <link rel="icon" href="/media/rudy-mark.png" type="image/png">
 <meta property="og:type" content="website">
 <meta property="og:title" content="The Prompt Book — free from SongGhost">
@@ -17,125 +17,779 @@
 <meta name="twitter:card" content="summary_large_image">
 <link rel="preload" href="/fonts/unbounded-latin.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="/fonts/manrope-latin.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" as="image" href="/media/ebook-cover.jpg">
 <link rel="stylesheet" href="/fonts/fonts.css">
 <link rel="stylesheet" href="/base.css">
 <link rel="stylesheet" href="/styles.css">
 <style>
-  .lm { min-height: 100vh; display: grid; grid-template-columns: minmax(0,1.05fr) minmax(0,0.95fr);
-        align-items: center; gap: clamp(2rem,5vw,4.5rem); padding: clamp(2rem,5vh,4rem) var(--gutter); }
-  .lm__eyebrow { margin-bottom: 0.9rem; }
-  .lm h1 { font-size: clamp(2.2rem, 3.4vw + 1rem, 3.9rem); margin-bottom: 1.1rem; }
-  .lm__sub { font-family: var(--display); font-weight: 500; font-size: clamp(1.05rem,1vw+0.9rem,1.3rem);
-             color: var(--ink-soft); margin-bottom: 1.2rem; }
-  .lm__body { max-width: 34rem; margin-bottom: 1.6rem; }
-  .lm__list { list-style: none; padding: 0; margin: 0 0 1.9rem; max-width: 32rem; }
-  .lm__list li { position: relative; padding-left: 1.6rem; margin-bottom: 0.5rem; font-size: 0.9875rem; color: var(--ink-soft); }
-  .lm__list li::before { content:''; position:absolute; left:0; top:0.55em; width:0.45rem; height:0.45rem;
-                         border-radius:50%; background: var(--cta); }
-  .lm__cover { justify-self: center; max-width: 25rem; width: 100%; }
-  .lm__cover img { width: 100%; border-radius: 6px;
-                   box-shadow: 0 40px 70px -40px rgba(11,10,9,0.55), 0 0 0 1px rgba(26,26,26,0.08); }
-  .form { display: flex; flex-direction: column; gap: 0.7rem; max-width: 27rem; }
-  .form__row { display: flex; gap: 0.7rem; flex-wrap: wrap; }
-  .form input { flex: 1 1 12rem; min-width: 0; font: inherit; font-size: 1rem; color: var(--ink);
-                background: var(--paper); border: 1px solid var(--rule); border-radius: 999px;
-                padding: 0.85rem 1.15rem; min-height: 48px; }
-  .form input:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; border-color: transparent; }
-  .form button { border: 0; cursor: pointer; }
-  .form__note { font-size: 0.8125rem; color: var(--ink-muted); }
-  .form__msg { font-size: 0.9rem; min-height: 1.2rem; }
-  .form__msg[data-state="error"] { color: #b3261e; }
-  .form__msg[data-state="ok"] { color: var(--accent); font-weight: 600; }
-  @media (max-width: 900px) {
-    .lm { grid-template-columns: minmax(0,1fr); min-height: 0; padding-block: clamp(2rem,6vh,3rem); }
-    .lm__cover { order: -1; max-width: 15rem; }
+/* ==================================================================
+   The Prompt Book — opt-in page
+
+   Rhythm borrowed from the main landing page: a cinematic night stage,
+   a cream editorial middle, a night close. The book is built as a real
+   object in 3D rather than shown as a flat JPEG, because the whole
+   pitch is "this is a designed publication, not a PDF someone exported".
+   ================================================================== */
+
+/* ── Night sections ───────────────────────────────────────────────── */
+
+.pb-night {
+  background: var(--night);
+  color: var(--night-ink);
+  position: relative;
+  overflow: hidden;
+}
+/* Warm key light behind the book, so the object reads as lit rather
+   than pasted onto a flat panel. */
+.pb-night::before {
+  content: '';
+  position: absolute;
+  inset: -20% -10% auto auto;
+  width: min(72vw, 900px);
+  aspect-ratio: 1;
+  background: radial-gradient(circle at 50% 50%,
+              rgba(63, 120, 255, 0.30), rgba(106, 60, 240, 0.14) 42%, transparent 68%);
+  pointer-events: none;
+}
+.pb-night::after {
+  content: '';
+  position: absolute;
+  inset: auto auto -30% -15%;
+  width: min(60vw, 720px);
+  aspect-ratio: 1;
+  background: radial-gradient(circle at 50% 50%, rgba(247, 243, 234, 0.10), transparent 66%);
+  pointer-events: none;
+}
+.pb-night > * { position: relative; z-index: 1; }
+
+.masthead--night {
+  background: color-mix(in srgb, var(--night) 82%, transparent);
+  border-bottom-color: transparent;
+  color: var(--night-ink);
+}
+.masthead--night .masthead__mark { color: var(--night-ink); }
+
+/* ── Hero ─────────────────────────────────────────────────────────── */
+
+.pb-hero-lm {
+  display: grid;
+  grid-template-columns: minmax(0, 1.02fr) minmax(0, 0.98fr);
+  align-items: center;
+  gap: clamp(2rem, 5vw, 5rem);
+  padding: clamp(2rem, 5vh, 3.75rem) var(--gutter) clamp(2.5rem, 6vh, 4.25rem);
+}
+
+.pb-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.55rem;
+  font-family: var(--display);
+  font-weight: 600;
+  font-size: 0.6875rem;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--night-ink);
+  background: rgba(244, 241, 234, 0.09);
+  border: 1px solid rgba(244, 241, 234, 0.18);
+  border-radius: 999px;
+  padding: 0.45rem 0.9rem;
+  margin-bottom: 1.4rem;
+}
+.pb-tag b { color: var(--accent-bright); font-weight: 700; }
+
+.pb-hero-lm h1 {
+  font-size: clamp(2.6rem, 5.4vw + 1rem, 5.4rem);
+  line-height: 0.94;
+  letter-spacing: -0.035em;
+  margin-bottom: 1.1rem;
+}
+.pb-hero-lm h1 em {
+  font-style: normal;
+  display: block;
+  background: linear-gradient(96deg, #8fb2ff, #b79bff 60%, #f4f1ea);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+.pb-hero-lm__sub {
+  font-family: var(--display);
+  font-weight: 500;
+  font-size: clamp(1.05rem, 1vw + 0.9rem, 1.35rem);
+  line-height: 1.35;
+  color: var(--night-ink);
+  margin-bottom: 1.1rem;
+}
+.pb-hero-lm__body {
+  color: var(--night-ink-muted);
+  max-width: 33rem;
+  margin-bottom: 1.9rem;
+  font-size: 1.0625rem;
+}
+.pb-hero-lm__body strong { color: var(--night-ink); font-weight: 700; }
+
+/* ── The book, as an object ───────────────────────────────────────── */
+
+.pb-stage {
+  justify-self: center;
+  width: 100%;
+  max-width: 30rem;
+  display: grid;
+  place-items: center;
+  padding-block: clamp(1.5rem, 4vw, 3rem);
+  perspective: 2200px;
+}
+
+.pb-tome {
+  --bw: clamp(13rem, 24vw, 20.5rem);
+  /* ~5% of the cover width. Any thicker and the page block stops reading as
+     paper and starts reading as a spiral binding. */
+  --depth: clamp(0.55rem, 1.05vw, 0.95rem);
+  position: relative;
+  width: var(--bw);
+  aspect-ratio: 1500 / 1940;
+  transform-style: preserve-3d;
+  transform: rotateX(6deg) rotateY(-26deg) rotateZ(-1.2deg);
+  animation: tome-float 9s var(--ease-in-out) infinite;
+}
+@keyframes tome-float {
+  0%, 100% { transform: rotateX(6deg) rotateY(-26deg) rotateZ(-1.2deg) translateY(0); }
+  50%      { transform: rotateX(5deg) rotateY(-22deg) rotateZ(-0.6deg) translateY(-14px); }
+}
+
+.pb-tome__face { position: absolute; top: 0; left: 0; width: 100%; height: 100%; }
+
+.pb-tome__front {
+  transform: translateZ(calc(var(--depth) / 2));
+  border-radius: 3px 7px 7px 3px;
+  overflow: hidden;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+}
+.pb-tome__front img { width: 100%; height: 100%; object-fit: cover; display: block; }
+/* Spine shading and a cover sheen, painted on rather than modelled —
+   at this angle a real spine face would be a sliver. */
+.pb-tome__front::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background:
+    linear-gradient(90deg, rgba(0,0,0,0.34) 0, rgba(0,0,0,0.12) 2.5%, rgba(0,0,0,0) 7%),
+    linear-gradient(74deg, rgba(255,255,255,0.16) 12%, rgba(255,255,255,0) 46%);
+}
+
+.pb-tome__back {
+  transform: translateZ(calc(var(--depth) / -2)) rotateY(180deg);
+  background: #17181b;
+  border-radius: 7px 3px 3px 7px;
+}
+
+/* The page block. Thin cream stripes read as leaves; this is what sells
+   "55 pages" without a word of copy. */
+.pb-tome__edge {
+  width: var(--depth);
+  left: calc(100% - (var(--depth) / 2));
+  transform: rotateY(90deg);
+  background:
+    linear-gradient(90deg, rgba(0,0,0,0.35), rgba(0,0,0,0) 40%),
+    repeating-linear-gradient(180deg,
+      #f4efe3 0 1px, #e6dfd0 1px 1.6px);
+  border-radius: 1px;
+}
+.pb-tome__spine {
+  width: var(--depth);
+  left: calc(var(--depth) / -2);
+  transform: rotateY(90deg);
+  background: linear-gradient(180deg, #1b1d21, #0e0f11);
+  border-radius: 1px;
+}
+
+/* Contact shadow on the floor. Separate element so it can stay put while
+   the book floats above it. */
+.pb-stage__shadow {
+  width: clamp(11rem, 21vw, 18rem);
+  height: 2.2rem;
+  margin-top: clamp(0.75rem, 2vw, 1.4rem);
+  border-radius: 50%;
+  background: radial-gradient(ellipse at 50% 50%, rgba(0,0,0,0.62), transparent 70%);
+  filter: blur(7px);
+  animation: shadow-breathe 9s var(--ease-in-out) infinite;
+}
+@keyframes shadow-breathe {
+  0%, 100% { transform: scaleX(1);    opacity: 0.85; }
+  50%      { transform: scaleX(0.9);  opacity: 0.6; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .pb-tome, .pb-stage__shadow { animation: none; }
+}
+
+/* ── Form ─────────────────────────────────────────────────────────── */
+
+.pb-form { max-width: 30rem; }
+/* One pill that holds both fields and the button, so the call to action
+   reads as a single object instead of three stacked rectangles. */
+.pb-form__shell {
+  display: flex;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+  padding: 0.4rem;
+  background: rgba(244, 241, 234, 0.07);
+  border: 1px solid rgba(244, 241, 234, 0.2);
+  border-radius: 999px;
+  transition: border-color 0.2s var(--ease-out), background 0.2s var(--ease-out);
+}
+.pb-form__shell:focus-within {
+  border-color: rgba(143, 178, 255, 0.75);
+  background: rgba(244, 241, 234, 0.1);
+}
+.pb-form input {
+  flex: 1 1 8rem;
+  min-width: 0;
+  font: inherit;
+  font-size: 1rem;
+  color: var(--night-ink);
+  background: transparent;
+  border: 0;
+  border-radius: 999px;
+  padding: 0.8rem 1.1rem;
+  min-height: 46px;
+}
+.pb-form input::placeholder { color: rgba(244, 241, 234, 0.45); }
+.pb-form input:focus { outline: none; }
+.pb-form__shell .btn { flex: 0 0 auto; border: 0; cursor: pointer; }
+.pb-form__note {
+  font-size: 0.8125rem;
+  color: var(--night-ink-60);
+  margin-top: 0.85rem;
+}
+.pb-form__msg { font-size: 0.9rem; min-height: 1.2rem; margin-top: 0.4rem; }
+.pb-form__msg[data-state="error"] { color: #ff9c93; }
+
+/* Below the pill's comfortable width, stack — a 3-up pill at 340px is
+   three unusable slivers. */
+@media (max-width: 560px) {
+  .pb-form__shell {
+    flex-direction: column;
+    border-radius: 22px;
+    padding: 0.55rem;
+    gap: 0.55rem;
   }
+  /* Once the pill stacks, flex-basis applies to height — 8rem would make
+     every field 128px tall. Let them size to their own content instead. */
+  .pb-form input { flex: none; background: rgba(244, 241, 234, 0.06); }
+  .pb-form__shell .btn { width: 100%; }
+}
+
+/* ── Stat strip ───────────────────────────────────────────────────── */
+
+.pb-stats {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 1px;
+  background: rgba(244, 241, 234, 0.14);
+  border-block: 1px solid rgba(244, 241, 234, 0.14);
+}
+.pb-stats div {
+  background: var(--night);
+  padding: clamp(1.2rem, 3vw, 2rem) 1rem;
+  text-align: center;
+}
+.pb-stats dt {
+  font-family: var(--display);
+  font-weight: 800;
+  font-size: clamp(1.5rem, 2.6vw, 2.4rem);
+  letter-spacing: -0.03em;
+  line-height: 1;
+}
+.pb-stats dd {
+  margin: 0.45rem 0 0;
+  font-size: 0.75rem;
+  letter-spacing: 0.13em;
+  text-transform: uppercase;
+  color: var(--night-ink-60);
+}
+@media (max-width: 640px) {
+  .pb-stats { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+
+/* ── Cream body ───────────────────────────────────────────────────── */
+
+.pb-band { padding: clamp(3.5rem, 9vh, 7rem) 0; }
+.pb-band__head { max-width: 44rem; margin-bottom: clamp(2rem, 4vw, 3rem); }
+.pb-band__head h2 {
+  font-size: clamp(1.9rem, 3vw + 0.9rem, 3.1rem);
+  letter-spacing: -0.03em;
+  line-height: 1.03;
+  margin-bottom: 0.9rem;
+}
+.pb-band__head p { color: var(--ink-soft); font-size: 1.0625rem; max-width: 36rem; }
+
+/* ── The proof ────────────────────────────────────────────────────── */
+
+.pb-proof { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: clamp(1rem, 2.4vw, 1.8rem); }
+@media (max-width: 800px) { .pb-proof { grid-template-columns: minmax(0, 1fr); } }
+
+.pb-card {
+  border: 1px solid var(--rule);
+  border-radius: 16px;
+  padding: clamp(1.3rem, 2.6vw, 2rem);
+  background: var(--paper);
+  display: flex;
+  flex-direction: column;
+}
+.pb-card--win { border-color: rgba(43, 91, 224, 0.4); box-shadow: 0 24px 50px -34px rgba(43, 91, 224, 0.7); }
+
+.pb-card__label {
+  font-family: var(--display);
+  font-weight: 700;
+  font-size: 0.6875rem;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--ink-faint);
+  margin-bottom: 0.9rem;
+}
+.pb-card--win .pb-card__label { color: var(--accent); }
+
+.pb-prompt {
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-size: 0.875rem;
+  line-height: 1.6;
+  background: var(--paper-sunk);
+  border-left: 3px solid var(--rule);
+  border-radius: 0 8px 8px 0;
+  padding: 0.85rem 1rem;
+  margin-bottom: 1.2rem;
+  color: var(--ink-soft);
+}
+.pb-card--win .pb-prompt { border-left-color: var(--accent); color: var(--ink); }
+
+.pb-card__song {
+  font-family: var(--display);
+  font-weight: 700;
+  font-size: 1.15rem;
+  letter-spacing: -0.02em;
+  margin-bottom: 0.7rem;
+}
+.pb-lyric {
+  margin: 0;
+  font-size: 0.9375rem;
+  line-height: 1.75;
+  color: var(--ink-soft);
+  white-space: pre-line;
+  flex: 1;
+}
+.pb-card--win .pb-lyric { color: var(--ink); }
+.pb-card__verdict {
+  margin-top: 1.2rem;
+  padding-top: 1rem;
+  border-top: 1px solid var(--rule-soft);
+  font-size: 0.9375rem;
+  color: var(--ink-muted);
+}
+.pb-card--win .pb-card__verdict { color: var(--ink-soft); }
+.pb-card__verdict strong { color: var(--ink); }
+
+.pb-proof__foot {
+  margin-top: clamp(1.4rem, 3vw, 2rem);
+  font-family: var(--display);
+  font-weight: 600;
+  font-size: clamp(1rem, 1.4vw, 1.25rem);
+  letter-spacing: -0.01em;
+}
+
+/* ── Look inside ──────────────────────────────────────────────────── */
+
+.pb-spreads {
+  display: flex;
+  gap: clamp(0.9rem, 2vw, 1.6rem);
+  overflow-x: auto;
+  overscroll-behavior-x: contain;
+  scroll-snap-type: x mandatory;
+  /* The rail is a full-bleed section child, but its first card must line up
+     with the .shell text above it — so it repeats .shell's own inset maths
+     rather than just using the raw gutter. */
+  padding: 1.2rem max(var(--gutter), (100% - 1240px) / 2) 2.4rem;
+  scrollbar-width: thin;
+}
+.pb-spreads figure {
+  flex: 0 0 auto;
+  width: clamp(11rem, 22vw, 16.5rem);
+  margin: 0;
+  scroll-snap-align: center;
+}
+.pb-spreads img {
+  width: 100%;
+  height: auto;
+  display: block;
+  border-radius: 8px;
+  border: 1px solid var(--rule-soft);
+  box-shadow: 0 26px 48px -30px rgba(11, 10, 9, 0.55);
+  transition: transform 0.35s var(--ease-out), box-shadow 0.35s var(--ease-out);
+}
+.pb-spreads figure:hover img {
+  transform: translateY(-6px);
+  box-shadow: 0 34px 60px -30px rgba(11, 10, 9, 0.65);
+}
+.pb-spreads figcaption {
+  margin-top: 0.7rem;
+  font-size: 0.8125rem;
+  color: var(--ink-muted);
+}
+
+/* ── Genre chips ──────────────────────────────────────────────────── */
+
+.pb-chips { display: flex; flex-wrap: wrap; gap: 0.5rem; margin-top: 1.6rem; }
+.pb-chips span {
+  font-family: var(--display);
+  font-weight: 600;
+  font-size: 0.8125rem;
+  letter-spacing: -0.005em;
+  padding: 0.5rem 0.95rem;
+  border: 1px solid var(--rule);
+  border-radius: 999px;
+  background: var(--paper);
+}
+
+/* ── Contents list ────────────────────────────────────────────────── */
+
+/* Left edge stays on the shell like every other section; the measure is
+   capped on the list itself rather than by centring a narrower container. */
+.pb-toc { list-style: none; padding: 0; margin: 0; max-width: 48rem; counter-reset: toc; }
+.pb-toc li {
+  counter-increment: toc;
+  display: grid;
+  grid-template-columns: 2.4rem minmax(0, 1fr);
+  gap: 1rem;
+  align-items: baseline;
+  padding: 1rem 0;
+  border-bottom: 1px solid var(--rule-soft);
+}
+.pb-toc li::before {
+  content: counter(toc, decimal-leading-zero);
+  font-family: var(--display);
+  font-weight: 700;
+  font-size: 0.8125rem;
+  color: var(--accent);
+}
+.pb-toc b { font-family: var(--display); font-weight: 700; font-size: 1.0625rem; letter-spacing: -0.015em; }
+.pb-toc p { margin: 0.3rem 0 0; color: var(--ink-muted); font-size: 0.9375rem; }
+
+/* ── Close ────────────────────────────────────────────────────────── */
+
+.pb-close { padding: clamp(3.5rem, 9vh, 7rem) var(--gutter); text-align: center; }
+.pb-close h2 {
+  font-size: clamp(2rem, 3.4vw + 1rem, 3.6rem);
+  letter-spacing: -0.035em;
+  line-height: 1;
+  margin-bottom: 1rem;
+}
+.pb-close p { color: var(--night-ink-muted); max-width: 34rem; margin: 0 auto 2rem; }
+.pb-close .pb-form { margin: 0 auto; }
+.pb-close .pb-form__note, .pb-close .pb-form__msg { text-align: center; }
+
+.pb-foot {
+  border-top: 1px solid var(--night-rule);
+  padding: 1.6rem var(--gutter);
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.6rem 1.4rem;
+  justify-content: center;
+  font-size: 0.8125rem;
+  color: var(--night-ink-60);
+}
+.pb-foot a { color: var(--night-ink-muted); }
+.pb-foot a:hover { color: var(--night-ink); }
+
+/* ── Layout collapse ──────────────────────────────────────────────── */
+
+@media (max-width: 900px) {
+  .pb-hero-lm { grid-template-columns: minmax(0, 1fr); text-align: left; }
+  .pb-stage { order: -1; max-width: 22rem; }
+}
+
+/* ── Reveal ───────────────────────────────────────────────────────── */
+
+.pb-reveal { opacity: 0; transform: translateY(18px); }
+.js .pb-reveal { transition: opacity 0.7s var(--ease-out), transform 0.7s var(--ease-out); }
+.pb-reveal.is-in { opacity: 1; transform: none; }
+@media (prefers-reduced-motion: reduce) {
+  .pb-reveal { opacity: 1; transform: none; }
+}
 </style>
 </head>
 <body>
 <a class="skip" href="#main">Skip to content</a>
 
-<header class="masthead">
-  <a class="masthead__mark" href="/" aria-label="SongGhost home">
-    <img src="/media/rudy-mark.png" alt="" width="96" height="99" decoding="async">
-    <span>SongGhost</span>
-  </a>
-  <nav class="masthead__nav" aria-label="Primary">
-    <a class="btn btn--sm btn--primary" href="/app">Open the web app</a>
-  </nav>
-</header>
+<section class="pb-night">
+  <header class="masthead masthead--night">
+    <a class="masthead__mark" href="/" aria-label="SongGhost home">
+      <img src="/media/rudy-mark.png" alt="" width="96" height="99" decoding="async">
+      <span>SongGhost</span>
+    </a>
+    <nav class="masthead__nav" aria-label="Primary">
+      <a class="btn btn--sm btn--primary" href="/app">Open the web app</a>
+    </nav>
+  </header>
 
-<main id="main" class="lm">
-  <div>
-    <p class="eyebrow lm__eyebrow">Free · Taught by Rudy</p>
-    <h1>The Prompt Book</h1>
-    <p class="lm__sub">How to tell Rudy what your song is about.</p>
-    <p class="lm__body">
-      Two people can ask for a song about losing their dad. One gets something
-      that could be about anyone's dad. One gets something that makes their
-      family cry. The difference is about forty words. This book is those words.
+  <main id="main" class="pb-hero-lm">
+    <div>
+      <p class="pb-tag"><b>Free</b> · Taught by Rudy · 55 pages</p>
+      <h1>The Prompt<em>Book</em></h1>
+      <p class="pb-hero-lm__sub">How to tell Rudy what your song is about.</p>
+      <p class="pb-hero-lm__body">
+        Two people ask for a song about losing their dad. One gets something
+        that could be about anyone's dad. One gets something that makes their
+        family cry. The difference is <strong>about forty words</strong>. This
+        book is those words.
+      </p>
+
+      <form class="pb-form" data-signup novalidate>
+        <div class="pb-form__shell">
+          <input type="text" name="firstName" placeholder="First name" autocomplete="given-name" aria-label="First name">
+          <input type="email" name="email" placeholder="Your email" autocomplete="email" required aria-label="Email address">
+          <button class="btn btn--primary" type="submit">Send it to me</button>
+        </div>
+        <p class="pb-form__note">Free, forever. No spam. Unsubscribe in one click.</p>
+        <p class="pb-form__msg" role="status" aria-live="polite"></p>
+      </form>
+    </div>
+
+    <div class="pb-stage">
+      <div class="pb-tome">
+        <div class="pb-tome__face pb-tome__spine" aria-hidden="true"></div>
+        <div class="pb-tome__face pb-tome__back" aria-hidden="true"></div>
+        <div class="pb-tome__face pb-tome__edge" aria-hidden="true"></div>
+        <div class="pb-tome__face pb-tome__front">
+          <img src="/media/ebook-cover.jpg" width="1500" height="1940" fetchpriority="high"
+               alt="The Prompt Book — cover, with Rudy holding a pencil and a notepad">
+        </div>
+      </div>
+      <div class="pb-stage__shadow" aria-hidden="true"></div>
+    </div>
+  </main>
+
+  <dl class="pb-stats">
+    <div><dt>55</dt><dd>Pages</dd></div>
+    <div><dt>13</dt><dd>Genre recipes</dd></div>
+    <div><dt>183</dt><dd>Style cues</dd></div>
+    <div><dt>$0</dt><dd>Forever</dd></div>
+  </dl>
+</section>
+
+<!-- ── The proof ──────────────────────────────────────────────────── -->
+
+<section class="pb-band">
+  <div class="shell">
+    <div class="pb-band__head pb-reveal">
+      <h2>Same app. Same day.<br>Sixty seconds more typing.</h2>
+      <p>
+        I did not want to just tell you this works, so I ran both prompts
+        through SongGhost for real. Same settings, same afternoon. The only
+        thing I changed was the words in the box. Here is exactly what came
+        back.
+      </p>
+    </div>
+
+    <div class="pb-proof pb-reveal">
+      <article class="pb-card">
+        <p class="pb-card__label">What most people type</p>
+        <p class="pb-prompt">a song about my grandma</p>
+        <p class="pb-card__song">“Grandma's Song”</p>
+        <p class="pb-lyric">You always kept the porch light on
+Waiting up for me to come home
+With cookies warm and open arms
+A little laugh, your favorite song</p>
+        <p class="pb-card__verdict">
+          It is not bad writing. It is just <strong>not about anyone</strong>.
+          Porch light, cookies, open arms — every line could belong to any
+          grandmother who ever lived.
+        </p>
+      </article>
+
+      <article class="pb-card pb-card--win">
+        <p class="pb-card__label">What the book teaches you to type</p>
+        <p class="pb-prompt">Singer-songwriter. My grandma Rosa taught me to make her tortillas every Sunday in her kitchen in Tucson. She always said “use your hands, not the spoon.” She can't stand at the counter as long as she used to, so I bought her a wooden stool to sit on while she watches me try. I want the chorus to land on her saying that line.</p>
+        <p class="pb-card__song">“Use Your Hands”</p>
+        <p class="pb-lyric">Sunday morning, Tucson sun
+Grandma Rosa in the kitchen, flour on her thumbs
+Apron tied, she smiles at me
+“Mi niña, let's make memories”</p>
+        <p class="pb-card__verdict">
+          The title came out of the detail, not the topic. Tucson, the flour,
+          the apron, the stool — <strong>nothing was wasted</strong>. And the
+          chorus landed on her line, exactly where it was asked to.
+        </p>
+      </article>
+    </div>
+
+    <p class="pb-proof__foot pb-reveal">
+      Both songs are in the book in full, along with the four things that
+      actually changed.
     </p>
-    <ul class="lm__list">
-      <li>The five things every good prompt has</li>
-      <li>A real before-and-after, run through the actual app</li>
-      <li>Paste-ready recipes for 13 genres, with the exact words that steer the style</li>
-      <li>A one-page cheat sheet you can print</li>
-    </ul>
+  </div>
+</section>
 
-    <form class="form" id="signup" novalidate>
-      <div class="form__row">
+<!-- ── Look inside ────────────────────────────────────────────────── -->
+
+<section class="pb-band" style="padding-top:0">
+  <div class="shell">
+    <div class="pb-band__head pb-reveal">
+      <h2>Look inside</h2>
+      <p>
+        Every genre gets the same two pages: a weak prompt, a strong one, the
+        exact words that steer the style, and why the second one works.
+      </p>
+    </div>
+  </div>
+
+  <div class="pb-spreads pb-reveal">
+    <figure>
+      <img src="/media/spreads/five-things.jpg" width="840" height="1087" loading="lazy" decoding="async"
+           alt="Chapter opener: The five things every good prompt has">
+      <figcaption>Chapter 2 — the five things</figcaption>
+    </figure>
+    <figure>
+      <img src="/media/spreads/recipe-pop.jpg" width="840" height="1087" loading="lazy" decoding="async"
+           alt="The Pop recipe page, with a table of style cues for each sub-style">
+      <figcaption>Every genre gets a room to pick</figcaption>
+    </figure>
+    <figure>
+      <img src="/media/spreads/weak-strong.jpg" width="840" height="1087" loading="lazy" decoding="async"
+           alt="A weak prompt and a strong prompt side by side, with notes on why the second works">
+      <figcaption>Weak and strong, side by side</figcaption>
+    </figure>
+    <figure>
+      <img src="/media/spreads/cheat-sheet.jpg" width="840" height="1087" loading="lazy" decoding="async"
+           alt="The one-page cheat sheet">
+      <figcaption>The one-page cheat sheet</figcaption>
+    </figure>
+    <figure>
+      <img src="/media/spreads/outro.jpg" width="840" height="1087" loading="lazy" decoding="async"
+           alt="The closing page, with links to the app">
+      <figcaption>Now go make something</figcaption>
+    </figure>
+  </div>
+
+  <div class="shell">
+    <p class="pb-band__head pb-reveal" style="margin-bottom:0">
+      <span style="font-family:var(--display);font-weight:700;font-size:1.0625rem">All thirteen, in full:</span>
+    </p>
+    <div class="pb-chips pb-reveal">
+      <span>Pop</span><span>Rock</span><span>Country</span><span>R&amp;B</span>
+      <span>Hip-Hop</span><span>Afrobeats</span><span>Reggae</span><span>Gospel</span>
+      <span>Soul</span><span>Jazz</span><span>Blues</span><span>Folk</span><span>EDM</span>
+    </div>
+  </div>
+</section>
+
+<!-- ── What's in it ───────────────────────────────────────────────── -->
+
+<section class="pb-band" style="padding-top:0">
+  <div class="shell">
+    <div class="pb-band__head pb-reveal">
+      <h2>What's in the book</h2>
+    </div>
+    <ol class="pb-toc pb-reveal">
+      <li><div><b>Why your first song came back flat</b>
+        <p>It is almost never the song's fault. It is the forty words you did not type.</p></div></li>
+      <li><div><b>The five things every good prompt has</b>
+        <p>One true thing, who is talking, what the song should do, the room, the one picture. Three of these will already put you ahead of nearly everyone.</p></div></li>
+      <li><div><b>Watch me fix one</b>
+        <p>One weak prompt, rebuilt in five moves, in front of you.</p></div></li>
+      <li><div><b>I tested this</b>
+        <p>Both prompts run through the real app, with exactly what came back.</p></div></li>
+      <li><div><b>The 13 recipes</b>
+        <p>Paste-ready prompts for every genre, plus the exact style cues that steer the sub-style — the ones the app actually listens for.</p></div></li>
+      <li><div><b>When it still isn't right</b>
+        <p>Six things that go wrong, and the exact fix for each.</p></div></li>
+      <li><div><b>The cheat sheet</b>
+        <p>One page. Print it, or keep it open while you write.</p></div></li>
+    </ol>
+  </div>
+</section>
+
+<!-- ── Close ──────────────────────────────────────────────────────── -->
+
+<section class="pb-night">
+  <div class="pb-close">
+    <h2>Go write one tonight.</h2>
+    <p>
+      Read the first four chapters once. They are short, and they are the part
+      that actually changes your songs. Then flip to your genre and steal the
+      recipe.
+    </p>
+
+    <form class="pb-form" data-signup novalidate>
+      <div class="pb-form__shell">
         <input type="text" name="firstName" placeholder="First name" autocomplete="given-name" aria-label="First name">
         <input type="email" name="email" placeholder="Your email" autocomplete="email" required aria-label="Email address">
+        <button class="btn btn--primary" type="submit">Send it to me</button>
       </div>
-      <button class="btn btn--primary btn--lg" type="submit">Send me the book</button>
-      <p class="form__note">Free. No spam. Unsubscribe any time.</p>
-      <p class="form__msg" id="msg" role="status" aria-live="polite"></p>
+      <p class="pb-form__note">Free, forever. No spam. Unsubscribe in one click.</p>
+      <p class="pb-form__msg" role="status" aria-live="polite"></p>
     </form>
   </div>
 
-  <figure class="lm__cover">
-    <img src="/media/ebook-cover.jpg" alt="The Prompt Book cover, with Rudy holding a pencil and a notepad"
-         width="1500" height="1940" decoding="async">
-  </figure>
-</main>
+  <div class="pb-foot">
+    <a href="/">SongGhost</a>
+    <a href="/app">Web app</a>
+    <a href="https://apps.apple.com/us/app/id6789995320">iOS app</a>
+    <a href="https://www.facebook.com/groups/1059552496761019">Music Review group</a>
+  </div>
+</section>
 
 <script>
 (function () {
-  var form = document.getElementById('signup');
-  var msg = document.getElementById('msg');
-  var btn = form.querySelector('button');
+  document.documentElement.classList.add('js');
 
-  form.addEventListener('submit', function (e) {
-    e.preventDefault();
-    var email = form.email.value.trim();
-    if (!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(email)) {
-      msg.dataset.state = 'error';
-      msg.textContent = 'That email does not look right. Mind checking it?';
-      form.email.focus();
-      return;
-    }
-    btn.disabled = true;
-    var original = btn.textContent;
-    btn.textContent = 'Sending…';
-    msg.dataset.state = '';
-    msg.textContent = '';
+  /* Reveal on scroll. */
+  var io = 'IntersectionObserver' in window
+    ? new IntersectionObserver(function (entries) {
+        entries.forEach(function (e) {
+          if (e.isIntersecting) { e.target.classList.add('is-in'); io.unobserve(e.target); }
+        });
+      }, { rootMargin: '0px 0px -12% 0px' })
+    : null;
+  document.querySelectorAll('.pb-reveal').forEach(function (el) {
+    if (io) io.observe(el); else el.classList.add('is-in');
+  });
 
-    fetch('/api/ebook-signup', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ email: email, firstName: form.firstName.value.trim() })
-    }).then(function (r) { return r.json().then(function (d) { return { ok: r.ok, d: d }; }); })
-      .then(function (res) {
-        if (!res.ok) throw new Error(res.d && res.d.error || 'Something went wrong.');
-        // The download never depends on the CRM call succeeding.
-        window.location.href = '/prompt-book/thanks?e=' + encodeURIComponent(email);
-      })
-      .catch(function (err) {
-        btn.disabled = false;
-        btn.textContent = original;
+  /* Both forms post to the same endpoint. */
+  document.querySelectorAll('form[data-signup]').forEach(function (form) {
+    var msg = form.querySelector('.pb-form__msg');
+    var btn = form.querySelector('button');
+
+    form.addEventListener('submit', function (e) {
+      e.preventDefault();
+      var email = form.email.value.trim();
+      if (!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(email)) {
         msg.dataset.state = 'error';
-        msg.textContent = err.message || 'Something went wrong. Try again?';
-      });
+        msg.textContent = 'That email does not look right. Mind checking it?';
+        form.email.focus();
+        return;
+      }
+      btn.disabled = true;
+      var original = btn.textContent;
+      btn.textContent = 'Sending…';
+      msg.dataset.state = '';
+      msg.textContent = '';
+
+      fetch('/api/ebook-signup', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email: email, firstName: form.firstName.value.trim() })
+      }).then(function (r) { return r.json().then(function (d) { return { ok: r.ok, d: d }; }); })
+        .then(function (res) {
+          if (!res.ok) throw new Error(res.d && res.d.error || 'Something went wrong.');
+          /* The download never depends on the CRM call succeeding. */
+          window.location.href = '/prompt-book/thanks?e=' + encodeURIComponent(email);
+        })
+        .catch(function (err) {
+          btn.disabled = false;
+          btn.textContent = original;
+          msg.dataset.state = 'error';
+          msg.textContent = err.message || 'Something went wrong. Try again?';
+        });
+    });
   });
 })();
 </script>
