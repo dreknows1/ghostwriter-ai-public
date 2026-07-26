@@ -113,13 +113,15 @@ setTimeout(function () {
     </div>
 
     <figure class="hero__film">
+      <!-- No poster attribute on purpose: the still is painted by the CSS
+           background on .hero__film, which is breakpoint-aware. A poster here
+           would additionally pull the 16:9 still on phones that are about to
+           show the 9:16 one. -->
       <video class="film" autoplay muted loop playsinline preload="none"
-             poster="/media/hero-rudy-poster.jpg"
              data-src="/media/hero-rudy.mp4"
              data-src-webm="/media/hero-rudy.webm"
              data-src-narrow="/media/hero-rudy-mobile.mp4"
              data-src-narrow-webm="/media/hero-rudy-mobile.webm"
-             data-poster-narrow="/media/hero-rudy-mobile-poster.jpg"
              aria-label="Rudy, the SongGhost ghostwriter, floating in a dimly lit recording studio"></video>
       <figcaption class="film__cap">Rudy — SongGhost's ghostwriter</figcaption>
     </figure>
@@ -162,7 +164,6 @@ setTimeout(function () {
   <!-- ── Meet Rudy (dark interlude) ─────────────────────────────────── -->
   <section class="interlude" id="craft">
     <video class="interlude__film" autoplay muted loop playsinline preload="none"
-           poster="/media/rudy-writing-poster.jpg"
            data-src="/media/rudy-writing.mp4"
            data-src-webm="/media/rudy-writing.webm" aria-hidden="true" tabindex="-1"></video>
     <div class="interlude__scrim" aria-hidden="true"></div>

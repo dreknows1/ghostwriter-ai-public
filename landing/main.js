@@ -72,8 +72,6 @@
     var d = video.dataset;
     var mp4 = (narrow && d.srcNarrow) || d.src;
     var webm = (narrow && d.srcNarrowWebm) || d.srcWebm;
-    var poster = (narrow && d.posterNarrow) || null;
-    if (poster) video.poster = poster;
 
     if (webm) {
       var s1 = document.createElement('source');
