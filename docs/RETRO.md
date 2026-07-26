@@ -56,10 +56,33 @@ three times.
 1. **`AUTH_TOKEN_SECRET` is Production-only.** Add a *different* value to the
    Preview environment so preview deployments can exercise sign-in (and so
    preview sessions can never be replayed against production).
-2. **`xcode-select` points away from Xcode**, which disables the iOS Simulator
-   tooling entirely: `sudo xcode-select -s /Applications/Xcode.app/Contents/Developer`.
-   Until that is run, no agent can drive the simulator.
-3. **Deeper product footage.** Only one authenticated app screen could be
-   captured. With (2) fixed, the language picker, genre picker, lyrics view,
-   cover art and Suno/Udio handoff can all be shot and dropped into the
-   "How it works" section, which is built to take them.
+2. **`xcode-select` still points at CommandLineTools**, so the dedicated iOS
+   Simulator tooling remains disabled:
+   `sudo xcode-select -s /Applications/Xcode.app/Contents/Developer`.
+   Not urgent — the Simulator was driven successfully via screen control
+   instead — but that tooling is the better path and needs one sudo command.
+   Note that Xcode's Settings → Locations dropdown already *reads* Xcode 26.6;
+   it's the `/var/db/xcode_select_link` symlink underneath that is stale, and
+   only sudo rewrites it.
+
+## Resolved since first ship
+
+- **Deeper product footage** — done. Screen-control access to the Simulator was
+  granted, so the app was driven directly: the input screen, the four-language
+  picker, the genre grid, a real generated song with its structure labels, and
+  the Suno handoff are all captured and now sit in a gallery under "How it
+  works". Two features are still described in words rather than shown — cover
+  art (art generation didn't fire on the remaining guest credits) and the saved
+  discography (its one-entry empty-ish state wasn't worth showing).
+- **Both hero and interlude videos** were rejected and re-generated: the hero is
+  now a narrative (request arrives → Rudy crosses to the desk → writes) and the
+  writing clip shows a real, correctly-spelled lyric.
+
+### Note on the capture session
+
+Driving the Simulator needed a workaround worth recording. The dedicated MCP was
+blocked (item 2), and typing via synthetic keystrokes came out as accented
+garbage — the Simulator's hardware-keyboard mapping mangles them. What worked
+was `xcrun simctl pbcopy booted` to load the device clipboard, then ⌘V. All
+captures were taken with `xcrun simctl io booted screenshot` at native
+resolution rather than screen-grabbing the window.
