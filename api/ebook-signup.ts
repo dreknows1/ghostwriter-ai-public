@@ -132,6 +132,10 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
 
   const token = process.env.GHL_API_TOKEN;
   const locationId = process.env.GHL_LOCATION_ID;
+  // Sending mail needs the conversations/message.write scope, which the app's
+  // contacts token does not carry. Keep them separate so adding the ability to
+  // send can never put the app's signup sync at risk.
+  const mailToken = process.env.GHL_MESSAGE_TOKEN || token;
   const debug = req.query?.debug === "1";
 
   let synced = false;
@@ -145,7 +149,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
       diag.contact = contact.ok ? { id: contact.contactId, created: contact.created } : contact;
 
       if (contact.ok && contact.contactId) {
-        const mail = await sendEmail(token, contact.contactId, firstName);
+        const mail = await sendEmail(mailToken!, contact.contactId, firstName);
         sent = mail.sent;
         diag.email = mail;
       }
