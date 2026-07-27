@@ -145,6 +145,28 @@ export default defineSchema({
     createdAt: v.number(),
   }).index("by_code", ["code"]),
 
+  // The Prompt Book nurture sequence. GoHighLevel cannot create workflows
+  // through its API — confirmed against the API, HighLevel's own idea board and
+  // their in-product AI — so the schedule lives here and GHL only does the
+  // sending. Every message still goes out from the verified domain and lands in
+  // the contact's GHL conversation, so the CRM view is unchanged.
+  //
+  // ghlContactId is captured at signup precisely so this never needs to read
+  // contacts back: the app's GHL token has contacts.write but no read scope.
+  nurtureSubscribers: defineTable({
+    email: v.string(),
+    firstName: v.optional(v.string()),
+    ghlContactId: v.string(),
+    // Day offsets in nurtureEmails.ts are measured from this.
+    startedAt: v.number(),
+    // Highest email number sent. 0 = enrolled, nothing sent yet.
+    lastSent: v.number(),
+    lastSentAt: v.optional(v.number()),
+    status: v.string(), // "active" | "completed" | "stopped"
+  })
+    .index("by_email", ["email"])
+    .index("by_status", ["status"]),
+
   blogAuthors: defineTable({
     email: v.string(),
     name: v.string(),

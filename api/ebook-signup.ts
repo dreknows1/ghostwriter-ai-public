@@ -116,6 +116,29 @@ async function sendEmail(token: string, contactId: string, firstName: string) {
   return { sent: false, reason: `messages ${res.status}`, detail: detail.slice(0, 300) };
 }
 
+/**
+ * Enrol the reader in the 9-email nurture sequence (convex/nurture.ts).
+ *
+ * Never throws: the sequence is a nice-to-have on top of the delivery that just
+ * happened, so a Convex outage must not turn a successful download into an
+ * error for the person who asked for it.
+ */
+async function enrollInNurture(email: string, firstName: string, ghlContactId: string) {
+  const convexUrl = process.env.CONVEX_URL;
+  if (!convexUrl) return { enrolled: false, reason: "CONVEX_URL missing" };
+  try {
+    const { ConvexHttpClient } = await import("convex/browser");
+    const client: any = new ConvexHttpClient(convexUrl);
+    return await client.mutation("nurture:enroll", {
+      email,
+      firstName: firstName || undefined,
+      ghlContactId,
+    });
+  } catch (e: any) {
+    return { enrolled: false, reason: e?.message || String(e) };
+  }
+}
+
 function escapeHtml(s: string) {
   return s.replace(/[&<>"']/g, (c) =>
     ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c] as string));
@@ -157,6 +180,15 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
         const mail = await sendEmail(mailToken!, contact.contactId, firstName);
         sent = mail.sent;
         diag.email = mail;
+
+        // Start the nurture sequence. The contact id is captured here on
+        // purpose: the daily job sends by contactId, so it never has to read
+        // contacts back — which it could not do anyway, since this token has
+        // contacts.write and no read scope.
+        //
+        // Deliberately last and deliberately swallowed: a nurture hiccup must
+        // never cost someone the book they just asked for.
+        diag.nurture = await enrollInNurture(email, firstName, contact.contactId);
       }
     } catch (e: any) {
       diag.error = e?.message || String(e);
