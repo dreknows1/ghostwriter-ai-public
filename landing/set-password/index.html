@@ -1,0 +1,242 @@
+<!doctype html>
+<html lang="en" class="no-js">
+<head>
+<meta charset="utf-8">
+<script>document.documentElement.classList.remove('no-js');</script>
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Set your password — SongGhost</title>
+<meta name="description" content="Set or reset the password on your SongGhost account.">
+<meta name="robots" content="noindex, nofollow">
+<meta name="theme-color" content="#0b0a09">
+<link rel="icon" href="/media/rudy-mark.png" type="image/png">
+<link rel="preload" href="/fonts/unbounded-latin.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="/fonts/manrope-latin.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="/fonts/fonts.css">
+<link rel="stylesheet" href="/base.css">
+<link rel="stylesheet" href="/styles.css">
+<style>
+/* ==================================================================
+   Set your password
+
+   Two states in one page, chosen by whether the URL carries a token:
+     no token  -> ask for the email, we send a one-time link
+     token     -> choose the new password
+   Kept deliberately plain: this page is reached from an email by someone
+   who is already locked out and mildly annoyed. Nothing to scroll past.
+   ================================================================== */
+.sp-wrap {
+  min-height: 100svh;
+  background: var(--night);
+  color: var(--night-ink);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem 1.25rem;
+}
+.sp-card {
+  width: 100%;
+  max-width: 27rem;
+  background: rgba(244, 241, 234, 0.04);
+  border: 1px solid rgba(244, 241, 234, 0.12);
+  border-radius: 1.5rem;
+  padding: 2.25rem 1.75rem;
+  text-align: center;
+}
+.sp-logo { width: 68px; height: auto; margin: 0 auto 1.25rem; display: block; }
+.sp-card h1 {
+  font-family: Unbounded, system-ui, sans-serif;
+  font-weight: 800;
+  font-size: clamp(1.5rem, 5vw, 1.9rem);
+  line-height: 1.1;
+  letter-spacing: -0.02em;
+  margin: 0 0 0.6rem;
+}
+.sp-card p.sp-lede {
+  color: var(--night-ink-muted);
+  font-size: 0.98rem;
+  line-height: 1.5;
+  margin: 0 0 1.5rem;
+}
+.sp-field { text-align: left; margin-bottom: 0.9rem; }
+.sp-field label {
+  display: block;
+  font-size: 0.72rem;
+  font-weight: 800;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--night-ink-60);
+  margin-bottom: 0.4rem;
+}
+.sp-field input {
+  width: 100%;
+  background: rgba(244, 241, 234, 0.07);
+  border: 1px solid rgba(244, 241, 234, 0.16);
+  border-radius: 0.85rem;
+  padding: 0.85rem 1rem;
+  color: var(--night-ink);
+  font: inherit;
+  font-size: 1rem; /* 16px keeps iOS from zooming the whole page on focus */
+}
+.sp-field input:focus {
+  outline: none;
+  border-color: var(--accent-bright);
+  background: rgba(244, 241, 234, 0.1);
+}
+.sp-btn {
+  width: 100%;
+  border: 0;
+  cursor: pointer;
+  background: var(--cta);
+  color: #fff;
+  font: inherit;
+  font-weight: 800;
+  font-size: 1rem;
+  padding: 0.95rem 1.25rem;
+  border-radius: 999px;
+  margin-top: 0.4rem;
+}
+.sp-btn[disabled] { opacity: 0.55; cursor: default; }
+.sp-msg { font-size: 0.92rem; line-height: 1.45; margin-top: 0.9rem; min-height: 1.2rem; }
+.sp-msg[data-state="error"] { color: #ff9c93; }
+.sp-msg[data-state="ok"] { color: #8ce0a8; }
+.sp-hint { font-size: 0.82rem; color: var(--night-ink-60); margin-top: 1.25rem; line-height: 1.5; }
+.sp-hint a { color: var(--night-ink); }
+[hidden] { display: none !important; }
+</style>
+</head>
+<body>
+<main class="sp-wrap">
+  <div class="sp-card">
+    <img class="sp-logo" src="/media/rudy-mark.png" alt="SongGhost" width="68" height="68">
+
+    <!-- STATE A: no token — ask where to send the link -->
+    <section id="request-view">
+      <h1>Set your password</h1>
+      <p class="sp-lede">Enter the email you use for SongGhost. We will send you a
+      link to choose a password.</p>
+      <form id="request-form" novalidate>
+        <div class="sp-field">
+          <label for="sp-email">Email</label>
+          <input id="sp-email" name="email" type="email" autocomplete="email"
+                 inputmode="email" placeholder="you@example.com" required>
+        </div>
+        <button class="sp-btn" type="submit" id="request-btn">Send me the link</button>
+      </form>
+      <p class="sp-msg" id="request-msg" role="status" aria-live="polite"></p>
+      <p class="sp-hint">Signed up with Google or Apple? You can keep using that
+      button — this just adds a password as another way in.</p>
+    </section>
+
+    <!-- STATE B: token present — choose the password -->
+    <section id="choose-view" hidden>
+      <h1>Choose a password</h1>
+      <p class="sp-lede">Pick something at least 8 characters long. You will be
+      signed in as soon as you save it.</p>
+      <form id="choose-form" novalidate>
+        <div class="sp-field">
+          <label for="sp-pw">New password</label>
+          <input id="sp-pw" name="password" type="password" autocomplete="new-password"
+                 minlength="8" placeholder="At least 8 characters" required>
+        </div>
+        <div class="sp-field">
+          <label for="sp-pw2">Type it again</label>
+          <input id="sp-pw2" name="confirm" type="password" autocomplete="new-password"
+                 minlength="8" placeholder="Same password" required>
+        </div>
+        <button class="sp-btn" type="submit" id="choose-btn">Save password</button>
+      </form>
+      <p class="sp-msg" id="choose-msg" role="status" aria-live="polite"></p>
+    </section>
+  </div>
+</main>
+
+<script>
+(function () {
+  var params = new URLSearchParams(location.search);
+  var token = params.get('token') || '';
+  var requestView = document.getElementById('request-view');
+  var chooseView = document.getElementById('choose-view');
+
+  if (token) { requestView.hidden = true; chooseView.hidden = false; }
+
+  function say(el, text, state) {
+    el.textContent = text;
+    if (state) { el.setAttribute('data-state', state); } else { el.removeAttribute('data-state'); }
+  }
+
+  async function post(body) {
+    var res = await fetch('/api/auth', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(body)
+    });
+    var data = {};
+    try { data = await res.json(); } catch (e) { /* empty or non-JSON body */ }
+    return { ok: res.ok, data: data };
+  }
+
+  // --- State A: request the link -------------------------------------------
+  var requestForm = document.getElementById('request-form');
+  var requestBtn = document.getElementById('request-btn');
+  var requestMsg = document.getElementById('request-msg');
+
+  requestForm.addEventListener('submit', async function (e) {
+    e.preventDefault();
+    var email = document.getElementById('sp-email').value.trim();
+    if (!email) { say(requestMsg, 'Enter your email first.', 'error'); return; }
+    requestBtn.disabled = true;
+    say(requestMsg, 'Sending…');
+    try {
+      var out = await post({ action: 'request-password-set', email: email });
+      if (out.ok) {
+        // The server answers identically whether or not the account exists, so
+        // this copy must not imply the address was found.
+        say(requestMsg, out.data.message || 'If that address has an account, we just sent it a link.', 'ok');
+        requestForm.reset();
+      } else {
+        say(requestMsg, out.data.error || 'Something went wrong. Please try again.', 'error');
+      }
+    } catch (err) {
+      say(requestMsg, 'Could not reach the server. Check your connection and try again.', 'error');
+    }
+    requestBtn.disabled = false;
+  });
+
+  // --- State B: choose the password ----------------------------------------
+  var chooseForm = document.getElementById('choose-form');
+  var chooseBtn = document.getElementById('choose-btn');
+  var chooseMsg = document.getElementById('choose-msg');
+
+  chooseForm.addEventListener('submit', async function (e) {
+    e.preventDefault();
+    var pw = document.getElementById('sp-pw').value;
+    var pw2 = document.getElementById('sp-pw2').value;
+    if (pw.length < 8) { say(chooseMsg, 'Use at least 8 characters.', 'error'); return; }
+    if (pw !== pw2) { say(chooseMsg, 'Those two do not match.', 'error'); return; }
+
+    chooseBtn.disabled = true;
+    say(chooseMsg, 'Saving…');
+    try {
+      var out = await post({ action: 'set-password', token: token, password: pw });
+      if (out.ok && out.data.sessionToken) {
+        // Hand the app the same session shape a normal sign-in produces, then
+        // send them straight in — no second login.
+        try {
+          localStorage.setItem('gwai_session', JSON.stringify(out.data.session));
+          localStorage.setItem('gwai_session_token', out.data.sessionToken);
+        } catch (e) { /* private mode: they will just sign in again */ }
+        say(chooseMsg, 'Saved. Taking you to the app…', 'ok');
+        setTimeout(function () { location.href = '/app'; }, 900);
+      } else {
+        say(chooseMsg, out.data.error || 'Something went wrong. Please try again.', 'error');
+        chooseBtn.disabled = false;
+      }
+    } catch (err) {
+      say(chooseMsg, 'Could not reach the server. Check your connection and try again.', 'error');
+      chooseBtn.disabled = false;
+    }
+  });
+})();
+</script>
+</body>
+</html>

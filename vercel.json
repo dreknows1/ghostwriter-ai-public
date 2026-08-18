@@ -10,6 +10,10 @@
       "destination": "/prompt-book/index.html"
     },
     {
+      "source": "/set-password",
+      "destination": "/set-password/index.html"
+    },
+    {
       "source": "/app",
       "destination": "/app/index.html"
     },

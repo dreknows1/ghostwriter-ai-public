@@ -26,6 +26,7 @@ function mintToken(opts) {
   return `${payloadB64}.${sig}`;
 }
 var SESSION_TTL_MS = 30 * 24 * 60 * 60 * 1e3;
+var PASSWORD_SET_TTL_MS = 60 * 60 * 1e3;
 
 // server/oauth-callback.ts
 function getBaseUrl(req) {

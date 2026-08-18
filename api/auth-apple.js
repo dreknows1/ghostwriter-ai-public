@@ -126,6 +126,7 @@ function mintSessionToken(opts) {
   const sig = sign(payloadB64, opts.secret);
   return `${payloadB64}.${sig}`;
 }
+var PASSWORD_SET_TTL_MS = 60 * 60 * 1e3;
 
 // server/auth-apple.ts
 var upsertAppleUserRef = makeFunctionReference("users:upsertAppleUser");

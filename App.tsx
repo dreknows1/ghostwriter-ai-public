@@ -1294,6 +1294,17 @@ export const App: React.FC = () => {
                     required
                     minLength={8}
                   />
+                  {!isSignUpMode && (
+                    // Community/Google/Apple accounts hold no password, so
+                    // "Invalid email or password" is a dead end for them until
+                    // they set one. This is the way out.
+                    <a
+                      href="/set-password"
+                      className="block text-left mt-2 text-sm text-slate-400 hover:text-white underline underline-offset-2 transition-colors"
+                    >
+                      Forgot password, or never set one?
+                    </a>
+                  )}
                 </div>
                 {isSignUpMode && (
                   <div>

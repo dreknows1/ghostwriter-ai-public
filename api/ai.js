@@ -21610,6 +21610,7 @@ function extractBearerToken(authHeader) {
   const m = /^Bearer\s+(.+)$/i.exec(h.trim());
   return m && m[1] ? m[1].trim() : null;
 }
+var PASSWORD_SET_TTL_MS = 60 * 60 * 1e3;
 
 // lib/sessionAuth.ts
 function requireSession(req, res) {

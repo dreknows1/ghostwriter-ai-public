@@ -271,3 +271,67 @@ export function consumeNonce(nonce: string, exp: number, now: number = Date.now(
 export function __resetConsumedNonces(): void {
   consumedNonces.clear();
 }
+
+// ---------------------------------------------------------------------------
+// PASSWORD-SET token — emailed link that lets a user set (or reset) a password.
+//
+// WHY THIS IS SEPARATE FROM THE OAUTH TOKEN ABOVE: the OAuth handshake token is
+// hard-capped at 120s (MAX_TOKEN_TTL_MS) because it is minted and redeemed by
+// two servers milliseconds apart. A password-set link travels by email and has
+// to survive a trip through an inbox, so it needs a far longer life. Rather
+// than loosen the OAuth cap — which protects a much more powerful token — this
+// is its own purpose with its own, independently-clamped TTL.
+//
+// THE HOLE IT MUST NOT REOPEN (H1): api/auth.ts `signup` refuses to attach a
+// password to an ALREADY EXISTING account, because doing so let anyone claim a
+// passwordless community/OAuth account by "signing up" as that email. This flow
+// is only safe because possession of the emailed token proves control of the
+// mailbox. So: the email is taken FROM THE TOKEN, never from the request body,
+// and the token is single-use (Convex authNonces) exactly like the OAuth one.
+// ---------------------------------------------------------------------------
+
+export const PASSWORD_SET_PURPOSE = "password-set";
+
+/** Password-set links live 60 minutes — long enough to reach an inbox, short
+ *  enough that a leaked link goes stale quickly. */
+export const PASSWORD_SET_TTL_MS = 60 * 60 * 1000;
+
+/**
+ * Mint a single-use, signed password-set token. `ttlMs` is clamped to
+ * PASSWORD_SET_TTL_MS. Carries a nonce so it can be consumed exactly once.
+ */
+export function mintPasswordSetToken(opts: {
+  email: string;
+  secret: string;
+  ttlMs?: number;
+  now?: number;
+  nonce?: string;
+}): string {
+  if (!opts.secret) throw new Error("mintPasswordSetToken: missing secret");
+  const now = opts.now ?? Date.now();
+  const ttl = Math.min(opts.ttlMs ?? PASSWORD_SET_TTL_MS, PASSWORD_SET_TTL_MS);
+  const payload: TokenPayload = {
+    email: opts.email.toLowerCase().trim(),
+    nonce: opts.nonce ?? randomBytes(16).toString("hex"),
+    exp: now + ttl,
+    purpose: PASSWORD_SET_PURPOSE,
+  };
+  const payloadB64 = Buffer.from(JSON.stringify(payload), "utf8").toString("base64url");
+  return `${payloadB64}.${sign(payloadB64, opts.secret)}`;
+}
+
+/**
+ * Verify a password-set token's signature, purpose and expiry. Does NOT consume
+ * the nonce — the caller must additionally consume it (Convex authNonces) so a
+ * link cannot be used twice.
+ */
+export function verifyPasswordSetToken(
+  token: string | undefined | null,
+  secret: string | undefined | null,
+  opts?: { now?: number }
+): VerifyResult {
+  return verifyToken(token, secret, {
+    expectedPurpose: PASSWORD_SET_PURPOSE,
+    now: opts?.now,
+  });
+}

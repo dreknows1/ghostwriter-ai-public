@@ -4,7 +4,14 @@ import { makeFunctionReference } from "convex/server";
 import { pbkdf2Sync, randomBytes, timingSafeEqual } from "node:crypto";
 import { applyCors, handlePreflight } from "../lib/cors";
 import { checkRateLimit, getRequestClientId } from "../lib/rateLimit";
-import { consumeNonce, mintSessionToken, OAUTH_SESSION_PURPOSE, verifyToken } from "../lib/authToken";
+import {
+  consumeNonce,
+  mintPasswordSetToken,
+  mintSessionToken,
+  OAUTH_SESSION_PURPOSE,
+  verifyPasswordSetToken,
+  verifyToken,
+} from "../lib/authToken";
 import { requireSession } from "../lib/sessionAuth";
 
 const getUserByEmailRef = makeFunctionReference<"query">("users:getUserByEmail");
@@ -154,6 +161,100 @@ async function syncContactToGHL(input: {
   }
 }
 
+/** Public origin used to build emailed links. */
+function getSiteOrigin(): string {
+  return (process.env.PUBLIC_SITE_URL || "https://www.songghost.com").replace(/\/+$/, "");
+}
+
+function escapeHtmlText(s: string): string {
+  return s.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
+}
+
+/**
+ * Email the single-use password-set link through GoHighLevel, the same path the
+ * Prompt Book delivery uses. Best-effort: a mail failure is logged but never
+ * surfaced to the caller, because the request endpoint deliberately returns an
+ * identical response whether or not the address is registered.
+ */
+async function sendPasswordSetEmail(email: string, token: string): Promise<void> {
+  const base = process.env.GHL_API_URL_BASE || "https://services.leadconnectorhq.com";
+  const apiToken = process.env.GHL_API_TOKEN;
+  const mailToken = process.env.GHL_MESSAGE_TOKEN || apiToken;
+  const locationId = process.env.GHL_LOCATION_ID;
+  const apiVersion = process.env.GHL_API_VERSION || "2021-07-28";
+  const from = process.env.GHL_FROM_EMAIL;
+  if (!apiToken || !mailToken || !locationId) {
+    console.error("[Password Set Email] GHL is not configured; link not sent");
+    return;
+  }
+
+  const link = `${getSiteOrigin()}/set-password?token=${encodeURIComponent(token)}`;
+  const safeLink = escapeHtmlText(link);
+  const hdrs = (t: string) => ({
+    Authorization: `Bearer ${t}`,
+    Version: apiVersion,
+    "Content-Type": "application/json",
+    Accept: "application/json",
+  });
+
+  // Resolve the contact id (create-or-recover, exactly like the ebook flow).
+  const contactRes = await fetch(`${base}/contacts/`, {
+    method: "POST",
+    headers: hdrs(apiToken),
+    body: JSON.stringify({ locationId, email, source: "Password reset" }),
+  });
+  const contactText = await contactRes.text().catch(() => "");
+  let contactJson: any = {};
+  try { contactJson = JSON.parse(contactText); } catch { /* non-JSON */ }
+  const contactId = contactJson?.contact?.id || contactJson?.id || contactJson?.meta?.contactId;
+  if (!contactId) {
+    console.error("[Password Set Email] no contact id", contactRes.status, contactText.slice(0, 200));
+    return;
+  }
+
+  const html = `
+<div style="font-family:-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif;font-size:16px;line-height:1.6;color:#1a1a1a">
+  <p>Hey,</p>
+  <p>Here is your link to set a password for SongGhost.</p>
+  <p><a href="${safeLink}" style="display:inline-block;background:#2b5be0;color:#ffffff;text-decoration:none;padding:12px 22px;border-radius:999px;font-weight:700">Set my password</a></p>
+  <p>Or paste this into your browser:<br><a href="${safeLink}">${safeLink}</a></p>
+  <p>This link works once and expires in 1 hour.</p>
+  <p>If you did not ask for this, you can ignore this email. Nothing changes until
+  you open the link and choose a password.</p>
+  <p>— Rudy</p>
+</div>`.trim();
+
+  const text = `Hey,
+
+Here is your link to set a password for SongGhost:
+
+${link}
+
+This link works once and expires in 1 hour.
+
+If you did not ask for this, ignore this email. Nothing changes until you open
+the link and choose a password.
+
+- Rudy`;
+
+  const mailRes = await fetch(`${base}/conversations/messages`, {
+    method: "POST",
+    headers: hdrs(mailToken),
+    body: JSON.stringify({
+      type: "Email",
+      contactId,
+      subject: "Set your SongGhost password",
+      html,
+      ...(from ? { emailFrom: from } : {}),
+      message: text,
+    }),
+  });
+  if (!mailRes.ok) {
+    const detail = await mailRes.text().catch(() => "");
+    console.error("[Password Set Email] send failed", mailRes.status, detail.slice(0, 200));
+  }
+}
+
 export default async function handler(req: VercelRequest, res: VercelResponse) {
   if (handlePreflight(req, res)) return;
   applyCors(req, res);
@@ -165,7 +266,14 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
 
   try {
     const { action, email, password } = (req.body || {}) as {
-      action?: "signup" | "signin" | "oauth" | "validateCommunityCode" | "db";
+      action?:
+        | "signup"
+        | "signin"
+        | "oauth"
+        | "validateCommunityCode"
+        | "db"
+        | "request-password-set"
+        | "set-password";
       email?: string;
       password?: string;
       referralCode?: string;
@@ -253,6 +361,111 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
       return res.status(200).json({
         session: { user: { id: user?._id || `user_${oauthEmail}`, email: oauthEmail } },
         sessionToken: mintSessionForEmail(oauthEmail),
+      });
+    }
+
+    // -----------------------------------------------------------------------
+    // PASSWORD SET / RESET — closes the dead end left by H1 + H2.
+    //
+    // H2 refuses sign-in for accounts holding no password (community imports,
+    // Google/Apple-created). H1 refuses signup for any address that already
+    // exists. Together they left those users with no way to EVER own a
+    // password. These two actions restore that without reopening either hole:
+    // the only way through is to present a token we emailed to the address, and
+    // the account is taken FROM THE TOKEN, never from the request body.
+    // -----------------------------------------------------------------------
+    if (action === "request-password-set") {
+      const ip = getRequestClientId(req as any);
+      const ipRl = checkRateLimit(`auth:pwreq:ip:${ip}`, 5, 60_000);
+      if (!ipRl.allowed) return rejectRateLimited(res, ipRl.resetAt);
+
+      const requestEmail = normalizeEmail(email || "");
+      const emailRl = checkRateLimit(`auth:pwreq:email:${requestEmail}`, 3, 15 * 60_000);
+      if (!emailRl.allowed) return rejectRateLimited(res, emailRl.resetAt);
+
+      // The SAME response either way. Varying it would turn this endpoint into
+      // an account-enumeration oracle ("is this person a SongGhost user?").
+      const genericOk = {
+        ok: true,
+        message: "If that address has an account, we just sent it a link.",
+      };
+      if (!requestEmail || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(requestEmail)) {
+        return res.status(200).json(genericOk);
+      }
+
+      const secret = process.env.AUTH_TOKEN_SECRET;
+      if (!secret) {
+        console.error("[Auth API] AUTH_TOKEN_SECRET is not configured");
+        return res.status(500).json({ error: "Server authentication is misconfigured" });
+      }
+
+      try {
+        const client = getConvexClient();
+        const existing: any = await client.query(getUserByEmailRef as any, { email: requestEmail });
+        if (existing?._id) {
+          await sendPasswordSetEmail(requestEmail, mintPasswordSetToken({ email: requestEmail, secret }));
+        }
+      } catch (e: any) {
+        // Swallow: the caller must not be able to tell a lookup/mail failure
+        // apart from "no such account".
+        console.error("[Password Set Request Error]", e?.message || e);
+      }
+      return res.status(200).json(genericOk);
+    }
+
+    if (action === "set-password") {
+      const ip = getRequestClientId(req as any);
+      const rl = checkRateLimit(`auth:pwset:ip:${ip}`, 10, 60_000);
+      if (!rl.allowed) return rejectRateLimited(res, rl.resetAt);
+
+      const secret = process.env.AUTH_TOKEN_SECRET;
+      if (!secret) {
+        console.error("[Auth API] AUTH_TOKEN_SECRET is not configured");
+        return res.status(500).json({ error: "Server authentication is misconfigured" });
+      }
+
+      const resetToken = String((req.body as any)?.token || "");
+      const newPassword = String((req.body as any)?.password || "");
+      if (newPassword.length < 8) {
+        return res.status(400).json({ error: "Password must be at least 8 characters" });
+      }
+
+      const verified = verifyPasswordSetToken(resetToken, secret);
+      if (!verified.valid) {
+        return res.status(401).json({ error: "This link is invalid or has expired. Please request a new one." });
+      }
+      // Single-use, layer 1: in-process fast-reject on a warm instance.
+      if (!consumeNonce(verified.payload.nonce, verified.payload.exp)) {
+        return res.status(401).json({ error: "This link has already been used. Please request a new one." });
+      }
+      const tokenEmail = normalizeEmail(verified.payload.email);
+      if (!tokenEmail) {
+        return res.status(401).json({ error: "This link is invalid or has expired. Please request a new one." });
+      }
+
+      const client = getConvexClient();
+      // Single-use, layer 2 (authoritative): Convex records the nonce atomically,
+      // so the same link replayed against a cold instance is still rejected.
+      const consumeResult: any = await client.mutation(consumeAuthNonceRef as any, {
+        nonce: verified.payload.nonce,
+        exp: verified.payload.exp,
+      });
+      if (!consumeResult?.firstUse) {
+        return res.status(401).json({ error: "This link has already been used. Please request a new one." });
+      }
+
+      const salt = randomBytes(16).toString("hex");
+      const passwordHash = hashPassword(newPassword, salt);
+      const user: any = await client.mutation(upsertUserCredentialsRef as any, {
+        email: tokenEmail,
+        passwordHash,
+        passwordSalt: salt,
+      });
+      await enforceSkoolTierIfEligible(client, tokenEmail);
+
+      return res.status(200).json({
+        session: { user: { id: user?._id || `user_${tokenEmail}`, email: tokenEmail } },
+        sessionToken: mintSessionForEmail(tokenEmail),
       });
     }
 

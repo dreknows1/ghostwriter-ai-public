@@ -159,6 +159,27 @@ function consumeNonce(nonce, exp, now = Date.now()) {
   consumedNonces.set(nonce, exp);
   return true;
 }
+var PASSWORD_SET_PURPOSE = "password-set";
+var PASSWORD_SET_TTL_MS = 60 * 60 * 1e3;
+function mintPasswordSetToken(opts) {
+  if (!opts.secret) throw new Error("mintPasswordSetToken: missing secret");
+  const now = opts.now ?? Date.now();
+  const ttl = Math.min(opts.ttlMs ?? PASSWORD_SET_TTL_MS, PASSWORD_SET_TTL_MS);
+  const payload = {
+    email: opts.email.toLowerCase().trim(),
+    nonce: opts.nonce ?? randomBytes(16).toString("hex"),
+    exp: now + ttl,
+    purpose: PASSWORD_SET_PURPOSE
+  };
+  const payloadB64 = Buffer.from(JSON.stringify(payload), "utf8").toString("base64url");
+  return `${payloadB64}.${sign(payloadB64, opts.secret)}`;
+}
+function verifyPasswordSetToken(token, secret, opts) {
+  return verifyToken(token, secret, {
+    expectedPurpose: PASSWORD_SET_PURPOSE,
+    now: opts?.now
+  });
+}
 
 // lib/sessionAuth.ts
 function requireSession(req, res) {
@@ -299,6 +320,87 @@ async function syncContactToGHL(input) {
     throw new Error(`GHL sync failed (${response.status}): ${details || "Unknown error"}`);
   }
 }
+function getSiteOrigin() {
+  return (process.env.PUBLIC_SITE_URL || "https://www.songghost.com").replace(/\/+$/, "");
+}
+function escapeHtmlText(s) {
+  return s.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
+}
+async function sendPasswordSetEmail(email, token) {
+  const base = process.env.GHL_API_URL_BASE || "https://services.leadconnectorhq.com";
+  const apiToken = process.env.GHL_API_TOKEN;
+  const mailToken = process.env.GHL_MESSAGE_TOKEN || apiToken;
+  const locationId = process.env.GHL_LOCATION_ID;
+  const apiVersion = process.env.GHL_API_VERSION || "2021-07-28";
+  const from = process.env.GHL_FROM_EMAIL;
+  if (!apiToken || !mailToken || !locationId) {
+    console.error("[Password Set Email] GHL is not configured; link not sent");
+    return;
+  }
+  const link = `${getSiteOrigin()}/set-password?token=${encodeURIComponent(token)}`;
+  const safeLink = escapeHtmlText(link);
+  const hdrs = (t) => ({
+    Authorization: `Bearer ${t}`,
+    Version: apiVersion,
+    "Content-Type": "application/json",
+    Accept: "application/json"
+  });
+  const contactRes = await fetch(`${base}/contacts/`, {
+    method: "POST",
+    headers: hdrs(apiToken),
+    body: JSON.stringify({ locationId, email, source: "Password reset" })
+  });
+  const contactText = await contactRes.text().catch(() => "");
+  let contactJson = {};
+  try {
+    contactJson = JSON.parse(contactText);
+  } catch {
+  }
+  const contactId = contactJson?.contact?.id || contactJson?.id || contactJson?.meta?.contactId;
+  if (!contactId) {
+    console.error("[Password Set Email] no contact id", contactRes.status, contactText.slice(0, 200));
+    return;
+  }
+  const html = `
+<div style="font-family:-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif;font-size:16px;line-height:1.6;color:#1a1a1a">
+  <p>Hey,</p>
+  <p>Here is your link to set a password for SongGhost.</p>
+  <p><a href="${safeLink}" style="display:inline-block;background:#2b5be0;color:#ffffff;text-decoration:none;padding:12px 22px;border-radius:999px;font-weight:700">Set my password</a></p>
+  <p>Or paste this into your browser:<br><a href="${safeLink}">${safeLink}</a></p>
+  <p>This link works once and expires in 1 hour.</p>
+  <p>If you did not ask for this, you can ignore this email. Nothing changes until
+  you open the link and choose a password.</p>
+  <p>\u2014 Rudy</p>
+</div>`.trim();
+  const text = `Hey,
+
+Here is your link to set a password for SongGhost:
+
+${link}
+
+This link works once and expires in 1 hour.
+
+If you did not ask for this, ignore this email. Nothing changes until you open
+the link and choose a password.
+
+- Rudy`;
+  const mailRes = await fetch(`${base}/conversations/messages`, {
+    method: "POST",
+    headers: hdrs(mailToken),
+    body: JSON.stringify({
+      type: "Email",
+      contactId,
+      subject: "Set your SongGhost password",
+      html,
+      ...from ? { emailFrom: from } : {},
+      message: text
+    })
+  });
+  if (!mailRes.ok) {
+    const detail = await mailRes.text().catch(() => "");
+    console.error("[Password Set Email] send failed", mailRes.status, detail.slice(0, 200));
+  }
+}
 async function handler(req, res) {
   if (handlePreflight(req, res)) return;
   applyCors(req, res);
@@ -371,6 +473,82 @@ async function handler(req, res) {
       return res.status(200).json({
         session: { user: { id: user?._id || `user_${oauthEmail}`, email: oauthEmail } },
         sessionToken: mintSessionForEmail(oauthEmail)
+      });
+    }
+    if (action === "request-password-set") {
+      const ip = getRequestClientId(req);
+      const ipRl = checkRateLimit(`auth:pwreq:ip:${ip}`, 5, 6e4);
+      if (!ipRl.allowed) return rejectRateLimited(res, ipRl.resetAt);
+      const requestEmail = normalizeEmail(email || "");
+      const emailRl = checkRateLimit(`auth:pwreq:email:${requestEmail}`, 3, 15 * 6e4);
+      if (!emailRl.allowed) return rejectRateLimited(res, emailRl.resetAt);
+      const genericOk = {
+        ok: true,
+        message: "If that address has an account, we just sent it a link."
+      };
+      if (!requestEmail || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(requestEmail)) {
+        return res.status(200).json(genericOk);
+      }
+      const secret = process.env.AUTH_TOKEN_SECRET;
+      if (!secret) {
+        console.error("[Auth API] AUTH_TOKEN_SECRET is not configured");
+        return res.status(500).json({ error: "Server authentication is misconfigured" });
+      }
+      try {
+        const client2 = getConvexClient();
+        const existing2 = await client2.query(getUserByEmailRef, { email: requestEmail });
+        if (existing2?._id) {
+          await sendPasswordSetEmail(requestEmail, mintPasswordSetToken({ email: requestEmail, secret }));
+        }
+      } catch (e) {
+        console.error("[Password Set Request Error]", e?.message || e);
+      }
+      return res.status(200).json(genericOk);
+    }
+    if (action === "set-password") {
+      const ip = getRequestClientId(req);
+      const rl = checkRateLimit(`auth:pwset:ip:${ip}`, 10, 6e4);
+      if (!rl.allowed) return rejectRateLimited(res, rl.resetAt);
+      const secret = process.env.AUTH_TOKEN_SECRET;
+      if (!secret) {
+        console.error("[Auth API] AUTH_TOKEN_SECRET is not configured");
+        return res.status(500).json({ error: "Server authentication is misconfigured" });
+      }
+      const resetToken = String(req.body?.token || "");
+      const newPassword = String(req.body?.password || "");
+      if (newPassword.length < 8) {
+        return res.status(400).json({ error: "Password must be at least 8 characters" });
+      }
+      const verified = verifyPasswordSetToken(resetToken, secret);
+      if (!verified.valid) {
+        return res.status(401).json({ error: "This link is invalid or has expired. Please request a new one." });
+      }
+      if (!consumeNonce(verified.payload.nonce, verified.payload.exp)) {
+        return res.status(401).json({ error: "This link has already been used. Please request a new one." });
+      }
+      const tokenEmail = normalizeEmail(verified.payload.email);
+      if (!tokenEmail) {
+        return res.status(401).json({ error: "This link is invalid or has expired. Please request a new one." });
+      }
+      const client2 = getConvexClient();
+      const consumeResult = await client2.mutation(consumeAuthNonceRef, {
+        nonce: verified.payload.nonce,
+        exp: verified.payload.exp
+      });
+      if (!consumeResult?.firstUse) {
+        return res.status(401).json({ error: "This link has already been used. Please request a new one." });
+      }
+      const salt = randomBytes2(16).toString("hex");
+      const passwordHash = hashPassword(newPassword, salt);
+      const user = await client2.mutation(upsertUserCredentialsRef, {
+        email: tokenEmail,
+        passwordHash,
+        passwordSalt: salt
+      });
+      await enforceSkoolTierIfEligible(client2, tokenEmail);
+      return res.status(200).json({
+        session: { user: { id: user?._id || `user_${tokenEmail}`, email: tokenEmail } },
+        sessionToken: mintSessionForEmail(tokenEmail)
       });
     }
     const normalizedEmail = normalizeEmail(email || "");
