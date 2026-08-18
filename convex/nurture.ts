@@ -135,10 +135,28 @@ export const stop = mutation({
   },
 });
 
+/** One subscriber owed one email on this run — the shape `dueNow` hands back. */
+type DueRow = {
+  id: string;
+  ghlContactId: string;
+  firstName?: string;
+  email: string;
+  emailN: number;
+};
+
 /** The daily run. */
 export const sendDue = internalAction({
   args: { dryRun: v.optional(v.boolean()) },
-  handler: async (ctx, args) => {
+  // The return type is annotated rather than inferred, and `due` below with it.
+  // This action calls its OWN module through `internal.nurture.*`, so inferring
+  // its type would require the type of `internal.nurture` — which contains this
+  // action. TypeScript gives up on that cycle with TS7022/TS7023. Convex's
+  // documented answer is an explicit annotation, which breaks the loop without
+  // losing type safety: the call sites are still checked against these shapes.
+  handler: async (
+    ctx,
+    args
+  ): Promise<{ sent: number; failed: number; skipped?: string; due?: number }> => {
     const token = process.env.GHL_MESSAGE_TOKEN;
     const from = process.env.GHL_FROM_EMAIL;
     if (!token) {
@@ -146,7 +164,7 @@ export const sendDue = internalAction({
       return { sent: 0, failed: 0, skipped: "no token" };
     }
 
-    const due = await ctx.runQuery(internal.nurture.dueNow, {});
+    const due: DueRow[] = await ctx.runQuery(internal.nurture.dueNow, {});
     let sent = 0;
     let failed = 0;
 

@@ -20,6 +20,8 @@ import type * as crons from "../crons.js";
 import type * as http from "../http.js";
 import type * as inviteCodes from "../inviteCodes.js";
 import type * as metrics from "../metrics.js";
+import type * as nurture from "../nurture.js";
+import type * as nurtureEmails from "../nurtureEmails.js";
 import type * as profiles from "../profiles.js";
 import type * as songs from "../songs.js";
 import type * as users from "../users.js";
@@ -43,6 +45,8 @@ declare const fullApi: ApiFromModules<{
   http: typeof http;
   inviteCodes: typeof inviteCodes;
   metrics: typeof metrics;
+  nurture: typeof nurture;
+  nurtureEmails: typeof nurtureEmails;
   profiles: typeof profiles;
   songs: typeof songs;
   users: typeof users;
